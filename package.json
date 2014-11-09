@@ -1,0 +1,30 @@
+{
+    "name": "tenside-ui",
+    "license": "MIT",
+    "author": {
+        "name": "Tristan Lins",
+        "email": "tristan.lins@bit3.de",
+        "url": "https://github.com/tristanlins"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/tenside/ui.git"
+    },
+    "dependencies": {
+        "gulp": "^3.8",
+        "gulp-autoprefixer": "^1.0",
+        "gulp-bower": "^0.0",
+        "gulp-concat": "^2.4",
+        "gulp-imagemin": "^1.2",
+        "gulp-jade": "^0.9",
+        "gulp-minify-css": "^0.3",
+        "gulp-livereload": "^2.1",
+        "gulp-newer": "^0.3",
+        "gulp-sass": "^1.1",
+        "gulp-sourcemaps": "^1.2",
+        "gulp-uglify": "^1.0",
+        "imagemin-optipng": "^4.0",
+        "imagemin-svgo": "^3.0",
+        "del": "^0.1"
+    }
+}

@@ -1,0 +1,28 @@
+extends _layout
+
+block content
+  .row
+    .col-md-3
+      ul.nav.nav-pills.nav-stacked(role="tablist")
+        li.active(role="presentation")
+          a(href="#tenside-packages", role="tab", data-toggle="tab") Packages
+        li(role="presentation")
+          a(href="#tenside-search", role="tab", data-toggle="tab") Search
+        li(role="presentation")
+          a(href="#tenside-editor", role="tab", data-toggle="tab") composer.json
+        li(role="presentation")
+          a(href="#tenside-config", role="tab", data-toggle="tab") Config
+
+    .col-md-9
+      .tab-content
+        #tenside-packages.tab-pane.active(role="tabpanel")
+          | Installed packages
+
+        #tenside-search.tab-pane(role="tabpanel")
+          | Search
+
+        #tenside-editor.tab-pane(role="tabpanel")
+          | composer.json Editor
+
+        #tenside-config.tab-pane(role="tabpanel")
+          | Config editor

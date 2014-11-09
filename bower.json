@@ -1,0 +1,13 @@
+{
+    "name": "tenside/ui",
+    "license": "MIT",
+    "authors": [
+        "Tristan Lins <tristan.lins@bit3.de>"
+    ],
+    "dependencies": {
+        "angular": "1.3.*",
+        "angular-bootstrap": "0.*",
+        "bootstrap-sass-official": "3.3.*"
+    },
+    "directory" : "vendor/bower"
+}

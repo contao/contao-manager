@@ -1,0 +1,6 @@
+# build files
+/build/
+
+# vendor files
+/node_modules/
+/bower_components/
