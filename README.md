@@ -28,7 +28,7 @@ npm install --save-dev
 ./node_modules/.bin/gulp install
 ```
 
-**Hint** If you have installed gulp globally, you can simply run `./node_modules/.bin/gulp install`.
+**Hint** If you have installed gulp globally, you can simply run `gulp install`.
 
 Build production ready distribution
 -----------------------------------
