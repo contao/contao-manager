@@ -5,24 +5,13 @@ block content
     .col-md-3
       ul.nav.nav-pills.nav-stacked(role="tablist")
         li.active(role="presentation")
-          a(href="#tenside-packages", role="tab", data-toggle="tab") Packages
+          a(href="#packages") Packages
         li(role="presentation")
-          a(href="#tenside-search", role="tab", data-toggle="tab") Search
+          a(href="#search") Search
         li(role="presentation")
-          a(href="#tenside-editor", role="tab", data-toggle="tab") composer.json
+          a(href="#editor") composer.json
         li(role="presentation")
-          a(href="#tenside-config", role="tab", data-toggle="tab") Config
+          a(href="#config") Config
 
-    .col-md-9
-      .tab-content
-        #tenside-packages.tab-pane.active(role="tabpanel")
-          | Installed packages
-
-        #tenside-search.tab-pane(role="tabpanel")
-          | Search
-
-        #tenside-editor.tab-pane(role="tabpanel")
-          | composer.json Editor
-
-        #tenside-config.tab-pane(role="tabpanel")
-          | Config editor
+    #main.col-md-9
+        div(ng-view)

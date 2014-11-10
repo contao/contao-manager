@@ -34,6 +34,7 @@ var paths = {
             'bower_components/jquery/dist/jquery.js',
             'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
             'bower_components/angular/angular.js',
+            'bower_components/angular-route/angular-route.js',
             'bower_components/angular-bootstrap/ui-bootstrap.js',
             'assets/javascripts/*.js'
         ]
@@ -77,6 +78,7 @@ gulp.task('watch-templates', [], function () {
         'javascripts': [
             'js/jquery.js',
             'js/angular.js',
+            'js/angular-route.js',
             'js/ui-bootstrap.js',
             'js/bootstrap.js',
             'js/tenside.js',

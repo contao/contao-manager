@@ -18,6 +18,10 @@
 
 // Core variables and mixins
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
+
+// Overwrite Bootstrap variables
+@import "bootstrap/variables";
+
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/mixins";
 
 // Reset and dependencies
@@ -66,6 +70,10 @@
 // Utility classes
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/utilities";
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/responsive-utilities";
+
+
+// Tenside specifiy styles
+
 
 
 html {

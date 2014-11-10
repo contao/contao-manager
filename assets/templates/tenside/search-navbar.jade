@@ -1,4 +1,5 @@
-form.navbar-form.navbar-right(role="search", ng-controller="TensideSearchController as search")
-  .form-group
-    input.form-control(type="text", placeholder="Search packages", ng-model="search.term")
-  button.btn.btn-default(type="submit") Search
+form.navbar-form.navbar-right(role="search", ng-submit="search()" ng-controller="TensideSearchController as search")
+    .input-group
+        input.form-control(type="text", placeholder="Search packages", ng-model="search.term")
+        span.input-group-btn
+            button.btn.btn-default(type="submit" ng-click="search()") Search

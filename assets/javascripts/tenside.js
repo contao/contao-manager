@@ -10,6 +10,7 @@
  *
  * @package    tenside/ui
  * @author     Tristan Lins <https://github.com/tristanlins>
+ * @author     Tim Becker <https://github.com/tim-bec>
  * @copyright  Tristan Lins <https://github.com/tristanlins>
  * @link       https://github.com/tenside/ui
  * @license    https://github.com/tenside/ui/blob/master/LICENSE MIT
@@ -19,7 +20,51 @@
 var TENSIDE;
 
 (function() {
-    var app = angular.module('tenside', []);
+    var app = angular.module('tenside', ['ngRoute']);
 
     TENSIDE = app;
+
+    TENSIDE.config(function($routeProvider) {
+    	$routeProvider
+
+    	// route for the home page
+    	.when('/', {
+    		templateUrl : 'pages/home.html',
+    		controller  : 'tensideMainController'
+    	})
+
+    	// route to the packages
+    	.when('/packages', {
+    		templateUrl : 'pages/packages.html',
+    		controller : 'tensidePackages'
+    	})
+
+    	// route for the editor page
+    	.when('/editor', {
+    		templateUrl : 'pages/composer-generator.html',
+    		controller : 'tensideComposerGenerator'
+    	})
+
+    	// route for config
+    	.when('/config', {
+    		templateUrl : 'pages/config.html',
+    		controller : 'tensideConfigController'
+    	});
+    });
+
+    app.controller('tensideMainController', ['$window', '$scope', function($window, $scope) {
+        $scope.main =  main;
+    }]);
+
+    app.controller('tensidePackages', ['$window', '$scope', function($window, $scope) {
+        $scope.packages =  packages;
+    }]);
+
+    app.controller('tensideComposerGenerator', ['$window', '$scope', function($window, $scope) {
+        $scope.generator =  generator;
+    }]);
+
+    app.controller('tensideConfigController', ['$window', '$scope', function($window, $scope) {
+        $scope.config =  config;
+    }]);
 })();
