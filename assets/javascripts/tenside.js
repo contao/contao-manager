@@ -24,36 +24,39 @@ var TENSIDE;
 
     TENSIDE = app;
 
-    TENSIDE.config(function($routeProvider) {
-    	$routeProvider
+    TENSIDE.config(function($routeProvider, $locationProvider) {
+    	$routeProvider.
+	    	// route for the home page
+	    	when('/', {
+	    		templateUrl : 'pages/home.html',
+	    		controller  : 'tensideMainController'}).
 
-    	// route for the home page
-    	.when('/', {
-    		templateUrl : 'pages/home.html',
-    		controller  : 'tensideMainController'
-    	})
+	    	// route to the packages
+	    	when('/packages', {
+	    		templateUrl : 'pages/packages.html',
+	    		controller : 'tensidePackages'}).
 
-    	// route to the packages
-    	.when('/packages', {
-    		templateUrl : 'pages/packages.html',
-    		controller : 'tensidePackages'
-    	})
+	    	// route for the editor page
+	    	when('/editor', {
+	    		templateUrl : 'pages/composer-generator.html',
+	    		controller : 'tensideComposerGenerator'}).
 
-    	// route for the editor page
-    	.when('/editor', {
-    		templateUrl : 'pages/composer-generator.html',
-    		controller : 'tensideComposerGenerator'
-    	})
+	    	// route for config
+	    	when('/config', {
+	    		templateUrl : 'pages/config.html',
+	    		controller : 'tensideConfigController'}).
 
-    	// route for config
-    	.when('/config', {
-    		templateUrl : 'pages/config.html',
-    		controller : 'tensideConfigController'
-    	});
+	    	otherwise({redirectTo: '/'});
+	    	$locationProvider.html5Mode( true );
     });
 
-    app.controller('tensideMainController', ['$window', '$scope', function($window, $scope) {
+    app.controller('tensideMainController', ['$window', '$scope', '$location',  function($window, $scope) {
         $scope.main =  main;
+        $scope.activePath = null;
+		$scope.$on('$routeChangeSuccess', function(){
+			$scope.activePath = $location.path();
+			console.log( $location.path() );
+		});
     }]);
 
     app.controller('tensidePackages', ['$window', '$scope', function($window, $scope) {

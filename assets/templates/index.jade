@@ -4,17 +4,17 @@ block content
   .row
     .col-md-3
       ul.nav.nav-pills.nav-stacked(role="tablist")
-        li.active(role="presentation")
-          a(href="#packages") 
+        li(role="presentation", ngClass="{active: isActive('/packages')}")
+          a(href="/packages") 
             i.fa.fa-archive  Packages
-        li(role="presentation")
-          a(href="#search") 
+        li(role="presentation", ngClass="{active: isActive('/search')}")
+          a(href="/search") 
             i.fa.fa-search  Search
-        li(role="presentation")
-          a(href="#editor") 
+        li(role="presentation", ngClass="{active: isActive('/editor')}")
+          a(href="/editor") 
             i.fa.fa-file-code-o  composer.json
-        li(role="presentation")
-          a(href="#config") 
+        li(role="presentation", ngClass="{active: isActive('/config')}")
+          a(href="/config") 
             i.fa.fa-gears  Config
 
     #main.col-md-9
