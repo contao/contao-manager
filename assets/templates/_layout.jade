@@ -17,7 +17,7 @@ html(lang="en", ng-app="tenside")
   body(ng-controller="tensideMainController")
     .container
         nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
-          .container-fluid
+          .container
             .navbar-header
               button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#navbar")
                 span.sr-only= "Toggle navigation"
@@ -27,7 +27,7 @@ html(lang="en", ng-app="tenside")
               a.navbar-brand(href="#") Tenside
 
             #navbar.collapse.navbar-collapse
-              ul.nav.navbar-nav
+              ul.nav.navbar-nav.navbar-right
                 li.active
                   a(href="#about") About
                 li
