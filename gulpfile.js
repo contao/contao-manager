@@ -27,6 +27,11 @@ var paths = {
         'watch': 'assets/stylesheets/**/*.scss',
         'src': 'assets/stylesheets/tenside.scss'
     },
+    fonts: {
+        'src': [
+            'bower_components/font-awesome/fonts/*'
+        ]
+    },
     javascripts: {
         'watch': [
             'assets/javascripts/*.js'
@@ -170,13 +175,32 @@ gulp.task('watch-images', [], function () {
 });
 
 /**
+ * Build fonts task
+ */
+
+ gulp.task('clean-fonts', function (cb) {
+    del(['build/fonts'], cb);
+ });
+
+ gulp.task('build-fonts', ['clean-fonts'], function () {
+    return gulp.src(paths.fonts.src)
+        .pipe(gulp.dest('build/fonts'));        
+ });
+
+gulp.task('watch-fonts', [], function () {
+    return gulp.src(paths.fonts.src)
+    .pipe(newer('build/fonts'))
+    .pipe(gulp.dest('build/fonts'));
+});
+
+/**
  * Global build tasks
  */
 gulp.task('clean', function (cb) {
     del(['build'], cb);
 });
 
-gulp.task('build', ['clean', 'build-templates', 'build-stylesheets', 'build-javascripts', 'build-images']);
+gulp.task('build', ['clean', 'build-templates', 'build-stylesheets', 'build-javascripts', 'build-images', 'build-fonts']);
 
 gulp.task('watch', function () {
     livereload.listen();
@@ -184,7 +208,8 @@ gulp.task('watch', function () {
     gulp.watch(paths.stylesheets.watch, ['watch-stylesheets']);
     gulp.watch(paths.javascripts.watch, ['watch-javascripts']);
     gulp.watch(paths.images.watch, ['watch-images']);
+    gulp.watch(paths.fonts.watch, ['watch-fonts']);
     gulp.watch('build/**/*').on('change', livereload.changed);
 });
 
-gulp.task('default', ['watch', 'watch-templates', 'watch-stylesheets', 'watch-javascripts', 'watch-images']);
+gulp.task('default', ['watch', 'watch-templates', 'watch-stylesheets', 'watch-javascripts', 'watch-images', 'watch-fonts']);
