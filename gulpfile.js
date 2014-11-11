@@ -24,6 +24,7 @@ var paths = {
     },
     stylesheets: {
         'watch': 'assets/stylesheets/*.scss',
+        'watch': 'assets/stylesheets/**/*.scss',
         'src': 'assets/stylesheets/tenside.scss'
     },
     javascripts: {
