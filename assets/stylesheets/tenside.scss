@@ -72,7 +72,7 @@
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/responsive-utilities";
 
 
-// Tenside specifiy styles
+
 
 // Webfont
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,700,400italic);
@@ -81,6 +81,9 @@
 
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
 
+// Tenside specifiy styles
+
+@import "partials/search";
 
 html {
   margin: 0;
