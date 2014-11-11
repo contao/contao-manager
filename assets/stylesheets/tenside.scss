@@ -17,7 +17,7 @@
  */
 
 // Core variables and mixins
-@import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
+//@import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
 
 // Overwrite Bootstrap variables
 @import "bootstrap/variables";
@@ -74,6 +74,9 @@
 
 // Tenside specifiy styles
 
+// Webfont
+
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700,400italic);
 
 
 html {
