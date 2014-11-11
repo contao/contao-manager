@@ -16,11 +16,11 @@ html(lang="en", ng-app="tenside")
 
   body(ng-controller="tensideMainController")
     .container
-        nav.navbar.navbar-default(role="navigation")
+        nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
           .container-fluid
             .navbar-header
               button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#navbar")
-                span.src-only= "Toggle navigation"
+                span.sr-only= "Toggle navigation"
                 span.icon-bar
                 span.icon-bar
                 span.icon-bar
@@ -29,9 +29,9 @@ html(lang="en", ng-app="tenside")
             #navbar.collapse.navbar-collapse
               ul.nav.navbar-nav
                 li.active
-                  a(href="#") Link A
+                  a(href="#about") About
                 li
-                  a(href="#") Link B
+                  a(href="#support") Support
 
               tenside-search
 

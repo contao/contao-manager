@@ -75,8 +75,11 @@
 // Tenside specifiy styles
 
 // Webfont
-
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,700,400italic);
+
+// Fonticons
+
+@import "../../bower_components/font-awesome/scss/font-awesome.scss";
 
 
 html {
@@ -86,8 +89,7 @@ html {
 
 body {
   margin: 0;
-  padding: 50px;
-  background-color: #fcfcfc;
+  padding: 70px 50px 50px 50px;
   background-size: 20px 20px;
   transition: background-color .5s;
 }
