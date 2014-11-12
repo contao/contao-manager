@@ -60,14 +60,14 @@ var TENSIDE;
     }]);
 
     app.controller('tensidePackages', ['$window', '$scope', function($window, $scope) {
-        $scope.packages =  packages;
+        $scope.packages = {};
     }]);
 
     app.controller('tensideComposerGenerator', ['$window', '$scope', function($window, $scope) {
-        $scope.generator =  generator;
+        $scope.generator = {};
     }]);
 
     app.controller('tensideConfigController', ['$window', '$scope', function($window, $scope) {
-        $scope.config =  config;
+        $scope.config = {};
     }]);
 })();
