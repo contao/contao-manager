@@ -50,7 +50,7 @@ var TENSIDE;
 	    	$locationProvider.html5Mode( true );
     });
 
-    app.controller('tensideMainController', ['$window', '$scope', '$location',  function($window, $scope) {
+    app.controller('tensideMainController', ['$window', '$scope', '$location',  function($window, $scope, $location) {
         $scope.main =  main;
         $scope.activePath = null;
 		$scope.$on('$routeChangeSuccess', function(){
