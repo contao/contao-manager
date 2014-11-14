@@ -27,12 +27,6 @@ var TENSIDE;
     TENSIDE.config(function ($routeProvider, $locationProvider) {
         $locationProvider.html5Mode(false);
 
-        // route for the home page
-        $routeProvider.when('/', {
-            templateUrl: 'pages/home.html',
-            controller: 'tensideMainController'
-        });
-
         // route to the packages
         $routeProvider.when('/packages', {
             templateUrl: 'pages/packages.html',
@@ -51,17 +45,20 @@ var TENSIDE;
             controller: 'tensideConfigController'
         });
 
-        $routeProvider.otherwise({redirectTo: '/'});
-    });
-
-    app.controller('tensideMainController', ['$window', '$scope', '$location', function ($window, $scope, $location) {
-        $scope.main = main;
-        $scope.activePath = null;
-        $scope.$on('$routeChangeSuccess', function () {
-            $scope.activePath = $location.path();
-            console.log($location.path());
+        // route for about page
+        $routeProvider.when('/about', {
+            templateUrl: 'pages/about.html',
+            controller: 'tensideAboutController'
         });
-    }]);
+
+        // route for support page
+        $routeProvider.when('/support', {
+            templateUrl: 'pages/support.html',
+            controller: 'tensideSupportController'
+        });
+
+        $routeProvider.otherwise({redirectTo: '/packages'});
+    });
 
     app.controller('tensidePackages', ['$window', '$scope', function ($window, $scope) {
         $scope.packages = {};
