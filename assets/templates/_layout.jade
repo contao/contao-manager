@@ -27,6 +27,20 @@ html(lang="en", ng-app="tenside")
               a.navbar-brand(href="#") Tenside
 
             #navbar.collapse.navbar-collapse
+              ul.nav.navbar-nav
+                li(role="presentation", ngClass="{active: isActive('/packages')}")
+                  a(href="#packages")
+                    i.fa.fa-archive  Packages
+                li(role="presentation", ngClass="{active: isActive('/search')}")
+                  a(href="#search")
+                    i.fa.fa-search  Search
+                li(role="presentation", ngClass="{active: isActive('/editor')}")
+                  a(href="#editor")
+                    i.fa.fa-file-code-o  composer.json
+                li(role="presentation", ngClass="{active: isActive('/config')}")
+                  a(href="#config")
+                    i.fa.fa-gears  Config
+
               ul.nav.navbar-nav.navbar-right
                 li
                   a(href="#/about") About
