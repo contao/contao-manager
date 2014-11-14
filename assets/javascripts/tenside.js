@@ -19,55 +19,61 @@
 
 var TENSIDE;
 
-(function() {
+(function () {
     var app = angular.module('tenside', ['ngRoute']);
 
     TENSIDE = app;
 
-    TENSIDE.config(function($routeProvider, $locationProvider) {
-    	$routeProvider.
-	    	// route for the home page
-	    	when('/', {
-	    		templateUrl : 'pages/home.html',
-	    		controller  : 'tensideMainController'}).
+    TENSIDE.config(function ($routeProvider, $locationProvider) {
+        $locationProvider.html5Mode(false);
 
-	    	// route to the packages
-	    	when('/packages', {
-	    		templateUrl : 'pages/packages.html',
-	    		controller : 'tensidePackages'}).
+        // route for the home page
+        $routeProvider.when('/', {
+            templateUrl: 'pages/home.html',
+            controller: 'tensideMainController'
+        });
 
-	    	// route for the editor page
-	    	when('/editor', {
-	    		templateUrl : 'pages/composer-generator.html',
-	    		controller : 'tensideComposerGenerator'}).
+        // route to the packages
+        $routeProvider.when('/packages', {
+            templateUrl: 'pages/packages.html',
+            controller: 'tensidePackages'
+        });
 
-	    	// route for config
-	    	when('/config', {
-	    		templateUrl : 'pages/config.html',
-	    		controller : 'tensideConfigController'}).
+        // route for the editor page
+        $routeProvider.when('/editor', {
+            templateUrl: 'pages/editor.html',
+            controller: 'tensideEditor'
+        });
 
-	    	otherwise({redirectTo: '/'});
-	    	$locationProvider.html5Mode( true );
+        // route for config
+        $routeProvider.when('/config', {
+            templateUrl: 'pages/config.html',
+            controller: 'tensideConfigController'
+        });
+
+        $routeProvider.otherwise({redirectTo: '/'});
     });
 
-    app.controller('tensideMainController', ['$window', '$scope', '$location',  function($window, $scope, $location) {
-        $scope.main =  main;
+    app.controller('tensideMainController', ['$window', '$scope', '$location', function ($window, $scope, $location) {
+        $scope.main = main;
         $scope.activePath = null;
-		$scope.$on('$routeChangeSuccess', function(){
-			$scope.activePath = $location.path();
-			console.log( $location.path() );
-		});
+        $scope.$on('$routeChangeSuccess', function () {
+            $scope.activePath = $location.path();
+            console.log($location.path());
+        });
     }]);
 
-    app.controller('tensidePackages', ['$window', '$scope', function($window, $scope) {
+    app.controller('tensidePackages', ['$window', '$scope', function ($window, $scope) {
         $scope.packages = {};
     }]);
 
-    app.controller('tensideComposerGenerator', ['$window', '$scope', function($window, $scope) {
-        $scope.generator = {};
+    app.controller('tensideEditor', ['$window', '$scope', function ($window, $scope) {
+        // var editor = ace.edit("editor");
+        // editor.setTheme("ace/theme/monokai");
+        // editor.getSession().setMode("ace/mode/javascript");
     }]);
 
-    app.controller('tensideConfigController', ['$window', '$scope', function($window, $scope) {
+    app.controller('tensideConfigController', ['$window', '$scope', function ($window, $scope) {
         $scope.config = {};
     }]);
 })();
