@@ -27,10 +27,10 @@ var TENSIDE;
     TENSIDE.config(function ($routeProvider, $locationProvider) {
         $locationProvider.html5Mode(false);
 
-        // route to the packages
+        // route to the packages page
         $routeProvider.when('/packages', {
             templateUrl: 'pages/packages.html',
-            controller: 'tensidePackages'
+            controller: 'tensidePackagesController'
         });
 
         // route to the search page
@@ -42,10 +42,10 @@ var TENSIDE;
         // route for the editor page
         $routeProvider.when('/editor', {
             templateUrl: 'pages/editor.html',
-            controller: 'tensideEditor'
+            controller: 'tensideEditorController'
         });
 
-        // route for config
+        // route for config page
         $routeProvider.when('/config', {
             templateUrl: 'pages/config.html',
             controller: 'tensideConfigController'
@@ -66,17 +66,25 @@ var TENSIDE;
         $routeProvider.otherwise({redirectTo: '/packages'});
     });
 
-    app.controller('tensidePackages', ['$window', '$scope', function ($window, $scope) {
+    app.controller('tensidePackagesController', ['$window', '$scope', function ($window, $scope) {
         $scope.packages = {};
     }]);
 
-    app.controller('tensideEditor', ['$window', '$scope', function ($window, $scope) {
+    app.controller('tensideEditorController', ['$window', '$scope', function ($window, $scope) {
         // var editor = ace.edit("editor");
         // editor.setTheme("ace/theme/monokai");
         // editor.getSession().setMode("ace/mode/javascript");
     }]);
 
     app.controller('tensideConfigController', ['$window', '$scope', function ($window, $scope) {
+        $scope.config = {};
+    }]);
+
+    app.controller('tensideAboutController', ['$window', '$scope', function ($window, $scope) {
+        $scope.config = {};
+    }]);
+
+    app.controller('tensideSupportController', ['$window', '$scope', function ($window, $scope) {
         $scope.config = {};
     }]);
 })();
