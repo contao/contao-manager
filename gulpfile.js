@@ -65,7 +65,6 @@ var paths = {
             'bower_components/angular-route/angular-route.js',
             'bower_components/angular-bootstrap/ui-bootstrap.js',
             'bower_components/ace/build/src/ace.js',
-            'bower_components/ace/build/src/theme-monokai.js',
             'bower_components/ace/build/src/mode-json.js',
             'bower_components/ace/build/src/worker-json.js',
             'assets/javascripts/*.js'
@@ -127,7 +126,6 @@ gulp.task('watch-templates', [], function () {
             'js/ui-bootstrap.js',
             'js/bootstrap.js',
             'js/ace.js',
-            'js/theme-monokai.js',
             'js/mode-json.js',
             'js/worker-json.js',
             'js/tenside.js',
