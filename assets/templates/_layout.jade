@@ -37,13 +37,13 @@ html(lang="en", ng-app="tenside")
 
         block content
 
-        footer.well.well-sm
-          a.btn.btn-default
-            | Tenside
+        footer
+          | Tenside #{app.tensideVersion}, provides Composer #{app.composerVersion}
 
-          label.btn.btn-default
-            input(type="checkbox", onclick="document.body.className = document.body.className ? '' : 'experts-mode'")
-            Toggle experts mode
+          .pull-right
+            label.checkbox
+              input(type="checkbox", onclick="document.body.className = document.body.className ? '' : 'experts-mode'")
+              Toggle experts mode
 
     each javascript in javascripts
       script(src=javascript)

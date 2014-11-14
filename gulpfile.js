@@ -15,7 +15,29 @@ var gulp = require('gulp'),
     optipng = require('imagemin-optipng'),
     svgo = require('imagemin-svgo'),
 // native modules
-    del = require('del');
+    del = require('del'),
+    sh = require('execSync');
+
+var tensideVersion  = false;
+var composerVersion = false;
+
+function getTensideVersion() {
+    if (!tensideVersion) {
+        var result = sh.exec('git describe --always --abbrev=8');
+        tensideVersion = result.stdout || 'unknown';
+    }
+
+    return tensideVersion;
+}
+
+function getComposerVersion() {
+    if (!composerVersion) {
+        var result = sh.exec('git describe --always --abbrev=8');
+        composerVersion = result.stdout || 'unknown';
+    }
+
+    return composerVersion;
+}
 
 var paths = {
     templates: {
@@ -70,7 +92,11 @@ gulp.task('clean-templates', function (cb) {
 gulp.task('build-templates', ['clean-templates'], function () {
     var variables = {
         'stylesheets': ['css/tenside.css'],
-        'javascripts': ['js/tenside.js']
+        'javascripts': ['js/tenside.js'],
+        'app': {
+            'tensideVersion': getTensideVersion(),
+            'composerVersion': getComposerVersion()
+        }
     };
 
     return gulp.src(paths.templates.src)
@@ -89,7 +115,11 @@ gulp.task('watch-templates', [], function () {
             'js/bootstrap.js',
             'js/tenside.js',
             'js/tenside-search.js'
-        ]
+        ],
+        'app': {
+            'tensideVersion': getTensideVersion(),
+            'composerVersion': getComposerVersion()
+        }
     };
 
     return gulp.src(paths.templates.src)

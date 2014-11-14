@@ -96,3 +96,12 @@ body {
   background-size: 20px 20px;
   transition: background-color .5s;
 }
+
+footer {
+  margin-top: $line-height-computed;
+
+  label.checkbox {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
