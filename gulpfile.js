@@ -8,6 +8,7 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
     minify = require('gulp-minify-css'),
     newer = require('gulp-newer'),
+    run = require('gulp-run'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify'),
     sourcemaps = require('gulp-sourcemaps'),
@@ -45,8 +46,7 @@ var paths = {
         'src': 'assets/templates/**/[^_]*.jade'
     },
     stylesheets: {
-        'watch': 'assets/stylesheets/*.scss',
-        'watch': 'assets/stylesheets/**/*.scss',
+        'watch': 'assets/stylesheets/**/[^_]*.scss',
         'src': 'assets/stylesheets/tenside.scss'
     },
     fonts: {
@@ -64,6 +64,10 @@ var paths = {
             'bower_components/angular/angular.js',
             'bower_components/angular-route/angular-route.js',
             'bower_components/angular-bootstrap/ui-bootstrap.js',
+            'bower_components/ace/build/src/ace.js',
+            'bower_components/ace/build/src/theme-monokai.js',
+            'bower_components/ace/build/src/mode-json.js',
+            'bower_components/ace/build/src/worker-json.js',
             'assets/javascripts/*.js'
         ]
     },
@@ -80,7 +84,16 @@ gulp.task('install-bower', function () {
     return bower();
 });
 
-gulp.task('install', ['install-bower']);
+gulp.task('clean-ace', function(cb) {
+    del(['bower_components/ace/build'], cb);
+});
+
+gulp.task('install-ace', ['install-bower', 'clean-ace'], function () {
+    return run('npm install', {cwd: process.cwd() + '/bower_components/ace'}).exec()
+        .pipe(run('node Makefile.dryice.js --s --target ./build minimal', {cwd: process.cwd() + '/bower_components/ace'}));
+});
+
+gulp.task('install', ['install-bower', 'install-ace']);
 
 /**
  * Build templates tasks
@@ -113,6 +126,10 @@ gulp.task('watch-templates', [], function () {
             'js/angular-route.js',
             'js/ui-bootstrap.js',
             'js/bootstrap.js',
+            'js/ace.js',
+            'js/theme-monokai.js',
+            'js/mode-json.js',
+            'js/worker-json.js',
             'js/tenside.js',
             'js/tenside-search.js'
         ],

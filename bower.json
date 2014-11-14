@@ -5,6 +5,7 @@
     "Tristan Lins <tristan.lins@bit3.de>"
   ],
   "dependencies": {
+    "ace": "1.1.*",
     "angular": "1.3.*",
     "angular-bootstrap": "0.*",
     "bootstrap-sass-official": "3.3.*",
