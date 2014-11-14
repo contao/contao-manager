@@ -33,6 +33,12 @@ var TENSIDE;
             controller: 'tensidePackages'
         });
 
+        // route to the search page
+        $routeProvider.when('/search', {
+            templateUrl: 'pages/search.html',
+            controller: 'tensideSearchController'
+        });
+
         // route for the editor page
         $routeProvider.when('/editor', {
             templateUrl: 'pages/editor.html',
