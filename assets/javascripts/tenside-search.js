@@ -28,7 +28,7 @@
         };
     });
 
-    app.controller('TensideSearchController', ['$window', '$scope', function($window, $scope) {
+    app.controller('tensideSearchController', ['$window', '$scope', function($window, $scope) {
         $scope.search = search;
     }]);
 
