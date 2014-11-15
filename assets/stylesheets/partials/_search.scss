@@ -1,14 +1,11 @@
-// Search bar
 
-.search {
-	
-}
+.navbar .tenside-search {
+  background-color: $search-bg;
+  color: $search-color;
+  padding-top: 8px;
+  padding-bottom: 8px;
 
-.search__input {
-	
-}
-
-.search__input--focus {
-	// Thats pretty dirty
-	width: 200%;
+  .form-group {
+    margin-bottom: 0;
+  }
 }

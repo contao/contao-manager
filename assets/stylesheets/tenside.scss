@@ -16,12 +16,11 @@
  * @filesource
  */
 
-// Core variables and mixins
-//@import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
-
-// Overwrite Bootstrap variables
+// Custom variables
 @import "bootstrap/variables";
 
+// Core variables and mixins
+@import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/variables";
 @import "../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/mixins";
 
 // Reset and dependencies
@@ -92,14 +91,28 @@ html {
 
 body {
   margin: 0;
-  padding: 70px 50px 50px 50px;
-  background-size: 20px 20px;
-  transition: background-color .5s;
+  padding: 0;
+  background-color: $wrap-bg;
+}
+
+header {
+  color: $wrap-color;
+}
+
+.body {
+  padding: 120px 50px 50px 50px;
+  background-color: $body-bg;
 }
 
 footer {
+  color: $wrap-color;
   margin-top: $line-height-computed;
 
+  a,
+  a:hover,
+  a:focus {
+    color: inherit;
+  }
   label.checkbox {
     margin-top: 0;
     margin-bottom: 0;
