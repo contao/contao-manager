@@ -46,7 +46,7 @@ var paths = {
         'src': 'assets/templates/**/[^_]*.jade'
     },
     stylesheets: {
-        'watch': 'assets/stylesheets/**/[^_]*.scss',
+        'watch': 'assets/stylesheets/**/*.scss',
         'src': 'assets/stylesheets/tenside.scss'
     },
     fonts: {
