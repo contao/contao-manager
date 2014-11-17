@@ -7,10 +7,12 @@
   "dependencies": {
     "ace": "1.1.*",
     "angular": "1.3.*",
+    "angular-route": "1.3.*",
     "angular-bootstrap": "0.*",
     "bootstrap-sass-official": "3.3.*",
-    "angular-route": "~1.3.2",
     "font-awesome": "~4.2.0"
   },
-  "directory": "vendor/bower"
+  "resolutions": {
+    "angular": "1.3.2"
+  }
 }
