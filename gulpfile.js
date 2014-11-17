@@ -83,13 +83,12 @@ gulp.task('install-bower', function () {
     return bower();
 });
 
-gulp.task('clean-ace', function(cb) {
-    del(['bower_components/ace/build'], cb);
-});
-
-gulp.task('install-ace', ['install-bower', 'clean-ace'], function () {
-    return run('npm install', {cwd: process.cwd() + '/bower_components/ace'}).exec()
-        .pipe(run('node Makefile.dryice.js --s --target ./build minimal', {cwd: process.cwd() + '/bower_components/ace'}));
+gulp.task('install-ace', ['install-bower'], function () {
+    run('npm install', {cwd: process.cwd() + '/bower_components/ace'}).exec(function() {
+        del(['bower_components/ace/build'], function() {
+            run('node Makefile.dryice.js --s --target ./build minimal', {cwd: process.cwd() + '/bower_components/ace'}).exec();
+        });
+    });
 });
 
 gulp.task('install', ['install-bower', 'install-ace']);
