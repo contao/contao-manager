@@ -18,6 +18,7 @@
  */
 
 var TENSIDE;
+var TENSIDEApi = TENSIDEApi || '';
 
 (function () {
     var app = angular.module('tenside', ['ngRoute']);

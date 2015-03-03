@@ -72,5 +72,8 @@ html(lang="en", ng-app="tenside")
               input(type="checkbox", onclick="document.body.className = document.body.className ? '' : 'experts-mode'")
               Toggle experts mode
 
+    script.
+      var TENSIDEApi=window.location.href.split('#')[0];
+
     each javascript in javascripts
       script(src=javascript)
