@@ -21,7 +21,7 @@ var TENSIDE;
 var TENSIDEApi = TENSIDEApi || '';
 
 (function () {
-    var app = angular.module('tenside', ['ngRoute']);
+    var app = angular.module('tenside', ['ngRoute', "ui.bootstrap"]);
 
     TENSIDE = app;
 
@@ -69,12 +69,6 @@ var TENSIDEApi = TENSIDEApi || '';
 
     app.controller('tensidePackagesController', ['$window', '$scope', function ($window, $scope) {
         $scope.packages = {};
-    }]);
-
-    app.controller('tensideEditorController', ['$window', '$scope', function ($window, $scope) {
-        // var editor = ace.edit("editor");
-        // editor.setTheme("ace/theme/monokai");
-        // editor.getSession().setMode("ace/mode/javascript");
     }]);
 
     app.controller('tensideConfigController', ['$window', '$scope', function ($window, $scope) {
