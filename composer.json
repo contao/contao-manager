@@ -1,0 +1,32 @@
+{
+  "name": "tenside/ui",
+  "description": "Tenside ui is the base UI component of tenside/core.",
+  "keywords": ["tenside"],
+  "homepage": "https://github.com/tenside/",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Christian Schiffler",
+      "email": "c.schiffler@cyberspectrum.de",
+      "homepage": "https://www.cyberspectrum.de"
+    },
+    {
+      "name": "Tim Becker",
+      "email": "tb@westwerk.ac",
+      "homepage": "https://www.westwerk.ac"
+    }
+  ],
+  "support": {
+    "irc": "irc://irc.freenode.org/tenside",
+    "issues": "https://github.com/tenside/ui/issues"
+  },
+  "require": {
+    "tenside/core": "~1.0"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
+}
