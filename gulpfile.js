@@ -129,6 +129,7 @@ gulp.task('watch-templates', [], function () {
             'js/ace.js',
             'js/mode-json.js',
             'js/worker-json.js',
+            'js/user-session.js',
             'js/tenside.js',
             'js/tenside-editor.js',
             'js/tenside-search.js'

@@ -11,6 +11,7 @@
  * @package    tenside/ui
  * @author     Tristan Lins <https://github.com/tristanlins>
  * @author     Tim Becker <https://github.com/tim-bec>
+ * @author     Christian Schiffler <https://github.com/discordier>
  * @copyright  Tristan Lins <https://github.com/tristanlins>
  * @link       https://github.com/tenside/ui
  * @license    https://github.com/tenside/ui/blob/master/LICENSE MIT
@@ -21,35 +22,47 @@ var TENSIDE;
 var TENSIDEApi = TENSIDEApi || '';
 
 (function () {
-    var app = angular.module('tenside', ['ngRoute', "ui.bootstrap"]);
+    var app = angular.module('tenside', ['ngRoute', "ui.bootstrap", "user-session"]);
 
     TENSIDE = app;
 
-    TENSIDE.config(function ($routeProvider, $locationProvider) {
+    TENSIDE.config(function ($routeProvider, $locationProvider, USER_ROLES) {
         $locationProvider.html5Mode(false);
 
         // route to the packages page
         $routeProvider.when('/packages', {
             templateUrl: 'pages/packages.html',
-            controller: 'tensidePackagesController'
+            controller: 'tensidePackagesController',
+            data: {
+                authorizedRoles: [USER_ROLES.admin]
+            }
         });
 
         // route to the search page
         $routeProvider.when('/search', {
             templateUrl: 'pages/search.html',
-            controller: 'tensideSearchController'
+            controller: 'tensideSearchController',
+            data: {
+                authorizedRoles: [USER_ROLES.admin]
+            }
         });
 
         // route for the editor page
         $routeProvider.when('/editor', {
             templateUrl: 'pages/editor.html',
-            controller: 'tensideEditorController'
+            controller: 'tensideEditorController',
+            data: {
+                authorizedRoles: [USER_ROLES.admin]
+            }
         });
 
         // route for config page
         $routeProvider.when('/config', {
             templateUrl: 'pages/config.html',
-            controller: 'tensideConfigController'
+            controller: 'tensideConfigController',
+            data: {
+                authorizedRoles: [USER_ROLES.admin]
+            }
         });
 
         // route for about page
@@ -64,8 +77,9 @@ var TENSIDEApi = TENSIDEApi || '';
             controller: 'tensideSupportController'
         });
 
-        $routeProvider.otherwise({redirectTo: '/packages'});
-    });
+        $routeProvider.otherwise({redirectTo: '/about'});
+    })
+    ;
 
     app.controller('tensidePackagesController', ['$window', '$scope', function ($window, $scope) {
         $scope.packages = {};

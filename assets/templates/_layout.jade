@@ -28,18 +28,24 @@ html(lang="en", ng-app="tenside")
 
           #navbar.collapse.navbar-collapse
             ul.nav.navbar-nav.navbar-right
-              li(role="presentation", ngClass="{active: isActive('/packages')}")
+              li(role="presentation", ngClass="{active: isActive('/packages')}", ng-show="authService.isAuthenticated()")
                 a(href="#packages")
                   i.fa.fa-archive  Packages
-              li(role="presentation", ngClass="{active: isActive('/search')}")
+              li(role="presentation", ngClass="{active: isActive('/search')}", ng-show="authService.isAuthenticated()")
                 a(href="#search")
                   i.fa.fa-search  Browse
-              li(role="presentation", ngClass="{active: isActive('/editor')}")
+              li(role="presentation", ngClass="{active: isActive('/editor')}", ng-show="authService.isAuthenticated()")
                 a(href="#editor")
                   i.fa.fa-file-code-o  composer.json
-              li(role="presentation", ngClass="{active: isActive('/config')}")
+              li(role="presentation", ngClass="{active: isActive('/config')}", ng-show="authService.isAuthenticated()")
                 a(href="#config")
                   i.fa.fa-gears  Config
+              li.ng-hide(role="presentation", ng-show="authService.isAuthenticated()")
+                a(href="", ng-click="logout()")
+                  i.fa.fa-user  Logout
+              li.ng-hide(role="presentation", ng-show="!authService.isAuthenticated()")
+                a(href="", ng-click="login()")
+                  i.fa.fa-user  Login
 
         .tenside-search
           form.form(role="search", ng-submit="search()" ng-controller="tensideSearchController as search")
