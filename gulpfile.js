@@ -17,14 +17,14 @@ var gulp = require('gulp'),
     svgo = require('imagemin-svgo'),
 // native modules
     del = require('del'),
-    sh = require('execSync');
+    sh = require('sync-exec');
 
 var tensideVersion  = false;
 var composerVersion = false;
 
 function getTensideVersion() {
     if (!tensideVersion) {
-        var result = sh.exec('git describe --always --abbrev=8');
+        var result = sh('git describe --always --abbrev=8');
         tensideVersion = result.stdout || 'unknown';
     }
 
@@ -33,7 +33,7 @@ function getTensideVersion() {
 
 function getComposerVersion() {
     if (!composerVersion) {
-        var result = sh.exec('git describe --always --abbrev=8');
+        var result = sh('git describe --always --abbrev=8');
         composerVersion = result.stdout || 'unknown';
     }
 
