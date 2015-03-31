@@ -19,7 +19,8 @@ var gulp = require('gulp'),
     svgo = require('imagemin-svgo'),
 // native modules
     del = require('del'),
-    sh = require('sync-exec');
+    sh = require('sync-exec'),
+    debug = require('gulp-debug');
 
 var out = process.env.DEST_DIR || 'build',
     tensideApi      = process.env.TENSIDE_API || false,
@@ -125,6 +126,7 @@ gulp.task('build-templates', ['clean-templates'], function () {
 
     return gulp.src(paths.templates.src)
         .pipe(jade({ locals: variables }))
+        .pipe(debug({title: 'templates:'}))
         .pipe(gulp.dest(out));
 });
 
@@ -176,6 +178,7 @@ gulp.task('build-stylesheets', ['clean-stylesheets'], function () {
         .pipe(minify())
         .pipe(concat('tenside.css'))
         .pipe(sourcemaps.write('.'))
+        .pipe(debug({title: 'css:'}))
         .pipe(gulp.dest(out + '/css'));
 });
 
@@ -200,10 +203,12 @@ gulp.task('clean-javascripts', function (cb) {
 
 gulp.task('build-javascripts', ['clean-javascripts'], function () {
     return gulp.src(paths.javascripts.src)
+        .pipe(debug({title: 'javascript in:'}))
         .pipe(sourcemaps.init())
         .pipe(uglify())
         .pipe(concat('tenside.js'))
         .pipe(sourcemaps.write('.'))
+        .pipe(debug({title: 'javascript:'}))
         .pipe(gulp.dest(out + '/js'));
 });
 
@@ -226,6 +231,7 @@ gulp.task('build-images', ['clean-images'], function () {
         .pipe(imagemin({
             use: [optipng(), svgo()]
         }))
+        .pipe(debug({title: 'image:'}))
         .pipe(gulp.dest(out + '/img'));
 });
 
@@ -245,6 +251,7 @@ gulp.task('clean-fonts', function (cb) {
 
 gulp.task('build-fonts', ['clean-fonts'], function () {
     return gulp.src(paths.fonts.src)
+        .pipe(debug({title: 'fonts:'}))
         .pipe(gulp.dest(out + '/fonts'));
 });
 
