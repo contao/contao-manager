@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp'),
 // gulp modules
     autoprefixer = require('gulp-autoprefixer'),
@@ -19,8 +21,18 @@ var gulp = require('gulp'),
     del = require('del'),
     sh = require('sync-exec');
 
-var tensideVersion  = false;
-var composerVersion = false;
+var out = process.env.DEST_DIR || 'build',
+    tensideApi      = process.env.TENSIDE_API || false,
+    tensideVersion  = process.env.TENSIDE_VERSION || false,
+    composerVersion = process.env.COMPOSER_VERSION || false;
+
+function getTensideApi() {
+    if (!tensideApi) {
+        tensideApi = 'window.location.href.split(\'#\')[0]';
+    }
+
+    return tensideApi;
+}
 
 function getTensideVersion() {
     if (!tensideVersion) {
@@ -86,7 +98,7 @@ gulp.task('install-bower', function () {
 
 gulp.task('install-ace', ['install-bower'], function () {
     run('npm install', {cwd: process.cwd() + '/bower_components/ace'}).exec(function() {
-        del(['bower_components/ace/build'], function() {
+        del(['bower_components/ace/build'], {force: true}, function() {
             run('node Makefile.dryice.js --s --target ./build minimal', {cwd: process.cwd() + '/bower_components/ace'}).exec();
         });
     });
@@ -98,7 +110,7 @@ gulp.task('install', ['install-bower', 'install-ace']);
  * Build templates tasks
  */
 gulp.task('clean-templates', function (cb) {
-    del(['build/*.html'], cb);
+    del([out + '/*.html'], {force: true}, cb);
 });
 
 gulp.task('build-templates', ['clean-templates'], function () {
@@ -113,7 +125,7 @@ gulp.task('build-templates', ['clean-templates'], function () {
 
     return gulp.src(paths.templates.src)
         .pipe(jade({ locals: variables }))
-        .pipe(gulp.dest('build'));
+        .pipe(gulp.dest(out));
 });
 
 gulp.task('watch-templates', [], function () {
@@ -135,6 +147,7 @@ gulp.task('watch-templates', [], function () {
             'js/tenside-search.js'
         ],
         'app': {
+            'tensideApi': getTensideApi(),
             'tensideVersion': getTensideVersion(),
             'composerVersion': getComposerVersion()
         }
@@ -142,14 +155,14 @@ gulp.task('watch-templates', [], function () {
 
     return gulp.src(paths.templates.src)
         .pipe(jade({ locals: variables }))
-        .pipe(gulp.dest('build'));
+        .pipe(gulp.dest(out));
 });
 
 /**
  * Build stylesheets tasks
  */
 gulp.task('clean-stylesheets', function (cb) {
-    del(['build/css'], cb);
+    del([out + '/css'], {force: true}, cb);
 });
 
 gulp.task('build-stylesheets', ['clean-stylesheets'], function () {
@@ -163,7 +176,7 @@ gulp.task('build-stylesheets', ['clean-stylesheets'], function () {
         .pipe(minify())
         .pipe(concat('tenside.css'))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('build/css'));
+        .pipe(gulp.dest(out + '/css'));
 });
 
 gulp.task('watch-stylesheets', [], function () {
@@ -175,14 +188,14 @@ gulp.task('watch-stylesheets', [], function () {
             cascade: false
         }))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('build/css'));
+        .pipe(gulp.dest(out + '/css'));
 });
 
 /**
  * Build javascripts tasks
  */
 gulp.task('clean-javascripts', function (cb) {
-    del(['build/js'], cb);
+    del([out + '/js'], {force: true}, cb);
 });
 
 gulp.task('build-javascripts', ['clean-javascripts'], function () {
@@ -191,21 +204,21 @@ gulp.task('build-javascripts', ['clean-javascripts'], function () {
         .pipe(uglify())
         .pipe(concat('tenside.js'))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('build/js'));
+        .pipe(gulp.dest(out + '/js'));
 });
 
 gulp.task('watch-javascripts', [], function () {
     return gulp.src(paths.javascripts.src)
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('build/js'));
+        .pipe(gulp.dest(out + '/js'));
 });
 
 /**
  * Build images tasks
  */
 gulp.task('clean-images', function (cb) {
-    del(['build/img'], cb);
+    del([out + '/img'], {force: true}, cb);
 });
 
 gulp.task('build-images', ['clean-images'], function () {
@@ -213,39 +226,39 @@ gulp.task('build-images', ['clean-images'], function () {
         .pipe(imagemin({
             use: [optipng(), svgo()]
         }))
-        .pipe(gulp.dest('build/img'));
+        .pipe(gulp.dest(out + '/img'));
 });
 
 gulp.task('watch-images', [], function () {
     return gulp.src(paths.images.src)
-        .pipe(newer('build/img'))
-        .pipe(gulp.dest('build/img'));
+        .pipe(newer(out + '/img'))
+        .pipe(gulp.dest(out + '/img'));
 });
 
 /**
  * Build fonts task
  */
 
- gulp.task('clean-fonts', function (cb) {
-    del(['build/fonts'], cb);
- });
+gulp.task('clean-fonts', function (cb) {
+    del([out + '/fonts'], {force: true}, cb);
+});
 
- gulp.task('build-fonts', ['clean-fonts'], function () {
+gulp.task('build-fonts', ['clean-fonts'], function () {
     return gulp.src(paths.fonts.src)
-        .pipe(gulp.dest('build/fonts'));
- });
+        .pipe(gulp.dest(out + '/fonts'));
+});
 
 gulp.task('watch-fonts', [], function () {
     return gulp.src(paths.fonts.src)
-    .pipe(newer('build/fonts'))
-    .pipe(gulp.dest('build/fonts'));
+        .pipe(newer(out + '/fonts'))
+        .pipe(gulp.dest(out + '/fonts'));
 });
 
 /**
  * Global build tasks
  */
 gulp.task('clean', function (cb) {
-    del(['build'], cb);
+    del([out], {force: true}, cb);
 });
 
 gulp.task('build', ['clean', 'build-templates', 'build-stylesheets', 'build-javascripts', 'build-images', 'build-fonts']);
@@ -257,7 +270,7 @@ gulp.task('watch', function () {
     gulp.watch(paths.javascripts.watch, ['watch-javascripts']);
     gulp.watch(paths.images.watch, ['watch-images']);
     gulp.watch(paths.fonts.watch, ['watch-fonts']);
-    gulp.watch('build/**/*').on('change', livereload.changed);
+    gulp.watch(out + '/**/*').on('change', livereload.changed);
 });
 
 gulp.task('default', ['watch', 'watch-templates', 'watch-stylesheets', 'watch-javascripts', 'watch-images', 'watch-fonts']);

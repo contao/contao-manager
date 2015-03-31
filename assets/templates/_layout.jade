@@ -79,7 +79,7 @@ html(lang="en", ng-app="tenside")
               Toggle experts mode
 
     script.
-      var TENSIDEApi=window.location.href.split('#')[0];
+      var TENSIDEApi=#{app.tensideApi};
 
     each javascript in javascripts
       script(src=javascript)
