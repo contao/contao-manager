@@ -2,7 +2,8 @@
   "name": "tenside/ui",
   "license": "MIT",
   "authors": [
-    "Tristan Lins <tristan.lins@bit3.de>"
+    "Christian Schiffler <c.schiffler@cyberspectrum.de>",
+    "Tim Becker <tb@westwerk.ac>"
   ],
   "dependencies": {
     "ace": "1.1.*",

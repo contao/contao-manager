@@ -2,9 +2,9 @@
     "name": "tenside-ui",
     "license": "MIT",
     "author": {
-        "name": "Tristan Lins",
-        "email": "tristan.lins@bit3.de",
-        "url": "https://github.com/tristanlins"
+        "name": "Christian Schiffler",
+        "email": "c.schiffler@cyberspectrum.de",
+        "url": "https://www.cyberspectrum.de"
     },
     "repository": {
         "type": "git",
