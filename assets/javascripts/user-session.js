@@ -1,7 +1,7 @@
 /**
  * This file is part of tenside/ui.
  *
- * (c) Tristan Lins <https://github.com/tristanlins>
+ * (c) Christian Schiffler <https://github.com/discordier>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,9 +17,9 @@
  */
 
 (function(){
-    var module = angular.module('user-session', []);
+    var userSession = angular.module('user-session', []);
 
-    module.constant('AUTH_EVENTS', {
+    userSession.constant('AUTH_EVENTS', {
         loginSuccess: 'auth-login-success',
         loginFailed: 'auth-login-failed',
         logoutSuccess: 'auth-logout-success',
@@ -27,7 +27,7 @@
         notAuthenticated: 'auth-not-authenticated',
         notAuthorized: 'auth-not-authorized'
     });
-    module.constant('USER_ROLES', {
+    userSession.constant('USER_ROLES', {
         all: '*',
         admin: 'admin',
         editor: 'editor',
@@ -47,7 +47,7 @@
      *  }
      *
      */
-    module.factory('AuthService', ['$rootScope', '$http', 'Session', function ($rootScope, $http, Session) {
+    userSession.factory('AuthService', ['$rootScope', '$http', 'Session', function ($rootScope, $http, Session) {
         var
             baseUrl,
             authService = {};
@@ -66,7 +66,7 @@
 
         authService.login = function (credentials) {
             return $http
-                .post(TENSIDEApi + 'auth', credentials)
+                .post(baseUrl, credentials)
                 .then(function (res) {
                     Session.create(res.data.id, res.data.user.id, res.data.user.role);
                     return res.data.user;
@@ -75,14 +75,14 @@
 
         authService.logout = function () {
             return $http
-                .delete(TENSIDEApi + 'auth')
+                .delete(baseUrl)
                 .then(function () {
                     Session.destroy();
                 });
         };
         authService.ping = function () {
             return $http
-                .get(TENSIDEApi + 'auth')
+                .get(baseUrl)
                 .then(function (res) {
                     Session.create(res.data.id, res.data.user.id,
                         res.data.user.role);
@@ -107,7 +107,7 @@
         return authService;
     }]);
 
-    module.service('Session', function () {
+    userSession.service('Session', function () {
         this.create = function (sessionId, userId, userRole) {
             this.id = sessionId;
             this.userId = userId;
@@ -121,9 +121,8 @@
         return this;
     });
 
-    module.run(function ($rootScope, $modal, $http, $location, AUTH_EVENTS, USER_ROLES, AuthService) {
+    userSession.run(function ($rootScope, $modal, $http, $location, AUTH_EVENTS, USER_ROLES, AuthService) {
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
-            console.log(current, next);
             var authorizedRoles = [];
             try{
                 authorizedRoles = next.data.authorizedRoles;
@@ -215,7 +214,7 @@
         });
     });
 
-    module.config(function ($httpProvider) {
+    userSession.config(function ($httpProvider) {
         $httpProvider.interceptors.push([
             '$injector',
             function ($injector) {
@@ -224,7 +223,7 @@
         ]);
     });
 
-    module.factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
+    userSession.factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
         return {
             responseError: function (response) {
                 $rootScope.$broadcast({
@@ -238,7 +237,7 @@
         };
     });
 
-    module.directive('formAutofillFix', function ($timeout) {
+    userSession.directive('formAutofillFix', function ($timeout) {
         return function (scope, element, attrs) {
             element.prop('method', 'post');
             if (attrs.ngSubmit) {

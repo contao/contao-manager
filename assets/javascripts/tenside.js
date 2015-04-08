@@ -1,7 +1,7 @@
 /**
  * This file is part of tenside/ui.
  *
- * (c) Tristan Lins <https://github.com/tristanlins>
+ * (c) Christian Schiffler <https://github.com/discordier>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,10 +22,13 @@ var TENSIDE;
 var TENSIDEApi = TENSIDEApi || '';
 
 (function () {
-    var app = angular.module('tenside', ['ngRoute', "ui.bootstrap", "user-session"]);
+    var app = angular.module('tenside', ['ngRoute', 'ui.bootstrap', 'user-session']);
 
     TENSIDE = app;
 
+    TENSIDE.run(function(AuthService) {
+        AuthService.setBaseUrl(TENSIDEApi + '/auth');
+    });
     TENSIDE.config(function ($routeProvider, $locationProvider, USER_ROLES) {
         $locationProvider.html5Mode(false);
 
