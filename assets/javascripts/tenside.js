@@ -32,33 +32,6 @@ var TENSIDEApi = TENSIDEApi || '';
     TENSIDE.config(function ($routeProvider, $locationProvider, USER_ROLES) {
         $locationProvider.html5Mode(false);
 
-        // route to the packages page
-        $routeProvider.when('/packages', {
-            templateUrl: 'pages/packages.html',
-            controller: 'tensidePackagesController',
-            data: {
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        });
-
-        // route to the search page
-        $routeProvider.when('/search', {
-            templateUrl: 'pages/search.html',
-            controller: 'tensideSearchController',
-            data: {
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        });
-
-        // route for the editor page
-        $routeProvider.when('/editor', {
-            templateUrl: 'pages/editor.html',
-            controller: 'tensideEditorController',
-            data: {
-                authorizedRoles: [USER_ROLES.admin]
-            }
-        });
-
         // route for config page
         $routeProvider.when('/config', {
             templateUrl: 'pages/config.html',
