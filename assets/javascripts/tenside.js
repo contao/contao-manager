@@ -29,7 +29,7 @@ var TENSIDEApi = TENSIDEApi || '';
     TENSIDE.run(function(AuthService) {
         AuthService.setBaseUrl(TENSIDEApi + 'auth');
     });
-    TENSIDE.config(function ($routeProvider, $locationProvider, USER_ROLES) {
+    TENSIDE.config(function ($routeProvider, $locationProvider, USER_ROLES, $httpProvider) {
         $locationProvider.html5Mode(false);
 
         // route for config page
@@ -54,12 +54,29 @@ var TENSIDEApi = TENSIDEApi || '';
         });
 
         $routeProvider.otherwise({redirectTo: '/about'});
+
+        $httpProvider.interceptors.push(function($q, $rootScope) {
+            return {
+                'request': function (config) {
+                    $rootScope.loading = true;
+                    return config;
+                },
+                'requestError': function (rejection) {
+                    $rootScope.loading = false;
+                    return $q.reject(rejection);
+                },
+                'response': function (response) {
+                    $rootScope.loading = false;
+                    return response;
+                },
+                'responseError': function (response) {
+                    $rootScope.loading = false;
+                    return $q.reject(response);
+                }
+            };
+        });
     })
     ;
-
-    app.controller('tensidePackagesController', ['$window', '$scope', function ($window, $scope) {
-        $scope.packages = {};
-    }]);
 
     app.controller('tensideConfigController', ['$window', '$scope', function ($window, $scope) {
         $scope.config = {};

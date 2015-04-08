@@ -124,3 +124,28 @@ footer {
 #editor {
   box-sizing: content-box;
 }
+
+.loading-indicator {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 23% 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  opacity: 1;
+  font-size: 150%;
+  text-align: center;
+  color: #fff;
+  transition: left 1ms linear, top 1ms linear, opacity .3s ease-in;
+}
+
+.loading-indicator.ng-hide {
+  display: block!important;
+  opacity: 0;
+  top: -9999px;
+  left: -9999px;
+
+  transition: left 1ms linear .3s, top 1ms linear .3s, opacity .3s ease-out;
+}

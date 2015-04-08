@@ -15,6 +15,11 @@ html(lang="en", ng-app="tenside")
     <![endif]-->
 
   body
+    .loading-indicator(ng-show="loading")
+      .container
+        span.spinner
+          i.fa.fa-refresh.fa-spin
+        |  Loading...
     header
       nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
         .container
