@@ -119,6 +119,7 @@ gulp.task('build-templates', ['clean-templates'], function () {
         'stylesheets': ['css/tenside.css'],
         'javascripts': ['js/tenside.js'],
         'app': {
+            'tensideApi': getTensideApi(),
             'tensideVersion': getTensideVersion(),
             'composerVersion': getComposerVersion()
         }
