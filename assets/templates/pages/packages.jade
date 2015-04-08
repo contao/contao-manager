@@ -3,103 +3,32 @@ h1
 
 .packages-list
   ul.list-group
-    li.list-group-item
+    li.list-group-item(ng-repeat="pack in packages")
       .row.package
         .col-md-1
-          img.img-responsive(src="img/isotope_circle.png")
+          img.img-responsive(ng-src="{{pack.image}}")
         .col-md-7
           strong
-            a(href="#package?name=isotope/core") Isotope eCommerce
-          small  [isotope/core]
+            a(href="#package?name={{pack.name}}") {{pack.description}}
+          small  [{{pack.name}}]
         .col-md-2
-          span.label.label-success 2.0.2
+          span.label(ng-class="versionToClass(pack.version)") {{pack.version}}
           | &nbsp;
-          span.label.label-success <span class="fa fa-arrow-circle-up"></span> 2.2.0
+          span.label(ng-class="versionToClass(pack.upgrade_version)", ng-if="pack.upgrade_version")
+            span.fa.fa-arrow-circle-up
+            | {{pack.upgrade_version}}
         .col-md-2.text-right
           .actions
             .btn-group(role="group")
-              button.btn.btn-primary.btn-md(type="button", title="Upgrade package")
+              button.btn.btn-primary.btn-md(type="button", title="Upgrade package", ng-if="!pack.locked && (pack.version!=pack.upgrade_version)", ng-click="upgrade(pack)")
                 span.fa.fa-fw.fa-arrow-circle-up
                 span.sr-only Upgrade package
-              button.btn.btn-warning.btn-md(type="button", title="Unlock package version")
-                span.fa.fa-fw.fa-lock
-                span.sr-only Unlock package version
-              button.btn.btn-danger.btn-md(type="button", title="Remove package")
-                span.fa.fa-fw.fa-trash-o
-                span.sr-only Remove package
-    li.list-group-item
-      .row.package
-        .col-md-1
-          img.img-responsive(src="img/isotope_circle.png")
-        .col-md-7
-          strong
-            a(href="#package?name=isotope/core") Isotope eCommerce
-          small  [isotope/core]
-        .col-md-2
-          span.label.label-info 2.2.0-RC1
-        .col-md-2.text-right
-          .actions
-            .btn-group(role="group")
-              button.btn.btn-warning.btn-md(type="button", title="Unlock package version")
-                span.fa.fa-fw.fa-lock
-                span.sr-only Unlock package version
-              button.btn.btn-danger.btn-md(type="button", title="Remove package")
-                span.fa.fa-fw.fa-trash-o
-                span.sr-only Remove package
-    li.list-group-item
-      .row.package
-        .col-md-1
-          img.img-responsive(src="img/isotope_circle.png")
-        .col-md-7
-          strong
-            a(href="#package?name=isotope/core") Isotope eCommerce
-          small  [isotope/core]
-        .col-md-2
-          span.label.label-warning 2.2.0-beta2
-        .col-md-2.text-right
-          .actions
-            .btn-group(role="group")
-              button.btn.btn-info.btn-md(type="button", title="Lock package version")
+              button.btn.btn-info.btn-md(type="button", title="Lock package version", ng-if="!pack.locked", ng-click="lock(pack)")
                 span.fa.fa-fw.fa-unlock
                 span.sr-only Lock package version
-              button.btn.btn-danger.btn-md(type="button", title="Remove package")
-                span.fa.fa-fw.fa-trash-o
-                span.sr-only Remove package
-    li.list-group-item
-      .row.package
-        .col-md-1
-          img.img-responsive(src="img/isotope_circle.png")
-        .col-md-7
-          strong
-            a(href="#package?name=isotope/core") Isotope eCommerce
-          small  [isotope/core]
-        .col-md-2
-          span.label.label-danger 2.2.0-alpha1
-        .col-md-2.text-right
-          .actions
-            .btn-group(role="group")
-              button.btn.btn-info.btn-md(type="button", title="Lock package version")
-                span.fa.fa-fw.fa-unlock
-                span.sr-only Lock package version
-              button.btn.btn-danger.btn-md(type="button", title="Remove package")
-                span.fa.fa-fw.fa-trash-o
-                span.sr-only Remove package
-    li.list-group-item
-      .row.package
-        .col-md-1
-          img.img-responsive(src="img/isotope_circle.png")
-        .col-md-7
-          strong
-            a(href="#package?name=isotope/core") Isotope eCommerce
-          small  [isotope/core]
-        .col-md-2
-          span.label.label-default dev-develop
-        .col-md-2.text-right
-          .actions
-            .btn-group(role="group")
-              button.btn.btn-warning.btn-md(type="button", title="Unlock package version")
+              button.btn.btn-warning.btn-md(type="button", title="Unlock package version", ng-if="pack.locked", ng-click="unlock(pack)")
                 span.fa.fa-fw.fa-lock
                 span.sr-only Unlock package version
-              button.btn.btn-danger.btn-md(type="button", title="Remove package")
+              button.btn.btn-danger.btn-md(type="button", title="Remove package", ng-if="!pack.locked", ng-click="remove(pack)")
                 span.fa.fa-fw.fa-trash-o
                 span.sr-only Remove package
