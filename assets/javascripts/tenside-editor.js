@@ -19,15 +19,63 @@
 (function() {
     var app = angular.module('tenside-editor', []);
 
-    app.controller('tensideEditorController', ['$window', '$scope', '$http', function ($window, $scope, $http) {
+    app.controller('tensideEditorController', ['$window', '$scope', '$http', '$timeout', function ($window, $scope, $http, $timeout) {
+
+        var editor;
+        if(editor === undefined) {
+            editor = (function(elementId){
+                var editor = ace.edit(elementId);
+
+                editor.getSession().setMode("ace/mode/json");
+                editor.getSession().setTabSize(2);
+                editor.getSession().setUseSoftTabs(true);
+                // FIXME: this should be calculated properly.
+                editor.setOptions({maxLines: 35});
+
+                /**
+                 * @see http://stackoverflow.com/a/13579233
+                 */
+                var heightUpdateFunction = function() {
+                    // http://stackoverflow.com/questions/11584061/
+                    var newHeight =
+                        editor.getSession().getScreenLength() * editor.renderer.lineHeight
+                        + 2 * editor.renderer.scrollBarH.getHeight();
+
+                    $('#editor').css('height', newHeight);
+
+                    // This call is required for the editor to fix all of
+                    // its inner structure for adapting to a change in size
+                    editor.resize();
+                };
+
+                // Set initial size to match initial content
+                heightUpdateFunction();
+
+                // Whenever a change happens inside the ACE editor, update
+                // the size again
+                editor.getSession().on('change', heightUpdateFunction);
+
+                return editor;
+            })('editor');
+        }
+        var timer;
+
+        $scope.$on('$destroy', function() {
+            $timeout.cancel(timer);
+        });
+
         var testComposerJson = function() {
-            $http.post(TENSIDEApi + 'composer.json', editor.getValue()).success(function(data, status, headers, config) {
-                $scope.errors   = data.error;
-                $scope.warnings = data.warning;
-            });
+            $timeout.cancel(timer);
+            timer = $timeout(function () {
+                $http.post(TENSIDEApi + 'composer.json', editor.getValue()).success(function(data) {
+                    $scope.errors   = data.error;
+                    $scope.warnings = data.warning;
+                });
+            }, 2000);
+            timer.then(function () { console.log('resolved'); }, function () { console.log('cancelled'); });
         };
 
-        $http.get(TENSIDEApi + 'composer.json', {'transformResponse': []}).success(function(data, status, headers, config) {
+        $http.get(TENSIDEApi + 'composer.json', {'transformResponse': []}).success(function(data) {
             editor.setValue(data);
             editor.gotoLine(0);
             editor.getSession().on('change', testComposerJson);

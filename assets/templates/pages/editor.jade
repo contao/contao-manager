@@ -5,37 +5,3 @@ div#errors(ng-repeat="error in errors")
 div#warnings(ng-repeat="warning in warnings")
     p {{warning}}
 pre#editor
-
-script.
-    var editor = (function(){
-        var editor = ace.edit("editor");
-
-        editor.getSession().setMode("ace/mode/json");
-        editor.getSession().setTabSize(4);
-        editor.getSession().setUseSoftTabs(true);
-
-        /**
-         * @see http://stackoverflow.com/a/13579233
-         */
-        var heightUpdateFunction = function() {
-            // http://stackoverflow.com/questions/11584061/
-            var newHeight =
-                editor.getSession().getScreenLength() * editor.renderer.lineHeight
-                + 2 * editor.renderer.scrollBarH.getHeight();
-
-            $('#editor').css('height', newHeight);
-
-            // This call is required for the editor to fix all of
-            // its inner structure for adapting to a change in size
-            editor.resize();
-        };
-
-        // Set initial size to match initial content
-        heightUpdateFunction();
-
-        // Whenever a change happens inside the ACE editor, update
-        // the size again
-        editor.getSession().on('change', heightUpdateFunction);
-
-        return editor;
-    })();
