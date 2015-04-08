@@ -27,7 +27,7 @@ var TENSIDEApi = TENSIDEApi || '';
     TENSIDE = app;
 
     TENSIDE.run(function(AuthService) {
-        AuthService.setBaseUrl(TENSIDEApi + '/auth');
+        AuthService.setBaseUrl(TENSIDEApi + 'auth');
     });
     TENSIDE.config(function ($routeProvider, $locationProvider, USER_ROLES) {
         $locationProvider.html5Mode(false);
