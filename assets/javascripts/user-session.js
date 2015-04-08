@@ -84,8 +84,7 @@
             return $http
                 .get(baseUrl)
                 .then(function (res) {
-                    Session.create(res.data.id, res.data.user.id,
-                        res.data.user.role);
+                    Session.create(res.data.id, res.data.user.id, res.data.user.role);
                     return res.data.user;
                 });
         };
@@ -118,6 +117,11 @@
             this.userId = null;
             this.userRole = null;
         };
+
+        this.getUserId = function() {
+            return this.userId;
+        };
+
         return this;
     });
 
