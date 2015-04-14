@@ -24,6 +24,16 @@
   "require": {
     "tenside/core": "~1.0"
   },
+  "autoload": {
+    "psr-4": {
+      "Tenside\\Ui\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tenside\\Ui\\Test\\": "tests"
+    }
+  },
   "extra": {
     "branch-alias": {
       "dev-develop": "1.0-dev"
