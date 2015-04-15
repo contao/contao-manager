@@ -47,13 +47,19 @@
      *  }
      *
      */
-    userSession.factory('AuthService', ['$rootScope', '$http', 'Session', function ($rootScope, $http, Session) {
+    userSession.factory('AuthService', ['$rootScope', '$http', 'Session', 'AUTH_EVENTS', function ($rootScope, $http, Session, AUTH_EVENTS) {
         var
             baseUrl,
             authService = {};
 
         authService.setBaseUrl = function(url) {
             baseUrl = url;
+
+            // Initialize the session as we might still be logged in from a previous load.
+            authService.ping().then(function (user) {
+                $rootScope.setCurrentUser(user);
+                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+            });
         };
 
         authService.getBaseUrl = function() {
@@ -210,12 +216,6 @@
                 $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
             }
         };
-
-        // Initialize the session as we might still be logged in from a previous load.
-        AuthService.ping().then(function (user) {
-            $rootScope.setCurrentUser(user);
-            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-        });
     });
 
     userSession.config(function ($httpProvider) {
