@@ -1,7 +1,7 @@
 h1
     | composer.json
-div#errors(ng-repeat="error in errors")
-    p {{error}}
-div#warnings(ng-repeat="warning in warnings")
-    p {{warning}}
+ul#errors(ng-repeat="error in errors")
+    li {{error}}
+ul#warnings(ng-repeat="warning in warnings")
+    li {{warning}}
 pre#editor
