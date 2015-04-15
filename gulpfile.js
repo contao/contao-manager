@@ -20,9 +20,12 @@ var gulp = require('gulp'),
 // native modules
     del = require('del'),
     sh = require('sync-exec'),
-    debug = require('gulp-debug');
+    debug = require('gulp-debug'),
+    data = require('gulp-data'),
+    globby = require('globby'),
+    clone = require('clone');
 
-var out = process.env.DEST_DIR || 'build',
+var out = process.env.DEST_DIR || '.build',
     tensideApi      = process.env.TENSIDE_API || false,
     tensideVersion  = process.env.TENSIDE_VERSION || false,
     composerVersion = process.env.COMPOSER_VERSION || false;
@@ -37,8 +40,7 @@ function getTensideApi() {
 
 function getTensideVersion() {
     if (!tensideVersion) {
-        var result = sh('git describe --always --abbrev=8');
-        tensideVersion = result.stdout || 'unknown';
+        tensideVersion = 'unknown';
     }
 
     return tensideVersion;
@@ -46,8 +48,7 @@ function getTensideVersion() {
 
 function getComposerVersion() {
     if (!composerVersion) {
-        var result = sh('git describe --always --abbrev=8');
-        composerVersion = result.stdout || 'unknown';
+        composerVersion = 'unknown';
     }
 
     return composerVersion;
@@ -55,12 +56,19 @@ function getComposerVersion() {
 
 var paths = {
     templates: {
-        'watch': 'assets/templates/**/*.jade',
+        'watch': [
+            'assets/templates/**/*.jade',
+            'js/*.js',
+            'css/*.css'
+        ],
         'src': 'assets/templates/**/[^_]*.jade'
     },
     stylesheets: {
         'watch': 'assets/stylesheets/**/*.scss',
-        'src': 'assets/stylesheets/tenside.scss'
+        'src': 'assets/stylesheets/tenside.scss',
+        'loadOrder': [
+            'css/tenside*.css'
+        ]
     },
     fonts: {
         'src': [
@@ -82,6 +90,20 @@ var paths = {
             'bower_components/ace/build/src/mode-json.js',
             'bower_components/ace/build/src/worker-json.js',
             'assets/javascripts/*.js'
+        ],
+        'loadOrder': [
+            'js/jquery.js',
+            'js/angular.js',
+            'js/angular-route.js',
+            'js/ui-bootstrap.js',
+            'js/ui-bootstrap-tpls.js',
+            'js/bootstrap.js',
+            'js/ace.js',
+            'js/mode-json.js',
+            'js/worker-json.js',
+            'js/user-session.js',
+            'js/tenside.js',
+            'js/tenside-*.js'
         ]
     },
     images: {
@@ -89,6 +111,37 @@ var paths = {
         'src': 'assets/images/*'
     }
 };
+
+var variables = {
+    'stylesheets': ['css/tenside.css'],
+    'javascripts': ['js/tenside.js'],
+    'app': {
+        'tensideApi': getTensideApi(),
+        'tensideVersion': getTensideVersion(),
+        'composerVersion': getComposerVersion()
+    }
+};
+
+var globVariables = function(variables) {
+    return data(
+        function() {
+            var data = variables ? clone(variables) : {
+                'stylesheets': paths.stylesheets.loadOrder,
+                'javascripts': paths.javascripts.loadOrder
+            };
+            data.stylesheets = globby.sync(data.stylesheets, {cwd: out});
+            data.javascripts = globby.sync(data.javascripts, {cwd: out});
+            data.app = {
+                'tensideApi': getTensideApi(),
+                'tensideVersion': getTensideVersion(),
+                'composerVersion': getComposerVersion()
+            };
+
+            return data;
+        }
+    );
+};
+
 
 /**
  * Installation tasks
@@ -114,50 +167,19 @@ gulp.task('clean-templates', function (cb) {
     del([out + '/*.html'], {force: true}, cb);
 });
 
-gulp.task('build-templates', ['clean-templates'], function () {
-    var variables = {
-        'stylesheets': ['css/tenside.css'],
-        'javascripts': ['js/tenside.js'],
-        'app': {
-            'tensideApi': getTensideApi(),
-            'tensideVersion': getTensideVersion(),
-            'composerVersion': getComposerVersion()
-        }
-    };
-
+gulp.task('build-templates', ['clean-templates', 'build-stylesheets', 'build-javascripts'], function () {
     return gulp.src(paths.templates.src)
-        .pipe(jade({ locals: variables }))
+        .pipe(globVariables())
+        .pipe(jade())
         .pipe(debug({title: 'templates:'}))
         .pipe(gulp.dest(out));
 });
 
 gulp.task('watch-templates', [], function () {
-    var variables = {
-        'stylesheets': ['css/tenside.css'],
-        'javascripts': [
-            'js/jquery.js',
-            'js/angular.js',
-            'js/angular-route.js',
-            'js/ui-bootstrap.js',
-            'js/ui-bootstrap-tpls.js',
-            'js/bootstrap.js',
-            'js/ace.js',
-            'js/mode-json.js',
-            'js/worker-json.js',
-            'js/user-session.js',
-            'js/tenside.js',
-            'js/tenside-editor.js',
-            'js/tenside-search.js'
-        ],
-        'app': {
-            'tensideApi': getTensideApi(),
-            'tensideVersion': getTensideVersion(),
-            'composerVersion': getComposerVersion()
-        }
-    };
-
     return gulp.src(paths.templates.src)
-        .pipe(jade({ locals: variables }))
+        .pipe(globVariables())
+        .pipe(jade())
+        .pipe(debug({title: 'templates:'}))
         .pipe(gulp.dest(out));
 });
 
@@ -217,6 +239,7 @@ gulp.task('watch-javascripts', [], function () {
     return gulp.src(paths.javascripts.src)
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write('.'))
+        .pipe(debug({title: 'javascript:'}))
         .pipe(gulp.dest(out + '/js'));
 });
 
@@ -269,7 +292,7 @@ gulp.task('clean', function (cb) {
     del([out], {force: true}, cb);
 });
 
-gulp.task('build', ['clean', 'build-templates', 'build-stylesheets', 'build-javascripts', 'build-images', 'build-fonts']);
+gulp.task('build', ['build-templates', 'build-images', 'build-fonts']);
 
 gulp.task('watch', function () {
     livereload.listen();
