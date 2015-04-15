@@ -17,10 +17,9 @@
  */
 
 (function() {
-    var app = angular.module('tenside-editor', []);
+    var app = angular.module('tenside-editor', ['tenside-api']);
 
-    app.controller('tensideEditorController', ['$window', '$scope', '$http', '$timeout', function ($window, $scope, $http, $timeout) {
-
+    app.controller('tensideEditorController', ['$window', '$scope', '$http', '$timeout', '$tensideApi', function ($window, $scope, $http, $timeout, $tensideApi) {
         var editor;
         if(editor === undefined) {
             editor = (function(elementId){
@@ -67,7 +66,7 @@
         var testComposerJson = function() {
             $timeout.cancel(timer);
             timer = $timeout(function () {
-                $http.post(TENSIDEApi + 'composer.json', editor.getValue()).success(function(data) {
+                $tensideApi.composerJson.put(editor.getValue()).success(function(data) {
                     $scope.errors   = data.error;
                     $scope.warnings = data.warning;
                 });
@@ -75,7 +74,7 @@
             timer.then(function () { console.log('resolved'); }, function () { console.log('cancelled'); });
         };
 
-        $http.get(TENSIDEApi + 'composer.json', {'transformResponse': []}).success(function(data) {
+        $tensideApi.composerJson.get().success(function(data) {
             editor.setValue(data);
             editor.gotoLine(0);
             editor.getSession().on('change', testComposerJson);

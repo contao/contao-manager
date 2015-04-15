@@ -17,9 +17,11 @@
  */
 
 (function() {
-    var app = angular.module('tenside-packages', []);
+    var app = angular.module('tenside-packages', ['tenside-api']);
 
-    app.controller('tensidePackagesController', ['$window', '$scope', '$http', function ($window, $scope, $http) {
+    app.controller('tensidePackagesController',
+        ['$scope', '$routeParams', '$tensideApi',
+        function ($scope, $routeParams, $tensideApi) {
         $scope.packages = [];
 
         // Mapping of version descriptors to css classes.
@@ -44,7 +46,7 @@
             console.log(pack);
         };
 
-        $http.get(TENSIDEApi + 'packages').success(function(data) {
+        $tensideApi.packages.list().success(function(data) {
             $scope.packages = data;
         });
     }]);
