@@ -22,14 +22,14 @@ var TENSIDE;
 var TENSIDEApi = TENSIDEApi || '';
 
 (function () {
-    var app = angular.module('tenside', ['ngRoute', 'ui.bootstrap', 'user-session']);
+    TENSIDE = angular.module('tenside', ['ngRoute', 'ui.bootstrap', 'user-session']);
 
-    TENSIDE = app;
-
-    TENSIDE.run(function(AuthService) {
+    TENSIDE.run(function(AuthService, $tensideApi, $rootScope) {
         AuthService.setBaseUrl(TENSIDEApi + 'auth');
-    });
-    TENSIDE.config(function ($routeProvider, $locationProvider, USER_ROLES, $httpProvider) {
+        $tensideApi.setBaseUrl(TENSIDEApi);
+    })
+    .config(function ($routeProvider, $locationProvider, USER_ROLES, $httpProvider) {
+
         $locationProvider.html5Mode(false);
 
         // route for config page
@@ -76,17 +76,12 @@ var TENSIDEApi = TENSIDEApi || '';
             };
         });
     })
-    ;
-
-    app.controller('tensideConfigController', ['$window', '$scope', function ($window, $scope) {
+    .controller('tensideConfigController', ['$window', '$scope', function ($window, $scope) {
+    }])
+    .controller('tensideAboutController', ['$window', '$scope', function ($window, $scope) {
         $scope.config = {};
-    }]);
-
-    app.controller('tensideAboutController', ['$window', '$scope', function ($window, $scope) {
-        $scope.config = {};
-    }]);
-
-    app.controller('tensideSupportController', ['$window', '$scope', function ($window, $scope) {
+    }])
+    .controller('tensideSupportController', ['$window', '$scope', function ($window, $scope) {
         $scope.config = {};
     }]);
 })();
