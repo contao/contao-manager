@@ -21,7 +21,8 @@
     "irc": "irc://irc.freenode.org/tenside",
     "issues": "https://github.com/tenside/ui/issues"
   },
-  "require": {
+  "require-dev": {
+    "phpcq/all-tasks": "~1.0",
     "tenside/core": "~1.0"
   },
   "autoload": {
