@@ -40,10 +40,10 @@ html(lang="en", ng-app="tenside")
               li(role="presentation", ngClass="{active: isActive('/search')}", ng-show="authService.isAuthenticated()")
                 a(href="#search")
                   i.fa.fa-search  Browse
-              li(role="presentation", ngClass="{active: isActive('/editor')}", ng-show="authService.isAuthenticated()")
+              li(role="presentation", ngClass="{active: isActive('/editor')}", ng-show="authService.isAuthenticated()&& expertsMode")
                 a(href="#editor")
                   i.fa.fa-file-code-o  composer.json
-              li(role="presentation", ngClass="{active: isActive('/config')}", ng-show="authService.isAuthenticated()")
+              li(role="presentation", ngClass="{active: isActive('/config')}", ng-show="authService.isAuthenticated() && expertsMode")
                 a(href="#config")
                   i.fa.fa-gears  Config
               li.ng-hide(role="presentation", ng-show="authService.isAuthenticated()")
@@ -81,7 +81,7 @@ html(lang="en", ng-app="tenside")
 
           .col-md-8.text-right
             label.checkbox
-              input(type="checkbox", onclick="document.body.className = document.body.className ? '' : 'experts-mode'")
+              input(type="checkbox", ng-model="expertsMode")
               | Toggle experts mode
 
     script.

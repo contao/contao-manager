@@ -27,6 +27,7 @@ var TENSIDEApi = TENSIDEApi || '';
     TENSIDE.run(function(AuthService, $tensideApi, $rootScope) {
         AuthService.setBaseUrl(TENSIDEApi + 'auth');
         $tensideApi.setBaseUrl(TENSIDEApi);
+        $rootScope.expertsMode = false;
     })
     .config(function ($routeProvider, $locationProvider, USER_ROLES, $httpProvider) {
 
