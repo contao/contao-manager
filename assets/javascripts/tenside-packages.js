@@ -42,9 +42,46 @@
             return 'label-success';
         };
 
+        $scope.typeImage = function(typeName) {
+            switch (typeName) {
+                case 'component':
+                case 'composer-installer':
+                case 'composer-plugin':
+                case 'legacy-contao-module':
+                case 'meta-package':
+                case 'metapackage':
+                case 'php':
+                    return 'img/type-' + typeName + '.png';
+                case 'symfony-bundle':
+                    return 'img/type-symfony-bundle.svg';
+                default:
+            }
+
+            return 'img/type-library.png';
+        };
+
         $scope.lock = function (pack) {
             console.log(pack);
         };
+
+        $scope.unlock = function (pack) {
+            console.log(pack);
+        };
+
+        $scope.upgrade = function (pack) {
+            // pack is optional.
+            console.log(pack);
+        };
+
+        $scope.remove = function (pack) {
+            console.log(pack);
+        };
+
+        if ($routeParams.packageVendor) {
+            $tensideApi.packages.get($routeParams.packageVendor + '/' + $routeParams.packageName).success(function(data) {
+                $scope.package = data;
+            });
+        }
 
         $tensideApi.packages.list().success(function(data) {
             $scope.packages = data;
@@ -58,6 +95,13 @@
         // route to the packages page
         $routeProvider.when('/packages', {
             templateUrl: 'pages/packages.html',
+            controller: 'tensidePackagesController',
+            data: {
+                authorizedRoles: [USER_ROLES.admin]
+            }
+        });
+        $routeProvider.when('/packages/:packageVendor/:packageName', {
+            templateUrl: 'pages/package.html',
             controller: 'tensidePackagesController',
             data: {
                 authorizedRoles: [USER_ROLES.admin]

@@ -1,34 +1,39 @@
 h1
   | Packages
-
+button.btn.btn-primary.btn-md(type="button", title="Upgrade", ng-click="upgrade")
+  span.fa.fa-fw.fa-arrow-circle-up
+  span Upgrade
 .packages-list
   ul.list-group
-    li.list-group-item(ng-repeat="pack in packages")
+    li.list-group-item(ng-repeat="package in packages")
       .row.package
         .col-md-1
-          img.img-responsive(ng-src="{{pack.image}}")
+          img.img-responsive(ng-src="{{typeImage(package.type)}}")
         .col-md-7
           strong
-            a(href="#package?name={{pack.name}}") {{pack.description}}
-          small  [{{pack.name}}]
+            a(href="#packages/{{package.name}}") {{package.description}}
+          small  [{{package.name}}]
         .col-md-2
-          span.label(ng-class="versionToClass(pack.version)") {{pack.version}}
+          span.label(ng-class="versionToClass(package.version)") {{package.version}}
           | &nbsp;
-          span.label(ng-class="versionToClass(pack.upgrade_version)", ng-if="pack.upgrade_version")
+          span.label(ng-class="versionToClass(package.upgrade_version)", ng-if="!package.locked && package.upgrade_version")
             span.fa.fa-arrow-circle-up
-            | {{pack.upgrade_version}}
+            | {{package.upgrade_version}}
         .col-md-2.text-right
           .actions
             .btn-group(role="group")
-              button.btn.btn-primary.btn-md(type="button", title="Upgrade package", ng-if="!pack.locked && (pack.version!=pack.upgrade_version)", ng-click="upgrade(pack)")
+              button.btn.btn-primary.btn-md(type="button", title="Upgrade package", ng-if="!package.locked && (package.version!=package.upgrade_version)", ng-click="upgrade(pack)")
                 span.fa.fa-fw.fa-arrow-circle-up
                 span.sr-only Upgrade package
-              button.btn.btn-info.btn-md(type="button", title="Lock package version", ng-if="!pack.locked", ng-click="lock(pack)")
+              button.btn.btn-info.btn-md(type="button", title="Lock package version", ng-if="!package.locked", ng-click="lock(pack)")
                 span.fa.fa-fw.fa-unlock
                 span.sr-only Lock package version
-              button.btn.btn-warning.btn-md(type="button", title="Unlock package version", ng-if="pack.locked", ng-click="unlock(pack)")
+              button.btn.btn-warning.btn-md(type="button", title="Unlock package version", ng-if="package.locked", ng-click="unlock(pack)")
                 span.fa.fa-fw.fa-lock
                 span.sr-only Unlock package version
-              button.btn.btn-danger.btn-md(type="button", title="Remove package", ng-if="!pack.locked", ng-click="remove(pack)")
+              button.btn.btn-danger.btn-md(type="button", title="Remove package", ng-if="!package.locked && package.constraint", ng-click="remove(pack)")
                 span.fa.fa-fw.fa-trash-o
                 span.sr-only Remove package
+button.btn.btn-primary.btn-md(type="button", title="Upgrade", ng-click="upgrade")
+  span.fa.fa-fw.fa-arrow-circle-up
+  span Upgrade
