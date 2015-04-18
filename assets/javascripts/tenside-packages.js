@@ -20,9 +20,15 @@
     var app = angular.module('tenside-packages', ['tenside-api']);
 
     app.controller('tensidePackagesController',
-        ['$scope', '$routeParams', '$tensideApi',
-        function ($scope, $routeParams, $tensideApi) {
+    ['$scope', '$routeParams', '$tensideApi',
+    function ($scope, $routeParams, $tensideApi) {
         $scope.packages = [];
+
+        var reload = function() {
+            $tensideApi.packages.list().success(function(data) {
+                $scope.packages = data;
+            });
+        };
 
         // Mapping of version descriptors to css classes.
         $scope.versionToClass = function(version) {
@@ -60,12 +66,21 @@
             return 'img/type-library.png';
         };
 
+        var updatePackage = function(data) {
+            $scope.packages[data.name] = data;
+        };
+
         $scope.lock = function (pack) {
-            console.log(pack);
+            var newPack = jQuery.extend(true, {}, pack);
+            newPack.locked = true;
+            $tensideApi.packages.put(newPack).success(updatePackage);
         };
 
         $scope.unlock = function (pack) {
-            console.log(pack);
+            var newPack = jQuery.extend(true, {}, pack);
+            newPack.locked = false;
+            $tensideApi.packages.put(newPack).success(updatePackage);
+            console.log(pack, newPack);
         };
 
         $scope.upgrade = function (pack) {
@@ -74,7 +89,9 @@
         };
 
         $scope.remove = function (pack) {
-            console.log(pack);
+            $tensideApi.packages.delete(pack).success(function() {
+                reload();
+            })
         };
 
         if ($routeParams.packageVendor) {
@@ -83,9 +100,7 @@
             });
         }
 
-        $tensideApi.packages.list().success(function(data) {
-            $scope.packages = data;
-        });
+        reload();
     }]);
 
     // Late dependency injection
