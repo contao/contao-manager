@@ -23,9 +23,14 @@
     ['$scope', '$routeParams', '$tensideApi',
     function ($scope, $routeParams, $tensideApi) {
         $scope.packages = [];
+        $scope.showDependencies = false;
+
+        $scope.$watch('showDependencies', function() {
+            reload();
+        });
 
         var reload = function() {
-            $tensideApi.packages.list().success(function(data) {
+            $tensideApi.packages.list($scope.showDependencies).success(function(data) {
                 $scope.packages = data;
             });
         };
@@ -99,8 +104,6 @@
                 $scope.package = data;
             });
         }
-
-        reload();
     }]);
 
     // Late dependency injection
