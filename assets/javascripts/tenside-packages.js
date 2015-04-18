@@ -71,6 +71,14 @@
             return 'img/type-library.png';
         };
 
+        $scope.canUpgrade = function(package) {
+            return !package.locked && package.upgrade_version;
+        };
+
+        $scope.canDelete = function(package) {
+            return !package.locked && package.constraint;
+        };
+
         var updatePackage = function(data) {
             $scope.packages[data.name] = data;
         };

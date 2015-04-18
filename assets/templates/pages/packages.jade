@@ -7,7 +7,7 @@ button.btn.btn-primary.btn-md(type="button", title="Upgrade", ng-click="upgrade"
     li.list-group-item(ng-repeat="package in packages")
       .row.package
         .col-md-1
-          img.img-responsive(ng-src="{{typeImage(package.type)}}")
+          img.img-responsive(ng-src="{{typeImage(package.type)}}" title="{{package.type}}")
         .col-md-7
           strong
             a(href="#packages/{{package.name}}") {{package.description}}
@@ -15,13 +15,13 @@ button.btn.btn-primary.btn-md(type="button", title="Upgrade", ng-click="upgrade"
         .col-md-2
           span.label(ng-class="versionToClass(package.version)") {{package.version}}
           | &nbsp;
-          span.label(ng-class="versionToClass(package.upgrade_version)", ng-if="!package.locked && package.upgrade_version")
+          span.label(ng-class="versionToClass(package.upgrade_version)", ng-if="canUpgrade(package)")
             span.fa.fa-arrow-circle-up
-            | {{package.upgrade_version}}
+            |  {{package.upgrade_version}}
         .col-md-2.text-right
           .actions
             .btn-group(role="group")
-              button.btn.btn-primary.btn-md(type="button", title="{{ 'PACKAGES.UPGRADE_SELECTED' | translate:{package:package.name} }}", ng-if="!package.locked && (package.version!=package.upgrade_version)", ng-click="upgrade(package)")
+              button.btn.btn-primary.btn-md(type="button", title="{{ 'PACKAGES.UPGRADE_SELECTED' | translate:{package:package.name} }}", ng-if="canUpgrade(package)", ng-click="upgrade(package)")
                 span.fa.fa-fw.fa-arrow-circle-up
                 span.sr-only(translate="PACKAGES.UPGRADE_SELECTED" translate-values="{package: package.name}")
               button.btn.btn-info.btn-md(type="button", title="{{ 'PACKAGES.LOCK_SELECTED' | translate:{package:package.name} }}", ng-if="!package.locked", ng-click="lock(package)")
@@ -30,12 +30,12 @@ button.btn.btn-primary.btn-md(type="button", title="Upgrade", ng-click="upgrade"
               button.btn.btn-warning.btn-md(type="button", title="{{ 'PACKAGES.UNLOCK_SELECTED' | translate:{package:package.name} }}", ng-if="package.locked", ng-click="unlock(package)")
                 span.fa.fa-fw.fa-lock
                 span.sr-only(translate="PACKAGES.UNLOCK_SELECTED" translate-values="{package: package.name}")
-              button.btn.btn-danger.btn-md(type="button", title="{{ 'PACKAGES.REMOVE_SELECTED' | translate:{package:package.name} }}", ng-if="!package.locked && package.constraint", ng-click="remove(package)")
+              button.btn.btn-danger.btn-md(type="button", title="{{ 'PACKAGES.REMOVE_SELECTED' | translate:{package:package.name} }}", ng-if="canDelete(package)", ng-click="remove(package)")
                 span.fa.fa-fw.fa-trash-o
                 span.sr-only(translate="PACKAGES.REMOVE_SELECTED" translate-values="{package: package.name}")
 button.btn.btn-primary.btn-md(type="button", title="Upgrade", ng-click="upgrade")
   span.fa.fa-fw.fa-arrow-circle-up
-  span Upgrade
+  span(translate="PACKAGES.UPGRADE")
 label.checkbox
   input(type="checkbox", ng-model="showDependencies")
   | Show dependencies
