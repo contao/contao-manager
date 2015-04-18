@@ -17,7 +17,7 @@
  */
 
 (function() {
-    var app = angular.module('tenside-packages', ['tenside-api']);
+    var app = angular.module('tenside-packages', ['tenside-api', 'pascalprecht.translate']);
 
     app.controller('tensidePackagesController',
     ['$scope', '$routeParams', '$tensideApi',
@@ -106,7 +106,7 @@
     // Late dependency injection
     TENSIDE.requires.push('tenside-packages');
 
-    TENSIDE.config(function ($routeProvider, USER_ROLES) {
+    TENSIDE.config(function ($routeProvider, USER_ROLES, $translateProvider) {
         // route to the packages page
         $routeProvider.when('/packages', {
             templateUrl: 'pages/packages.html',
@@ -122,6 +122,19 @@
                 authorizedRoles: [USER_ROLES.admin]
             }
         });
+
+        var translations = {
+            PACKAGES: {
+                HEADLINE: 'Packages',
+                UPGRADE: 'Upgrade',
+                UPGRADE_SELECTED: 'Upgrade package {{package}}.',
+                LOCK_SELECTED: 'Lock package {{package}} version.',
+                UNLOCK_SELECTED: 'Unlock package {{package}} version.',
+                REMOVE_SELECTED: 'Remove package {{package}}.'
+            }
+        };
+
+        $translateProvider.translations('en', translations);
     });
 
 })();

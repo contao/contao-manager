@@ -11,6 +11,7 @@
     "angular-route": "~1.2.0",
     "angular-bootstrap": "~0.12",
     "bootstrap-sass-official": "~3.3.0",
-    "font-awesome": "~4.2.0"
+    "font-awesome": "~4.2.0",
+    "angular-translate": "~2.6.1"
   }
 }

@@ -22,16 +22,26 @@ var TENSIDE;
 var TENSIDEApi = TENSIDEApi || '';
 
 (function () {
-    TENSIDE = angular.module('tenside', ['ngRoute', 'ui.bootstrap', 'user-session']);
+    TENSIDE = angular.module('tenside', ['ngRoute', 'ui.bootstrap', 'user-session', 'pascalprecht.translate']);
 
     TENSIDE.run(function(AuthService, $tensideApi, $rootScope) {
         AuthService.setBaseUrl(TENSIDEApi + 'auth');
         $tensideApi.setBaseUrl(TENSIDEApi);
         $rootScope.expertsMode = false;
     })
-    .config(function ($routeProvider, $locationProvider, USER_ROLES, $httpProvider) {
+    .config(function ($routeProvider, $locationProvider, USER_ROLES, $httpProvider, $translateProvider) {
 
         $locationProvider.html5Mode(false);
+
+        var translations = {
+            SLOGAN: 'Package management made easy!',
+            LOADING: 'Loading...'
+        };
+
+        $translateProvider
+            .translations('en', translations)
+            .usePostCompiling(true)
+            .preferredLanguage('en');
 
         // route for config page
         $routeProvider.when('/config', {
