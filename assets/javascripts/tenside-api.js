@@ -21,52 +21,75 @@
 
     TENSIDE_API.factory('$tensideApi', ['$http', function ($http) {
         var
-            baseUrl,
-            tensideApi = {};
+            http = $http,
+            tensideApiConnection = function() {
+                var self = this,
+                    apiUrl,
+                    version;
+                self.setBaseUrl = function(url) {
+                    apiUrl = url;
+                };
 
-        var endpoint = function(endpoint, version) {
-            if (version === undefined) {
-                version = 'v1';
-            }
-            return tensideApi.getBaseUrl() + 'api/' + version + '/' + endpoint;
-        };
+                self.getBaseUrl = function() {
+                    return apiUrl;
+                };
 
-        tensideApi.setBaseUrl = function(url) {
-            baseUrl = url;
-        };
+                self.setVersion = function(ver) {
+                    version = ver;
+                };
 
-        tensideApi.getBaseUrl = function() {
-            return baseUrl;
-        };
+                self.getVersion = function() {
+                    return version;
+                };
 
-        tensideApi.packages = (function() {
-            this.list = function(all) {
-                return $http.get(endpoint('packages'), all ? {params: {all: ''}} : {});
+                self.endpoint = function(endpoint) {
+                    if (version === undefined) {
+                        version = 'v1';
+                    }
+                    return self.getBaseUrl() + 'api/' + version + '/' + endpoint;
+                };
+
+                self.packages = new tensideApiPackages(self);
+                self.composerJson = new tensideApiComposerJson(self);
+            },
+            tensideApiPackages = function (tensideApi) {
+                var self = this,
+                    api = tensideApi,
+                    endpoint = function(name) {
+                        if (name) {
+                            return endpoint() + '/' + name;
+                        }
+                        return api.endpoint('packages');
+                    }
+                    ;
+                self.list = function(all) {
+                    return http.get(endpoint(), all ? {params: {all: ''}} : {});
+                };
+                self.get = function(name) {
+                    return http.get(endpoint(name));
+                };
+                self.put = function(data) {
+                    return http.put(endpoint(data.name), data);
+                };
+                self.delete = function () {
+                    return http.delete(endpoint(data.name));
+                };
+            },
+            tensideApiComposerJson = function (tensideApi) {
+                var self = this,
+                    api = tensideApi,
+                    endpoint = function() {
+                        return api.endpoint('composer.json');
+                    }
+                    ;
+                self.get = function() {
+                    return http.get(endpoint(), {'transformResponse': []});
+                };
+                self.put = function(data) {
+                    return http.put(endpoint(), data);
+                };
             };
-            this.get = function(name) {
-                return $http.get(endpoint('packages') + '/' + name);
-            };
-            this.put = function(name, data) {
-                return $http.put(endpoint('packages') + '/' + name, data);
-            };
-            this.delete = function () {
-                return $http.delete(endpoint('packages') + '/' + name);
-            };
 
-            return this;
-        })();
-
-        tensideApi.composerJson = (function() {
-            this.get = function() {
-                return $http.get(endpoint('composer.json'), {'transformResponse': []});
-            };
-            this.put = function(data) {
-                return $http.put(endpoint('composer.json'), data);
-            };
-
-            return this;
-        })();
-
-        return tensideApi;
+        return new tensideApiConnection();
     }]);
 }());
