@@ -25,7 +25,7 @@ var gulp = require('gulp'),
     globby = require('globby'),
     clone = require('clone');
 
-var out = process.env.DEST_DIR || '.build',
+var out             = process.env.DEST_DIR || '.build',
     tensideApi      = process.env.TENSIDE_API || false,
     tensideVersion  = process.env.TENSIDE_VERSION || false,
     composerVersion = process.env.COMPOSER_VERSION || false;
@@ -58,8 +58,8 @@ var paths = {
     templates: {
         'watch': [
             'assets/templates/**/*.jade',
-            'js/*.js',
-            'css/*.css'
+            out + '/js/*.js',
+            out + '/css/*.css'
         ],
         'src': 'assets/templates/**/[^_]*.jade'
     },
