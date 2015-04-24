@@ -28,7 +28,8 @@ var gulp = require('gulp'),
 var out             = process.env.DEST_DIR || '.build',
     tensideApi      = process.env.TENSIDE_API || false,
     tensideVersion  = process.env.TENSIDE_VERSION || false,
-    composerVersion = process.env.COMPOSER_VERSION || false;
+    composerVersion = process.env.COMPOSER_VERSION || false,
+    mockAPI         = false;
 
 function getTensideApi() {
     if (!tensideApi) {
@@ -133,6 +134,12 @@ var globVariables = function(variables) {
             };
             data.stylesheets = globby.sync(data.stylesheets, {cwd: out});
             data.javascripts = globby.sync(data.javascripts, {cwd: out});
+
+            if (mockAPI) {
+                var pos = data.javascripts.indexOf('js/tenside-api.js');
+                data.javascripts[pos] = 'js/mock-tenside-api.js';
+            }
+
             data.app = {
                 'tensideApi': getTensideApi(),
                 'tensideVersion': getTensideVersion(),
