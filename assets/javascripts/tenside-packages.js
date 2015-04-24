@@ -22,7 +22,7 @@
     app.controller('tensidePackagesController',
     ['$scope', '$routeParams', '$tensideApi',
     function ($scope, $routeParams, $tensideApi) {
-        $scope.packages = [];
+        $scope.packages = {};
         $scope.showDependencies = false;
 
         $scope.$watch('showDependencies', function() {
