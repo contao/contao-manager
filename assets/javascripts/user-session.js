@@ -17,248 +17,60 @@
  */
 
 (function(){
-    var userSession = angular.module('user-session', []);
+    var userSession = angular.module('user-session', ['tenside-api']);
 
-    userSession.constant('AUTH_EVENTS', {
-        loginSuccess: 'auth-login-success',
-        loginFailed: 'auth-login-failed',
-        logoutSuccess: 'auth-logout-success',
-        sessionTimeout: 'auth-session-timeout',
-        notAuthenticated: 'auth-not-authenticated',
-        notAuthorized: 'auth-not-authorized'
-    });
-    userSession.constant('USER_ROLES', {
-        all: '*',
-        admin: 'admin',
-        editor: 'editor',
-        guest: 'guest'
-    });
-
-    /* Authentication service which uses json responses for login.
-     *
-     * The response to GET and POST (using credentials) is expected to be of this nature:
-     *  {
-     *    id: "session id."
-     *    user: {
-     *      id:   "user id",
-     *      user: "username"
-     *      role: "any of the roles specified in USER_ROLES constant"
-     *    }
-     *  }
-     *
-     */
-    userSession.factory('AuthService', ['$rootScope', '$http', 'Session', 'AUTH_EVENTS', function ($rootScope, $http, Session, AUTH_EVENTS) {
-        var
-            baseUrl,
-            authService = {};
-
-        authService.setBaseUrl = function(url) {
-            baseUrl = url;
-
-            // Initialize the session as we might still be logged in from a previous load.
-            authService.ping().then(function (user) {
-                $rootScope.setCurrentUser(user);
-                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-            });
-        };
-
-        authService.getBaseUrl = function() {
-            return baseUrl;
-        };
-
-        authService.getSession = function() {
-            return Session;
-        };
-
-        authService.login = function (credentials) {
-            return $http
-                .post(baseUrl, credentials)
-                .then(function (res) {
-                    Session.create(res.data.id, res.data.user.id, res.data.user.role);
-                    return res.data.user;
-                });
-        };
-
-        authService.logout = function () {
-            return $http
-                .delete(baseUrl)
-                .then(function () {
-                    Session.destroy();
-                });
-        };
-        authService.ping = function () {
-            return $http
-                .get(baseUrl)
-                .then(function (res) {
-                    Session.create(res.data.id, res.data.user.id, res.data.user.role);
-                    return res.data.user;
-                });
-        };
-
-        authService.isAuthenticated = function () {
-            return !!Session.userId;
-        };
-
-        authService.isAuthorized = function (authorizedRoles) {
-            if (!angular.isArray(authorizedRoles)) {
-                authorizedRoles = [authorizedRoles];
-            }
-            return ((authorizedRoles.length == 0) || (authService.isAuthenticated() &&
-            authorizedRoles.indexOf(Session.userRole) !== -1));
-        };
-
-        $rootScope.authService = authService;
-
-        return authService;
-    }]);
-
-    userSession.service('Session', function () {
-        this.create = function (sessionId, userId, userRole) {
-            this.id = sessionId;
-            this.userId = userId;
-            this.userRole = userRole;
-        };
-        this.destroy = function () {
-            this.id = null;
-            this.userId = null;
-            this.userRole = null;
-        };
-
-        this.getUserId = function() {
-            return this.userId;
-        };
-
-        return this;
-    });
-
-    userSession.run(function ($rootScope, $modal, $http, $location, AUTH_EVENTS, USER_ROLES, AuthService) {
-        $rootScope.$on('$routeChangeStart', function (event, next, current) {
-            var authorizedRoles = [];
-            try{
-                authorizedRoles = next.data.authorizedRoles;
-            } catch(e) {}
-            if (!AuthService.isAuthorized(authorizedRoles)) {
-                event.preventDefault();
-                if (AuthService.isAuthenticated()) {
-                    // user is not allowed
-                    $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
-                } else {
-                    // user is not logged in
-                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-                }
-            }
-        });
-
-        var checked, open;
+    userSession.factory('sessionRecoverer', ['$q', '$injector', function($q, $injector) {
         var showDialog = function () {
-            if (open) {
-                return;
-            }
-            if (!checked) {
-                AuthService.ping().then(function (user) {
-                    $rootScope.setCurrentUser(user);
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                }, function () {
-                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-                });
-                checked = true;
-
-                return;
-            }
-
-            var scope = $rootScope.$new();
+            var
+                scope = $injector.get('$rootScope').$new(),
+                api = $injector.get('$tensideApi');
             scope.login = function (credentials) {
-                scope.loginDialog.close(credentials);
-                open = false;
+                // FIXME: check selected method and login accordingly.
+                api.login(credentials.username, credentials.password).then(function (user) {
+                    api.setKey(user.data.token);
+                    scope.loginDialog.close();
+                });
             };
             scope.credentials = {
+                method: 'basic',
                 username: '',
-                password: ''
+                password: '',
+                jwtToken: ''
             };
-            scope.loginDialog = $modal.open({
+            scope.loginDialog = $injector.get('$modal').open({
                 scope: scope,
                 templateUrl: 'pages/login.html',
                 backdrop: 'static'
             });
 
-            scope.loginDialog.opened.then(function (credentials) { open = true; });
-            scope.loginDialog.result.then(function (credentials) {
-                AuthService.login(credentials).then(function (user) {
-                    $rootScope.setCurrentUser(user);
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                }, function () {
-                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-                });
-            }, function () {
-                $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-            });
+            // return the login dialog promise.
+            return scope.loginDialog.result;
         };
 
-        $rootScope.$on(AUTH_EVENTS.notAuthenticated, showDialog);
-        $rootScope.$on(AUTH_EVENTS.sessionTimeout, showDialog);
-        $rootScope.currentUser = null;
-        $rootScope.userRoles = USER_ROLES;
-        $rootScope.isAuthorized = AuthService.isAuthorized;
-
-        $rootScope.setCurrentUser = function (user) {
-            $rootScope.currentUser = user;
-        };
-        $rootScope.logout = function() {
-            AuthService.logout().then(
-                function() {
-                    $location.path('/');
-                }
-            );
-            $rootScope.setCurrentUser(null);
-        };
-        $rootScope.login = function() {
-            if (!AuthService.isAuthenticated()) {
-                $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-            }
-        };
-    });
-
-    userSession.config(function ($httpProvider) {
-        $httpProvider.interceptors.push([
-            '$injector',
-            function ($injector) {
-                return $injector.get('AuthInterceptor');
-            }
-        ]);
-    });
-
-    userSession.factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
         return {
-            responseError: function (response) {
-                $rootScope.$broadcast({
-                    401: AUTH_EVENTS.notAuthenticated,
-                    403: AUTH_EVENTS.notAuthorized,
-                    419: AUTH_EVENTS.sessionTimeout,
-                    440: AUTH_EVENTS.sessionTimeout
-                }[response.status], response);
-                return $q.reject(response);
-            }
-        };
-    });
+            responseError: function(rejection) {
+                // Session has expired
+                if (rejection.status == 401){
+                    var deferred = $q.defer();
 
-    userSession.directive('formAutofillFix', function ($timeout) {
-        return function (scope, element, attrs) {
-            element.prop('method', 'post');
-            if (attrs.ngSubmit) {
-                $timeout(function () {
-                    element
-                        .unbind('submit')
-                        .bind('submit', function (event) {
-                            event.preventDefault();
-                            element
-                                .find('input, textarea, select')
-                                .trigger('input')
-                                .trigger('change')
-                                .trigger('keydown');
-                            scope.$apply(attrs.ngSubmit);
-                        });
-                });
+                    // Create a new session (recover the session)
+                    // We use login method that logs the user in using the current credentials and
+                    // returns a promise
+                    showDialog().then(deferred.resolve, deferred.reject);
+
+                    // When the session recovered, make the same backend call again and chain the request
+                    return deferred.promise.then(function() {
+                        var api = $injector.get('$tensideApi');
+                        return api(jQuery.extend(rejection.config, {headers: {authorization: undefined}}));
+                    });
+                }
+
+                return $q.reject(rejection);
             }
         };
-    });
+    }]);
+
+    userSession.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.interceptors.push('sessionRecoverer');
+    }]);
 }());

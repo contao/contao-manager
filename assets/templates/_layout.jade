@@ -34,24 +34,18 @@ html(lang="en", ng-app="tenside")
             small(translate)  SLOGAN
           #navbar.collapse.navbar-collapse
             ul.nav.navbar-nav.navbar-right
-              li(role="presentation", ngClass="{active: isActive('/packages')}", ng-show="authService.isAuthenticated()")
+              li(role="presentation", ngClass="{active: isActive('/packages')}")
                 a(href="#packages")
                   i.fa.fa-archive  Packages
-              li(role="presentation", ngClass="{active: isActive('/search')}", ng-show="authService.isAuthenticated()")
+              li(role="presentation", ngClass="{active: isActive('/search')}")
                 a(href="#search")
                   i.fa.fa-search  Browse
-              li(role="presentation", ngClass="{active: isActive('/editor')}", ng-show="authService.isAuthenticated()&& expertsMode")
+              li(role="presentation", ngClass="{active: isActive('/editor')}", ng-show="expertsMode")
                 a(href="#editor")
                   i.fa.fa-file-code-o  composer.json
-              li(role="presentation", ngClass="{active: isActive('/config')}", ng-show="authService.isAuthenticated() && expertsMode")
+              li(role="presentation", ngClass="{active: isActive('/config')}", ng-show="expertsMode")
                 a(href="#config")
                   i.fa.fa-gears  Config
-              li.ng-hide(role="presentation", ng-show="authService.isAuthenticated()")
-                a(href="", ng-click="logout()")
-                  i.fa.fa-user  Logout
-              li.ng-hide(role="presentation", ng-show="!authService.isAuthenticated()")
-                a(href="", ng-click="login()")
-                  i.fa.fa-user  Login
 
         .tenside-search
           form.form(role="search", ng-submit="search()" ng-controller="tensideSearchController as search")

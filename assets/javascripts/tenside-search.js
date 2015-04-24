@@ -35,14 +35,11 @@
     // Late dependency injection
     TENSIDE.requires.push('tenside-search');
 
-    TENSIDE.config(function ($routeProvider, USER_ROLES) {
+    TENSIDE.config(function ($routeProvider) {
         // route to the search page
         $routeProvider.when('/search', {
             templateUrl: 'pages/search.html',
-            controller: 'tensideSearchController',
-            data: {
-                authorizedRoles: [USER_ROLES.admin]
-            }
+            controller: 'tensideSearchController'
         });
     });
 

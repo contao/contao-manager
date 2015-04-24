@@ -85,14 +85,11 @@
     // Late dependency injection
     TENSIDE.requires.push('tenside-editor');
 
-    TENSIDE.config(function ($routeProvider, USER_ROLES) {
+    TENSIDE.config(function ($routeProvider) {
         // route for the editor page
         $routeProvider.when('/editor', {
             templateUrl: 'pages/editor.html',
-            controller: 'tensideEditorController',
-            data: {
-                authorizedRoles: [USER_ROLES.admin]
-            }
+            controller: 'tensideEditorController'
         });
     });
 

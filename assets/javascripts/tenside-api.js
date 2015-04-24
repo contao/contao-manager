@@ -19,38 +19,35 @@
 (function(){
     var TENSIDE_API = angular.module('tenside-api', []);
 
-    TENSIDE_API.factory('$tensideApi', ['$http', function ($http) {
+    TENSIDE_API.factory('$tensideApi', ['$http', 'Base64', function ($http, Base64) {
         var
             http = $http,
-            tensideApiConnection = function() {
-                var self = this,
-                    apiUrl,
-                    version;
-                self.setBaseUrl = function(url) {
-                    apiUrl = url;
-                };
+            apiUrl,
+            apiKey,
+            version,
+            api = function(config) {
+                return http(prepareConfig(config));
+            },
+            endpoint = function(endpoint) {
+                if (-1 < endpoint.indexOf(api.getBaseUrl())) {
+                    return endpoint;
+                }
 
-                self.getBaseUrl = function() {
-                    return apiUrl;
-                };
+                if (version === undefined) {
+                    version = 'v1';
+                }
 
-                self.setVersion = function(ver) {
-                    version = ver;
-                };
-
-                self.getVersion = function() {
-                    return version;
-                };
-
-                self.endpoint = function(endpoint) {
-                    if (version === undefined) {
-                        version = 'v1';
-                    }
-                    return self.getBaseUrl() + 'api/' + version + '/' + endpoint;
-                };
-
-                self.packages = new tensideApiPackages(self);
-                self.composerJson = new tensideApiComposerJson(self);
+                return api.getBaseUrl() + 'api/' + version + '/' + endpoint;
+            },
+            prepareConfig = function(options) {
+                var myOpts = jQuery.extend(true, options || {}, {
+                    url: endpoint(options.url),
+                    headers: {}
+                });
+                if (!myOpts.headers.authorization) {
+                    myOpts.headers.authorization = 'jwt token=' + apiKey;
+                }
+                return myOpts;
             },
             tensideApiPackages = function (tensideApi) {
                 var self = this,
@@ -59,37 +56,168 @@
                         if (name) {
                             return endpoint() + '/' + name;
                         }
-                        return api.endpoint('packages');
+
+                        return 'packages';
                     }
                     ;
                 self.list = function(all) {
-                    return http.get(endpoint(), all ? {params: {all: ''}} : {});
+                    return api.get(endpoint(), all ? {params: {all: ''}} : {});
                 };
                 self.get = function(name) {
-                    return http.get(endpoint(name));
+                    return api.get(endpoint(name));
                 };
                 self.put = function(data) {
-                    return http.put(endpoint(data.name), data);
+                    return api.put(endpoint(data.name), data);
                 };
                 self.delete = function () {
-                    return http.delete(endpoint(data.name));
+                    return api.delete(endpoint(data.name));
                 };
             },
             tensideApiComposerJson = function (tensideApi) {
                 var self = this,
                     api = tensideApi,
                     endpoint = function() {
-                        return api.endpoint('composer.json');
+                        return 'composer.json';
                     }
                     ;
                 self.get = function() {
-                    return http.get(endpoint(), {'transformResponse': []});
+                    return api.get(endpoint(), {'transformResponse': []});
                 };
                 self.put = function(data) {
-                    return http.put(endpoint(), data);
+                    return api.put(endpoint(), data);
                 };
             };
 
-        return new tensideApiConnection();
-    }]);
+        api.setBaseUrl = function(url) {
+            apiUrl = url;
+        };
+
+        api.getBaseUrl = function() {
+            return apiUrl;
+        };
+
+        api.hasKey = function() {
+            return !!apiKey;
+        };
+
+        api.setKey = function(key) {
+            apiKey = key;
+
+            return self;
+        };
+
+        api.setVersion = function(ver) {
+            version = ver;
+
+            return self;
+        };
+
+        api.getVersion = function() {
+            return version;
+        };
+
+        api.login = function(username, password) {
+            var authdata = Base64.encode(username + ':' + password);
+            return http.get(endpoint('auth'), {headers: {authorization: 'Basic ' + authdata}})
+        };
+
+        api.get = function(url, config) {
+            return api(jQuery.extend({url: url, method: 'get'}, config));
+        };
+        api.put = function(url, data, config) {
+            return api(jQuery.extend({url: url, method: 'put', data: data}, config));
+        };
+        api.post = function(url, data, config) {
+            return api(jQuery.extend({url: url, method: 'post', data: data}, config));
+        };
+        api.delete = function(url, config) {
+            return api(jQuery.extend({url: url, method: 'delete'}, config));
+        };
+
+        // Create our specific endpoints now.
+        api.packages = new tensideApiPackages(api);
+        api.composerJson = new tensideApiComposerJson(api);
+
+        return api;
+    }]).factory('Base64', function () {
+        var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+        return {
+            encode: function (input) {
+                var output = "";
+                var chr1, chr2, chr3 = "";
+                var enc1, enc2, enc3, enc4 = "";
+                var i = 0;
+
+                do {
+                    chr1 = input.charCodeAt(i++);
+                    chr2 = input.charCodeAt(i++);
+                    chr3 = input.charCodeAt(i++);
+
+                    enc1 = chr1 >> 2;
+                    enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                    enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                    enc4 = chr3 & 63;
+
+                    if (isNaN(chr2)) {
+                        enc3 = enc4 = 64;
+                    } else if (isNaN(chr3)) {
+                        enc4 = 64;
+                    }
+
+                    output = output +
+                        keyStr.charAt(enc1) +
+                        keyStr.charAt(enc2) +
+                        keyStr.charAt(enc3) +
+                        keyStr.charAt(enc4);
+                    chr1 = chr2 = chr3 = "";
+                    enc1 = enc2 = enc3 = enc4 = "";
+                } while (i < input.length);
+
+                return output;
+            },
+
+            decode: function (input) {
+                var output = "";
+                var chr1, chr2, chr3 = "";
+                var enc1, enc2, enc3, enc4 = "";
+                var i = 0;
+
+                // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
+                var base64test = /[^A-Za-z0-9\+\/\=]/g;
+                if (base64test.exec(input)) {
+                    window.alert("There were invalid base64 characters in the input text.\n" +
+                        "Valid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\n" +
+                        "Expect errors in decoding.");
+                }
+                input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+                do {
+                    enc1 = keyStr.indexOf(input.charAt(i++));
+                    enc2 = keyStr.indexOf(input.charAt(i++));
+                    enc3 = keyStr.indexOf(input.charAt(i++));
+                    enc4 = keyStr.indexOf(input.charAt(i++));
+
+                    chr1 = (enc1 << 2) | (enc2 >> 4);
+                    chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                    chr3 = ((enc3 & 3) << 6) | enc4;
+
+                    output = output + String.fromCharCode(chr1);
+
+                    if (enc3 != 64) {
+                        output = output + String.fromCharCode(chr2);
+                    }
+                    if (enc4 != 64) {
+                        output = output + String.fromCharCode(chr3);
+                    }
+
+                    chr1 = chr2 = chr3 = "";
+                    enc1 = enc2 = enc3 = enc4 = "";
+
+                } while (i < input.length);
+
+                return output;
+            }
+        };
+    });
 }());

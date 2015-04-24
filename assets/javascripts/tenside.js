@@ -24,12 +24,11 @@ var TENSIDEApi = TENSIDEApi || '';
 (function () {
     TENSIDE = angular.module('tenside', ['ngRoute', 'ui.bootstrap', 'user-session', 'pascalprecht.translate']);
 
-    TENSIDE.run(function(AuthService, $tensideApi, $rootScope) {
-        AuthService.setBaseUrl(TENSIDEApi + 'auth');
+    TENSIDE.run(function($tensideApi, $rootScope) {
         $tensideApi.setBaseUrl(TENSIDEApi);
         $rootScope.expertsMode = false;
     })
-    .config(function ($routeProvider, $locationProvider, USER_ROLES, $httpProvider, $translateProvider) {
+    .config(function ($routeProvider, $locationProvider, $httpProvider, $translateProvider) {
 
         $locationProvider.html5Mode(false);
 
@@ -46,10 +45,7 @@ var TENSIDEApi = TENSIDEApi || '';
         // route for config page
         $routeProvider.when('/config', {
             templateUrl: 'pages/config.html',
-            controller: 'tensideConfigController',
-            data: {
-                authorizedRoles: [USER_ROLES.admin]
-            }
+            controller: 'tensideConfigController'
         });
 
         // route for about page

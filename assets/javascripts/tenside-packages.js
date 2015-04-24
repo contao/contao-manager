@@ -117,21 +117,15 @@
     // Late dependency injection
     TENSIDE.requires.push('tenside-packages');
 
-    TENSIDE.config(function ($routeProvider, USER_ROLES, $translateProvider) {
+    TENSIDE.config(function ($routeProvider, $translateProvider) {
         // route to the packages page
         $routeProvider.when('/packages', {
             templateUrl: 'pages/packages.html',
-            controller: 'tensidePackagesController',
-            data: {
-                authorizedRoles: [USER_ROLES.admin]
-            }
+            controller: 'tensidePackagesController'
         });
         $routeProvider.when('/packages/:packageVendor/:packageName', {
             templateUrl: 'pages/package.html',
-            controller: 'tensidePackagesController',
-            data: {
-                authorizedRoles: [USER_ROLES.admin]
-            }
+            controller: 'tensidePackagesController'
         });
 
         var translations = {
