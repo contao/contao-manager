@@ -28,19 +28,19 @@
         };
     });
 
-    app.controller('tensideSearchController', ['$window', '$scope', function($window, $scope) {
+    app.controller('tensideSearchController', ['$scope', function($scope) {
         $scope.search = search;
     }]);
 
     // Late dependency injection
     TENSIDE.requires.push('tenside-search');
 
-    TENSIDE.config(function ($routeProvider) {
+    TENSIDE.config(['$routeProvider', function ($routeProvider) {
         // route to the search page
         $routeProvider.when('/search', {
             templateUrl: 'pages/search.html',
             controller: 'tensideSearchController'
         });
-    });
+    }]);
 
 })();

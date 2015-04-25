@@ -19,7 +19,9 @@
 (function() {
     var app = angular.module('tenside-editor', ['tenside-api']);
 
-    app.controller('tensideEditorController', ['$window', '$scope', '$http', '$timeout', '$tensideApi', function ($window, $scope, $http, $timeout, $tensideApi) {
+    app.controller('tensideEditorController',
+        ['$scope', '$timeout', '$tensideApi',
+        function ($scope, $timeout, $tensideApi) {
         var editor;
         if(editor === undefined) {
             editor = (function(elementId){
@@ -71,7 +73,6 @@
                     $scope.warnings = data.warning;
                 });
             }, 2000);
-            timer.then(function () { console.log('resolved'); }, function () { console.log('cancelled'); });
         };
 
         $tensideApi.composerJson.get().success(function(data) {
@@ -85,12 +86,12 @@
     // Late dependency injection
     TENSIDE.requires.push('tenside-editor');
 
-    TENSIDE.config(function ($routeProvider) {
+    TENSIDE.config(['$routeProvider', function ($routeProvider) {
         // route for the editor page
         $routeProvider.when('/editor', {
             templateUrl: 'pages/editor.html',
             controller: 'tensideEditorController'
         });
-    });
+    }]);
 
 })();

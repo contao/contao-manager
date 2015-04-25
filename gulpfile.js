@@ -23,7 +23,8 @@ var gulp = require('gulp'),
     debug = require('gulp-debug'),
     data = require('gulp-data'),
     globby = require('globby'),
-    clone = require('clone');
+    clone = require('clone'),
+    cwd = process.cwd();
 
 var out             = process.env.DEST_DIR || '.build',
     tensideApi      = process.env.TENSIDE_API || false,
@@ -91,7 +92,9 @@ var paths = {
             'bower_components/ace/build/src/ace.js',
             'bower_components/ace/build/src/mode-json.js',
             'bower_components/ace/build/src/worker-json.js',
-            'assets/javascripts/*.js'
+            'assets/javascripts/user-session.js',
+            'assets/javascripts/tenside.js', // keep this first, as the others depend on it.
+            'assets/javascripts/tenside-*.js'
         ],
         'loadOrder': [
             'js/jquery.js',
@@ -151,6 +154,19 @@ var globVariables = function(variables) {
     );
 };
 
+var globJsSource = function(javascripts) {
+    var myScripts = javascripts || paths.javascripts.src;
+    console.log(cwd, myScripts);
+    myScripts = globby.sync(myScripts, {cwd: cwd});
+
+    if (mockAPI) {
+        var pos = myScripts.indexOf('assets/javascripts/tenside-api.js');
+        myScripts[pos] = 'assets/javascripts/mock-tenside-api.js';
+    }
+    console.log(myScripts);
+
+    return myScripts
+};
 
 /**
  * Installation tasks
@@ -234,7 +250,7 @@ gulp.task('clean-javascripts', function (cb) {
 });
 
 gulp.task('build-javascripts', ['clean-javascripts'], function () {
-    return gulp.src(paths.javascripts.src)
+    return gulp.src(globJsSource(paths.javascripts.src))
         .pipe(debug({title: 'javascript in:'}))
         .pipe(sourcemaps.init())
         .pipe(uglify())

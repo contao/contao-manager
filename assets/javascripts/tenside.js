@@ -24,11 +24,33 @@ var TENSIDEApi = TENSIDEApi || '';
 (function () {
     TENSIDE = angular.module('tenside', ['ngRoute', 'ui.bootstrap', 'user-session', 'pascalprecht.translate']);
 
-    TENSIDE.run(function($tensideApi, $rootScope) {
+    TENSIDE.run(['$tensideApi', '$rootScope', function($tensideApi, $rootScope) {
         $tensideApi.setBaseUrl(TENSIDEApi);
         $rootScope.expertsMode = false;
-    })
-    .config(function ($routeProvider, $locationProvider, $httpProvider, $translateProvider) {
+    }])
+    .factory('loadingHandler', ['$q', '$rootScope', function($q, $rootScope) {
+        return {
+            'request': function (config) {
+                $rootScope.loading = true;
+                return config;
+            },
+            'requestError': function (rejection) {
+                $rootScope.loading = false;
+                return $q.reject(rejection);
+            },
+            'response': function (response) {
+                $rootScope.loading = false;
+                return response;
+            },
+            'responseError': function (response) {
+                $rootScope.loading = false;
+                return $q.reject(response);
+            }
+        };
+    }])
+    .config(
+        ['$routeProvider', '$locationProvider', '$httpProvider', '$translateProvider',
+        function ($routeProvider, $locationProvider, $httpProvider, $translateProvider) {
 
         $locationProvider.html5Mode(false);
 
@@ -62,33 +84,20 @@ var TENSIDEApi = TENSIDEApi || '';
 
         $routeProvider.otherwise({redirectTo: '/about'});
 
-        $httpProvider.interceptors.push(function($q, $rootScope) {
-            return {
-                'request': function (config) {
-                    $rootScope.loading = true;
-                    return config;
-                },
-                'requestError': function (rejection) {
-                    $rootScope.loading = false;
-                    return $q.reject(rejection);
-                },
-                'response': function (response) {
-                    $rootScope.loading = false;
-                    return response;
-                },
-                'responseError': function (response) {
-                    $rootScope.loading = false;
-                    return $q.reject(response);
-                }
-            };
-        });
-    })
-    .controller('tensideConfigController', ['$window', '$scope', function ($window, $scope) {
+        $httpProvider.interceptors.push('loadingHandler');
     }])
-    .controller('tensideAboutController', ['$window', '$scope', function ($window, $scope) {
+    .controller('tensideConfigController', ['$scope', function ($scope) {
+        $scope.sections = {
+            'core': {
+                'upgrade_mode': 'inline',
+                'github_token': 'abc1234'
+            }
+        };
+    }])
+    .controller('tensideAboutController', ['$scope', function ($scope) {
         $scope.config = {};
     }])
-    .controller('tensideSupportController', ['$window', '$scope', function ($window, $scope) {
+    .controller('tensideSupportController', ['$scope', function ($scope) {
         $scope.config = {};
     }]);
 })();

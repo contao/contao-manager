@@ -117,7 +117,7 @@
     // Late dependency injection
     TENSIDE.requires.push('tenside-packages');
 
-    TENSIDE.config(function ($routeProvider, $translateProvider) {
+    TENSIDE.config(['$routeProvider', '$translateProvider', function ($routeProvider, $translateProvider) {
         // route to the packages page
         $routeProvider.when('/packages', {
             templateUrl: 'pages/packages.html',
@@ -140,6 +140,6 @@
         };
 
         $translateProvider.translations('en', translations);
-    });
+    }]);
 
 })();
