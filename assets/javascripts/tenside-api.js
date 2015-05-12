@@ -37,7 +37,7 @@
                     version = 'v1';
                 }
 
-                return api.getBaseUrl() + 'api/' + version + '/' + endpoint;
+                return api.getBaseUrl() + '/api/' + version + '/' + endpoint;
             },
             prepareConfig = function(options) {
                 var myOpts = jQuery.extend(true, options || {}, {

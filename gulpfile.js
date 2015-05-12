@@ -34,7 +34,7 @@ var out             = process.env.DEST_DIR || '.build',
 
 function getTensideApi() {
     if (!tensideApi) {
-        tensideApi = 'window.location.href.split(\'#\')[0]';
+        tensideApi = 'window.location.href.substring(0, window.location.href.split(\'#\')[0].lastIndexOf(\'/\'))';
     }
 
     return tensideApi;
@@ -85,6 +85,7 @@ var paths = {
             'bower_components/jquery/dist/jquery.js',
             'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
             'bower_components/angular/angular.js',
+            'bower_components/angular-animate/angular-animate.js',
             'bower_components/angular-route/angular-route.js',
             'bower_components/angular-translate/angular-translate.js',
             'bower_components/angular-bootstrap/ui-bootstrap.js',
@@ -99,6 +100,7 @@ var paths = {
         'loadOrder': [
             'js/jquery.js',
             'js/angular.js',
+            'js/angular-animate.js',
             'js/angular-route.js',
             'js/angular-translate.js',
             'js/ui-bootstrap.js',

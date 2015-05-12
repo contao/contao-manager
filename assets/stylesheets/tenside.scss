@@ -149,3 +149,37 @@ footer {
 
   transition: left 1ms linear .3s, top 1ms linear .3s, opacity .3s ease-out;
 }
+
+/* animations in installer */
+.slide-frame {
+  position:relative;
+  height:500px;
+  overflow:hidden;
+}
+
+.slide-frame > div {
+  width:100%;
+}
+
+.slide.ng-enter, .slide.ng-leave {
+  -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+}
+
+.slide.ng-enter {
+  position: absolute;
+  left:100%;
+}
+
+.slide.ng-enter.ng-enter-active {
+  left:0;
+}
+
+.slide.ng-leave {
+  position: absolute;
+  left:0;
+}
+
+.slide.ng-leave.ng-leave-active {
+  left:-100%;
+}

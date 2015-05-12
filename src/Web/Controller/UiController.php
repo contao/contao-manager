@@ -38,6 +38,7 @@ class UiController extends AbstractController
     {
         static::createRoute($routes, 'rootRedirect', '/', __CLASS__);
         static::createRoute($routes, 'index', '/index.html', __CLASS__);
+        static::createRoute($routes, 'install', '/install.html', __CLASS__);
 
         static::createRoute(
             $routes,
@@ -62,6 +63,11 @@ class UiController extends AbstractController
     public function rootRedirectAction(Request $request)
     {
         $uri = $request->getUri();
+        // Special case, not correctly setup yet. Do so now.
+        if (!$this->getTenside()->isInstalled()) {
+            return new RedirectResponse($uri . 'install.html');
+        }
+
         return new RedirectResponse($uri . 'index.html');
     }
 
@@ -74,11 +80,43 @@ class UiController extends AbstractController
      */
     public function indexAction(Request $request)
     {
+        // Special case, not correctly setup yet. Do so now.
+        if (!$this->getTenside()->isInstalled()) {
+            return new RedirectResponse($request->getUri() . 'install.html');
+        }
+
         return new Response(
             str_replace(
                 'var TENSIDEApi=window.location.href.split(\'#\')[0];',
                 'var TENSIDEApi=\'' . $request->getSchemeAndHttpHost() . $request->getBaseUrl() . '/\';',
                 file_get_contents($this->getAssetsDir() . '/index.html')
+            ),
+            200,
+            array(
+                'Content-Type' => 'text/html; charset=UTF-8'
+            )
+        );
+    }
+
+    /**
+     * Provide the install.html file.
+     *
+     * @param Request $request The request to process.
+     *
+     * @return Response
+     */
+    public function installAction(Request $request)
+    {
+        // Special case, already setup. Redirect to index then.
+        if ($this->getTenside()->isInstalled()) {
+            return new RedirectResponse($request->getUri() . 'index.html');
+        }
+
+        return new Response(
+            str_replace(
+                'var TENSIDEApi=window.location.href.split(\'#\')[0];',
+                'var TENSIDEApi=\'' . $request->getSchemeAndHttpHost() . $request->getBaseUrl() . '/\';',
+                file_get_contents($this->getAssetsDir() . '/install.html')
             ),
             200,
             array(

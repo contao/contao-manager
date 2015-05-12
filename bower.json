@@ -8,6 +8,7 @@
   "dependencies": {
     "ace": "1.1.*",
     "angular": "~1.2.0",
+    "angular-animate": "~1.2.0",
     "angular-route": "~1.2.0",
     "angular-bootstrap": "~0.12",
     "bootstrap-sass-official": "~3.3.0",
