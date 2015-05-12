@@ -36,15 +36,14 @@ class UiController extends AbstractController
      */
     public static function createRoutes(RouteCollection $routes)
     {
-        static::createRoute($routes, 'rootRedirect', '/', __CLASS__);
-        static::createRoute($routes, 'index', '/index.html', __CLASS__);
-        static::createRoute($routes, 'install', '/install.html', __CLASS__);
+        static::createRoute($routes, 'rootRedirect', '/');
+        static::createRoute($routes, 'index', '/index.html');
+        static::createRoute($routes, 'install', '/install.html');
 
         static::createRoute(
             $routes,
             'asset',
             '/{path}/{file}',
-            __CLASS__,
             ['GET'],
             [
                 'path' => 'css|fonts|img|js|pages|tenside',
