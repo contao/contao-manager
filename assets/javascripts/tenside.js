@@ -64,12 +64,6 @@ var TENSIDEApi = TENSIDEApi || '';
             .usePostCompiling(true)
             .preferredLanguage('en');
 
-        // route for config page
-        $routeProvider.when('/config', {
-            templateUrl: 'pages/config.html',
-            controller: 'tensideConfigController'
-        });
-
         // route for about page
         $routeProvider.when('/about', {
             templateUrl: 'pages/about.html',
@@ -85,14 +79,6 @@ var TENSIDEApi = TENSIDEApi || '';
         $routeProvider.otherwise({redirectTo: '/about'});
 
         $httpProvider.interceptors.push('loadingHandler');
-    }])
-    .controller('tensideConfigController', ['$scope', function ($scope) {
-        $scope.sections = {
-            'core': {
-                'upgrade_mode': 'inline',
-                'github_token': 'abc1234'
-            }
-        };
     }])
     .controller('tensideAboutController', ['$scope', function ($scope) {
         $scope.config = {};
