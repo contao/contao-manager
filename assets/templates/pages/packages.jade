@@ -1,5 +1,5 @@
 h1(translate="PACKAGES.HEADLINE")
-button.btn.btn-primary.btn-md(type="button", title="Upgrade", ng-click="upgrade")
+button.btn.btn-primary.btn-md(type="button", title="{{ 'PACKAGES.UPGRADE' | translate}}", ng-click="upgrade")
   span.fa.fa-fw.fa-arrow-circle-up
   span(translate="PACKAGES.UPGRADE")
 .packages-list
@@ -33,7 +33,7 @@ button.btn.btn-primary.btn-md(type="button", title="Upgrade", ng-click="upgrade"
               button.btn.btn-danger.btn-md(type="button", title="{{ 'PACKAGES.REMOVE_SELECTED' | translate:{package:package.name} }}", ng-if="canDelete(package)", ng-click="remove(package)")
                 span.fa.fa-fw.fa-trash-o
                 span.sr-only(translate="PACKAGES.REMOVE_SELECTED" translate-values="{package: package.name}")
-button.btn.btn-primary.btn-md(type="button", title="Upgrade", ng-click="upgrade")
+button.btn.btn-primary.btn-md(type="button", title="{{ 'PACKAGES.UPGRADE' | translate}}", ng-click="upgrade")
   span.fa.fa-fw.fa-arrow-circle-up
   span(translate="PACKAGES.UPGRADE")
 label.checkbox
