@@ -81,12 +81,8 @@
             editor.getSession().on('change', testComposerJson);
             testComposerJson();
         });
-    }]);
-
-    // Late dependency injection
-    TENSIDE.requires.push('tenside-editor');
-
-    TENSIDE.config(['$routeProvider', function ($routeProvider) {
+    }])
+    .config(['$routeProvider', function ($routeProvider) {
         // route for the editor page
         $routeProvider.when('/editor', {
             templateUrl: 'pages/editor.html',
@@ -94,4 +90,6 @@
         });
     }]);
 
+    // Late dependency injection
+    TENSIDE.requires.push('tenside-editor');
 })();
