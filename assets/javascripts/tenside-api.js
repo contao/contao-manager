@@ -44,7 +44,7 @@
                     url: endpoint(options.url),
                     headers: {}
                 });
-                if (!myOpts.headers.authorization) {
+                if (!myOpts.headers.authorization && apiKey !== undefined) {
                     myOpts.headers.authorization = 'jwt token=' + apiKey;
                 }
                 return myOpts;
