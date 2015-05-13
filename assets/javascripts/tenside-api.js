@@ -86,6 +86,17 @@
                 self.put = function(data) {
                     return api.put(endpoint(), data);
                 };
+            },
+            tensideApiSearch = function (tensideApi) {
+                var self = this,
+                    api = tensideApi,
+                    endpoint = function() {
+                        return 'search';
+                    }
+                    ;
+                self.search = function(keywords) {
+                    return api.put(endpoint(), {keywords: keywords});
+                };
             };
 
         api.setBaseUrl = function(url) {
@@ -137,6 +148,7 @@
         // Create our specific endpoints now.
         api.packages = new tensideApiPackages(api);
         api.composerJson = new tensideApiComposerJson(api);
+        api.search = new tensideApiSearch(api);
 
         return api;
     }]).factory('Base64', function () {

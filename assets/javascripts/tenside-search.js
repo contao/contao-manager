@@ -17,25 +17,75 @@
  */
 
 (function() {
-    var app = angular.module('tenside-search', []);
-
-    var search = { term: '' };
-
-    app.directive('tensideSearch', function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'tenside/search-navbar.html'
+    angular.module('tenside-search', ['tenside-api'])
+    .factory('tensideSearchData', function() {
+        var data = {
+            keyword: ''
         };
-    });
 
-    app.controller('tensideSearchController', ['$scope', function($scope) {
-        $scope.search = search;
-    }]);
+        return {
+            setKeywords: function (keywords) {
+                data.keyword = keywords;
+            },
+            getKeywords: function() {
+                return data.keyword;
+            }
+        };
+    })
+    .controller('tensideSearchHeader',
+    ['$scope', 'tensideSearchData', '$location',
+    function ($scope, data, $location) {
+        $scope.keywords = data.getKeywords();
+        $scope.$watch('keywords', function (value, previous) {
+            if (value !== previous) {
+                data.setKeywords(value);
+            }
+        });
+        $scope.search = function() {
+            $location.path('search');
+        };
+    }])
+    .controller('tensideSearchController',
+    ['$scope', '$tensideApi', 'tensideSearchData',
+    function($scope, $tensideApi, data) {
+        var search = function (keywords) {
+            $tensideApi.search.search(keywords).success(function(data) {
+                $scope.packages = data;
+            });
+        };
 
-    // Late dependency injection
-    TENSIDE.requires.push('tenside-search');
+        $scope.$watch(
+            function() {
+                return data.getKeywords();
+            },
+            function (value, previous) {
+                if (value !== previous) {
+                    search(value);
+                }
+            }
+        );
+        $scope.packages = {
+        };
+        // FIXME: make this some library and rip this method from package and search controller
+        $scope.typeImage = function(typeName) {
+            switch (typeName) {
+                case 'component':
+                case 'composer-installer':
+                case 'composer-plugin':
+                case 'legacy-contao-module':
+                case 'meta-package':
+                case 'metapackage':
+                case 'php':
+                    return 'img/type-' + typeName + '.png';
+                case 'symfony-bundle':
+                    return 'img/type-symfony-bundle.svg';
+                default:
+            }
 
-    TENSIDE.config(['$routeProvider', function ($routeProvider) {
+            return 'img/type-library.png';
+        };
+    }])
+    .config(['$routeProvider', function ($routeProvider) {
         // route to the search page
         $routeProvider.when('/search', {
             templateUrl: 'pages/search.html',
@@ -43,4 +93,6 @@
         });
     }]);
 
+    // Late dependency injection
+    TENSIDE.requires.push('tenside-search');
 })();

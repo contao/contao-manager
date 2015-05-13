@@ -52,7 +52,7 @@
 
             return 'label-success';
         };
-
+        // FIXME: make this some library and rip this method from package and search controller
         $scope.typeImage = function(typeName) {
             switch (typeName) {
                 case 'component':

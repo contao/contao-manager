@@ -48,11 +48,15 @@ html(lang="en", ng-app="tenside")
                   i.fa.fa-gears  Config
 
         .tenside-search
-          form.form(role="search", ng-submit="search()" ng-controller="tensideSearchController as search")
+          form.form(role="search", ng-controller="tensideSearchHeader")
             .container
-              .form-group
-                input.form-control(type="search", placeholder="Search packages", ng-model="search.term")
-
+              .form-group(style="display:inline;")
+                .input-group
+                  span.input-group-addon
+                    span.fa.fa-search
+                  input.form-control(type="search", placeholder="Search packages", ng-model="keywords", ng-class="{'search__input--focus': focused}", ng-init="focused = false", ng-focus="focused = true", ng-blur="focused = false")
+                  span.input-group-btn
+                    button.btn.btn-default(type="submit", ng-click="search()") Search
     .body
       .container
         block content

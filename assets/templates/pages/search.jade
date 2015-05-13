@@ -2,79 +2,16 @@ h1
   | Search
 
 .search-result
-  .well.well-xs
+  .well.well-xs(ng-repeat="package in packages")
     .row.package
       .col-md-1
-          img.img-responsive(src="img/isotope_circle.png")
+        img.img-responsive(ng-src="{{typeImage(package.type)}}" title="{{package.type}}")
       .col-md-11
         h2
-          a(href="#package?name=isotope/core") Isotope eCommerce
-          | &nbsp;
-          small  [isotope/core]
-          | &nbsp;
-          span.fa.fa-check-square
-          span.pull-right.label.label-success 2.0.2
-        p.description
-          | Isotope eCommerce ist eine eCommerce-Lösung für das Contao CMS.
-          | Weil jeder Webshop einzigartig ist, wurde Isotope mit Prioriät auf Flexibilität gebaut,
-          | so dass du alles auf deine individuellen Wünsche anpassen kannst.
-
-  .well.well-xs
-    .row.package
-      .col-md-1
-          img.img-responsive(src="img/isotope_circle.png")
-      .col-md-11
-        h2
-          a(href="#package?name=isotope/core") Isotope eCommerce
-          | &nbsp;
-          small  [isotope/core]
-          span.pull-right.label.label-info 2.2.0-RC1
-        p.description
-          | Isotope eCommerce ist eine eCommerce-Lösung für das Contao CMS.
-          | Weil jeder Webshop einzigartig ist, wurde Isotope mit Prioriät auf Flexibilität gebaut,
-          | so dass du alles auf deine individuellen Wünsche anpassen kannst.
-
-  .well.well-xs
-    .row.package
-      .col-md-1
-          img.img-responsive(src="img/isotope_circle.png")
-      .col-md-11
-        h2
-          a(href="#package?name=isotope/core") Isotope eCommerce
-          | &nbsp;
-          small  [isotope/core]
-          span.pull-right.label.label-warning 2.2.0-beta2
-        p.description
-          | Isotope eCommerce ist eine eCommerce-Lösung für das Contao CMS.
-          | Weil jeder Webshop einzigartig ist, wurde Isotope mit Prioriät auf Flexibilität gebaut,
-          | so dass du alles auf deine individuellen Wünsche anpassen kannst.
-
-  .well.well-xs
-    .row.package
-      .col-md-1
-          img.img-responsive(src="img/isotope_circle.png")
-      .col-md-11
-        h2
-          a(href="#package?name=isotope/core") Isotope eCommerce
-          | &nbsp;
-          small  [isotope/core]
-          span.pull-right.label.label-danger 2.2.0-alpha1
-        p.description
-          | Isotope eCommerce ist eine eCommerce-Lösung für das Contao CMS.
-          | Weil jeder Webshop einzigartig ist, wurde Isotope mit Prioriät auf Flexibilität gebaut,
-          | so dass du alles auf deine individuellen Wünsche anpassen kannst.
-
-  .well.well-xs
-    .row.package
-      .col-md-1
-          img.img-responsive(src="img/isotope_circle.png")
-      .col-md-11
-        h2
-          a(href="#package?name=isotope/core") Isotope eCommerce
-          | &nbsp;
-          small  [isotope/core]
-          span.pull-right.label.label-default dev-develop
-        p.description
-          | Isotope eCommerce ist eine eCommerce-Lösung für das Contao CMS.
-          | Weil jeder Webshop einzigartig ist, wurde Isotope mit Prioriät auf Flexibilität gebaut,
-          | so dass du alles auf deine individuellen Wünsche anpassen kannst.
+          a(href="#package?name={{package.name}}") {{package.name}}
+          span.fa.fa-check-square(ng-show="package.installed")
+          span.pull-right.label.label-success
+            span.fa.fa-thumbs-up {{package.favers}}
+          span.pull-right.label.label-default
+            span.fa.fa-download {{package.downloads}}
+        p.description {{package.description}}
