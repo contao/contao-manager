@@ -49,8 +49,8 @@ var TENSIDEApi = TENSIDEApi || '';
         };
     }])
     .config(
-        ['$routeProvider', '$locationProvider', '$httpProvider', '$translateProvider',
-        function ($routeProvider, $locationProvider, $httpProvider, $translateProvider) {
+        ['$routeProvider', '$locationProvider', '$httpProvider', '$translateProvider', '$tooltipProvider',
+        function ($routeProvider, $locationProvider, $httpProvider, $translateProvider, $tooltipProvider) {
 
         $locationProvider.html5Mode(false);
 
@@ -79,6 +79,11 @@ var TENSIDEApi = TENSIDEApi || '';
         $routeProvider.otherwise({redirectTo: '/about'});
 
         $httpProvider.interceptors.push('loadingHandler');
+
+        $tooltipProvider.options({
+            placement: 'top',
+            appendToBody: true
+        });
     }])
     .controller('tensideAboutController', ['$scope', function ($scope) {
         $scope.config = {};
