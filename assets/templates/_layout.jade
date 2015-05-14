@@ -30,8 +30,8 @@ html(lang="en", ng-app="tenside")
               span.icon-bar
               span.icon-bar
             a.navbar-brand(href="#") Tenside
-            |&nbsp;
-            small(translate)  SLOGAN
+              | &nbsp;
+              small(translate) SLOGAN
           #navbar.collapse.navbar-collapse
             ul.nav.navbar-nav.navbar-right
               li(role="presentation", ngClass="{active: isActive('/packages')}")
@@ -48,15 +48,16 @@ html(lang="en", ng-app="tenside")
                   i.fa.fa-gears  Config
 
         .tenside-search
-          form.form(role="search", ng-controller="tensideSearchHeader")
+          form.form(role="search", ng-controller="tensideSearchHeader", ng-submit="search()")
             .container
               .form-group(style="display:inline;")
                 .input-group
-                  span.input-group-addon
-                    span.fa.fa-search
                   input.form-control(type="search", placeholder="Search packages", ng-model="keywords", ng-class="{'search__input--focus': focused}", ng-init="focused = false", ng-focus="focused = true", ng-blur="focused = false")
-                  span.input-group-btn
-                    button.btn.btn-default(type="submit", ng-click="search()") Search
+                  div.btn-search.input-group-addon(ng-click="search()", ng-class="{'disabled': keywords == ''}")
+                    i.fa.fa-search
+                    | &nbsp;
+                    small SEARCH
+
     .body
       .container
         block content

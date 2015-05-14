@@ -36,14 +36,14 @@
     ['$scope', 'tensideSearchData', '$location',
     function ($scope, data, $location) {
         $scope.keywords = data.getKeywords();
-        $scope.$watch('keywords', function (value, previous) {
-            if (value !== previous) {
-                data.setKeywords(value);
-            }
-        });
+
         $scope.search = function() {
-            $location.path('search');
+            if($scope.keywords != '') {
+                data.setKeywords($scope.keywords);
+            }
         };
+
+        $scope.searchButtonActive = $scope.keywords == '' ? '' : 'disabled';
     }])
     .controller('tensideSearchController',
     ['$scope', '$tensideApi', 'tensideSearchData',
