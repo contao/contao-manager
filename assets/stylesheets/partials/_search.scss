@@ -8,6 +8,18 @@
   .form-group {
     margin-bottom: 0;
   }
+
+  .btn-search {
+    cursor: pointer;
+    color: #666;
+    transition: color 0.25s ease;
+
+    &.disabled {
+      cursor: default;
+      color: #dedede;
+      transition: color 0.25s ease;
+    }
+  }
 }
 
 .search-result {
