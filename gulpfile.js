@@ -95,6 +95,7 @@ var paths = {
             'bower_components/ace/build/src/worker-json.js',
             'assets/javascripts/user-session.js',
             'assets/javascripts/tenside.js', // keep this first, as the others depend on it.
+            'assets/javascripts/tenside-api.js',
             'assets/javascripts/tenside-*.js'
         ],
         'loadOrder': [
@@ -111,6 +112,7 @@ var paths = {
             'js/worker-json.js',
             'js/user-session.js',
             'js/tenside.js',
+            'js/mock-*.js',
             'js/tenside-*.js'
         ]
     },
@@ -263,7 +265,7 @@ gulp.task('build-javascripts', ['clean-javascripts'], function () {
 });
 
 gulp.task('watch-javascripts', [], function () {
-    return gulp.src(paths.javascripts.src)
+    return gulp.src(globJsSource(paths.javascripts.src))
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write('.'))
         .pipe(debug({title: 'javascript:'}))
