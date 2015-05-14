@@ -95,6 +95,7 @@ var paths = {
             'bower_components/ace/build/src/worker-json.js',
             'assets/javascripts/user-session.js',
             'assets/javascripts/tenside.js', // keep this first, as the others depend on it.
+            'assets/javascripts/mock-*.js',
             'assets/javascripts/tenside-api.js',
             'assets/javascripts/tenside-*.js'
         ],
