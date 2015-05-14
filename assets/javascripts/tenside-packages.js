@@ -53,22 +53,30 @@
             return 'label-success';
         };
         // FIXME: make this some library and rip this method from package and search controller
-        $scope.typeImage = function(typeName) {
+        $scope.typeIcon = function(typeName) {
             switch (typeName) {
+                case 'library':
+                    return 'fa-puzzle-piece';
                 case 'component':
+                    return 'fa-cog';
                 case 'composer-installer':
+                    return 'fa-magic';
                 case 'composer-plugin':
+                    return 'fa-plug';
                 case 'legacy-contao-module':
+                    return 'fa-thumbs-down';
                 case 'meta-package':
+                    return 'fa-cubes';
                 case 'metapackage':
+                    return 'fa-cubes';
                 case 'php':
-                    return 'img/type-' + typeName + '.png';
+                    return 'fa-code-o';
                 case 'symfony-bundle':
-                    return 'img/type-symfony-bundle.svg';
+                    return 'fa-archive';
                 default:
             }
 
-            return 'img/type-library.png';
+            return 'fa-question';
         };
 
         $scope.canUpgrade = function(pack) {
