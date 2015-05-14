@@ -22,14 +22,41 @@
     TENSIDE_API.factory('$tensideApi', ['$q', function ($q) {
         var MOCKDATA = {
             packages: {
+                "contao\/contao": {
+                    "name": "contao\/contao",
+                    "version": "4.0.0-beta1",
+                    "constraint": "[\u003E= 4.0.0.0-dev \u003C 5.0.0.0-dev]",
+                    "type": "metapackage",
+                    "locked": false,
+                    "upgrade_version": "dev-develop",
+                    "description": "Contao Open Source CMS",
+                    "license": ["LGPL-3.0+"],
+                    "authors": [{"name": "Leo Feyer", "homepage": "https:\/\/github.com\/leofeyer"}],
+                    "abandoned": true,
+                    "replacement": "contao\/contao-se"
+                },
                 "doctrine\/annotations": {
                     "name": "doctrine\/annotations",
-                    "version": "v1.2.3",
+                    "version": "v1.2.4",
                     "constraint": "[\u003E= 1.2.0.0-dev \u003C 2.0.0.0-dev]",
                     "type": "library",
                     "locked": false,
-                    "upgrade_version": "v1.2.4",
-                    "description": "Docblock Annotations Parser"
+                    "upgrade_version": "dev-master",
+                    "description": "Docblock Annotations Parser",
+                    "license": ["MIT"],
+                    "keywords": ["annotations", "docblock", "parser"],
+                    "homepage": "http:\/\/www.doctrine-project.org",
+                    "authors": [{
+                        "name": "Roman Borschel",
+                        "email": "roman@code-factory.org"
+                    }, {"name": "Benjamin Eberlei", "email": "kontakt@beberlei.de"}, {
+                        "name": "Guilherme Blanco",
+                        "email": "guilhermeblanco@gmail.com"
+                    }, {"name": "Jonathan Wage", "email": "jonwage@gmail.com"}, {
+                        "name": "Johannes Schmitt",
+                        "email": "schmittjoh@gmail.com"
+                    }],
+                    "abandoned": false
                 },
                 "incenteev\/composer-parameter-handler": {
                     "name": "incenteev\/composer-parameter-handler",
@@ -37,16 +64,26 @@
                     "constraint": "[\u003E= 2.0.0.0-dev \u003C 3.0.0.0-dev]",
                     "type": "library",
                     "locked": false,
-                    "description": "Composer script handling your ignored parameter file"
+                    "upgrade_version": "dev-master",
+                    "description": "Composer script handling your ignored parameter file",
+                    "license": ["MIT"],
+                    "keywords": ["parameters management"],
+                    "homepage": "https:\/\/github.com\/Incenteev\/ParameterHandler",
+                    "authors": [{"name": "Christophe Coevoet", "email": "stof@notk.org"}],
+                    "abandoned": false
                 },
                 "sensio\/distribution-bundle": {
                     "name": "sensio\/distribution-bundle",
-                    "version": "v3.0.20",
+                    "version": "v3.0.22",
                     "constraint": "[\u003E= 3.0.0.0-dev \u003C 4.0.0.0-dev]",
                     "type": "symfony-bundle",
                     "locked": false,
-                    "upgrade_version": "v3.0.21",
-                    "description": "Base bundle for Symfony Distributions"
+                    "upgrade_version": "dev-master",
+                    "description": "Base bundle for Symfony Distributions",
+                    "license": ["MIT"],
+                    "keywords": ["configuration", "distribution"],
+                    "authors": [{"name": "Fabien Potencier", "email": "fabien@symfony.com"}],
+                    "abandoned": false
                 },
                 "sensio\/framework-extra-bundle": {
                     "name": "sensio\/framework-extra-bundle",
@@ -54,15 +91,62 @@
                     "constraint": "[\u003E= 3.0.0.0-dev \u003C 4.0.0.0-dev]",
                     "type": "symfony-bundle",
                     "locked": false,
-                    "description": "This bundle provides a way to configure your controllers with annotations"
+                    "upgrade_version": "dev-master",
+                    "description": "This bundle provides a way to configure your controllers with annotations",
+                    "license": ["MIT"],
+                    "keywords": ["annotations", "controllers"],
+                    "authors": [{"name": "Fabien Potencier", "email": "fabien@symfony.com"}],
+                    "abandoned": false
+                },
+                "symfony\/monolog-bundle": {
+                    "name": "symfony\/monolog-bundle",
+                    "version": "v2.7.1",
+                    "constraint": "[\u003E= 2.6.0.0-dev \u003C 3.0.0.0-dev]",
+                    "type": "symfony-bundle",
+                    "locked": false,
+                    "upgrade_version": "dev-master",
+                    "description": "Symfony MonologBundle",
+                    "license": ["MIT"],
+                    "keywords": ["log", "logging"],
+                    "homepage": "http:\/\/symfony.com",
+                    "authors": [{
+                        "name": "Symfony Community",
+                        "homepage": "http:\/\/symfony.com\/contributors"
+                    }, {"name": "Fabien Potencier", "email": "fabien@symfony.com"}],
+                    "abandoned": false
+                },
+                "symfony\/swiftmailer-bundle": {
+                    "name": "symfony\/swiftmailer-bundle",
+                    "version": "v2.3.8",
+                    "constraint": "[\u003E= 2.3.0.0-dev \u003C 3.0.0.0-dev]",
+                    "type": "symfony-bundle",
+                    "locked": false,
+                    "upgrade_version": "dev-master",
+                    "description": "Symfony SwiftmailerBundle",
+                    "license": ["MIT"],
+                    "homepage": "http:\/\/symfony.com",
+                    "authors": [{
+                        "name": "Symfony Community",
+                        "homepage": "http:\/\/symfony.com\/contributors"
+                    }, {"name": "Fabien Potencier", "email": "fabien@symfony.com"}],
+                    "abandoned": false
                 },
                 "symfony\/symfony": {
                     "name": "symfony\/symfony",
-                    "version": "v2.6.6",
+                    "version": "v2.6.7",
                     "constraint": "[\u003E= 2.6.0.0-dev \u003C 3.0.0.0-dev]",
                     "type": "library",
                     "locked": false,
-                    "description": "The Symfony PHP framework"
+                    "upgrade_version": "2.7.x-dev",
+                    "description": "The Symfony PHP framework",
+                    "license": ["MIT"],
+                    "keywords": ["framework"],
+                    "homepage": "http:\/\/symfony.com",
+                    "authors": [{
+                        "name": "Symfony Community",
+                        "homepage": "http:\/\/symfony.com\/contributors"
+                    }, {"name": "Fabien Potencier", "email": "fabien@symfony.com"}],
+                    "abandoned": false
                 }
             },
             composerJson: {
