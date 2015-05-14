@@ -1,39 +1,63 @@
 h1(translate="PACKAGES.HEADLINE")
-button.btn.btn-primary.btn-md(type="button", title="{{ 'PACKAGES.UPGRADE' | translate}}", ng-click="upgrade")
-  span.fa.fa-fw.fa-arrow-circle-up
-  span(translate="PACKAGES.UPGRADE")
 .packages-list
   ul.list-group
-    li.list-group-item(ng-repeat="package in packages")
+    li.list-group-item.package(ng-repeat="package in packages")
       .row.package
         .col-md-1
-          img.img-responsive(ng-src="{{typeImage(package.type)}}" title="{{package.type}}")
-        .col-md-7
-          strong
-            a(href="#packages/{{package.name}}") {{package.description}}
-          small  [{{package.name}}]
-        .col-md-2
-          span.label(ng-class="versionToClass(package.version)") {{package.version}}
-          | &nbsp;
-          span.label(ng-class="versionToClass(package.upgrade_version)", ng-if="canUpgrade(package)")
-            span.fa.fa-arrow-circle-up
-            |  {{package.upgrade_version}}
+          // todo: multi select for composer actions
+          //input(type="checkbox", ng-model="package.selected")
+          i(class="package__type fa {{typeIcon(package.type)}}", title="{{package.type}}")
+        .col-md-9
+          a.package__link(href="#packages/{{package.name}}")
+            h2.package__headline  {{package.name}}
+          a(href="#packages/{{package.name}}") {{package.description}}
         .col-md-2.text-right
+          p.version__current
+            span.label(ng-class="versionToClass(package.version)", tooltip="Aktuell installierte Version", tooltip-placement="left") {{package.version}}
+          p.version__next
+            span.label(ng-class="versionToClass(package.upgrade_version)", ng-if="canUpgrade(package)", tooltip="Verfügbare Version", tooltip-placement="left")
+              span.fa.fa-arrow-circle-up
+              |  {{package.upgrade_version}}
+
+      .row.package__meta
+        .col-md-7.col-md-offset-1.package__keywords
+          p(ng-show="package.keywords.length") Keywords
+            span.label.label-default.package__keyword(ng-repeat="keyword in package.keywords") {{keyword}}
+          p.package__license Lizenz
+            span.label.label-info(ng-repeat="license in package.license") {{license}}
+        .col-md-2
+
+        .col-md-2
           .actions
-            .btn-group(role="group")
-              button.btn.btn-primary.btn-md(type="button", title="{{ 'PACKAGES.UPGRADE_SELECTED' | translate:{package:package.name} }}", ng-if="canUpgrade(package)", ng-click="upgrade(package)")
-                span.fa.fa-fw.fa-arrow-circle-up
-                span.sr-only(translate="PACKAGES.UPGRADE_SELECTED" translate-values="{package: package.name}")
-              button.btn.btn-info.btn-md(type="button", title="{{ 'PACKAGES.LOCK_SELECTED' | translate:{package:package.name} }}", ng-if="!package.locked", ng-click="lock(package)")
-                span.fa.fa-fw.fa-unlock
-                span.sr-only(translate="PACKAGES.LOCK_SELECTED" translate-values="{package: package.name}")
-              button.btn.btn-warning.btn-md(type="button", title="{{ 'PACKAGES.UNLOCK_SELECTED' | translate:{package:package.name} }}", ng-if="package.locked", ng-click="unlock(package)")
-                span.fa.fa-fw.fa-lock
-                span.sr-only(translate="PACKAGES.UNLOCK_SELECTED" translate-values="{package: package.name}")
-              button.btn.btn-danger.btn-md(type="button", title="{{ 'PACKAGES.REMOVE_SELECTED' | translate:{package:package.name} }}", ng-if="canDelete(package)", ng-click="remove(package)")
-                span.fa.fa-fw.fa-trash-o
-                span.sr-only(translate="PACKAGES.REMOVE_SELECTED" translate-values="{package: package.name}")
-button.btn.btn-primary.btn-md(type="button", title="{{ 'PACKAGES.UPGRADE' | translate}}", ng-click="upgrade")
+            .btn-group.btn-group-justified(role="group")
+              .btn-group
+                button.btn.btn-primary.btn-md(type="button", tooltip="{{ 'PACKAGES.UPGRADE_SELECTED' | translate:{package:package.name} }}", ng-if="canUpgrade(package)", ng-click="upgrade(package)")
+                  span.fa.fa-fw.fa-arrow-circle-up
+                  span.sr-only(translate="PACKAGES.UPGRADE_SELECTED" translate-values="{package: package.name}")
+              .btn-group(ng-if="!package.locked")
+                button.btn.btn-info.btn-md(type="button", tooltip="{{ 'PACKAGES.LOCK_SELECTED' | translate:{package:package.name,version:package.version} }}", ng-if="!package.locked", ng-click="lock(package)")
+                  span.fa.fa-fw.fa-unlock
+                  span.sr-only(translate="PACKAGES.LOCK_SELECTED" translate-values="{package: package.name}")
+              .btn-group(ng-if="package.locked")
+                button.btn.btn-warning.btn-md(type="button", tooltip="{{ 'PACKAGES.UNLOCK_SELECTED' | translate:{package:package.name,version:package.version} }}", ng-if="package.locked", ng-click="unlock(package)")
+                  span.fa.fa-fw.fa-lock
+                  span.sr-only(translate="PACKAGES.UNLOCK_SELECTED" translate-values="{package: package.name}")
+              .btn-group
+                button.btn.btn-danger.btn-md(type="button", tooltip="{{ 'PACKAGES.REMOVE_SELECTED' | translate:{package:package.name} }}", ng-if="canDelete(package)", ng-click="remove(package)")
+                  span.fa.fa-fw.fa-trash-o
+                  span.sr-only(translate="PACKAGES.REMOVE_SELECTED" translate-values="{package: package.name}")
+          //.version.btn-group-vertical
+            button.version__btn.version__btn--current
+              span.fa.fa-certificate
+              | Current
+              span.label(ng-class="versionToClass(package.version)") {{package.version}}
+            button.version__btn.version__btn--possible(ng-if="canUpgrade(package)")
+              span.fa.fa-fast-forward
+              | Next
+              span.label(ng-class="versionToClass(package.upgrade_version)", ng-if="canUpgrade(package)")
+                span.fa.fa-arrow-circle-up
+                |  {{package.upgrade_version}}
+button.btn.btn-primary.btn-md(type="button", tooltip="{{ 'PACKAGES.UPGRADE' | translate}}", ng-click="upgrade")
   span.fa.fa-fw.fa-arrow-circle-up
   span(translate="PACKAGES.UPGRADE")
 label.checkbox

@@ -141,9 +141,12 @@
                 HEADLINE: 'Packages',
                 UPGRADE: 'Upgrade',
                 UPGRADE_SELECTED: 'Upgrade package {{package}}.',
-                LOCK_SELECTED: 'Lock package {{package}} version.',
-                UNLOCK_SELECTED: 'Unlock package {{package}} version.',
+                LOCK_SELECTED: 'Lock package {{package}} at version {{version}}.',
+                UNLOCK_SELECTED: 'Unlock package {{package}} from version {{version}}.',
                 REMOVE_SELECTED: 'Remove package {{package}}.'
+            },
+            PACKAGE: {
+              DETAIL: 'Package {{package}} details.'
             }
         };
 

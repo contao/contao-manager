@@ -2,3 +2,69 @@
 .packages-list {
 
 }
+
+.list-group-item {
+  padding: 25px 25px 15px 0;
+  border: none;
+  border-bottom: 1px solid $gray-lighter;
+  margin-bottom: 0;
+
+  &:nth-child(even) {
+    background: $gray-lighter;
+  }
+}
+
+.list-group-heading {
+  list-style: none;
+  padding: 10px 15px;
+  font-size: 12px;
+}
+
+.package__type {
+  font-size: 40px;
+  padding: 15px;
+  color: $gray-light;
+}
+
+.package__meta {
+  margin-top: 10px;
+  font-size: 14px;
+  color: $gray-light;
+  padding-top: 10px;
+
+  .label {
+    font-size: 100%;
+    font-weight: normal;
+    margin: 5px;
+  }
+}
+
+.package__link,
+.package__link:hover {
+  text-decoration: none;
+}
+
+.package__headline {
+  margin-top: 0;
+}
+
+// Version
+
+.version {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.version__btn {
+  @extend .btn;
+  @extend .btn-block;
+  @include button-variant(#fff, $search-bg, #fff);
+}
+
+.version__btn--current {
+  
+}
+
+.version__btn--possible {
+  
+}
