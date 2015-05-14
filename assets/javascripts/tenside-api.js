@@ -60,8 +60,15 @@
                         return 'packages';
                     }
                     ;
-                self.list = function(all) {
-                    return api.get(endpoint(), all ? {params: {all: ''}} : {});
+                self.list = function(all, solveDependencies) {
+                    var data = {params: {}};
+                    if (all) {
+                        data.params['all'] = '';
+                    }
+                    if (solveDependencies) {
+                        data.params['solve'] = '';
+                    }
+                    return api.get(endpoint(), data);
                 };
                 self.get = function(name) {
                     return api.get(endpoint(name));
