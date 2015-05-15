@@ -19,7 +19,9 @@
 (function(){
     var userSession = angular.module('user-session', ['tenside-api']);
 
-    userSession.factory('sessionRecoverer', ['$q', '$injector', function($q, $injector) {
+    userSession.factory('sessionRecoverer',
+    ['$q', '$injector',
+    function($q, $injector) {
         var showDialog = function () {
             var
                 scope = $injector.get('$rootScope').$new(),
@@ -27,7 +29,7 @@
             scope.login = function (credentials) {
                 // FIXME: check selected method and login accordingly.
                 api.login(credentials.username, credentials.password).then(function (user) {
-                    api.setKey(user.data.token);
+                    api.setKey(user.data.token, user.data.store || 'session');
                     scope.loginDialog.close();
                 });
             };

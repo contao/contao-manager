@@ -19,7 +19,9 @@
 (function(){
     var TENSIDE_API = angular.module('tenside-api', []);
 
-    TENSIDE_API.factory('$tensideApi', ['$http', 'Base64', function ($http, Base64) {
+    TENSIDE_API.factory('$tensideApi',
+    ['$http', 'Base64', '$window',
+    function ($http, Base64, $window) {
         var
             http = $http,
             apiUrl,
@@ -58,8 +60,7 @@
                         }
 
                         return 'packages';
-                    }
-                    ;
+                    };
                 self.list = function(all, solveDependencies) {
                     var data = {params: {}};
                     if (all) {
@@ -118,8 +119,17 @@
             return !!apiKey;
         };
 
-        api.setKey = function(key) {
+        api.setKey = function(key, store) {
             apiKey = key;
+
+            switch (store) {
+                case 'session':
+                    $window.sessionStorage.apiKey = key;
+                    break;
+                case 'local':
+                    $window.localStorage.apiKey = key;
+                    break;
+            }
 
             return self;
         };
@@ -156,6 +166,13 @@
         api.packages = new tensideApiPackages(api);
         api.composerJson = new tensideApiComposerJson(api);
         api.search = new tensideApiSearch(api);
+
+        // Check if we have a stored key.
+        if ($window.sessionStorage.apiKey !== undefined) {
+            api.setKey($window.sessionStorage.apiKey);
+        } else if ($window.localStorage.apiKey !== undefined) {
+            api.setKey($window.localStorage.apiKey);
+        }
 
         return api;
     }]).factory('Base64', function () {
