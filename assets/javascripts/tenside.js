@@ -24,9 +24,20 @@ var TENSIDEApi = TENSIDEApi || '';
 (function () {
     TENSIDE = angular.module('tenside', ['ngRoute', 'ui.bootstrap', 'user-session', 'pascalprecht.translate']);
 
-    TENSIDE.run(['$tensideApi', '$rootScope', function($tensideApi, $rootScope) {
+    TENSIDE.run(
+    ['$tensideApi', '$rootScope', '$window',
+    function($tensideApi, $rootScope, $window) {
         $tensideApi.setBaseUrl(TENSIDEApi);
-        $rootScope.expertsMode = false;
+        $rootScope.expertsMode = ($window.sessionStorage.getItem('expertsMode') !== null);
+        $rootScope.$watch('expertsMode', function (value, previous) {
+            if (value !== previous) {
+                if (value) {
+                    $window.sessionStorage.setItem('expertsMode', 'yes');
+                } else {
+                    $window.sessionStorage.removeItem('expertsMode');
+                }
+            }
+        });
     }])
     .factory('loadingHandler', ['$q', '$rootScope', function($q, $rootScope) {
         return {
