@@ -1,3 +1,21 @@
+// Package small
+
+.packages-list-small {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  .package {
+    min-height: 250px;
+    width: 47%;
+    margin: 0 auto 50px auto;
+    background: $gray-lighter;
+    position: relative;
+
+    .inner {
+      padding: 10px;
+    }
+  }
+}
 
 .packages-list {
 
@@ -12,6 +30,10 @@
   &:nth-child(even) {
     background: $gray-lighter;
   }
+
+  .packages-list-small & {
+    padding: 5px;
+  }
 }
 
 .list-group-heading {
@@ -21,22 +43,35 @@
 }
 
 .package__type {
+  text-align: center;
+}
+
+.package__icon {
   font-size: 40px;
   padding: 15px;
   color: $gray-light;
+
+  .packages-list-small & {
+    font-size: 25px;
+  }
 }
 
 .package__meta {
   margin-top: 10px;
-  font-size: 14px;
+  font-size: 12px;
   color: $gray-light;
   padding-top: 10px;
+  border-top: 1px solid #dadada;
 
   .label {
     font-size: 100%;
     font-weight: normal;
     margin: 5px;
   }
+}
+
+.package__keyword {
+  padding: 0 10px;
 }
 
 .package__link,
@@ -46,25 +81,47 @@
 
 .package__headline {
   margin-top: 0;
+
+  .packages-list-small & {
+    font-size: 16px;
+    margin: 5px 0;
+  }
 }
 
 // Version
 
 .version {
   width: 100%;
-  margin-top: 15px;
+  position: absolute;
+  top: 0;
+  right: 0px;
+  text-align: right;
+  background: #ddd;
+  height: 10px;
+
+  .package__meta & {
+    display: block;
+  }
 }
 
-.version__btn {
-  @extend .btn;
-  @extend .btn-block;
-  @include button-variant(#fff, $search-bg, #fff);
+.version {
+  .label {
+    border-radius: 0;
+    font-weight: normal;
+    position: relative;
+    bottom: 10px
+  }
+
 }
 
-.version__btn--current {
-  
+.version__current {
+  .label {
+    font-size: 100%;
+    bottom: 10px;
+  }
 }
 
-.version__btn--possible {
-  
+.actions {
+  position: absolute;
+  bottom: 0;
 }
