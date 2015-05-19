@@ -38,19 +38,19 @@
         // Mapping of version descriptors to css classes.
         $scope.versionToClass = function(version) {
             if (version.indexOf('dev-') > -1) {
-                return 'label-default';
+                return 'default';
             }
             if (version.indexOf('-alpha') > -1) {
-                return 'label-danger';
+                return 'danger';
             }
             if (version.indexOf('-beta') > -1) {
-                return 'label-warning';
+                return 'warning';
             }
             if (version.indexOf('-RC') > -1) {
-                return 'label-info';
+                return 'info';
             }
 
-            return 'label-success';
+            return 'success';
         };
         // FIXME: make this some library and rip this method from package and search controller
         $scope.typeIcon = function(typeName) {
