@@ -2,16 +2,30 @@ h1
   | Search
 
 .search-result
-  .well.well-xs(ng-repeat="package in packages")
-    .row.package
-      .col-md-1
-        img.img-responsive(ng-src="{{typeImage(package.type)}}" title="{{package.type}}")
-      .col-md-11
+    .row.package(ng-repeat="package in packages")
+      .col-md-8
         h2
+          i(class="package__icon fa {{typeIcon(package.type)}}", title="{{package.type}}")
           a(href="#package?name={{package.name}}") {{package.name}}
-          span.fa.fa-check-square(ng-show="package.installed")
-          span.pull-right.label.label-success
-            span.fa.fa-thumbs-up {{package.favers}}
-          span.pull-right.label.label-default
-            span.fa.fa-download {{package.downloads}}
+        span.fa.fa-check-square(ng-show="package.installed")
+          |  Installiert
         p.description {{package.description}}
+        .package__meta
+          span.label.label-info
+            |  {{package.url}}
+            span.fa.fa-download
+          span.label.label-default
+            |  {{package.license}}  Lizenz
+            span.fa.fa-download
+          span.label.label-success
+            |  {{package.favers}}  Bewertung
+            span.fa.fa-thumbs-up
+          span.label.label-default
+            |  {{package.downloads}}  Downloads
+            span.fa.fa-download
+
+      .col-md-3.col-md-offset-1.text-right
+        button.btn.btn-success(ng-show="!package.installed")
+          | Paket prüfen und installieren
+        p.btn.btn-info(ng-show="package.installed")
+          | Paket installiert

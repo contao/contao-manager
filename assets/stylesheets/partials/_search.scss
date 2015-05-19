@@ -24,11 +24,27 @@
 
 .search-result {
   .package {
+    padding: 10px;
+
     h2 {
       margin-top: 0;
+      font-size: 14px;
     }
     p.description {
       margin-bottom: 0;
     }
+
+    &:nth-child(odd) {
+      background: $gray-lighter;
+    }
+  }
+
+  .package__meta {
+     border-top: none;
+   }
+
+  .package__icon {
+    font-size: 20px;
+    padding: 0 10px 0 0;
   }
 }
