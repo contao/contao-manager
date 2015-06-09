@@ -4,9 +4,9 @@ h1 Package small
     .inner
       .version
         span.version__current
-          span.label(class="{{'label-' + versionToClass(package.version)}}", tooltip="Aktuell installierte Version") {{package.version}}
+          span.label(class="{{'label-' + versionToClass(package.version)}}", tooltip="{{PACKAGES.CURRENT_VERSION}}") {{package.version}}
         span.version__next
-          span.label(class="{{'label-' + versionToClass(package.upgrade_version)}}", ng-if="canUpgrade(package)", tooltip="Verfügbare Version")
+          span.label(class="{{'label-' + versionToClass(package.upgrade_version)}}", ng-if="canUpgrade(package)", tooltip="{{PACKAGES.AVAILABLE_VERSION}}")
             span.fa.fa-arrow-circle-up
             |  {{package.upgrade_version}}
       // todo: multi select for composer actions

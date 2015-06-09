@@ -46,7 +46,7 @@ class UiController extends AbstractController
             '/{path}/{file}',
             ['GET'],
             [
-                'path' => 'css|fonts|img|js|pages|tenside',
+                'path' => 'css|fonts|img|js|pages|l10n',
                 'file' => '[\-\_a-zA-Z]*(\.[a-zA-Z]*)+'
             ]
         );
@@ -183,7 +183,8 @@ class UiController extends AbstractController
             return 'application/font-woff';
         }
 
-        if (substr($filePath, -4) === '.map') {
+        if ((substr($filePath, -4) === '.map')
+            || (substr($filePath, -4) === '.json')) {
             return 'application/json';
         }
 

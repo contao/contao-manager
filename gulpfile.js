@@ -9,6 +9,7 @@ var gulp = require('gulp'),
     jade = require('gulp-jade'),
     livereload = require('gulp-livereload'),
     minify = require('gulp-minify-css'),
+    jsonminify = require('gulp-jsonminify'),
     newer = require('gulp-newer'),
     run = require('gulp-run'),
     sass = require('gulp-sass'),
@@ -88,6 +89,7 @@ var paths = {
             'bower_components/angular-animate/angular-animate.js',
             'bower_components/angular-route/angular-route.js',
             'bower_components/angular-translate/angular-translate.js',
+            'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
             'bower_components/angular-bootstrap/ui-bootstrap.js',
             'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
             'bower_components/ace/build/src/ace.js',
@@ -105,6 +107,7 @@ var paths = {
             'js/angular-animate.js',
             'js/angular-route.js',
             'js/angular-translate.js',
+            'js/angular-translate-loader-static-files.js',
             'js/ui-bootstrap.js',
             'js/ui-bootstrap-tpls.js',
             'js/bootstrap.js',
@@ -120,6 +123,10 @@ var paths = {
     images: {
         'watch': 'assets/images/*',
         'src': 'assets/images/*'
+    },
+    localization: {
+        'watch': 'assets/l10n/*',
+        'src': 'assets/l10n/*'
     }
 };
 
@@ -316,13 +323,36 @@ gulp.task('watch-fonts', [], function () {
 });
 
 /**
+ * Build localization tasks.
+ */
+gulp.task('clean-localization', function (cb) {
+    del([out + '/l10n'], {force: true}, cb);
+});
+
+gulp.task('build-localization', ['clean-localization'], function () {
+    return gulp.src(globJsSource(paths.localization.src))
+        .pipe(sourcemaps.init())
+        .pipe(jsonminify())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(out + '/l10n'));
+});
+
+gulp.task('watch-localization', [], function () {
+    return gulp.src(globJsSource(paths.localization.src))
+        .pipe(sourcemaps.init())
+        .pipe(jsonminify())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(out + '/l10n'));
+});
+
+/**
  * Global build tasks
  */
 gulp.task('clean', function (cb) {
     del([out], {force: true}, cb);
 });
 
-gulp.task('build', ['build-templates', 'build-images', 'build-fonts']);
+gulp.task('build', ['build-templates', 'build-images', 'build-fonts', 'build-localization']);
 
 gulp.task('watch', function () {
     livereload.listen();
@@ -331,7 +361,8 @@ gulp.task('watch', function () {
     gulp.watch(paths.javascripts.watch, ['watch-javascripts']);
     gulp.watch(paths.images.watch, ['watch-images']);
     gulp.watch(paths.fonts.watch, ['watch-fonts']);
+    gulp.watch(paths.localization.watch, ['watch-localization']);
     gulp.watch(out + '/**/*').on('change', livereload.changed);
 });
 
-gulp.task('default', ['watch', 'watch-templates', 'watch-stylesheets', 'watch-javascripts', 'watch-images', 'watch-fonts']);
+gulp.task('default', ['watch', 'watch-templates', 'watch-stylesheets', 'watch-javascripts', 'watch-images', 'watch-fonts', 'watch-localization']);

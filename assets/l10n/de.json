@@ -1,0 +1,40 @@
+{
+  "LOADING": "Laden...",
+  "CONFIG": {
+    "HEADLINE": "Configuration",
+    "SAVE": "Speichern",
+    "CORE": {
+      "TITLE": "Allgemein"
+    },
+    "INSTALL": {
+      "TITLE": "Installation",
+      "MINIMUM_STABILITY": {
+        "STABLE": "Stabile Versionen (empfohlen)",
+        "RC": "Release Kandidaten",
+        "BETA": "Beta releases",
+        "ALPHA": "Alpha releases",
+        "DEV": "Aktuellste Entwicklungsstände (instabil)"
+      },
+      "PREFERRED_INSTALL": {
+        "DIST": "Distributionsarchive (empfohlen)",
+        "SOURCE": "Aus Versionskontrolle (git, mercurial or svn)",
+        "AUTO": "Automatisch bestimmen"
+      }
+    },
+    "DOWNLOAD": {
+      "TITLE": "Download",
+      "REPOSITORY": {
+        "TYPE": "Typ",
+        "URL": "URL",
+        "ALLOW_SSL_DOWNGRADE": "Erlaube SSL downgrade",
+        "DELETE": "Repository entfernen",
+        "ADD": "Repository hinzufügen",
+        "TYPES": {
+          "COMPOSER": "Composer (wie packagist.org)",
+          "ARTIFACT": "Artifact-repository",
+          "VCS": "Versionsverwaltung repository"
+        }
+      }
+    }
+  }
+}

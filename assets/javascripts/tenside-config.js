@@ -19,52 +19,8 @@
 (function () {
     angular.module('tenside-config', ['tenside-api'])
         .config(
-        ['$routeProvider', '$translateProvider',
-            function ($routeProvider, $translateProvider) {
-                var translations = {
-                    CONFIG: {
-                        HEADLINE: 'Configuration',
-                        SAVE: 'Save',
-                        CORE: {
-                            TITLE: 'General'
-                        },
-                        INSTALL: {
-                            TITLE: 'Installation',
-                            MINIMUM_STABILITY: {
-                                STABLE: 'Stable releases (recommended)',
-                                RC: 'Release candidates',
-                                BETA: 'Beta releases',
-                                ALPHA: 'Alpha releases',
-                                DEV: 'Bleeding edge development versions'
-                            },
-                            PREFERRED_INSTALL: {
-                                DIST: 'Distribution archive (recommended)',
-                                SOURCE: 'From source (git, mercurial or svn)',
-                                AUTO: 'Guess automatically'
-                            }
-                        },
-                        DOWNLOAD: {
-                            TITLE: 'Download',
-                            REPOSITORY: {
-                                TYPE: 'Type',
-                                URL: 'URL',
-                                ALLOW_SSL_DOWNGRADE: 'Allow SSL downgrade',
-                                // Buttons
-                                DELETE: 'Remove repository',
-                                ADD: 'Add repository',
-                                // Types:
-                                TYPES: {
-                                    COMPOSER: 'Composer (like packagist.org)',
-                                    ARTIFACT: 'Artifact repository',
-                                    VCS: 'Source repository'
-                                }
-                            }
-                        }
-                    }
-                };
-
-                $translateProvider.translations('en', translations);
-
+        ['$routeProvider',
+            function ($routeProvider) {
                 // route for config page
                 $routeProvider.when('/config', {
                     templateUrl: 'pages/config.html',

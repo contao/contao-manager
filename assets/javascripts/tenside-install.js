@@ -29,14 +29,17 @@ var TENSIDEApi = TENSIDEApi || '';
         .config(
         ['$translateProvider',
             function ($translateProvider) {
-                var translations = {
-                    SLOGAN: 'Package management made easy!'
-                };
-
                 $translateProvider
-                    .translations('en', translations)
+                    .useStaticFilesLoader({
+                        prefix: 'l10n/',
+                        suffix: '.json'
+                    })
                     .usePostCompiling(true)
-                    .preferredLanguage('en');
+                    .fallbackLanguage('en')
+                    .determinePreferredLanguage();
+                if ('' === $translateProvider.use()) {
+                    $translateProvider.preferredLanguage('en')
+                }
             }
         ])
         .controller(

@@ -135,24 +135,5 @@
             templateUrl: 'pages/package.html',
             controller: 'tensidePackagesController'
         });
-
-        var translations = {
-            PACKAGES: {
-                HEADLINE: 'Packages',
-                UPGRADE: 'Upgrade',
-                LOCK: 'Lock',
-                REMOVE: 'Remove',
-                UPGRADE_SELECTED: 'Upgrade package {{package}}.',
-                LOCK_SELECTED: 'Lock package {{package}} at version {{version}}.',
-                UNLOCK_SELECTED: 'Unlock package {{package}} from version {{version}}.',
-                REMOVE_SELECTED: 'Remove package {{package}}.'
-            },
-            PACKAGE: {
-              DETAIL: 'Package {{package}} details.'
-            }
-        };
-
-        $translateProvider.translations('en', translations);
     }]);
-
 })();

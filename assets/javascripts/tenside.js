@@ -65,15 +65,17 @@ var TENSIDEApi = TENSIDEApi || '';
 
         $locationProvider.html5Mode(false);
 
-        var translations = {
-            SLOGAN: 'Package management made easy!',
-            LOADING: 'Loading...'
-        };
-
         $translateProvider
-            .translations('en', translations)
+            .useStaticFilesLoader({
+                prefix: 'l10n/',
+                suffix: '.json'
+            })
             .usePostCompiling(true)
-            .preferredLanguage('en');
+            .fallbackLanguage('en')
+            .determinePreferredLanguage();
+        if ('' === $translateProvider.use()) {
+            $translateProvider.preferredLanguage('en')
+        }
 
         // route for about page
         $routeProvider.when('/about', {
