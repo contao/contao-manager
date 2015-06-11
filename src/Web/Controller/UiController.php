@@ -127,27 +127,42 @@ class UiController extends AbstractController
     /**
      * Provide an asset.
      *
-     * @param string $path The assets sub dir.
+     * @param string  $path    The assets sub dir.
      *
-     * @param string $file The file name within the sub dir..
+     * @param string  $file    The file name within the sub dir..
+     *
+     * @param Request $request The request to process.
      *
      * @return Response
      */
-    public function assetAction($path, $file)
+    public function assetAction($path, $file, Request $request)
     {
         $filePath = $this->getAssetsDir() . '/' . $path . '/' . $file;
 
-        if (file_exists($filePath)) {
-            $response = new Response(file_get_contents($filePath));
-            $mime     = $this->getMime($filePath);
-            if ($mime !== null) {
-                $response->headers->set('Content-Type', $mime);
-            }
+        if (!file_exists($filePath)) {
+            return new Response($filePath . ' not found', 404);
+        }
 
+        $response = new Response();
+        $response->setPublic();
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+
+        $lastModified = filemtime($filePath);
+
+        $response->setETag(md5($filePath . $lastModified));
+        $response->setLastModified(new \DateTime('@' . $lastModified));
+
+        if ($response->isNotModified($request)) {
+            // return the 304 Response immediately
             return $response;
         }
 
-        return new Response($filePath . ' not found', 404);
+        $mime = $this->getMime($filePath);
+        if ($mime !== null) {
+            $response->headers->set('Content-Type', $mime);
+        }
+
+        return $response->setContent(file_get_contents($filePath));
     }
 
     /**
