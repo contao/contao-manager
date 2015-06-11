@@ -123,6 +123,7 @@ class UiTask extends AbstractTask
             ->name('*.eot')
             ->name('*.ttf')
             ->name('*.woff')
+            ->name('*.json')
             ->in($compiledAssets);
         foreach ($finder as $file) {
             /** @var SplFileInfo $file */
