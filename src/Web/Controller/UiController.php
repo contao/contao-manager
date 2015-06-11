@@ -159,33 +159,24 @@ class UiController extends AbstractController
      */
     private function getMime($filePath)
     {
-        if (substr($filePath, -3) === '.js') {
-            return 'text/javascript; charset=UTF-8';
-        }
-
-        if (substr($filePath, -5) === '.html') {
-            return 'text/html; charset=UTF-8';
-        }
-
-        if (substr($filePath, -4) === '.css') {
-            return 'text/css; charset=UTF-8';
-        }
-
-        if (substr($filePath, -4) === '.png') {
-            return 'image/png';
-        }
-
-        if (substr($filePath, -4) === '.svg') {
-            return 'image/svg+xml';
-        }
-
-        if (substr($filePath, -5) === '.woff') {
-            return 'application/font-woff';
-        }
-
-        if ((substr($filePath, -4) === '.map')
-            || (substr($filePath, -4) === '.json')) {
-            return 'application/json';
+        $chunks = explode('.', $filePath);
+        if (count($chunks) > 1) {
+            $fileExtension = array_pop($chunks);
+            foreach ([
+                    'js' => 'text/javascript; charset=UTF-8',
+                    'html' => 'text/html; charset=UTF-8',
+                    'css' => 'text/css; charset=UTF-8',
+                    'png' => 'image/png',
+                    'svg' => 'image/svg+xml',
+                    'woff' => 'application/font-woff',
+                    'woff2' => 'application/font-woff',
+                    'map' => 'application/json',
+                    'json' => 'application/json',
+                ] as $extension => $mimeType) {
+                if ($fileExtension === $extension) {
+                    return $mimeType;
+                }
+            }
         }
 
         return null;
