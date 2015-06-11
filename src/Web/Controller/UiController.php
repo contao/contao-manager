@@ -47,7 +47,7 @@ class UiController extends AbstractController
             ['GET'],
             [
                 'path' => 'css|fonts|img|js|pages|l10n',
-                'file' => '[\-\_a-zA-Z]*(\.[a-zA-Z]*)+'
+                'file' => '[\-\_a-zA-Z0-9]*(\.[a-zA-Z0-9]*)+'
             ]
         );
     }
