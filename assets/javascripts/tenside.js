@@ -66,6 +66,10 @@ var TENSIDEApi = TENSIDEApi || '';
         $locationProvider.html5Mode(false);
 
         $translateProvider
+            .registerAvailableLanguageKeys(['en', 'de'], {
+                'en*': 'en',
+                'de*': 'de'
+            })
             .useStaticFilesLoader({
                 prefix: 'l10n/',
                 suffix: '.json'

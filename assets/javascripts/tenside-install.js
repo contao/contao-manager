@@ -30,6 +30,10 @@ var TENSIDEApi = TENSIDEApi || '';
         ['$translateProvider',
             function ($translateProvider) {
                 $translateProvider
+                    .registerAvailableLanguageKeys(['en', 'de'], {
+                        'en*': 'en',
+                        'de*': 'de'
+                    })
                     .useStaticFilesLoader({
                         prefix: 'l10n/',
                         suffix: '.json'
