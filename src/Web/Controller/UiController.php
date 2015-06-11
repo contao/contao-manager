@@ -178,15 +178,15 @@ class UiController extends AbstractController
         if (count($chunks) > 1) {
             $fileExtension = array_pop($chunks);
             foreach ([
-                    'js' => 'text/javascript; charset=UTF-8',
-                    'html' => 'text/html; charset=UTF-8',
-                    'css' => 'text/css; charset=UTF-8',
-                    'png' => 'image/png',
-                    'svg' => 'image/svg+xml',
-                    'woff' => 'application/font-woff',
-                    'woff2' => 'application/font-woff',
-                    'map' => 'application/json',
-                    'json' => 'application/json',
+                    'js'    => 'text/javascript; charset=UTF-8',
+                    'map'   => 'application/json',
+                    'css'   => 'text/css; charset=UTF-8',
+                    'png'   => 'image/png',
+                    'svg'   => 'image/svg+xml',
+                    'woff'  => 'application/font-woff',
+                    'woff2' => 'font/woff2',
+                    'json'  => 'application/json',
+                    'html'  => 'text/html; charset=UTF-8',
                 ] as $extension => $mimeType) {
                 if ($fileExtension === $extension) {
                     return $mimeType;
