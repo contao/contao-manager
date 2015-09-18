@@ -103,6 +103,7 @@ class UiTask extends AbstractTask
         $finder->files()
             ->ignoreVCS(true)
             ->name('*.php')
+            ->name('*.yml')
             ->notName('UiTask.php')
             ->in(dirname(dirname(__DIR__)) . '/src');
         foreach ($finder as $file) {

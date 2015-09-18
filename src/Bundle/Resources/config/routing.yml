@@ -1,0 +1,22 @@
+rootRedirect:
+    path:     /
+    defaults: { _controller: TensideUiBundle:Ui:rootRedirect }
+    methods:  [GET]
+
+index:
+    path:     /index.html
+    defaults: { _controller: TensideUiBundle:Ui:index }
+    methods:  [GET]
+
+install:
+    path:     /install.html
+    defaults: { _controller: TensideUiBundle:Ui:install }
+    methods:  [GET]
+
+asset:
+    path:     /{path}/{file}
+    defaults: { _controller: TensideUiBundle:Ui:asset }
+    methods:  [GET]
+    requirements:
+        path: "css|fonts|img|js|pages|l10n"
+        file: "[\-\_a-zA-Z0-9]*(\.[a-zA-Z0-9]*)+"

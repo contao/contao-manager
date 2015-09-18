@@ -3,7 +3,7 @@
 /**
  * This file is part of tenside/ui.
  *
- * (c) Christian Schiffler <https://github.com/discordier>
+ * (c) Christian Schiffler <c.schiffler@cyberspectrum.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,47 +11,25 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    tenside/ui
- * @author     Christian Schiffler <https://github.com/discordier>
- * @copyright  Christian Schiffler <https://github.com/discordier>
- * @link       https://github.com/tenside/ui
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  2015 Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @license    https://github.com/tenside/ui/blob/master/LICENSE MIT
+ * @link       https://github.com/tenside/ui
  * @filesource
  */
 
-namespace Tenside\Ui\Web\Controller;
+namespace Tenside\Ui\Bundle\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouteCollection;
-use Tenside\Web\Controller\AbstractController;
+use Tenside\CoreBundle\Controller\AbstractController;
 
 /**
  * Provide access to all embedded asset files.
  */
 class UiController extends AbstractController
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function createRoutes(RouteCollection $routes)
-    {
-        static::createRoute($routes, 'rootRedirect', '/');
-        static::createRoute($routes, 'index', '/index.html');
-        static::createRoute($routes, 'install', '/install.html');
-
-        static::createRoute(
-            $routes,
-            'asset',
-            '/{path}/{file}',
-            ['GET'],
-            [
-                'path' => 'css|fonts|img|js|pages|l10n',
-                'file' => '[\-\_a-zA-Z0-9]*(\.[a-zA-Z0-9]*)+'
-            ]
-        );
-    }
-
     /**
      * Redirect any request to the "/" path to the index.html file.
      *
@@ -91,9 +69,9 @@ class UiController extends AbstractController
                 file_get_contents($this->getAssetsDir() . '/index.html')
             ),
             200,
-            array(
+            [
                 'Content-Type' => 'text/html; charset=UTF-8'
-            )
+            ]
         );
     }
 
@@ -118,9 +96,9 @@ class UiController extends AbstractController
                 file_get_contents($this->getAssetsDir() . '/install.html')
             ),
             200,
-            array(
+            [
                 'Content-Type' => 'text/html; charset=UTF-8'
-            )
+            ]
         );
     }
 

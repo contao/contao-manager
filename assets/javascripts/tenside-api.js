@@ -47,7 +47,7 @@
                     headers: {}
                 });
                 if (!myOpts.headers.authorization && apiKey !== undefined) {
-                    myOpts.headers.authorization = 'jwt token=' + apiKey;
+                    myOpts.headers.authorization = 'Bearer ' + apiKey;
                 }
                 return myOpts;
             },
