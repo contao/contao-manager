@@ -41,7 +41,7 @@ class UiController extends AbstractController
     {
         $uri = $request->getUri();
         // Special case, not correctly setup yet. Do so now.
-        if (!$this->getTenside()->isInstalled()) {
+        if (!$this->isInstalled()) {
             return new RedirectResponse($uri . 'install.html');
         }
 
@@ -58,7 +58,7 @@ class UiController extends AbstractController
     public function indexAction(Request $request)
     {
         // Special case, not correctly setup yet. Do so now.
-        if (!$this->getTenside()->isInstalled()) {
+        if (!$this->isInstalled()) {
             return new RedirectResponse($request->getUri() . 'install.html');
         }
 
@@ -85,7 +85,7 @@ class UiController extends AbstractController
     public function installAction(Request $request)
     {
         // Special case, already setup. Redirect to index then.
-        if ($this->getTenside()->isInstalled()) {
+        if ($this->isInstalled()) {
             return new RedirectResponse($request->getUri() . 'index.html');
         }
 
@@ -197,5 +197,16 @@ class UiController extends AbstractController
         }
 
         throw new \RuntimeException('Could not find assets directory.');
+    }
+
+    /**
+     * Check if the application has been installed.
+     *
+     * @return bool
+     */
+    private function isInstalled()
+    {
+        // FIXME: need to determine this somehow better. Can not check for tenside also as we need the secret and user.
+        return (file_exists($this->getTensideHome() . DIRECTORY_SEPARATOR . 'composer.json'));
     }
 }
