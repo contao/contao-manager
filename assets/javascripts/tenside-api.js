@@ -105,6 +105,36 @@
                 self.search = function(keywords) {
                     return api.put(endpoint(), {keywords: keywords});
                 };
+            },
+            tensideApiTasks = function(tensideApi) {
+                var self = this,
+                    api = tensideApi,
+                    endpoint = function(name) {
+                        if (name) {
+                            return endpoint() + '/' + name;
+                        }
+
+                        return 'tasks';
+                    };
+                self.list = function() {
+                    return api.get(endpoint());
+                };
+                self.get = function(id) {
+                    return api.get(endpoint(id));
+                };
+                self.add = function(data) {
+                    return api.post(endpoint(), data);
+                };
+                self.addUpgrade = function(packageNames) {
+                    if (packageNames) {
+                        return self.add({type: 'upgrade', packages: packageNames});
+                    }
+
+                    return self.add({type: 'upgrade'});
+                };
+                self.runInline = function(id) {
+                    return api.get('run-task/'+ id);
+                }
             };
 
         api.setBaseUrl = function(url) {
@@ -166,6 +196,7 @@
         api.packages = new tensideApiPackages(api);
         api.composerJson = new tensideApiComposerJson(api);
         api.search = new tensideApiSearch(api);
+        api.tasks = new tensideApiTasks(api);
 
         // Check if we have a stored key.
         if ($window.sessionStorage.apiKey !== undefined) {

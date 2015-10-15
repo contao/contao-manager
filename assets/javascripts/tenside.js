@@ -102,6 +102,13 @@ var TENSIDEApi = TENSIDEApi || '';
             appendToBody: true
         });
     }])
+    .controller('taskRunController',
+    ['$scope', '$routeParams',
+    function ($scope, $routeParams) {
+        $scope.taskId = $routeParams.taskId;
+
+
+    }])
     .controller('tensideAboutController', ['$scope', function ($scope) {
         $scope.config = {};
     }])

@@ -84,7 +84,7 @@ var TENSIDEApi = TENSIDEApi || '';
                 angular.forEach($scope.projects,
                     function (versions, name) {
                         var project = name;
-                        $http.get(TENSIDEApi + '/install/search-project/' + name).success(function(data) {
+                        $http.get(TENSIDEApi + '/api/v1/install/search-project/' + name + '.json').success(function(data) {
                             $scope.projects[project] = data.versions;
                         });
                     }
@@ -139,7 +139,7 @@ var TENSIDEApi = TENSIDEApi || '';
                         console.log($scope);
                         alert('We will now create your project.');
 
-                        $http.put(TENSIDEApi + '/install/create-project', $scope.install).success(function(data) {
+                        $http.put(TENSIDEApi + '/api/v1/install/create-project.json', $scope.install).success(function(data) {
                             if (data.status === 'OK') {
                                 window.location.href = window.location.href.replace(/install\.html/, '');
 

@@ -107,6 +107,7 @@
         $scope.upgrade = function (pack) {
             // pack is optional.
             console.log(pack);
+            $tensideApi.tasks.addUpgrade(pack? [pack.name] : undefined);
         };
 
         $scope.remove = function (pack) {
