@@ -72,12 +72,16 @@
                     return api.get(endpoint(), data);
                 };
                 self.get = function(name) {
+                    if (!name) {throw 'no name passed to $tensideApi.packages.get()';}
+
                     return api.get(endpoint(name));
                 };
                 self.put = function(data) {
+                    if (!data.name) {throw 'no name passed to $tensideApi.packages.put()';}
+
                     return api.put(endpoint(data.name), data);
                 };
-                self.delete = function () {
+                self.delete = function (data) {
                     return api.delete(endpoint(data.name));
                 };
             },
@@ -103,6 +107,8 @@
                     }
                     ;
                 self.search = function(keywords) {
+                    if (!keywords) {throw 'no keywords passed to $tensideApi.search.search()';}
+
                     return api.put(endpoint(), {keywords: keywords});
                 };
             },
@@ -119,8 +125,16 @@
                 self.list = function() {
                     return api.get(endpoint());
                 };
-                self.get = function(id) {
-                    return api.get(endpoint(id));
+                self.get = function(id, offset) {
+                    if (!id) {throw 'no id passed to $tensideApi.tasks.get()';}
+
+                    var config;
+
+                    if (offset) {
+                        config = {params: {offset: offset}};
+                    }
+
+                    return api.get(endpoint(id), config);
                 };
                 self.add = function(data) {
                     return api.post(endpoint(), data);
@@ -129,8 +143,11 @@
                     if (packageNames) {
                         return self.add({type: 'upgrade', packages: packageNames});
                     }
-
                     return self.add({type: 'upgrade'});
+
+                };
+                self.delete = function (id) {
+                    return api.delete(endpoint(id));
                 };
                 self.runInline = function(id) {
                     return api.get('run-task/'+ id);
