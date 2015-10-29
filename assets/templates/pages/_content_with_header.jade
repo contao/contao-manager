@@ -1,0 +1,30 @@
+header
+  .logo
+    img(src="../img/tenside.svg", ng-class="{'fa-spin': loading}")
+    a(href="#/") tenside
+
+.tenside-search.container
+  div.spacer
+    .btn.btn-default.col-lg-2
+      i.fa.fa-refresh
+      | &nbsp;
+      | Check for updates
+    search-header.col-lg-10
+
+.body
+  .container
+    block content
+
+footer
+  .container
+    .row
+      .col-md-6
+        p
+          a(href="https://github.com/tenside/ui/commit/#{app.tensideVersion}", target="_blank") Tenside #{app.tensideVersion}
+        p
+          a(href="https://github.com/composer/composer/commit/#{app.composerVersion}", target="_blank") Composer #{app.composerVersion}
+      .col-md-6.right
+        p
+          a(href="#/about") About
+        p
+          a(href="#/support") Support

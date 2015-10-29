@@ -1,12 +1,67 @@
 {
   "SLOGAN": "Package management made easy!",
   "LOADING": "Loading...",
-  
+
+  "title": {
+    "base": "Tenside - Package management made easy!",
+    "packages": "Tenside - Installed packages",
+    "search": "Tenside - Search packages"
+  },
+  "link_more": "more",
+  "tenside_package_list_entry": {
+    "btn_install":     "Check and install",
+    "tt_install":      "Install package {{package}}",
+    "btn_remove":      "Remove",
+    "tt_remove":       "Remove package {{package}}",
+    "btn_upgrade":     "Upgrade",
+    "tt_upgrade":      "Upgrade package {{package}}",
+    "btn_disable":     "Disable",
+    "tt_disable":      "Disable package {{package}}",
+    "btn_enable":      "Enable",
+    "tt_enable":       "Enable package {{package}}",
+
+    "favers":          "{{favers}} Favers",
+    "downloads":       "{{downloads}} downloads",
+    "current_version": "Currently installed version",
+
+    "package_type": {
+      "library":              "Library",
+      "component":            "Component",
+      "composer-installer":   "Composer installer",
+      "composer-plugin":      "Composer plugin",
+      "legacy-contao-module": "Legacy Contao module",
+      "contao-bundle":        "Contao bundle",
+      "contao-module":        "Contao extension",
+      "meta-package":         "Meta package",
+      "metapackage":          "Meta package",
+      "php":                  "PHP extension",
+      "symfony-bundle":       "Symfony bundle"
+    }
+  },
+
+  "INSTALL": {
+    "TITLE": "Tenside installer",
+    "WELCOME": "Welcome",
+    "VERSION": "to tenside {{version}}",
+    "ABSTRACT": "We have detected that you have no installation at this instance yet. Please fill in the information below to create a web project now.",
+    "FIELDS": {
+      "USERNAME": "Username",
+      "PASSWORD": "Password",
+      "CONFIRM": "Retype password",
+      "SECRET": "Installation secret",
+      "PROJECT": "Base project",
+      "PROJECT-PLACEHOLDER": "Select a base project",
+      "VERSION": "Version",
+      "VERSION-PLACEHOLDER": "Decide automatically"
+    },
+    "BTN_GO": "Sign up"
+  },
   "PACKAGES": {
     "HEADLINE": "Packages",
     "UPGRADE": "Upgrade",
     "LOCK": "Lock",
     "REMOVE": "Remove",
+    "DISABLE": "Disable",
     "UPGRADE_SELECTED": "Upgrade package {{package}}.",
     "LOCK_SELECTED": "Lock package {{package}} at version {{version}}.",
     "UNLOCK_SELECTED": "Unlock package {{package}} from version {{version}}.",
@@ -54,5 +109,4 @@
       }
     }
   }
-
 }

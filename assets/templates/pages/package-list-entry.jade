@@ -1,0 +1,36 @@
+.col-lg-2
+  i.icon.fa(package-type="package.type")
+.col-lg-6
+  .name {{package.name}}
+  .description {{package.description}}
+    a(href="#/package/{{ package.name }}")  {{ 'link_more' | translate }}
+  .license
+    span.label.label-info(ng-repeat="license in package.license")
+      i.fa.fa-legal
+      | {{license}}
+    span.label.label-success(ng-if="package.favers")
+      i.fa.fa-thumbs-up
+      |  {{ 'tenside_package_list_entry.favers' | translate:{favers: package.favers} }}
+    span.label.label-default(ng-if="package.downloads")
+      i.fa.fa-download
+      |  {{'tenside_package_list_entry.downloads' | translate:{downloads: package.downloads} }}
+.col-lg-2
+  .constraint
+    span.label(version-class="package.version", uib-tooltip="{{ 'tenside_package_list_entry.current_version' | translate }}") {{package.version}}
+  .date DATETIME
+.col-lg-2
+  button.btn.btn-default.btn-lg(type="button", uib-tooltip="{{ 'tenside_package_list_entry.tt_disable' | translate:{package:package.name} }}", ng-if="canDisable(package)")
+    span.fa.fa-fw.fa-power-off
+    span {{ 'tenside_package_list_entry.btn_disable' | translate }}
+  button.btn.btn-default.btn-lg(type="button", uib-tooltip="{{ 'tenside_package_list_entry.tt_enable' | translate:{package:package.name} }}", ng-if="canEnable(package)")
+    span.fa.fa-fw.fa-power-off
+    span {{'tenside_package_list_entry.btn_enable'| translate }}
+  button.btn.btn-default.btn-lg(type="button", uib-tooltip="{{ 'tenside_package_list_entry.tt_upgrade' | translate:{package:package.name} }}", ng-if="canUpgrade(package)")
+    span.fa.fa-fw.fa-arrow-circle-up
+    span {{'tenside_package_list_entry.btn_upgrade'| translate }}
+  button.btn.btn-danger.btn-lg(type="button", uib-tooltip="{{ 'tenside_package_list_entry.tt_remove' | translate:{package:package.name} }}", ng-if="canRemove(package)", ng-click="remove(package)")
+    span.fa.fa-fw.fa-trash-o
+    span {{'tenside_package_list_entry.btn_remove'| translate }}
+  button.btn.btn-success(uib-tooltip="{{ 'tenside_package_list_entry.tt_install' | translate:{package:package.name} }}", ng-if="canInstall(package)")
+    span.fa.fa-fw.fa-plus-circle
+    span {{'tenside_package_list_entry.btn_install'| translate }}

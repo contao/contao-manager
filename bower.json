@@ -7,13 +7,12 @@
   ],
   "dependencies": {
     "ace": "1.1.*",
-    "angular": "~1.2.0",
-    "angular-animate": "~1.2.0",
-    "angular-route": "~1.2.0",
-    "angular-bootstrap": "~0.12",
-    "bootstrap-sass-official": "~3.3.0",
-    "font-awesome": "~4.3.0",
-    "angular-translate": "~2.6.1",
-    "angular-translate-loader-static-files": "~2.6.1"
+    "angular": "^1.4",
+    "angular-ui-router": "^0.2",
+    "angular-bootstrap": "^0.14",
+    "bootstrap-sass-official": "^3.3",
+    "font-awesome": "^4.3",
+    "angular-translate": "^2",
+    "angular-translate-loader-static-files": "^2.6"
   }
 }

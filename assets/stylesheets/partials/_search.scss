@@ -1,9 +1,12 @@
-
-.navbar .tenside-search {
-  background-color: $search-bg;
+.tenside-search {
+  //background-color: $search-bg;
   color: $search-color;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+
+  .spacer {
+    margin: 0 10%;
+  }
 
   .form-group {
     margin-bottom: 0;

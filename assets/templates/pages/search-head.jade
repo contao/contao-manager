@@ -1,0 +1,8 @@
+form.form(role="search", ng-submit="search()")
+  .form-group(style="display:inline;")
+    .input-group
+      input.form-control(type="search", placeholder="Search packages...", ng-model="keywords", ng-class="{'search__input--focus': focused}", ng-init="focused = false", ng-focus="focused = true", ng-blur="focused = false")
+      div.btn-search.input-group-addon(ng-click="search()", ng-class="{'disabled': keywords == ''}")
+        i.fa.fa-search
+        | &nbsp;
+        small SEARCH

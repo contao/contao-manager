@@ -1,31 +1,11 @@
-h1
-  | Search
+extends _content_with_header
 
-.search-result
-    .row.package(ng-repeat="package in packages")
-      .col-md-8
-        h2
-          i(class="package__icon fa {{typeIcon(package.type)}}", title="{{package.type}}")
-          a(href="#package?name={{package.name}}") {{package.name}}
-        span.fa.fa-check-square(ng-show="package.installed")
-          |  Installiert
-        p.description {{package.description}}
-        .package__meta
-          span.label.label-info
-            |  {{package.url}}
-            span.fa.fa-download
-          span.label.label-default
-            |  {{package.license}}  Lizenz
-            span.fa.fa-download
-          span.label.label-success
-            |  {{package.favers}}  Bewertung
-            span.fa.fa-thumbs-up
-          span.label.label-default
-            |  {{package.downloads}}  Downloads
-            span.fa.fa-download
-
-      .col-md-3.col-md-offset-1.text-right
-        button.btn.btn-success(ng-show="!package.installed")
-          | Paket prüfen und installieren
-        p.btn.btn-info(ng-show="package.installed")
-          | Paket installiert
+block content
+  .sort-selection
+    .sort-best-matched Best Matched
+    .sort-name Name
+    .sort-last-updated Last Updated
+  .type-selection
+    input(type="radio" ng-model="color.name" value="red")
+  .search-result
+    package-list-entry.row.package(ng-repeat="package in packages")

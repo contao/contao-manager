@@ -1,24 +1,37 @@
 // Package small
 
-.packages-list-small {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  .package {
-    min-height: 250px;
-    width: 47%;
-    margin: 0 auto 50px auto;
-    background: $gray-lighter;
-    position: relative;
-
-    .inner {
-      padding: 10px;
-    }
-  }
+.packages {
 }
 
-.packages-list {
+package-list-entry {
+  background-color: #fff;
+  color: $gray-light;
+  padding: 10px;
+  border-radius: 3px;
+  margin-bottom: 15px;
+  border-bottom: 3px solid #e1d8c4;
+  display: block;
 
+  .name {
+    font-size: 12pt;
+    font-weight: 700;
+  }
+
+  .description {
+    margin-bottom: 10px;
+    .more {
+      margin-left: 10px;
+    }
+  }
+
+  .icon {
+    font-size: 100px;
+    padding: 15px;
+
+    .packages-list-small & {
+      font-size: 25px;
+    }
+  }
 }
 
 .list-group-item {
@@ -44,16 +57,6 @@
 
 .package__type {
   text-align: center;
-}
-
-.package__icon {
-  font-size: 40px;
-  padding: 15px;
-  color: $gray-light;
-
-  .packages-list-small & {
-    font-size: 25px;
-  }
 }
 
 .package__meta {

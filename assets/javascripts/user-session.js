@@ -63,7 +63,7 @@
                     // When the session recovered, make the same backend call again and chain the request
                     return deferred.promise.then(function() {
                         var api = $injector.get('$tensideApi');
-                        return api(jQuery.extend(rejection.config, {headers: {authorization: undefined}}));
+                        return api(angular.merge(rejection.config, {headers: {authorization: undefined}}));
                     });
                 }
 

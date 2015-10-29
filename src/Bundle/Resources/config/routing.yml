@@ -8,11 +8,6 @@ index:
     defaults: { _controller: TensideUiBundle:Ui:index }
     methods:  [GET]
 
-install:
-    path:     /install.html
-    defaults: { _controller: TensideUiBundle:Ui:install }
-    methods:  [GET]
-
 asset:
     path:     /{path}/{file}
     defaults: { _controller: TensideUiBundle:Ui:asset }

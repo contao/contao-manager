@@ -1,0 +1,18 @@
+.popup
+  header
+    h3 Processing task...
+  .popup-content
+    ul.task-progress(ng-show="task.isRunning()")
+      li.s1 &nbsp;
+      li.s2 &nbsp;
+      li.s3 &nbsp;
+      li.s4 &nbsp;
+      li.s5 &nbsp;
+    span.subhead Performing task...
+    span.description ... please stand by.
+    a.btn.btn-danger(ng-show="task.isRunning()") Cancel
+    a.btn.btn-default(ng-show="!task.isRunning()", ng-click="close()") Close
+    a.console-toggle.switch-off(ng-show="consoleVisible", ng-click="consoleVisible = !consoleVisible") Hide console output
+    a.console-toggle.switch-on(ng-show="!consoleVisible", ng-click="consoleVisible = !consoleVisible") Show console output
+    div(ng-show="consoleVisible")
+      pre#console-output {{ task.getOutput() }}

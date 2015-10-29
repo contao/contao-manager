@@ -21,8 +21,7 @@
     angular.module(
         'tenside-tasklist',
         [
-            'ui.router', 'ngRoute', 'ui.bootstrap', 'user-session', 'pascalprecht.translate',
-            'tenside-api', 'tenside-install'
+            'ui.router', 'tenside-api'
         ]
     ).factory(
         'TensideTasks',
@@ -121,9 +120,10 @@
                     listRefreshTimer,
                     listRefresh = function () {
                         $tensideApi.tasks.list()
-                            .success(function (data, status, headers) {
+                            .success(function (data) {
                                 var info, task, id;
 
+                                listRefreshTimer = undefined;
                                 // Add new tasks to the list.
                                 for (id in data) {
                                     if (data.hasOwnProperty(id)) {
@@ -212,8 +212,15 @@
                     return listService.getTask(listService.getCurrentTaskId());
                 };
 
-                // Initially start the polling now.
-                listRefreshTimer = $timeout(listRefresh, listRefreshTime);
+                listService.startPolling = function () {
+                    if (!listRefreshTimer) {
+                        listRefresh();
+                    }
+                };
+
+                listService.stopPolling = function () {
+                    $timeout.cancel(listRefreshTimer);
+                };
 
                 return listService;
             }

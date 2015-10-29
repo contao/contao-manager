@@ -40,12 +40,8 @@ class UiController extends AbstractController
     public function rootRedirectAction(Request $request)
     {
         $uri = $request->getUri();
-        // Special case, not correctly setup yet. Do so now.
-        if (!$this->isInstalled()) {
-            return new RedirectResponse($uri . 'install.html');
-        }
 
-        return new RedirectResponse($uri . 'index.html');
+        return new RedirectResponse(rtrim($uri, '/') . '/index.html');
     }
 
     /**
@@ -57,44 +53,8 @@ class UiController extends AbstractController
      */
     public function indexAction(Request $request)
     {
-        // Special case, not correctly setup yet. Do so now.
-        if (!$this->isInstalled()) {
-            return new RedirectResponse($request->getUri() . 'install.html');
-        }
-
         return new Response(
-            str_replace(
-                'var TENSIDEApi=window.location.href.split(\'#\')[0];',
-                'var TENSIDEApi=\'' . $request->getSchemeAndHttpHost() . $request->getBaseUrl() . '/\';',
-                file_get_contents($this->getAssetsDir() . '/index.html')
-            ),
-            200,
-            [
-                'Content-Type' => 'text/html; charset=UTF-8'
-            ]
-        );
-    }
-
-    /**
-     * Provide the install.html file.
-     *
-     * @param Request $request The request to process.
-     *
-     * @return Response
-     */
-    public function installAction(Request $request)
-    {
-        // Special case, already setup. Redirect to index then.
-        if ($this->isInstalled()) {
-            return new RedirectResponse($request->getUri() . 'index.html');
-        }
-
-        return new Response(
-            str_replace(
-                'var TENSIDEApi=window.location.href.split(\'#\')[0];',
-                'var TENSIDEApi=\'' . $request->getSchemeAndHttpHost() . $request->getBaseUrl() . '/\';',
-                file_get_contents($this->getAssetsDir() . '/install.html')
-            ),
+            $this->fixApiBaseUrl($request, file_get_contents($this->getAssetsDir() . '/index.html')),
             200,
             [
                 'Content-Type' => 'text/html; charset=UTF-8'
@@ -200,13 +160,20 @@ class UiController extends AbstractController
     }
 
     /**
-     * Check if the application has been installed.
+     * Replace the magic API base url determining code with the fixed url to the current installation in templates.
      *
-     * @return bool
+     * @param Request $request The request to extract the base url from.
+     *
+     * @param string  $content The template code.
+     *
+     * @return string
      */
-    private function isInstalled()
+    private function fixApiBaseUrl(Request $request, $content)
     {
-        // FIXME: need to determine this somehow better. Can not check for tenside also as we need the secret and user.
-        return (file_exists($this->getTensideHome() . DIRECTORY_SEPARATOR . 'composer.json'));
+        return str_replace(
+            'window.location.href.substring(0, window.location.href.split(\'#\')[0].lastIndexOf(\'/\'));',
+            '\'' . dirname($request->getUri()) . '\';',
+            $content
+        );
     }
 }

@@ -42,7 +42,7 @@
                 return api.getBaseUrl() + '/api/' + version + '/' + endpoint;
             },
             prepareConfig = function(options) {
-                var myOpts = jQuery.extend(true, options || {}, {
+                var myOpts = angular.merge({}, options || {}, {
                     url: endpoint(options.url),
                     headers: {}
                 });
@@ -197,16 +197,17 @@
         };
 
         api.get = function(url, config) {
-            return api(jQuery.extend({url: url, method: 'get'}, config));
+            //return api(jQuery.extend({url: url, method: 'get'}, config));
+            return api(angular.merge({url: url, method: 'get'}, config));
         };
         api.put = function(url, data, config) {
-            return api(jQuery.extend({url: url, method: 'put', data: data}, config));
+            return api(angular.merge({url: url, method: 'put', data: data}, config));
         };
         api.post = function(url, data, config) {
-            return api(jQuery.extend({url: url, method: 'post', data: data}, config));
+            return api(angular.merge({url: url, method: 'post', data: data}, config));
         };
         api.delete = function(url, config) {
-            return api(jQuery.extend({url: url, method: 'delete'}, config));
+            return api(angular.merge({url: url, method: 'delete'}, config));
         };
 
         // Create our specific endpoints now.

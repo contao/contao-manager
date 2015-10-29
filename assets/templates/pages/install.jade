@@ -1,0 +1,29 @@
+header
+    .container
+        h1 {{ 'INSTALL.WELCOME' | translate }}
+        h2 {{ 'INSTALL.VERSION' | translate:{version:"#{app.tensideVersion}"} }}
+.body
+    .container
+        block content
+            #main
+                div
+                    p {{ 'INSTALL.ABSTRACT' | translate }}
+                    .form-group
+                        label.control-label(for="username") {{ 'INSTALL.FIELDS.USERNAME' | translate }}:
+                        input#username.form-control(type="text", name="username", ng-model="install.credentials.username")
+                    .form-group
+                        label.control-label(for="password") {{ 'INSTALL.FIELDS.PASSWORD' | translate }}:
+                        input#password.form-control(type="password", name="password", ng-model="install.credentials.password")
+                    .form-group
+                        label.control-label(for="password-confirm") {{ 'INSTALL.FIELDS.CONFIRM' | translate }}:
+                        input#password-confirm.form-control(type="password", name="password-confirm", ng-model="password_confirm")
+                    .form-group
+                        label.control-label(for="project") {{ 'INSTALL.FIELDS.PROJECT' | translate }}:
+                        select#project.form-control(name="project", type="text", ng-model="install.project.name", ng-options="name as name for (name, versions) in projects")
+                            option(style="display:none" value="") {{ 'INSTALL.FIELDS.PROJECT-PLACEHOLDER' | translate }}
+                    .form-group
+                        label.control-label(for="version") {{ 'INSTALL.FIELDS.VERSION' | translate }}:
+                        select#version.form-control(name="version", type="text", ng-model="install.project.version", ng-options="name as name for (name, versions) in projects[install.project.name]")
+                            option(style="display:none" value="") {{ 'INSTALL.FIELDS.VERSION-PLACEHOLDER' | translate }}
+                    .form-group
+                        a.install.btn.btn-success(ng-click="perform()") {{ 'INSTALL.BTN_GO' | translate }}

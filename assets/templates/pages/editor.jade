@@ -1,7 +1,10 @@
-h1
+extends _content_with_header
+
+block content
+  h1
     | composer.json
-ul#errors(ng-repeat="error in errors")
+  ul#errors(ng-repeat="error in errors")
     li {{error}}
-ul#warnings(ng-repeat="warning in warnings")
+  ul#warnings(ng-repeat="warning in warnings")
     li {{warning}}
-pre#editor
+  pre#editor

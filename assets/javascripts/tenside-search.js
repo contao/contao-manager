@@ -1,7 +1,7 @@
 /**
  * This file is part of tenside/ui.
  *
- * (c) Christian Schiffler <https://github.com/discordier>
+ * (c) Christian Schiffler <c.schiffler@cyberspectrum.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -9,97 +9,73 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    tenside/ui
- * @author     Christian Schiffler <https://github.com/discordier>
- * @copyright  Christian Schiffler <https://github.com/discordier>
- * @link       https://github.com/tenside/ui
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  2015 Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @license    https://github.com/tenside/ui/blob/master/LICENSE MIT
+ * @link       https://github.com/tenside/ui
  * @filesource
  */
 
-(function() {
-    angular.module('tenside-search', ['tenside-api'])
-    .factory('tensideSearchData', function() {
-        var data = {
-            keyword: ''
-        };
-
-        return {
-            setKeywords: function (keywords) {
-                data.keyword = keywords;
-            },
-            getKeywords: function() {
-                return data.keyword;
-            }
-        };
-    })
-    .controller('tensideSearchHeader',
-    ['$scope', 'tensideSearchData', '$location',
-    function ($scope, data, $location) {
-        $scope.keywords = data.getKeywords();
-
-        $scope.search = function() {
-            if($scope.keywords != '') {
-                data.setKeywords($scope.keywords);
-            }
-        };
-
-        $scope.searchButtonActive = $scope.keywords == '' ? '' : 'disabled';
-    }])
-    .controller('tensideSearchController',
-    ['$scope', '$tensideApi', 'tensideSearchData',
-    function($scope, $tensideApi, data) {
-        var search = function (keywords) {
-            $tensideApi.search.search(keywords).success(function(data) {
-                $scope.packages = data;
-            });
-        };
-
-        $scope.$watch(
-            function() {
-                return data.getKeywords();
-            },
-            function (value, previous) {
-                if (value !== previous) {
-                    search(value);
+(function () {
+    "use strict";
+    angular
+        .module('tenside-search', ['tenside-api', 'tenside-package-list-entry'])
+        .config(
+            [
+                '$stateProvider',
+                function ($stateProvider) {
+                    $stateProvider.state(
+                        'search',
+                        {
+                            url: '/search?keywords&type',
+                            templateUrl: 'pages/search.html',
+                            controller: 'tensideSearchController'
+                        }
+                    );
                 }
-            }
-        );
-        $scope.packages = {
-        };
-        // FIXME: make this some library and rip this method from package and search controller
-        $scope.typeIcon = function(typeName) {
-            switch (typeName) {
-                case 'library':
-                    return 'fa-puzzle-piece';
-                case 'component':
-                    return 'fa-cog';
-                case 'composer-installer':
-                    return 'fa-magic';
-                case 'composer-plugin':
-                    return 'fa-plug';
-                case 'legacy-contao-module':
-                    return 'fa-thumbs-down';
-                case 'meta-package':
-                    return 'fa-cubes';
-                case 'metapackage':
-                    return 'fa-cubes';
-                case 'php':
-                    return 'fa-code-o';
-                case 'symfony-bundle':
-                    return 'fa-archive';
-                default:
-            }
+            ]
+        )
+        .directive(
+            'searchHeader',
+            [
+                '$state', '$stateParams',
+                function ($state, $stateParams) {
+                    return {
+                        restrict: 'E',
+                        scope: true,
+                        templateUrl: 'pages/search-head.html',
+                        link: function (scope, element, attrs) {
+                            scope.keywords = $stateParams.keywords ? $stateParams.keywords : '';
+                            scope.search = function () {
+                                if (scope.keywords != '') {
+                                    var params = { keywords: scope.keywords};
+                                    if ($stateParams.type) {
+                                        params.type = $stateParams.type;
+                                    }
+                                    $state.go('search', params, {reload: true});
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        )
+        .controller(
+            'tensideSearchController',
+            [
+                '$scope', '$tensideApi', '$stateParams',
+                function ($scope, $tensideApi, $stateParams) {
 
-            return 'fa-question';
-        };
-    }])
-    .config(['$routeProvider', function ($routeProvider) {
-        // route to the search page
-        $routeProvider.when('/search', {
-            templateUrl: 'pages/search.html',
-            controller: 'tensideSearchController'
-        });
-    }]);
+                    $tensideApi.search.search($stateParams.keywords).success(function (data) {
+                        $scope.packages = data;
+                    }).error(function() {
+
+                    });
+
+                    $scope.packages = {};
+                }
+            ]
+        );
 
     // Late dependency injection
     TENSIDE.requires.push('tenside-search');

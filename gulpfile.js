@@ -83,11 +83,10 @@ var paths = {
             'assets/javascripts/*.js'
         ],
         'src': [
-            'bower_components/jquery/dist/jquery.js',
-            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
+//            'bower_components/jquery/dist/jquery.js',
+//            'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
             'bower_components/angular/angular.js',
-            'bower_components/angular-animate/angular-animate.js',
-            'bower_components/angular-route/angular-route.js',
+            'bower_components/angular-ui-router/release/angular-ui-router.js',
             'bower_components/angular-translate/angular-translate.js',
             'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
             'bower_components/angular-bootstrap/ui-bootstrap.js',
@@ -102,15 +101,14 @@ var paths = {
             'assets/javascripts/tenside-*.js'
         ],
         'loadOrder': [
-            'js/jquery.js',
+//            'js/jquery.js',
             'js/angular.js',
-            'js/angular-animate.js',
-            'js/angular-route.js',
+            'js/angular-ui-router.js',
             'js/angular-translate.js',
             'js/angular-translate-loader-static-files.js',
             'js/ui-bootstrap.js',
             'js/ui-bootstrap-tpls.js',
-            'js/bootstrap.js',
+//            'js/bootstrap.js',
             'js/ace.js',
             'js/mode-json.js',
             'js/worker-json.js',

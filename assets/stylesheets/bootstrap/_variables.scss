@@ -1,18 +1,29 @@
 // #068FD5
 
-$wrap-bg: #2C3E50;
-$wrap-color: #ffffff;
+$font-size-base: 14px;
 
-$body-bg: #ffffff;
+$gray-light: #7e7e7e;
+
+$body-bg: #eee9e0;
+
+$head-bg: #ffffff;
+$head-color: #a7a7a7;
+
 $text-color: #09283B;
-$font-family-sans-serif: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-sans-serif: 'Lato', "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
 $search-bg: #068FD5;
 $search-color: #ffffff;
 
-$navbar-default-bg: $wrap-bg;
-$navbar-default-color: $wrap-color;
+$navbar-default-bg: $head-bg;
+$navbar-default-color: $head-color;
 
-$navbar-default-link-color: $wrap-color;
+$navbar-default-link-color: $head-color;
 $navbar-default-link-hover-color: #313C49;
 $navbar-default-link-hover-bg: #F5F2EE;
+
+$icon-font-path: "../fonts" !default;
+
+$btn-default-color: #fff;
+$btn-default-bg: $gray-light;
+$btn-default-border: $gray-light;
