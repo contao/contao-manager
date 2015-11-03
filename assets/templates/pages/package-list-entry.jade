@@ -17,7 +17,7 @@
 .col-lg-2
   .constraint
     span.label(version-class="package.version", uib-tooltip="{{ 'tenside_package_list_entry.current_version' | translate }}") {{package.version}}
-  .date DATETIME
+  .date(uib-tooltip="{{ 'tenside_package_list_entry.release_date' | translate }}") {{package.time | date: 'short' }}
 .col-lg-2
   button.btn.btn-default.btn-lg(type="button", uib-tooltip="{{ 'tenside_package_list_entry.tt_disable' | translate:{package:package.name} }}", ng-if="canDisable(package)")
     span.fa.fa-fw.fa-power-off
