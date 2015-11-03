@@ -106,10 +106,13 @@
                         return 'search';
                     }
                     ;
-                self.search = function(keywords) {
+                self.search = function(keywords, type) {
                     if (!keywords) {throw 'no keywords passed to $tensideApi.search.search()';}
-
-                    return api.put(endpoint(), {keywords: keywords});
+                    var data = {keywords: keywords};
+                    if (type) {
+                        data['type'] = type;
+                    }
+                    return api.put(endpoint(), data);
                 };
             },
             tensideApiTasks = function(tensideApi) {
