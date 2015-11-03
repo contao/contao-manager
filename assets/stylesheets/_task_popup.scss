@@ -128,11 +128,24 @@
 }
 
 #blur {
+  #blur-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: none;
+    z-index: 1;
+  }
+
   &.blur-in {
     -webkit-animation: blur .5s forwards;
     -moz-animation: blur .5s forwards;
     -o-animation: blur .5s forwards;
     animation: blur .5s forwards;
+    #blur-cover {
+      display: block;
+    }
   }
 
   &.blur-out {
