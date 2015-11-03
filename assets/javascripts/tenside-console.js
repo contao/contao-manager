@@ -27,8 +27,8 @@
         )
         .directive('tensideConsole',
             [
-                '$timeout', '$tensideApi',
-                function ($timeout, $tensideApi) {
+                '$timeout', '$tensideApi', 'TensideTasks',
+                function ($timeout, $tensideApi, TensideTasks) {
                     return {
                         restrict: 'E',
                         scope: true,
@@ -49,9 +49,10 @@
                             // Initialize the scope.
                             scope.consoleVisible = scope.consoleVisible || false;
                             scope.close = function () {
-                                if (scope.task.getStatus() === 'FINISHED') {
+                                //if (scope.task.getStatus() === 'FINISHED') {
                                     $tensideApi.tasks.delete(scope.task.getId());
-                                }
+                                    TensideTasks.startPolling();
+                                //}
                                 scope.task = null;
                                 hide();
                                 // FIXME: We must redirect from install to success screen here.
@@ -88,7 +89,15 @@
                                 'tenside.task.updated',
                                 function (event, task) {
                                     if (scope.task !== task) {
+                                        if (!scope.task) {
+                                            scope.$broadcast('console-watch-task', task);
+                                        }
+
                                         return;
+                                    }
+
+                                    if (task.isPending()) {
+                                        $tensideApi.tasks.run(task.getId());
                                     }
 
                                     // Close the popup automatically if console is not visible.
@@ -96,7 +105,7 @@
                                         scope.close();
                                     }
 
-                                    if (true) {
+                                    if (task.isRunning()) {
                                         var output = document.getElementById('console-output');
                                         // needs a delay as it is some milliseconds behind.
                                         $timeout(function () {

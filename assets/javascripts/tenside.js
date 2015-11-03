@@ -137,10 +137,16 @@ var TENSIDEApi = TENSIDEApi || '';
         )
         .run(
             [
-                '$rootScope', '$translate',
-                function ($rootScope, $translate) {
+                '$rootScope', '$translate', 'TensideTasks',
+                function ($rootScope, $translate, TensideTasks) {
                     $rootScope.$on('$stateChangeSuccess', function (event, toState/*, toParams, fromState, fromParams*/) {
                         $rootScope.appContentClass = toState.name;
+
+                        // Do not start polling in install screen.
+                        if (toState.name !== 'install') {
+                            TensideTasks.startPolling();
+                        }
+
                         $translate('title.' + toState.name).then(function (translation) {
                             $rootScope.title = translation;
                         }, function () {
@@ -153,8 +159,8 @@ var TENSIDEApi = TENSIDEApi || '';
             ]
         )
         .controller('TensideIndexController',
-            ['$http', '$state', 'TensideTasks',
-                function ($http, $state, TensideTasks) {
+            ['$http', '$state',
+                function ($http, $state) {
                     // Determine the initial state of the application.
                     $http.get(TENSIDEApi + '/api/v1/install/get_state.json').success(function (data) {
                         if (data.installation) {
@@ -165,8 +171,6 @@ var TENSIDEApi = TENSIDEApi || '';
                                     state = 'install';
                                     break;
                                 default:
-                                    // Do not start polling in install screen.
-                                    TensideTasks.startPolling();
                                     state = 'packages';
                             }
                             $state.go(state);

@@ -60,6 +60,9 @@
                     task.isRunning = function () {
                         return $data.status === 'RUNNING';
                     };
+                    task.isPending = function () {
+                        return $data.status === 'PENDING';
+                    };
                     task.hasErrored = function () {
                         return $data.status === 'ERROR';
                     };
@@ -89,7 +92,8 @@
                                 // Setup delayed refreshing if not complete yet.
                                 if (task.isOutputComplete()) {
                                     $rootScope.$broadcast('tenside.task.done', task);
-                                    listRefresh();
+                                    delete taskRefreshTimer[id];
+                                    delete $tasks[id];
                                 } else {
                                     $rootScope.$broadcast('tenside.task.updated', task);
                                     var timer = $timeout(function () {
@@ -104,9 +108,10 @@
                             })
                             .error(function (result, status) {
                                 if (status === 404) {
-                                    broadcast('tenside.task.not-found', task);
+                                    $rootScope.$broadcast('tenside.task.not-found', task);
                                 }
-                                // TODO: what to do on other errors?
+                                // Assume the task is dead - refresh the list then.
+                                listRefresh();
                             });
                     };
 
