@@ -147,11 +147,20 @@
                         return self.add({type: 'upgrade', packages: packageNames});
                     }
                     return self.add({type: 'upgrade'});
-
+                };
+                self.addRequire = function(packageName) {
+                    return self.add({type: 'require-package', package: [packageName]});
+                };
+                self.addRemove = function(packageName) {
+                    return self.add({type: 'remove-package', package: [packageName]});
                 };
                 self.delete = function (id) {
                     return api.delete(endpoint(id));
                 };
+                self.run = function () {
+                    return api.get(endpoint('run'));
+                };
+
                 self.runInline = function(id) {
                     return api.get('run-task/'+ id);
                 }
