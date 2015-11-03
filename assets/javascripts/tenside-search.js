@@ -63,16 +63,28 @@
         .controller(
             'tensideSearchController',
             [
-                '$scope', '$tensideApi', '$stateParams',
-                function ($scope, $tensideApi, $stateParams) {
-
-                    $tensideApi.search.search($stateParams.keywords).success(function (data) {
-                        $scope.packages = data;
-                    }).error(function() {
-
-                    });
-
+                '$scope', '$tensideApi', '$stateParams', '$state',
+                function ($scope, $tensideApi, $stateParams, $state) {
                     $scope.packages = {};
+                    $scope.type = $stateParams.type ? $stateParams.type : 'all';
+
+                    $tensideApi.search.search($stateParams.keywords, $scope.type)
+                        .success(function (data) {
+                            $scope.packages = data;
+                        })
+                        .error(function() {
+                            // FIXME: handle search error here.
+                        });
+
+                    $scope.$watch('type', function (newValue, oldValue) {
+                        if (oldValue != newValue) {
+                            var params = { keywords: $stateParams.keywords };
+                            if ($scope.type) {
+                                params.type = $scope.type;
+                            }
+                            $state.go('search', params, {reload: true});
+                        }
+                    });
                 }
             ]
         );
