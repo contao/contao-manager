@@ -94,72 +94,80 @@
         )
         .directive(
             'packageListEntry',
-            function () {
-                return {
-                    restrict: 'E',
-                    scope: true,
-                    templateUrl: 'pages/package-list-entry.html',
-                    link: function (scope, element, attrs) {
-                        var updatePackage = function (data) {
-                            scope.packages[data.name] = data;
-                        };
+            [
+                '$state', '$tensideApi',
+                function ($state, $tensideApi) {
+                    return {
+                        restrict: 'E',
+                        scope: true,
+                        templateUrl: 'pages/package-list-entry.html',
+                        link: function (scope, element, attrs) {
+                            scope.canInstall = function (pack) {
+                                return !pack.installed;
+                            };
+                            scope.canUpgrade = function (pack) {
+                                return !pack.locked && pack.upgrade_version;
+                            };
 
-                        scope.canInstall = function (pack) {
-                            return !pack.installed;
-                        };
-                        scope.canUpgrade = function (pack) {
-                            return !pack.locked && pack.upgrade_version;
-                        };
+                            scope.canRemove = function (pack) {
+                                return !pack.locked && pack.installed && pack.constraint;
+                            };
 
-                        scope.canRemove = function (pack) {
-                            return !pack.locked && pack.installed;
-                        };
+                            scope.canEnable = function (pack) {
+                                return pack.installed;
+                            };
 
-                        scope.canEnable = function (pack) {
-                            return !pack.locked && pack.constraint;
-                        };
+                            scope.canLock = function (pack) {
+                                return !pack.locked && pack.installed;
+                            };
 
-                        scope.canDisable = function (pack) {
-                            return !pack.locked && pack.constraint;
-                        };
+                            scope.canUnlock = function (pack) {
+                                return pack.locked && pack.installed;
+                            };
 
-                        scope.canLock = function (pack) {
-                            return !pack.locked;
-                        };
+                            scope.enable = scope.disable = function () {
+                                $state.go('edit', {file: 'AppKernel'});
+                            };
 
-                        scope.canUnlock = function (pack) {
-                            return pack.locked;
-                        };
+                            scope.lock = function (pack) {
+                                var newPack = angular.merge({}, pack, {locked: true});
+                                $tensideApi.packages.put(newPack).success(updatePackage);
+                            };
 
-                        /*
-                        scope.lock = function (pack) {
-                            var newPack = jQuery.extend(true, {}, pack);
-                            newPack.locked = true;
-                            $tensideApi.packages.put(newPack).success(updatePackage);
-                        };
+                            scope.unlock = function (pack) {
+                                var newPack = angular.merge({}, pack, {locked: false});
+                                $tensideApi.packages.put(newPack).success(updatePackage);
+                            };
 
-                        scope.unlock = function (pack) {
-                            var newPack = jQuery.extend(true, {}, pack);
-                            newPack.locked = false;
-                            $tensideApi.packages.put(newPack).success(updatePackage);
-                            console.log(pack, newPack);
-                        };
+                            scope.install = function(pack) {
+                                $tensideApi.tasks.addRequire(pack.name);
+                            };
 
-                        scope.upgrade = function (pack) {
-                            // pack is optional.
-                            console.log(pack);
-                            $tensideApi.tasks.addUpgrade(pack ? [pack.name] : undefined);
-                        };
+                            scope.remove = function (pack) {
+                                $tensideApi.tasks.addRemove(pack.name);
+                            };
 
-                        scope.remove = function (pack) {
-                            $tensideApi.packages.delete(pack).success(function () {
-                                reload();
-                            })
-                        };
-                         */
-                    }
-                };
-            }
+                            /*
+                             scope.upgrade = function (pack) {
+                             // pack is optional.
+                             console.log(pack);
+                             $tensideApi.tasks.addUpgrade(pack ? [pack.name] : undefined);
+                             };
+
+                             scope.remove = function (pack) {
+                             $tensideApi.packages.delete(pack).success(function () {
+                             reload();
+                             })
+                             };
+                             */
+
+                            var updatePackage = function (data) {
+                                scope.packages[data.name] = data;
+                            };
+                        }
+                    };
+                }
+            ]
         )
     ;
 
