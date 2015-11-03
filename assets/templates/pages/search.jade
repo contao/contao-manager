@@ -6,6 +6,18 @@ block content
     .sort-name Name
     .sort-last-updated Last Updated
   .type-selection
-    input(type="radio" ng-model="color.name" value="red")
+    | Search in
+    .my-packages.radio
+      label(for="package-type-installed")
+        input#package-type-installed(type="radio" ng-model="type" value="installed", name="type")
+        | My packages
+    .contao-packages.radio
+      label(for="package-type-contao")
+        input#package-type-contao(type="radio" ng-model="type" value="contao", name="type")
+        | Contao packages
+    .all-packages.radio
+      label(for="package-type-all")
+        input#package-type-all(type="radio" ng-model="type" value="all", name="type")
+        | All packages
   .search-result
     package-list-entry.row.package(ng-repeat="package in packages")
