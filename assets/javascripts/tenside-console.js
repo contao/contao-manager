@@ -97,10 +97,10 @@
                                     }
 
                                     if (true) {
-                                        var output = $('#console-output');
+                                        var output = document.getElementById('console-output');
                                         // needs a delay as it is some milliseconds behind.
                                         $timeout(function () {
-                                            output.scrollTop(output[0].scrollHeight);
+                                            output.scrollTop = output.scrollHeight;
                                         }, 10);
                                     }
                                 }
