@@ -93,6 +93,7 @@ var paths = {
             'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
             'bower_components/ace/build/src/ace.js',
             'bower_components/ace/build/src/mode-json.js',
+            'bower_components/ace/build/src/mode-php.js',
             'bower_components/ace/build/src/worker-json.js',
             'assets/javascripts/user-session.js',
             'assets/javascripts/tenside.js', // keep this first, as the others depend on it.
@@ -111,6 +112,7 @@ var paths = {
 //            'js/bootstrap.js',
             'js/ace.js',
             'js/mode-json.js',
+            'js/mode-php.js',
             'js/worker-json.js',
             'js/user-session.js',
             'js/tenside.js',

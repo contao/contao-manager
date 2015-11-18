@@ -5,7 +5,10 @@
   "title": {
     "base": "Tenside - Package management made easy!",
     "packages": "Tenside - Installed packages",
-    "search": "Tenside - Search packages"
+    "search": "Tenside - Search packages",
+    "AppKernel": "Edit AppKernel",
+    "composer_json": "Edit composer.json"
+
   },
   "link_more": "more",
   "tenside_package_list_entry": {

@@ -126,7 +126,7 @@
                             };
 
                             scope.enable = scope.disable = function () {
-                                $state.go('edit', {file: 'AppKernel'});
+                                $state.go('AppKernel');
                             };
 
                             scope.lock = function (pack) {

@@ -1,10 +1,8 @@
 extends _content_with_header
 
 block content
-  h1
-    | composer.json
   ul#errors(ng-repeat="error in errors")
     li {{error}}
   ul#warnings(ng-repeat="warning in warnings")
     li {{warning}}
-  pre#editor
+  pre#editor(tenside-editor, load="loadFile()", push="pushFile(content)", type="{{type}}", errors="errors", warnings="warnings")

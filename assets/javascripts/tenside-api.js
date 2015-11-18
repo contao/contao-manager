@@ -99,6 +99,20 @@
                     return api.put(endpoint(), data);
                 };
             },
+            tensideApiAppKernelPhp = function (tensideApi) {
+                var self = this,
+                    api = tensideApi,
+                    endpoint = function() {
+                        return 'AppKernel.php';
+                    }
+                    ;
+                self.get = function() {
+                    return api.get(endpoint(), {'transformResponse': []});
+                };
+                self.put = function(data) {
+                    return api.put(endpoint(), data);
+                };
+            },
             tensideApiSearch = function (tensideApi) {
                 var self = this,
                     api = tensideApi,
@@ -225,6 +239,7 @@
         // Create our specific endpoints now.
         api.packages = new tensideApiPackages(api);
         api.composerJson = new tensideApiComposerJson(api);
+        api.appKernelPhp = new tensideApiAppKernelPhp(api);
         api.search = new tensideApiSearch(api);
         api.tasks = new tensideApiTasks(api);
 
