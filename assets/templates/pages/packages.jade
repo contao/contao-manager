@@ -1,7 +1,9 @@
 extends _content_with_header
 
 block content
-  .row.sort
-    .by-name name
-    .by-last-updated last updated
-  package-list-entry.row.package(ng-repeat="package in packages")
+  .sort-selection
+    a.sortorder(href="", ng-click="order('name')", ng-class="{'active':(sort === 'name'), 'reverse':reverse}")
+      | {{ 'search.sort.name' | translate }}
+    a.sortorder(href="", ng-click="order('time')", ng-class="{'active':(sort === 'time'), 'reverse':reverse}")
+      | {{ 'search.sort.release_date' | translate }}
+  package-list-entry.row.package(ng-repeat="package in packages| orderBy:sort:reverse")

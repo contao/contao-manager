@@ -39,10 +39,20 @@
             'tensidePackagesController',
             ['$scope', '$tensideApi',
                 function ($scope, $tensideApi) {
-                    $scope.packages = {};
+                    $scope.packages = [];
+                    $scope.sort = 'name';
+                    $scope.reverse = true;
+                    $scope.order = function(sort) {
+                        $scope.reverse = ($scope.sort === sort) ? !$scope.reverse : false;
+                        $scope.sort = sort;
+                    };
 
                     $tensideApi.packages.list($scope.showDependencies).success(function (data) {
-                        $scope.packages = data;
+                        var ary = [];
+                        angular.forEach(data, function (val) {
+                            ary.push(val);
+                        });
+                        $scope.packages = ary;
                     });
                 }
             ]
