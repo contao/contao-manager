@@ -12,20 +12,13 @@
   "link_more": "more",
   "tenside_package_list_entry": {
     "btn_install":     "Check and install",
-    "tt_install":      "Install package {{package}}",
     "btn_remove":      "Remove",
-    "tt_remove":       "Remove package {{package}}",
     "btn_upgrade":     "Upgrade",
-    "tt_upgrade":      "Upgrade package {{package}}",
     "btn_disable":     "Disable",
-    "tt_disable":      "Disable package {{package}}",
     "btn_enable":      "Enable",
-    "tt_enable":       "Enable package {{package}}",
-
     "favers":          "{{favers}} Favers",
     "downloads":       "{{downloads}} downloads",
     "current_version": "Currently installed version",
-
     "package_type": {
       "library":              "Library",
       "component":            "Component",

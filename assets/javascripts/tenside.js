@@ -69,8 +69,8 @@ var TENSIDEApi = TENSIDEApi || '';
         )
         .config(
             [
-                '$stateProvider', '$urlRouterProvider', '$httpProvider', '$translateProvider', '$tooltipProvider',
-                function ($stateProvider, $urlRouterProvider, $httpProvider, $translateProvider, $tooltipProvider) {
+                '$stateProvider', '$urlRouterProvider', '$httpProvider', '$translateProvider',
+                function ($stateProvider, $urlRouterProvider, $httpProvider, $translateProvider) {
 
                     $httpProvider.interceptors.push('loadingHandler');
                     $translateProvider
@@ -127,11 +127,6 @@ var TENSIDEApi = TENSIDEApi || '';
                             }
                         )
                     ;
-
-                    $tooltipProvider.options({
-                        placement: 'top',
-                        appendToBody: true
-                    });
                 }
             ]
         )

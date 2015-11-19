@@ -16,21 +16,21 @@
       |  {{'tenside_package_list_entry.downloads' | translate:{downloads: package.downloads} }}
 .col-lg-2
   .constraint
-    span.label(version-class="package.version", uib-tooltip="{{ 'tenside_package_list_entry.current_version' | translate }}") {{package.version}}
-  .date(uib-tooltip="{{ 'tenside_package_list_entry.release_date' | translate }}") {{package.time | date: 'short' }}
+    span.label(version-class="package.version") {{package.version}}
+  .date {{package.time | date: 'short' }}
 .col-lg-2
-  button.btn.btn-default.btn-lg(type="button", uib-tooltip="{{ 'tenside_package_list_entry.tt_disable' | translate:{package:package.name} }}", ng-if="canDisable(package)", ng-click="disable(package)")
+  button.btn.btn-default.btn-lg(type="button", ng-if="canDisable(package)", ng-click="disable(package)")
     span.fa.fa-fw.fa-power-off
     span {{ 'tenside_package_list_entry.btn_disable' | translate }}
-  button.btn.btn-default.btn-lg(type="button", uib-tooltip="{{ 'tenside_package_list_entry.tt_enable' | translate:{package:package.name} }}", ng-if="canEnable(package)", ng-click="enable(package)")
+  button.btn.btn-default.btn-lg(type="button", ng-if="canEnable(package)", ng-click="enable(package)")
     span.fa.fa-fw.fa-power-off
     span {{'tenside_package_list_entry.btn_enable'| translate }}
-  button.btn.btn-default.btn-lg(type="button", uib-tooltip="{{ 'tenside_package_list_entry.tt_upgrade' | translate:{package:package.name} }}", ng-if="canUpgrade(package)")
+  button.btn.btn-default.btn-lg(type="button", ng-if="canUpgrade(package)")
     span.fa.fa-fw.fa-arrow-circle-up
     span {{'tenside_package_list_entry.btn_upgrade'| translate }}
-  button.btn.btn-danger.btn-lg(type="button", uib-tooltip="{{ 'tenside_package_list_entry.tt_remove' | translate:{package:package.name} }}", ng-if="canRemove(package)", ng-click="remove(package)")
+  button.btn.btn-danger.btn-lg(type="button", ng-if="canRemove(package)", ng-click="remove(package)")
     span.fa.fa-fw.fa-trash-o
     span {{'tenside_package_list_entry.btn_remove'| translate }}
-  button.btn.btn-success(uib-tooltip="{{ 'tenside_package_list_entry.tt_install' | translate:{package:package.name} }}", ng-if="canInstall(package)", ng-click="install(package)")
+  button.btn.btn-success(ng-if="canInstall(package)", ng-click="install(package)")
     span.fa.fa-fw.fa-plus-circle
     span {{'tenside_package_list_entry.btn_install'| translate }}
