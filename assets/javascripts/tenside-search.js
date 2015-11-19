@@ -66,7 +66,7 @@
                 '$scope', '$tensideApi', '$stateParams', '$state',
                 function ($scope, $tensideApi, $stateParams, $state) {
                     $scope.packages = {};
-                    $scope.type = $stateParams.type ? $stateParams.type : 'all';
+                    $scope.type = $stateParams.type ? $stateParams.type : 'contao';
 
                     $tensideApi.search.search($stateParams.keywords, $scope.type)
                         .success(function (data) {
