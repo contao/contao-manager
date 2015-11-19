@@ -5,13 +5,13 @@
   .description {{package.description}}
     a(href="#/package/{{ package.name }}")  {{ 'link_more' | translate }}
   .license
-    span.label.label-info(ng-repeat="license in package.license")
+    span.info-label(ng-repeat="license in package.license")
       i.fa.fa-legal
       | {{license}}
-    span.label.label-success(ng-if="package.favers")
+    span.info-label(ng-if="package.favers")
       i.fa.fa-thumbs-up
       |  {{ 'tenside_package_list_entry.favers' | translate:{favers: package.favers} }}
-    span.label.label-default(ng-if="package.downloads")
+    span.info-label(ng-if="package.downloads")
       i.fa.fa-download
       |  {{'tenside_package_list_entry.downloads' | translate:{downloads: package.downloads} }}
 .col-lg-2
