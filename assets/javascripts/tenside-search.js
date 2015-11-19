@@ -65,12 +65,16 @@
             [
                 '$scope', '$tensideApi', '$stateParams', '$state',
                 function ($scope, $tensideApi, $stateParams, $state) {
-                    $scope.packages = {};
+                    $scope.packages = [];
                     $scope.type = $stateParams.type ? $stateParams.type : 'contao';
 
                     $tensideApi.search.search($stateParams.keywords, $scope.type)
                         .success(function (data) {
-                            $scope.packages = data;
+                            var ary = [];
+                            angular.forEach(data, function (val) {
+                                ary.push(val);
+                            });
+                            $scope.packages = ary;
                         })
                         .error(function() {
                             // FIXME: handle search error here.
@@ -85,6 +89,13 @@
                             $state.go('search', params, {reload: true});
                         }
                     });
+
+                    $scope.sort = 'name';
+                    $scope.reverse = true;
+                    $scope.order = function(sort) {
+                        $scope.reverse = ($scope.sort === sort) ? !$scope.reverse : false;
+                        $scope.sort = sort;
+                    };
                 }
             ]
         );

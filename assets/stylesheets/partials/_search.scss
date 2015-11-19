@@ -1,6 +1,4 @@
 .tenside-search {
-  //background-color: $search-bg;
-  color: $search-color;
   padding-top: 30px;
   padding-bottom: 30px;
 
@@ -26,55 +24,58 @@
 }
 
 #app-content.search {
+  a {
+    color: $text-color;
+  }
   .sort-selection {
-    div {
+    text-align: right;
+
+    a.sortorder {
       display: inline-block;
+      padding: 0 20px;
+
+      &:hover, &:active, &:focus {
+        text-decoration: none;
+      }
+
+      &.active {
+        color: #308392;
+        border-bottom: 1px solid #308392;
+        background-color: #F2EFE7;
+      }
+
+      &.active:after {
+        content: '\25b2';
+      }
+      &.active.reverse:after {
+        content: '\25bc';
+      }
     }
   }
-  .type-selection {
+  .heading {
     border: 1px solid $gray-lighter;
     border-left: 0;
     border-right: 0;
     padding: 5px 0;
-    font-weight: 700;
+    font-weight: 100;
     margin-bottom: 50px;
+    .type-selection {
+      div {
+        display: inline-block;
+        padding: 0 10px;
+        &.active {
+          color: #308392;
+        }
 
-    div {
+        label {
+          font-weight: 100;
+        }
+      }
+    }
+    .lnk-close {
       display: inline-block;
       padding: 0 10px;
-
-      label {
-        font-weight: 100;
-      }
+      margin: 10px 0;
     }
   }
-
-  .search-result {
-    .package {
-      padding: 10px;
-
-      h2 {
-        margin-top: 0;
-        font-size: 14px;
-      }
-      p.description {
-        margin-bottom: 0;
-      }
-/*
-      &:nth-child(odd) {
-        background: $gray-lighter;
-      }
-*/
-    }
-
-    .package__meta {
-      border-top: none;
-    }
-
-    .package__icon {
-      font-size: 20px;
-      padding: 0 10px 0 0;
-    }
-  }
-
 }

@@ -8,7 +8,6 @@
     "search": "Tenside - Search packages",
     "AppKernel": "Edit AppKernel",
     "composer_json": "Edit composer.json"
-
   },
   "link_more": "more",
   "tenside_package_list_entry": {
@@ -39,6 +38,19 @@
       "metapackage":          "Meta package",
       "php":                  "PHP extension",
       "symfony-bundle":       "Symfony bundle"
+    }
+  },
+  "search": {
+    "btn_close": "Close",
+    "search_in": "Search in",
+    "sort": {
+      "name": "Name",
+      "release_date": "Release date"
+    },
+    "type": {
+      "installed": "My packages",
+      "contao": "Available packages for Contao",
+      "all": "All available packages"
     }
   },
 
