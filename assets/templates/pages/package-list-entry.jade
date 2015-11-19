@@ -3,7 +3,7 @@
 .col-lg-6
   .name {{package.name}}
   .description {{package.description}}
-    a(href="#/package/{{ package.name }}")  {{ 'link_more' | translate }}
+    a(href="{{ package.more }}", ng-if="package.more")  {{ 'link_more' | translate }}
   .license
     span.info-label(ng-repeat="license in package.license")
       i.fa.fa-legal

@@ -7,7 +7,7 @@
     "AppKernel": "Edit AppKernel",
     "composer_json": "Edit composer.json"
   },
-  "link_more": "more",
+  "link_more": "More",
   "tenside_package_list_entry": {
     "btn_install":     "Check and install",
     "btn_remove":      "Remove",
