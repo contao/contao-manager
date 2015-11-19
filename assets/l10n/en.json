@@ -3,6 +3,7 @@
   "LOADING": "Loading...",
 
   "title": {
+    "login": "Tenside login",
     "base": "Tenside - Package management made easy!",
     "packages": "Tenside - Installed packages",
     "search": "Tenside - Search packages",
@@ -46,24 +47,32 @@
       "all": "All available packages"
     }
   },
-
-  "INSTALL": {
-    "TITLE": "Tenside installer",
-    "WELCOME": "Welcome",
-    "VERSION": "to tenside {{version}}",
-    "ABSTRACT": "We have detected that you have no installation at this instance yet. Please fill in the information below to create a web project now.",
-    "FIELDS": {
-      "USERNAME": "Username",
-      "PASSWORD": "Password",
-      "CONFIRM": "Retype password",
-      "SECRET": "Installation secret",
-      "PROJECT": "Base project",
-      "PROJECT-PLACEHOLDER": "Select a base project",
-      "VERSION": "Version",
-      "VERSION-PLACEHOLDER": "Decide automatically"
+  "install": {
+    "welcome": "Welcome",
+    "version": "to tenside {{version}}",
+    "abstract": "We have detected that you have no installation at this instance yet. Please fill in the information to create a project now.",
+    "fields": {
+      "username": "Username",
+      "password": "Password",
+      "confirm": "Retype password",
+      "project": "Base project",
+      "project_placeholder": "Select a base project",
+      "version": "Version",
+      "version_placeholder": "Decide automatically"
     },
-    "BTN_GO": "Sign up"
+    "btn_sign_up": "Sign up"
   },
+  "login": {
+    "welcome": "Welcome",
+    "version": "to tenside {{version}}",
+    "sign_in": "Sign in",
+    "sign_in_explain": "Login to access your account.",
+    "username": "Username",
+    "password": "Password",
+    "btn_sign_in": "Sign in",
+    "error": "There was a problem logging in. Please try again."
+  },
+
   "PACKAGES": {
     "HEADLINE": "Packages",
     "UPGRADE": "Upgrade",

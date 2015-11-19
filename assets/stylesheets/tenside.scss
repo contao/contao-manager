@@ -74,7 +74,7 @@
 
 
 // Webfont
-@import url(http://fonts.googleapis.com/css?family=Lato:400,700,400italic&subset=latin,latin-ext);
+@import url(http://fonts.googleapis.com/css?family=Lato:100,400,700,400italic&subset=latin,latin-ext);
 
 // Fonticons
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
@@ -115,28 +115,73 @@ header {
 }
 
 .body {
-  padding: 0 50px 50px 50px;
+  &.with-header {
+    padding: 0 50px 50px 50px;
+  }
+  &.without-header {
+    padding-top: 10%;
+
+    h1 {
+      padding-top: 100px;
+      background: url(../img/tenside.svg) top center no-repeat;
+      font-size: 60px;
+      font-weight: 100;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 400;
+      text-align: center;
+      margin: 0 0 40px 0;
+    }
+
+    .container {
+      // max-width: 380px;
+      background-color: $head-bg;
+      color: $text-color;
+
+      .row {
+        padding: 80px 40px;
+      }
+    }
+  }
 }
 
 footer {
-  color: $head-color;
-  margin-top: $line-height-computed;
-  border-top: 1px solid $head-color;
+  &.with-header {
+    color: $head-color;
+    margin-top: $line-height-computed;
+    border-top: 1px solid $head-color;
+  }
 
-  a,
-  a:hover,
-  a:focus {
-    color: inherit;
+  &.without-header {
+    .container {
+      background-color: $head-bg;
+      color: $text-color;
+      .row {
+        padding: 20px 40px;
+
+        >div {
+          border-top: 1px solid $head-color;
+        }
+      }
+    }
   }
-  label.checkbox {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
+}
+
+input {
+  margin: 0;
+}
+
+label {
+  font-weight: 400;
 }
 
 // Tenside specific styles
 @import "_task_popup";
 @import "partials/editor";
 @import "partials/install";
+@import "partials/login";
 @import "partials/packages";
 @import "partials/search";

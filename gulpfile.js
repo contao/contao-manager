@@ -95,7 +95,6 @@ var paths = {
             'bower_components/ace/build/src/mode-json.js',
             'bower_components/ace/build/src/mode-php.js',
             'bower_components/ace/build/src/worker-json.js',
-            'assets/javascripts/user-session.js',
             'assets/javascripts/tenside.js', // keep this first, as the others depend on it.
             'assets/javascripts/mock-*.js',
             'assets/javascripts/tenside-api.js',
@@ -114,7 +113,6 @@ var paths = {
             'js/mode-json.js',
             'js/mode-php.js',
             'js/worker-json.js',
-            'js/user-session.js',
             'js/tenside.js',
             'js/mock-*.js',
             'js/tenside-*.js'

@@ -1,29 +1,33 @@
-header
-    .container
-        h1 {{ 'INSTALL.WELCOME' | translate }}
-        h2 {{ 'INSTALL.VERSION' | translate:{version:"#{app.tensideVersion}"} }}
-.body
-    .container
-        block content
-            #main
-                div
-                    p {{ 'INSTALL.ABSTRACT' | translate }}
-                    .form-group
-                        label.control-label(for="username") {{ 'INSTALL.FIELDS.USERNAME' | translate }}:
-                        input#username.form-control(type="text", name="username", ng-model="install.credentials.username")
-                    .form-group
-                        label.control-label(for="password") {{ 'INSTALL.FIELDS.PASSWORD' | translate }}:
-                        input#password.form-control(type="password", name="password", ng-model="install.credentials.password")
-                    .form-group
-                        label.control-label(for="password-confirm") {{ 'INSTALL.FIELDS.CONFIRM' | translate }}:
-                        input#password-confirm.form-control(type="password", name="password-confirm", ng-model="password_confirm")
-                    .form-group
-                        label.control-label(for="project") {{ 'INSTALL.FIELDS.PROJECT' | translate }}:
-                        select#project.form-control(name="project", type="text", ng-model="install.project.name", ng-options="name as name for (name, versions) in projects")
-                            option(style="display:none" value="") {{ 'INSTALL.FIELDS.PROJECT-PLACEHOLDER' | translate }}
-                    .form-group
-                        label.control-label(for="version") {{ 'INSTALL.FIELDS.VERSION' | translate }}:
-                        select#version.form-control(name="version", type="text", ng-model="install.project.version", ng-options="name as name for (name, versions) in projects[install.project.name]")
-                            option(style="display:none" value="") {{ 'INSTALL.FIELDS.VERSION-PLACEHOLDER' | translate }}
-                    .form-group
-                        a.install.btn.btn-success(ng-click="perform()") {{ 'INSTALL.BTN_GO' | translate }}
+extends _content_without_header
+
+block content
+  .col-lg-6
+    h1 {{ 'install.welcome' | translate }}
+    h2 {{ 'install.version' | translate:{version:"#{app.tensideVersion}"} }}
+    p.text-center {{ 'install.abstract' | translate }}
+  form.form-horizontal.col-lg-6
+    .form-group
+      label.control-label.col-sm-4(for="username") {{ 'install.fields.username' | translate }}:
+      .col-sm-8
+        input#username.form-control(type="text", name="username", ng-model="install.credentials.username")
+    .form-group
+      label.control-label.col-sm-4(for="password") {{ 'install.fields.password' | translate }}:
+      .col-sm-8
+        input#password.form-control(type="password", name="password", ng-model="install.credentials.password")
+    .form-group
+      label.control-label.col-sm-4(for="password-confirm") {{ 'install.fields.confirm' | translate }}:
+      .col-sm-8
+        input#password-confirm.form-control(type="password", name="password-confirm", ng-model="password_confirm")
+    .form-group
+      label.control-label.col-sm-4(for="project") {{ 'install.fields.project' | translate }}:
+      .col-sm-8
+        select#project.form-control(name="project", ng-model="install.project.name", ng-options="name as name for (name, versions) in projects")
+          option(style="display:none" value="") {{ 'install.fields.project_placeholder' | translate }}
+    .form-group
+      label.control-label.col-sm-4(for="version") {{ 'install.fields.version' | translate }}:
+      .col-sm-8
+        select#version.form-control(name="version", ng-model="install.project.version", ng-options="name as name for (name, versions) in projects[install.project.name]")
+          option(style="display:none" value="") {{ 'install.fields.version_placeholder' | translate }}
+    .form-group
+      .col-sm-offset-4.col-sm-8
+        a.install.btn.btn-success(ng-click="perform()") {{ 'install.btn_sign_up' | translate }}

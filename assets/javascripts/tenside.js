@@ -26,7 +26,7 @@ var TENSIDEApi = TENSIDEApi || '';
     TENSIDE = angular.module(
         'tenside',
         [
-            'ui.router', 'ui.bootstrap', 'user-session', 'pascalprecht.translate',
+            'ui.router', 'ui.bootstrap', 'pascalprecht.translate',
             'tenside-api', 'tenside-install', 'tenside-tasklist', 'tenside-console'
         ]
     );
@@ -92,16 +92,6 @@ var TENSIDEApi = TENSIDEApi || '';
 
                     $urlRouterProvider.otherwise('/');
                     $stateProvider
-                    // HOME STATES AND NESTED VIEWS ========================================
-                        .state(
-                            'login',
-                            {
-                                url: '/login',
-                                templateUrl: 'pages/login.html',
-                                controller: 'TensideLoginController'
-                            }
-                        )
-                        // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
                         .state(
                             'index',
                             {
