@@ -24,20 +24,11 @@
             [
                 '$stateProvider',
                 function ($stateProvider) {
-                    // route to the packages page
                     $stateProvider.state(
                         'packages',
                         {
                             url: '/packages',
                             templateUrl: 'pages/packages.html',
-                            controller: 'tensidePackagesController'
-                        }
-                    );
-                    $stateProvider.state(
-                        'package',
-                        {
-                            url: '/package/:packageVendor/:packageName',
-                            templateUrl: 'pages/package.html',
                             controller: 'tensidePackagesController'
                         }
                     );
@@ -53,14 +44,6 @@
                     $tensideApi.packages.list($scope.showDependencies).success(function (data) {
                         $scope.packages = data;
                     });
-
-                    /*
-                     if ($routeParams.packageVendor) {
-                     $tensideApi.packages.get($routeParams.packageVendor + '/' + $routeParams.packageName).success(function (data) {
-                     $scope.package = data;
-                     });
-                     }
-                     */
                 }
             ]
         );
