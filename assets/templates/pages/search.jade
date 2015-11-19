@@ -8,7 +8,7 @@ block content
       | {{ 'search.sort.release_date' | translate }}
   .heading.row
     .type-selection.col-lg-11
-      | {{ 'search.search_in' | translate }}
+      span.search-in {{ 'search.search_in' | translate }}
       .my-packages.radio(ng-class="{'active':(type === 'installed')}")
         label(for="package-type-installed")
           input#package-type-installed(type="radio", ng-model="type", value="installed", name="type")

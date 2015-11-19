@@ -12,15 +12,12 @@ $head-color: #a7a7a7;
 $text-color: #09283B;
 $font-family-sans-serif: 'Lato', "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
-$navbar-default-bg: $head-bg;
-$navbar-default-color: $head-color;
+$link-color: #308392;
 
-$navbar-default-link-color: $head-color;
-$navbar-default-link-hover-color: #313C49;
-$navbar-default-link-hover-bg: #F5F2EE;
-
-$icon-font-path: "../fonts" !default;
+$icon-font-path: "../fonts/" !default;
 
 $btn-default-color: #fff;
 $btn-default-bg: $gray-light;
 $btn-default-border: $gray-light;
+
+$selected-option-bg: #F2EFE7;

@@ -24,11 +24,14 @@
 }
 
 #app-content.search {
-  a {
-    color: $text-color;
+  .body {
+    a {
+      color: $text-color;
+    }
   }
   .sort-selection {
     text-align: right;
+    padding: 20px 0;
 
     a.sortorder {
       display: inline-block;
@@ -39,9 +42,9 @@
       }
 
       &.active {
-        color: #308392;
-        border-bottom: 1px solid #308392;
-        background-color: #F2EFE7;
+        color: $link-color;
+        border-bottom: 1px solid $link-color;
+        background-color: $selected-option-bg;
       }
 
       &.active:after {
@@ -53,22 +56,23 @@
     }
   }
   .heading {
-    border: 1px solid $gray-lighter;
+    border: 1px solid $head-color;
     border-left: 0;
     border-right: 0;
     padding: 5px 0;
-    font-weight: 100;
     margin-bottom: 50px;
     .type-selection {
+      .search-in {
+        font-weight: 700;
+      }
       div {
         display: inline-block;
-        padding: 0 10px;
+        padding: 10px;
+        margin-top: 0;
+        margin-bottom: 0;
         &.active {
-          color: #308392;
-        }
-
-        label {
-          font-weight: 100;
+          color: $link-color;
+          background-color: $selected-option-bg;
         }
       }
     }
