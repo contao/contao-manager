@@ -1,0 +1,23 @@
+extends _content_without_header
+
+block content
+  .col-lg-12
+    h1 {{ 'login.welcome' | translate }}
+    h2 {{ 'login.version' | translate:{version:"#{app.tensideVersion}"} }}
+    h3 {{ 'login.sign_in' | translate }}
+    p {{ 'login.sign_in_explain' | translate }}
+
+    div.alert.alert-danger(ng-show="error") {{ 'login.error' | translate }}
+    form(role="form", ng-submit="", novalidate)
+      div.form-group.has-feedback
+        label.sr-only(for="username") {{ 'login.username' | translate }}:
+        input#username.form-control(type="text", name="username", ng-model="credentials.username", placeholder="{{ 'login.username' | translate }}")
+        span.form-control-feedback(aria-hidden="true")
+          i.fa.fa-user
+    div.form-group.has-feedback
+        label.sr-only(for="password") {{ 'login.password' | translate }}:
+        input#password.form-control(type="password", name="password", ng-model="credentials.password", placeholder="{{ 'login.password' | translate }}")
+        span.form-control-feedback(aria-hidden="true")
+          i.fa.fa-lock
+      div.form-group
+        button.btn.btn-success(ng-click="login(credentials)") {{ 'login.btn_sign_in' | translate }}

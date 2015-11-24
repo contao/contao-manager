@@ -1,0 +1,41 @@
+/**
+ * This file is part of tenside/contao-ui.
+ *
+ * (c) Christian Schiffler <c.schiffler@cyberspectrum.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    tenside/contao-ui
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  2015 Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @license    https://github.com/tenside/contao-ui/blob/master/LICENSE MIT
+ * @link       https://github.com/tenside/contao-ui
+ * @filesource
+ */
+
+// #068FD5
+
+$font-size-base: 14px;
+
+$gray-light: #7e7e7e;
+
+$body-bg: #eee9e0;
+
+$head-bg: #ffffff;
+$head-color: #a7a7a7;
+
+$text-color: #09283B;
+$font-family-sans-serif: 'Lato', "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+
+$link-color: #308392;
+
+$icon-font-path: "../fonts/" !default;
+
+$btn-default-color: #fff;
+$btn-default-bg: $gray-light;
+$btn-default-border: $gray-light;
+
+$selected-option-bg: #F2EFE7;

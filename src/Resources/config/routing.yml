@@ -1,0 +1,17 @@
+rootRedirect:
+    path:     /
+    defaults: { _controller: AppBundle:Ui:rootRedirect }
+    methods:  [GET]
+
+index:
+    path:     /index.html
+    defaults: { _controller: AppBundle:Ui:index }
+    methods:  [GET]
+
+asset:
+    path:     /{path}/{file}
+    defaults: { _controller: AppBundle:Ui:asset }
+    methods:  [GET]
+    requirements:
+        path: "css|fonts|img|js|pages|l10n"
+        file: "[\-\_a-zA-Z0-9]*(\.[a-zA-Z0-9]*)+"

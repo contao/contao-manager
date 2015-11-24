@@ -1,0 +1,30 @@
+extends _content_with_header
+
+block content
+  .sort-selection
+    a.sortorder(href="", ng-click="order('name')", ng-class="{'active':(sort === 'name'), 'reverse':reverse}")
+      | {{ 'search.sort.name' | translate }}
+    a.sortorder(href="", ng-click="order('time')", ng-class="{'active':(sort === 'time'), 'reverse':reverse}")
+      | {{ 'search.sort.release_date' | translate }}
+  .heading.row
+    .type-selection.col-lg-11
+      span.search-in {{ 'search.search_in' | translate }}
+      .my-packages.radio(ng-class="{'active':(type === 'installed')}")
+        label(for="package-type-installed")
+          input#package-type-installed(type="radio", ng-model="type", value="installed", name="type")
+          | {{ 'search.type.installed' | translate }}
+      .contao-packages.radio(ng-class="{'active':(type === 'contao')}")
+        label(for="package-type-contao")
+          input#package-type-contao(type="radio", ng-model="type", value="contao", name="type")
+          | {{ 'search.type.contao' | translate }}
+      .all-packages.radio(ng-class="{'active':(type === 'all')}")
+        label(for="package-type-all")
+          input#package-type-all(type="radio", ng-model="type", value="all", name="type")
+          | {{ 'search.type.all' | translate }}
+    .close-container.col-lg-1
+      .lnk-close
+        a(href="#/")
+          i.fa.fa-close
+          | {{ 'search.btn_close' | translate }}
+  .search-result
+    package-list-entry.row.package(ng-repeat="package in packages | orderBy:sort:reverse")

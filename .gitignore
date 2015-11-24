@@ -17,9 +17,11 @@ vendor/
 # build
 /build
 build.properties
-/assets/
-tenside.phar
+phpunit.xml
+package-manager.phar
 app/cache
 
-# Components
-/components/
+# vendor files
+/vendor/
+/node_modules/
+/bower_components/

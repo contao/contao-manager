@@ -1,0 +1,67 @@
+h1(translate="CONFIG.HEADLINE")
+
+tabset
+  tab(heading="{{'CONFIG.CORE.TITLE' | translate}}")
+    fieldset
+      h2 Composer upgrade mode:
+      each description, mode in {inline: 'Run inline', detached: 'run detached', standalone: 'standalone in the background as separate process.'}
+        .radio
+          label(for="upgrade_mode_" + mode)
+            input(id="upgrade_mode_" + mode, type="radio", ng-model="values.upgrade_mode" value=mode)
+            =description
+
+  tab(heading="{{'CONFIG.INSTALL.TITLE' | translate}}")
+    fieldset(ng-show="expertsMode")
+      h2 Minimum stability:
+      each mode in ['stable', 'rc', 'beta', 'alpha', 'dev']
+        .radio
+          label(for="minimum_stability_" + mode)
+            input(id="minimum_stability_" + mode, type="radio", ng-model="values.minimum_stability" value=mode)
+            ='{{\'CONFIG.INSTALL.MINIMUM_STABILITY.' + mode.toUpperCase() + '\' | translate}}'
+      p.text-info
+        i.fa.fa-info.fa-2x.pull-left
+        | The minimum stability defines the lowest stability a package version must have to be allowed to be installed.
+        | It is generally recommended to use only stable releases.
+    fieldset
+      h2 Preferred installation method:
+      each mode in ['dist', 'source', 'auto']
+        .radio
+          label(for="preferred_install_" + mode)
+            input(id="preferred_install_" + mode, type="radio", ng-model="values.preferred_install" value=mode)
+            ='{{\'CONFIG.INSTALL.PREFERRED_INSTALL.' + mode.toUpperCase() + '\' | translate}}'
+      p.text-info
+        i.fa.fa-info.fa-2x.pull-left
+        | Choose if you prefer source packages (require git, mercurial or svn) or dist archives (works every time).
+
+  tab(heading="{{'CONFIG.DOWNLOAD.TITLE' | translate}}")
+    h2 Authentication
+    div.form-group
+      label(for="github_token") Github OAuth token:
+      input#github_token.form-control(type="text", ng-model="values.github_token")
+      p.text-info
+        i.fa.fa-info.fa-2x.pull-left
+        | If you have "api limit reached" problems with github, put a github oauth token here.
+    h2 Repositories
+    div.form-group
+      div.row(ng-repeat="repository in values.repositories")
+        div.form-group.col-xs-12.col-sm-2
+          label(for="repository_{{$index}}_type", translate="CONFIG.DOWNLOAD.REPOSITORY.TYPE")
+          select.form-control(id="repository_{{$index}}_type", ng-model="repository.type", ng-options="'CONFIG.DOWNLOAD.REPOSITORY.TYPES.' + i | translate as i for i in {'COMPOSER': 'composer', 'vcs': 'VCS'}")
+        div.form-group.col-xs-12.col-sm-3
+          label(for="repository_{{$index}}_url", translate="CONFIG.DOWNLOAD.REPOSITORY.URL")
+          input.form-control(id="repository_{{$index}}_url" type="text", ng-model="repository.url")
+        .checkbox.col-xs-12.col-sm-3
+          label(for="repository_{{$index}}_allow_ssl_downgrade")
+            input(id="repository_{{$index}}_allow_ssl_downgrade", type="checkbox", ng-model="repository.allow_ssl_downgrade")
+            | {{'CONFIG.DOWNLOAD.REPOSITORY.ALLOW_SSL_DOWNGRADE' | translate}}
+        button.btn.btn-danger.col-xs-12.col-sm-2(type="button", title="{{ 'CONFIG.DOWNLOAD.REPOSITORY.DELETE' | translate }}", ng-click="removeRepository($index)")
+          span.fa.fa-fw.fa-trash-o
+          span(translate="CONFIG.DOWNLOAD.REPOSITORY.DELETE")
+
+      button.btn.btn-success(type="button", title="{{ 'CONFIG.DOWNLOAD.REPOSITORY.ADD' | translate }}", ng-click="addRepository()")
+        span.fa.fa-fw.fa-plus-circle
+        span(translate="CONFIG.DOWNLOAD.REPOSITORY.ADD")
+
+button.btn.btn-primary.btn-md(type="button", title="{{ 'CONFIG.SAVE' | translate }}", ng-click="save")
+  span.fa.fa-fw.fa-save
+  span(translate="CONFIG.SAVE")

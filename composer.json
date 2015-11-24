@@ -22,11 +22,17 @@
     "symfony/security-bundle": "~2.7"
   },
   "require-dev": {
+    "phpcq/all-tasks": "~1.0",
     "cyberspectrum/pharpiler": "~1.0"
   },
   "autoload": {
     "psr-4": {
       "AppBundle\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AppBundle\\Test\\": "tests"
     }
   },
   "extra": {

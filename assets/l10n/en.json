@@ -1,0 +1,110 @@
+{
+  "title": {
+    "login": "Tenside login",
+    "base": "Tenside - Package management made easy!",
+    "packages": "Tenside - Installed packages",
+    "search": "Tenside - Search packages",
+    "AppKernel": "Edit AppKernel",
+    "composer_json": "Edit composer.json"
+  },
+  "link_more": "More",
+  "tenside_package_list_entry": {
+    "btn_install":     "Check and install",
+    "btn_remove":      "Remove",
+    "btn_upgrade":     "Upgrade",
+    "btn_disable":     "Disable",
+    "btn_enable":      "Enable",
+    "favers":          "{{favers}} Favers",
+    "downloads":       "{{downloads}} downloads",
+    "current_version": "Currently installed version",
+    "package_type": {
+      "library":              "Library",
+      "component":            "Component",
+      "composer-installer":   "Composer installer",
+      "composer-plugin":      "Composer plugin",
+      "legacy-contao-module": "Legacy Contao module",
+      "contao-bundle":        "Contao bundle",
+      "contao-module":        "Contao extension",
+      "meta-package":         "Meta package",
+      "metapackage":          "Meta package",
+      "php":                  "PHP extension",
+      "symfony-bundle":       "Symfony bundle"
+    }
+  },
+  "search": {
+    "btn_close": "Close",
+    "search_in": "Search in",
+    "sort": {
+      "name": "Name",
+      "release_date": "Release date"
+    },
+    "type": {
+      "installed": "My packages",
+      "contao": "Available packages for Contao",
+      "all": "All available packages"
+    }
+  },
+  "install": {
+    "welcome": "Welcome",
+    "version": "to tenside {{version}}",
+    "abstract": "We have detected that you have no installation at this instance yet. Please fill in the information to create a project now.",
+    "fields": {
+      "username": "Username",
+      "password": "Password",
+      "confirm": "Retype password",
+      "project": "Base project",
+      "project_placeholder": "Select a base project",
+      "version": "Version",
+      "version_placeholder": "Decide automatically"
+    },
+    "btn_sign_up": "Sign up"
+  },
+  "login": {
+    "welcome": "Welcome",
+    "version": "to tenside {{version}}",
+    "sign_in": "Sign in",
+    "sign_in_explain": "Login to access your account.",
+    "username": "Username",
+    "password": "Password",
+    "btn_sign_in": "Sign in",
+    "error": "There was a problem logging in. Please try again."
+  },
+
+  "CONFIG": {
+    "HEADLINE": "Configuration",
+    "SAVE": "Save",
+    "CORE": {
+      "TITLE": "General"
+    },
+    "INSTALL": {
+      "TITLE": "Installation",
+      "MINIMUM_STABILITY": {
+        "STABLE": "Stable releases (recommended)",
+        "RC": "Release candidates",
+        "BETA": "Beta releases",
+        "ALPHA": "Alpha releases",
+        "DEV": "Bleeding edge development versions"
+      },
+      "PREFERRED_INSTALL": {
+        "DIST": "Distribution archive (recommended)",
+        "SOURCE": "From source (git, mercurial or svn)",
+        "AUTO": "Guess automatically"
+      }
+    },
+    "DOWNLOAD": {
+      "TITLE": "Download",
+      "REPOSITORY": {
+        "TYPE": "Type",
+        "URL": "URL",
+        "ALLOW_SSL_DOWNGRADE": "Allow SSL downgrade",
+        "DELETE": "Remove repository",
+        "ADD": "Add repository",
+        "TYPES": {
+          "COMPOSER": "Composer (like packagist.org)",
+          "ARTIFACT": "Artifact repository",
+          "VCS": "Source repository"
+        }
+      }
+    }
+  }
+}

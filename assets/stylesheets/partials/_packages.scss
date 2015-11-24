@@ -1,0 +1,189 @@
+/**
+ * This file is part of tenside/contao-ui.
+ *
+ * (c) Christian Schiffler <c.schiffler@cyberspectrum.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    tenside/contao-ui
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  2015 Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @license    https://github.com/tenside/contao-ui/blob/master/LICENSE MIT
+ * @link       https://github.com/tenside/contao-ui
+ * @filesource
+ */
+
+.sort-selection {
+  text-align: right;
+  padding: 20px 0;
+
+  a.sortorder {
+    display: inline-block;
+    padding: 0 20px;
+
+    &:hover, &:active, &:focus {
+      text-decoration: none;
+    }
+
+    &.active {
+      color: $link-color;
+      border-bottom: 1px solid $link-color;
+      background-color: $selected-option-bg;
+    }
+
+    &.active:after {
+      content: '\25b2';
+    }
+    &.active.reverse:after {
+      content: '\25bc';
+    }
+  }
+}
+
+package-list-entry {
+  background-color: #fff;
+  color: $gray-light;
+  padding: 10px;
+  border-radius: 3px;
+  margin-bottom: 15px;
+  border-bottom: 3px solid #e1d8c4;
+  display: block;
+
+  .name {
+    font-size: 12pt;
+    font-weight: 700;
+  }
+
+  .description {
+    margin-bottom: 10px;
+    .more {
+      margin-left: 10px;
+    }
+  }
+
+  .icon {
+    font-size: 100px;
+    padding: 15px;
+
+    .packages-list-small & {
+      font-size: 25px;
+    }
+  }
+  .info-label {
+    padding: 0.2em 0.6em 0.3em;
+  }
+}
+
+.list-group-item {
+  padding: 25px 25px 15px 0;
+  border: none;
+  border-bottom: 1px solid $gray-lighter;
+  margin-bottom: 0;
+
+  &:nth-child(even) {
+    background: $gray-lighter;
+  }
+
+  .packages-list-small & {
+    padding: 5px;
+  }
+}
+
+.list-group-heading {
+  list-style: none;
+  padding: 10px 15px;
+  font-size: 12px;
+}
+
+constraint-editor {
+  .form-control-static {
+    color: $btn-default-color;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    display: table-cell;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  .input-group-addon {
+    color: $btn-default-color;
+  }
+}
+
+.package__type {
+  text-align: center;
+}
+
+.package__meta {
+  margin-top: 10px;
+  font-size: 12px;
+  color: $gray-light;
+  padding-top: 10px;
+  border-top: 1px solid #dadada;
+
+  .label {
+    font-size: 100%;
+    font-weight: normal;
+    margin: 5px;
+  }
+}
+
+.package__keyword {
+  padding: 0 10px;
+}
+
+.package__link,
+.package__link:hover {
+  text-decoration: none;
+}
+
+.package__headline {
+  margin-top: 0;
+
+  .packages-list-small & {
+    font-size: 16px;
+    margin: 5px 0;
+  }
+}
+
+// Version
+
+.version {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  right: 0px;
+  text-align: right;
+  background: #ddd;
+  height: 10px;
+
+  .package__meta & {
+    display: block;
+  }
+}
+
+.version {
+  .label {
+    border-radius: 0;
+    font-weight: normal;
+    position: relative;
+    bottom: 10px
+  }
+
+}
+
+.version__current {
+  .label {
+    font-size: 100%;
+    bottom: 10px;
+  }
+}
+
+.actions {
+  position: absolute;
+  bottom: 0;
+}

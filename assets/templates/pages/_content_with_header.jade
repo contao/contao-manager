@@ -1,0 +1,20 @@
+header
+  .logo
+    img(src="../img/tenside.svg", ng-class="{'fa-spin': loading}")
+    a(href="#/") tenside
+
+.tenside-search.container
+  div.spacer
+    .btn.btn-default.col-lg-2
+      i.fa.fa-refresh
+      | &nbsp;
+      | Check for updates
+    search-header.col-lg-10
+
+.body.with-header
+  .container
+    block content
+
+footer.with-header
+  .container
+    include ../_footer

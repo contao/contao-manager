@@ -19,8 +19,7 @@ tasks:
     working_dir: %package:contao/package-manager%
     timeout: null
     env:
-      TENSIDE_VERSION: "%version:tenside/core%"
-      COMPOSER_VERSION: "%version:composer/composer%"
+      TENSIDE_VERSION: "%version:contao/package-manager%"
 
   - type: add-package
     name: contao/package-manager
