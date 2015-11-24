@@ -5,7 +5,6 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     bower = require('gulp-bower'),
     concat = require('gulp-concat'),
-    imagemin = require('gulp-imagemin'),
     jade = require('gulp-jade'),
     livereload = require('gulp-livereload'),
     minify = require('gulp-minify-css'),
@@ -15,9 +14,6 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify'),
     sourcemaps = require('gulp-sourcemaps'),
-// image optimizers
-    optipng = require('imagemin-optipng'),
-    svgo = require('imagemin-svgo'),
 // native modules
     del = require('del'),
     sh = require('sync-exec'),
@@ -276,9 +272,6 @@ gulp.task('clean-images', function (cb) {
 
 gulp.task('build-images', ['clean-images'], function () {
     return gulp.src(paths.images.src)
-        .pipe(imagemin({
-            use: [optipng(), svgo()]
-        }))
         .pipe(debug({title: 'image:'}))
         .pipe(gulp.dest(out + '/img'));
 });
