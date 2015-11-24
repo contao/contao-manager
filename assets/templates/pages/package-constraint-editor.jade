@@ -1,0 +1,12 @@
+div.form-group
+  label.control-label.sr-only(for="constraint-editor{{::uniqueId}}") {{ 'package.constraint' | translate }}:
+  .input-group(ng-if="editing")
+    input.form-control(id="constraint-editor{{::uniqueId}}", type="text", ng-model="packageInfo.desiredVersion")
+    a.input-group-addon.label-success(ng-click="acceptEdit()")
+      i.fa.fa-check
+    a.input-group-addon.label-danger(ng-click="rejectEdit()")
+      i.fa.fa-close
+  .input-group(ng-if="!editing")
+    p.form-control-static.text-center(version-class="packageInfo.realVersion") {{packageInfo.realVersion}}
+    a.input-group-addon(ng-click="enableEdit()", version-class="packageInfo.realVersion")
+      i.fa.fa-gear

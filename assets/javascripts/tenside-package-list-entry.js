@@ -93,6 +93,45 @@
             }
         )
         .directive(
+            'constraintEditor',
+            [
+                '$state', '$tensideApi',
+                function () {
+                    var uniqueId = 1;
+                    return {
+                        restrict: 'E',
+                        scope: {
+                            'realVersion': '=version',
+                            'desiredVersion': '=constraint',
+                            'packageName': '=packageName',
+                            'onAccept': '='
+                        },
+                        templateUrl: 'pages/package-constraint-editor.html',
+                        link: function (scope) {
+                            scope.uniqueId = 'item' + uniqueId++;
+                            scope.editing = false;
+                            scope.packageInfo = {
+                                realVersion:  scope.realVersion,
+                                desiredVersion: scope.desiredVersion,
+                                packageName: scope.packageName
+                            };
+
+                            scope.enableEdit = function() {
+                                scope.editing=true;
+                            };
+                            scope.acceptEdit = function() {
+                                scope.onAccept(scope.packageInfo.packageName, scope.packageInfo.desiredVersion);
+                                scope.editing=false;
+                            };
+                            scope.rejectEdit = function() {
+                                scope.editing=false;
+                            };
+                        }
+                    }
+                }
+            ]
+        )
+        .directive(
             'packageListEntry',
             [
                 '$state', '$tensideApi',
@@ -140,11 +179,18 @@
                             };
 
                             scope.install = function(pack) {
-                                $tensideApi.tasks.addRequire(pack.name);
+                                $tensideApi.tasks.addRequire(pack.name, pack.upgrade_version);
                             };
 
                             scope.remove = function (pack) {
                                 $tensideApi.tasks.addRemove(pack.name);
+                            };
+
+                            scope.upgrade = function (pack) {
+                                $tensideApi.tasks.addRequire(pack.name, pack.upgrade_version);
+                            };
+                            scope.changeConstraint = function (packname, constraint) {
+                                $tensideApi.tasks.addRequire(packname, constraint);
                             };
 
                             /*

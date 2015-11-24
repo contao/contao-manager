@@ -162,8 +162,13 @@
                     }
                     return self.add({type: 'upgrade'});
                 };
-                self.addRequire = function(packageName) {
-                    return self.add({type: 'require-package', package: [packageName]});
+                self.addRequire = function(packageName, version) {
+                    if (version) {
+                        version = '=' + version;
+                    } else {
+                        version = '';
+                    }
+                    return self.add({type: 'require-package', package: [packageName + version]});
                 };
                 self.addRemove = function(packageName) {
                     return self.add({type: 'remove-package', package: [packageName]});

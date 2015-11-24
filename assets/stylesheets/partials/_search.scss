@@ -29,32 +29,6 @@
       color: $text-color;
     }
   }
-  .sort-selection {
-    text-align: right;
-    padding: 20px 0;
-
-    a.sortorder {
-      display: inline-block;
-      padding: 0 20px;
-
-      &:hover, &:active, &:focus {
-        text-decoration: none;
-      }
-
-      &.active {
-        color: $link-color;
-        border-bottom: 1px solid $link-color;
-        background-color: $selected-option-bg;
-      }
-
-      &.active:after {
-        content: '\25b2';
-      }
-      &.active.reverse:after {
-        content: '\25bc';
-      }
-    }
-  }
   .heading {
     border: 1px solid $head-color;
     border-left: 0;

@@ -16,7 +16,7 @@
       |  {{'tenside_package_list_entry.downloads' | translate:{downloads: package.downloads} }}
 .col-lg-2
   .constraint
-    span.label(version-class="package.version") {{package.version}}
+    constraint-editor(constraint="package.constraint", version="package.version", package-name="package.name", on-accept="changeConstraint")
   .date {{package.time | date: 'short' }}
 .col-lg-2
   button.btn.btn-default.btn-lg(type="button", ng-if="canDisable(package)", ng-click="disable(package)")
@@ -25,12 +25,12 @@
   button.btn.btn-default.btn-lg(type="button", ng-if="canEnable(package)", ng-click="enable(package)")
     span.fa.fa-fw.fa-power-off
     span {{'tenside_package_list_entry.btn_enable'| translate }}
-  button.btn.btn-default.btn-lg(type="button", ng-if="canUpgrade(package)")
+  button.btn.btn-default.btn-lg(type="button", ng-if="canUpgrade(package)", ng-click="upgrade(package)")
     span.fa.fa-fw.fa-arrow-circle-up
     span {{'tenside_package_list_entry.btn_upgrade'| translate }}
   button.btn.btn-danger.btn-lg(type="button", ng-if="canRemove(package)", ng-click="remove(package)")
     span.fa.fa-fw.fa-trash-o
     span {{'tenside_package_list_entry.btn_remove'| translate }}
-  button.btn.btn-success(ng-if="canInstall(package)", ng-click="install(package)")
+  button.btn.btn-success.btn-lg(ng-if="canInstall(package)", ng-click="install(package)")
     span.fa.fa-fw.fa-plus-circle
     span {{'tenside_package_list_entry.btn_install'| translate }}
