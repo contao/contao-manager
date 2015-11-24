@@ -23,6 +23,7 @@ namespace AppBundle\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Kernel;
 use Tenside\CoreBundle\Controller\AbstractController;
 
 /**
@@ -54,7 +55,7 @@ class UiController extends AbstractController
     public function indexAction(Request $request)
     {
         return new Response(
-            $this->fixApiBaseUrl($request, file_get_contents($this->getAssetsDir() . '/index.html')),
+            $this->fixApiBaseUrl($request, file_get_contents($this->locateResource('index.html'))),
             200,
             [
                 'Content-Type' => 'text/html; charset=UTF-8'
@@ -75,7 +76,7 @@ class UiController extends AbstractController
      */
     public function assetAction($path, $file, Request $request)
     {
-        $filePath = $this->getAssetsDir() . '/' . $path . '/' . $file;
+        $filePath = $this->locateResource($path . '/' . $file);
 
         if (!file_exists($filePath)) {
             return new Response($filePath . ' not found', 404);
@@ -139,24 +140,14 @@ class UiController extends AbstractController
      * Retrieve the assets dir.
      *
      * @return string
-     *
-     * @throws \RuntimeException When the assets dir can not be located.
      */
-    private function getAssetsDir()
+    private function locateResource($resourceName)
     {
-        if ($phar = \Phar::running()) {
-            return $phar . '/assets';
-        }
+        /** @var Kernel $kernel */
+        $kernel = $this->container->get('kernel');
+        $path = $kernel->locateResource('@AppBundle/Resources/.build/' . $resourceName);
 
-        // FIXME: hardcoded assets path for non phar mode - change this!
-        $dir = dirname(__DIR__);
-        while (($dir = dirname($dir)) !== '.') {
-            if (is_dir($dir . '/.build')) {
-                return $dir . '/.build';
-            }
-        }
-
-        throw new \RuntimeException('Could not find assets directory.');
+        return $path;
     }
 
     /**
