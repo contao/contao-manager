@@ -11,9 +11,6 @@ Thumbs.db
 .idea/
 nbproject/
 
-# composer related
-vendor/
-
 # build
 /build
 build.properties
