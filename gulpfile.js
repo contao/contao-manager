@@ -10,13 +10,12 @@ var gulp = require('gulp'),
     minify = require('gulp-minify-css'),
     jsonminify = require('gulp-jsonminify'),
     newer = require('gulp-newer'),
-    run = require('gulp-run'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify'),
     sourcemaps = require('gulp-sourcemaps'),
 // native modules
     del = require('del'),
-    sh = require('sync-exec'),
+    exec = require('sync-exec'),
     debug = require('gulp-debug'),
     data = require('gulp-data'),
     globby = require('globby'),
@@ -171,10 +170,22 @@ gulp.task('install-bower', function () {
 });
 
 gulp.task('install-ace', ['install-bower'], function () {
-    run('npm install', {cwd: process.cwd() + '/bower_components/ace'}).exec(function() {
-        del(['bower_components/ace/build'], {force: true}, function() {
-            run('node Makefile.dryice.js --s --target ./build minimal', {cwd: process.cwd() + '/bower_components/ace'}).exec();
-        });
+    // Ensure npm install is valid.
+    var result = exec('npm install', {cwd: process.cwd() + '/bower_components/ace'});
+    if (0 !== result.status) {
+        console.log(result.stdout);
+        console.log(result.stderr);
+    }
+    // Remove built files and rebuild then.
+    del(['bower_components/ace/build'], {force: true}, function() {
+        var result = exec(
+            'node Makefile.dryice.js --s --target ./build minimal',
+            {cwd: process.cwd() + '/bower_components/ace'}
+        );
+        if (0 !== result.status) {
+            console.log(result.stdout);
+            console.log(result.stderr);
+        }
     });
 });
 
