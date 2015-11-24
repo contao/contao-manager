@@ -1,0 +1,93 @@
+phar: package-manager.phar
+
+tasks:
+  - type: run-process
+    command: %package:contao/package-manager%/app/console cache:clear --env=phar --no-warmup -vvv
+  - type: run-process
+    command: %package:contao/package-manager%/app/console cache:warmup --env=phar --no-debug
+
+  - type: run-process
+    command: npm install --save-dev
+    working_dir: %package:contao/package-manager%
+    timeout: null
+  - type: run-process
+    command: %package:contao/package-manager%/node_modules/.bin/gulp install
+    working_dir: %package:contao/package-manager%
+    timeout: null
+  - type: run-process
+    command: %package:contao/package-manager%/node_modules/.bin/gulp build
+    working_dir: %package:contao/package-manager%
+    timeout: null
+    env:
+      TENSIDE_VERSION: "%version:tenside/core%"
+      COMPOSER_VERSION: "%version:composer/composer%"
+
+  - type: add-package
+    name: contao/package-manager
+    include_files: &default_include_files
+      - "*.php"
+      - "(LICENSE\\.?.*)"
+      - "%package:contao/package-manager%/app/console"
+    exclude_files: &default_exclude_files
+      - "(.*[Tt]ests?\\/*)"
+      - "*tests/*.php"
+      - "app/cache/prod/*"
+    package_override:
+      contao/package-manager:
+        include_files:
+          - *default_include_files
+          - "*.build/*"
+        exclude_files:
+          - *default_exclude_files
+          - "*node_modules*"
+          - "*bower_components*"
+        rewrite_paths:
+          .build: /assets
+      symfony/framework-bundle:
+        exclude_files:
+          - *default_exclude_files
+          # Drop all commands registered by symfony bundle as we can not use them.
+          - "(Command/.*(Config|Assets|Cache|Debug|Router|Server|Translation|YamlLint).*Command\\.php)"
+          # Drop all views, we are not using symfony forms.
+          - "*views*"
+      symfony/security-bundle:
+        exclude_files:
+          - *default_exclude_files
+          # Drop all commands registered by symfony bundle as we can not use them.
+          - "(Command/.*AclCommand\\.php)"
+
+  - type: set-stub
+    stub_file: "%package:tenside/core%/src/stub.php"
+
+  - type: composer-autoload
+    optimize: true
+
+rewrites:
+  - files:
+      - "%package:tenside/core%/src/stub.php"
+      - "%package:tenside/core%/src/Tenside.php"
+    filter:
+      - type: replace
+        "@@TENSIDE_MIN_PHP_VERSION@@": "5.4"
+
+      - type: warning-time
+        search: "@warning_time@"
+        format: "@@warning_time@@"
+        # 30 * 86400 = 2592000
+        ahead: 2592000
+
+      - type: replace
+        "@package_version@": "%version:contao/package-manager%"
+
+      - type: replace
+        "@tenside_distribution@": "contao/package-manager"
+
+      - type: replace
+        "@release_date@": "%date:contao/package-manager%"
+      - type: replace
+        "tenside.phar": "package-manager.phar"
+
+  # keep this last
+  - files: "*.php"
+    filter:
+      - type: php-strip

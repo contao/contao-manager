@@ -1,0 +1,63 @@
+imports:
+    - { resource: parameters.yml }
+
+framework:
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+    translator: false
+
+security:
+    access_control:
+        # Anonymous access for the login route - otherwise we can not log in.
+        - { path: ^/api/v1/auth, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        # Anonymous access for the install route - otherwise we can not install (Will refuse to install anyway).
+        - { path: ^/api/v1/install, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        # Delegate everything else from the API to the role checking service.
+        - { path: ^/api, role: [ROLE_CHECK] }
+
+    encoders:
+        Symfony\Component\Security\Core\User\UserInterface: bcrypt
+
+    providers:
+        tenside_core_user_provider:
+            id: tenside.user_provider
+
+    firewalls:
+        # all public resources.
+        public:
+            stateless: true
+            pattern:        /(assets/|$|api/v1/install)
+            anonymous:      true
+
+        # Allow basic auth and token auth on login route.
+        login:
+            stateless: true
+            simple_preauth:
+                authenticator: tenside.jwt_authenticator
+            http_basic: ~
+            pattern: ^/api/v1/auth
+
+        # Allow only token auth on any API.
+        secured_area:
+            pattern: ^/api
+            stateless: true
+            simple_preauth:
+                authenticator: tenside.jwt_authenticator
+
+# Monolog configuration
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: error
+            handler:      nested
+        nested:
+            type: service
+            id:   "tenside.logger"
+
+services:
+    # We need to override the uri signer as the kernel.secret is written in the tenside.json outside of the phar.
+    # Otherwise the kernel will not be boot able and therefore we will not be able to create the tenside.json.
+    uri_signer:
+        class: Tenside\CoreBundle\UriSigner
+        arguments: [@tenside.config]

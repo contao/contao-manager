@@ -1,0 +1,39 @@
+{
+  "name": "contao/package-manager",
+  "description": "Contao package manager.",
+  "keywords": ["tenside"],
+  "homepage": "https://contao.org/",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Christian Schiffler",
+      "email": "c.schiffler@cyberspectrum.de",
+      "homepage": "https://www.cyberspectrum.de"
+    }
+  ],
+  "require": {
+    "php": ">=5.5",
+    "composer/composer": "~1.0@dev",
+    "symfony/monolog-bundle": "~2.8",
+    "tenside/core": "~1.0",
+    "symfony/framework-bundle": "~2.8",
+    "symfony/http-kernel": "~2.8",
+    "symfony/security-bundle": "~2.7"
+  },
+  "require-dev": {
+    "cyberspectrum/pharpiler": "~1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "AppBundle\\": "src"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

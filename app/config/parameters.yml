@@ -1,0 +1,12 @@
+parameters:
+    # Just to ensure no-one will create another instance of the service using the original parameter.
+    uri_signer.class: Tenside\CoreBundle\UriSigner
+    # Path to the script to run when in non-phar mode - relative to the app root.
+    tenside.script_name: console
+    # All errors are to be considered FATAL!
+    debug.error_handler.throw_at: -1
+
+    # self update related.
+    tenside.self_update.base_url: "store.contao.org"
+    tenside.self_update.origin_name: "contao.org"
+    tenside.self_update.phar_name: "package-manager.phar"

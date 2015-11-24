@@ -1,0 +1,83 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * This file is part of contao/package-manager.
+ *
+ * (c) Christian Schiffler <c.schiffler@cyberspectrum.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    contao/package-manager
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  2015 Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @license    https://github.com/contao/package-manager/blob/master/LICENSE MIT
+ * @link       https://github.com/contao/package-manager
+ * @filesource
+ */
+
+set_time_limit(0);
+
+require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/AppKernel.php';
+
+use Tenside\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Debug\Debug;
+
+if (PHP_SAPI !== 'cli') {
+    echo 'Warning: This is the cli interface, it should not be invoked via the '.
+        PHP_SAPI . ' version of PHP.' . PHP_EOL;
+}
+
+if (function_exists('ini_set')) {
+    ini_set('display_errors', 1);
+
+    $memoryInBytes = function ($value) {
+        $unit  = strtolower(substr($value, -1, 1));
+        $value = (int) $value;
+        switch ($unit) {
+            case 'g':
+                $value *= 1024;
+            // no break (cumulative multiplier)
+            case 'm':
+                $value *= 1024;
+            // no break (cumulative multiplier)
+            case 'k':
+                $value *= 1024;
+                break;
+            default:
+        }
+
+        return $value;
+    };
+
+    $memoryLimit = trim(ini_get('memory_limit'));
+    // Increase memory_limit if it is lower than 512M
+    if (($memoryLimit != -1) && ($memoryInBytes($memoryLimit) < 512 * 1024 * 1024)) {
+        // @codingStandardsIgnoreStart
+        @ini_set('memory_limit', '512M');
+        // @codingStandardsIgnoreEnd
+    }
+    unset($memoryInBytes, $memoryLimit);
+}
+
+$input = new ArgvInput();
+if (\Phar::running()) {
+    $env   = 'phar';
+    $debug = false;
+} else {
+    $env   = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'prod');
+    $debug = getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(array('--no-debug', '')) && $env !== 'prod';
+}
+
+if ($debug) {
+    Debug::enable();
+}
+
+$kernel      = new AppKernel($env, $debug);
+$application = new Application($kernel);
+$application->run($input);
