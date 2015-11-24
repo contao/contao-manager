@@ -1,5 +1,5 @@
 /**
- * This file is part of tenside/ui.
+ * This file is part of tenside/contao-ui.
  *
  * (c) Christian Schiffler <c.schiffler@cyberspectrum.de>
  *
@@ -8,13 +8,11 @@
  *
  * This project is provided in good faith and hope to be usable by anyone.
  *
- * @package    tenside/ui
+ * @package    tenside/contao-ui
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Tim Becker <tb@westwerk.ac>
- * @author     Tristan Lins <tristan.lins@bit3.de>
  * @copyright  2015 Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @license    https://github.com/tenside/ui/blob/master/LICENSE MIT
- * @link       https://github.com/tenside/ui
+ * @license    https://github.com/tenside/contao-ui/blob/master/LICENSE MIT
+ * @link       https://github.com/tenside/contao-ui
  * @filesource
  */
 

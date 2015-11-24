@@ -1,5 +1,5 @@
-tenside/ui
-==========
+tenside/contao-ui
+=================
 
 Setup guide
 -----------

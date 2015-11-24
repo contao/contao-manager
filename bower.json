@@ -1,9 +1,8 @@
 {
-  "name": "tenside/ui",
+  "name": "tenside/contao-ui",
   "license": "MIT",
   "authors": [
-    "Christian Schiffler <c.schiffler@cyberspectrum.de>",
-    "Tim Becker <tb@westwerk.ac>"
+    "Christian Schiffler <c.schiffler@cyberspectrum.de>"
   ],
   "dependencies": {
     "ace": "1.1.*",

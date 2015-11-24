@@ -1,5 +1,5 @@
 {
-    "name": "tenside-ui",
+    "name": "tenside-contao-ui",
     "license": "MIT",
     "author": {
         "name": "Christian Schiffler",
@@ -8,7 +8,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "http://github.com/tenside/ui.git"
+        "url": "http://github.com/tenside/contao-ui.git"
     },
     "dependencies": {
         "gulp": "^3.8",
