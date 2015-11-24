@@ -1,5 +1,5 @@
 TensideCoreBundle:
-    resource: "@AppBundle/Resources/config/routing.yml"
+    resource: "@TensideCoreBundle/Resources/config/routing.yml"
     prefix: /api
 TensideUiBundle:
     resource: "@AppBundle/Resources/config/routing.yml"
