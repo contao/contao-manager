@@ -24,8 +24,7 @@ var gulp = require('gulp'),
 
 var out             = process.env.DEST_DIR || '.build',
     tensideApi      = process.env.TENSIDE_API || false,
-    tensideVersion  = process.env.TENSIDE_VERSION || false,
-    mockAPI         = false;
+    tensideVersion  = process.env.TENSIDE_VERSION || false;
 
 function getTensideApi() {
     if (!tensideApi) {
@@ -82,7 +81,6 @@ var paths = {
             'bower_components/ace/build/src/mode-php.js',
             'bower_components/ace/build/src/worker-json.js',
             'assets/javascripts/tenside.js', // keep this first, as the others depend on it.
-            'assets/javascripts/mock-*.js',
             'assets/javascripts/tenside-api.js',
             'assets/javascripts/tenside-*.js'
         ],
@@ -100,7 +98,6 @@ var paths = {
             'js/mode-php.js',
             'js/worker-json.js',
             'js/tenside.js',
-            'js/mock-*.js',
             'js/tenside-*.js'
         ]
     },
@@ -133,11 +130,6 @@ var globVariables = function(variables) {
             data.stylesheets = globby.sync(data.stylesheets, {cwd: out});
             data.javascripts = globby.sync(data.javascripts, {cwd: out});
 
-            if (mockAPI) {
-                var pos = data.javascripts.indexOf('js/tenside-api.js');
-                data.javascripts[pos] = 'js/mock-tenside-api.js';
-            }
-
             data.app = {
                 'tensideApi': getTensideApi(),
                 'tensideVersion': getTensideVersion()
@@ -152,11 +144,6 @@ var globJsSource = function(javascripts) {
     var myScripts = javascripts || paths.javascripts.src;
     console.log(cwd, myScripts);
     myScripts = globby.sync(myScripts, {cwd: cwd});
-
-    if (mockAPI) {
-        var pos = myScripts.indexOf('assets/javascripts/tenside-api.js');
-        myScripts[pos] = 'assets/javascripts/mock-tenside-api.js';
-    }
     console.log(myScripts);
 
     return myScripts
