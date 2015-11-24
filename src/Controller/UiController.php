@@ -18,7 +18,7 @@
  * @filesource
  */
 
-namespace Tenside\Ui\Bundle\Controller;
+namespace Tenside\ContaoUi\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

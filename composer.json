@@ -22,12 +22,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Tenside\\Ui\\": "src"
+      "Tenside\\ContaoUi\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Tenside\\Ui\\Test\\": "tests"
+      "Tenside\\ContaoUi\\Test\\": "tests"
     }
   },
   "extra": {

@@ -18,13 +18,13 @@
  * @filesource
  */
 
-namespace Tenside\Ui\Bundle;
+namespace Tenside\ContaoUi;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * This class is the tenside ui bundle.
+ * This class is the tenside ui bundle for the contao ui.
  */
-class TensideUiBundle extends Bundle
+class TensideContaoUiBundle extends Bundle
 {
 }
