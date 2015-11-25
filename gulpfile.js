@@ -22,7 +22,7 @@ var gulp = require('gulp'),
     clone = require('clone'),
     cwd = process.cwd();
 
-var out             = process.env.DEST_DIR || '.build',
+var out             = process.env.DEST_DIR || cwd + '/src/Resources/.build',
     tensideApi      = process.env.TENSIDE_API || false,
     tensideVersion  = process.env.TENSIDE_VERSION || false;
 
@@ -45,42 +45,42 @@ function getTensideVersion() {
 var paths = {
     templates: {
         'watch': [
-            'assets/templates/**/*.jade',
+            cwd + '/src/Resources/assets/templates/**/*.jade',
             out + '/js/*.js',
             out + '/css/*.css'
         ],
-        'src': 'assets/templates/**/[^_]*.jade'
+        'src': cwd + '/src/Resources/assets/templates/**/[^_]*.jade'
     },
     stylesheets: {
-        'watch': 'assets/stylesheets/**/*.scss',
-        'src': 'assets/stylesheets/tenside.scss',
+        'watch': cwd + '/src/Resources/assets/stylesheets/**/*.scss',
+        'src': cwd + '/src/Resources/assets/stylesheets/tenside.scss',
         'loadOrder': [
             'css/tenside*.css'
         ]
     },
     fonts: {
         'src': [
-            'bower_components/font-awesome/fonts/*'
+            cwd + '/bower_components/font-awesome/fonts/*'
         ]
     },
     javascripts: {
         'watch': [
-            'assets/javascripts/*.js'
+            cwd + '/src/Resources/assets/javascripts/*.js'
         ],
         'src': [
-            'bower_components/angular/angular.js',
-            'bower_components/angular-ui-router/release/angular-ui-router.js',
-            'bower_components/angular-translate/angular-translate.js',
-            'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
-            'bower_components/angular-bootstrap/ui-bootstrap.js',
-            'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-            'bower_components/ace/build/src/ace.js',
-            'bower_components/ace/build/src/mode-json.js',
-            'bower_components/ace/build/src/mode-php.js',
-            'bower_components/ace/build/src/worker-json.js',
-            'assets/javascripts/tenside.js', // keep this first, as the others depend on it.
-            'assets/javascripts/tenside-api.js',
-            'assets/javascripts/tenside-*.js'
+            cwd + '/bower_components/angular/angular.js',
+            cwd + '/bower_components/angular-ui-router/release/angular-ui-router.js',
+            cwd + '/bower_components/angular-translate/angular-translate.js',
+            cwd + '/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
+            cwd + '/bower_components/angular-bootstrap/ui-bootstrap.js',
+            cwd + '/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+            cwd + '/bower_components/ace/build/src/ace.js',
+            cwd + '/bower_components/ace/build/src/mode-json.js',
+            cwd + '/bower_components/ace/build/src/mode-php.js',
+            cwd + '/bower_components/ace/build/src/worker-json.js',
+            cwd + '/src/Resources/assets/javascripts/tenside.js', // keep this first, as the others depend on it.
+            cwd + '/src/Resources/assets/javascripts/tenside-api.js',
+            cwd + '/src/Resources/assets/javascripts/tenside-*.js'
         ],
         'loadOrder': [
             'js/angular.js',
@@ -98,12 +98,12 @@ var paths = {
         ]
     },
     images: {
-        'watch': 'assets/images/*',
-        'src': 'assets/images/*'
+        'watch': cwd + '/src/Resources/assets/images/*',
+        'src': cwd + '/src/Resources/assets/images/*'
     },
     localization: {
-        'watch': 'assets/l10n/*',
-        'src': 'assets/l10n/*'
+        'watch': cwd + '/src/Resources/assets/l10n/*',
+        'src': cwd + '/src/Resources/assets/l10n/*'
     }
 };
 
