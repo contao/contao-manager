@@ -14,4 +14,4 @@ asset:
     methods:  [GET]
     requirements:
         path: "css|fonts|img|js|pages|l10n"
-        file: "[\-\_a-zA-Z0-9]*(\.[a-zA-Z0-9]*)+"
+        file: "[\\-\\_a-zA-Z0-9]*(\\.[a-zA-Z0-9]*)+"
