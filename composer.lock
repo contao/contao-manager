@@ -2642,12 +2642,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "957973976ea42299a9fd5d9a499401e38bcd1fa5"
+                "reference": "ba30b69d978069275bd59d29a84ff17ebcb5fbdf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/957973976ea42299a9fd5d9a499401e38bcd1fa5",
-                "reference": "957973976ea42299a9fd5d9a499401e38bcd1fa5",
+                "url": "https://api.github.com/repos/tenside/core/zipball/ba30b69d978069275bd59d29a84ff17ebcb5fbdf",
+                "reference": "ba30b69d978069275bd59d29a84ff17ebcb5fbdf",
                 "shasum": ""
             },
             "require": {
@@ -2671,6 +2671,9 @@
             },
             "require-dev": {
                 "phpcq/all-tasks": "~1.1"
+            },
+            "suggest": {
+                "nelmio/api-doc-bundle": "To benefit from the API documentation annotation"
             },
             "type": "library",
             "extra": {
@@ -2701,7 +2704,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2015-11-24 06:09:11"
+            "time": "2015-11-26 12:35:02"
         }
     ],
     "packages-dev": [
