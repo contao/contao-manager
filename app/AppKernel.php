@@ -19,6 +19,7 @@
  */
 
 use AppBundle\AppBundle;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
@@ -84,6 +85,18 @@ class AppKernel extends Kernel
         if ('phar' !== $this->getEnvironment()) {
             $bundles[] = new \Symfony\Bundle\TwigBundle\TwigBundle();
             $bundles[] = new Nelmio\ApiDocBundle\NelmioApiDocBundle();
+
+            // Load the annotation if it get's mentioned, Doctrine does not try to autoload it via plain PHP.
+            AnnotationRegistry::registerLoader(
+                function ($class) {
+                    if (0 === strcmp('Nelmio\\ApiDocBundle\\Annotation\\ApiDoc', $class)) {
+                        class_exists('Nelmio\\ApiDocBundle\\Annotation\\ApiDoc');
+                        return true;
+                    }
+
+                    return false;
+                }
+            );
         }
 
         return $bundles;
