@@ -22,7 +22,9 @@
     "symfony/security-bundle": "~2.7"
   },
   "require-dev": {
-    "cyberspectrum/pharpiler": "~1.0"
+    "phpcq/all-tasks": "~1.1",
+    "cyberspectrum/pharpiler": "~1.0",
+    "nelmio/api-doc-bundle": "~2.10"
   },
   "autoload": {
     "psr-4": {

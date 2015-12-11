@@ -73,13 +73,20 @@ class AppKernel extends Kernel
      */
     public function registerBundles()
     {
-        return [
+        $bundles = [
             new SecurityBundle(),
             new TensideCoreBundle(),
             new FrameworkBundle(),
             new MonologBundle(),
-            new AppBundle()
+            new AppBundle(),
         ];
+
+        if ('phar' !== $this->getEnvironment()) {
+            $bundles[] = new \Symfony\Bundle\TwigBundle\TwigBundle();
+            $bundles[] = new Nelmio\ApiDocBundle\NelmioApiDocBundle();
+        }
+
+        return $bundles;
     }
 
     /**
