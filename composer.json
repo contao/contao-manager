@@ -24,7 +24,8 @@
   "require-dev": {
     "phpcq/all-tasks": "~1.1",
     "cyberspectrum/pharpiler": "~1.0",
-    "nelmio/api-doc-bundle": "~2.10"
+    "nelmio/api-doc-bundle": "~2.10",
+    "symfony/browser-kit": "~2.8"
   },
   "autoload": {
     "psr-4": {

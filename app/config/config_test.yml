@@ -1,0 +1,10 @@
+imports:
+    - { resource: config_prod.yml }
+
+framework:
+    test: ~
+
+services:
+    tenside.home:
+        class:  AppBundle\Test\TestHomePathDeterminator
+        public: true
