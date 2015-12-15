@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cf957a329fe2645348081b469e61e7df",
-    "content-hash": "b90e094e066fc6b61117ca1582228b74",
+    "hash": "88fc8e8b912343eb9fcaead5e323b932",
+    "content-hash": "db2523295536e140615a349725be495e",
     "packages": [
         {
             "name": "composer/composer",
@@ -2642,12 +2642,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "957973976ea42299a9fd5d9a499401e38bcd1fa5"
+                "reference": "bbb30cc25f02d931f6d92703a962b9a7d2d4ceb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/957973976ea42299a9fd5d9a499401e38bcd1fa5",
-                "reference": "957973976ea42299a9fd5d9a499401e38bcd1fa5",
+                "url": "https://api.github.com/repos/tenside/core/zipball/bbb30cc25f02d931f6d92703a962b9a7d2d4ceb3",
+                "reference": "bbb30cc25f02d931f6d92703a962b9a7d2d4ceb3",
                 "shasum": ""
             },
             "require": {
@@ -2670,6 +2670,7 @@
                 "symfony/yaml": "~2.8"
             },
             "require-dev": {
+                "nelmio/api-doc-bundle": "~2.10",
                 "phpcq/all-tasks": "~1.1"
             },
             "type": "library",
@@ -2701,7 +2702,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2015-11-24 06:09:11"
+            "time": "2015-12-11 19:39:14"
         }
     ],
     "packages-dev": [
@@ -3874,16 +3875,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.18",
+            "version": "4.8.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fa33d4ad96481b91df343d83e8c8aabed6b1dfd3"
+                "reference": "ea76b17bced0500a28098626b84eda12dbcf119c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fa33d4ad96481b91df343d83e8c8aabed6b1dfd3",
-                "reference": "fa33d4ad96481b91df343d83e8c8aabed6b1dfd3",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ea76b17bced0500a28098626b84eda12dbcf119c",
+                "reference": "ea76b17bced0500a28098626b84eda12dbcf119c",
                 "shasum": ""
             },
             "require": {
@@ -3942,7 +3943,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-11-11 11:32:49"
+            "time": "2015-12-12 07:45:58"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
