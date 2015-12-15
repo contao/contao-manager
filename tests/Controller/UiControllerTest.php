@@ -18,7 +18,7 @@
  * @filesource
  */
 
-namespace AppBundle\Tests\Controller;
+namespace AppBundle\Test\Controller;
 
 use AppBundle\Controller\UiController;
 use Symfony\Component\DependencyInjection\Container;
@@ -184,6 +184,6 @@ class UiControllerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFixturesPath($path = '')
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . ($path ? DIRECTORY_SEPARATOR . $path : '');
+        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'fixtures' . ($path ? DIRECTORY_SEPARATOR . $path : '');
     }
 }
