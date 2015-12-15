@@ -139,13 +139,15 @@ class UiController extends AbstractController
     /**
      * Retrieve the assets dir.
      *
+     * @param string $resourceName The name of the resource to be retrieved.
+     *
      * @return string
      */
     private function locateResource($resourceName)
     {
         /** @var Kernel $kernel */
         $kernel = $this->container->get('kernel');
-        $path = $kernel->locateResource('@AppBundle/Resources/.build/' . $resourceName);
+        $path   = $kernel->locateResource('@AppBundle/Resources/.build/' . $resourceName);
 
         return $path;
     }
