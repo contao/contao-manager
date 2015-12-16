@@ -35,6 +35,9 @@ security:
             simple_preauth:
                 authenticator: tenside.jwt_authenticator
             http_basic: ~
+            guard:
+                authenticators:
+                    - app.postdata_authenticator
             pattern: ^/api/v1/auth
 
         # Allow only token auth on any API.
@@ -61,3 +64,6 @@ services:
     uri_signer:
         class: Tenside\CoreBundle\UriSigner
         arguments: [@tenside.config]
+    app.postdata_authenticator:
+        class: AppBundle\Security\PostDataAuthenticator
+        arguments: [@security.password_encoder]
