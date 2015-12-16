@@ -2641,12 +2641,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "bbb30cc25f02d931f6d92703a962b9a7d2d4ceb3"
+                "reference": "ce6ac9a187804a17e908059f03b3b5ab4bb02a91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/bbb30cc25f02d931f6d92703a962b9a7d2d4ceb3",
-                "reference": "bbb30cc25f02d931f6d92703a962b9a7d2d4ceb3",
+                "url": "https://api.github.com/repos/tenside/core/zipball/ce6ac9a187804a17e908059f03b3b5ab4bb02a91",
+                "reference": "ce6ac9a187804a17e908059f03b3b5ab4bb02a91",
                 "shasum": ""
             },
             "require": {
@@ -2704,7 +2704,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2015-12-11 19:39:14"
+            "time": "2015-12-16 00:07:22"
         }
     ],
     "packages-dev": [
