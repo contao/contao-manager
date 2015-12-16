@@ -32,6 +32,7 @@ tasks:
       - "(.*[Tt]ests?\\/*)"
       - "*tests/*.php"
       - "app/cache/prod/*"
+      - "app/cache/test/*"
     package_override:
       contao/package-manager:
         include_files:
