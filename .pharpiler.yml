@@ -5,23 +5,6 @@ tasks:
     command: %package:contao/package-manager%/app/console cache:clear --env=phar --no-warmup -vvv
   - type: run-process
     command: %package:contao/package-manager%/app/console cache:warmup --env=phar --no-debug
-
-  - type: run-process
-    command: npm install --save-dev
-    working_dir: %package:contao/package-manager%
-    timeout: null
-  - type: run-process
-    command: %package:contao/package-manager%/node_modules/.bin/gulp install
-    working_dir: %package:contao/package-manager%
-    timeout: null
-  - type: run-process
-    command: %package:contao/package-manager%/node_modules/.bin/gulp build
-    working_dir: %package:contao/package-manager%
-    timeout: null
-    env:
-      TENSIDE_VERSION: "%version:tenside/core%"
-      COMPOSER_VERSION: "%version:composer/composer%"
-
   - type: add-package
     name: contao/package-manager
     include_files: &default_include_files
