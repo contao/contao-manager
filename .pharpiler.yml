@@ -48,6 +48,11 @@ tasks:
 
 rewrites:
   - files:
+      - "%package:contao/package-manager%/app/console"
+    filter:
+      - type: replace
+        "#!/usr/bin/env php": ""
+  - files:
       - "%package:tenside/core%/src/stub.php"
       - "%package:tenside/core%/src/Tenside.php"
     filter:
