@@ -20,7 +20,7 @@
 
 namespace AppBundle\Test;
 
-use Tenside\CoreBundle\HomePathDeterminator;
+use Tenside\CoreBundle\Util\HomePathDeterminator;
 
 /**
  * This class provides information about the home path to use throughout the test run.

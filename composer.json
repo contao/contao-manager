@@ -16,10 +16,11 @@
     "php": ">=5.5",
     "composer/composer": "~1.0@dev",
     "symfony/monolog-bundle": "~2.8",
-    "tenside/core": "~1.0",
     "symfony/framework-bundle": "~2.8",
+    "symfony/security-bundle": "~2.8",
     "symfony/http-kernel": "~2.8",
-    "symfony/security-bundle": "~2.7"
+    "tenside/core": "~1.0",
+    "tenside/core-bundle": "~1.0"
   },
   "require-dev": {
     "phpcq/all-tasks": "~1.1",
@@ -30,6 +31,11 @@
   "autoload": {
     "psr-4": {
       "AppBundle\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AppBundle\\Test\\": "tests"
     }
   },
   "extra": {

@@ -62,7 +62,7 @@ services:
     # We need to override the uri signer as the kernel.secret is written in the tenside.json outside of the phar.
     # Otherwise the kernel will not be boot able and therefore we will not be able to create the tenside.json.
     uri_signer:
-        class: Tenside\CoreBundle\UriSigner
+        class: Tenside\CoreBundle\Util\UriSigner
         arguments: [@tenside.config]
     app.postdata_authenticator:
         class: AppBundle\Security\PostDataAuthenticator
