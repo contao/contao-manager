@@ -24,7 +24,7 @@ set_time_limit(0);
 require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/AppKernel.php';
 
-use Tenside\Console\Application;
+use Tenside\CoreBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;
 
