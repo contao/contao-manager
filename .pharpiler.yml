@@ -22,13 +22,6 @@ tasks:
           - "app/cache/test/*"
         include_files:
           - *default_include_files
-          - "*.build/*"
-        exclude_files:
-          - *default_exclude_files
-          - "*node_modules*"
-          - "*bower_components*"
-        rewrite_paths:
-          .build: /assets
       symfony/framework-bundle:
         exclude_files:
           - *default_exclude_files
@@ -41,9 +34,14 @@ tasks:
           - *default_exclude_files
           # Drop all commands registered by symfony bundle as we can not use them.
           - "(Command/.*AclCommand\\.php)"
+      tenside/core-bundle:
+        exclude_files:
+          - *default_exclude_files
+          # Drop the stub.
+          - "src/Resources/stub.php"
 
   - type: set-stub
-    stub_file: "%package:tenside/core%/src/stub.php"
+    stub_file: "%package:tenside/core-bundle%/src/Resources/stub.php"
 
   - type: composer-autoload
     optimize: true
@@ -55,7 +53,7 @@ rewrites:
       - type: replace
         "#!/usr/bin/env php": ""
   - files:
-      - "%package:tenside/core%/src/stub.php"
+      - "%package:tenside/core-bundle%/src/Resources/stub.php"
       - "%package:tenside/core%/src/Tenside.php"
     filter:
       - type: replace
