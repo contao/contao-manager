@@ -7,6 +7,13 @@ tasks:
     command: %package:contao/package-manager%/app/console cache:warmup --env=phar --no-debug
   - type: add-package
     name: contao/package-manager
+    exclude_dependencies:
+      # exclude everything needed for PHP<5.5, we are min php 5.5.
+      - ircmaxell/password-compat
+      - symfony/polyfill-php54
+      - symfony/polyfill-php55
+      # exclude build time related dependencies.
+      - seld/phar-utils
     include_files: &default_include_files
       - "*.php"
       - "(LICENSE\\.?.*)"
