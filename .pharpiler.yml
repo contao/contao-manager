@@ -20,8 +20,15 @@ tasks:
           - *default_exclude_files
           - "app/cache/prod/*"
           - "app/cache/test/*"
+      composer/composer:
+        exclude_files:
+          - *default_exclude_files
+          - bootstrap.php
+          - src/Compiler.php
+      seld/cli-prompt:
         include_files:
           - *default_include_files
+          - "*hiddeninput.exe"
       symfony/framework-bundle:
         exclude_files:
           - *default_exclude_files
