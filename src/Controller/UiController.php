@@ -8,8 +8,6 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +19,6 @@ class UiController implements ContainerAwareInterface
 
     /**
      * Login action.
-     *
-     * @Route("/login")
-     * @Method({"GET"})
      */
     public function loginAction()
     {
@@ -32,9 +27,6 @@ class UiController implements ContainerAwareInterface
 
     /**
      * Install action.
-     *
-     * @Route("/install")
-     * @Method({"GET"})
      */
     public function installAction()
     {
@@ -43,9 +35,6 @@ class UiController implements ContainerAwareInterface
 
     /**
      * Packages action.
-     *
-     * @Route("/packages")
-     * @Method({"GET"})
      */
     public function packagesAction()
     {
@@ -54,9 +43,6 @@ class UiController implements ContainerAwareInterface
 
     /**
      * Search action.
-     *
-     * @Route("/search")
-     * @Method({"GET"})
      */
     public function searchAction()
     {

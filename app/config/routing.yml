@@ -1,6 +1,23 @@
-AppBundle:
-    resource: "@AppBundle/Controller"
-    type:     annotation
+login:
+    path:      /login
+    defaults:  { _controller: AppBundle:Ui:login }
+    methods:   [GET]
+
+install:
+    path:      /install
+    defaults:  { _controller: AppBundle:Ui:install }
+    methods:   [GET]
+
+packages:
+    path:      /packages
+    defaults:  { _controller: AppBundle:Ui:packages }
+    methods:   [GET]
+
+search:
+    path:      /search
+    defaults:  { _controller: AppBundle:Ui:search }
+    methods:   [GET]
+
 TensideCoreBundle:
     resource: "@TensideCoreBundle/Resources/config/routing.yml"
     prefix: /api

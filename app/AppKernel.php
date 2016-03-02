@@ -20,10 +20,11 @@
 
 use AppBundle\AppBundle;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
+use Nelmio\ApiDocBundle\NelmioApiDocBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
+use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Config\EnvParametersResource;
@@ -80,13 +81,12 @@ class AppKernel extends Kernel
             new TensideCoreBundle(),
             new FrameworkBundle(),
             new MonologBundle(),
-            new SensioFrameworkExtraBundle(),
             new AppBundle(),
         ];
 
         if ('phar' !== $this->getEnvironment()) {
-            $bundles[] = new \Symfony\Bundle\TwigBundle\TwigBundle();
-            $bundles[] = new Nelmio\ApiDocBundle\NelmioApiDocBundle();
+            $bundles[] = new TwigBundle();
+            $bundles[] = new NelmioApiDocBundle();
 
             // Load the annotation if it get's mentioned, Doctrine does not try to autoload it via plain PHP.
             AnnotationRegistry::registerLoader(
