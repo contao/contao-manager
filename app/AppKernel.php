@@ -20,6 +20,7 @@
 
 use AppBundle\AppBundle;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
@@ -79,6 +80,7 @@ class AppKernel extends Kernel
             new TensideCoreBundle(),
             new FrameworkBundle(),
             new MonologBundle(),
+            new SensioFrameworkExtraBundle(),
             new AppBundle(),
         ];
 

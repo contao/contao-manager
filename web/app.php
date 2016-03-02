@@ -37,7 +37,8 @@ if (ini_get('session.auto_start')) {
 // FIXME: change this.
 ini_set('display_errors', 1);
 
-require_once __DIR__.'/../vendor/autoload.php';
+$loader = require_once __DIR__.'/../vendor/autoload.php';
+Doctrine\Common\Annotations\AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 require_once __DIR__.'/../app/AppKernel.php';
 
 if (\Phar::running()) {

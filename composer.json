@@ -25,7 +25,8 @@
     "symfony/security-bundle": "~2.8",
     "symfony/http-kernel": "~2.8",
     "tenside/core": "~1.0",
-    "tenside/core-bundle": "~1.0"
+    "tenside/core-bundle": "~1.0",
+    "sensio/framework-extra-bundle": "^3.0"
   },
   "require-dev": {
     "phpcq/all-tasks": "~1.1",
