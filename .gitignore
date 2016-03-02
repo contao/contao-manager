@@ -23,6 +23,9 @@ app/cache
 # Components
 /components/
 
+# Tenside
+/tenside
+
 # Node
 /node_modules/
 
