@@ -1,0 +1,22 @@
+
+
+$font-default: LatoLatinWeb, Arial, sans-serif;
+$font-regular: LatoLatinWebRegular, Arial, sans-serif;
+$font-hairline: LatoLatinWebHairline, Arial, sans-serif;
+
+$text-color: #737373;
+$link-color: #bd2e20;
+$border-color: #cccccc;
+$footer-link: #2a7887;
+$contao-color: #ea7422;
+
+$green-button: #31a64b;
+$red-button: #db5041;
+$orange-button: #db8c41;
+
+
+@mixin screen($width) {
+    @media (min-width: #{$width}px) {
+        @content;
+    }
+}

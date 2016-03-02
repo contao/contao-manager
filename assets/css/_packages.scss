@@ -1,0 +1,279 @@
+@import "defaults";
+
+.search {
+    position: relative;
+    max-width: 540px;
+    margin: 0 auto 50px;
+
+    input[type=text] {
+        width: 100%;
+        height: 38px;
+        padding: 0 12px;
+        margin-bottom: 10px;
+        border: 1px solid $border-color;
+    }
+
+    button {
+        width: 100%;
+        height: 38px;
+        border: 1px solid $border-color;
+    }
+
+    @include screen(1024) {
+        button {
+            position: absolute;
+            top: 0;
+            left: -212px;
+            width: 200px;
+        }
+    }
+}
+
+.type {
+    margin-bottom: 30px;
+    padding: 15px 20px 14px 0;
+    font-size: 16px;
+    border-top: 1px solid #ccbfa2;
+    border-bottom: 1px solid #ccbfa2;
+
+    .close {
+        float: right;
+        color: $text-color;
+
+        svg {
+            width: 11px;
+            height: 11px;
+            margin-right: 2px;
+            fill: $text-color;
+        }
+    }
+
+    legend {
+        float: left;
+        font-weight: bold;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        display: inline-block;
+        margin-left: 30px;
+    }
+
+    input[type=radio]:checked + label {
+        color: #2a7887;
+    }
+}
+
+.sorting {
+    padding-right: 35px;
+    text-align: right;
+
+    li {
+        display: inline-block;
+    }
+
+    a {
+        display: block;
+        padding: 0 15px;
+        font-family: $font-regular;
+        color: $text-color;
+        line-height: 28px;
+
+        &.active,
+        &.asc,
+        &.desc {
+            background: #f0ede4;
+            border-bottom: 2px solid #2a7887;
+        }
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+.package {
+    margin-bottom: 14px;
+    background: #fff;
+    border-bottom: 3px solid #ddd3bc;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+
+    .inside {
+        overflow: hidden;
+        padding: 25px 20px;
+    }
+
+    .warning {
+        padding: 0 20px;
+        font: 12px/1.8 $font-regular;
+        text-align: center;
+        background: #e8c8bc;
+        border-radius: 2px 2px 0 0;
+
+        p {
+            display: inline-block;
+            padding: 8px 0;
+        }
+
+        > svg {
+            position: relative;
+            top: 6px;
+            width: 26px;
+            height: 23px;
+            margin-right: 5px;
+            fill: $link-color;
+        }
+
+        .close {
+            float: right;
+            padding: 8px 0;
+
+            svg {
+                width: 8px;
+                height: 8px;
+                margin-right: 2px;
+                fill: $link-color;
+            }
+        }
+    }
+
+    figure {
+        display: none;
+
+        @include screen(1024) {
+            display: block;
+            float: left;
+            width: 110px;
+            margin-right: 20px;
+        }
+    }
+
+    .about {
+        margin-bottom: 20px;
+
+        @include screen(1024) {
+            float: left;
+            width: 390px;
+        }
+
+        @include screen(1180) {
+            width: 610px;
+        }
+
+        .description {
+            margin-bottom: 1em;
+
+            @include screen(1024) {
+                min-height: 2.8em;
+            }
+        }
+    }
+
+    .release {
+        float: left;
+        width: 33%;
+
+        @include screen(1024) {
+            width: 160px;
+            margin-left: 40px;
+            margin-bottom: 25px;
+        }
+
+        input[type=text] {
+            float: left;
+            width: calc(100% - 32px);
+            max-width: 128px;
+            height: 30px;
+            margin-right: 2px;
+            background: $orange-button;
+            border: 0;
+            color: #fff;
+            -webkit-text-fill-color: #fff;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        button {
+            width: 30px;
+            height: 30px;
+            background: $orange-button;
+
+            svg {
+                fill: #fff;
+            }
+        }
+
+        time {
+            display: none;
+
+            @include screen(1200) {
+                display: block;
+                margin-top: 25px;
+                text-align: center;
+            }
+        }
+    }
+
+    .actions {
+        float: right;
+        width: 66%;
+        max-width: 500px;
+        padding-left: 40px;
+        text-align: right;
+
+        @include screen(1024) {
+            width: 160px;
+            margin-left: 40px;
+            padding-left: 0;
+        }
+
+        button {
+            display: inline-block;
+            width: 45%;
+            height: 40px;
+
+            @include screen(1024) {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            &.enable,
+            &.disable {
+                margin-right: 5%;
+
+                svg {
+                    position: relative;
+                    top: 1px;
+                    width: 14px;
+                    height: 15px;
+                    margin-right:3px;
+                    fill: #fff;
+                }
+            }
+
+            &.enable,
+            &.install {
+                background: $green-button;
+            }
+
+            &.uninstall {
+                background: $red-button;
+
+                svg {
+                    position: relative;
+                    top: 2px;
+                    width: 13px;
+                    height: 15px;
+                    margin-right:2px;
+                    fill: #fff;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,218 @@
+@import "fonts";
+@import "defaults";
+@import "layout";
+
+.table {
+    display: table;
+    width: 100%;
+    height: 100%;
+
+    .cell {
+        display: table-cell;
+        vertical-align: middle;
+    }
+}
+
+main {
+    position: relative;
+    max-width: 380px;
+    margin: 0 auto;
+    background: #fff;
+
+    &:after {
+        content: "";
+        display: table;
+        clear: both
+    }
+
+    @include screen(960) {
+        .wide & {
+            max-width: 940px;
+        }
+    }
+
+    &:before {
+        position: absolute;
+        display: block;
+        width:100px;
+        top: 40px;
+        bottom: 60px;
+        left: -100px;
+        content: "";
+        box-shadow: 15px 0 60px 25px #ebe6db inset, -5px 0 10px -4px rgba(0,0,0,.8) inset;
+    }
+
+    &:after {
+        position: absolute;
+        display: block;
+        width:100px;
+        top: 40px;
+        bottom: 60px;
+        right: -100px;
+        content: "";
+        box-shadow: -15px 0 60px 25px #ebe6db inset, 5px 0 10px -4px rgba(0,0,0,.8) inset;
+    }
+}
+
+header {
+    margin-bottom: 80px;
+    text-align: center;
+
+    .wide & {
+        padding: 80px 60px 0;
+
+        @include screen(960) {
+            float: left;
+            width: 50%;
+            padding-top: 60px;
+        }
+    }
+
+    img {
+        margin-top: 40px;
+    }
+
+    strong {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 40px;
+        font-style: italic;
+
+        span {
+            display: block;
+            font: 60px $font-hairline;
+            font-weight: normal;
+            font-style: normal;
+        }
+    }
+}
+
+section {
+    position: relative;
+    max-width: 250px;
+    margin: 0 auto;
+
+    @include screen(960) {
+        .wide & {
+            float: left;
+            width: 370px;
+            margin: 80px 60px 80px 40px;
+            max-width: none;
+
+            label {
+                float: left;
+                width: 120px;
+                padding-top: 15px;
+                font-family: $font-regular;
+            }
+
+            input {
+                width: 250px;
+            }
+
+            button {
+                float: right;
+                width: 250px;
+            }
+        }
+    }
+
+    .widget {
+        position: relative;
+    }
+
+    fieldset {
+        overflow: hidden;
+        margin-top: 2em;
+
+        legend {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        p {
+            margin: .5em 0 1em;
+        }
+    }
+
+    input {
+        width: 100%;
+        height: 38px;
+        margin: 5px 0 10px;
+        padding: 0 30px 0 12px;
+        border: 1px solid $border-color;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+    }
+
+    button {
+        width: 100%;
+        height: 40px;
+        margin-top: 20px;
+        background: #31a64b;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+    }
+
+    &.login {
+        p {
+            margin-bottom: 30px;
+        }
+
+        a {
+            display: block;
+            font-size: 12px;
+        }
+
+        label {
+            position: absolute;
+            right: 13px;
+            text-indent: -999em;
+
+            &[for=ctrl_username] {
+                top: 17px;
+                width: 12px;
+                height: 14px;
+                background: url("../images/user.svg") left top no-repeat;
+            }
+
+            &[for=ctrl_password] {
+                top: 18px;
+                width: 13px;
+                height: 11px;
+                background: url("../images/lock.svg") left top no-repeat;
+            }
+        }
+    }
+}
+
+footer {
+    clear: both;
+    width: 250px;
+    margin: 80px auto 0;
+    padding: 15px 0;
+    font-size: 12px;
+    border-top: 1px solid #eeeeee;
+
+    &:before {
+        content: "";
+        display: table;
+        clear: both
+    }
+
+    @include screen(1024) {
+        .wide & {
+            width: 840px;
+        }
+    }
+
+    a {
+        color: $footer-link;
+    }
+
+    .support {
+        float: right;
+    }
+}

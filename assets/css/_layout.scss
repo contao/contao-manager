@@ -1,0 +1,112 @@
+@import "defaults";
+
+html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+*, *:before, *:after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit
+}
+
+body, form, figure, blockquote, p {
+    margin: 0;
+    padding: 0
+}
+
+header, footer, main, nav, section, aside, article, figure, figcaption {
+    display: block
+}
+
+html, body, form, fieldset, p, div, h1, h2, h3, h4, h5, h6 {
+    -webkit-text-size-adjust: none;
+}
+
+body {
+    background: #ebe6db;
+}
+
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+img, svg, iframe {
+    display: block;
+    max-width: 100%;
+    border: 0;
+}
+
+img, svg {
+    height: auto;
+}
+*/
+
+
+body, input, textarea, button {
+    font: 14px/1.4 $font-default;
+    color: $text-color;
+}
+
+select, input, textarea {
+    font-size: 99%;
+
+
+/*    @include placeholder() {
+        color: $level4-text-color;
+        text-indent: 0;
+    }*/
+
+    &:disabled {
+        border: 0;
+        color: $text-color;
+        -webkit-text-fill-color: $text-color;
+        cursor: text;
+    }
+}
+
+.invisible {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: bold;
+    margin: 0;
+}
+
+a {
+    color: $link-color;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+button {
+    border: none;
+    background: $text-color;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 2px;
+}
+
+h1 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
