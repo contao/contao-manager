@@ -63,7 +63,7 @@ services:
     # Otherwise the kernel will not be boot able and therefore we will not be able to create the tenside.json.
     uri_signer:
         class: Tenside\CoreBundle\Util\UriSigner
-        arguments: [@tenside.config]
+        arguments: ["@tenside.config"]
     app.postdata_authenticator:
         class: AppBundle\Security\PostDataAuthenticator
-        arguments: [@security.password_encoder]
+        arguments: ["@security.password_encoder"]
