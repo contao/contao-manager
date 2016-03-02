@@ -1,0 +1,24 @@
+{
+  "name": "contao-package-manager",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/contao/package-manager.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "babel-preset-react": "^6.5.0",
+    "browserify": "^13.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-browserify": "^0.5.1",
+    "gulp-clean-css": "^2.0.3",
+    "gulp-cli": "^1.2.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-sass": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.3",
+    "gulp-watch": "^4.3.5",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7"
+  }
+}

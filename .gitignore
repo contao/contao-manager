@@ -17,9 +17,15 @@ vendor/
 # build
 /build
 build.properties
-/assets/
 tenside.phar
 app/cache
 
 # Components
 /components/
+
+# Node
+/node_modules/
+
+# Layout
+/web/scripts.js
+/web/styles.css

@@ -10,6 +10,11 @@
       "name": "Christian Schiffler",
       "email": "c.schiffler@cyberspectrum.de",
       "homepage": "https://www.cyberspectrum.de"
+    },
+    {
+      "name": "Yanick Witschi",
+      "email": "yanick.witschi@terminal42.ch",
+      "homepage": "https://www.terminal42.ch"
     }
   ],
   "require": {
