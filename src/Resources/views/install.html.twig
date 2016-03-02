@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Contao Manager</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="styles/login.css">
+</head>
+<body class="wide">
+
+<div class="table">
+    <div class="cell">
+        <main>
+            <header>
+                <img src="images/logo.svg" width="100" height="100" alt="Contao Logo">
+                <strong><span>Welcome</span> to Contao Manager v1.0</strong>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
+            </header>
+
+            <section>
+                <form action="#" method="post">
+                    <fieldset>
+                        <legend>User Account</legend>
+                        <p>Create a user account to manager your installation.</p>
+
+                        <div class="widget">
+                            <label for="ctrl_username">Username</label>
+                            <input type="text" id="ctrl_username">
+                        </div>
+
+                        <div class="widget">
+                            <label for="ctrl_password">Password</label>
+                            <input type="password" id="ctrl_password">
+                        </div>
+
+                        <div class="widget">
+                            <label for="ctrl_password_confirm">Retype Password</label>
+                            <input type="password" id="ctrl_password_confirm">
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Contao Installation</legend>
+                        <p>Enter a version to install or leave blank for the latest version.</p>
+
+                        <div class="widget">
+                            <label for="ctrl_version">Version</label>
+                            <input type="password" id="ctrl_version" placeholder="latest">
+                        </div>
+                    </fieldset>
+
+                    <button type="submit">Install</button>
+                </form>
+            </section>
+
+            <footer>
+                © 2016 <a href="http://association.contao.org/" target="_blank">Contao Association</a>
+                <a href="" class="support">Support</a>
+            </footer>
+        </main>
+    </div>
+</div>
+
+</body>
+</html>
