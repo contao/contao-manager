@@ -1,6 +1,17 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var Widget = React.createClass({
+    render: function() {
+        return (
+            <div className="widget">
+                <label htmlFor="ctrl_{this.props.name}">{this.props.label}</label>
+                <input type="{this.props.type}" id="ctrl_{this.props.name}" placeholder="{this.props.placeholder}" />
+            </div>
+        );
+    }
+});
+
 var InstallComponent = React.createClass({
     render: function() {
         return (
@@ -9,30 +20,18 @@ var InstallComponent = React.createClass({
                     <legend>User Account</legend>
                     <p>Create a user account to manage your installation.</p>
 
-                    <div className="widget">
-                        <label htmlFor="ctrl_username">Username</label>
-                        <input type="text" id="ctrl_username" />
-                    </div>
+                    <Widget type="text" name="username" label="Username"></Widget>
+                    <Widget type="password" name="password" label="Password"></Widget>
+                    <Widget type="password" name="password_confirm" label="Retype Password"></Widget>
 
-                    <div className="widget">
-                        <label htmlFor="ctrl_password">Password</label>
-                        <input type="password" id="ctrl_password" />
-                    </div>
-
-                    <div className="widget">
-                        <label htmlFor="ctrl_password_confirm">Retype Password</label>
-                        <input type="password" id="ctrl_password_confirm" />
-                    </div>
                 </fieldset>
 
                 <fieldset>
                     <legend>Contao Installation</legend>
                     <p>Enter a version to install or leave blank for the latest version.</p>
 
-                    <div className="widget">
-                        <label htmlFor="ctrl_version">Version</label>
-                        <input type="password" id="ctrl_version" placeholder="latest" />
-                    </div>
+                    <Widget type="text" name="version" label="Retype Password" placeholder="latest"></Widget>
+
                 </fieldset>
 
                 <button type="submit">Install</button>
