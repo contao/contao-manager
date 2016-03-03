@@ -1,60 +1,52 @@
-{%  extends 'AppBundle::base.html.twig' %}
+{%  extends 'AppBundle::frontend.html.twig' %}
 
-{% block body %}
-<body class="wide">
+{% block header %}
 
-<div class="table">
-    <div class="cell">
-        <main>
-            <header>
-                <img src="{{ path('asset', {'path': 'images/logo.svg'}) }}" width="100" height="100" alt="Contao Logo">
-                <strong><span>Welcome</span> to Contao Manager v1.0</strong>
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
-            </header>
+<header>
+    <img src="{{ path('asset', {'path': 'images/logo.svg'}) }}" width="100" height="100" alt="Contao Logo">
+    <strong><span>Welcome</span> to Contao Manager v1.0</strong>
+    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
+</header>
 
-            <section>
-                <form action="#" method="post">
-                    <fieldset>
-                        <legend>{% trans from "install" %}User Account{% endtrans %}</legend>
-                        <p>Create a user account to manager your installation.</p>
+{% endblock %}
 
-                        <div class="widget">
-                            <label for="ctrl_username">Username</label>
-                            <input type="text" id="ctrl_username">
-                        </div>
 
-                        <div class="widget">
-                            <label for="ctrl_password">Password</label>
-                            <input type="password" id="ctrl_password">
-                        </div>
+{% block frontend_body %}
 
-                        <div class="widget">
-                            <label for="ctrl_password_confirm">Retype Password</label>
-                            <input type="password" id="ctrl_password_confirm">
-                        </div>
-                    </fieldset>
+    <section>
+        <form action="#" method="post">
+            <fieldset>
+                <legend>{% trans from "install" %}User Account{% endtrans %}</legend>
+                <p>{% trans from "install" %}Create a user account to manage your installation.{% endtrans %}</p>
 
-                    <fieldset>
-                        <legend>Contao Installation</legend>
-                        <p>Enter a version to install or leave blank for the latest version.</p>
+                <div class="widget">
+                    <label for="ctrl_username">{% trans from "install" %}Username{% endtrans %}</label>
+                    <input type="text" id="ctrl_username">
+                </div>
 
-                        <div class="widget">
-                            <label for="ctrl_version">Version</label>
-                            <input type="password" id="ctrl_version" placeholder="latest">
-                        </div>
-                    </fieldset>
+                <div class="widget">
+                    <label for="ctrl_password">{% trans from "install" %}Password{% endtrans %}</label>
+                    <input type="password" id="ctrl_password">
+                </div>
 
-                    <button type="submit">Install</button>
-                </form>
-            </section>
+                <div class="widget">
+                    <label for="ctrl_password_confirm">{% trans from "install" %}Retype Password{% endtrans %}</label>
+                    <input type="password" id="ctrl_password_confirm">
+                </div>
+            </fieldset>
 
-            <footer>
-                © 2016 <a href="http://association.contao.org/" target="_blank">Contao Association</a>
-                <a href="" class="support">Support</a>
-            </footer>
-        </main>
-    </div>
-</div>
+            <fieldset>
+                <legend>{% trans from "install" %}Contao Installation{% endtrans %}</legend>
+                <p>{% trans from "install" %}Enter a version to install or leave blank for the latest version.{% endtrans %}</p>
 
-</body>
+                <div class="widget">
+                    <label for="ctrl_version">{% trans from "install" %}Version{% endtrans %}</label>
+                    <input type="password" id="ctrl_version" placeholder="{% trans from "install" %}latest{% endtrans %}">
+                </div>
+            </fieldset>
+
+            <button type="submit">{% trans from "install" %}Install{% endtrans %}</button>
+        </form>
+    </section>
+
 {% endblock %}
