@@ -71,8 +71,8 @@ class UiController extends Controller
     private function isProjectCreated()
     {
         try {
-            $res = $this->request('GET', '/install/get_state');
-            $json = new JsonArray($res->getBody()->getContents());
+            $res = $this->forward('TensideCoreBundle:InstallProject:getInstallationState');
+            $json = new JsonArray($res->getContent());
             if ('OK' === $json->get('status')
                 && true === $json->get('state/tenside_configured')
                 && true === $json->get('state/project_created')
@@ -84,29 +84,5 @@ class UiController extends Controller
         } catch (\Exception $e) {}
 
         return false;
-    }
-
-    /**
-     * @param       $method
-     * @param       $apiRelativeUri
-     * @param array $params
-     *
-     * @return mixed|\Psr\Http\Message\ResponseInterface
-     */
-    private function request($method, $apiRelativeUri, array $params = [])
-    {
-        /** @var Request $request */
-        $request = $this->container->get('request_stack')->getCurrentRequest();
-        $uri = $request->getSchemeAndHttpHost() . '/api/v1/' . ltrim($apiRelativeUri, '/');
-
-        $params = array_merge([
-            'headers' => [
-                'User-Agent' => 'tenside/ui',
-                'Accept'     => 'application/json',
-            ]
-        ], $params);
-
-        $client = new Client();
-        return $client->request($method, $uri, $params);
     }
 }

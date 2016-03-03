@@ -26,8 +26,7 @@
     "symfony/http-kernel": "~2.8",
     "symfony/twig-bundle": "~2.3|~3.0",
     "tenside/core": "~1.0",
-    "tenside/core-bundle": "~1.0",
-    "guzzlehttp/guzzle": "^6.1"
+    "tenside/core-bundle": "~1.0"
   },
   "require-dev": {
     "phpcq/all-tasks": "~1.1",
