@@ -57,3 +57,5 @@ gulp.task('watch', function() {
     gulp.watch(combinedStylesGlob, ['sass']);
 });
 
+// Build and watch task
+gulp.task('build:watch', ['scripts', 'sass', 'watch']);
