@@ -32,7 +32,7 @@ search:
         _locale: en|de
 
 asset:
-    path:     /assets/{path}
+    path:     /web-assets/{path}
     defaults: { _controller: AppBundle:Ui:asset }
     methods:  [GET]
     requirements:
