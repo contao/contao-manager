@@ -8,14 +8,28 @@
 
 namespace AppBundle\Controller;
 
+use GuzzleHttp\Client;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tenside\Core\Util\JsonArray;
 
 
-class UiController implements ContainerAwareInterface
+class UiController extends Controller
 {
-    use ContainerAwareTrait;
+    /**
+     * Index action
+     */
+    public function indexAction()
+    {
+        if (false === $this->isProjectCreated()) {
+            return $this->redirect(
+                $this->generateUrl('install')
+            );
+        }
+    }
 
     /**
      * Login action.
@@ -50,22 +64,49 @@ class UiController implements ContainerAwareInterface
     }
 
     /**
-     * Render a template with given parameters and response.
+     * Check if project was created
      *
-     * @param               $view
-     * @param array         $parameters
-     * @param Response|null $response
-     *
-     * @return Response
+     * @return bool
      */
-    private function render($view, array $parameters = [], Response $response = null)
+    private function isProjectCreated()
     {
-        if (null === $response) {
-            $response = new Response();
-        }
+        try {
+            $res = $this->request('GET', '/install/get_state');
+            $json = new JsonArray($res->getBody()->getContents());
+            if ('OK' === $json->get('status')
+                && true === $json->get('state/tenside_configured')
+                && true === $json->get('state/project_created')
+                && true === $json->get('state/project_installed')
+            ) {
 
-        $response->setContent($this->container->get('twig')->render($view, $parameters));
+                return true;
+            }
+        } catch (\Exception $e) {}
 
-        return $response;
+        return false;
+    }
+
+    /**
+     * @param       $method
+     * @param       $apiRelativeUri
+     * @param array $params
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     */
+    private function request($method, $apiRelativeUri, array $params = [])
+    {
+        /** @var Request $request */
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $uri = $request->getSchemeAndHttpHost() . '/api/v1/' . ltrim($apiRelativeUri, '/');
+
+        $params = array_merge([
+            'headers' => [
+                'User-Agent' => 'tenside/ui',
+                'Accept'     => 'application/json',
+            ]
+        ], $params);
+
+        $client = new Client();
+        return $client->request($method, $uri, $params);
     }
 }

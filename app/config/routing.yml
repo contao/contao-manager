@@ -1,3 +1,8 @@
+index:
+    path:      /
+    defaults:  { _controller: AppBundle:Ui:index }
+    methods:   [GET]
+
 login:
     path:      /login
     defaults:  { _controller: AppBundle:Ui:login }
