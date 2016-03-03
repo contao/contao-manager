@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "e94066967ce136c55e3c3a575e480fab34538c59"
+                "reference": "02ed27b16b184ecd6befed5bf8f6501084b42c0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/e94066967ce136c55e3c3a575e480fab34538c59",
-                "reference": "e94066967ce136c55e3c3a575e480fab34538c59",
+                "url": "https://api.github.com/repos/composer/composer/zipball/02ed27b16b184ecd6befed5bf8f6501084b42c0e",
+                "reference": "02ed27b16b184ecd6befed5bf8f6501084b42c0e",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-03-02 18:28:44"
+            "time": "2016-03-03 12:21:49"
         },
         {
             "name": "composer/semver",
@@ -2861,12 +2861,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "3b843c69444d17a684e1dc7307737ec5a4a10cdc"
+                "reference": "3247cfacfba664cd34e733d856f9ddac682241ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/3b843c69444d17a684e1dc7307737ec5a4a10cdc",
-                "reference": "3b843c69444d17a684e1dc7307737ec5a4a10cdc",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/3247cfacfba664cd34e733d856f9ddac682241ec",
+                "reference": "3247cfacfba664cd34e733d856f9ddac682241ec",
                 "shasum": ""
             },
             "require": {
@@ -2926,7 +2926,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-03-02 17:17:29"
+            "time": "2016-03-03 10:04:46"
         },
         {
             "name": "twig/twig",
