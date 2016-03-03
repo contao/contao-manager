@@ -23,6 +23,13 @@ search:
     defaults:  { _controller: AppBundle:Ui:search }
     methods:   [GET]
 
+asset:
+    path:     /assets/{path}
+    defaults: { _controller: AppBundle:Ui:asset }
+    methods:  [GET]
+    requirements:
+        path: .+
+
 TensideCoreBundle:
     resource: "@TensideCoreBundle/Resources/config/routing.yml"
     prefix: /api

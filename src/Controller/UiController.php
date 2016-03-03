@@ -8,12 +8,14 @@
 
 namespace AppBundle\Controller;
 
-use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Tenside\Core\Util\JsonArray;
 
 
@@ -61,6 +63,46 @@ class UiController extends Controller
     public function searchAction()
     {
         return $this->render('AppBundle::search.html.twig');
+    }
+
+    /**
+     * Asset action.
+     * Assets have to be served using PHP because of the PHAR compilation.
+     *
+     * @var string $path
+     */
+    public function assetAction($path)
+    {
+        $webDir = dirname($this->container->getParameter('kernel.root_dir')) . '/web';
+        $path = realpath($webDir . '/' . $path);
+
+        if (false === $path) {
+
+            throw new BadRequestHttpException('This asset does not exist!');
+        }
+
+        $file = new \SplFileInfo($path);
+
+        $response = new BinaryFileResponse($file);
+        $response->setAutoLastModified();
+        $response->setAutoEtag();
+
+        // Try to be explicit about our own assets
+        switch ($file->getExtension()) {
+            case 'css':
+                $response->headers->set('Content-Type', 'text/css');
+                break;
+            case 'js':
+                $response->headers->set('Content-Type', 'text/javascript');
+                break;
+            case 'svg':
+                $response->headers->set('Content-Type', 'image/svg+xml');
+                break;
+            default:
+                // Otherwise, let the Symfony file mime type guesser do the work
+        }
+
+        return $response;
     }
 
     /**
