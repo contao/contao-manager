@@ -52,7 +52,8 @@ gulp.task('default', ['scripts', 'sass']);
 
 // Watch task
 gulp.task('watch', function() {
-    gulp.watch(scriptsGlob, ['scripts']);
-    gulp.watch(stylesGlob, ['sass']);
+    gulp.watch(standaloneScriptsGlob, ['scripts']);
+    gulp.watch(combinedScriptsGlob, ['scripts']);
+    gulp.watch(combinedStylesGlob, ['sass']);
 });
 
