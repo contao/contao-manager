@@ -4,7 +4,7 @@ imports:
 framework:
     router:
         resource: "%kernel.root_dir%/config/routing_%kernel.environment%.yml"
-    translator: false
+    translator: { fallbacks: [en] }
     templating:
       engines: ['php', 'twig']
 
