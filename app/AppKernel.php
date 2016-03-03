@@ -82,10 +82,10 @@ class AppKernel extends Kernel
             new FrameworkBundle(),
             new MonologBundle(),
             new AppBundle(),
+            new TwigBundle()
         ];
 
         if ('phar' !== $this->getEnvironment()) {
-            $bundles[] = new TwigBundle();
             $bundles[] = new NelmioApiDocBundle();
 
             // Load the annotation if it get's mentioned, Doctrine does not try to autoload it via plain PHP.

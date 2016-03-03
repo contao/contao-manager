@@ -1,11 +1,6 @@
 imports:
     - { resource: config.yml }
 
-# We need this for generating the API docs.
-framework:
-  templating:
-    engines: ['php', 'twig']
-
 nelmio_api_doc:
   name: Contao Package Manager
   sandbox:

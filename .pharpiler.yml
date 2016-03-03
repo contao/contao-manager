@@ -16,6 +16,7 @@ tasks:
       - seld/phar-utils
     include_files: &default_include_files
       - "*.php"
+      - "*.twig"
       - "(LICENSE\\.?.*)"
       - "%package:contao/package-manager%/app/console"
     exclude_files: &default_exclude_files
