@@ -9,6 +9,14 @@
 
 {% block body %}
 
+<body{% block body_attributes %}{% endblock %}>
+{% block body_inner %}
+
+{% endblock %}
+
+{% block pre_body_end_scripts %}{% endblock %}
+
+</body>
 {% endblock %}
 
 

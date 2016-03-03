@@ -1,28 +1,27 @@
 {%  extends 'AppBundle::base.html.twig' %}
 
+{% block body_attributes %} class="wide"{% endblock %}
 
-{% block body %}
-<body class="wide">
-    <div class="table">
-        <div class="cell">
-            <main>
-                {% block header %}
+{% block body_inner %}
+<div class="table">
+    <div class="cell">
+        <main>
+            {% block header %}
 
-                {% endblock %}
+            {% endblock %}
 
-                {% block frontend_body %}
+            {% block frontend_body %}
 
-                {% endblock %}
+            {% endblock %}
 
-                {% block footer %}
-                    <footer>
-                        © 2016 <a href="http://association.contao.org/" target="_blank">Contao Association</a>
-                        <a href="https://github.com/contao/package-manager/issues" class="support">{% trans %}Support{% endtrans %}</a>
-                    </footer>
-                {% endblock %}
+            {% block footer %}
+                <footer>
+                    © 2016 <a href="http://association.contao.org/" target="_blank">Contao Association</a>
+                    <a href="https://github.com/contao/package-manager/issues" class="support">{% trans %}Support{% endtrans %}</a>
+                </footer>
+            {% endblock %}
 
-            </main>
-        </div>
+        </main>
     </div>
-</body>
+</div>
 {% endblock %}
