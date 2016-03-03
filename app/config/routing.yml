@@ -4,24 +4,32 @@ index:
     methods:   [GET]
 
 login:
-    path:      /login
-    defaults:  { _controller: AppBundle:Ui:login }
+    path:      /{_locale}/login
+    defaults:  { _locale: en, _controller: AppBundle:Ui:login }
     methods:   [GET]
+    requirements:
+        _locale: en|de
 
 install:
-    path:      /install
-    defaults:  { _controller: AppBundle:Ui:install }
+    path:      /{_locale}/install
+    defaults:  { _locale: en, _controller: AppBundle:Ui:install }
     methods:   [GET]
+    requirements:
+        _locale: en|de
 
 packages:
-    path:      /packages
-    defaults:  { _controller: AppBundle:Ui:packages }
+    path:      /{_locale}/packages
+    defaults:  { _locale: en, _controller: AppBundle:Ui:packages }
     methods:   [GET]
+    requirements:
+        _locale: en|de
 
 search:
-    path:      /search
-    defaults:  { _controller: AppBundle:Ui:search }
+    path:      /{_locale}/search
+    defaults:  { _locale: en, _controller: AppBundle:Ui:search }
     methods:   [GET]
+    requirements:
+        _locale: en|de
 
 asset:
     path:     /assets/{path}

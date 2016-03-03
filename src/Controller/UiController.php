@@ -23,12 +23,19 @@ class UiController extends Controller
 {
     /**
      * Index action
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
+        // Try to find the user language
+        $locale = $request->getPreferredLanguage(['de', 'en']);
+
         if (false === $this->isProjectCreated()) {
             return $this->redirect(
-                $this->generateUrl('install')
+                $this->generateUrl('install', ['_locale' => $locale])
             );
         }
     }
