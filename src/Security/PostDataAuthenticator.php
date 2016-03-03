@@ -68,7 +68,11 @@ class PostDataAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        $inputData = new JsonArray($request->getContent());
+        try {
+            $inputData = new JsonArray($request->getContent());
+        } catch (\Exception $e) {
+            return null;
+        }
 
         if (!($inputData->has('username') && $inputData->has('password'))) {
             // post data? Return null and no other methods will be called
