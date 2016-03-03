@@ -14,39 +14,11 @@
 {% block frontend_body %}
 
     <section>
-        <form action="#" method="post">
-            <fieldset>
-                <legend>{% trans from "install" %}User Account{% endtrans %}</legend>
-                <p>{% trans from "install" %}Create a user account to manage your installation.{% endtrans %}</p>
-
-                <div class="widget">
-                    <label for="ctrl_username">{% trans from "install" %}Username{% endtrans %}</label>
-                    <input type="text" id="ctrl_username">
-                </div>
-
-                <div class="widget">
-                    <label for="ctrl_password">{% trans from "install" %}Password{% endtrans %}</label>
-                    <input type="password" id="ctrl_password">
-                </div>
-
-                <div class="widget">
-                    <label for="ctrl_password_confirm">{% trans from "install" %}Retype Password{% endtrans %}</label>
-                    <input type="password" id="ctrl_password_confirm">
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>{% trans from "install" %}Contao Installation{% endtrans %}</legend>
-                <p>{% trans from "install" %}Enter a version to install or leave blank for the latest version.{% endtrans %}</p>
-
-                <div class="widget">
-                    <label for="ctrl_version">{% trans from "install" %}Version{% endtrans %}</label>
-                    <input type="password" id="ctrl_version" placeholder="{% trans from "install" %}latest{% endtrans %}">
-                </div>
-            </fieldset>
-
-            <button type="submit">{% trans from "install" %}Install{% endtrans %}</button>
-        </form>
+        <div id="install_component"></div>
     </section>
 
+{% endblock %}
+
+{% block pre_body_end_scripts %}
+<script type="application/javascript" src="{{ path('asset', {'path': 'js/install.js'}) }}"></script>
 {% endblock %}
