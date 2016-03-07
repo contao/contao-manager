@@ -13,7 +13,7 @@ var Widget = React.createClass({
         return (
             <div className={"widget" + (this.props.error ? " error" : "")}>
                 <label htmlFor={this.props.name}>{this.props.label}</label>
-                <input type={this.props.type} id={"ctrl_" + this.props.name} placeholder={this.props.placeholder} onChange={onChange} />
+                <input type={this.props.type} id={"ctrl_" + this.props.name} name={this.props.name} placeholder={this.props.placeholder} onChange={onChange} />
             </div>
         );
     }
