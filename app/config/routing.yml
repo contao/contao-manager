@@ -38,6 +38,11 @@ asset:
     requirements:
         path: .+
 
+translation:
+    path:     /translation/{locale}/{domain}
+    defaults: { _controller: AppBundle:Ui:translation }
+    methods:  [GET]
+
 TensideCoreBundle:
     resource: "@TensideCoreBundle/Resources/config/routing.yml"
     prefix: /api

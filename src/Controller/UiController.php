@@ -119,19 +119,24 @@ class UiController extends Controller
     /**
      * Translation action.
      *
-     * @param string $locale
-     * @param string $domain
+     * @param Request $request
+     * @param string  $locale
+     * @param string  $domain
      *
      * @return Response
      */
-    public function translationAction($locale, $domain)
+    public function translationAction(Request $request, $locale, $domain)
     {
         /** @var Translator $translator */
         $translator = $this->container->get('translator');
 
         try {
             $catalogue = $translator->getCatalogue($locale);
-            $response = JsonResponse::create($catalogue->all($domain));
+            $data = $catalogue->all($domain);
+            $cacheKey = md5(json_encode($data));
+            $response = JsonResponse::create($data);
+            $response->setEtag($cacheKey);
+            $response->isNotModified($request);
 
             return $response;
         } catch (\Exception $e) {

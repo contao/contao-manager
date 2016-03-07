@@ -36,7 +36,7 @@ var InstallComponent = React.createClass({
         return (
             <form action="#" method="post">
                 <fieldset>
-                    <legend>User Account</legend>
+                    <legend><Translation domain="install">User Account</Translation></legend>
                     <p>Create a user account to manage your installation.</p>
 
                     <Widget type="text" name="username" label="Username"></Widget>
