@@ -1,22 +1,8 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+'use strict';
 
-var Widget = React.createClass({
-    render: function() {
-
-        var onChange = null;
-        if (undefined !== this.props.onChange){
-            onChange = this.props.onChange.bind(null, this.props);
-        }
-
-        return (
-            <div className={"widget" + (this.props.error ? " error" : "")}>
-                <label htmlFor={this.props.name}>{this.props.label}</label>
-                <input type={this.props.type} id={"ctrl_" + this.props.name} placeholder={this.props.placeholder} onChange={onChange} />
-            </div>
-        );
-    }
-});
+const React         = require('react');
+const Translation   = require('./translation.js');
+const Widget        = require('./widget.js');
 
 var InstallComponent = React.createClass({
     password: '',
@@ -41,7 +27,12 @@ var InstallComponent = React.createClass({
         }
     },
 
+    handleInstall: function(e) {
+        e.preventDefault();
+    },
+
     render: function() {
+
         return (
             <form action="#" method="post">
                 <fieldset>
@@ -62,13 +53,12 @@ var InstallComponent = React.createClass({
 
                 </fieldset>
 
-                <button type="submit">Install</button>
+                <button type="submit" onClick={this.handleInstall}>Install</button>
             </form>
         );
     }
 });
 
-ReactDOM.render(
-<InstallComponent />,
-    document.getElementById('install_component')
-);
+module.exports = InstallComponent;
+
+

@@ -13,9 +13,12 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\TranslatorInterface;
 use Tenside\Core\Util\JsonArray;
 
 
@@ -110,6 +113,30 @@ class UiController extends Controller
         }
 
         return $response;
+    }
+
+
+    /**
+     * Translation action.
+     *
+     * @param string $locale
+     * @param string $domain
+     *
+     * @return Response
+     */
+    public function translationAction($locale, $domain)
+    {
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+        try {
+            $catalogue = $translator->getCatalogue($locale);
+            $response = JsonResponse::create($catalogue->all($domain));
+
+            return $response;
+        } catch (\Exception $e) {
+            throw new BadRequestHttpException('Could not load translation');
+        }
     }
 
     /**

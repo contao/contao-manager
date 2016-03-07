@@ -24,7 +24,7 @@ order everytime you change something, we use Gulp to define tasks. A simple
 `$ ./node_modules/.bin/gulp`
 
 will execute the `default` task defined in the `gulpfile.js` and thus build
-the `web/scripts.js` and `web/styles.css` from the source files.
+the bundled Javascript and CSS files.
 
 If you want to change something on the source files and have Gulp rebuild
 all the files everytime you save your changes, simply use
@@ -32,3 +32,9 @@ all the files everytime you save your changes, simply use
 `$ ./node_modules/.bin/gulp watch`
 
 which will keep watching all source files until you end the process.
+
+Note: For production you should use
+
+`$ ./node_modules/.bin/gulp --production`
+
+because that will enable minifying (uglyfying) JS as well as CSS files.

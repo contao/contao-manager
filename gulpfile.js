@@ -1,49 +1,46 @@
+'use strict';
+
+const browserify    = require('browserify');
 const gulp          = require('gulp');
-const babel         = require('gulp-babel');
-const concat        = require('gulp-concat');
-const browserify    = require('gulp-browserify');
-const watch         = require('gulp-watch');
-const sass          = require('gulp-sass');
-const sourcemaps    = require('gulp-sourcemaps');
-const cleanCSS      = require('gulp-clean-css');
+const source        = require('vinyl-source-stream');
+const buffer        = require('vinyl-buffer');
+const gutil         = require('gulp-util');
 const uglify        = require('gulp-uglify');
+const sourcemaps    = require('gulp-sourcemaps');
+const rename        = require('gulp-rename');
+const sass          = require('gulp-sass');
+const cleanCSS      = require('gulp-clean-css');
+const concat        = require('gulp-concat');
 
-var combinedScriptsGlob     = 'assets/js/*.js';
-var standaloneScriptsGlob   = 'assets/js/components/*.js';
-var combinedStylesGlob      = 'assets/css/*.scss';
+var production      = !!gutil.env.production;
 
-
-// Build javascripts task
-gulp.task('scripts', function() {
-
-    // Combined
-    gulp.src(combinedScriptsGlob)
-        .pipe(babel({
-            presets: ['react']
-        }))
-        .pipe(browserify())
-        .pipe(concat('global.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('web/js'));
-
-    // Standalone
-    gulp.src(standaloneScriptsGlob)
-        .pipe(babel({
-            presets: ['react']
-        }))
-        .pipe(browserify())
-        .pipe(uglify())
-        .pipe(gulp.dest('web/js'));
+// Build bundle.js
+gulp.task('scripts', function () {
+    return browserify({
+            entries: './assets/js/app.js',
+            debug: true
+        })
+        .transform('babelify', {presets: ['react']})
+        .bundle()
+        .pipe(source('./assets/js/app.js'))
+        .pipe(buffer())
+        .pipe(production ? sourcemaps.init({loadMaps: true}) : gutil.noop())
+        .pipe(production ? uglify() : gutil.noop())
+        .pipe(rename('bundle.js'))
+            .on('error', gutil.log)
+        .pipe(production ? sourcemaps.write() : gutil.noop())
+        .pipe(gulp.dest('./web/js'));
 });
 
-// Build SASS task
+
+// Build bundle.css task
 gulp.task('sass', function () {
-    return gulp.src(combinedStylesGlob)
-        .pipe(sourcemaps.init())
+    return gulp.src('assets/css/*.scss')
+        .pipe(production ? sourcemaps.init() : gutil.noop())
         .pipe(sass())
-        .pipe(sourcemaps.write())
-        .pipe(concat('global.css'))
-        .pipe(cleanCSS())
+        .pipe(production ? sourcemaps.write() : gutil.noop())
+        .pipe(concat('bundle.css'))
+        .pipe(production ? cleanCSS() : gutil.noop())
         .pipe(gulp.dest('web/css'));
 });
 
@@ -52,9 +49,8 @@ gulp.task('default', ['scripts', 'sass']);
 
 // Watch task
 gulp.task('watch', function() {
-    gulp.watch(standaloneScriptsGlob, ['scripts']);
-    gulp.watch(combinedScriptsGlob, ['scripts']);
-    gulp.watch(combinedStylesGlob, ['sass']);
+    gulp.watch(['./assets/js/app.js', './assets/js/**/*.js'], ['scripts']);
+    gulp.watch('assets/css/*.scss', ['sass']);
 });
 
 // Build and watch task
