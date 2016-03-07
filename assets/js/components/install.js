@@ -1,15 +1,19 @@
 'use strict';
 
 const React         = require('react');
+const jQuery        = require('jQuery');
 const Translation   = require('./translation.js');
 const Widget        = require('./widget.js');
+const eventhandler  = require('./eventhandler.js');
+
 
 var InstallComponent = React.createClass({
     password: '',
     passwordConfirm: '',
     getInitialState: function() {
         return {
-            passwordsMatch: true
+            passwordsMatch: true,
+            installing: false
         };
     },
 
@@ -29,12 +33,61 @@ var InstallComponent = React.createClass({
 
     handleInstall: function(e) {
         e.preventDefault();
+        var form = jQuery('#install-form');
+        var configurePayload = {
+            credentials: {
+                username: form.find('input[name="username"]').first().val(),
+                password: form.find('input[name="password"]').first().val()
+            }
+        };
+        var createProjectPayload = {
+            project: {
+                name:    'contao/contao'
+            }
+        };
+
+        var versionField = form.find('input[name="version"]').first();
+
+        if (versionField.val() != versionField.attr('placeholder')) {
+            createProjectPayload.version = versionField.val();
+        }
+
+        eventhandler.emit('displayTaskPopup', {
+            'h1': 'hi'
+        });
+
+        this.setState({installing: true});
+
+        jQuery.ajax('/api/v1/install/configure', {
+            method: 'POST',
+            data: JSON.stringify(configurePayload),
+            dataType: 'json'
+        }).complete(function(response) {
+            if ('OK' !== response.status) {
+                // @todo: what if configure failed?
+            }
+
+            jQuery.ajax('/api/v1/install/create-project', {
+                method: 'POST',
+                data: JSON.stringify(createProjectPayload),
+                dataType: 'json'
+            }).complete(function(response) {
+                if ('OK' !== response.status) {
+                    // @todo: what if create-project failed?
+                }
+            }).fail(function() {
+                // @todo: what if create-project failed?
+            });
+
+        }).fail(function() {
+            // @todo: what if configure failed?
+        });
     },
 
     render: function() {
 
         return (
-            <form action="#" method="post">
+            <form id="install-form" action="#" method="post">
                 <fieldset>
                     <legend><Translation domain="install">User Account</Translation></legend>
                     <p>Create a user account to manage your installation.</p>
@@ -53,7 +106,7 @@ var InstallComponent = React.createClass({
 
                 </fieldset>
 
-                <button type="submit" onClick={this.handleInstall}>Install</button>
+                <button disabled={this.state.installing} type="submit" onClick={this.handleInstall}>Install</button>
             </form>
         );
     }
