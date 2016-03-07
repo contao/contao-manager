@@ -10,16 +10,18 @@
 {% block body %}
 
 <body{% block body_attributes %}{% endblock %}>
+
 {% block body_inner %}
 
 {% endblock %}
 
+<div id="taskpopup_component"></div>
+
 {% block pre_body_end_scripts %}
     <script type="application/javascript" src="{{ path('asset', {'path': 'js/bundle.js'}) }}"></script>
 {% endblock %}
-
 </body>
 {% endblock %}
 
 
-</htm
+</html>
