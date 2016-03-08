@@ -36,43 +36,12 @@ class UiController extends Controller
         // Try to find the user language
         $locale = $request->getPreferredLanguage(['de', 'en']);
 
-        if (false === $this->isProjectCreated()) {
-            return $this->redirect(
-                $this->generateUrl('install', ['_locale' => $locale])
-            );
-        }
-    }
+        return $this->render('AppBundle::index.html.php', [
+            'lang'  => $locale,
+            'css'   => $this->generateUrl('asset', ['path' => 'css/bundle.css']),
+            'js'    => $this->generateUrl('asset', ['path' => 'js/bundle.js']),
 
-    /**
-     * Login action.
-     */
-    public function loginAction()
-    {
-        return $this->render('AppBundle::login.html.twig');
-    }
-
-    /**
-     * Install action.
-     */
-    public function installAction()
-    {
-        return $this->render('AppBundle::install.html.twig');
-    }
-
-    /**
-     * Packages action.
-     */
-    public function packagesAction()
-    {
-        return $this->render('AppBundle::packages.html.twig');
-    }
-
-    /**
-     * Search action.
-     */
-    public function searchAction()
-    {
-        return $this->render('AppBundle::search.html.twig');
+        ]);
     }
 
     /**
@@ -142,28 +111,5 @@ class UiController extends Controller
         } catch (\Exception $e) {
             throw new BadRequestHttpException('Could not load translation');
         }
-    }
-
-    /**
-     * Check if project was created
-     *
-     * @return bool
-     */
-    private function isProjectCreated()
-    {
-        try {
-            $res = $this->forward('TensideCoreBundle:InstallProject:getInstallationState');
-            $json = new JsonArray($res->getContent());
-            if ('OK' === $json->get('status')
-                && true === $json->get('state/tenside_configured')
-                && true === $json->get('state/project_created')
-                && true === $json->get('state/project_installed')
-            ) {
-
-                return true;
-            }
-        } catch (\Exception $e) {}
-
-        return false;
     }
 }

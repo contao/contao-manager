@@ -3,8 +3,16 @@
 const crossroads   = require('crossroads');
 const React        = require('react'); // has to be present here because JSX is transformed to React.createElement()
 const ReactDOM     = require('react-dom');
+const App          = require('./components/app.js');
 const TaskPopup    = require('./components/taskpopup.js');
 const Install      = require('./components/install.js');
+
+
+ReactDOM.render(
+    <App />,
+    document.getElementById('app')
+);
+
 
 // Install
 crossroads.addRoute('/{locale}/install', function() {

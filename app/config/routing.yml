@@ -3,34 +3,6 @@ index:
     defaults:  { _controller: AppBundle:Ui:index }
     methods:   [GET]
 
-login:
-    path:      /{_locale}/login
-    defaults:  { _locale: en, _controller: AppBundle:Ui:login }
-    methods:   [GET]
-    requirements:
-        _locale: en|de
-
-install:
-    path:      /{_locale}/install
-    defaults:  { _locale: en, _controller: AppBundle:Ui:install }
-    methods:   [GET]
-    requirements:
-        _locale: en|de
-
-packages:
-    path:      /{_locale}/packages
-    defaults:  { _locale: en, _controller: AppBundle:Ui:packages }
-    methods:   [GET]
-    requirements:
-        _locale: en|de
-
-search:
-    path:      /{_locale}/search
-    defaults:  { _locale: en, _controller: AppBundle:Ui:search }
-    methods:   [GET]
-    requirements:
-        _locale: en|de
-
 asset:
     path:     /web-assets/{path}
     defaults: { _controller: AppBundle:Ui:asset }

@@ -24,7 +24,6 @@ use Nelmio\ApiDocBundle\NelmioApiDocBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
-use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Config\EnvParametersResource;
@@ -81,8 +80,7 @@ class AppKernel extends Kernel
             new TensideCoreBundle(),
             new FrameworkBundle(),
             new MonologBundle(),
-            new AppBundle(),
-            new TwigBundle()
+            new AppBundle()
         ];
 
         if ('phar' !== $this->getEnvironment()) {
