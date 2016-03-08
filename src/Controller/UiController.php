@@ -36,6 +36,18 @@ class UiController extends Controller
         // Try to find the user language
         $locale = $request->getPreferredLanguage(['de', 'en']);
 
+        return $this->redirect($this->generateUrl('app', ['locale' => $locale]));
+    }
+
+    /**
+     * App action
+     *
+     * @param $locale
+     *
+     * @return Response
+     */
+    public function appAction($locale)
+    {
         return $this->render('AppBundle::index.html.php', [
             'lang'  => $locale,
             'css'   => $this->generateUrl('asset', ['path' => 'css/bundle.css']),

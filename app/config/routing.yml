@@ -1,7 +1,14 @@
 index:
     path:      /
     defaults:  { _controller: AppBundle:Ui:index }
+    methods:  [GET]
+
+app:
+    path:      /{locale}/{app_path}
+    defaults:  { _controller: AppBundle:Ui:app, app_path: '' }
     methods:   [GET]
+    requirements:
+        locale: en|de
 
 asset:
     path:     /web-assets/{path}
@@ -18,3 +25,15 @@ translation:
 TensideCoreBundle:
     resource: "@TensideCoreBundle/Resources/config/routing.yml"
     prefix: /api
+
+
+# Fallback to UI index if no route matches
+catch_all:
+    path:     /{catchall}
+    methods:  [GET]
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: 'index'
+        ignoreAttributes: true
+    requirements:
+        catchall: .+
