@@ -40,6 +40,19 @@
         float: right;
         color: $text-color;
 
+        i {
+            position: relative;
+            top: -1px;
+            right: -6px;
+            margin: 0;
+            color: $text-color;
+            -webkit-transform: rotate(45deg) scale(0.75);
+            -moz-transform: rotate(45deg) scale(0.75);
+            -ms-transform: rotate(45deg) scale(0.75);
+            -o-transform: rotate(45deg) scale(0.75);
+            transform: rotate(45deg) scale(0.75);
+        }
+
         svg {
             width: 11px;
             height: 11px;
@@ -202,6 +215,7 @@
         button {
             width: 30px;
             height: 30px;
+            padding: 6px;
             background: $orange-button;
 
             svg {

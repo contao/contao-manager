@@ -1,4 +1,5 @@
 /* Webfont: LatoLatin-Bold */
+@import url(icono.css);
 @font-face {
   font-family: 'LatoLatinWeb';
   src: url("../fonts/LatoLatin-Bold.eot");

@@ -76,14 +76,12 @@ var TaskPopupComponent = React.createClass({
                 <button>Cancel</button>
 
                 <a onClick={this.hideConsole} className="hide">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 128">
-                        <path d="M219.3 123.2c6.2-6.2 6.2-16.4 0-22.6l-96-96c-6.2-6.2-16.4-6.2-22.6 0l-96 96c-3.1 3.1-4.7 7.2-4.7 11.3 0 4.1 1.6 8.2 4.7 11.3 6.2 6.2 16.4 6.2 22.6 0L112 38.5l84.7 84.7a15.7 15.7 0 0 0 22.6 0z"></path>
-                    </svg> <Translation domain="taskpopup">Hide Console Output</Translation>
+                    <i className="icono-caretRight"></i>
+                    <Translation domain="taskpopup">Hide Console Output</Translation>
                 </a>
-                <a  onClick={this.showConsole} className="show">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 128">
-                        <path d="M4.7 4.7c-6.2 6.2-6.2 16.4 0 22.6l96 96c6.2 6.2 16.4 6.2 22.6 0l96-96c3.1-3.1 4.7-7.2 4.7-11.3s-1.6-8.2-4.7-11.3c-6.2-6.2-16.4-6.2-22.6 0L112 89.4 27.2 4.7c-6.1-6.3-16.4-6.3-22.5 0z"></path>
-                    </svg> <Translation domain="taskpopup">Show Console Output</Translation>
+                <a onClick={this.showConsole} className="show">
+                    <i className="icono-caretRight"></i>
+                    <Translation domain="taskpopup">Show Console Output</Translation>
                 </a>
                 <code>{this.state.content.consoleOutput}</code>
             </div>

@@ -1,4 +1,5 @@
 /* Webfont: LatoLatin-Bold */
+@import url(icono.css);
 @font-face {
   font-family: 'LatoLatinWeb';
   src: url("../fonts/LatoLatin-Bold.eot");
@@ -303,6 +304,17 @@ main, footer {
   .type .close {
     float: right;
     color: #737373; }
+    .type .close i {
+      position: relative;
+      top: -1px;
+      right: -6px;
+      margin: 0;
+      color: #737373;
+      -webkit-transform: rotate(45deg) scale(0.75);
+      -moz-transform: rotate(45deg) scale(0.75);
+      -ms-transform: rotate(45deg) scale(0.75);
+      -o-transform: rotate(45deg) scale(0.75);
+      transform: rotate(45deg) scale(0.75); }
     .type .close svg {
       width: 11px;
       height: 11px;
@@ -416,6 +428,7 @@ main, footer {
     .package .release button {
       width: 30px;
       height: 30px;
+      padding: 6px;
       background: #db8c41; }
       .package .release button svg {
         fill: #fff; }
@@ -483,7 +496,7 @@ main, footer {
   -moz-border-radius: 2px;
   border-radius: 2px;
   z-index: 10; }
-  #task-popup.console {
+  #task-popup.console, #task-popup.status-error {
     height: 630px;
     margin-top: -325px; }
   #task-popup h1 {
@@ -507,22 +520,34 @@ main, footer {
     display: block;
     text-align: left;
     margin: 0 70px; }
-    #task-popup a svg {
+    #task-popup a i {
       position: relative;
       top: -1px;
-      width: 10px;
-      height: 5px;
       margin-right: 2px;
-      fill: #bd2e20; }
+      margin-left: 0;
+      color: #bd2e20;
+      -webkit-transform: rotate(90deg) scale(0.5);
+      -moz-transform: rotate(90deg) scale(0.5);
+      -ms-transform: rotate(90deg) scale(0.5);
+      -o-transform: rotate(90deg) scale(0.5);
+      transform: rotate(90deg) scale(0.5); }
     #task-popup a.hide {
       display: none; }
+      #task-popup a.hide i {
+        -webkit-transform: rotate(-90deg) scale(0.5);
+        -moz-transform: rotate(-90deg) scale(0.5);
+        -ms-transform: rotate(-90deg) scale(0.5);
+        -o-transform: rotate(-90deg) scale(0.5);
+        transform: rotate(-90deg) scale(0.5); }
   #task-popup.console a {
     display: none; }
     #task-popup.console a.hide {
       display: block; }
+  #task-popup.status-error a {
+    visibility: hidden; }
   #task-popup code {
     display: none; }
-  #task-popup.console code {
+  #task-popup.console code, #task-popup.status-error code {
     display: block;
     overflow: scroll;
     height: 300px;
@@ -533,31 +558,44 @@ main, footer {
     color: #00ff00;
     white-space: pre;
     text-align: left; }
-  #task-popup .loading {
-    overflow: hidden;
-    margin: 45px auto 20px;
-    width: 85px;
-    text-align: center; }
-    #task-popup .loading > div {
-      float: left;
-      width: 16px;
-      height: 16px;
-      margin-right: 1px;
-      background-color: #31a64b;
-      -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-      animation: sk-bouncedelay 1.4s infinite ease-in-out both; }
-    #task-popup .loading .bounce1 {
-      -webkit-animation-delay: -0.64s;
-      animation-delay: -0.64s; }
-    #task-popup .loading .bounce2 {
-      -webkit-animation-delay: -0.48s;
-      animation-delay: -0.48s; }
-    #task-popup .loading .bounce3 {
-      -webkit-animation-delay: -0.32s;
-      animation-delay: -0.32s; }
-    #task-popup .loading .bounce4 {
-      -webkit-animation-delay: -0.16s;
-      animation-delay: -0.16s; }
+  #task-popup .status {
+    display: none; }
+    #task-popup .status.success, #task-popup .status.error {
+      margin: 27px auto 20px;
+      -webkit-transform: scale(1.5);
+      -moz-transform: scale(1.5);
+      -ms-transform: scale(1.5);
+      -o-transform: scale(1.5);
+      transform: scale(1.5); }
+    #task-popup .status.success i {
+      color: #31a64b; }
+    #task-popup .status.error i {
+      color: #db5041; }
+    #task-popup .status.loading {
+      overflow: hidden;
+      width: 85px;
+      margin: 45px auto 20px;
+      text-align: center; }
+      #task-popup .status.loading > div {
+        float: left;
+        width: 16px;
+        height: 16px;
+        margin-right: 1px;
+        background-color: #31a64b;
+        -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        animation: sk-bouncedelay 1.4s infinite ease-in-out both; }
+      #task-popup .status.loading .bounce1 {
+        -webkit-animation-delay: -0.64s;
+        animation-delay: -0.64s; }
+      #task-popup .status.loading .bounce2 {
+        -webkit-animation-delay: -0.48s;
+        animation-delay: -0.48s; }
+      #task-popup .status.loading .bounce3 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s; }
+      #task-popup .status.loading .bounce4 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s; }
 @-webkit-keyframes sk-bouncedelay {
   0%, 90%, 100% {
     opacity: 0; }
@@ -568,6 +606,15 @@ main, footer {
     opacity: 0; }
   20% {
     opacity: 1; } }
+  #task-popup.status-success .success {
+    display: block; }
+  #task-popup.status-error h1 {
+    background-color: #db5041; }
+  #task-popup.status-error .error {
+    display: block; }
+  #task-popup.status-loading .loading {
+    display: block; }
+
 .blur-in {
   position: absolute;
   height: 100%;

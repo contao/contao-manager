@@ -18,7 +18,8 @@
     border-radius: 2px;
     z-index: 10;
 
-    &.console {
+    &.console,
+    &.status-error {
         height:630px;
         margin-top:-325px;
     }
@@ -51,17 +52,29 @@
         text-align: left;
         margin: 0 70px;
 
-        svg {
+        i {
             position: relative;
             top: -1px;
-            width: 10px;
-            height: 5px;
             margin-right: 2px;
-            fill: $link-color;
+            margin-left: 0;
+            color: $link-color;
+            -webkit-transform: rotate(90deg) scale(0.5);
+            -moz-transform: rotate(90deg) scale(0.5);
+            -ms-transform: rotate(90deg) scale(0.5);
+            -o-transform: rotate(90deg) scale(0.5);
+            transform: rotate(90deg) scale(0.5);
         }
 
         &.hide {
             display: none;
+
+            i {
+                -webkit-transform: rotate(-90deg) scale(0.5);
+                -moz-transform: rotate(-90deg) scale(0.5);
+                -ms-transform: rotate(-90deg) scale(0.5);
+                -o-transform: rotate(-90deg) scale(0.5);
+                transform: rotate(-90deg) scale(0.5);
+            }
         }
     }
 
@@ -73,11 +86,16 @@
         }
     }
 
+    &.status-error a {
+        visibility: hidden;
+    }
+
     code {
         display: none;
     }
 
-    &.console code {
+    &.console code,
+    &.status-error code {
         display: block;
         overflow: scroll;
         height: 300px;
@@ -90,51 +108,91 @@
         text-align: left;
     }
 
-    .loading {
-        overflow: hidden;
-        margin: 45px auto 20px;
-        width: 85px;
-        text-align: center;
+    .status {
+        display: none;
 
-        > div {
-            float: left;
-            width: 16px;
-            height: 16px;
-            margin-right: 1px;
-            background-color: $green-button;
-            -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-            animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        &.success,
+        &.error {
+            margin: 27px auto 20px;
+            -webkit-transform: scale(1.5);
+            -moz-transform: scale(1.5);
+            -ms-transform: scale(1.5);
+            -o-transform: scale(1.5);
+            transform: scale(1.5);
         }
 
-        .bounce1 {
-            -webkit-animation-delay: -0.64s;
-            animation-delay: -0.64s;
+        &.success i {
+            color: $green-button;
         }
 
-        .bounce2 {
-            -webkit-animation-delay: -0.48s;
-            animation-delay: -0.48s;
+        &.error i {
+            color: $red-button;
         }
 
-        .bounce3 {
-            -webkit-animation-delay: -0.32s;
-            animation-delay: -0.32s;
+        &.loading {
+            overflow: hidden;
+            width: 85px;
+            margin: 45px auto 20px;
+            text-align: center;
+
+            > div {
+                float: left;
+                width: 16px;
+                height: 16px;
+                margin-right: 1px;
+                background-color: $green-button;
+                -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+                animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+            }
+
+            .bounce1 {
+                -webkit-animation-delay: -0.64s;
+                animation-delay: -0.64s;
+            }
+
+            .bounce2 {
+                -webkit-animation-delay: -0.48s;
+                animation-delay: -0.48s;
+            }
+
+            .bounce3 {
+                -webkit-animation-delay: -0.32s;
+                animation-delay: -0.32s;
+            }
+
+            .bounce4 {
+                -webkit-animation-delay: -0.16s;
+                animation-delay: -0.16s;
+            }
+
+            @-webkit-keyframes sk-bouncedelay {
+                0%, 90%, 100% { opacity: 0 }
+                20% { opacity: 1 }
+            }
+
+            @keyframes sk-bouncedelay {
+                0%, 90%, 100% { opacity: 0; }
+                20% { opacity: 1; }
+            }
+        }
+    }
+
+    &.status-success .success {
+        display: block;
+    }
+
+    &.status-error {
+        h1 {
+            background-color: $red-button;
         }
 
-        .bounce4 {
-            -webkit-animation-delay: -0.16s;
-            animation-delay: -0.16s;
+        .error {
+            display: block;
         }
+    }
 
-        @-webkit-keyframes sk-bouncedelay {
-            0%, 90%, 100% { opacity: 0 }
-            20% { opacity: 1 }
-        }
-
-        @keyframes sk-bouncedelay {
-            0%, 90%, 100% { opacity: 0; }
-            20% { opacity: 1; }
-        }
+    &.status-loading .loading {
+        display: block;
     }
 }
 
