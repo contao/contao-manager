@@ -21,7 +21,7 @@ var AppComponent = React.createClass({
                     <main>
                         <header>
                             <img src="/web-assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
-                                <strong><span>Welcome</span> to Contao Manager v1.0</strong>
+                                <p className="welcome"><strong>Welcome</strong> to Contao Manager v1.0</p>
                                 <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
                         </header>
 

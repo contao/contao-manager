@@ -72,13 +72,13 @@ header {
         margin-top: 40px;
     }
 
-    strong {
-        display: block;
+    .welcome {
         margin-top: 15px;
         margin-bottom: 40px;
+        font-weight: bold;
         font-style: italic;
 
-        span {
+        strong {
             display: block;
             font: 60px $font-hairline;
             font-weight: normal;
