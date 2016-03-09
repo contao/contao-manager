@@ -6,7 +6,7 @@ framework:
         resource: "%kernel.root_dir%/config/routing_%kernel.environment%.yml"
     translator: { fallbacks: [en] }
     templating:
-      engines: ['php']
+      engines: ['php', 'twig']
 
 security:
     access_control:
