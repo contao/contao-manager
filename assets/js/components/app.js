@@ -4,6 +4,7 @@ const React         = require('react');
 const jQuery        = require('jQuery');
 const Install       = require('./install.js');
 const eventhandler  = require('./eventhandler');
+const TaskPopup     = require('./taskpopup.js');
 
 var AppComponent = React.createClass({
 
@@ -35,6 +36,7 @@ var AppComponent = React.createClass({
                         </footer>
                     </main>
                 </div>
+                <TaskPopup />
             </div>
         )
     }
