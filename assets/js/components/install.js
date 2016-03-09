@@ -12,7 +12,7 @@ var InstallComponent = React.createClass({
     passwordConfirm: '',
     getInitialState: function() {
         return {
-            passwordsMatch: true,
+            passwordsErrorMessage: '',
             installing: false
         };
     },
@@ -25,9 +25,9 @@ var InstallComponent = React.createClass({
         }
 
         if (this.password === this.passwordConfirm) {
-            this.setState({passwordsMatch: true});
+            this.setState({passwordsErrorMessage: ''});
         } else {
-            this.setState({passwordsMatch: false});
+            this.setState({passwordsErrorMessage: <Translation domain="install">Passwords do not match!</Translation>});
         }
     },
 
@@ -93,8 +93,8 @@ var InstallComponent = React.createClass({
                     <p>Create a user account to manage your installation.</p>
 
                     <Widget type="text" name="username" label="Username"></Widget>
-                    <Widget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={!this.state.passwordsMatch}></Widget>
-                    <Widget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={!this.state.passwordsMatch}></Widget>
+                    <Widget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage}></Widget>
+                    <Widget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage}></Widget>
 
                 </fieldset>
 
