@@ -13,8 +13,9 @@ var TaskPopupComponent = React.createClass({
         return {
             show: false,
             showConsole: false,
+            status: 'loading',
             content: {
-                h1: '',
+                taskTitle: '',
                 h2: '',
                 shortExplanation: '',
                 consoleOutput: ''
@@ -26,13 +27,11 @@ var TaskPopupComponent = React.createClass({
         var self = this;
         this.popup = jQuery('#task-popup');
 
-        eventhandler.on('displayTaskPopup', function(content) {
-            self.setState({
-                show: true,
-                content: content
-            });
+        eventhandler.on('displayTaskPopup', function(state) {
+            state.show = true;
+            self.setState(state);
         });
-        eventhandler.on('hideTaskPopup', function(content) {
+        eventhandler.on('hideTaskPopup', function() {
             self.setState({
                 show: false
             });
@@ -58,11 +57,22 @@ var TaskPopupComponent = React.createClass({
 
     render: function() {
 
-        return (
-            <div id="task-popup" className={this.state.showConsole ? "console" : ""}>
-                <h1>{this.state.content.h1}</h1>
+        var cssClasses = [];
 
-                <div className="loading">
+        if (this.state.showConsole) {
+            cssClasses.push('console');
+        }
+
+        cssClasses.push('status-' + this.state.status);
+        cssClasses = cssClasses.join(' ');
+
+        return (
+            <div id="task-popup" className={cssClasses ? cssClasses : ''}>
+                <h1>{this.state.content.taskTitle}</h1>
+
+                <div className="status success"><i className="icono-checkCircle"></i></div>
+                <div className="status error"><i className="icono-crossCircle"></i></div>
+                <div className="status loading">
                     <div className="bounce1"></div>
                     <div className="bounce2"></div>
                     <div className="bounce3"></div>
