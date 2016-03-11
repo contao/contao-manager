@@ -1,7 +1,7 @@
 'use strict';
 
 const React         = require('react');
-const jQuery        = require('jQuery');
+const jQuery        = require('jquery');
 const Translation   = require('./translation.js');
 const eventhandler  = require('./eventhandler');
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const React = require('react');
-const jQuery = require('jQuery');
+const jQuery = require('jquery');
 
 var translate = function(key, domain, locale) {
     domain = typeof domain !== 'undefined' ? domain : 'messages';
