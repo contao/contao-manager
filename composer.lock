@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "fe134d3359ff6533f5462743cada35eabaf2350f"
+                "reference": "8bf46768f3f5397c259b77321b2e887a53624adb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/fe134d3359ff6533f5462743cada35eabaf2350f",
-                "reference": "fe134d3359ff6533f5462743cada35eabaf2350f",
+                "url": "https://api.github.com/repos/composer/composer/zipball/8bf46768f3f5397c259b77321b2e887a53624adb",
+                "reference": "8bf46768f3f5397c259b77321b2e887a53624adb",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-03-08 13:41:06"
+            "time": "2016-03-10 16:31:09"
         },
         {
             "name": "composer/semver",
@@ -1700,7 +1700,7 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -1759,16 +1759,16 @@
         },
         {
             "name": "symfony/polyfill-php54",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php54.git",
-                "reference": "74663d5a2ff3c530c1bc0571500e0feec9094054"
+                "reference": "9ba741ca01c77282ecf5796c2c1d667f03454ffb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php54/zipball/74663d5a2ff3c530c1bc0571500e0feec9094054",
-                "reference": "74663d5a2ff3c530c1bc0571500e0feec9094054",
+                "url": "https://api.github.com/repos/symfony/polyfill-php54/zipball/9ba741ca01c77282ecf5796c2c1d667f03454ffb",
+                "reference": "9ba741ca01c77282ecf5796c2c1d667f03454ffb",
                 "shasum": ""
             },
             "require": {
@@ -1813,11 +1813,11 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-01-20 09:13:37"
+            "time": "2016-01-25 19:13:00"
         },
         {
             "name": "symfony/polyfill-php55",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php55.git",
@@ -1873,7 +1873,7 @@
         },
         {
             "name": "symfony/polyfill-php56",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php56.git",
@@ -1929,16 +1929,16 @@
         },
         {
             "name": "symfony/polyfill-php70",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php70.git",
-                "reference": "8428ceddbbaf102f2906769a8ef2438220c5cb95"
+                "reference": "386c1be9cad3ab531425211919e78c37971be4ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/8428ceddbbaf102f2906769a8ef2438220c5cb95",
-                "reference": "8428ceddbbaf102f2906769a8ef2438220c5cb95",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/386c1be9cad3ab531425211919e78c37971be4ce",
+                "reference": "386c1be9cad3ab531425211919e78c37971be4ce",
                 "shasum": ""
             },
             "require": {
@@ -1984,11 +1984,11 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-01-25 08:44:42"
+            "time": "2016-01-28 22:42:02"
         },
         {
             "name": "symfony/polyfill-util",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-util.git",
@@ -2716,12 +2716,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "3247cfacfba664cd34e733d856f9ddac682241ec"
+                "reference": "a3a07a88988740fc69c33afc2ac26dd8f197d94c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/3247cfacfba664cd34e733d856f9ddac682241ec",
-                "reference": "3247cfacfba664cd34e733d856f9ddac682241ec",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/a3a07a88988740fc69c33afc2ac26dd8f197d94c",
+                "reference": "a3a07a88988740fc69c33afc2ac26dd8f197d94c",
                 "shasum": ""
             },
             "require": {
@@ -2781,7 +2781,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-03-03 10:04:46"
+            "time": "2016-03-11 05:07:32"
         }
     ],
     "packages-dev": [
@@ -3112,16 +3112,16 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.2.3",
+            "version": "2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "9d816dfa565b9c47685057761acaf432c9e8066a"
+                "reference": "b086687f3a01dc6bb92d633aef071d2c5dd0db06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/9d816dfa565b9c47685057761acaf432c9e8066a",
-                "reference": "9d816dfa565b9c47685057761acaf432c9e8066a",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/b086687f3a01dc6bb92d633aef071d2c5dd0db06",
+                "reference": "b086687f3a01dc6bb92d633aef071d2c5dd0db06",
                 "shasum": ""
             },
             "require": {
@@ -3148,7 +3148,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "time": "2016-02-23 08:20:26"
+            "time": "2016-03-10 15:15:04"
         },
         {
             "name": "phpcq/all-tasks",
@@ -3646,16 +3646,16 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.4.0",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "76fa15ecc35e046255955470d32a65f27bafe28b"
+                "reference": "1ce4c586f4071d27a82421e56ae0e9864c89094d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/76fa15ecc35e046255955470d32a65f27bafe28b",
-                "reference": "76fa15ecc35e046255955470d32a65f27bafe28b",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/1ce4c586f4071d27a82421e56ae0e9864c89094d",
+                "reference": "1ce4c586f4071d27a82421e56ae0e9864c89094d",
                 "shasum": ""
             },
             "require": {
@@ -3707,7 +3707,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2016-03-08 12:31:02"
+            "time": "2016-03-08 21:43:36"
         },
         {
             "name": "phpspec/php-diff",
