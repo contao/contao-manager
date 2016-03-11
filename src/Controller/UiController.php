@@ -22,25 +22,22 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Translation\Translator;
-use Symfony\Component\Translation\TranslatorInterface;
-use Tenside\Core\Util\JsonArray;
 
-
+/**
+ * This is the controller for the web interface.
+ */
 class UiController extends Controller
 {
     /**
      * Index action
      *
-     * @param Request $request
+     * @param Request $request The request.
      *
      * @return Response
      */
@@ -53,9 +50,9 @@ class UiController extends Controller
     }
 
     /**
-     * App action
+     * App action.
      *
-     * @param $locale
+     * @param string $locale The locale.
      *
      * @return Response
      */
@@ -65,23 +62,26 @@ class UiController extends Controller
             'lang'  => $locale,
             'css'   => $this->generateUrl('asset', ['path' => 'css/bundle.css']),
             'js'    => $this->generateUrl('asset', ['path' => 'js/bundle.js']),
-
         ]);
     }
 
     /**
      * Asset action.
+     *
      * Assets have to be served using PHP because of the PHAR compilation.
      *
-     * @var string $path
+     * @param string $path The path.
+     *
+     * @return BinaryFileResponse
+     *
+     * @throws BadRequestHttpException When the asset does not exist.
      */
     public function assetAction($path)
     {
         $webDir = dirname($this->container->getParameter('kernel.root_dir')) . '/web';
-        $path = realpath($webDir . '/' . $path);
+        $path   = realpath($webDir . '/' . $path);
 
         if (false === $path) {
-
             throw new BadRequestHttpException('This asset does not exist!');
         }
 
@@ -113,11 +113,15 @@ class UiController extends Controller
     /**
      * Translation action.
      *
-     * @param Request $request
-     * @param string  $locale
-     * @param string  $domain
+     * @param Request $request The request.
+     *
+     * @param string  $locale  The locale string.
+     *
+     * @param string  $domain  The current domain.
      *
      * @return Response
+     *
+     * @throws BadRequestHttpException When a translation could not be loaded.
      */
     public function translationAction(Request $request, $locale, $domain)
     {
@@ -126,9 +130,9 @@ class UiController extends Controller
 
         try {
             $catalogue = $translator->getCatalogue($locale);
-            $data = $catalogue->all($domain);
-            $cacheKey = md5(json_encode($data));
-            $response = JsonResponse::create($data);
+            $data      = $catalogue->all($domain);
+            $cacheKey  = md5(json_encode($data));
+            $response  = JsonResponse::create($data);
             $response->setEtag($cacheKey);
             $response->isNotModified($request);
 
