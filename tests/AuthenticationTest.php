@@ -169,7 +169,13 @@ class AuthenticationTest extends WebTestCase
 
         $this->assertEquals('ok', $data['status']);
         $this->assertEquals(
-            ['ROLE_UPGRADE', 'ROLE_MANIPULATE_REQUIREMENTS', 'ROLE_EDIT_COMPOSER_JSON', 'ROLE_EDIT_APP_KERNEL'],
+            [
+                'ROLE_NONE',
+                'ROLE_UPGRADE',
+                'ROLE_MANIPULATE_REQUIREMENTS',
+                'ROLE_EDIT_COMPOSER_JSON',
+                'ROLE_EDIT_APP_KERNEL'
+            ],
             $data['acl']
         );
     }
