@@ -13,9 +13,7 @@
     text-align: center;
     background: #ffffff;
     border-bottom: 2px solid #ddd3bc;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
+    @include border-radius(2px);
     z-index: 10;
 
     &.console,
@@ -29,9 +27,7 @@
         color: #fff;
         font-weight: normal;
         line-height: 40px;
-        -webkit-border-radius: 2px;
-        -moz-border-radius: 2px;
-        border-radius: 2px;
+        @include border-radius(2px);
     }
 
     h2, p {
@@ -42,6 +38,7 @@
     }
 
     button {
+        width: auto;
         height: 35px;
         margin: 2em 0;
         padding: 0 30px;
@@ -58,22 +55,14 @@
             margin-right: 2px;
             margin-left: 0;
             color: $link-color;
-            -webkit-transform: rotate(90deg) scale(0.5);
-            -moz-transform: rotate(90deg) scale(0.5);
-            -ms-transform: rotate(90deg) scale(0.5);
-            -o-transform: rotate(90deg) scale(0.5);
-            transform: rotate(90deg) scale(0.5);
+            @include prefix(transform, rotate(90deg) scale(0.5));
         }
 
         &.hide {
             display: none;
 
             i {
-                -webkit-transform: rotate(-90deg) scale(0.5);
-                -moz-transform: rotate(-90deg) scale(0.5);
-                -ms-transform: rotate(-90deg) scale(0.5);
-                -o-transform: rotate(-90deg) scale(0.5);
-                transform: rotate(-90deg) scale(0.5);
+                @include prefix(transform, rotate(-90deg) scale(0.5));
             }
         }
     }
@@ -114,11 +103,7 @@
         &.success,
         &.error {
             margin: 27px auto 20px;
-            -webkit-transform: scale(1.5);
-            -moz-transform: scale(1.5);
-            -ms-transform: scale(1.5);
-            -o-transform: scale(1.5);
-            transform: scale(1.5);
+            @include prefix(transform, scale(1.5));
         }
 
         &.success i {
@@ -141,36 +126,26 @@
                 height: 16px;
                 margin-right: 1px;
                 background-color: $green-button;
-                -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-                animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+                @include prefix(animation, loading 1.4s infinite ease-in-out both);
             }
 
             .bounce1 {
-                -webkit-animation-delay: -0.64s;
-                animation-delay: -0.64s;
+                @include prefix(animation-delay, -0.64s, false)
             }
 
             .bounce2 {
-                -webkit-animation-delay: -0.48s;
-                animation-delay: -0.48s;
+                @include prefix(animation-delay, -0.48s, false);
             }
 
             .bounce3 {
-                -webkit-animation-delay: -0.32s;
-                animation-delay: -0.32s;
+                @include prefix(animation-delay, -0.32s, false);
             }
 
             .bounce4 {
-                -webkit-animation-delay: -0.16s;
-                animation-delay: -0.16s;
+                @include prefix(animation-delay, -0.16s, false)
             }
 
-            @-webkit-keyframes sk-bouncedelay {
-                0%, 90%, 100% { opacity: 0 }
-                20% { opacity: 1 }
-            }
-
-            @keyframes sk-bouncedelay {
+            @include keyframes(loading) {
                 0%, 90%, 100% { opacity: 0; }
                 20% { opacity: 1; }
             }
@@ -201,151 +176,27 @@
     height: 100%;
     width: 100%;
     z-index: -1;
-    -webkit-animation: blur .5s forwards;
-    -moz-animation: blur .5s forwards;
-    -o-animation: blur .5s forwards;
-    animation: blur .5s forwards;
+    @include prefix(animation, blur .5s forwards, false);
 }
 
 .blur-out {
-    -webkit-animation: blur-out .5s forwards;
-    -moz-animation: blur-out .5s forwards;
-    -o-animation: blur-out .5s forwards;
-    animation: blur-out .5s forwards;
+    @include prefix(animation, blur-out .5s forwards, false);
 }
 
-@-webkit-keyframes blur {
+@include keyframes(blur) {
     0% {
-        -webkit-filter: blur(0px);
-        -moz-filter: blur(0px);
-        -o-filter: blur(0px);
-        -ms-filter: blur(0px);
-        filter: blur(0px);
+        @include prefix(filter, blur(0px));
     }
     100% {
-        -webkit-filter: blur(4px);
-        -moz-filter: blur(4px);
-        -o-filter: blur(4px);
-        -ms-filter: blur(4px);
-        filter: blur(4px);
+        @include prefix(filter, blur(4px));
     }
 }
 
-@-moz-keyframes blur {
+@include keyframes(blur-out) {
     0% {
-        -webkit-filter: blur(0px);
-        -moz-filter: blur(0px);
-        -o-filter: blur(0px);
-        -ms-filter: blur(0px);
-        filter: blur(0px);
+        @include prefix(filter, blur(4px));
     }
     100% {
-        -webkit-filter: blur(4px);
-        -moz-filter: blur(4px);
-        -o-filter: blur(4px);
-        -ms-filter: blur(4px);
-        filter: blur(4px);
-    }
-}
-
-@-o-keyframes blur {
-    0% {
-        -webkit-filter: blur(0px);
-        -moz-filter: blur(0px);
-        -o-filter: blur(0px);
-        -ms-filter: blur(0px);
-        filter: blur(0px);
-    }
-    100% {
-        -webkit-filter: blur(4px);
-        -moz-filter: blur(4px);
-        -o-filter: blur(4px);
-        -ms-filter: blur(4px);
-        filter: blur(4px);
-    }
-}
-
-@keyframes blur {
-    0% {
-        -webkit-filter: blur(0px);
-        -moz-filter: blur(0px);
-        -o-filter: blur(0px);
-        -ms-filter: blur(0px);
-        filter: blur(0px);
-    }
-    100% {
-        -webkit-filter: blur(4px);
-        -moz-filter: blur(4px);
-        -o-filter: blur(4px);
-        -ms-filter: blur(4px);
-        filter: blur(4px);
-    }
-}
-
-@-webkit-keyframes blur-out {
-    0% {
-        -webkit-filter: blur(4px);
-        -moz-filter: blur(4px);
-        -o-filter: blur(4px);
-        -ms-filter: blur(4px);
-        filter: blur(4px);
-    }
-    100% {
-        -webkit-filter: blur(0px);
-        -moz-filter: blur(0px);
-        -o-filter: blur(0px);
-        -ms-filter: blur(0px);
-        filter: blur(0px);
-    }
-}
-
-@-moz-keyframes blur-out {
-    0% {
-        -webkit-filter: blur(4px);
-        -moz-filter: blur(4px);
-        -o-filter: blur(4px);
-        -ms-filter: blur(4px);
-        filter: blur(4px);
-    }
-    100% {
-        -webkit-filter: blur(0px);
-        -moz-filter: blur(0px);
-        -o-filter: blur(0px);
-        -ms-filter: blur(0px);
-        filter: blur(0px);
-    }
-}
-
-@-o-keyframes blur-out {
-    0% {
-        -webkit-filter: blur(4px);
-        -moz-filter: blur(4px);
-        -o-filter: blur(4px);
-        -ms-filter: blur(4px);
-        filter: blur(4px);
-    }
-    100% {
-        -webkit-filter: blur(0px);
-        -moz-filter: blur(0px);
-        -o-filter: blur(0px);
-        -ms-filter: blur(0px);
-        filter: blur(0px);
-    }
-}
-
-@keyframes blur-out {
-    0% {
-        -webkit-filter: blur(4px);
-        -moz-filter: blur(4px);
-        -o-filter: blur(4px);
-        -ms-filter: blur(4px);
-        filter: blur(4px);
-    }
-    100% {
-        -webkit-filter: blur(0px);
-        -moz-filter: blur(0px);
-        -o-filter: blur(0px);
-        -ms-filter: blur(0px);
-        filter: blur(0px);
+        @include prefix(filter, blur(0px));
     }
 }

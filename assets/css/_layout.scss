@@ -1,15 +1,11 @@
 @import "defaults";
 
 html {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box
+    @include prefix(box-sizing, border-box, false, false);
 }
 
 *, *:before, *:after {
-    -webkit-box-sizing: inherit;
-    -moz-box-sizing: inherit;
-    box-sizing: inherit
+    @include prefix(box-sizing, inherit, false, false);
 }
 
 body, form, figure, blockquote, p {
@@ -98,17 +94,10 @@ a {
     }
 }
 
-button {
-    border: none;
-    background: $text-color;
-    color: #ffffff;
-    font-weight: bold;
-    border-radius: 2px;
-}
-
 h1 {
     font-size: 18px;
     margin-bottom: 10px;
 }
 
+@import "forms";
 @import "icono.css";

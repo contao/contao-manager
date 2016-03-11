@@ -20,3 +20,34 @@ $orange-button: #db8c41;
         @content;
     }
 }
+
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+
+@mixin prefix($property, $value, $ms:true, $opera:true) {
+    -webkit-#{$property}: $value;
+       -moz-#{$property}: $value;
+    @if $opera {
+         -o-#{$property}: $value;
+    }
+    @if $ms {
+        -ms-#{$property}: $value;
+    }
+            #{$property}: $value;
+}
+
+@mixin border-radius($value) {
+    @include prefix(border-radius, $value, false, false);
+}

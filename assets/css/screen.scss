@@ -38,8 +38,7 @@ header {
         }
 
         .nav-active & {
-            -webkit-transform: rotate(90deg);
-            transform: rotate(90deg)
+            @include prefix(transform, rotate(90deg));
         }
 
         span {
@@ -63,16 +62,14 @@ header {
         background: #fff;
         z-index: 10;
 
-        -webkit-transform: translateY(-120%);
-        transform: translateY(-120%);
+        @include prefix(transform, translateY(-120%));
 
         transition: -webkit-transform .4s cubic-bezier(.55, 0, .1, 1);
         transition: transform .4s cubic-bezier(.55, 0, .1, 1);
         transition: transform .4s cubic-bezier(.55, 0, .1, 1), -webkit-transform .4s cubic-bezier(.55, 0, .1, 1);
 
         .nav-active & {
-            -webkit-transform: translateY(0);
-            transform: translateY(0)
+            @include prefix(transform, translateY(0));
         }
 
         ul, li {

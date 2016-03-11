@@ -2,6 +2,10 @@
 @import "defaults";
 @import "layout";
 
+html, body {
+    height: 100%;
+}
+
 .table {
     display: table;
     width: 100%;
@@ -106,7 +110,8 @@ section {
                 font-family: $font-regular;
             }
 
-            input {
+            input[type=text],
+            input[type=password] {
                 width: 250px;
             }
 
@@ -136,24 +141,12 @@ section {
     }
 
     input {
-        width: 100%;
-        height: 38px;
         margin: 5px 0 10px;
-        padding: 0 30px 0 12px;
-        border: 1px solid $border-color;
-        -webkit-border-radius: 2px;
-        -moz-border-radius: 2px;
-        border-radius: 2px;
     }
 
     button {
-        width: 100%;
-        height: 40px;
         margin-top: 20px;
         background: #31a64b;
-        -webkit-border-radius: 2px;
-        -moz-border-radius: 2px;
-        border-radius: 2px;
     }
 
     &.login {
