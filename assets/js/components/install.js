@@ -86,6 +86,9 @@ var InstallComponent = React.createClass({
 
     render: function() {
 
+        var hasErrors = this.state.passwordsErrorMessage !== '';
+        var disableButton = hasErrors || this.state.installing;
+
         return (
             <form id="install-form" action="#" method="post">
                 <fieldset>
@@ -106,7 +109,7 @@ var InstallComponent = React.createClass({
 
                 </fieldset>
 
-                <button disabled={this.state.installing} type="submit" onClick={this.handleInstall}>Install</button>
+                <button disabled={disableButton} type="submit" onClick={this.handleInstall}>Install</button>
             </form>
         );
     }
