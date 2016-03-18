@@ -3,7 +3,7 @@
 const React         = require('react');
 const jQuery        = require('jquery');
 const Translation   = require('./translation.js');
-const Widget        = require('./widget.js');
+const TextWidget    = require('./widgets/text.js');
 const eventhandler  = require('./eventhandler.js');
 
 
@@ -20,11 +20,17 @@ var InstallComponent = React.createClass({
 
     validateConstraint: function(props, e) {
 
-        var self = this;
+        var self  = this,
+            value = e.target.value;
+
+        if ('' === value) {
+            self.setState({constraintErrorMessage: ''});
+            return;
+        }
 
         jQuery.ajax('/api/v1/constraint', {
             method: 'POST',
-            data: JSON.stringify({constraint: e.target.value}),
+            data: JSON.stringify({constraint: value}),
             dataType: 'json'
         }).success(function(response) {
              if ('ok' !== response.status) {
@@ -116,9 +122,9 @@ var InstallComponent = React.createClass({
                     <legend><Translation domain="install">User Account</Translation></legend>
                     <p>Create a user account to manage your installation.</p>
 
-                    <Widget type="text" name="username" label="Username"></Widget>
-                    <Widget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage}></Widget>
-                    <Widget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage}></Widget>
+                    <TextWidget type="text" name="username" label="Username"></TextWidget>
+                    <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage}></TextWidget>
+                    <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage}></TextWidget>
 
                 </fieldset>
 
@@ -126,7 +132,7 @@ var InstallComponent = React.createClass({
                     <legend>Contao Installation</legend>
                     <p>Enter a version to install or leave blank for the latest version.</p>
 
-                    <Widget type="text" name="version" label="Version" placeholder="latest" onChange={this.validateConstraint} error={this.state.constraintErrorMessage}></Widget>
+                    <TextWidget type="text" name="version" label="Version" placeholder="latest" onChange={this.validateConstraint} error={this.state.constraintErrorMessage}></TextWidget>
 
                 </fieldset>
 
