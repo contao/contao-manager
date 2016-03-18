@@ -1,0 +1,12 @@
+imports:
+    - { resource: config.yml }
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: debug
+            handler:      nested
+        nested:
+            type: service
+            id:   "tenside.logger"
