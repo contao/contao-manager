@@ -25,6 +25,7 @@ app/cache
 
 # Tenside
 /tenside
+/test-dir
 
 # Node
 /node_modules/

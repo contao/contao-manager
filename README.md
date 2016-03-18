@@ -7,7 +7,7 @@ This is the contao package manager
 
 ## Build yourself
 
-1. Install the node.js dependencies:
+### 1. Install the node.js dependencies:
 
 `$ npm install`
 
@@ -16,7 +16,7 @@ can be compiled into their respective targets.
 If you want to know what dependencies are needed, check the `package.json`
 file (or the node.js documentation).
 
-2. Gulp
+###  2. Gulp
 
 Because calling multiple commands after each other and in the correct
 order everytime you change something, we use Gulp to define tasks. A simple
@@ -38,3 +38,28 @@ Note: For production you should use
 `$ ./node_modules/.bin/gulp --production`
 
 because that will enable minifying (uglyfying) JS as well as CSS files.
+
+### 3. Setting the DirectoryIndex
+
+Make sure your DirectoryIndex points to `/web` because that's where the
+project runs in (regular Symfony application).
+
+### 4. Setting the COMPOSER environment variable
+
+The underlying software that handles all the Composer commands is called
+`Tenside`. By default, `Tenside` thinks of managing an installation from
+within the standard Symfony application `web` folder but it can be
+changed to anything you like.
+
+As you run within the `web` folder, `Tenside` will check for one directory
+above it and start managing from there. While developing this means, that
+it will start to manage the package manager itself which is likely not
+what you want. For that matter, set the `COMPOSER` environment variable
+to a different directory (`test-dir` in the package manager root in that
+case):
+
+```
+SetEnv COMPOSER /path/to/my/package-manager/test-dir/web
+```
+
+Note the virual `web` folder. Obviously that's an example for Apache.
