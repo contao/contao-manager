@@ -14,6 +14,8 @@ security:
         - { path: ^/api/v1/auth, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
         # Anonymous access for the install route - otherwise we can not install (Will refuse to install anyway).
         - { path: ^/api/v1/install, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        # Anonymous access for the constraint route
+        - { path: ^/api/v1/constraint, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
         # Delegate everything else from the API to the role checking service.
         - { path: ^/api, role: [ROLE_CHECK] }
 
@@ -28,7 +30,7 @@ security:
         # all public resources.
         public:
             stateless: true
-            pattern:        /(assets/|$|api/v1/install)
+            pattern:        /(assets/|$|api/v1/install|api/v1/constraint)
             anonymous:      true
 
         # Allow basic auth and token auth on login route.

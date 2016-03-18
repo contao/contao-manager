@@ -13,8 +13,29 @@ var InstallComponent = React.createClass({
     getInitialState: function() {
         return {
             passwordsErrorMessage: '',
+            constraintErrorMessage: '',
             installing: false
         };
+    },
+
+    validateConstraint: function(props, e) {
+
+        var self = this;
+
+        jQuery.ajax('/api/v1/constraint', {
+            method: 'POST',
+            data: JSON.stringify({constraint: e.target.value}),
+            dataType: 'json'
+        }).success(function(response) {
+             if ('ok' !== response.status) {
+                self.setState({constraintErrorMessage: <Translation>You have to enter a valid Composer version constraint!</Translation>});
+            } else {
+                self.setState({constraintErrorMessage: ''});
+            }
+
+        }).fail(function() {
+            // @todo: what if request failed?
+        });
     },
 
     handlePasswordCompare: function(props, e) {
@@ -105,7 +126,7 @@ var InstallComponent = React.createClass({
                     <legend>Contao Installation</legend>
                     <p>Enter a version to install or leave blank for the latest version.</p>
 
-                    <Widget type="text" name="version" label="Version" placeholder="latest"></Widget>
+                    <Widget type="text" name="version" label="Version" placeholder="latest" onChange={this.validateConstraint} error={this.state.constraintErrorMessage}></Widget>
 
                 </fieldset>
 
