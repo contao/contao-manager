@@ -25,14 +25,14 @@ var translate = function(key, domain, locale) {
 var Translation = React.createClass({
     getInitialState: function() {
         return {
-            label:  this.props.children,
+            label:  '',
             domain: this.props.domain,
             locale: this.props.locale
         };
     },
     componentDidMount: function() {
 
-        var label = this.state.label;
+        var label = this.props.children;
         var self = this;
 
         translate(this.props.children, this.props.domain, this.props.locale)
