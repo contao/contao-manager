@@ -167,7 +167,7 @@ class AuthenticationTest extends WebTestCase
 
         $data = json_decode($client->getResponse()->getContent(), true);
 
-        $this->assertEquals('ok', $data['status']);
+        $this->assertEquals('OK', $data['status']);
         $this->assertEquals(
             [
                 'ROLE_NONE',
