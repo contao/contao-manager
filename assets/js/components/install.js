@@ -63,7 +63,7 @@ var InstallComponent = React.createClass({
         };
         var createProjectPayload = {
             project: {
-                name:    'contao/contao'
+                name:    'contao/standard-edition'
             }
         };
 
