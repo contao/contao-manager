@@ -1,7 +1,7 @@
 'use strict';
 
-const eventhandler  = require('./eventhandler');
-const Task          = require('./../tasks/task.js');
+const eventhandler  = require('./../components/eventhandler.js');
+const Task          = require('./task.js');
 const jQuery        = require('jQuery');
 const Promise       = require('promise');
 
