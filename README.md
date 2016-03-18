@@ -62,4 +62,4 @@ case):
 SetEnv COMPOSER /path/to/my/package-manager/test-dir/web
 ```
 
-Note the virual `web` folder. Obviously that's an example for Apache.
+Note the virtual `web` folder. Obviously that's an example for Apache.
