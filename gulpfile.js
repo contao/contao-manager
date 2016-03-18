@@ -20,7 +20,7 @@ gulp.task('scripts', function () {
             entries: './assets/js/index.js',
             debug: true
         })
-        .transform('babelify', {presets: ['react']})
+        .transform('babelify', {presets: ['react', 'es2015']})
         .bundle()
         .pipe(source('./assets/js/index.js'))
         .pipe(buffer())
