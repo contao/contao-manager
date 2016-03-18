@@ -3,6 +3,7 @@
 const eventhandler  = require('./eventhandler');
 const Task          = require('./../tasks/task.js');
 const jQuery        = require('jQuery');
+const Promise       = require('promise');
 
 var checkTaskInstance = function(task) {
     if (!task instanceof Task) {
@@ -12,114 +13,93 @@ var checkTaskInstance = function(task) {
     return task;
 };
 
-var getErrorHandler = function(handler) {
-    return handler || function (response) {
-            console.log('An error occured! Payload: ' + JSON.stringify(response))
-        };
-};
-
-var getSuccessHandler = function(handler) {
-    return handler || function () {
-            // noop
-        };
-};
-
-var addTask = function(task, onError, onSuccess) {
+var addTask = function(task) {
 
     task = checkTaskInstance(task);
-    onError = getErrorHandler(onError);
-    onSuccess = getSuccessHandler(onSuccess);
 
     eventhandler.emit('displayTaskPopup', {
         taskTitle: task.getTitle()
     });
 
-    jQuery.ajax('/api/v1/tasks', {
-        method: 'POST',
-        data: JSON.stringify(task.getPayload()),
-        dataType: 'json'
-    }).complete(function(response) {
-        if ('OK' !== response.status) {
-            return onError(response);
-        }
+    return new Promise(function (resolve, reject) {
+        jQuery.ajax('/api/v1/tasks', {
+            method: 'POST',
+            data: JSON.stringify(task.getPayload()),
+            dataType: 'json'
+        }).complete(function(response) {
+            if ('OK' === response.status) {
+                return resolve(response);
+            }
 
-        return onSuccess(response);
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        onError({
-            textStatus: textStatus,
-            errorThrown: errorThrown
+            reject(response);
+
+        }).fail(function(err) {
+            reject(err);
         });
     });
 };
 
-var runNextTask = function(task, onError, onSuccess) {
+var runNextTask = function(task) {
 
     task = checkTaskInstance(task);
-    onError = getErrorHandler(onError);
-    onSuccess = getSuccessHandler(onSuccess);
 
-    jQuery.ajax('/api/v1/tasks', {
-        method: 'GET',
-        data: JSON.stringify(task.getPayload()),
-        dataType: 'json'
-    }).complete(function(response) {
-        if ('OK' !== response.status) {
-            return onError(response);
-        }
+    return new Promise(function (resolve, reject) {
+        jQuery.ajax('/api/v1/tasks', {
+            method: 'GET',
+            data: JSON.stringify(task.getPayload()),
+            dataType: 'json'
+        }).complete(function(response) {
+            if ('OK' === response.status) {
+                return resolve(response);
+            }
 
-        return onSuccess(response);
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        onError({
-            textStatus: textStatus,
-            errorThrown: errorThrown
+            reject(response);
+
+        }).fail(function(err) {
+            reject(err);
         });
     });
 };
 
-var deleteTask = function(task, onError, onSuccess) {
+var deleteTask = function(task) {
 
     task = checkTaskInstance(task);
-    onError = getErrorHandler(onError);
-    onSuccess = getSuccessHandler(onSuccess);
 
-    jQuery.ajax('/api/v1/tasks/' + task.getId(), {
-        method: 'DELETE'
-    }).complete(function(response) {
-        if ('OK' !== response.status) {
-            return onError(response);
-        }
+    return new Promise(function (resolve, reject) {
+        jQuery.ajax('/api/v1/tasks/' + task.getId(), {
+            method: 'DELETE'
+        }).complete(function(response) {
+            if ('OK' === response.status) {
+                return resolve(response);
+            }
 
-        return onSuccess(response);
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        onError({
-            textStatus: textStatus,
-            errorThrown: errorThrown
+            reject(response);
+
+        }).fail(function(err) {
+            reject(err);
         });
     });
 };
 
-var getTask = function(task, onError, onSuccess) {
+var getTask = function(task) {
 
     task = checkTaskInstance(task);
-    onError = getErrorHandler(onError);
-    onSuccess = getSuccessHandler(onSuccess);
 
+    return new Promise(function (resolve, reject) {
+        jQuery.ajax('/api/v1/tasks/' + task.getId(), {
+            method: 'GET',
+            dataType: 'json'
+        }).complete(function(response) {
+            if ('OK' === response.status) {
+                task.setContent(response);
 
-    jQuery.ajax('/api/v1/tasks/' + task.getId(), {
-        method: 'GET',
-        dataType: 'json'
-    }).complete(function(response) {
-        if ('OK' !== response.status) {
-            return onError(response);
-        }
+                return resolve(response);
+            }
 
-        task.setContent(response);
+            reject(response);
 
-        return onSuccess(response);
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        onError({
-            textStatus: textStatus,
-            errorThrown: errorThrown
+        }).fail(function(err) {
+            reject(err);
         });
     });
 };
