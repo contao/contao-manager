@@ -1,7 +1,9 @@
 'use strict';
 
-const React = require('react');
-const jQuery = require('jquery');
+const React     = require('react');
+const jQuery    = require('jquery');
+const Promise   = require('promise');
+const lscache   = require('lscache');
 
 var translate = function(key, domain, locale) {
     domain = typeof domain !== 'undefined' ? domain : 'messages';
@@ -17,8 +19,23 @@ var translate = function(key, domain, locale) {
         }
     }
 
-    return jQuery.ajax({
-        url: '/translation/' + locale + '/' + domain
+    var cacheKey = 'cpm:translations:' + locale + ':' + domain;
+
+    return new Promise(function (resolve, reject) {
+
+        var cache = lscache.get(cacheKey);
+
+        if (cache) {
+            resolve(cache);
+            return;
+        }
+
+        jQuery.ajax({
+            url: '/translation/' + locale + '/' + domain
+        }).success(function(result) {
+            lscache.set(cacheKey, result, 60); // expire after 1 hour
+            resolve(result);
+        });
     });
 };
 
@@ -36,12 +53,8 @@ var Translation = React.createClass({
         var self = this;
 
         translate(this.props.children, this.props.domain, this.props.locale)
-            .complete(function(result) {
-                if (undefined !== result.responseJSON
-                    && undefined !== result.responseJSON[label]
-                ) {
-                    self.setState({label: result.responseJSON[label]});
-                }
+            .then(function(result) {
+                self.setState({label: result[label]});
             });
     },
     render: function() {
