@@ -62,8 +62,8 @@ var InstallComponent = React.createClass({
             method: 'POST',
             data: JSON.stringify(configurePayload),
             dataType: 'json'
-        }).complete(function(response) {
-            if ('OK' !== response.status) {
+        }).success(function(response) {
+            if ('ok' !== response.status) {
                 // @todo: what if configure failed?
             }
 
@@ -71,8 +71,8 @@ var InstallComponent = React.createClass({
                 method: 'POST',
                 data: JSON.stringify(createProjectPayload),
                 dataType: 'json'
-            }).complete(function(response) {
-                if ('OK' !== response.status) {
+            }).success(function(response) {
+                if ('ok' !== response.status) {
                     // @todo: what if create-project failed?
                 }
             }).fail(function() {
