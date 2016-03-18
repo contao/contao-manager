@@ -33,7 +33,7 @@ var InstallComponent = React.createClass({
             data: JSON.stringify({constraint: value}),
             dataType: 'json'
         }).success(function(response) {
-             if ('ok' !== response.status) {
+             if ('OK' !== response.status) {
                 self.setState({constraintErrorMessage: <Translation>You have to enter a valid Composer version constraint!</Translation>});
             } else {
                 self.setState({constraintErrorMessage: ''});

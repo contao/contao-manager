@@ -629,16 +629,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v1.3.0",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "ff76e1a660669bb56ba74ba0583fd8d41417bf39"
+                "reference": "a93889dfb1c0ae465b62236ede8d00d3ea260952"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/ff76e1a660669bb56ba74ba0583fd8d41417bf39",
-                "reference": "ff76e1a660669bb56ba74ba0583fd8d41417bf39",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/a93889dfb1c0ae465b62236ede8d00d3ea260952",
+                "reference": "a93889dfb1c0ae465b62236ede8d00d3ea260952",
                 "shasum": ""
             },
             "require": {
@@ -673,7 +673,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-03-17 16:11:57"
+            "time": "2016-03-18 17:16:04"
         },
         {
             "name": "psr/log",
@@ -2717,12 +2717,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "a3a07a88988740fc69c33afc2ac26dd8f197d94c"
+                "reference": "1e2055e114e8d305243f1e17e23a25ef6f3dae43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/a3a07a88988740fc69c33afc2ac26dd8f197d94c",
-                "reference": "a3a07a88988740fc69c33afc2ac26dd8f197d94c",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/1e2055e114e8d305243f1e17e23a25ef6f3dae43",
+                "reference": "1e2055e114e8d305243f1e17e23a25ef6f3dae43",
                 "shasum": ""
             },
             "require": {
@@ -2782,7 +2782,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-03-11 05:07:32"
+            "time": "2016-03-18 18:30:26"
         }
     ],
     "packages-dev": [
