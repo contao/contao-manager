@@ -2,8 +2,10 @@
 
 const React         = require('react');
 const jQuery        = require('jquery');
+const Promise       = require('promise');
 const Translation   = require('./translation.js');
 const TextWidget    = require('./widgets/text.js');
+const TensideState  = require('./tenside/state.js');
 const eventhandler  = require('./eventhandler.js');
 
 
@@ -60,54 +62,111 @@ var InstallComponent = React.createClass({
 
     handleInstall: function(e) {
         e.preventDefault();
+
+        var self = this;
         var form = jQuery('#install-form');
-        var configurePayload = {
-            credentials: {
-                username: form.find('input[name="username"]').first().val(),
-                password: form.find('input[name="password"]').first().val()
-            }
-        };
-        var createProjectPayload = {
-            project: {
-                name:    'contao/standard-edition'
-            }
-        };
 
-        var versionField = form.find('input[name="version"]').first();
+        TensideState.getState()
+            .then(function(state) {
+                // Configure project if not already configured
+                if (true !== state.tenside_configured) {
+                    var configurePayload = {
+                        credentials: {
+                            username: form.find('input[name="username"]').first().val(),
+                            password: form.find('input[name="password"]').first().val()
+                        }
+                    };
 
-        if (versionField.val() != versionField.attr('placeholder')) {
-            createProjectPayload.version = versionField.val();
-        }
+                    return self.configure(configurePayload, state);
+                }
 
-        eventhandler.emit('displayTaskPopup', {
-            'h1': 'hi'
+                return state;
+            })
+            .then(function(state) {
+                // Create project if not already created
+                if (true !== state.project_created) {
+                    var createProjectPayload = {
+                        project: {
+                            name: 'contao/standard-edition'
+                        }
+                    };
+
+                    var versionField = form.find('input[name="version"]').first();
+
+                    if (versionField.val() != versionField.attr('placeholder')) {
+                        createProjectPayload.version = versionField.val();
+                    }
+
+                    return self.createProject(createProjectPayload, state);
+                }
+
+                return state;
+            })
+            .then(function(state) {
+                // Install project if not already installed
+                if (true !== state.project_installed) {
+                    // @todo this is a logical problem. If I configured
+                    // the project but did not install immediately, it might
+                    // be that the project is configured but there's no task
+                    // for installing it anymore. Configure and create-project
+                    // should be one API endpoint, in my opinion.
+                }
+
+            })
+            .catch(function(err) {
+                // @todo: what to do with those general errors
+                console.log(err);
+            });
+    },
+
+    configure: function(configurePayload, state) {
+
+        return new Promise(function (resolve, reject) {
+
+            jQuery.ajax('/api/v1/install/configure', {
+                method: 'POST',
+                data: JSON.stringify(configurePayload),
+                dataType: 'json'
+            }).success(function (response) {
+                if ('OK' === response.status) {
+                    // Successfully configured, adjust state
+                    state.tenside_configured = true;
+
+                    // @todo: store the token!
+
+                    resolve(state);
+                } else {
+                    reject(response);
+                }
+            }).fail(function (err) {
+                reject(err);
+            });
         });
+    },
 
-        this.setState({installing: true});
+    createProject: function(createProjectPayload, state) {
 
-        jQuery.ajax('/api/v1/install/configure', {
-            method: 'POST',
-            data: JSON.stringify(configurePayload),
-            dataType: 'json'
-        }).success(function(response) {
-            if ('ok' !== response.status) {
-                // @todo: what if configure failed?
-            }
+        return new Promise(function (resolve, reject) {
 
             jQuery.ajax('/api/v1/install/create-project', {
                 method: 'POST',
                 data: JSON.stringify(createProjectPayload),
                 dataType: 'json'
-            }).success(function(response) {
-                if ('ok' !== response.status) {
-                    // @todo: what if create-project failed?
-                }
-            }).fail(function() {
-                // @todo: what if create-project failed?
-            });
+            }).success(function (response) {
+                if ('OK' === response.status) {
+                    // Successfully created, adjust state
+                    state.project_created = true;
 
-        }).fail(function() {
-            // @todo: what if configure failed?
+                    // Taskrunner
+
+
+                    resolve(state);
+                } else {
+                    reject(response);
+                }
+            }).fail(function (err) {
+                reject(err);
+            });
         });
     },
 
