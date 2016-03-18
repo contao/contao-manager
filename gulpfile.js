@@ -35,7 +35,7 @@ gulp.task('scripts', function () {
 
 // Build bundle.css task
 gulp.task('sass', function () {
-    return gulp.src('assets/css/*.scss')
+    return gulp.src('assets/css/bundle.scss')
         .pipe(production ? sourcemaps.init() : gutil.noop())
         .pipe(sass())
         .pipe(production ? sourcemaps.write() : gutil.noop())

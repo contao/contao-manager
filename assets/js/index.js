@@ -15,7 +15,7 @@ routes['index'] = crossroads.addRoute('/{locale}/', function() {
     ReactDOM.render(
         <App />,
         document.getElementById('app')
-    )
+    );
     ReactDOM.render(
         <TaskPopup />,
         document.getElementById('popup')
