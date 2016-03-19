@@ -74,7 +74,8 @@ var InstallComponent = React.createClass({
                     var configurePayload = {
                         credentials: {
                             username: form.find('input[name="username"]').first().val(),
-                            password: form.find('input[name="password"]').first().val()
+                            password: form.find('input[name="password"]').first().val(),
+                            secret: 'foobar' // @todo: Tenside should do this!
                         }
                     };
 
