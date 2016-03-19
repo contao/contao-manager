@@ -7,6 +7,7 @@ const Translation   = require('./translation.js');
 const TextWidget    = require('./widgets/text.js');
 const TensideState  = require('./tenside/state.js');
 const eventhandler  = require('./eventhandler.js');
+const request       = require('./request.js');
 
 
 var InstallComponent = React.createClass({
@@ -30,7 +31,7 @@ var InstallComponent = React.createClass({
             return;
         }
 
-        jQuery.ajax('/api/v1/constraint', {
+        request.createRequest('/api/v1/constraint', {
             method: 'POST',
             data: JSON.stringify({constraint: value}),
             dataType: 'json'
@@ -123,7 +124,7 @@ var InstallComponent = React.createClass({
 
         return new Promise(function (resolve, reject) {
 
-            jQuery.ajax('/api/v1/install/configure', {
+            request.createRequest('/api/v1/install/configure', {
                 method: 'POST',
                 data: JSON.stringify(configurePayload),
                 dataType: 'json'
@@ -132,7 +133,8 @@ var InstallComponent = React.createClass({
                     // Successfully configured, adjust state
                     state.tenside_configured = true;
 
-                    // @todo: store the token!
+                    // Store the JWT
+                    request.setToken(response.token);
 
                     resolve(state);
                 } else {
@@ -148,7 +150,7 @@ var InstallComponent = React.createClass({
 
         return new Promise(function (resolve, reject) {
 
-            jQuery.ajax('/api/v1/install/create-project', {
+            request.createRequest('/api/v1/install/create-project', {
                 method: 'POST',
                 data: JSON.stringify(createProjectPayload),
                 dataType: 'json'
@@ -156,9 +158,6 @@ var InstallComponent = React.createClass({
                 if ('OK' === response.status) {
                     // Successfully created, adjust state
                     state.project_created = true;
-
-                    // Taskrunner
-
 
                     resolve(state);
                 } else {
