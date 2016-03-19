@@ -68,7 +68,7 @@ var InstallComponent = React.createClass({
 
         TensideState.getState()
             .then(function(state) {
-                // Configure project if not already configured
+                // Configure tenside if not already configured
                 if (true !== state.tenside_configured) {
                     var configurePayload = {
                         credentials: {
@@ -93,7 +93,7 @@ var InstallComponent = React.createClass({
 
                     var versionField = form.find('input[name="version"]').first();
 
-                    if (versionField.val() != versionField.attr('placeholder')) {
+                    if ('' !== versionField.val()) {
                         createProjectPayload.version = versionField.val();
                     }
 
