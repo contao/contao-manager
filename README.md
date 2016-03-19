@@ -63,3 +63,22 @@ SetEnv COMPOSER /path/to/my/package-manager/test-dir/web
 ```
 
 Note the virtual `web` folder. Obviously that's an example for Apache.
+
+### 5. Development and Debug modes
+
+By default, debugging is disabled and the package manager runs in `prod`
+mode. To change this, you can set yet another two environment variables:
+
+```
+SetEnv SYMFONY_ENV dev
+SetEnv SYMFONY_DEBUG 1
+```
+
+This enables extended logging and debugging features especially useful
+during development.
+
+### 6. Accessing the API documentation
+
+You can see all available API calls thanks to the fantastic 
+NelmioApiBundle when accessing the route `/assets/api-doc`.
+Note that this is only available in `dev` mode .
