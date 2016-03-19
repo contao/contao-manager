@@ -7,6 +7,7 @@ const Translation   = require('./translation.js');
 const TextWidget    = require('./widgets/text.js');
 const TensideState  = require('./tenside/state.js');
 const eventhandler  = require('./eventhandler.js');
+const taskmanager   = require('./taskmanager.js');
 const request       = require('./request.js');
 
 
@@ -107,11 +108,12 @@ var InstallComponent = React.createClass({
             .then(function(state) {
                 // Install project if not already installed
                 if (true !== state.project_installed) {
-                    // @todo this is a logical problem. If I configured
-                    // the project but did not install immediately, it might
-                    // be that the project is configured but there's no task
-                    // for installing it anymore. Configure and create-project
-                    // should be one API endpoint, in my opinion.
+
+                    // @todo what if the project was created but not installed
+                    // and the task manually deleted? running the next task
+                    // will fail?
+
+                    return taskmanager.runNextTask();
                 }
 
             })
