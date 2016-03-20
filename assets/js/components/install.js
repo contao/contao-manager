@@ -55,7 +55,7 @@ var InstallComponent = React.createClass({
             this.passwordConfirm = e.target.value;
         }
 
-        if (this.password === this.passwordConfirm) {
+        if ('' === this.password || '' === this.passwordConfirm || this.password === this.passwordConfirm) {
             this.setState({passwordsErrorMessage: ''});
         } else {
             this.setState({passwordsErrorMessage: <Translation domain="install">Passwords do not match!</Translation>});
