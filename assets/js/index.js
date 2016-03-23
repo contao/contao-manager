@@ -5,6 +5,7 @@ const React        = require('react'); // has to be present here because JSX is 
 const ReactDOM     = require('react-dom');
 const Install      = require('./components/public/install.js');
 const Login        = require('./components/public/login.js');
+const Packages     = require('./components/manager/packages.js');
 const TaskPopup    = require('./components/taskpopup.js');
 
 
@@ -29,6 +30,18 @@ routes['login'] = crossroads.addRoute('/{locale}/login', function() {
 routes['install'] = crossroads.addRoute('/{locale}/install', function() {
     ReactDOM.render(
         <Install />,
+        document.getElementById('app')
+    );
+    ReactDOM.render(
+        <TaskPopup />,
+        document.getElementById('popup')
+    );
+});
+
+// Packages
+routes['packages'] = crossroads.addRoute('/{locale}/packages', function() {
+    ReactDOM.render(
+        <Packages />,
         document.getElementById('app')
     );
     ReactDOM.render(

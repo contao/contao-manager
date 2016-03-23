@@ -127,6 +127,20 @@
             padding: 8px 0;
         }
 
+        a {
+            display: inline-block;
+
+            &:before {
+                padding: 0 10px;
+                content: "|"
+            }
+
+            &.close:before,
+            &.first:before {
+                content: "";
+            }
+        }
+
         > svg {
             position: relative;
             top: 6px;
