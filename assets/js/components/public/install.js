@@ -3,12 +3,13 @@
 const React         = require('react');
 const jQuery        = require('jquery');
 const Promise       = require('promise');
-const Translation   = require('./translation.js');
-const TextWidget    = require('./widgets/text.js');
-const TensideState  = require('./tenside/state.js');
-const eventhandler  = require('./eventhandler.js');
-const taskmanager   = require('./taskmanager.js');
-const request       = require('./request.js');
+const Trappings     = require('./trappings.js');
+const Translation   = require('../translation.js');
+const TextWidget    = require('../widgets/text.js');
+const TensideState  = require('../tenside/state.js');
+const eventhandler  = require('../eventhandler.js');
+const taskmanager   = require('../taskmanager.js');
+const request       = require('../request.js');
 
 
 var InstallComponent = React.createClass({
@@ -178,50 +179,31 @@ var InstallComponent = React.createClass({
         var disableButton = hasErrors || this.state.installing;
 
         return (
-            <div id="content" className="table wide">
-                <div className="cell">
-                    <main>
-                        <header>
-                            <img src="/web-assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
-                            <p className="welcome"><strong>Welcome</strong> to Contao Manager v1.0</p>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
-                        </header>
+            <Trappings install={true}>
+                <form id="install-form" action="#" method="post">
+                    <fieldset>
+                        <legend><Translation domain="install">User Account</Translation></legend>
+                        <p>Create a user account to manage your installation.</p>
 
-                        <section>
-                            <form id="install-form" action="#" method="post">
-                                <fieldset>
-                                    <legend><Translation domain="install">User Account</Translation></legend>
-                                    <p>Create a user account to manage your installation.</p>
+                        <TextWidget type="text" name="username" label="Username" />
+                        <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
+                        <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
 
-                                    <TextWidget type="text" name="username" label="Username" />
-                                    <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
-                                    <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
+                    </fieldset>
 
-                                </fieldset>
+                    <fieldset>
+                        <legend>Contao Installation</legend>
+                        <p>Enter a version to install or leave blank for the latest version.</p>
 
-                                <fieldset>
-                                    <legend>Contao Installation</legend>
-                                    <p>Enter a version to install or leave blank for the latest version.</p>
+                        <TextWidget type="text" name="version" label="Version" placeholder="latest" onChange={this.validateConstraint} error={this.state.constraintErrorMessage} />
 
-                                    <TextWidget type="text" name="version" label="Version" placeholder="latest" onChange={this.validateConstraint} error={this.state.constraintErrorMessage} />
+                    </fieldset>
 
-                                </fieldset>
-
-                                <button disabled={disableButton} type="submit" onClick={this.handleInstall}>Install</button>
-                            </form>
-                        </section>
-
-                        <footer>
-                            © 2016 <a href="http://association.contao.org/" target="_blank">Contao Association</a>
-                            <a href="" className="support">Support</a>
-                        </footer>
-                    </main>
-                </div>
-            </div>
+                    <button disabled={disableButton} type="submit" onClick={this.handleInstall}>Install</button>
+                </form>
+            </Trappings>
         );
     }
 });
 
 module.exports = InstallComponent;
-
-

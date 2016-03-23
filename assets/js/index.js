@@ -3,8 +3,8 @@
 const crossroads   = require('crossroads');
 const React        = require('react'); // has to be present here because JSX is transformed to React.createElement()
 const ReactDOM     = require('react-dom');
-const Install      = require('./components/install.js');
-const Login        = require('./components/login.js');
+const Install      = require('./components/public/install.js');
+const Login        = require('./components/public/login.js');
 const TaskPopup    = require('./components/taskpopup.js');
 
 
