@@ -1,7 +1,6 @@
 'use strict';
 
 const React = require('react');
-const ReactDOM = require('react-dom');
 
 var ErrorMessage = React.createClass({
     render: function() {
@@ -46,7 +45,7 @@ var Widget = React.createClass({
         return (
             <div className={cssClasses}>
                 {errorMessage}
-                <label htmlFor={this.props.name}>{this.props.label}</label>
+                <label htmlFor={'ctrl_' + this.props.name}>{this.props.label}</label>
                 <input type={this.props.type} id={'ctrl_' + this.props.name} name={this.props.name} placeholder={this.props.placeholder} onChange={this.handleChange} />
             </div>
         );
