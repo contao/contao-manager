@@ -18,14 +18,10 @@ routes['index'] = crossroads.addRoute('/{locale}/', function(request) {
 });
 
 // Install
-routes['install'] = crossroads.addRoute('/{locale}/login', function() {
+routes['login'] = crossroads.addRoute('/{locale}/login', function() {
     ReactDOM.render(
         <Login />,
         document.getElementById('app')
-    );
-    ReactDOM.render(
-        <TaskPopup />,
-        document.getElementById('popup')
     );
 });
 
