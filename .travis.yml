@@ -11,9 +11,11 @@ sudo: false
 install:
   - travis_retry composer self-update && composer --version
   - travis_retry composer update --prefer-dist --no-interaction
+  - travis_retry npm install
 
 script:
   - ant -keep-going
+  - ./node_modules/.bin/gulp
 
 # Hack to make things work again - we can not use a shallow repository.
 git:
