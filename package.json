@@ -19,6 +19,7 @@
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
     "hashchange": "^1.0.0",
+    "history": "^2.0.1",
     "jquery": "^2.2.1",
     "lscache": "^1.0.5",
     "promise": "^7.1.1",
