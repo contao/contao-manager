@@ -5,7 +5,7 @@ const ReactDOM     = require('react-dom');
 const routing      = require('./components/helpers/routing.js');
 const App          = require('./components/app.js');
 const TaskPopup    = require('./components/taskpopup.js');
-const TensideState = require('./components/tenside/state.js');
+const TensideState = require('./components/helpers/tenside-state.js');
 const request      = require('./components/helpers/request.js');
 
 // Check Tenside state

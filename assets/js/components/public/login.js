@@ -7,7 +7,7 @@ const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
 const request       = require('../helpers/request.js');
 const routing       = require('../helpers/routing.js');
-const TensideState  = require('../tenside/state.js');
+const TensideState  = require('../helpers/tenside-state.js');
 
 
 var InstallComponent = React.createClass({
