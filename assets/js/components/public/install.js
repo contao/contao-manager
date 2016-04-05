@@ -131,8 +131,7 @@ var InstallComponent = React.createClass({
         var configurePayload = {
             credentials: {
                 username: username,
-                password: password,
-                secret: 'foobar' // @todo: Tenside should do this!
+                password: password
             }
         };
 
