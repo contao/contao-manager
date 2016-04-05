@@ -22,7 +22,7 @@ var _initialize = function() {
     _initialized = true;
 };
 
-var _getLanguage = function() {
+var getLanguage = function() {
     var lang = 'en';
 
     if (undefined !== document
@@ -54,7 +54,7 @@ var getRoute = function(routeName) {
 
 var redirect = function(routeName, lang) {
     _initialize();
-    lang = typeof lang !== 'undefined' ? lang : _getLanguage();
+    lang = typeof lang !== 'undefined' ? lang : getLanguage();
     var route = getRoute(routeName);
     var newLocation = route.interpolate({locale: lang});
 
@@ -70,5 +70,6 @@ module.exports = {
     getRoutes: getRoutes,
     getRoute: getRoute,
     redirect: redirect,
-    getHistory: getHistory
+    getHistory: getHistory,
+    getLanguage: getLanguage
 };

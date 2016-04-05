@@ -4,6 +4,7 @@ const React                 = require('react');
 const jQuery                = require('jquery');
 const Promise               = require('promise');
 const cancellablePromise    = require('./helpers/cancellable-promise.js');
+const request               = require('./helpers/request.js');
 
 var translate = function(key, placeholders, domain, locale) {
     placeholders = typeof placeholders !== 'undefined' ? placeholders : {};
@@ -11,13 +12,7 @@ var translate = function(key, placeholders, domain, locale) {
     locale = typeof locale !== 'undefined' ? locale : 'fallback';
 
     if ('fallback' === locale) {
-        if (undefined !== document
-            && undefined !== document.getElementsByTagName('html')[0]
-            && undefined !== document.getElementsByTagName('html')[0].lang) {
-            locale = document.getElementsByTagName('html')[0].lang;
-        } else {
-            locale = 'en';
-        }
+        locale = request.getLanguage();
     }
 
     var promise = new Promise(function (resolve, reject) {
