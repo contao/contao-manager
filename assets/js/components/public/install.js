@@ -161,7 +161,7 @@ var InstallComponent = React.createClass({
                         // Store the JWT
                         request.setToken(response.token);
 
-                        resolve(state);
+                        resolve(response);
                     } else {
                         reject(response);
                     }
