@@ -6,7 +6,7 @@ const ReactDOM     = require('react-dom');
 const history      = require('history').createHistory();
 const App          = require('./components/app.js');
 const TensideState = require('./components/tenside/state.js');
-const request      = require('./components/request.js');
+const request      = require('./components/helpers/request.js');
 
 // Routing definition
 function handleRoute(hash) {
