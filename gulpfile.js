@@ -1,16 +1,16 @@
 'use strict';
 
-var browserify    = require('browserify');
-var gulp          = require('gulp');
-var source        = require('vinyl-source-stream');
-var buffer        = require('vinyl-buffer');
-var gutil         = require('gulp-util');
-var uglify        = require('gulp-uglify');
-var sourcemaps    = require('gulp-sourcemaps');
-var rename        = require('gulp-rename');
-var sass          = require('gulp-sass');
-var cleanCSS      = require('gulp-clean-css');
-var concat        = require('gulp-concat');
+const browserify    = require('browserify');
+const gulp          = require('gulp');
+const source        = require('vinyl-source-stream');
+const buffer        = require('vinyl-buffer');
+const gutil         = require('gulp-util');
+const uglify        = require('gulp-uglify');
+const sourcemaps    = require('gulp-sourcemaps');
+const rename        = require('gulp-rename');
+const sass          = require('gulp-sass');
+const cleanCSS      = require('gulp-clean-css');
+const concat        = require('gulp-concat');
 
 var production      = !!gutil.env.production;
 
