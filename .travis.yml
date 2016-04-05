@@ -8,6 +8,10 @@ php:
 
 sudo: false
 
+# Let's bump node.js to the latest version.
+before_install:
+   - nvm install node
+
 install:
   - travis_retry composer self-update && composer --version
   - travis_retry composer update --prefer-dist --no-interaction
