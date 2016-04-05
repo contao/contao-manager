@@ -5,7 +5,8 @@ const jQuery                = require('jquery');
 const Promise               = require('promise');
 const cancellablePromise    = require('./helpers/cancellable-promise.js');
 
-var translate = function(key, domain, locale) {
+var translate = function(key, placeholders, domain, locale) {
+    placeholders = typeof placeholders !== 'undefined' ? placeholders : {};
     domain = typeof domain !== 'undefined' ? domain : 'messages';
     locale = typeof locale !== 'undefined' ? locale : 'fallback';
 
@@ -23,7 +24,21 @@ var translate = function(key, domain, locale) {
         jQuery.ajax({
             url: '/translation/' + locale + '/' + domain
         }).success(function(result) {
-            resolve(result);
+            var translation = key;
+            if (undefined !== result[key]) {
+                translation = result[key];
+            }
+
+            // Replace placeholders
+            if (placeholders) {
+                for (var placeholder in placeholders) {
+                    if (placeholders.hasOwnProperty(placeholder)) {
+                        translation = translation.replace('%' + placeholder + '%', placeholders[placeholder]);
+                    }
+                }
+            }
+
+            resolve(translation);
         });
     });
 
@@ -46,21 +61,10 @@ var Translation = React.createClass({
         var label = this.props.children;
         var self = this;
 
-        this.translatePromise = translate(label, this.props.domain, this.props.locale);
+        this.translatePromise = translate(label, this.props.placeholders, this.props.domain, this.props.locale);
         this.translatePromise
             .promise
-            .then(function(result) {
-                var translation = result[label];
-
-                // Replace placeholders
-                if (self.props.placeholders) {
-                    for (var placeholder in self.props.placeholders) {
-                        if (self.props.placeholders.hasOwnProperty(placeholder)) {
-                            translation = translation.replace('%' + placeholder + '%', self.props.placeholders[placeholder]);
-                        }
-                    }
-                }
-
+            .then(function(translation) {
                 self.setState({label: translation});
             })
             .catch(function(err) {
