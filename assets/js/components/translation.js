@@ -1,9 +1,9 @@
 'use strict';
 
-const React     = require('react');
-const jQuery    = require('jquery');
-const Promise   = require('promise');
-const lscache   = require('lscache');
+const React                 = require('react');
+const jQuery                = require('jquery');
+const Promise               = require('promise');
+const cancellablePromise    = require('./helpers/cancellable-promise.js');
 
 var translate = function(key, domain, locale) {
     domain = typeof domain !== 'undefined' ? domain : 'messages';
@@ -19,27 +19,21 @@ var translate = function(key, domain, locale) {
         }
     }
 
-    var cacheKey = 'cpm:translations:' + locale + ':' + domain;
-
-    return new Promise(function (resolve, reject) {
-
-        var cache = lscache.get(cacheKey);
-
-        if (cache) {
-            resolve(cache);
-            return;
-        }
-
+    var promise = new Promise(function (resolve, reject) {
         jQuery.ajax({
             url: '/translation/' + locale + '/' + domain
         }).success(function(result) {
-            lscache.set(cacheKey, result, 60); // expire after 1 hour
             resolve(result);
         });
     });
+
+    return cancellablePromise.makeCancellable(promise);
 };
 
 var Translation = React.createClass({
+
+    translatePromise: null,
+
     getInitialState: function() {
         return {
             label:  '',
@@ -52,7 +46,9 @@ var Translation = React.createClass({
         var label = this.props.children;
         var self = this;
 
-        translate(label, this.props.domain, this.props.locale)
+        this.translatePromise = translate(label, this.props.domain, this.props.locale);
+        this.translatePromise
+            .promise
             .then(function(result) {
                 var translation = result[label];
 
@@ -66,8 +62,16 @@ var Translation = React.createClass({
                 }
 
                 self.setState({label: translation});
+            })
+            .catch(function(err) {
+                // catch isCancelled
             });
     },
+
+    componentWillUnmount: function() {
+        this.translatePromise.cancel();
+    },
+
     render: function() {
 
         return (

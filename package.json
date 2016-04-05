@@ -21,7 +21,6 @@
     "hashchange": "^1.0.0",
     "history": "^2.0.1",
     "jquery": "^2.2.1",
-    "lscache": "^1.0.5",
     "promise": "^7.1.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
