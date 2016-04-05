@@ -6,6 +6,8 @@ const Trappings     = require('./trappings.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
 const request       = require('../helpers/request.js');
+const routing       = require('../helpers/routing.js');
+const TensideState  = require('../tenside/state.js');
 
 
 var InstallComponent = React.createClass({
@@ -35,7 +37,18 @@ var InstallComponent = React.createClass({
         this.login(username, password)
             .then(function() {
                 self.setState({isLoggedIn: true});
-            })
+
+                TensideState.getState()
+                    .then(function(state) {
+                        // If no project was created go to the install screen
+                        // Otherwise go to the packages
+                        if (true !== state.project_created) {
+                            routing.redirect('install');
+                        } else {
+                            routing.redirect('packages');
+                        }
+                    });
+            });
     },
 
     login: function(username, password) {
