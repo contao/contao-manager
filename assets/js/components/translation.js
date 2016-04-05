@@ -52,9 +52,20 @@ var Translation = React.createClass({
         var label = this.props.children;
         var self = this;
 
-        translate(this.props.children, this.props.domain, this.props.locale)
+        translate(label, this.props.domain, this.props.locale)
             .then(function(result) {
-                self.setState({label: result[label]});
+                var translation = result[label];
+
+                // Replace placeholders
+                if (self.props.placeholders) {
+                    for (var placeholder in self.props.placeholders) {
+                        if (self.props.placeholders.hasOwnProperty(placeholder)) {
+                            translation = translation.replace('%' + placeholder + '%', self.props.placeholders[placeholder]);
+                        }
+                    }
+                }
+
+                self.setState({label: translation});
             });
     },
     render: function() {
