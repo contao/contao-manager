@@ -16,20 +16,18 @@ function handleRoute(hash) {
         .then(function(state) {
             // If not configured, go to the install screen
             if (true !== state.tenside_configured) {
-                hash = 'install';
-                updateHashWithoutRedirect(hash);
+                return 'install';
             }
 
-            return state;
-        })
-        .then(function(state) {
             // If no project was created and not logged in, go to the login screen
             if (true !== state.project_created && '' === request.getToken()) {
-                hash = 'login';
-                updateHashWithoutRedirect(hash);
+                return 'login';
             }
+
+            return hash;
         })
-        .then(function() {
+        .then(function(hash) {
+            updateHashWithoutRedirect(hash);
             var app = <App route={hash} />;
             ReactDOM.render(app, document.getElementById('app'));
         });
