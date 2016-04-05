@@ -1,7 +1,7 @@
 'use strict';
 
 const React         = require('react');
-const jQuery        = require('jQuery');
+const jQuery        = require('jquery');
 const Trappings     = require('./trappings.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
