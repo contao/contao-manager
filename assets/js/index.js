@@ -1,42 +1,50 @@
 'use strict';
 
-const hashchange   = require('hashchange');
 const React        = require('react'); // has to be present here because JSX is transformed to React.createElement()
 const ReactDOM     = require('react-dom');
-const history      = require('history').createHistory();
+const routing      = require('./components/helpers/routing.js');
 const App          = require('./components/app.js');
 const TaskPopup    = require('./components/taskpopup.js');
 const TensideState = require('./components/tenside/state.js');
 const request      = require('./components/helpers/request.js');
 
-// Routing definition
-function handleRoute(hash) {
+// Check Tenside state
+TensideState.getState()
+    .then(function(state) {
+        // If not configured, go to the install screen
+        if (true !== state.tenside_configured) {
+            routing.redirect('install');
+            return;
+        }
 
-    // Check Tenside state
-    TensideState.getState()
-        .then(function(state) {
-            // If not configured, go to the install screen
-            if (true !== state.tenside_configured) {
-                return 'install';
+        // If no project was created and not logged in, go to the login screen
+        if (true !== state.project_created && '' === request.getToken()) {
+            routing.redirect('login');
+        }
+    })
+    .then(function () {
+        var router = routing.getRouter();
+        var routes = routing.getRoutes();
+
+        for (var routeName in routes) {
+            if (routes.hasOwnProperty(routeName)) {
+                routes[routeName].matched.add(function() {
+                    switchContent(this.routeName);
+                }.bind({ routeName: routeName }));
             }
+        }
 
-            // If no project was created and not logged in, go to the login screen
-            if (true !== state.project_created && '' === request.getToken()) {
-                return 'login';
-            }
-
-            return hash;
-        })
-        .then(function(hash) {
-            updateHashWithoutRedirect(hash);
-            ReactDOM.render(<App route={hash} />, document.getElementById('app'));
-            ReactDOM.render(<TaskPopup />, document.getElementById('popup'));
+        routing.getHistory().listen(function(location) {
+            router.parse(location.pathname);
         });
-}
+        router.parse(document.location.pathname);
+    });
 
-hashchange.update(handleRoute);
-hashchange.update();
 
-function updateHashWithoutRedirect(hash) {
-    history.push(window.location.pathname + '#' + hash);
-}
+
+var switchContent = function(routeName) {
+    ReactDOM.render(<App route={routeName} />, document.getElementById('app'));
+    ReactDOM.render(<TaskPopup />, document.getElementById('popup'));
+};
+
+
