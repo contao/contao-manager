@@ -34,6 +34,12 @@ TensideState.getState()
             }
         }
 
+        // Fallback
+        router.bypassed.add(function() {
+            var target = '' === request.getToken() ? 'login' : 'packages';
+            routing.redirect(target);
+        });
+
         routing.getHistory().listen(function(location) {
             router.parse(location.pathname);
         });
