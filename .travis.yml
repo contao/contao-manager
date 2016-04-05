@@ -11,7 +11,7 @@ sudo: false
 install:
   - travis_retry composer self-update && composer --version
   - travis_retry composer update --prefer-dist --no-interaction
-  - travis_retry npm install
+  - travis_retry npm install --no-progress
 
 script:
   - ant -keep-going
