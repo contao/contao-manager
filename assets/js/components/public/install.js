@@ -19,8 +19,16 @@ var InstallComponent = React.createClass({
         return {
             passwordsErrorMessage: '',
             constraintErrorMessage: '',
-            installing: false
+            installing: false,
+            isLoggedIn: false
         };
+    },
+
+    componentDidMount: function() {
+
+        if ('' !== request.getUsername() && '' !== request.getToken()) {
+            this.setState({isLoggedIn: true});
+        }
     },
 
     validateConstraint: function(props, e) {
@@ -178,18 +186,27 @@ var InstallComponent = React.createClass({
         var hasErrors = this.state.passwordsErrorMessage !== '';
         var disableButton = hasErrors || this.state.installing;
 
+        var usernamePart = '';
+
+        if (this.state.isLoggedIn) {
+            var translationPlaceholders = { username: request.getUsername() };
+            usernamePart = <Translation placeholders={translationPlaceholders}>You are logged in as %username%.</Translation>;
+        } else {
+            usernamePart = <fieldset>
+                <legend><Translation domain="install">User Account</Translation></legend>
+                <p>Create a user account to manage your installation.</p>
+
+                <TextWidget type="text" name="username" label="Username" />
+                <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
+                <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
+
+            </fieldset>
+        }
+
         return (
             <Trappings install={true}>
                 <form id="install-form" action="#" method="post">
-                    <fieldset>
-                        <legend><Translation domain="install">User Account</Translation></legend>
-                        <p>Create a user account to manage your installation.</p>
-
-                        <TextWidget type="text" name="username" label="Username" />
-                        <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
-                        <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
-
-                    </fieldset>
+                    {usernamePart}
 
                     <fieldset>
                         <legend>Contao Installation</legend>
