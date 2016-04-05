@@ -3,6 +3,7 @@
 const jQuery        = require('jquery');
 
 var jwtToken = '';
+var username = '';
 
 var createRequest = function(url, props) {
 
@@ -25,8 +26,18 @@ var getToken = function() {
     return jwtToken;
 };
 
+var setUsername = function(name) {
+    username = name;
+};
+
+var getUsername = function() {
+    return username;
+};
+
 module.exports = {
     createRequest: createRequest,
     setToken: setToken,
-    getToken: getToken
+    getToken: getToken,
+    setUsername: setUsername,
+    getUsername: getUsername
 };
