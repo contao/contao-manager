@@ -81,15 +81,10 @@ var InstallComponent = React.createClass({
             .then(function(state) {
                 // Configure tenside if not already configured
                 if (true !== state.tenside_configured) {
-                    var configurePayload = {
-                        credentials: {
-                            username: form.find('input[name="username"]').first().val(),
-                            password: form.find('input[name="password"]').first().val(),
-                            secret: 'foobar' // @todo: Tenside should do this!
-                        }
-                    };
+                    var username = form.find('input[name="username"]').first().val();
+                    var password = form.find('input[name="password"]').first().val();
 
-                    return self.configure(configurePayload, state);
+                    return self.configure(username, password);
                 }
 
                 return state;
@@ -132,28 +127,48 @@ var InstallComponent = React.createClass({
             });
     },
 
-    configure: function(configurePayload, state) {
+    configure: function(username, password) {
+        var configurePayload = {
+            credentials: {
+                username: username,
+                password: password,
+                secret: 'foobar' // @todo: Tenside should do this!
+            }
+        };
 
+        // First do an autoconfigure and then merge the data with the user
         return new Promise(function (resolve, reject) {
 
-            request.createRequest('/api/v1/install/configure', {
-                method: 'POST',
-                data: JSON.stringify(configurePayload),
-                dataType: 'json'
-            }).success(function (response) {
-                if ('OK' === response.status) {
-                    // Successfully configured, adjust state
-                    state.tenside_configured = true;
+            return new Promise(function (resolve, reject) {
+                request.createRequest('/api/v1/install/autoconfig', {
+                    method: 'GET',
+                    dataType: 'json'
+                }).success(function (response) {
+                    resolve(response);
+                }).fail(function (err) {
+                    reject(err);
+                });
+            }).then(function(autoconfig) {
 
-                    // Store the JWT
-                    request.setToken(response.token);
+                var config = { configuration: autoconfig};
+                configurePayload = Object.assign(configurePayload, config);
 
-                    resolve(state);
-                } else {
-                    reject(response);
-                }
-            }).fail(function (err) {
-                reject(err);
+                request.createRequest('/api/v1/install/configure', {
+                    method: 'POST',
+                    data: JSON.stringify(configurePayload),
+                    dataType: 'json'
+                }).success(function (response) {
+                    if ('OK' === response.status) {
+                        // Store the JWT
+                        request.setToken(response.token);
+
+                        resolve(state);
+                    } else {
+                        reject(response);
+                    }
+                }).fail(function (err) {
+                    reject(err);
+                });
             });
         });
     },
