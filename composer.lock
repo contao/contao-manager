@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "bc1d92aeee090d17f20548d3902d07d56933f029"
+                "reference": "997b5ef53684fb141c63435b1fcf8325a8fcaeec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/bc1d92aeee090d17f20548d3902d07d56933f029",
-                "reference": "bc1d92aeee090d17f20548d3902d07d56933f029",
+                "url": "https://api.github.com/repos/composer/composer/zipball/997b5ef53684fb141c63435b1fcf8325a8fcaeec",
+                "reference": "997b5ef53684fb141c63435b1fcf8325a8fcaeec",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-04-03 17:44:22"
+            "time": "2016-04-05 09:52:15"
         },
         {
             "name": "composer/semver",
@@ -2659,12 +2659,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "d1b9f7c310f5ad5d7e3a9a5cbf869949fd597573"
+                "reference": "eb77fffe010ec73d400e7cc8639597af68862bc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/d1b9f7c310f5ad5d7e3a9a5cbf869949fd597573",
-                "reference": "d1b9f7c310f5ad5d7e3a9a5cbf869949fd597573",
+                "url": "https://api.github.com/repos/tenside/core/zipball/eb77fffe010ec73d400e7cc8639597af68862bc0",
+                "reference": "eb77fffe010ec73d400e7cc8639597af68862bc0",
                 "shasum": ""
             },
             "require": {
@@ -2711,7 +2711,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-04-01 19:33:46"
+            "time": "2016-04-05 09:52:45"
         },
         {
             "name": "tenside/core-bundle",
@@ -2719,12 +2719,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "3fabf9a231b21e89c3f3f355fe811b51ad39a30c"
+                "reference": "4f518be478cacc62001146e76a7a3fb3469d6272"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/3fabf9a231b21e89c3f3f355fe811b51ad39a30c",
-                "reference": "3fabf9a231b21e89c3f3f355fe811b51ad39a30c",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/4f518be478cacc62001146e76a7a3fb3469d6272",
+                "reference": "4f518be478cacc62001146e76a7a3fb3469d6272",
                 "shasum": ""
             },
             "require": {
@@ -2750,7 +2750,8 @@
             "require-dev": {
                 "composer/composer": "~1.0@dev",
                 "nelmio/api-doc-bundle": "~2.10",
-                "phpcq/all-tasks": "~1.1"
+                "phpcq/all-tasks": "~1.1",
+                "symfony/expression-language": "~2.8"
             },
             "suggest": {
                 "nelmio/api-doc-bundle": "To benefit from the API documentation annotation"
@@ -2784,7 +2785,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-04-01 17:59:12"
+            "time": "2016-04-04 14:09:16"
         }
     ],
     "packages-dev": [
