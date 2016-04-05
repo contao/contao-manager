@@ -68,7 +68,6 @@ var InstallComponent = React.createClass({
 
     render: function() {
 
-        var username = request.getUsername();
         var disabled = this.state.isLoggingIn || this.state.isLoggedIn;
 
         if (this.state.isLoggedIn) {
@@ -82,8 +81,8 @@ var InstallComponent = React.createClass({
         } else {
             return (
                 <Trappings sectionClass="login">
-                    <h1>Sign In</h1>
-                    <p>Login to manage your installation.</p>
+                    <h1><Translation domain="login">Sign In</Translation></h1>
+                    <p><Translation domain="login">Login to manage your installation.</Translation></p>
 
                     <form id="login-form" action="#" method="post">
                         <TextWidget type="text" name="username" label="Username"
@@ -96,7 +95,7 @@ var InstallComponent = React.createClass({
                         {/* <a href="">Forgot your password?</a> */}
 
                         <button disabled={disabled} type="submit"
-                                onClick={this.handleLogin}>Sign in
+                                onClick={this.handleLogin}><Translation domain="login">Sign In</Translation>
                         </button>
                     </form>
                 </Trappings>
