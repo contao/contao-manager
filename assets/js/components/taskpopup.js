@@ -3,7 +3,7 @@
 const React         = require('react');
 const jQuery        = require('jquery');
 const Translation   = require('./translation.js');
-const eventhandler  = require('./eventhandler');
+const eventhandler  = require('./helpers/eventhandler');
 
 var TaskPopupComponent = React.createClass({
 

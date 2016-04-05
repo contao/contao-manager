@@ -5,6 +5,7 @@ const React        = require('react'); // has to be present here because JSX is 
 const ReactDOM     = require('react-dom');
 const history      = require('history').createHistory();
 const App          = require('./components/app.js');
+const TaskPopup    = require('./components/taskpopup.js');
 const TensideState = require('./components/tenside/state.js');
 const request      = require('./components/helpers/request.js');
 
@@ -28,8 +29,8 @@ function handleRoute(hash) {
         })
         .then(function(hash) {
             updateHashWithoutRedirect(hash);
-            var app = <App route={hash} />;
-            ReactDOM.render(app, document.getElementById('app'));
+            ReactDOM.render(<App route={hash} />, document.getElementById('app'));
+            ReactDOM.render(<TaskPopup />, document.getElementById('popup'));
         });
 }
 
