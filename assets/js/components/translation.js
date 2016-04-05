@@ -4,7 +4,7 @@ const React                 = require('react');
 const jQuery                = require('jquery');
 const Promise               = require('promise');
 const cancellablePromise    = require('./helpers/cancellable-promise.js');
-const request               = require('./helpers/request.js');
+const routing               = require('./helpers/routing.js');
 
 var translate = function(key, placeholders, domain, locale) {
     placeholders = typeof placeholders !== 'undefined' ? placeholders : {};
@@ -12,7 +12,7 @@ var translate = function(key, placeholders, domain, locale) {
     locale = typeof locale !== 'undefined' ? locale : 'fallback';
 
     if ('fallback' === locale) {
-        locale = request.getLanguage();
+        locale = routing.getLanguage();
     }
 
     var promise = new Promise(function (resolve, reject) {
