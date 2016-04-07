@@ -15,14 +15,16 @@ Promise.config({cancellation: true});
 // Check Tenside state
 TensideState.getState()
     .then(function(state) {
-        // If not configured, go to the install screen
-        if (true !== state.tenside_configured) {
+        // If not configured or project not created or installed, go to the install screen
+        if (true !== state.tenside_configured
+        && true !== state.project_created
+        && true !== state.project_installed) {
             routing.redirect('install');
             return;
         }
 
-        // If no project was created and not logged in, go to the login screen
-        if (true !== state.project_created && '' === request.getToken()) {
+        // If not logged in, go to the login screen
+        if ('' === request.getToken()) {
             routing.redirect('login');
         }
     })
