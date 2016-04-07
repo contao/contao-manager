@@ -19,7 +19,7 @@
   ],
   "require": {
     "php": ">=5.5",
-    "composer/composer": "dev-master",
+    "composer/composer": "~1.0",
     "symfony/monolog-bundle": "~2.8",
     "symfony/framework-bundle": "~2.8",
     "symfony/security-bundle": "~2.8",

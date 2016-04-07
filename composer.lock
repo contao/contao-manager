@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e401153eb6c63eb9ae13dcf69f875e5d",
-    "content-hash": "fa598753c9bd7d3b5eb4c1579c3f1c80",
+    "hash": "af9523f5186c58a2007d85844e81c784",
+    "content-hash": "45d4e3d23454c589ba457cb6755a59c2",
     "packages": [
         {
             "name": "composer/composer",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "9f3b1fd062d2a6eb4792a5ad0d0a48be117f63bc"
+                "reference": "32df3aa8cdbdaa16df9491b5e672e81c87f94c78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/9f3b1fd062d2a6eb4792a5ad0d0a48be117f63bc",
-                "reference": "9f3b1fd062d2a6eb4792a5ad0d0a48be117f63bc",
+                "url": "https://api.github.com/repos/composer/composer/zipball/32df3aa8cdbdaa16df9491b5e672e81c87f94c78",
+                "reference": "32df3aa8cdbdaa16df9491b5e672e81c87f94c78",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-04-05 09:59:40"
+            "time": "2016-04-05 12:27:26"
         },
         {
             "name": "composer/semver",
@@ -2719,12 +2719,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "c33f805017dcddb394081273ac1f5efb53b94986"
+                "reference": "c9527863436f198bfb6034867e088c588e9a963d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/c33f805017dcddb394081273ac1f5efb53b94986",
-                "reference": "c33f805017dcddb394081273ac1f5efb53b94986",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/c9527863436f198bfb6034867e088c588e9a963d",
+                "reference": "c9527863436f198bfb6034867e088c588e9a963d",
                 "shasum": ""
             },
             "require": {
@@ -2785,7 +2785,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-04-05 10:21:45"
+            "time": "2016-04-06 12:56:03"
         }
     ],
     "packages-dev": [
@@ -5250,9 +5250,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "composer/composer": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
