@@ -2,7 +2,7 @@
 
 const React         = require('react');
 const jQuery        = require('jquery');
-const Promise       = require('promise');
+const Promise       = require('bluebird');
 const Trappings     = require('./trappings.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
@@ -147,7 +147,8 @@ var InstallComponent = React.createClass({
                 }).fail(function (err) {
                     reject(err);
                 });
-            }).then(function(autoconfig) {
+            })
+            .then(function(autoconfig) {
 
                 var config = { configuration: autoconfig};
                 configurePayload = Object.assign(configurePayload, config);

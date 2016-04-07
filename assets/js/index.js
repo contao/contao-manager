@@ -2,11 +2,15 @@
 
 const React        = require('react'); // has to be present here because JSX is transformed to React.createElement()
 const ReactDOM     = require('react-dom');
+const Promise      = require('bluebird');
 const routing      = require('./components/helpers/routing.js');
 const App          = require('./components/app.js');
 const TaskPopup    = require('./components/taskpopup.js');
 const TensideState = require('./components/helpers/tenside-state.js');
 const request      = require('./components/helpers/request.js');
+
+// Enable cancelling of promises for the whole app
+Promise.config({cancellation: true});
 
 // Check Tenside state
 TensideState.getState()

@@ -1,10 +1,9 @@
 'use strict';
 
-const React                 = require('react');
-const jQuery                = require('jquery');
-const Promise               = require('promise');
-const cancellablePromise    = require('./helpers/cancellable-promise.js');
-const routing               = require('./helpers/routing.js');
+const React     = require('react');
+const jQuery    = require('jquery');
+const Promise   = require('bluebird');
+const routing   = require('./helpers/routing.js');
 
 var translate = function(key, placeholders, domain, locale) {
     placeholders = typeof placeholders !== 'undefined' ? placeholders : {};
@@ -15,7 +14,7 @@ var translate = function(key, placeholders, domain, locale) {
         locale = routing.getLanguage();
     }
 
-    var promise = new Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         jQuery.ajax({
             url: '/translation/' + locale + '/' + domain
         }).success(function(result) {
@@ -36,8 +35,6 @@ var translate = function(key, placeholders, domain, locale) {
             resolve(translation);
         });
     });
-
-    return cancellablePromise.makeCancellable(promise);
 };
 
 var Translation = React.createClass({
@@ -58,7 +55,6 @@ var Translation = React.createClass({
 
         this.translatePromise = translate(label, this.props.placeholders, this.props.domain, this.props.locale);
         this.translatePromise
-            .promise
             .then(function(translation) {
                 self.setState({label: translation});
             })

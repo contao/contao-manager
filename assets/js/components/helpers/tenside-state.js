@@ -1,4 +1,4 @@
-const Promise       = require('promise');
+const Promise       = require('bluebird');
 const jQuery        = require('jquery');
 
 
