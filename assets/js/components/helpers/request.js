@@ -30,6 +30,9 @@ var setToken = function(token) {
             domain: window.location.hostname,
             secure: window.location.protocol === 'https:'
         });
+
+    // reset cookie cache
+    cookies = null;
 };
 
 var getToken = function() {
