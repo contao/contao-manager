@@ -52,17 +52,24 @@ within the standard Symfony application `web` folder but it can be
 changed to anything you like.
 
 As you run within the `web` folder, `Tenside` will check for one directory
-above it and start managing from there. While developing this means, that
-it will start to manage the package manager itself which is likely not
-what you want. For that matter, set the `COMPOSER` environment variable
-to a different directory (`test-dir` in the package manager root in that
-case):
+above it for the existence of a `composer.json` file and start managing
+from there. While developing this means, that it will start to manage the
+package manager itself which is likely not what you want.
+For that matter, set the `COMPOSER` environment variable to a different
+location (`test-dir` in the package manager root in that case).
+
+Example for Apache (add to file `/path/to/my/package-manager/web/.htaccess`):
 
 ```
-SetEnv COMPOSER /path/to/my/package-manager/test-dir/web
+SetEnv COMPOSER /path/to/test-dir/composer.json
 ```
 
-Note the virtual `web` folder. Obviously that's an example for Apache.
+This will force tenside to use the defined location as installation root
+(the file itself does not have to exist, only the parenting directory has
+to).
+
+In the end, Tenside behaves exactly the same as Composer, see
+[composer docs](https://getcomposer.org/doc/03-cli.md#composer)
 
 ### 5. Development and Debug modes
 
