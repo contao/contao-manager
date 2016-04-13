@@ -14,7 +14,8 @@ var InstallComponent = React.createClass({
     getInitialState: function() {
         return {
             isLoggingIn: false,
-            isLoggedIn: false
+            isLoggedIn: false,
+            credentialsIncorrect: false
         }
     },
 
@@ -48,6 +49,9 @@ var InstallComponent = React.createClass({
                             routing.redirect('packages');
                         }
                     });
+            })
+            .catch(function() {
+                self.setState({credentialsIncorrect: true});
             });
     },
 
@@ -82,6 +86,7 @@ var InstallComponent = React.createClass({
     render: function() {
 
         var disabled = this.state.isLoggingIn || this.state.isLoggedIn;
+        var errorMsg = this.state.credentialsIncorrect ? <Translation domain="login">Your credentials are incorrect!</Translation> : '';
 
         if (this.state.isLoggedIn) {
             var translationPlaceholders = { username: request.getUsername() };
@@ -99,9 +104,9 @@ var InstallComponent = React.createClass({
 
                     <form id="login-form" action="#" method="post">
                         <TextWidget type="text" name="username" label="Username"
-                                    placeholder="Username"/>
+                                    placeholder="Username" error={errorMsg}/>
                         <TextWidget type="password" name="password"
-                                    label="Password" placeholder="Password"/>
+                                    label="Password" placeholder="Password" error={errorMsg}/>
 
 
                         {/* @todo Implement a forgot password functionality? */}
