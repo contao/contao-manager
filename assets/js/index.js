@@ -16,9 +16,9 @@ Promise.config({cancellation: true});
 TensideState.getState()
     .then(function(state) {
         // If not configured or project not created or installed, go to the install screen
-        if (true !== state.tenside_configured
-        && true !== state.project_created
-        && true !== state.project_installed) {
+        if (false === state.tenside_configured
+        || false === state.project_created
+        || false === state.project_installed) {
             routing.redirect('install');
             return;
         }
