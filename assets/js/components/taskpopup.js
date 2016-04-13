@@ -27,15 +27,18 @@ var TaskPopupComponent = React.createClass({
         var self = this;
         this.popup = jQuery('#task-popup');
 
+        // Escape key
+        jQuery(document).keyup(function(e) {
+            if (27 === e.keyCode) {
+                self.hide();
+            }
+        });
+
         eventhandler.on('displayTaskPopup', function(state) {
             state.show = true;
             self.setState(state);
         });
-        eventhandler.on('hideTaskPopup', function() {
-            self.setState({
-                show: false
-            });
-        });
+        eventhandler.on('hideTaskPopup', self.hide);
     },
 
     componentWillUpdate: function(nextProps, nextState) {
@@ -45,6 +48,12 @@ var TaskPopupComponent = React.createClass({
         } else {
             this.popup.fadeOut();
         }
+    },
+
+    hide: function() {
+        this.setState({
+            show: false
+        });
     },
 
     hideConsole: function() {
