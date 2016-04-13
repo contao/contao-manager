@@ -89,3 +89,7 @@ during development.
 You can see all available API calls thanks to the fantastic 
 NelmioApiBundle when accessing the route `/assets/api-doc`.
 Note that this is only available in `dev` mode .
+
+For a pre generated version of documentation, see [doc/API.md][1]
+
+[1]: https://github.com/contao/package-manager/blob/master/doc/API.md
