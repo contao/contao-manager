@@ -46,6 +46,10 @@ var getToken = function() {
 };
 
 var setUsername = function(name) {
+    // @todo this has to be improved because currently it's possible to have
+    // a token but no username is set to the app because the auth
+    // api endpoint does not yet deliver the username.
+    // See: https://github.com/tenside/core-bundle/issues/7
     username = name;
 };
 
