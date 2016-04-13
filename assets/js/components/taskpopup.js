@@ -193,7 +193,7 @@ var TaskPopupComponent = React.createClass({
 
                 <p>{consolePreview}</p>
 
-                <button>Cancel</button>
+                <button onClick={this.hide}>Cancel</button>
 
                 <a onClick={this.hideConsole} className="hide">
                     <i className="icono-caretRight"></i>
