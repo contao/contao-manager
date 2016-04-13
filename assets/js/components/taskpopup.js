@@ -3,21 +3,25 @@
 const React         = require('react');
 const jQuery        = require('jquery');
 const Translation   = require('./translation.js');
-const eventhandler  = require('./helpers/eventhandler');
+const eventhandler  = require('./helpers/eventhandler.js');
+const request       = require('./helpers/request.js');
 
 var TaskPopupComponent = React.createClass({
 
     popup: null,
+    lastTaskId: null,
+    currentInterval: null,
+    taskTitleCache: {},
 
     getInitialState: function() {
         return {
             show: false,
             showConsole: false,
             status: 'loading',
+            taskId: null,
+            updateFrequency: 2000, // every 2 seconds
             content: {
-                taskTitle: '',
-                h2: '',
-                shortExplanation: '',
+                taskTitle: '[…]',
                 consoleOutput: ''
             }
         };
@@ -50,10 +54,21 @@ var TaskPopupComponent = React.createClass({
         }
     },
 
+    componentDidUpdate: function(prevProps, prevState) {
+
+        // If task has changed, start update
+        if (this.lastTaskId !== this.state.taskId) {
+            this.startTaskUpdate();
+        }
+
+        this.lastTaskId = this.state.taskId;
+    },
+
     hide: function() {
         this.setState({
             show: false
         });
+        window.clearInterval(this.currentInterval);
     },
 
     hideConsole: function() {
@@ -64,9 +79,96 @@ var TaskPopupComponent = React.createClass({
         this.setState({showConsole: true});
     },
 
+    startTaskUpdate: function() {
+        this.currentInterval = window.setInterval(this.taskUpdate, this.state.updateFrequency);
+    },
+
+    taskUpdate: function() {
+
+        var taskId = this.state.taskId;
+        var self = this;
+
+        if (null === taskId) {
+            window.clearInterval(this.currentInterval);
+            return;
+        }
+
+        request.createRequest('/api/v1/tasks/' + taskId, {
+            method: 'GET',
+            dataType: 'json'
+        }).success(function (response) {
+
+            var newState = {
+                content: {
+                    consoleOutput:response.output
+                }
+            };
+
+            switch (response.status) {
+                case 'PENDING':
+                case 'RUNNING':
+                    break;
+                case 'FINISHED':
+                    newState['status'] = 'success';
+                    window.clearInterval(self.currentInterval);
+                    break;
+                case 'ERROR':
+                default:
+                    newState['status'] = 'error';
+                    window.clearInterval(self.currentInterval);
+            }
+
+            newState['content']['taskTitle'] = self.getTaskTitle(response.type);
+            self.setState(newState);
+
+        }).fail(function (err) {
+            self.setState({status: 'error'});
+            window.clearInterval(self.currentInterval);
+        });
+    },
+
+    extractConsolePreview: function() {
+        // get the last line (with content from a string
+        var chunks = this.state.content.consoleOutput.split("\n").reverse();
+        for (var i=0;i<chunks.length;i++) {
+            var line = chunks[i].trim();
+
+            if ('' !== line) {
+
+                return line;
+            }
+        }
+
+        return '[…]';
+    },
+
+    getTaskTitle: function(type) {
+
+        if (undefined !== this.taskTitleCache[type]) {
+
+            return this.taskTitleCache[type];
+        }
+
+        var label = '';
+        var lookup = {
+            'install':          'Installing packages',
+            'remove-package':   'Removing a package',
+            'require-package':  'Requiring a package',
+            'upgrade':          'Upgrading packages'
+        };
+
+        if (undefined !== lookup[type]) {
+            label = lookup[type];
+        }
+
+        this.taskTitleCache[type] = <Translation domain="taskpopup">{label}</Translation>;
+        return this.taskTitleCache[type];
+    },
+
     render: function() {
 
         var cssClasses = [];
+        var consolePreview = this.extractConsolePreview();
 
         if (this.state.showConsole) {
             cssClasses.push('console');
@@ -89,8 +191,7 @@ var TaskPopupComponent = React.createClass({
                     <div className="bounce5"></div>
                 </div>
 
-                <h2>{this.state.content.h2}</h2>
-                <p>{this.state.content.shortExplanation}</p>
+                <p>{consolePreview}</p>
 
                 <button>Cancel</button>
 
