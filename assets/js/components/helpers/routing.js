@@ -5,6 +5,7 @@ const history      = require('history').createHistory();
 var _initialized = false;
 var router = null;
 var routes = [];
+var currentRoute = null;
 
 var _initialize = function() {
     if (_initialized) {
@@ -18,6 +19,8 @@ var _initialize = function() {
     routes['login'] = router.addRoute('/{locale}/login');
     routes['install'] = router.addRoute('/{locale}/install');
     routes['packages'] = router.addRoute('/{locale}/packages');
+    routes['app-kernel'] = router.addRoute('/{locale}/files/app-kernel');
+    routes['composer-json'] = router.addRoute('/{locale}/files/composer-json');
 
     _initialized = true;
 };
@@ -52,13 +55,24 @@ var getRoute = function(routeName) {
     return routes[routeName];
 };
 
-var redirect = function(routeName, lang) {
+var generateUrl = function (routeName, lang) {
     _initialize();
     lang = typeof lang !== 'undefined' ? lang : getLanguage();
     var route = getRoute(routeName);
-    var newLocation = route.interpolate({locale: lang});
+    return route.interpolate({locale: lang});
+};
 
-    history.push(newLocation);
+var isCurrentRoute = function(routeName) {
+    return routeName === currentRoute;
+};
+
+var setCurrentRoute = function(routeName) {
+    currentRoute = routeName;
+};
+
+var redirect = function(routeName, lang) {
+    _initialize();
+    history.push(generateUrl(routeName, lang));
 };
 
 var getHistory = function() {
@@ -69,7 +83,10 @@ module.exports = {
     getRouter: getRouter,
     getRoutes: getRoutes,
     getRoute: getRoute,
+    generateUrl: generateUrl,
+    isCurrentRoute: isCurrentRoute,
     redirect: redirect,
     getHistory: getHistory,
-    getLanguage: getLanguage
+    getLanguage: getLanguage,
+    setCurrentRoute: setCurrentRoute
 };

@@ -1,6 +1,30 @@
 'use strict';
 
-const React = require('react');
+const React     = require('react');
+const routing   = require('./../helpers/routing.js');
+
+var Link = React.createClass({
+
+    handleClick: function(e) {
+        e.preventDefault();
+
+        routing.redirect(this.props.routeName);
+    },
+
+    generateLink: function(routeName) {
+        return routing.generateUrl(routeName);
+    },
+
+    isRouteActive: function(routeName) {
+        return routing.isCurrentRoute(routeName);
+    },
+
+    render: function() {
+        return (
+            <a onClick={this.handleClick} href={this.generateLink(this.props.routeName)} className={this.isRouteActive(this.props.routeName) ? 'active' : 'inactive'}>{this.props.routeName}</a>
+        )
+    }
+});
 
 var NavigationComponent = React.createClass({
     getInitialState: function() {
@@ -11,12 +35,12 @@ var NavigationComponent = React.createClass({
         return (
             <nav role="navigation">
                 <ul>
-                    <li><a href="#" className="active">Packages</a></li>
+                    <li><Link routeName="packages"/></li>
                     <li>
-                        <a href="#">Files</a>
+                        <a>Files</a>
                         <ul>
-                            <li><a href="#">AppKernel</a></li>
-                            <li><a href="#">composer.json</a></li>
+                            <li><Link routeName="app-kernel"/></li>
+                            <li><Link routeName="composer-json"/></li>
                         </ul>
                     </li>
                     <li><a href="#">Configuration</a></li>

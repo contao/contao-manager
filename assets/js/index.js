@@ -35,6 +35,7 @@ TensideState.getState()
         for (var routeName in routes) {
             if (routes.hasOwnProperty(routeName)) {
                 routes[routeName].matched.add(function() {
+                    routing.setCurrentRoute(this.routeName);
                     switchContent(this.routeName);
                 }.bind({ routeName: routeName }));
             }
