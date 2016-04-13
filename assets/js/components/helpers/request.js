@@ -32,7 +32,7 @@ var setToken = function(token) {
         });
 
     // reset cookie cache
-    cookies = null;
+    cookies['cpm:token'] = token;
 };
 
 var getToken = function() {
