@@ -53,11 +53,10 @@ class UiController extends Controller
      * App action.
      *
      * @param string $locale The locale.
-     * @param string $app_path The app path.
      *
      * @return Response
      */
-    public function appAction($locale, $app_path)
+    public function appAction($locale)
     {
         return $this->render('AppBundle::index.html.php', [
             'lang'  => $locale,
