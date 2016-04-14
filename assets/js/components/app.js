@@ -6,9 +6,15 @@ const Login         = require('./public/login.js');
 const Packages      = require('./manager/packages.js');
 const File          = require('./manager/file.js');
 
+// Load php and javascript for file edit
+require('react-codemirror/node_modules/codemirror/mode/javascript/javascript');
+require('react-codemirror/node_modules/codemirror/mode/php/php');
+
 var AppComponent = React.createClass({
 
     render: function() {
+        var options = {};
+
         switch (this.props.route)  {
             case 'install':
                 return <Install />;
@@ -17,10 +23,12 @@ var AppComponent = React.createClass({
                 return <Packages />;
 
             case 'app-kernel':
-                return <File fileName="AppKernel.php" />;
+                options = { mode: 'php', indentUnit: 4 };
+                return <File apiEndpoint="/api/v1/AppKernel.php" options={options} />;
 
             case 'composer-json':
-                return <File fileName="composer.json" />;
+                options = { mode: {name: "javascript", json: true}, indentUnit: 4 };
+                return <File apiEndpoint="/api/v1/composer.json" options={options} />;
 
             default:
                 return <Login />;

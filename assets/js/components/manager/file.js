@@ -1,18 +1,79 @@
 'use strict';
 
-const React     = require('react');
-const Trappings = require('./trappings.js');
+const React      = require('react');
+const Trappings  = require('./trappings.js');
+const Codemirror = require('react-codemirror');
+const request    = require('./../helpers/request.js');
+const _          = require('lodash');
 
 var FileComponent = React.createClass({
     getInitialState: function() {
-        return {};
+        return {
+            code: '',
+            status: 'OK',
+            error: {
+                line: 0,
+                msg: ''
+            }
+        };
+    },
+
+    componentDidMount: function() {
+        var self = this;
+        request.createRequest(this.props.apiEndpoint, {
+            method: 'GET'
+        }).success(function (response) {
+
+            self.setState({code: response});
+
+        }).fail(function (err) {
+            // @todo
+        });
+    },
+
+    updateContent: function(content) {
+        var self = this;
+        self.setState({code: content});
+
+        request.createRequest(this.props.apiEndpoint, {
+            method: 'PUT',
+            data: content
+        }).success(function (response) {
+
+            var newState = {
+                status: response.status
+            };
+
+            if (undefined !== response.error) {
+                newState['error'] = response.error
+            } else {
+                newState['error'] = {
+                    msg: '',
+                    line: 0
+                }
+            }
+            self.setState(newState);
+
+        }).fail(function (err) {
+            // @todo
+        });
     },
 
     render: function() {
+
+        var options = {
+            lineNumbers: true,
+            autofocus: true,
+            dragDrop: false
+        };
+        options = _.assign(options, this.props.options);
         return (
             <Trappings>
 
-            <p>Edit content of file "{this.props.fileName}"</p>
+            <p>Your file status: {this.state.status}</p>
+            <p>Error message: {this.state.error.msg} on line {this.state.error.line}</p>
+
+            <Codemirror value={this.state.code} onChange={this.updateContent} options={options} />
 
             </Trappings>
         );
