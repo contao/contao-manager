@@ -1,7 +1,8 @@
 'use strict';
 
-const React     = require('react');
-const routing   = require('./../helpers/routing.js');
+const React         = require('react');
+const Translation   = require('./../translation.js');
+const routing       = require('./../helpers/routing.js');
 
 var Link = React.createClass({
 
@@ -19,9 +20,27 @@ var Link = React.createClass({
         return routing.isCurrentRoute(routeName);
     },
 
+    getLabel: function(routeName) {
+        var label = '';
+        var lookup = {
+            'packages':         'Packages',
+            'app-kernel':       'AppKernel.php',
+            'composer-json':    'composer.json'
+        };
+
+        if (undefined !== lookup[routeName]) {
+            label = lookup[routeName];
+        }
+
+        return <Translation domain="navigation">{label}</Translation>;
+    },
+
     render: function() {
         return (
-            <a onClick={this.handleClick} href={this.generateLink(this.props.routeName)} className={this.isRouteActive(this.props.routeName) ? 'active' : 'inactive'}>{this.props.routeName}</a>
+            <a onClick={this.handleClick}
+               href={this.generateLink(this.props.routeName)}
+               className={this.isRouteActive(this.props.routeName) ? 'active' : 'inactive'}
+            >{this.getLabel(this.props.routeName)}</a>
         )
     }
 });
@@ -37,13 +56,13 @@ var NavigationComponent = React.createClass({
                 <ul>
                     <li><Link routeName="packages"/></li>
                     <li>
-                        <a>Files</a>
+                        <a><Translation domain="navigation">Files</Translation></a>
                         <ul>
                             <li><Link routeName="app-kernel"/></li>
                             <li><Link routeName="composer-json"/></li>
                         </ul>
                     </li>
-                    <li><a href="#">Configuration</a></li>
+                    <li><a href="#"><Translation domain="navigation">Configuration</Translation></a></li>
                 </ul>
             </nav>
         );
