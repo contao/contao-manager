@@ -8,56 +8,60 @@ const App          = require('./components/app.js');
 const TaskPopup    = require('./components/taskpopup.js');
 const TensideState = require('./components/helpers/tenside-state.js');
 const request      = require('./components/helpers/request.js');
+const _            = require('lodash');
 
 // Enable cancelling of promises for the whole app
 Promise.config({cancellation: true});
 
-// Check Tenside state
-TensideState.getState()
-    .then(function(state) {
-        // If not configured or project not created or installed, go to the install screen
-        if (false === state.tenside_configured
-        || false === state.project_created
-        || false === state.project_installed) {
-            routing.redirect('install');
-            return;
-        }
+var router = routing.getRouter();
 
-        // If not logged in, go to the login screen
-        if ('' === request.getToken()) {
-            routing.redirect('login');
-        }
+// Route requirement promises
+var requirementsPromises = [
+    // Tenside state
+    TensideState.getState(),
+    // @todo Logged in state
+    Promise.resolve({
+        'user_loggedIn': true
     })
-    .then(function () {
-        var router = routing.getRouter();
-        var routes = routing.getRoutes();
+];
 
-        for (var routeName in routes) {
-            if (routes.hasOwnProperty(routeName)) {
-                routes[routeName].matched.add(function() {
-                    routing.setCurrentRoute(this.routeName);
-                    switchContent(this.routeName);
-                }.bind({ routeName: routeName }));
+// Route matched
+router.routed.add(function(request, data) {
+
+    // Wait for requirement promises to resolve
+    Promise.all(requirementsPromises).then(function(resolvedPromises) {
+
+        var promiseResults = {};
+        _.forIn(resolvedPromises, function(v, k) {
+            _.merge(promiseResults, v);
+        });
+
+        // Now compare requirement with results
+        if (undefined !== data.route.requirement && _.isFunction(data.route.requirement)) {
+
+            var fulfilled = data.route.requirement(promiseResults);
+            // Redirect to returned route if not fulfilled
+            if (true !== fulfilled) {
+                routing.redirect(fulfilled);
             }
         }
 
-        // Fallback
-        router.bypassed.add(function() {
-            var target = '' === request.getToken() ? 'login' : 'packages';
-            routing.redirect(target);
-        });
-
-        routing.getHistory().listen(function(location) {
-            router.parse(location.pathname);
-        });
-        router.parse(document.location.pathname);
+        // Cool, all requirements have been fulfilled, access
+        routing.setCurrentRoute(data.route.name);
+        ReactDOM.render(<App route={data.route.name} />, document.getElementById('app'));
+        ReactDOM.render(<TaskPopup />, document.getElementById('popup'));
     });
+});
 
+// If no route matched, go to packages by default
+router.bypassed.add(function() {
+    routing.redirect('packages');
+});
 
+// Listen to the history change and call the router then
+routing.getHistory().listen(function(location) {
+    router.parse(location.pathname);
+});
 
-var switchContent = function(routeName) {
-    ReactDOM.render(<App route={routeName} />, document.getElementById('app'));
-    ReactDOM.render(<TaskPopup />, document.getElementById('popup'));
-};
-
-
+// Dispatch the routing on the initial call
+router.parse(document.location.pathname);

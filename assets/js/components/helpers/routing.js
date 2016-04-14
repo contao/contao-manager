@@ -1,6 +1,6 @@
 const crossroads   = require('crossroads');
 const history      = require('history').createHistory();
-
+const _            = require('lodash');
 
 var _initialized = false;
 var router = null;
@@ -16,13 +16,71 @@ var _initialize = function() {
     router = crossroads.create();
 
     // Routes
-    routes['login'] = router.addRoute('/{locale}/login');
-    routes['install'] = router.addRoute('/{locale}/install');
-    routes['packages'] = router.addRoute('/{locale}/packages');
-    routes['app-kernel'] = router.addRoute('/{locale}/files/app-kernel');
-    routes['composer-json'] = router.addRoute('/{locale}/files/composer-json');
+    var routesDef = {
+        'install': {
+            path: '/{locale}/install',
+            requirement: function(results) {
+                if (true === results['tenside_configured']
+                    && true === results['project_created']
+                    && true === results['project_installed']
+                ) {
+                    return 'login';
+                }
+
+                return true;
+            }
+        },
+        'login': {
+            path: '/{locale}/login',
+            requirement: _tensideOk
+        },
+        'packages': {
+            path: '/{locale}/packages',
+            requirement: _tensideOkAndLoggedIn
+        },
+        'app-kernel': {
+            path: '/{locale}/files/app-kernel',
+            requirement: _tensideOkAndLoggedIn
+        },
+        'composer-json': {
+            path: '/{locale}/files/composer-json',
+            requirement: _tensideOkAndLoggedIn
+        }
+    };
+
+    _.forIn(routesDef, function(routeDef, routeName) {
+        var route = router.addRoute(routeDef.path);
+        route.name = routeName;
+        route.requirement = routeDef.requirement;
+        routes[routeName] = route;
+    });
 
     _initialized = true;
+};
+
+var _tensideOk = function(results) {
+    if (false === results['tenside_configured']
+        || false === results['project_created']
+        || false === results['project_installed']
+    ) {
+        return 'install';
+    }
+
+    return true;
+};
+
+var _tensideOkAndLoggedIn = function(results) {
+    var tensideOk = _tensideOk(results);
+
+    if (true !== tensideOk) {
+        return tensideOk;
+    }
+
+    if (false === results['user_loggedIn']) {
+        return 'login';
+    }
+
+    return true;
 };
 
 var getLanguage = function() {
