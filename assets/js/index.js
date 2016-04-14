@@ -15,18 +15,16 @@ Promise.config({cancellation: true});
 
 var router = routing.getRouter();
 
-// Route requirement promises
-var requirementsPromises = [
-    // Tenside state
-    TensideState.getState(),
-    // @todo Logged in state
-    Promise.resolve({
-        'user_loggedIn': true
-    })
-];
-
 // Route matched
 router.routed.add(function(request, data) {
+
+    // Route requirement promises
+    var requirementsPromises = [
+        // Tenside state
+        TensideState.getState(),
+        // Logged in or not?
+        TensideState.getLoggedIn()
+    ];
 
     // Wait for requirement promises to resolve
     Promise.all(requirementsPromises).then(function(resolvedPromises) {
