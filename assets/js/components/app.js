@@ -7,8 +7,8 @@ const Packages      = require('./manager/packages.js');
 const File          = require('./manager/file.js');
 
 // Load php and javascript for file edit
-require('react-codemirror/node_modules/codemirror/mode/javascript/javascript');
-require('react-codemirror/node_modules/codemirror/mode/php/php');
+require('codemirror/mode/javascript/javascript');
+require('codemirror/mode/php/php');
 
 var AppComponent = React.createClass({
 
