@@ -19,8 +19,16 @@ var FileComponent = React.createClass({
     },
 
     componentDidMount: function() {
+        this.loadInitial(this.props.apiEndpoint);
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        this.loadInitial(nextProps.apiEndpoint);
+    },
+
+    loadInitial: function(endPoint) {
         var self = this;
-        request.createRequest(this.props.apiEndpoint, {
+        request.createRequest(endPoint, {
             method: 'GET'
         }).success(function (response) {
 
