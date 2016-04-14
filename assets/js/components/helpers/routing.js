@@ -32,7 +32,19 @@ var _initialize = function() {
         },
         'login': {
             path: '/{locale}/login',
-            requirement: _tensideOk
+            requirement: function(results) {
+                var tensideOk = _tensideOk(results);
+
+                if (true !== tensideOk) {
+                    return tensideOk;
+                }
+                // Already logged in
+                if (true === results['user_loggedIn']) {
+                    return 'packages'
+                }
+
+                return true;
+            }
         },
         'packages': {
             path: '/{locale}/packages',
