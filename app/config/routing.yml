@@ -9,6 +9,7 @@ app:
     methods:   [GET]
     requirements:
         locale: en|de
+        app_path: .+
 
 asset:
     path:     /web-assets/{path}
