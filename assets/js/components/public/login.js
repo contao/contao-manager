@@ -7,22 +7,13 @@ const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
 const request       = require('../helpers/request.js');
 const routing       = require('../helpers/routing.js');
-const TensideState  = require('../helpers/tenside-state.js');
 
 
 var InstallComponent = React.createClass({
     getInitialState: function() {
         return {
             isLoggingIn: false,
-            isLoggedIn: false,
             credentialsIncorrect: false
-        }
-    },
-
-    componentDidMount: function() {
-
-        if ('' !== request.getUsername() && '' !== request.getToken()) {
-            this.setState({isLoggedIn: true});
         }
     },
 
@@ -37,18 +28,7 @@ var InstallComponent = React.createClass({
 
         this.login(username, password)
             .then(function() {
-                self.setState({isLoggedIn: true});
-
-                TensideState.getState()
-                    .then(function(state) {
-                        // If no project was created go to the install screen
-                        // Otherwise go to the packages
-                        if (true !== state.project_created) {
-                            routing.redirect('install');
-                        } else {
-                            routing.redirect('packages');
-                        }
-                    });
+                routing.redirect('packages');
             })
             .catch(function() {
                 self.setState({credentialsIncorrect: true});
@@ -85,40 +65,29 @@ var InstallComponent = React.createClass({
 
     render: function() {
 
-        var disabled = this.state.isLoggingIn || this.state.isLoggedIn;
         var errorMsg = this.state.credentialsIncorrect ? <Translation domain="login">Your credentials are incorrect!</Translation> : '';
 
-        if (this.state.isLoggedIn) {
-            var translationPlaceholders = { username: request.getUsername() };
+    return (
+            <Trappings sectionClass="login">
+                <h1><Translation domain="login">Sign In</Translation></h1>
+                <p><Translation domain="login">Login to manage your installation.</Translation></p>
 
-            return (
-                <Trappings sectionClass="login">
-                    <h1><Translation placeholders={translationPlaceholders}>You are logged in as %username%.</Translation></h1>
-                </Trappings>
-            );
-        } else {
-            return (
-                <Trappings sectionClass="login">
-                    <h1><Translation domain="login">Sign In</Translation></h1>
-                    <p><Translation domain="login">Login to manage your installation.</Translation></p>
-
-                    <form id="login-form" action="#" method="post">
-                        <TextWidget type="text" name="username" label="Username"
-                                    placeholder="Username" error={errorMsg}/>
-                        <TextWidget type="password" name="password"
-                                    label="Password" placeholder="Password" error={errorMsg}/>
+                <form id="login-form" action="#" method="post">
+                    <TextWidget type="text" name="username" label="Username"
+                                placeholder="Username" error={errorMsg}/>
+                    <TextWidget type="password" name="password"
+                                label="Password" placeholder="Password" error={errorMsg}/>
 
 
-                        {/* @todo Implement a forgot password functionality? */}
-                        {/* <a href="">Forgot your password?</a> */}
+                    {/* @todo Implement a forgot password functionality? */}
+                    {/* <a href="">Forgot your password?</a> */}
 
-                        <button disabled={disabled} type="submit"
-                                onClick={this.handleLogin}><Translation domain="login">Sign In</Translation>
-                        </button>
-                    </form>
-                </Trappings>
-            );
-        }
+                    <button disabled={this.state.isLoggingIn} type="submit"
+                            onClick={this.handleLogin}><Translation domain="login">Sign In</Translation>
+                    </button>
+                </form>
+            </Trappings>
+        );
     }
 });
 
