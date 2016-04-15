@@ -12,13 +12,13 @@ var ErrorMessage = React.createClass({
 
 var Widget = React.createClass({
 
-    getInitialState: function () {
+    getInitialState: function() {
         return {
             empty: true
         };
     },
 
-    handleChange: function (event) {
+    handleChange: function(event) {
         this.setState({
             empty: '' === event.target.value
         });
