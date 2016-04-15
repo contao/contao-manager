@@ -3,7 +3,6 @@
 const jQuery        = require('jquery');
 const cookie        = require('cookie');
 
-var username = '';
 var cookies;
 
 var createRequest = function(url, props) {
@@ -45,19 +44,6 @@ var getToken = function() {
     return '';
 };
 
-var setUsername = function(name) {
-    // @todo this has to be improved because currently it's possible to have
-    // a token but no username is set to the app because the auth
-    // api endpoint does not yet deliver the username.
-    // See: https://github.com/tenside/core-bundle/issues/7
-    username = name;
-};
-
-var getUsername = function() {
-    return username;
-};
-
-
 function _readCookie(name,c,C,i){
     if(cookies){ return cookies[name]; }
 
@@ -75,7 +61,5 @@ function _readCookie(name,c,C,i){
 module.exports = {
     createRequest: createRequest,
     setToken: setToken,
-    getToken: getToken,
-    setUsername: setUsername,
-    getUsername: getUsername
+    getToken: getToken
 };
