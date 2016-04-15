@@ -1,20 +1,37 @@
 'use strict';
 
-const React      = require('react');
-const Trappings  = require('./trappings.js');
-const Codemirror = require('react-codemirror');
-const request    = require('./../helpers/request.js');
-const _          = require('lodash');
+const React         = require('react');
+const Trappings     = require('./trappings.js');
+const Codemirror    = require('react-codemirror');
+const request       = require('./../helpers/request.js');
+const Translation   = require('./../translation.js');
+const _             = require('lodash');
+
+var MessageComponent = React.createClass({
+    render: function() {
+
+        var line = '';
+        var msg = this.props.msg;
+
+        if (this.props.line > 0) {
+            var placeholders = { line: this.props.line };
+            line = <Translation domain="file" placeholders={placeholders}>Line %line%</Translation>;
+            msg = ': ' + msg;
+        }
+
+        return (
+            <p className={this.props.type}>{line}{msg}</p>
+        )
+    }
+});
 
 var FileComponent = React.createClass({
     getInitialState: function() {
         return {
             code: '',
             status: 'OK',
-            error: {
-                line: 0,
-                msg: ''
-            }
+            errors: [],
+            warnings: []
         };
     },
 
@@ -48,18 +65,21 @@ var FileComponent = React.createClass({
             data: content
         }).success(function (response) {
 
-            var newState = {
-                status: response.status
-            };
+            var newState = {};
+            newState['status'] = response.status;
 
-            if (undefined !== response.error) {
-                newState['error'] = response.error
+            if (undefined !== response.warnings) {
+                newState['warnings'] = response.warnings;
             } else {
-                newState['error'] = {
-                    msg: '',
-                    line: 0
-                }
+                newState['warnings'] = [];
             }
+
+            if (undefined !== response.errors) {
+                newState['errors'] = response.errors;
+            } else {
+                newState['errors'] = [];
+            }
+
             self.setState(newState);
 
         }).fail(function (err) {
@@ -69,17 +89,35 @@ var FileComponent = React.createClass({
 
     render: function() {
 
+        var messages = [];
         var options = {
             lineNumbers: true,
             autofocus: true,
             dragDrop: false
         };
         options = _.assign(options, this.props.options);
+
+        if ('OK' === this.state.status) {
+            var msg = <Translation domain="file">The file is OK!</Translation>;
+            messages.push(<MessageComponent key="ok" type="ok" msg={msg}></MessageComponent>);
+        }
+
+        if (this.state.warnings.length > 0) {
+            _.forEach(this.state.warnings, function(value, key) {
+                messages.push(<MessageComponent key={'warning' + key} type="warning" msg={value.msg} line={value.line} />);
+            });
+        }
+
+        if (this.state.errors.length > 0) {
+            _.forEach(this.state.errors, function(value, key) {
+                messages.push(<MessageComponent key={'error' + key} type="error" msg={value.msg} line={value.line} />);
+            });
+        }
+
         return (
             <Trappings>
 
-            <p>Your file status: {this.state.status}</p>
-            <p>Error message: {this.state.error.msg} on line {this.state.error.line}</p>
+            <div className="messages">{messages}</div>
 
             <Codemirror value={this.state.code} onChange={this.updateContent} options={options} />
 
