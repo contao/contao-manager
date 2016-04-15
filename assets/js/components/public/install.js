@@ -68,6 +68,8 @@ var LoggedInComponent = React.createClass({
 
 var InstallComponent = React.createClass({
 
+    tensideStatePromise: null,
+
     getInitialState: function() {
         return {
             constraintErrorMessage: '',
@@ -79,7 +81,7 @@ var InstallComponent = React.createClass({
 
     componentDidMount: function() {
         var self = this;
-        TensideState.getLoggedIn()
+        this.tensideStatePromise = TensideState.getLoggedIn()
             .then(function(result) {
                 if (true === result.user_loggedIn) {
                     self.setState({
@@ -239,6 +241,10 @@ var InstallComponent = React.createClass({
                 reject(err);
             });
         });
+    },
+
+    componentWillUnmount: function() {
+        this.tensideStatePromise.cancel();
     },
 
     render: function() {
