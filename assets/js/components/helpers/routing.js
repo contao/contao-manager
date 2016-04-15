@@ -20,9 +20,19 @@ var _initialize = function() {
         'install': {
             path: '/{locale}/install',
             requirement: function(results) {
+                // Fully configured, never access this route
                 if (true === results['tenside_configured']
                     && true === results['project_created']
                     && true === results['project_installed']
+                ) {
+                    return 'login';
+                }
+
+                // Configured but not logged in yet (and not installed or not
+                // created - otherwise the if above would have redirected
+                // already)
+                if (true === results['tenside_configured']
+                    && false === results['user_loggedIn']
                 ) {
                     return 'login';
                 }
@@ -33,14 +43,17 @@ var _initialize = function() {
         'login': {
             path: '/{locale}/login',
             requirement: function(results) {
-                var tensideOk = _tensideOk(results);
-
-                if (true !== tensideOk) {
-                    return tensideOk;
-                }
                 // Already logged in
                 if (true === results['user_loggedIn']) {
                     return 'packages'
+                }
+
+                // Configured but not installed (needs to login)
+                if (true === results['tenside_configured']
+                    && (false === results['project_created']
+                    || false === results['project_installed'])
+                ) {
+                    return true;
                 }
 
                 return true;
