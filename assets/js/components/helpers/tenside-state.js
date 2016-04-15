@@ -26,7 +26,7 @@ var getLoggedIn = function() {
             dataType: 'json'
         }).success(function (response) {
             if ('OK' === response.status) {
-                resolve({user_loggedIn: true});
+                resolve({user_loggedIn: true, username: response.username});
             } else {
                 resolve({user_loggedIn: false});
             }

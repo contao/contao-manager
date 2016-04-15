@@ -12,23 +12,82 @@ const taskmanager   = require('../helpers/taskmanager.js');
 const request       = require('../helpers/request.js');
 
 
-var InstallComponent = React.createClass({
+var UsernameComponent = React.createClass({
+
     password: '',
     passwordConfirm: '',
+
     getInitialState: function() {
         return {
-            passwordsErrorMessage: '',
+            passwordsErrorMessage: ''
+        };
+    },
+
+    handlePasswordCompare: function(props, e) {
+        if (props.name == 'password') {
+            this.password = e.target.value;
+        } else {
+            this.passwordConfirm = e.target.value;
+        }
+
+        if ('' === this.password || '' === this.passwordConfirm || this.password === this.passwordConfirm) {
+            this.setState({passwordsErrorMessage: ''});
+        } else {
+            this.setState({passwordsErrorMessage: <Translation domain="install">Passwords do not match!</Translation>});
+        }
+    },
+
+    render: function() {
+        return (
+            <fieldset>
+                <legend><Translation domain="install">User Account</Translation></legend>
+                <p>Create a user account to manage your installation.</p>
+
+                <TextWidget type="text" name="username" label="Username" />
+                <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
+                <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
+
+            </fieldset>
+        )
+    }
+});
+
+var LoggedInComponent = React.createClass({
+
+    render: function() {
+
+        var translationPlaceholders = { username: this.props.username };
+
+        return (
+            <fieldset>
+                <legend><Translation placeholders={translationPlaceholders}>You are logged in as %username%.</Translation></legend>
+            </fieldset>
+        )
+    }
+});
+
+var InstallComponent = React.createClass({
+
+    getInitialState: function() {
+        return {
             constraintErrorMessage: '',
             installing: false,
-            isLoggedIn: false
+            isLoggedIn: false,
+            username: ''
         };
     },
 
     componentDidMount: function() {
-
-        if ('' !== request.getUsername() && '' !== request.getToken()) {
-            this.setState({isLoggedIn: true});
-        }
+        var self = this;
+        TensideState.getLoggedIn()
+            .then(function(result) {
+                if (true === result.user_loggedIn) {
+                    self.setState({
+                        isLoggedIn: true,
+                        username: result.username
+                    });
+                }
+            });
     },
 
     validateConstraint: function(props, e) {
@@ -55,20 +114,6 @@ var InstallComponent = React.createClass({
         }).fail(function() {
             // @todo: what if request failed?
         });
-    },
-
-    handlePasswordCompare: function(props, e) {
-        if (props.name == 'password') {
-            this.password = e.target.value;
-        } else {
-            this.passwordConfirm = e.target.value;
-        }
-
-        if ('' === this.password || '' === this.passwordConfirm || this.password === this.passwordConfirm) {
-            this.setState({passwordsErrorMessage: ''});
-        } else {
-            this.setState({passwordsErrorMessage: <Translation domain="install">Passwords do not match!</Translation>});
-        }
     },
 
     handleInstall: function(e) {
@@ -202,20 +247,10 @@ var InstallComponent = React.createClass({
         var disableButton = hasErrors || this.state.installing;
 
         var usernamePart = '';
-
         if (this.state.isLoggedIn) {
-            var translationPlaceholders = { username: request.getUsername() };
-            usernamePart = <Translation placeholders={translationPlaceholders}>You are logged in as %username%.</Translation>;
+            usernamePart = <LoggedInComponent username={this.state.username} />;
         } else {
-            usernamePart = <fieldset>
-                <legend><Translation domain="install">User Account</Translation></legend>
-                <p>Create a user account to manage your installation.</p>
-
-                <TextWidget type="text" name="username" label="Username" />
-                <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
-                <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
-
-            </fieldset>
+            usernamePart = <UsernameComponent/>;
         }
 
         return (

@@ -51,7 +51,6 @@ var InstallComponent = React.createClass({
                 if ('OK' === response.status) {
                     // Store the JWT
                     request.setToken(response.token);
-                    request.setUsername(username);
 
                     resolve(response);
                 } else {
