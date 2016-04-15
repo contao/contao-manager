@@ -4,13 +4,50 @@ const React     = require('react');
 const Trappings = require('./trappings.js');
 const Package   = require('./package.js');
 const Warning   = require('./package-warning.js');
+const request   = require('./../helpers/request.js');
+const _         = require('lodash');
 
 var PackagesComponent = React.createClass({
+
+    loadPackagesRequest: null,
+
     getInitialState: function() {
-        return {};
+        return {
+            packages: []
+        };
+    },
+
+    componentDidMount: function() {
+        var self = this;
+        this.loadPackagesRequest = request.createRequest('/api/v1/packages', {
+        }).success(function(response) {
+            // @todo should this not return a status too?
+
+            self.setState({packages: response});
+
+        }).fail(function() {
+            // @todo: what if request failed?
+        });
+    },
+
+    componentWillUnmount: function() {
+        this.loadPackagesRequest.abort();
     },
 
     render: function() {
+
+        var packages = [];
+
+        _.forEach(this.state.packages, function(packageData) {
+            packages.push(<Package
+                key={packageData.name}
+                name={packageData.name}
+                description={packageData.description}
+                licenses={packageData.license}
+                constraint={packageData.installed}
+            />);
+        });
+
         return (
             <Trappings>
 
@@ -26,54 +63,7 @@ var PackagesComponent = React.createClass({
                     </ul>
                 </section>
 
-                <Package
-                    name="contao/contao"
-                    description="Contao Open Source CMS."
-                    website="#"
-                    license="LGPL-3.0+"
-                    installs="2 091"
-                    constraint="4.2.0@dev"
-                    canBeEnabled={true}
-                    isEnabled={true}
-                />
-
-                <Package
-                    name="isotope/isotope-core"
-                    description="Core repository of Isotope eCommerce, an eCommerce extension for Contao Open Source CMS."
-                    website="#"
-                    license="LGPL-3.0+"
-                    installs="5000"
-                    constraint=""
-                    canBeEnabled={true}
-                    isEnabled={false}
-                    before={(() => {
-                        var links = [
-                            {
-                                label: "Edit composer.json",
-                                href:  "#"
-                            },
-                            {
-                                label: "Help",
-                                href:  "#"
-                            }
-                        ];
-
-                        return (
-                            <Warning message="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor." links={links} />
-                        )
-                    })()}
-                />
-
-                <Package
-                    name="metamodels/core"
-                    description="MetaModels core."
-                    website="#"
-                    license="LGPL-3.0+"
-                    installs="14859"
-                    constraint="^2.3.0"
-                    canBeEnabled={true}
-                    isEnabled={true}
-                />
+                {packages}
 
             </Trappings>
         );

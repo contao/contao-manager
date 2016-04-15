@@ -38,7 +38,7 @@ var PackagesComponent = React.createClass({
                     <div className="about">
                         <h1>{this.props.name}</h1>
                         <p className="description">{this.props.description} <a href={this.props.website}>More</a></p>
-                        <p className="additional">{this.props.license} &nbsp;&nbsp; | &nbsp;&nbsp; {this.props.installs} Installs</p>
+                        <p className="additional">{this.props.licenses} &nbsp;&nbsp; | &nbsp;&nbsp; {this.props.installs} Installs</p>
                     </div>
 
                     <div className="release">
