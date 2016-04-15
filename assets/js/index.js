@@ -41,6 +41,7 @@ router.routed.add(function(request, data) {
             // Redirect to returned route if not fulfilled
             if (true !== fulfilled) {
                 routing.redirect(fulfilled);
+                return;
             }
         }
 
