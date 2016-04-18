@@ -2,6 +2,7 @@
 
 const jQuery        = require('jquery');
 const cookie        = require('cookie');
+const Promise       = require('bluebird');
 
 var cookies;
 
@@ -15,7 +16,19 @@ var createRequest = function(url, props) {
         props.headers['Authorization'] = 'Bearer ' + getToken();
     }
 
-    return jQuery.ajax(url, props);
+    return new Promise(function(resolve, reject) {
+        jQuery.ajax(url, props)
+            .success(function(response) {
+                if (undefined !== response.status && 'OK' !== response.status) {
+                    return reject(new Error(response));
+                }
+
+                return resolve(response);
+            })
+            .fail(function(err) {
+                return reject(new Error(err));
+            });
+    });
 };
 
 var setToken = function(token) {

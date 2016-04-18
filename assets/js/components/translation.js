@@ -1,9 +1,9 @@
 'use strict';
 
 const React     = require('react');
-const jQuery    = require('jquery');
 const Promise   = require('bluebird');
 const routing   = require('./helpers/routing.js');
+const request   = require('./helpers/request.js');
 
 var translate = function(key, placeholders, domain, locale) {
     placeholders = typeof placeholders !== 'undefined' ? placeholders : {};
@@ -15,12 +15,12 @@ var translate = function(key, placeholders, domain, locale) {
     }
 
     return new Promise(function (resolve, reject) {
-        jQuery.ajax({
-            url: '/translation/' + locale + '/' + domain
-        }).success(function(result) {
+        request.createRequest('/translation/' + locale + '/' + domain, {
+            dataType: 'json'
+        }).then(function (response) {
             var translation = key;
-            if (undefined !== result[key]) {
-                translation = result[key];
+            if (undefined !== response[key]) {
+                translation = response[key];
             }
 
             // Replace placeholders
@@ -32,7 +32,9 @@ var translate = function(key, placeholders, domain, locale) {
                 }
             }
 
-            resolve(translation);
+            return resolve(translation);
+        }).catch(function (err) {
+            return reject(new Error(err));
         });
     });
 };

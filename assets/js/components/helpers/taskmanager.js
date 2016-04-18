@@ -8,13 +8,13 @@ var runNextTask = function() {
     return request.createRequest('/api/v1/tasks/run', {
         method: 'GET',
         dataType: 'json'
-    }).success(function (response) {
+    }).then(function (response) {
         if ('OK' === response.status) {
             eventhandler.emit('displayTaskPopup', {
                 taskId: response.task
             });
         }
-    }).fail(function (err) {
+    }).catch(function (err) {
         // @todo
     });
 };

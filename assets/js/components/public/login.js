@@ -46,17 +46,17 @@ var InstallComponent = React.createClass({
                 method: 'POST',
                 data: JSON.stringify(authPayload),
                 dataType: 'json'
-            }).success(function (response) {
+            }).then(function (response) {
                 if ('OK' === response.status) {
                     // Store the JWT
                     request.setToken(response.token);
 
                     resolve(response);
                 } else {
-                    reject(response);
+                    reject(new Error(response));
                 }
-            }).fail(function (err) {
-                reject(err);
+            }).catch(function (err) {
+                reject(new Error(err));
             });
         });
     },

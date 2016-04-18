@@ -47,11 +47,11 @@ var FileComponent = React.createClass({
         var self = this;
         request.createRequest(endPoint, {
             method: 'GET'
-        }).success(function (response) {
+        }).then(function (response) {
 
             self.setState({code: response});
 
-        }).fail(function (err) {
+        }).catch(function (err) {
             // @todo
         });
     },
@@ -63,7 +63,7 @@ var FileComponent = React.createClass({
         request.createRequest(this.props.apiEndpoint, {
             method: 'PUT',
             data: content
-        }).success(function (response) {
+        }).then(function (response) {
 
             var newState = {};
             newState['status'] = response.status;
@@ -82,7 +82,7 @@ var FileComponent = React.createClass({
 
             self.setState(newState);
 
-        }).fail(function (err) {
+        }).catch(function (err) {
             // @todo
         });
     },

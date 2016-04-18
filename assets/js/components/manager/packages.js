@@ -23,12 +23,12 @@ var PackagesComponent = React.createClass({
     componentDidMount: function() {
         var self = this;
         this.loadPackagesRequest = request.createRequest('/api/v1/packages', {
-        }).success(function(response) {
+        }).then(function(response) {
             // @todo should this not return a status too?
 
             self.setState({packages: response});
 
-        }).fail(function() {
+        }).catch(function() {
             // @todo: what if request failed?
         });
 
@@ -77,12 +77,11 @@ var PackagesComponent = React.createClass({
         var delay;
         clearTimeout(delay);
         delay = setTimeout(function() {
-            self.searchPackagesRequest .success(function(response) {
+            self.searchPackagesRequest.then(function(response) {
                 // @todo should this not return a status too?
-
                 self.setState({packages: response});
 
-            }).fail(function() {
+            }).catch(function() {
                 // @todo: what if request failed?
             });
 
@@ -92,11 +91,11 @@ var PackagesComponent = React.createClass({
 
     stopRunningRequests: function() {
         if (null !== this.loadPackagesRequest) {
-            this.loadPackagesRequest.abort();
+            this.loadPackagesRequest.cancel();
         }
 
         if (null !== this.searchPackagesRequest) {
-            this.searchPackagesRequest.abort();
+            this.searchPackagesRequest.cancel();
         }
     },
 

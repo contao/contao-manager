@@ -7,15 +7,15 @@ var getState = function() {
     return new Promise(function (resolve, reject) {
         request.createRequest('/api/v1/install/get_state', {
             dataType: 'json'
-        }).success(function (response) {
+        }).then(function (response) {
             if ('OK' === response.status) {
                 resolve(response.state)
             } else {
-                reject(response);
+                reject(new Error(response));
             }
 
-        }).fail(function (err) {
-            reject(err);
+        }).catch(function (err) {
+            reject(new Error(err));
         });
     });
 };
@@ -24,13 +24,13 @@ var getLoggedIn = function() {
     return new Promise(function (resolve, reject) {
         request.createRequest('/api/v1/auth', {
             dataType: 'json'
-        }).success(function (response) {
+        }).then(function (response) {
             if ('OK' === response.status) {
                 resolve({user_loggedIn: true, username: response.username});
             } else {
                 resolve({user_loggedIn: false});
             }
-        }).fail(function () {
+        }).catch(function () {
             resolve({user_loggedIn: false});
         });
     });

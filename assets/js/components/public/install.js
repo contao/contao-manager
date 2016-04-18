@@ -105,14 +105,14 @@ var InstallComponent = React.createClass({
             method: 'POST',
             data: JSON.stringify({constraint: value}),
             dataType: 'json'
-        }).success(function(response) {
+        }).then(function(response) {
              if ('OK' !== response.status) {
                 self.setState({constraintErrorMessage: <Translation>You have to enter a valid Composer version constraint!</Translation>});
             } else {
                 self.setState({constraintErrorMessage: ''});
             }
 
-        }).fail(function() {
+        }).catch(function() {
             // @todo: what if request failed?
         });
     },
@@ -188,10 +188,10 @@ var InstallComponent = React.createClass({
                 request.createRequest('/api/v1/install/autoconfig', {
                     method: 'GET',
                     dataType: 'json'
-                }).success(function (response) {
+                }).then(function (response) {
                     resolve(response);
-                }).fail(function (err) {
-                    reject(err);
+                }).catch(function (err) {
+                    reject(new Error(err));
                 });
             })
             .then(function(autoconfig) {
@@ -203,17 +203,17 @@ var InstallComponent = React.createClass({
                     method: 'POST',
                     data: JSON.stringify(configurePayload),
                     dataType: 'json'
-                }).success(function (response) {
+                }).then(function (response) {
                     if ('OK' === response.status) {
                         // Store the JWT
                         request.setToken(response.token);
 
                         resolve(response);
                     } else {
-                        reject(response);
+                        reject(new Error(response));
                     }
-                }).fail(function (err) {
-                    reject(err);
+                }).catch(function (err) {
+                    reject(new Error(err));
                 });
             });
         });
@@ -227,17 +227,17 @@ var InstallComponent = React.createClass({
                 method: 'POST',
                 data: JSON.stringify(createProjectPayload),
                 dataType: 'json'
-            }).success(function (response) {
+            }).then(function (response) {
                 if ('OK' === response.status) {
                     // Successfully created, adjust state
                     state.project_created = true;
 
                     resolve(state);
                 } else {
-                    reject(response);
+                    reject(new Error(response));
                 }
-            }).fail(function (err) {
-                reject(err);
+            }).catch(function (err) {
+                reject(new Error(err));
             });
         });
     },
