@@ -5,6 +5,26 @@ const Promise   = require('bluebird');
 const routing   = require('./helpers/routing.js');
 const request   = require('./helpers/request.js');
 
+var cache = {};
+
+var getTranslationForKey = function(key, data, placeholders) {
+    var translation = key;
+    if (undefined !== data[key]) {
+        translation = data[key];
+    }
+
+    // Replace placeholders
+    if (placeholders) {
+        for (var placeholder in placeholders) {
+            if (placeholders.hasOwnProperty(placeholder)) {
+                translation = translation.replace('%' + placeholder + '%', placeholders[placeholder]);
+            }
+        }
+    }
+
+    return translation;
+};
+
 var translate = function(key, placeholders, domain, locale) {
     placeholders = typeof placeholders !== 'undefined' ? placeholders : {};
     domain = typeof domain !== 'undefined' ? domain : 'messages';
@@ -15,25 +35,24 @@ var translate = function(key, placeholders, domain, locale) {
     }
 
     return new Promise(function (resolve, reject) {
+
+        // Maybe cached?
+        if (undefined !== cache[domain] && undefined !== cache[domain][locale]) {
+            return resolve(getTranslationForKey(key, cache[domain][locale], placeholders));
+        }
+
         request.createRequest('/translation/' + locale + '/' + domain, {
             dataType: 'json'
         }).then(function (response) {
-            var translation = key;
-            if (undefined !== response[key]) {
-                translation = response[key];
+            // Cache
+            if (undefined === cache[domain]) {
+                cache[domain] = {};
             }
+            cache[domain][locale] = response;
 
-            // Replace placeholders
-            if (placeholders) {
-                for (var placeholder in placeholders) {
-                    if (placeholders.hasOwnProperty(placeholder)) {
-                        translation = translation.replace('%' + placeholder + '%', placeholders[placeholder]);
-                    }
-                }
-            }
-
-            return resolve(translation);
+            return resolve(getTranslationForKey(key, response, placeholders));
         }).catch(function (err) {
+            cache = {};
             return reject(new Error(err));
         });
     });
