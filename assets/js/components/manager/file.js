@@ -14,8 +14,7 @@ var MessageComponent = React.createClass({
         var msg = this.props.msg;
 
         if (this.props.line > 0) {
-            var placeholders = { line: this.props.line };
-            line = <Translation domain="file" placeholders={placeholders}>Line %line%</Translation>;
+            line = <Translation domain="file" placeholders={{ line: this.props.line }}>Line %line%</Translation>;
             msg = ': ' + msg;
         }
 

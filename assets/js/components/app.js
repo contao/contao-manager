@@ -13,8 +13,6 @@ require('codemirror/mode/php/php');
 var AppComponent = React.createClass({
 
     render: function() {
-        var options = {};
-
         switch (this.props.route)  {
             case 'install':
                 return <Install />;
@@ -23,12 +21,10 @@ var AppComponent = React.createClass({
                 return <Packages />;
 
             case 'app-kernel':
-                options = { mode: 'php', indentUnit: 4 };
-                return <File apiEndpoint="/api/v1/AppKernel.php" options={options} />;
+                return <File apiEndpoint="/api/v1/AppKernel.php" options={{ mode: 'php', indentUnit: 4 }} />;
 
             case 'composer-json':
-                options = { mode: {name: "javascript", json: true}, indentUnit: 4 };
-                return <File apiEndpoint="/api/v1/composer.json" options={options} />;
+                return <File apiEndpoint="/api/v1/composer.json" options={{ mode: {name: "javascript", json: true}, indentUnit: 4 }} />;
 
             default:
                 return <Login />;

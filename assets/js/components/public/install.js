@@ -54,12 +54,9 @@ var UsernameComponent = React.createClass({
 var LoggedInComponent = React.createClass({
 
     render: function() {
-
-        var translationPlaceholders = { username: this.props.username };
-
         return (
             <fieldset>
-                <legend><Translation placeholders={translationPlaceholders}>You are logged in as %username%.</Translation></legend>
+                <legend><Translation placeholders={{ username: this.props.username }}>You are logged in as %username%.</Translation></legend>
             </fieldset>
         )
     }
