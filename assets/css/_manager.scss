@@ -18,6 +18,20 @@ header {
         }
     }
 
+    #logout {
+        display: block;
+        float: right;
+        margin: 10px 30px;
+
+        svg {
+            fill: $text-color;
+        }
+
+        &:hover svg {
+            fill: $contao-color;
+        }
+    }
+
     #nav-toggle {
         display: block;
         float: right;
