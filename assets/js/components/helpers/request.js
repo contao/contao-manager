@@ -28,6 +28,14 @@ var createRequest = function(url, props) {
                     return reject(new Error(response));
                 }
 
+                // Check if response contains a token, then we reset it which
+                // means you will only get logged out after 10 minutes of
+                // inactivity
+                var token = jqXHR.getResponseHeader('Authentication');
+                if (token) {
+                    setToken(token);
+                }
+
                 return resolve(response);
             })
             .fail(function(err) {
