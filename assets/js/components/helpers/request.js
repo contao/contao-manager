@@ -23,7 +23,7 @@ var createRequest = function(url, props) {
 
     return new Promise(function(resolve, reject, onCancel) {
         var req = jQuery.ajax(url, props)
-            .success(function(response) {
+            .done(function(response, textStatus, jqXHR) {
                 if (undefined !== response.status && 'OK' !== response.status) {
                     return reject(new Error(response));
                 }
