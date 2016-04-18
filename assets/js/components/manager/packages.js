@@ -22,15 +22,16 @@ var PackagesComponent = React.createClass({
 
     componentDidMount: function() {
         var self = this;
-        this.loadPackagesRequest = request.createRequest('/api/v1/packages', {
-        }).then(function(response) {
-            // @todo should this not return a status too?
+        this.loadPackagesRequest = request.createRequest('/api/v1/packages')
+            .then(function(response) {
+                // @todo should this not return a status too?
 
-            self.setState({packages: response});
+                self.setState({packages: response});
 
-        }).catch(function() {
-            // @todo: what if request failed?
-        });
+            })
+            .catch(function() {
+                // @todo: what if request failed?
+            });
 
         // Focus search input
         document.getElementById('search').focus();

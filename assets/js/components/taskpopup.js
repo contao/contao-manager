@@ -93,10 +93,8 @@ var TaskPopupComponent = React.createClass({
             return;
         }
 
-        request.createRequest('/api/v1/tasks/' + taskId, {
-            method: 'GET',
-            dataType: 'json'
-        }).then(function (response) {
+        request.createRequest('/api/v1/tasks/' + taskId)
+            .then(function (response) {
 
             var newState = {
                 content: {

@@ -11,6 +11,8 @@ Promise.config({cancellation: true});
 
 var createRequest = function(url, props) {
 
+    props = props || {};
+
     if ('' !== getToken()) {
         if (undefined === props.headers) {
             props.headers = {};

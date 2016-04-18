@@ -5,18 +5,17 @@ const request       = require('./request.js');
 
 var runNextTask = function() {
 
-    return request.createRequest('/api/v1/tasks/run', {
-        method: 'GET',
-        dataType: 'json'
-    }).then(function (response) {
-        if ('OK' === response.status) {
-            eventhandler.emit('displayTaskPopup', {
-                taskId: response.task
-            });
-        }
-    }).catch(function (err) {
-        // @todo
-    });
+    return request.createRequest('/api/v1/tasks/run')
+        .then(function (response) {
+            if ('OK' === response.status) {
+                eventhandler.emit('displayTaskPopup', {
+                    taskId: response.task
+                });
+            }
+        })
+        .catch(function (err) {
+            // @todo
+        });
 };
 
 module.exports = {

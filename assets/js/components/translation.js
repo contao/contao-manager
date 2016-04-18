@@ -41,20 +41,19 @@ var translate = function(key, placeholders, domain, locale) {
             return resolve(getTranslationForKey(key, cache[domain][locale], placeholders));
         }
 
-        request.createRequest('/translation/' + locale + '/' + domain, {
-            dataType: 'json'
-        }).then(function (response) {
-            // Cache
-            if (undefined === cache[domain]) {
-                cache[domain] = {};
-            }
-            cache[domain][locale] = response;
+        request.createRequest('/translation/' + locale + '/' + domain)
+            .then(function (response) {
+                // Cache
+                if (undefined === cache[domain]) {
+                    cache[domain] = {};
+                }
+                cache[domain][locale] = response;
 
-            return resolve(getTranslationForKey(key, response, placeholders));
-        }).catch(function (err) {
-            cache = {};
-            return reject(new Error(err));
-        });
+                return resolve(getTranslationForKey(key, response, placeholders));
+            }).catch(function (err) {
+                cache = {};
+                return reject(new Error(err));
+            });
     });
 };
 

@@ -44,15 +44,14 @@ var FileComponent = React.createClass({
 
     loadInitial: function(endPoint) {
         var self = this;
-        request.createRequest(endPoint, {
-            method: 'GET'
-        }).then(function (response) {
+        request.createRequest(endPoint)
+            .then(function (response) {
 
-            self.setState({code: response});
+                self.setState({code: response});
 
-        }).catch(function (err) {
-            // @todo
-        });
+            }).catch(function (err) {
+                // @todo
+            });
     },
 
     updateContent: function(content) {
@@ -60,30 +59,32 @@ var FileComponent = React.createClass({
         self.setState({code: content});
 
         request.createRequest(this.props.apiEndpoint, {
-            method: 'PUT',
-            data: content
-        }).then(function (response) {
+                method: 'PUT',
+                data: content
+            })
+            .then(function (response) {
 
-            var newState = {};
-            newState['status'] = response.status;
+                var newState = {};
+                newState['status'] = response.status;
 
-            if (undefined !== response.warnings) {
-                newState['warnings'] = response.warnings;
-            } else {
-                newState['warnings'] = [];
-            }
+                if (undefined !== response.warnings) {
+                    newState['warnings'] = response.warnings;
+                } else {
+                    newState['warnings'] = [];
+                }
 
-            if (undefined !== response.errors) {
-                newState['errors'] = response.errors;
-            } else {
-                newState['errors'] = [];
-            }
+                if (undefined !== response.errors) {
+                    newState['errors'] = response.errors;
+                } else {
+                    newState['errors'] = [];
+                }
 
-            self.setState(newState);
+                self.setState(newState);
 
-        }).catch(function (err) {
-            // @todo
-        });
+            })
+            .catch(function (err) {
+                // @todo
+            });
     },
 
     render: function() {
