@@ -1,7 +1,6 @@
 'use strict';
 
 const React = require('react');
-const jQuery = require('jquery');
 
 var PackageWarningComponent = React.createClass({
     getInitialState: function() {

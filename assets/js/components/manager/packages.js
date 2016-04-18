@@ -1,10 +1,8 @@
 'use strict';
 
 const React         = require('react');
-const jQuery        = require('jquery');
 const Trappings     = require('./trappings.js');
 const Package       = require('./package.js');
-const Warning       = require('./package-warning.js');
 const request       = require('./../helpers/request.js');
 const RadioWidget   = require('./../widgets/radio.js');
 const _             = require('lodash');
@@ -35,7 +33,7 @@ var PackagesComponent = React.createClass({
         });
 
         // Focus search input
-        jQuery('#search').focus();
+        document.getElementById('search').focus();
     },
 
     componentWillUnmount: function() {
@@ -46,13 +44,13 @@ var PackagesComponent = React.createClass({
         e.preventDefault();
         this.stopRunningRequests();
         self.setState({searching: false});
-        jQuery('#search').val('');
+        document.getElementById('search').value = '';
     },
 
     handleSearch: function(e) {
         e.preventDefault();
         var self = this;
-        var keywords = jQuery('#search').val();
+        var keywords = document.getElementById('search').value;
 
         // Stop running requests
         this.stopRunningRequests();

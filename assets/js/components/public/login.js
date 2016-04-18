@@ -1,7 +1,6 @@
 'use strict';
 
 const React         = require('react');
-const jQuery        = require('jquery');
 const Trappings     = require('./trappings.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
@@ -22,9 +21,9 @@ var InstallComponent = React.createClass({
         this.setState({isInstalling: true});
 
         var self = this;
-        var form = jQuery('#login-form');
-        var username = form.find('input[name="username"]').first().val();
-        var password = form.find('input[name="password"]').first().val();
+        var form = document.getElementById('login-form');
+        var username = form.querySelectorAll('input[name="username"]')[0].value
+        var password = form.querySelectorAll('input[name="password"]')[0].value
 
         this.login(username, password)
             .then(function() {

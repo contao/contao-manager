@@ -1,7 +1,6 @@
 'use strict';
 
 const React         = require('react');
-const jQuery        = require('jquery');
 const Promise       = require('bluebird');
 const Trappings     = require('./trappings.js');
 const Translation   = require('../translation.js');
@@ -122,14 +121,14 @@ var InstallComponent = React.createClass({
         e.preventDefault();
 
         var self = this;
-        var form = jQuery('#install-form');
+        var form = document.getElementById('install-form');
 
         TensideState.getState()
             .then(function(state) {
                 // Configure tenside if not already configured
                 if (true !== state.tenside_configured) {
-                    var username = form.find('input[name="username"]').first().val();
-                    var password = form.find('input[name="password"]').first().val();
+                    var username = form.querySelectorAll('input[name="username"]')[0].value;
+                    var password = form.querySelectorAll('input[name="password"]')[0].value;
 
                     return self.configure(username, password);
                 }
@@ -145,10 +144,10 @@ var InstallComponent = React.createClass({
                         }
                     };
 
-                    var versionField = form.find('input[name="version"]').first();
+                    var versionField = form.querySelectorAll('input[name="version"]')[0];
 
-                    if ('' !== versionField.val()) {
-                        createProjectPayload.version = versionField.val();
+                    if ('' !== versionField.value) {
+                        createProjectPayload.version = versionField.value;
                     }
 
                     return self.createProject(createProjectPayload, state);

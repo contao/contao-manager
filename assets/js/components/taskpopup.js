@@ -1,7 +1,6 @@
 'use strict';
 
 const React         = require('react');
-const jQuery        = require('jquery');
 const Translation   = require('./translation.js');
 const eventhandler  = require('./helpers/eventhandler.js');
 const request       = require('./helpers/request.js');
@@ -29,10 +28,10 @@ var TaskPopupComponent = React.createClass({
 
     componentDidMount: function() {
         var self = this;
-        this.popup = jQuery('#task-popup');
+        this.popup = document.getElementById('task-popup');
 
         // Escape key
-        jQuery(document).keyup(function(e) {
+        window.addEventListener('keyup', function(e) {
             if (27 === e.keyCode) {
                 self.hide();
             }
@@ -48,9 +47,10 @@ var TaskPopupComponent = React.createClass({
     componentWillUpdate: function(nextProps, nextState) {
 
         if (nextState.show) {
-            this.popup.fadeIn();
+            // @todo Use css transitions for this
+            //this.popup.fadeIn();
         } else {
-            this.popup.fadeOut();
+            //this.popup.fadeOut();
         }
     },
 
@@ -96,7 +96,7 @@ var TaskPopupComponent = React.createClass({
         request.createRequest('/api/v1/tasks/' + taskId, {
             method: 'GET',
             dataType: 'json'
-        }).success(function (response) {
+        }).then(function (response) {
 
             var newState = {
                 content: {
@@ -121,7 +121,7 @@ var TaskPopupComponent = React.createClass({
             newState['content']['taskTitle'] = self.getTaskTitle(response.type);
             self.setState(newState);
 
-        }).fail(function (err) {
+        }).catch(function (err) {
             self.setState({status: 'error'});
             window.clearInterval(self.currentInterval);
         });
