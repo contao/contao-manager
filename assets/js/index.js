@@ -10,9 +10,6 @@ const TensideState = require('./components/helpers/tenside-state.js');
 const request      = require('./components/helpers/request.js');
 const _            = require('lodash');
 
-// Enable cancelling of promises for the whole app
-Promise.config({cancellation: true});
-
 var router = routing.getRouter();
 
 // Route matched

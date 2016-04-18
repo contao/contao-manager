@@ -6,6 +6,9 @@ const Promise       = require('bluebird');
 
 var cookies;
 
+// Enable cancelling of promises
+Promise.config({cancellation: true});
+
 var createRequest = function(url, props) {
 
     if ('' !== getToken()) {
@@ -16,8 +19,8 @@ var createRequest = function(url, props) {
         props.headers['Authorization'] = 'Bearer ' + getToken();
     }
 
-    return new Promise(function(resolve, reject) {
-        jQuery.ajax(url, props)
+    return new Promise(function(resolve, reject, onCancel) {
+        var req = jQuery.ajax(url, props)
             .success(function(response) {
                 if (undefined !== response.status && 'OK' !== response.status) {
                     return reject(new Error(response));
@@ -28,6 +31,10 @@ var createRequest = function(url, props) {
             .fail(function(err) {
                 return reject(new Error(err));
             });
+
+        onCancel(function() {
+            req.abort();
+        });
     });
 };
 
