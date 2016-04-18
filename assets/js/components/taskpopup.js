@@ -170,6 +170,10 @@ var TaskPopupComponent = React.createClass({
         var cssClasses = [];
         var consolePreview = this.extractConsolePreview();
 
+        if (!this.state.show) {
+            cssClasses.push('hidden');
+        }
+
         if (this.state.showConsole) {
             cssClasses.push('console');
         }
