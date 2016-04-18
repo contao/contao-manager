@@ -62,7 +62,6 @@ var NavigationComponent = React.createClass({
                             <li><Link routeName="composer-json"/></li>
                         </ul>
                     </li>
-                    <li><a href="#"><Translation domain="navigation">Configuration</Translation></a></li>
                 </ul>
             </nav>
         );

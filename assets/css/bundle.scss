@@ -11,3 +11,8 @@
 }
 
 @import "codemirror";
+
+.CodeMirror {
+    position: relative;
+    z-index: -1;
+}
