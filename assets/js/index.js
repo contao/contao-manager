@@ -44,8 +44,19 @@ router.routed.add(function(request, data) {
 
         // Cool, all requirements have been fulfilled, access
         routing.setCurrentRoute(data.route.name);
-        ReactDOM.render(<App route={data.route.name} />, document.getElementById('app'));
-        ReactDOM.render(<TaskPopup />, document.getElementById('popup'));
+
+        if (undefined !== data.route.controller && _.isFunction(data.route.controller)) {
+            var ret = data.route.controller(request);
+
+            // Redirect to returned route if not true
+            if (true !== ret) {
+                routing.redirect(ret);
+                return;
+            }
+        } else {
+            ReactDOM.render(<App route={data.route.name} />, document.getElementById('app'));
+            ReactDOM.render(<TaskPopup />, document.getElementById('popup'));
+        }
     });
 });
 

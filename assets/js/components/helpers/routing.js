@@ -77,6 +77,7 @@ var _initialize = function() {
         var route = router.addRoute(routeDef.path);
         route.name = routeName;
         route.requirement = routeDef.requirement;
+        route.controller  = routeDef.controller;
         routes[routeName] = route;
     });
 
