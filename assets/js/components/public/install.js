@@ -31,8 +31,17 @@ var UsernameComponent = React.createClass({
 
         if ('' === this.password || '' === this.passwordConfirm || this.password === this.passwordConfirm) {
             this.setState({passwordsErrorMessage: ''});
+
+            if (undefined !== this.props.onPasswordNoError){
+                this.props.onPasswordNoError.call(this);
+            }
+
         } else {
             this.setState({passwordsErrorMessage: <Translation domain="install">Passwords do not match!</Translation>});
+
+            if (undefined !== this.props.onPasswordError){
+                this.props.onPasswordError.call(this);
+            }
         }
     },
 
@@ -69,6 +78,7 @@ var InstallComponent = React.createClass({
     getInitialState: function() {
         return {
             constraintErrorMessage: '',
+            hasPasswordErrors: false,
             installing: false,
             isLoggedIn: false,
             username: ''
@@ -239,20 +249,26 @@ var InstallComponent = React.createClass({
         });
     },
 
+    onPasswordError: function() {
+        this.setState({hasPasswordErrors: true});
+    },
+
+    onPasswordNoError: function() {
+        this.setState({hasPasswordErrors: false});
+    },
+
     componentWillUnmount: function() {
         this.tensideStatePromise.cancel();
     },
 
     render: function() {
 
-        var hasErrors = this.state.passwordsErrorMessage !== '';
-        var disableButton = hasErrors || this.state.installing;
-
+        var disableButton = this.state.hasPasswordErrors || this.state.installing;
         var usernamePart = '';
         if (this.state.isLoggedIn) {
             usernamePart = <LoggedInComponent username={this.state.username} />;
         } else {
-            usernamePart = <UsernameComponent/>;
+            usernamePart = <UsernameComponent onPasswordError={this.onPasswordError} onPasswordNoError={this.onPasswordNoError} />;
         }
 
         return (
