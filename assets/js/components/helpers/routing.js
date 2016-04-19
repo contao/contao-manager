@@ -1,6 +1,7 @@
 const crossroads   = require('crossroads');
 const history      = require('history').createHistory();
 const _            = require('lodash');
+const request      = require('./request.js');
 
 var _initialized = false;
 var router = null;
@@ -70,6 +71,13 @@ var _initialize = function() {
         'composer-json': {
             path: '/{locale}/files/composer-json',
             requirement: _tensideOkAndLoggedIn
+        },
+        'logout': {
+            path: '{locale}/logout',
+            controller: function() {
+                request.setToken('');
+                return 'login';
+            }
         }
     };
 
