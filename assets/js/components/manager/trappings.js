@@ -1,13 +1,26 @@
 'use strict';
 
-const React = require('react');
-const Navigation = require('./navigation.js');
-const routing = require('./../helpers/routing.js');
+const React         = require('react');
+const Navigation    = require('./navigation.js');
+const routing       = require('./../helpers/routing.js');
+const eventhandler  = require('./../helpers/eventhandler.js');
 
 var TrappingsComponent = React.createClass({
 
     getInitialState: function() {
-        return {};
+        return {
+            blurClass: ''
+        };
+    },
+
+    componentDidMount: function() {
+        var self = this;
+        eventhandler.on('displayTaskPopup', function() {
+            self.setState({blurClass: 'blur-in'});
+        });
+        eventhandler.on('hideTaskPopup', function() {
+            self.setState({blurClass: 'blur-out'});
+        });
     },
 
     handleLogout: function(e) {
@@ -17,8 +30,16 @@ var TrappingsComponent = React.createClass({
     },
 
     render: function() {
+
+        var classes = [
+            'manager',
+            this.state.blurClass
+        ];
+
+        classes = _.compact(classes);
+
         return (
-            <div id="content" className="manager">
+            <div id="content" className={classes.join(' ')}>
 
                 <header>
                     <a id="logo" href="#"><img src="/web-assets/images/logo.svg" width="40" height="40" alt="Contao Logo" /> Contao Manager</a>

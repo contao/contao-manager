@@ -43,17 +43,7 @@ var TaskPopupComponent = React.createClass({
         });
         eventhandler.on('hideTaskPopup', self.hide);
     },
-
-    componentWillUpdate: function(nextProps, nextState) {
-
-        if (nextState.show) {
-            // @todo Use css transitions for this
-            //this.popup.fadeIn();
-        } else {
-            //this.popup.fadeOut();
-        }
-    },
-
+    
     componentDidUpdate: function(prevProps, prevState) {
 
         // If task has changed, start update
