@@ -24,7 +24,7 @@ var Widget = React.createClass({
         });
 
         if (undefined !== this.props.onChange){
-            this.props.onChange.call(this, this.props, event);
+            this.props.onChange.call(this, e, this.props);
         }
     },
 

@@ -22,7 +22,7 @@ var UsernameComponent = React.createClass({
         };
     },
 
-    handlePasswordCompare: function(props, e) {
+    handlePasswordCompare: function(e, props) {
         if (props.name == 'password') {
             this.password = e.target.value;
         } else {
@@ -88,7 +88,7 @@ var InstallComponent = React.createClass({
             });
     },
 
-    validateConstraint: function(props, e) {
+    validateConstraint: function(e, props) {
 
         var self  = this,
             value = e.target.value;

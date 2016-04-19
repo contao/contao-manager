@@ -4,12 +4,6 @@ const React = require('react');
 
 var Option = React.createClass({
 
-    handleChange: function(e) {
-        if (undefined !== this.props.onChange){
-            this.props.onChange.call(this, this.props, e);
-        }
-    },
-
     render: function() {
         return (
             <span>
@@ -19,7 +13,7 @@ var Option = React.createClass({
                     id={this.props.id}
                     value={this.props.value}
                     checked={this.props.selected}
-                    onChange={this.handleChange}
+                    onChange={this.props.onChange}
                 />
                 <label htmlFor={this.props.id}>{this.props.label}</label>
             </span>
@@ -37,11 +31,11 @@ var Widget = React.createClass({
 
     handleChange: function(e) {
         this.setState({
-            selected: e.value
+            selected: e.target.value
         });
 
         if (undefined !== this.props.onChange){
-            this.props.onChange.call(this, this.props, e);
+            this.props.onChange.call(this, e, this.props);
         }
     },
 
