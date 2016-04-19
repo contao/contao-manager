@@ -5,80 +5,65 @@ const Trappings     = require('./trappings.js');
 const Package       = require('./package.js');
 const request       = require('./../helpers/request.js');
 const RadioWidget   = require('./../widgets/radio.js');
+const Translation   = require('./../translation.js');
 const _             = require('lodash');
 
 
 var PackagesComponent = React.createClass({
 
-    loadPackagesRequest: null,
-    searchPackagesRequest: null,
+    requests: [],
 
     getInitialState: function() {
         return {
-            searching: false,
+            mode: 'packages',
+            keywords : '',
+            type: 'installed',
+            threshold: 20,
             packages: []
         };
     },
 
     componentDidMount: function() {
-        var self = this;
-        this.loadPackagesRequest = request.createRequest('/api/v1/packages')
-            .then(function(response) {
-                // @todo should this not return a status too?
 
-                self.setState({packages: response});
-
-            })
-            .catch(function() {
-                // @todo: what if request failed?
-            });
+        this.loadPackagesPackages();
 
         // Focus search input
         document.getElementById('search').focus();
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+        // Only update if the state is different.
+        return !_.isEqual(this.state, nextState);
+    },
+
+    componentWillUpdate: function(nextProps, nextState) {
+        this.stopRunningRequests();
+
+        if ('packages' === nextState.mode) {
+            this.loadPackagesPackages();
+        } else{
+            this.loadSearchPackages(nextState);
+        }
     },
 
     componentWillUnmount: function() {
         this.stopRunningRequests();
     },
 
-    handleSearchClose: function(e) {
-        e.preventDefault();
-        this.stopRunningRequests();
-        self.setState({searching: false});
-        document.getElementById('search').value = '';
-    },
-
-    handleSearch: function(e) {
-        e.preventDefault();
+    loadSearchPackages: function(state) {
         var self = this;
-        var keywords = document.getElementById('search').value;
-
-        // Stop running requests
-        this.stopRunningRequests();
-
-        // Leave searching state when keywords is empty
-        if ('' === keywords) {
-            self.setState({searching: false});
-            return;
-        }
-
-        self.setState({searching: true});
 
         var searchPayload = {
-            keywords: keywords,
-            type: 'installed',
-            threshold: 20
+            keywords: state.keywords,
+            type: state.type,
+            threshold: state.threshold
         };
 
-        self.searchPackagesRequest = request.createRequest('/api/v1/search', {
-            method: 'POST',
-            data: JSON.stringify(searchPayload)
-        });
-
-        var delay;
-        clearTimeout(delay);
-        delay = setTimeout(function() {
-            self.searchPackagesRequest.then(function(response) {
+        var req = request.createRequest('/api/v1/search', {
+                method: 'POST',
+                data: JSON.stringify(searchPayload)
+            })
+            .then(function(response) {
                 // @todo should this not return a status too?
                 self.setState({packages: response});
 
@@ -86,18 +71,54 @@ var PackagesComponent = React.createClass({
                 // @todo: what if request failed?
             });
 
-        }, 1000);
+        this.requests.push(req);
+    },
 
+    loadPackagesPackages: function() {
+        var self = this;
+        var req = request.createRequest('/api/v1/packages')
+            .then(function(response) {
+                // @todo should this not return a status too?
+                self.setState({packages: response});
+            })
+            .catch(function() {
+                // @todo: what if request failed?
+            });
+
+        this.requests.push(req);
+    },
+
+    updateKeywordsOnType: function(e) {
+        e.preventDefault();
+        var keywords = e.target.value;
+
+        this.setState({
+            mode: '' !== keywords ? 'search' : 'packages',
+            keywords: keywords
+        });
+    },
+
+    handleTypeChange: function(e) {
+        this.setState({
+            type: e.target.value
+        });
+    },
+
+    handleCloseButton: function(e) {
+        e.preventDefault();
+
+        this.setState({
+            mode: 'packages',
+            keywords: ''
+        });
     },
 
     stopRunningRequests: function() {
-        if (null !== this.loadPackagesRequest) {
-            this.loadPackagesRequest.cancel();
-        }
-
-        if (null !== this.searchPackagesRequest) {
-            this.searchPackagesRequest.cancel();
-        }
+        var self = this;
+        _.forEach(_.reverse(this.requests), function(req, i) {
+            req.cancel();
+            self.requests.splice(i, 1);
+        });
     },
 
     render: function() {
@@ -116,15 +137,15 @@ var PackagesComponent = React.createClass({
 
         var search = '';
 
-        if (this.state.searching) {
-            search = <SearchTypeComponent />
+        if ('search' === this.state.mode) {
+            search = <SearchTypeComponent onChange={this.handleTypeChange} onClose={this.handleCloseButton} selected={this.state.type} />
         }
 
         return (
             <Trappings>
 
                 <section className="search">
-                    <input id="search" type="text" placeholder="Search Packages…" onKeyUp={this.handleSearch} />
+                    <input id="search" type="text" placeholder="Search Packages…" onChange={this.updateKeywordsOnType} value={this.state.keywords} />
                     <button>Check for Updates</button>
                 </section>
 
@@ -147,27 +168,26 @@ var PackagesComponent = React.createClass({
 var SearchTypeComponent = React.createClass({
 
     options: [{
-        value: 'mine',
-        label: 'Mine'
-    }, {
-        value: 'contao',
-        label: 'Contao'
-    }, {
-        value: 'all',
-        label: 'All'
-    }
+            value: 'installed',
+            label: <Translation domain="packages">My installed packages</Translation>
+        }, {
+            value: 'contao',
+            label: <Translation domain="packages">Available packages for Contao</Translation>
+        }, {
+            value: 'all',
+            label: <Translation domain="packages">All available packages</Translation>
+        }
     ],
 
     render: function() {
         return (
             <fieldset className="type">
-                <legend>Search in</legend>
-                {/* @todo add onClick here */}
-                <a href="#" className="close">
+                <legend><Translation domain="packages">Search in</Translation></legend>
+                <a href="#close" className="close" onClick={this.props.onClose}>
                     <i className="icono-cross" />
-                    Close
+                    <Translation domain="packages">Close search</Translation>
                 </a>
-                <RadioWidget options={this.options} name="searchType" selected="mine"/>
+                <RadioWidget options={this.options} onChange={this.props.onChange} name="searchType" selected={this.props.selected}/>
             </fieldset>
         )
     }
