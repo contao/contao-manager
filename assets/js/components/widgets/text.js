@@ -18,9 +18,9 @@ var Widget = React.createClass({
         };
     },
 
-    handleChange: function(event) {
+    handleChange: function(e) {
         this.setState({
-            empty: '' === event.target.value
+            empty: '' === e.target.value
         });
 
         if (undefined !== this.props.onChange){
