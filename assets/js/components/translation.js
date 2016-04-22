@@ -5,6 +5,9 @@ const Promise   = require('bluebird');
 const routing   = require('./helpers/routing.js');
 const request   = require('./helpers/request.js');
 
+// Enable cancelling of promises
+Promise.config({cancellation: true});
+
 var cache = {};
 
 var getTranslationForKey = function(key, data, placeholders) {
@@ -34,27 +37,21 @@ var translate = function(key, placeholders, domain, locale) {
         locale = routing.getLanguage();
     }
 
-    return new Promise(function (resolve, reject) {
+    // Maybe cached?
+    if (undefined !== cache[domain] && undefined !== cache[domain][locale]) {
+        return Promise.resolve(getTranslationForKey(key, cache[domain][locale], placeholders));
+    }
 
-        // Maybe cached?
-        if (undefined !== cache[domain] && undefined !== cache[domain][locale]) {
-            return resolve(getTranslationForKey(key, cache[domain][locale], placeholders));
-        }
+    return request.createRequest('/translation/' + locale + '/' + domain)
+        .then(function (response) {
+            // Cache
+            if (undefined === cache[domain]) {
+                cache[domain] = {};
+            }
+            cache[domain][locale] = response;
 
-        request.createRequest('/translation/' + locale + '/' + domain)
-            .then(function (response) {
-                // Cache
-                if (undefined === cache[domain]) {
-                    cache[domain] = {};
-                }
-                cache[domain][locale] = response;
-
-                return resolve(getTranslationForKey(key, response, placeholders));
-            }).catch(function (err) {
-                cache = {};
-                return reject(new Error(err));
-            });
-    });
+            return getTranslationForKey(key, response, placeholders);
+        });
 };
 
 var Translation = React.createClass({
@@ -77,9 +74,6 @@ var Translation = React.createClass({
         this.translatePromise
             .then(function(translation) {
                 self.setState({label: translation});
-            })
-            .catch(function(err) {
-                // catch isCancelled
             });
     },
 
