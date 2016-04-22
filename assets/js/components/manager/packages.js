@@ -16,47 +16,52 @@ var PackagesComponent = React.createClass({
     getInitialState: function() {
         return {
             mode: 'packages',
-            keywords : '',
-            type: 'installed',
-            threshold: 20,
+            searchRequest: {
+                keywords: '',
+                type: 'installed',
+                threshold: 20
+            },
             packages: []
         };
     },
 
     componentDidMount: function() {
 
-        this.loadPackagesPackages();
+        this.updatePackageList('packages');
 
         // Focus search input
         document.getElementById('search').focus();
-    },
-
-    shouldComponentUpdate: function(nextProps, nextState) {
-        // Only update if the state is different.
-        return !_.isEqual(this.state, nextState);
-    },
-
-    componentWillUpdate: function(nextProps, nextState) {
-        this.stopRunningRequests();
-
-        if ('packages' === nextState.mode) {
-            this.loadPackagesPackages();
-        } else{
-            this.loadSearchPackages(nextState);
-        }
     },
 
     componentWillUnmount: function() {
         this.stopRunningRequests();
     },
 
-    loadSearchPackages: function(state) {
+    updatePackageList: function(mode, searchRequest) {
+
+        searchRequest = searchRequest || {
+            keywords: '',
+            type: 'installed',
+            threshold: 20
+        };
+
+        this.stopRunningRequests();
+
+        if ('packages' === mode) {
+            this.loadPackagesPackages();
+        } else {
+            this.loadSearchPackages(searchRequest);
+        }
+    },
+
+
+    loadSearchPackages: function(searchRequest) {
         var self = this;
 
         var searchPayload = {
-            keywords: state.keywords,
-            type: state.type,
-            threshold: state.threshold
+            keywords:   searchRequest.keywords,
+            type:       searchRequest.type,
+            threshold:  searchRequest.threshold
         };
 
         var req = request.createRequest('/api/v1/search', {
@@ -66,8 +71,8 @@ var PackagesComponent = React.createClass({
             .then(function(response) {
                 // @todo should this not return a status too?
                 self.setState({packages: response});
-
-            }).catch(function() {
+            })
+            .catch(function() {
                 // @todo: what if request failed?
             });
 
@@ -76,6 +81,7 @@ var PackagesComponent = React.createClass({
 
     loadPackagesPackages: function() {
         var self = this;
+
         var req = request.createRequest('/api/v1/packages')
             .then(function(response) {
                 // @todo should this not return a status too?
@@ -90,27 +96,38 @@ var PackagesComponent = React.createClass({
 
     updateKeywordsOnType: function(e) {
         e.preventDefault();
-        var keywords = e.target.value;
+        var searchRequest = _.merge(this.state.searchRequest, {keywords: e.target.value});
+        var mode = '' === e.target.value ? 'packages' : 'search';
 
         this.setState({
-            mode: '' !== keywords ? 'search' : 'packages',
-            keywords: keywords
+            mode: mode,
+            searchRequest: searchRequest
         });
+
+        this.updatePackageList(mode, searchRequest);
     },
 
     handleTypeChange: function(e) {
+        var searchRequest = _.merge(this.state.searchRequest, {type: e.target.value});
+
         this.setState({
-            type: e.target.value
+            searchRequest: searchRequest
         });
+
+        this.updatePackageList('search', searchRequest);
     },
 
     handleCloseButton: function(e) {
         e.preventDefault();
+        var searchRequest = _.merge(this.state.searchRequest, {keywords: ''});
 
         this.setState({
             mode: 'packages',
-            keywords: ''
+            searchRequest: searchRequest
         });
+
+        this.updatePackageList('packages', searchRequest);
+    },
     },
 
     stopRunningRequests: function() {
