@@ -24,9 +24,15 @@ var createRequest = function(url, props) {
     return new Promise(function(resolve, reject, onCancel) {
         var req = jQuery.ajax(url, props)
             .done(function(response, textStatus, jqXHR) {
+
+                // @todo, we can do that check here as soon as really every
+                // Tenside response includes a response.status value
+                // which means we can reject the promise here already
+                // and thus not every caller needs to check for response.status
+                /*
                 if (undefined !== response.status && 'OK' !== response.status) {
                     return reject(new Error(response));
-                }
+                }*/
 
                 // Check if response contains a token, then we reset it which
                 // means you will only get logged out after 10 minutes of
