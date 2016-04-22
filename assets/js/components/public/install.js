@@ -6,7 +6,6 @@ const Trappings     = require('./trappings.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
 const TensideState  = require('../helpers/tenside-state.js');
-const eventhandler  = require('../helpers/eventhandler.js');
 const taskmanager   = require('../helpers/taskmanager.js');
 const request       = require('../helpers/request.js');
 

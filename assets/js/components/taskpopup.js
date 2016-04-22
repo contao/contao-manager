@@ -37,13 +37,15 @@ var TaskPopupComponent = React.createClass({
             }
         });
 
-        eventhandler.on('displayTaskPopup', function(state) {
-            state.show = true;
-            self.setState(state);
-        });
+        eventhandler.on('displayTaskPopup', self.show);
         eventhandler.on('hideTaskPopup', self.hide);
     },
-    
+
+    componentWillUnmount: function() {
+        eventhandler.removeListener('displayTaskPopup', self.show);
+        eventhandler.removeListener('hideTaskPopup', self.hide);
+    },
+
     componentDidUpdate: function(prevProps, prevState) {
 
         // If task has changed, start update
@@ -52,6 +54,12 @@ var TaskPopupComponent = React.createClass({
         }
 
         this.lastTaskId = this.state.taskId;
+    },
+
+    show: function() {
+        this.setState({
+            show: true
+        });
     },
 
     hide: function() {

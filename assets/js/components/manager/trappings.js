@@ -14,13 +14,21 @@ var TrappingsComponent = React.createClass({
     },
 
     componentDidMount: function() {
-        var self = this;
-        eventhandler.on('displayTaskPopup', function() {
-            self.setState({blurClass: 'blur-in'});
-        });
-        eventhandler.on('hideTaskPopup', function() {
-            self.setState({blurClass: 'blur-out'});
-        });
+        eventhandler.on('displayTaskPopup', this.blurIn);
+        eventhandler.on('hideTaskPopup', this.blurOut);
+    },
+
+    componentWillUnmount: function() {
+        eventhandler.removeListener('displayTaskPopup', this.blurIn);
+        eventhandler.removeListener('hideTaskPopup', this.blurOut);
+    },
+
+    blurIn: function() {
+        this.setState({blurClass: 'blur-in'});
+    },
+
+    blurOut: function() {
+        this.setState({blurClass: 'blur-out'});
     },
 
     handleLogout: function(e) {
