@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "composer/composer",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "de0e25b0d494ace6b571a9205b82d017e5cb9257"
+                "reference": "a083aa5e0c9b8ad989c622638aa380c1f88a68ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/de0e25b0d494ace6b571a9205b82d017e5cb9257",
-                "reference": "de0e25b0d494ace6b571a9205b82d017e5cb9257",
+                "url": "https://api.github.com/repos/composer/composer/zipball/a083aa5e0c9b8ad989c622638aa380c1f88a68ec",
+                "reference": "a083aa5e0c9b8ad989c622638aa380c1f88a68ec",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-04-18 20:14:28"
+            "time": "2016-04-21 11:30:19"
         },
         {
             "name": "composer/semver",
@@ -2659,12 +2659,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "0e105cc178864c8d51ff931515a0bcfdf12d4651"
+                "reference": "39986eff915c4688dc30ba0d82049daff8eabc0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/0e105cc178864c8d51ff931515a0bcfdf12d4651",
-                "reference": "0e105cc178864c8d51ff931515a0bcfdf12d4651",
+                "url": "https://api.github.com/repos/tenside/core/zipball/39986eff915c4688dc30ba0d82049daff8eabc0c",
+                "reference": "39986eff915c4688dc30ba0d82049daff8eabc0c",
                 "shasum": ""
             },
             "require": {
@@ -2711,7 +2711,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-04-12 20:43:27"
+            "time": "2016-04-21 16:18:51"
         },
         {
             "name": "tenside/core-bundle",
@@ -2719,12 +2719,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "599ba3fb619977db2d45e1fb2c6de75dd75d42ef"
+                "reference": "31e4dd18233ef17cd129db5bbf9feec685791849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/599ba3fb619977db2d45e1fb2c6de75dd75d42ef",
-                "reference": "599ba3fb619977db2d45e1fb2c6de75dd75d42ef",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/31e4dd18233ef17cd129db5bbf9feec685791849",
+                "reference": "31e4dd18233ef17cd129db5bbf9feec685791849",
                 "shasum": ""
             },
             "require": {
@@ -2785,7 +2785,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-04-19 09:48:08"
+            "time": "2016-04-21 19:16:12"
         }
     ],
     "packages-dev": [
@@ -3651,20 +3651,20 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.4.2",
+            "version": "2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "fccbdb6b222f6d7a6d35af1c396ba5435cec76a9"
+                "reference": "2b9c2417a18696dfb578b38c116cd0ddc19b256e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/fccbdb6b222f6d7a6d35af1c396ba5435cec76a9",
-                "reference": "fccbdb6b222f6d7a6d35af1c396ba5435cec76a9",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/2b9c2417a18696dfb578b38c116cd0ddc19b256e",
+                "reference": "2b9c2417a18696dfb578b38c116cd0ddc19b256e",
                 "shasum": ""
             },
             "require": {
-                "pdepend/pdepend": "~2.0",
+                "pdepend/pdepend": "^2.0.4",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -3712,7 +3712,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2016-03-10 17:17:44"
+            "time": "2016-04-04 11:52:04"
         },
         {
             "name": "phpspec/php-diff",
