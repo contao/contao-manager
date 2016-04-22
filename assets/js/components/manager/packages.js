@@ -16,6 +16,7 @@ var PackagesComponent = React.createClass({
     getInitialState: function() {
         return {
             mode: 'packages',
+            loading: false,
             searchRequest: {
                 keywords: '',
                 type: 'installed',
@@ -57,6 +58,7 @@ var PackagesComponent = React.createClass({
 
     loadSearchPackages: function(searchRequest) {
         var self = this;
+        this.setState({loading: true});
 
         var searchPayload = {
             keywords:   searchRequest.keywords,
@@ -70,10 +72,11 @@ var PackagesComponent = React.createClass({
             })
             .then(function(response) {
                 // @todo should this not return a status too?
-                self.setState({packages: response});
+                self.setState({packages: response, loading: false});
             })
             .catch(function() {
                 // @todo: what if request failed?
+                self.setState({loading: false});
             });
 
         this.requests.push(req);
@@ -81,14 +84,16 @@ var PackagesComponent = React.createClass({
 
     loadPackagesPackages: function() {
         var self = this;
+        this.setState({loading: true});
 
         var req = request.createRequest('/api/v1/packages')
             .then(function(response) {
                 // @todo should this not return a status too?
-                self.setState({packages: response});
+                self.setState({packages: response, loading: false});
             })
             .catch(function() {
                 // @todo: what if request failed?
+                self.setState({loading: false});
             });
 
         this.requests.push(req);
@@ -128,6 +133,11 @@ var PackagesComponent = React.createClass({
 
         this.updatePackageList('packages', searchRequest);
     },
+
+    handleRemoveButton: function(e) {
+        // @todo request the api to remove the package
+        console.log('remove');
+
     },
 
     stopRunningRequests: function() {
@@ -139,30 +149,41 @@ var PackagesComponent = React.createClass({
     },
 
     render: function() {
-
-        var packages = [];
-
-        _.forEach(this.state.packages, function(packageData) {
-            packages.push(<Package
-                key={packageData.name}
-                name={packageData.name}
-                description={packageData.description}
-                licenses={packageData.license}
-                constraint={packageData.installed}
-            />);
-        });
-
-        var search = '';
+        var packages = null;
+        var self     = this;
+        var search   = '';
 
         if ('search' === this.state.mode) {
-            search = <SearchTypeComponent onChange={this.handleTypeChange} onClose={this.handleCloseButton} selected={this.state.type} />
+            search = <SearchTypeComponent onChange={this.handleTypeChange} onClose={this.handleCloseButton} selected={this.state.searchRequest.type} />
+        }
+
+        if (this.state.loading) {
+            // @todo
+            packages = 'Hello, I can be a beautiful ajax spinner.';
+        } else {
+            packages = [];
+
+            _.forEach(this.state.packages, function(packageData) {
+                packages.push(<Package
+                    key={packageData.name}
+                    name={packageData.name}
+                    description={packageData.description}
+                    licenses={packageData.license}
+                    constraint={packageData.installed}
+                    onRemove={self.handleRemoveButton}
+                />);
+            });
+
+            if (0 === packages.length) {
+                packages = <Translation domain="packages">No packages found.</Translation>
+            }
         }
 
         return (
             <Trappings>
 
                 <section className="search">
-                    <input id="search" type="text" placeholder="Search Packages…" onChange={this.updateKeywordsOnType} value={this.state.keywords} />
+                    <input id="search" type="text" placeholder="Search Packages…" onChange={this.updateKeywordsOnType} value={this.state.searchRequest.keywords} />
                     <button>Check for Updates</button>
                 </section>
 
