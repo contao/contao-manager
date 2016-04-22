@@ -136,8 +136,6 @@ var PackagesComponent = React.createClass({
 
     handleRemoveButton: function(e) {
         // @todo request the api to remove the package
-        console.log('remove');
-
     },
 
     stopRunningRequests: function() {

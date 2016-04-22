@@ -4,8 +4,21 @@ const React = require('react');
 const _     = require('lodash');
 
 var PackagesComponent = React.createClass({
+
     getInitialState: function() {
-        return {};
+        return {
+            removed: false
+        };
+    },
+
+    handleRemoveButton: function(e) {
+        this.setState({
+            removed: true
+        });
+
+        if (undefined !== this.props.onRemove) {
+            this.props.onRemove.call(this, e, this.props);
+        }
     },
 
     render: function() {
@@ -57,7 +70,7 @@ var PackagesComponent = React.createClass({
 
                     <fieldset className="actions">
                         {stateButton}
-                        <button className="uninstall">
+                        <button className={"uninstall" + (this.state.removed ? ' removed' : '')} onClick={this.handleRemoveButton} disabled={this.state.removed}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.8 105.6"><path d="M0 8.3h31.8V0H59v8.3h31.8v12.5H0V8.3zm8.3 17.8h75.8v79.5H8.3m64-70.7h-7.6v62.8h7.5l.1-62.8zm-22.7 0h-7.5v62.8h7.5V34.9zm-22.8.5h-7.5v62.8h7.5V35.4z"/></svg>
                             Remove
                         </button>
