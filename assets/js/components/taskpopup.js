@@ -85,34 +85,32 @@ var TaskPopupComponent = React.createClass({
 
         request.createRequest('/api/v1/tasks/' + taskId)
             .then(function (response) {
+                var newState = {
+                    content: {
+                        consoleOutput:response.output
+                    }
+                };
 
-            var newState = {
-                content: {
-                    consoleOutput:response.output
+                switch (response.status) {
+                    case 'PENDING':
+                    case 'RUNNING':
+                        break;
+                    case 'FINISHED':
+                        newState['status'] = 'success';
+                        window.clearInterval(self.currentInterval);
+                        break;
+                    case 'ERROR':
+                    default:
+                        newState['status'] = 'error';
+                        window.clearInterval(self.currentInterval);
                 }
-            };
 
-            switch (response.status) {
-                case 'PENDING':
-                case 'RUNNING':
-                    break;
-                case 'FINISHED':
-                    newState['status'] = 'success';
-                    window.clearInterval(self.currentInterval);
-                    break;
-                case 'ERROR':
-                default:
-                    newState['status'] = 'error';
-                    window.clearInterval(self.currentInterval);
-            }
-
-            newState['content']['taskTitle'] = self.getTaskTitle(response.type);
-            self.setState(newState);
-
-        }).catch(function (err) {
-            self.setState({status: 'error'});
-            window.clearInterval(self.currentInterval);
-        });
+                newState['content']['taskTitle'] = self.getTaskTitle(response.type);
+                self.setState(newState);
+            }).catch(function (err) {
+                self.setState({status: 'error'});
+                window.clearInterval(self.currentInterval);
+            });
     },
 
     extractConsolePreview: function() {
