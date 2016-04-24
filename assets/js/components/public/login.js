@@ -1,6 +1,7 @@
 'use strict';
 
 const React         = require('react');
+const Promise       = require('bluebird');
 const Trappings     = require('./trappings.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
@@ -9,12 +10,20 @@ const routing       = require('../helpers/routing.js');
 
 
 var InstallComponent = React.createClass({
+
+    loginPromise: Promise.resolve(),
+
     getInitialState: function() {
         return {
             isLoggingIn: false,
             credentialsIncorrect: false
         }
     },
+
+    componentWillUnmount: function() {
+        this.loginPromise.cancel();
+    },
+
 
     handleLogin: function(e) {
         e.preventDefault();
@@ -25,12 +34,14 @@ var InstallComponent = React.createClass({
         var username = form.querySelectorAll('input[name="username"]')[0].value
         var password = form.querySelectorAll('input[name="password"]')[0].value
 
-        this.login(username, password)
+        this.loginPromise = this.login(username, password)
             .then(function() {
                 routing.redirect('packages');
             })
             .catch(function() {
-                self.setState({credentialsIncorrect: true});
+                if (!self.loginPromise.isCancelled()) {
+                    self.setState({credentialsIncorrect: true});
+                }
             });
     },
 
