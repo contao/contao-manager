@@ -70,10 +70,13 @@ var Translation = React.createClass({
         var label = this.props.children;
         var self = this;
 
-        this.translatePromise = translate(label, this.props.placeholders, this.props.domain, this.props.locale);
-        this.translatePromise
+        this.translatePromise = translate(label, this.props.placeholders, this.props.domain, this.props.locale)
             .then(function(translation) {
-                self.setState({label: translation});
+                if (!self.translatePromise.isCancelled()) {
+                    self.setState({label: translation});
+                }
+
+                return translation;
             });
     },
 
