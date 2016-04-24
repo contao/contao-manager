@@ -9,6 +9,7 @@ const TensideState  = require('../helpers/tenside-state.js');
 const taskmanager   = require('../helpers/taskmanager.js');
 const request       = require('../helpers/request.js');
 
+// @todo Handle the componentWillUnmount stuff here (cancelling, unsettled promises)
 
 var UsernameComponent = React.createClass({
 
