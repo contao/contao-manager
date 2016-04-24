@@ -21,37 +21,19 @@ var createRequest = function(url, props) {
         props.headers['Authorization'] = 'Bearer ' + getToken();
     }
 
-    return new Promise(function(resolve, reject, onCancel) {
-        var req = jQuery.ajax(url, props)
-            .done(function(response, textStatus, jqXHR) {
+    var ajax = jQuery.ajax(url, props);
+    return Promise.resolve(ajax)
+        .then(function(response) {
+            // Check if response contains a token, then we reset it which
+            // means you will only get logged out after 10 minutes of
+            // inactivity
+            var token = ajax.getResponseHeader('Authentication');
+            if (token) {
+                setToken(token);
+            }
 
-                // @todo, we can do that check here as soon as really every
-                // Tenside response includes a response.status value
-                // which means we can reject the promise here already
-                // and thus not every caller needs to check for response.status
-                /*
-                if (undefined !== response.status && 'OK' !== response.status) {
-                    return reject(new Error(response));
-                }*/
-
-                // Check if response contains a token, then we reset it which
-                // means you will only get logged out after 10 minutes of
-                // inactivity
-                var token = jqXHR.getResponseHeader('Authentication');
-                if (token) {
-                    setToken(token);
-                }
-
-                return resolve(response);
-            })
-            .fail(function(err) {
-                return reject(new Error(err));
-            });
-
-        onCancel(function() {
-            req.abort();
+            return response;
         });
-    });
 };
 
 var setToken = function(token) {
