@@ -35,31 +35,22 @@ var InstallComponent = React.createClass({
     },
 
     login: function(username, password) {
-        return new Promise(function (resolve, reject) {
 
-            var authPayload = {
-                username: username,
-                password: password
-            };
+        var authPayload = {
+            username: username,
+            password: password
+        };
 
-            request.createRequest('/api/v1/auth', {
-                    method: 'POST',
-                    data: JSON.stringify(authPayload)
-                })
-                .then(function (response) {
-                    if ('OK' === response.status) {
-                        // Store the JWT
-                        request.setToken(response.token);
-
-                        resolve(response);
-                    } else {
-                        reject(new Error(response));
-                    }
-                })
-                .catch(function (err) {
-                    reject(new Error(err));
-                });
-        });
+        return request.createRequest('/api/v1/auth', {
+                method: 'POST',
+                data: JSON.stringify(authPayload)
+            })
+            .then(function (response) {
+                if ('OK' === response.status) {
+                    // Store the JWT
+                    request.setToken(response.token);
+                }
+            });
     },
 
     render: function() {
