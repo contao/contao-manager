@@ -37,30 +37,21 @@ var translate = function(key, placeholders, domain, locale) {
         locale = routing.getLanguage();
     }
 
-    return new Promise(function(resolve, reject, onCancel) {
-        // Maybe cached?
-        if (undefined !== cache[domain] && undefined !== cache[domain][locale]) {
-            return resolve(getTranslationForKey(key, cache[domain][locale], placeholders));
-        }
+    // Maybe cached?
+    if (undefined !== cache[domain] && undefined !== cache[domain][locale]) {
+        return Promise.resolve(getTranslationForKey(key, cache[domain][locale], placeholders));
+    }
 
-        var req = request.createRequest('/translation/' + locale + '/' + domain)
-            .then(function (response) {
-                // Cache
-                if (undefined === cache[domain]) {
-                    cache[domain] = {};
-                }
-                cache[domain][locale] = response;
+    return request.createRequest('/translation/' + locale + '/' + domain)
+        .then(function (response) {
+            // Cache
+            if (undefined === cache[domain]) {
+                cache[domain] = {};
+            }
+            cache[domain][locale] = response;
 
-                return resolve(getTranslationForKey(key, response, placeholders));
-            })
-            .catch(function(err) {
-                return reject(new Error(err));
-            });
-
-        onCancel(function() {
-            req.cancel();
+            return getTranslationForKey(key, response, placeholders);
         });
-    });
 };
 
 var Translation = React.createClass({
