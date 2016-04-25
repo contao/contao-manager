@@ -104,7 +104,7 @@ var ActionsComponent = React.createClass({
 
         if (this.props.canBeRemoved) {
             buttons.push(
-                <button className="uninstall" onClick={this.props.onRemove} disabled={this.props.isRemoved}>
+                <button key="remove" className="uninstall" onClick={this.props.onRemove} disabled={this.props.isRemoved}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.8 105.6"><path d="M0 8.3h31.8V0H59v8.3h31.8v12.5H0V8.3zm8.3 17.8h75.8v79.5H8.3m64-70.7h-7.6v62.8h7.5l.1-62.8zm-22.7 0h-7.5v62.8h7.5V34.9zm-22.8.5h-7.5v62.8h7.5V35.4z"/></svg>
                     Remove
                 </button>
@@ -113,7 +113,7 @@ var ActionsComponent = React.createClass({
 
         if (this.props.canBeInstalled) {
             buttons.push(
-                <button className="install" onClick={this.props.onInstall} disabled={this.props.isInstalled}>
+                <button key="install" className="install" onClick={this.props.onInstall} disabled={this.props.isInstalled}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.8 105.6"><path d="M0 8.3h31.8V0H59v8.3h31.8v12.5H0V8.3zm8.3 17.8h75.8v79.5H8.3m64-70.7h-7.6v62.8h7.5l.1-62.8zm-22.7 0h-7.5v62.8h7.5V34.9zm-22.8.5h-7.5v62.8h7.5V35.4z"/></svg>
                     Install
                 </button>
@@ -123,14 +123,14 @@ var ActionsComponent = React.createClass({
         if (this.props.canBeEnabledOrDisabled) {
             if (this.props.isEnabled) {
                 buttons.push(
-                    <button className="disable">
+                    <button key="disable" className="disable">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 448"><path className="st0" d="M320 256c0-47.4-25.7-88.7-64-110.9V74.9c74.6 26.4 128 97.5 128 181.1 0 106-86 192-192 192S0 362 0 256c0-83.6 53.4-154.7 128-181.1v70.2C89.7 167.3 64 208.6 64 256c0 70.7 57.3 128 128 128s128-57.3 128-128zm-160-64V32c0-17.7 14.3-32 32-32s32 14.3 32 32v160c0 17.7-14.3 32-32 32s-32-14.3-32-32z"/></svg>
                         Disable
                     </button>
                 );
             } else {
                 buttons.push(
-                    <button className="enable">
+                    <button key="enable" className="enable">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 448"><path className="st0" d="M320 256c0-47.4-25.7-88.7-64-110.9V74.9c74.6 26.4 128 97.5 128 181.1 0 106-86 192-192 192S0 362 0 256c0-83.6 53.4-154.7 128-181.1v70.2C89.7 167.3 64 208.6 64 256c0 70.7 57.3 128 128 128s128-57.3 128-128zm-160-64V32c0-17.7 14.3-32 32-32s32 14.3 32 32v160c0 17.7-14.3 32-32 32s-32-14.3-32-32z"/></svg>
                         Enable
                     </button>
