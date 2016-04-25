@@ -45,6 +45,9 @@ var PackagesComponent = React.createClass({
             }
         }
 
+        // @todo Needs to be integrated
+        stateButton = '';
+
         if (this.state.removed) {
             hint = <HintComponent><Translation domain="package">The package will only be removed when you apply the changes.</Translation></HintComponent>
         }
