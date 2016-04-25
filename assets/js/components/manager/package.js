@@ -67,7 +67,7 @@ var PackagesComponent = React.createClass({
 
                     <div className="about">
                         <h1><Highlight search={this.props.keywords} matchElement="mark">{this.props.name}</Highlight></h1>
-                        <p className="description"><Highlight search={this.props.keywords} matchElement="mark">{this.props.description}</Highlight> <a href={this.props.website}>More</a></p>
+                        <p className="description"><Highlight search={this.props.keywords} matchElement="mark">{this.props.description}</Highlight></p>
                         <p className="additional">{licenses.join(', ')} &nbsp;&nbsp; | &nbsp;&nbsp; {this.props.installs} Installs</p>
                     </div>
 
