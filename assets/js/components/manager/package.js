@@ -5,21 +5,6 @@ const _             = require('lodash');
 const Highlight     = require('react-highlighter');
 const Translation   = require('./../translation.js');
 
-var HintComponent = React.createClass({
-    render: function() {
-        return (
-            <div className="warning hint">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80.1 71.6">
-                    <path d="M79.1 59.6L47 4c-1.4-2.5-4.1-4-6.9-4s-5.5 1.5-6.9 4L1.1 59.6c-1.4 2.5-1.4 5.5 0 8s4.1 4 6.9 4h64.1c2.9 0 5.5-1.5 6.9-4 1.5-2.5 1.5-5.6.1-8zM8 63.6L40 8l32.1 55.5-64.1.1z" />
-                    <path d="M36 26.5v16.7c0 2.2 1.8 4 4 4s4-1.8 4-4V26.5c0-2.2-1.8-4-4-4s-4 1.8-4 4z" />
-                    <circle cx="40" cy="54.3" r="4" />
-                </svg>
-                <p>{this.props.children}</p>
-            </div>
-        )
-    }
-});
-
 var PackagesComponent = React.createClass({
 
     getInitialState: function() {
@@ -102,6 +87,21 @@ var PackagesComponent = React.createClass({
                 </div>
             </section>
         );
+    }
+});
+
+var HintComponent = React.createClass({
+    render: function() {
+        return (
+            <div className="warning hint">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80.1 71.6">
+                    <path d="M79.1 59.6L47 4c-1.4-2.5-4.1-4-6.9-4s-5.5 1.5-6.9 4L1.1 59.6c-1.4 2.5-1.4 5.5 0 8s4.1 4 6.9 4h64.1c2.9 0 5.5-1.5 6.9-4 1.5-2.5 1.5-5.6.1-8zM8 63.6L40 8l32.1 55.5-64.1.1z" />
+                    <path d="M36 26.5v16.7c0 2.2 1.8 4 4 4s4-1.8 4-4V26.5c0-2.2-1.8-4-4-4s-4 1.8-4 4z" />
+                    <circle cx="40" cy="54.3" r="4" />
+                </svg>
+                <p>{this.props.children}</p>
+            </div>
+        )
     }
 });
 

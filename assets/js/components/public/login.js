@@ -8,8 +8,7 @@ const TextWidget    = require('../widgets/text.js');
 const request       = require('../helpers/request.js');
 const routing       = require('../helpers/routing.js');
 
-
-var InstallComponent = React.createClass({
+var LoginComponent = React.createClass({
 
     loginPromise: Promise.resolve(),
 
@@ -92,4 +91,4 @@ var InstallComponent = React.createClass({
     }
 });
 
-module.exports = InstallComponent;
+module.exports = LoginComponent;

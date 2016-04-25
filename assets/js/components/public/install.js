@@ -11,66 +11,6 @@ const request       = require('../helpers/request.js');
 
 // @todo Handle the componentWillUnmount stuff here (cancelling, unsettled promises)
 
-var UsernameComponent = React.createClass({
-
-    password: '',
-    passwordConfirm: '',
-
-    getInitialState: function() {
-        return {
-            passwordsErrorMessage: ''
-        };
-    },
-
-    handlePasswordCompare: function(e, props) {
-        if (props.name == 'password') {
-            this.password = e.target.value;
-        } else {
-            this.passwordConfirm = e.target.value;
-        }
-
-        if ('' === this.password || '' === this.passwordConfirm || this.password === this.passwordConfirm) {
-            this.setState({passwordsErrorMessage: ''});
-
-            if (undefined !== this.props.onPasswordNoError){
-                this.props.onPasswordNoError.call(this);
-            }
-
-        } else {
-            this.setState({passwordsErrorMessage: <Translation domain="install">Passwords do not match!</Translation>});
-
-            if (undefined !== this.props.onPasswordError){
-                this.props.onPasswordError.call(this);
-            }
-        }
-    },
-
-    render: function() {
-        return (
-            <fieldset>
-                <legend><Translation domain="install">User Account</Translation></legend>
-                <p>Create a user account to manage your installation.</p>
-
-                <TextWidget type="text" name="username" label="Username" />
-                <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
-                <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
-
-            </fieldset>
-        )
-    }
-});
-
-var LoggedInComponent = React.createClass({
-
-    render: function() {
-        return (
-            <fieldset>
-                <legend><Translation placeholders={{ username: this.props.username }}>You are logged in as %username%.</Translation></legend>
-            </fieldset>
-        )
-    }
-});
-
 var InstallComponent = React.createClass({
 
     tensideStatePromise: null,
@@ -288,6 +228,67 @@ var InstallComponent = React.createClass({
                 </form>
             </Trappings>
         );
+    }
+});
+
+
+var UsernameComponent = React.createClass({
+
+    password: '',
+    passwordConfirm: '',
+
+    getInitialState: function() {
+        return {
+            passwordsErrorMessage: ''
+        };
+    },
+
+    handlePasswordCompare: function(e, props) {
+        if (props.name == 'password') {
+            this.password = e.target.value;
+        } else {
+            this.passwordConfirm = e.target.value;
+        }
+
+        if ('' === this.password || '' === this.passwordConfirm || this.password === this.passwordConfirm) {
+            this.setState({passwordsErrorMessage: ''});
+
+            if (undefined !== this.props.onPasswordNoError){
+                this.props.onPasswordNoError.call(this);
+            }
+
+        } else {
+            this.setState({passwordsErrorMessage: <Translation domain="install">Passwords do not match!</Translation>});
+
+            if (undefined !== this.props.onPasswordError){
+                this.props.onPasswordError.call(this);
+            }
+        }
+    },
+
+    render: function() {
+        return (
+            <fieldset>
+                <legend><Translation domain="install">User Account</Translation></legend>
+                <p>Create a user account to manage your installation.</p>
+
+                <TextWidget type="text" name="username" label="Username" />
+                <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
+                <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
+
+            </fieldset>
+        )
+    }
+});
+
+var LoggedInComponent = React.createClass({
+
+    render: function() {
+        return (
+            <fieldset>
+                <legend><Translation placeholders={{ username: this.props.username }}>You are logged in as %username%.</Translation></legend>
+            </fieldset>
+        )
     }
 });
 
