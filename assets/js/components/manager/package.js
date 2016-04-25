@@ -2,6 +2,7 @@
 
 const React         = require('react');
 const _             = require('lodash');
+const Highlight     = require('react-highlighter');
 const Translation   = require('./../translation.js');
 
 var HintComponent = React.createClass({
@@ -78,8 +79,8 @@ var PackagesComponent = React.createClass({
                     <figure><img src="" width="110" height="110" /></figure>
 
                     <div className="about">
-                        <h1>{this.props.name}</h1>
-                        <p className="description">{this.props.description} <a href={this.props.website}>More</a></p>
+                        <h1><Highlight search={this.props.keywords} matchElement="mark">{this.props.name}</Highlight></h1>
+                        <p className="description"><Highlight search={this.props.keywords} matchElement="mark">{this.props.description}</Highlight> <a href={this.props.website}>More</a></p>
                         <p className="additional">{licenses.join(', ')} &nbsp;&nbsp; | &nbsp;&nbsp; {this.props.installs} Installs</p>
                     </div>
 

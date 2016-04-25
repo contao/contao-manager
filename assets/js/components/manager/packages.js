@@ -168,6 +168,7 @@ var PackagesComponent = React.createClass({
                     description={packageData.description}
                     licenses={packageData.license}
                     constraint={packageData.installed}
+                    keywords={self.state.searchRequest.keywords}
                     onRemove={self.handleRemoveButton}
                 />);
             });
