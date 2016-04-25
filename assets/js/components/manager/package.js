@@ -9,7 +9,9 @@ var PackagesComponent = React.createClass({
 
     getInitialState: function() {
         return {
-            removed: false
+            removed: false,
+            installed: false,
+            enabled: this.props.enabled
         };
     },
 
@@ -23,35 +25,32 @@ var PackagesComponent = React.createClass({
         }
     },
 
-    render: function() {
-        var stateButton = '';
-        var hint = '';
+    handleInstallButton: function(e) {
+        this.setState({
+            installed: true
+        });
 
-        if (this.props.canBeEnabled) {
-            if (this.props.isEnabled) {
-                stateButton = (
-                    <button className="disable">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 448"><path className="st0" d="M320 256c0-47.4-25.7-88.7-64-110.9V74.9c74.6 26.4 128 97.5 128 181.1 0 106-86 192-192 192S0 362 0 256c0-83.6 53.4-154.7 128-181.1v70.2C89.7 167.3 64 208.6 64 256c0 70.7 57.3 128 128 128s128-57.3 128-128zm-160-64V32c0-17.7 14.3-32 32-32s32 14.3 32 32v160c0 17.7-14.3 32-32 32s-32-14.3-32-32z"/></svg>
-                        Disable
-                    </button>
-                );
-            } else {
-                stateButton = (
-                    <button className="enable">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 448"><path className="st0" d="M320 256c0-47.4-25.7-88.7-64-110.9V74.9c74.6 26.4 128 97.5 128 181.1 0 106-86 192-192 192S0 362 0 256c0-83.6 53.4-154.7 128-181.1v70.2C89.7 167.3 64 208.6 64 256c0 70.7 57.3 128 128 128s128-57.3 128-128zm-160-64V32c0-17.7 14.3-32 32-32s32 14.3 32 32v160c0 17.7-14.3 32-32 32s-32-14.3-32-32z"/></svg>
-                        Enable
-                    </button>
-                );
-            }
+        if (undefined !== this.props.onInstall) {
+            this.props.onInstall.call(this, e, this.props);
         }
+    },
 
-        // @todo Needs to be integrated
-        stateButton = '';
+    handleEnableOrDisableButton: function(e) {
+        this.setState({
+            enabled: !this.state.enabled
+        });
+
+        if (undefined !== this.props.onEnableOrDisable) {
+            this.props.onEnableOrDisable.call(this, e, this.props);
+        }
+    },
+
+    render: function() {
+        var hint = '';
 
         if (this.state.removed) {
             hint = <HintComponent><Translation domain="package">The package will only be removed when you apply the changes.</Translation></HintComponent>
         }
-
 
         var licenses = [];
         _.forEach(this.props.licenses, function(license) {
@@ -80,16 +79,68 @@ var PackagesComponent = React.createClass({
                         <time>2015-08-06<br />09:38 UTC</time>
                     </div>
 
-                    <fieldset className="actions">
-                        {stateButton}
-                        <button className={"uninstall" + (this.state.removed ? ' removed' : '')} onClick={this.handleRemoveButton} disabled={this.state.removed}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.8 105.6"><path d="M0 8.3h31.8V0H59v8.3h31.8v12.5H0V8.3zm8.3 17.8h75.8v79.5H8.3m64-70.7h-7.6v62.8h7.5l.1-62.8zm-22.7 0h-7.5v62.8h7.5V34.9zm-22.8.5h-7.5v62.8h7.5V35.4z"/></svg>
-                            Remove
-                        </button>
-                    </fieldset>
+                    <ActionsComponent
+                        canBeRemoved={this.props.canBeRemoved}
+                        onRemove={this.handleRemoveButton}
+                        isRemoved={this.state.removed}
+                        canBeInstalled={this.props.canBeInstalled}
+                        onInstall={this.handleInstallButton}
+                        isInstalled={this.state.installed}
+                        canBeEnabledOrDisabled={this.props.canBeEnabledOrDisabled}
+                        onEnableOrDisable={this.handleEnableOrDisableButton}
+                        isEnabled={this.state.enabled}
+                    />
+
                 </div>
             </section>
         );
+    }
+});
+
+var ActionsComponent = React.createClass({
+    render: function() {
+
+        var buttons = [];
+
+        if (this.props.canBeRemoved) {
+            buttons.push(
+                <button className="uninstall" onClick={this.props.onRemove} disabled={this.props.isRemoved}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.8 105.6"><path d="M0 8.3h31.8V0H59v8.3h31.8v12.5H0V8.3zm8.3 17.8h75.8v79.5H8.3m64-70.7h-7.6v62.8h7.5l.1-62.8zm-22.7 0h-7.5v62.8h7.5V34.9zm-22.8.5h-7.5v62.8h7.5V35.4z"/></svg>
+                    Remove
+                </button>
+            );
+        }
+
+        if (this.props.canBeInstalled) {
+            buttons.push(
+                <button className="install" onClick={this.props.onInstall} disabled={this.props.isInstalled}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.8 105.6"><path d="M0 8.3h31.8V0H59v8.3h31.8v12.5H0V8.3zm8.3 17.8h75.8v79.5H8.3m64-70.7h-7.6v62.8h7.5l.1-62.8zm-22.7 0h-7.5v62.8h7.5V34.9zm-22.8.5h-7.5v62.8h7.5V35.4z"/></svg>
+                    Install
+                </button>
+            );
+        }
+
+        if (this.props.canBeEnabledOrDisabled) {
+            if (this.props.isEnabled) {
+                buttons.push(
+                    <button className="disable">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 448"><path className="st0" d="M320 256c0-47.4-25.7-88.7-64-110.9V74.9c74.6 26.4 128 97.5 128 181.1 0 106-86 192-192 192S0 362 0 256c0-83.6 53.4-154.7 128-181.1v70.2C89.7 167.3 64 208.6 64 256c0 70.7 57.3 128 128 128s128-57.3 128-128zm-160-64V32c0-17.7 14.3-32 32-32s32 14.3 32 32v160c0 17.7-14.3 32-32 32s-32-14.3-32-32z"/></svg>
+                        Disable
+                    </button>
+                );
+            } else {
+                buttons.push(
+                    <button className="enable">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 448"><path className="st0" d="M320 256c0-47.4-25.7-88.7-64-110.9V74.9c74.6 26.4 128 97.5 128 181.1 0 106-86 192-192 192S0 362 0 256c0-83.6 53.4-154.7 128-181.1v70.2C89.7 167.3 64 208.6 64 256c0 70.7 57.3 128 128 128s128-57.3 128-128zm-160-64V32c0-17.7 14.3-32 32-32s32 14.3 32 32v160c0 17.7-14.3 32-32 32s-32-14.3-32-32z"/></svg>
+                        Enable
+                    </button>
+                );
+            }
+        }
+
+        return (
+            <fieldset className="actions">{buttons}</fieldset>
+        )
     }
 });
 
