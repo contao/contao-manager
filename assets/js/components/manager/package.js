@@ -45,6 +45,15 @@ var PackagesComponent = React.createClass({
         }
     },
 
+    getFormattedLastUpdated: function() {
+        if (undefined === this.props.time) {
+            return '';
+        }
+
+        var date = new Date(this.props.time);
+        return date.toLocaleDateString() + ' (' + date.toLocaleTimeString() + ')';
+    },
+
     render: function() {
         var hint = '';
 
@@ -68,7 +77,13 @@ var PackagesComponent = React.createClass({
                     <div className="about">
                         <h1><Highlight search={this.props.keywords} matchElement="mark">{this.props.name}</Highlight></h1>
                         <p className="description"><Highlight search={this.props.keywords} matchElement="mark">{this.props.description}</Highlight></p>
-                        <p className="additional">{licenses.join(', ')} &nbsp;&nbsp; | &nbsp;&nbsp; {this.props.installs} Installs</p>
+                        <p className="additional">
+                            <Translation>Licenses:</Translation> {licenses.join(', ')}
+                            &nbsp;&nbsp; | &nbsp;&nbsp;
+                            <Translation>Last updated:</Translation> {this.getFormattedLastUpdated()}
+                            &nbsp;&nbsp; | &nbsp;&nbsp;
+                            <Translation>Installed version:</Translation> {this.props.installed}
+                        </p>
                     </div>
 
                     <div className="release">
@@ -76,7 +91,6 @@ var PackagesComponent = React.createClass({
                             <input type="text" value={this.props.constraint} placeholder="latest" disabled />
                             <button><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M88.1 50c0-1.2-.1-2.4-.2-3.5l12.1-7c-.7-3.4-1.8-6.7-3.2-9.8L82.9 31c-1.2-2-2.7-4-4.3-5.7l5.6-12.5c-2.6-2.3-5.5-4.3-8.5-6.1l-10.5 9.1c-2.2-.9-4.5-1.7-6.9-2.2L55.3.3a47.08 47.08 0 0 0-10.6 0l-3 13.3c-2.4.5-4.7 1.3-6.9 2.2L24.3 6.7c-3.1 1.7-5.9 3.8-8.5 6.1l5.6 12.5c-1.6 1.8-3 3.7-4.3 5.7L3.2 29.7C1.8 32.8.7 36.1 0 39.5l12.1 6.9c-.1 1.2-.2 2.3-.2 3.5s.1 2.4.2 3.5L0 60.5c.7 3.4 1.8 6.7 3.2 9.8L17.1 69c1.2 2 2.7 4 4.3 5.7l-5.6 12.5c2.6 2.3 5.5 4.3 8.5 6.1l10.5-9.1c2.2.9 4.5 1.7 6.9 2.2l3 13.3a47.08 47.08 0 0 0 10.6 0l3-13.3c2.4-.5 4.7-1.3 6.9-2.2l10.5 9.1c3.1-1.7 5.9-3.8 8.5-6.1l-5.6-12.5c1.6-1.8 3-3.7 4.3-5.7l13.9 1.3c1.4-3.1 2.5-6.4 3.2-9.8l-12.1-6.9c.2-1.2.2-2.4.2-3.6zM50 66.4c-9.2 0-16.7-7.3-16.7-16.4 0-9 7.5-16.4 16.7-16.4S66.7 40.9 66.7 50c0 9-7.5 16.4-16.7 16.4z"/></svg></button>
                         </fieldset>
-                        <time>2015-08-06<br />09:38 UTC</time>
                     </div>
 
                     <ActionsComponent

@@ -171,7 +171,9 @@ var PackagesComponent = React.createClass({
                     name={packageData.name}
                     description={packageData.description}
                     licenses={packageData.license}
-                    constraint={packageData.installed}
+                    constraint={packageData.constraint}
+                    installed={packageData.installed}
+                    time={packageData.time}
                     keywords={self.state.searchRequest.keywords}
                     canBeRemoved={'packages' === self.state.mode}
                     canBeInstalled={'search' === self.state.mode}
