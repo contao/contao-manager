@@ -138,6 +138,10 @@ var PackagesComponent = React.createClass({
         // @todo request the api to remove the package
     },
 
+    handleInstallButton: function(e) {
+        // @todo request the api to install the package
+    },
+
     stopRunningRequests: function() {
         var self = this;
         _.forEach(_.reverse(this.requests), function(req, i) {
@@ -169,7 +173,10 @@ var PackagesComponent = React.createClass({
                     licenses={packageData.license}
                     constraint={packageData.installed}
                     keywords={self.state.searchRequest.keywords}
+                    canBeRemoved={'packages' === self.state.mode}
+                    canBeInstalled={'search' === self.state.mode}
                     onRemove={self.handleRemoveButton}
+                    onInstall={self.handleInstallButton}
                 />);
             });
 
