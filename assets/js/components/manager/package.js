@@ -4,14 +4,22 @@ const React         = require('react');
 const _             = require('lodash');
 const Highlight     = require('react-highlighter');
 const Translation   = require('./../translation.js');
+const request       = require('./../helpers/request.js');
 
 var PackagesComponent = React.createClass({
 
+    initialConstraint: null,
+
     getInitialState: function() {
+
+        this.initialConstraint = this.props.constraint;
+
         return {
             removed: false,
             installed: false,
-            enabled: this.props.enabled
+            enabled: this.props.enabled,
+            constraint: this.initialConstraint,
+            constraintInputDisabled: true
         };
     },
 
@@ -43,6 +51,39 @@ var PackagesComponent = React.createClass({
         if (undefined !== this.props.onEnableOrDisable) {
             this.props.onEnableOrDisable.call(this, e, this.props);
         }
+    },
+
+    handleEnableConstraintInput: function() {
+        this.setState({constraintInputDisabled: false});
+    },
+
+    handleDisableConstraintInput: function() {
+        this.setState({constraintInputDisabled: true});
+    },
+
+    handleConstraintBlur: function(e) {
+        this.handleDisableConstraintInput();
+        this.validateConstraint(e);
+    },
+
+    handleConstraintChange: function(e) {
+        this.setState({constraint: e.target.value});
+    },
+
+    validateConstraint: function(e) {
+        var self = this;
+
+        request.createRequest('/api/v1/constraint', {
+            method: 'POST',
+            data: JSON.stringify({constraint: e.target.value}),
+            dataType: 'json'
+        }).then(function(response) {
+            if ('OK' !== response.status) {
+                self.setState({constraint: self.initialConstraint});
+            }
+        }).catch(function() {
+            // @todo: what if request failed?
+        });
     },
 
     getFormattedLastUpdated: function() {
@@ -88,8 +129,12 @@ var PackagesComponent = React.createClass({
 
                     <div className="release">
                         <fieldset>
-                            <input type="text" value={this.props.constraint} placeholder="latest" disabled />
-                            <button><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M88.1 50c0-1.2-.1-2.4-.2-3.5l12.1-7c-.7-3.4-1.8-6.7-3.2-9.8L82.9 31c-1.2-2-2.7-4-4.3-5.7l5.6-12.5c-2.6-2.3-5.5-4.3-8.5-6.1l-10.5 9.1c-2.2-.9-4.5-1.7-6.9-2.2L55.3.3a47.08 47.08 0 0 0-10.6 0l-3 13.3c-2.4.5-4.7 1.3-6.9 2.2L24.3 6.7c-3.1 1.7-5.9 3.8-8.5 6.1l5.6 12.5c-1.6 1.8-3 3.7-4.3 5.7L3.2 29.7C1.8 32.8.7 36.1 0 39.5l12.1 6.9c-.1 1.2-.2 2.3-.2 3.5s.1 2.4.2 3.5L0 60.5c.7 3.4 1.8 6.7 3.2 9.8L17.1 69c1.2 2 2.7 4 4.3 5.7l-5.6 12.5c2.6 2.3 5.5 4.3 8.5 6.1l10.5-9.1c2.2.9 4.5 1.7 6.9 2.2l3 13.3a47.08 47.08 0 0 0 10.6 0l3-13.3c2.4-.5 4.7-1.3 6.9-2.2l10.5 9.1c3.1-1.7 5.9-3.8 8.5-6.1l-5.6-12.5c1.6-1.8 3-3.7 4.3-5.7l13.9 1.3c1.4-3.1 2.5-6.4 3.2-9.8l-12.1-6.9c.2-1.2.2-2.4.2-3.6zM50 66.4c-9.2 0-16.7-7.3-16.7-16.4 0-9 7.5-16.4 16.7-16.4S66.7 40.9 66.7 50c0 9-7.5 16.4-16.7 16.4z"/></svg></button>
+                            <input type="text" value={this.state.constraint} onBlur={this.handleConstraintBlur} onChange={this.handleConstraintChange} disabled={this.state.constraintInputDisabled} />
+                            <button onClick={this.handleEnableConstraintInput}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                                    <path d="M88.1 50c0-1.2-.1-2.4-.2-3.5l12.1-7c-.7-3.4-1.8-6.7-3.2-9.8L82.9 31c-1.2-2-2.7-4-4.3-5.7l5.6-12.5c-2.6-2.3-5.5-4.3-8.5-6.1l-10.5 9.1c-2.2-.9-4.5-1.7-6.9-2.2L55.3.3a47.08 47.08 0 0 0-10.6 0l-3 13.3c-2.4.5-4.7 1.3-6.9 2.2L24.3 6.7c-3.1 1.7-5.9 3.8-8.5 6.1l5.6 12.5c-1.6 1.8-3 3.7-4.3 5.7L3.2 29.7C1.8 32.8.7 36.1 0 39.5l12.1 6.9c-.1 1.2-.2 2.3-.2 3.5s.1 2.4.2 3.5L0 60.5c.7 3.4 1.8 6.7 3.2 9.8L17.1 69c1.2 2 2.7 4 4.3 5.7l-5.6 12.5c2.6 2.3 5.5 4.3 8.5 6.1l10.5-9.1c2.2.9 4.5 1.7 6.9 2.2l3 13.3a47.08 47.08 0 0 0 10.6 0l3-13.3c2.4-.5 4.7-1.3 6.9-2.2l10.5 9.1c3.1-1.7 5.9-3.8 8.5-6.1l-5.6-12.5c1.6-1.8 3-3.7 4.3-5.7l13.9 1.3c1.4-3.1 2.5-6.4 3.2-9.8l-12.1-6.9c.2-1.2.2-2.4.2-3.6zM50 66.4c-9.2 0-16.7-7.3-16.7-16.4 0-9 7.5-16.4 16.7-16.4S66.7 40.9 66.7 50c0 9-7.5 16.4-16.7 16.4z"/>
+                                </svg>
+                            </button>
                         </fieldset>
                     </div>
 
