@@ -23,34 +23,48 @@ var PackagesComponent = React.createClass({
         };
     },
 
+    componentWillUpdate: function(nextProps, nextState) {
+
+        if (undefined === this.props.onModified) {
+            return;
+        }
+
+        var wasModified = false;
+
+        if (nextState.removed !== false
+            || nextState.installed !== false
+            || nextState.enabled !== this.props.enabled
+            || nextState.constraint !== this.initialConstraint
+        ) {
+            wasModified = true;
+        }
+
+        this.props.onModified.call(this, {
+            package: this.props.name,
+            modified: wasModified,
+            removed: nextState.removed,
+            enabled: nextState.enabled,
+            installed: nextState.installed,
+            constraint: nextState.constraint
+        });
+    },
+
     handleRemoveButton: function(e) {
         this.setState({
             removed: true
         });
-
-        if (undefined !== this.props.onRemove) {
-            this.props.onRemove.call(this, e, this.props);
-        }
     },
 
     handleInstallButton: function(e) {
         this.setState({
             installed: true
         });
-
-        if (undefined !== this.props.onInstall) {
-            this.props.onInstall.call(this, e, this.props);
-        }
     },
 
     handleEnableOrDisableButton: function(e) {
         this.setState({
             enabled: !this.state.enabled
         });
-
-        if (undefined !== this.props.onEnableOrDisable) {
-            this.props.onEnableOrDisable.call(this, e, this.props);
-        }
     },
 
     handleEnableConstraintInput: function() {
@@ -122,7 +136,7 @@ var PackagesComponent = React.createClass({
         _.forEach(this.props.licenses, function(license) {
             licenses.push(license);
         });
-        
+
         return (
             <section className="package">
 
