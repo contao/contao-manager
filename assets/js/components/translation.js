@@ -11,6 +11,9 @@ Promise.config({cancellation: true});
 var cache = {};
 
 var getTranslationForKey = function(key, data, placeholders) {
+
+    placeholders = typeof placeholders !== 'undefined' ? placeholders : {};
+
     var translation = key;
     if (undefined !== data[key]) {
         translation = data[key];
@@ -28,8 +31,7 @@ var getTranslationForKey = function(key, data, placeholders) {
     return translation;
 };
 
-var translate = function(key, placeholders, domain, locale) {
-    placeholders = typeof placeholders !== 'undefined' ? placeholders : {};
+var fetchData = function(domain, locale) {
     domain = typeof domain !== 'undefined' ? domain : 'messages';
     locale = typeof locale !== 'undefined' ? locale : 'fallback';
 
@@ -39,7 +41,7 @@ var translate = function(key, placeholders, domain, locale) {
 
     // Maybe cached?
     if (undefined !== cache[domain] && undefined !== cache[domain][locale]) {
-        return Promise.resolve(getTranslationForKey(key, cache[domain][locale], placeholders));
+        return Promise.resolve(cache[domain][locale]);
     }
 
     return request.createRequest('/translation/' + locale + '/' + domain)
@@ -50,44 +52,44 @@ var translate = function(key, placeholders, domain, locale) {
             }
             cache[domain][locale] = response;
 
-            return getTranslationForKey(key, response, placeholders);
+            return response;
         });
 };
 
 var Translation = React.createClass({
 
-    translatePromise: null,
+    fetchDataPromise: null,
 
     getInitialState: function() {
         return {
-            label:  '',
-            domain: this.props.domain,
-            locale: this.props.locale
+            data: {}
         };
     },
+
     componentDidMount: function() {
 
-        var label = this.props.children;
         var self = this;
 
-        this.translatePromise = translate(label, this.props.placeholders, this.props.domain, this.props.locale)
-            .then(function(translation) {
-                if (!self.translatePromise.isCancelled()) {
-                    self.setState({label: translation});
+        this.fetchDataPromise = fetchData(this.props.domain, this.props.locale)
+            .then(function(data) {
+                if (!self.fetchDataPromise.isCancelled()) {
+                    self.setState({data: data});
                 }
 
-                return translation;
+                return data;
             });
     },
 
     componentWillUnmount: function() {
-        this.translatePromise.cancel();
+        this.fetchDataPromise.cancel();
     },
 
     render: function() {
 
+        var label = getTranslationForKey(this.props.children, this.state.data, this.props.placeholders);
+
         return (
-            <span>{this.state.label}</span>
+            <span>{label}</span>
         )
     }
 });
