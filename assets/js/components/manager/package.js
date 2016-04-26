@@ -95,18 +95,34 @@ var PackagesComponent = React.createClass({
         return date.toLocaleDateString() + ' (' + date.toLocaleTimeString() + ')';
     },
 
+    getHintMessageData: function() {
+        if (this.state.removed && this.state.constraint !== this.initialConstraint) {
+            return ['You marked this package for removal and also changed the constraint. Note that changing the constraint will not have any effect, as the package will be removed.'];
+        } else if (this.state.removed) {
+            return ['You marked this package for removal. The package will only be removed when you apply the changes.'];
+        } else if (this.state.constraint !== this.initialConstraint) {
+            return ['You changed the constraint of this package form "%old_constraint%" to "%new_constraint%". The package will only be updated when you apply the changes.',
+                {
+                    old_constraint: this.initialConstraint,
+                    new_constraint: this.state.constraint
+                }];
+        } else {
+            return [''];
+        }
+    },
+
     render: function() {
         var hint = '';
-
-        if (this.state.removed) {
-            hint = <HintComponent><Translation domain="package">The package will only be removed when you apply the changes.</Translation></HintComponent>
+        var hintData = this.getHintMessageData();
+        if ('' !== hintData[0]) {
+            hint = <HintComponent><Translation domain="package" placeholders={hintData[1]}>{hintData[0]}</Translation></HintComponent>
         }
 
         var licenses = [];
         _.forEach(this.props.licenses, function(license) {
             licenses.push(license);
         });
-
+        
         return (
             <section className="package">
 
