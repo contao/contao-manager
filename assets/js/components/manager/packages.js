@@ -17,6 +17,7 @@ var PackagesComponent = React.createClass({
         return {
             mode: 'packages',
             loading: false,
+            showApplyButton: false,
             searchRequest: {
                 keywords: '',
                 type: 'installed',
@@ -134,12 +135,13 @@ var PackagesComponent = React.createClass({
         this.updatePackageList('packages', searchRequest);
     },
 
-    handleRemoveButton: function(e) {
-        // @todo request the api to remove the package
-    },
-
-    handleInstallButton: function(e) {
-        // @todo request the api to install the package
+    handlePackageModified: function(data) {
+        if (data.modified) {
+            this.setState({showApplyButton: true});
+        } else {
+            this.setState({showApplyButton: false});
+        }
+        // @todo request the api to modify the package
     },
 
     stopRunningRequests: function() {
@@ -153,11 +155,14 @@ var PackagesComponent = React.createClass({
     render: function() {
         var packages = null;
         var self     = this;
-        var search   = '';
-
-        if ('search' === this.state.mode) {
-            search = <SearchTypeComponent onChange={this.handleTypeChange} onClose={this.handleCloseButton} selected={this.state.searchRequest.type} />
-        }
+        var search = <SearchTypeComponent
+            mode={this.state.mode}
+            onTypeChange={this.handleTypeChange}
+            onClose={this.handleCloseButton}
+            selected={this.state.searchRequest.type}
+            keywords={this.state.searchRequest.keywords}
+            onKeywordsChange={this.updateKeywordsOnType}
+         />;
 
         if (this.state.loading) {
             // @todo
@@ -177,8 +182,7 @@ var PackagesComponent = React.createClass({
                     keywords={self.state.searchRequest.keywords}
                     canBeRemoved={'packages' === self.state.mode}
                     canBeInstalled={'search' === self.state.mode}
-                    onRemove={self.handleRemoveButton}
-                    onInstall={self.handleInstallButton}
+                    onModified={self.handlePackageModified}
                 />);
             });
 
@@ -189,18 +193,6 @@ var PackagesComponent = React.createClass({
 
         return (
             <Trappings>
-
-                <section className="search">
-                    <input id="search" type="text" placeholder="Search Packages…" onChange={this.updateKeywordsOnType} value={this.state.searchRequest.keywords} />
-                    <button>Check for Updates</button>
-                </section>
-
-                <section className="sorting">
-                    <ul>
-                        <li><a href="#" className="desc">Name</a></li>
-                        <li><a href="#">Last updated</a></li>
-                    </ul>
-                </section>
 
                 {search}
 
@@ -226,15 +218,31 @@ var SearchTypeComponent = React.createClass({
     ],
 
     render: function() {
+
+        var typeFilter = '';
+
+        if ('search' === this.props.mode) {
+            typeFilter = (
+                <fieldset className="type">
+                    <legend><Translation domain="packages">Search in</Translation></legend>
+                    <a href="#close" className="close" onClick={this.props.onClose}>
+                        <i className="icono-cross" />
+                        <Translation domain="packages">Close search</Translation>
+                    </a>
+                    <RadioWidget options={this.options} onChange={this.props.onTypeChange} name="searchType" selected={this.props.selected}/>
+                </fieldset>
+            )
+        }
+
         return (
-            <fieldset className="type">
-                <legend><Translation domain="packages">Search in</Translation></legend>
-                <a href="#close" className="close" onClick={this.props.onClose}>
-                    <i className="icono-cross" />
-                    <Translation domain="packages">Close search</Translation>
-                </a>
-                <RadioWidget options={this.options} onChange={this.props.onChange} name="searchType" selected={this.props.selected}/>
-            </fieldset>
+            <section className="search">
+                <input id="search" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} value={this.props.keywords} />
+                <button>Check for Updates</button>
+
+                {typeFilter}
+
+            </section>
+
         )
     }
 });
