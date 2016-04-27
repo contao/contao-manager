@@ -18,7 +18,7 @@ var PackagesComponent = React.createClass({
         return {
             mode: 'packages',
             loading: false,
-            showApplyButton: false,
+            showApplyAndResetButtons: false,
             searchRequest: {
                 keywords: '',
                 type: 'installed',
@@ -74,11 +74,11 @@ var PackagesComponent = React.createClass({
             })
             .then(function(response) {
                 // @todo should this not return a status too?
-                self.setState({packages: response, loading: false});
+                self.setState({packages: response, loading: false, showApplyAndResetButtons: false});
             })
             .catch(function() {
                 // @todo: what if request failed?
-                self.setState({loading: false});
+                self.setState({loading: false, showApplyAndResetButtons: false});
             });
 
         this.requests.push(req);
@@ -91,11 +91,11 @@ var PackagesComponent = React.createClass({
         var req = request.createRequest('/api/v1/packages')
             .then(function(response) {
                 // @todo should this not return a status too?
-                self.setState({packages: response, loading: false});
+                self.setState({packages: response, loading: false, showApplyAndResetButtons: false});
             })
             .catch(function() {
                 // @todo: what if request failed?
-                self.setState({loading: false});
+                self.setState({loading: false, showApplyAndResetButtons: false});
             });
 
         this.requests.push(req);
@@ -136,11 +136,23 @@ var PackagesComponent = React.createClass({
         this.updatePackageList('packages', searchRequest);
     },
 
+    handleApplyButton: function(e) {
+        e.preventDefault();
+
+        // @todo run the taskrunner
+    },
+
+    handleResetButton: function(e) {
+        e.preventDefault();
+
+        this.updatePackageList('packages');
+    },
+
     handlePackageModified: function(data) {
         if (data.modified) {
-            this.setState({showApplyButton: true});
+            this.setState({showApplyAndResetButtons: true});
         } else {
-            this.setState({showApplyButton: false});
+            this.setState({showApplyAndResetButtons: false});
         }
         // @todo request the api to modify the package
     },
@@ -158,11 +170,14 @@ var PackagesComponent = React.createClass({
         var self     = this;
         var search = <SearchTypeComponent
             mode={this.state.mode}
+            showApplyAndResetButtons={this.state.showApplyAndResetButtons}
             onTypeChange={this.handleTypeChange}
             onClose={this.handleCloseButton}
             selected={this.state.searchRequest.type}
             keywords={this.state.searchRequest.keywords}
             onKeywordsChange={this.updateKeywordsOnType}
+            onApplyChanges={this.handleApplyButton}
+            onResetChanges={this.handleResetButton}
          />;
 
         if (this.state.loading) {
@@ -235,16 +250,26 @@ var SearchTypeComponent = React.createClass({
             )
         }
 
-        return (
-            <section className="search">
-                <input id="search" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} value={this.props.keywords} />
-                <button>Check for Updates</button>
+        if (true === this.props.showApplyAndResetButtons) {
+            return  (
+                <section className="search">
 
-                {typeFilter}
+                    <button onClick={this.props.onApplyChanges}>Apply changes</button>
+                    <button onClick={this.props.onResetChanges}>Reset changes</button>
+                </section>
+            );
+        } else {
+            return  (
+                <section className="search">
 
-            </section>
+                    <input id="search" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} value={this.props.keywords} />
+                    <button>Check for Updates</button>
 
-        )
+                    {typeFilter}
+
+                </section>
+            );
+        }
     }
 });
 
