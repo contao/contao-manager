@@ -39,21 +39,14 @@ var fetchData = function(domain, locale) {
         locale = routing.getLanguage();
     }
 
-    // Maybe cached?
-    if (undefined !== cache[domain] && undefined !== cache[domain][locale]) {
-        return Promise.resolve(cache[domain][locale]);
+    var cacheKey = domain + '.' + locale;
+
+    // Check the cache
+    if (undefined !== cache[cacheKey]) {
+        return cache[cacheKey];
     }
 
-    return request.createRequest('/translation/' + locale + '/' + domain)
-        .then(function (response) {
-            // Cache
-            if (undefined === cache[domain]) {
-                cache[domain] = {};
-            }
-            cache[domain][locale] = response;
-
-            return response;
-        });
+    return cache[cacheKey] = request.createRequest('/translation/' + locale + '/' + domain);
 };
 
 module.exports = {
