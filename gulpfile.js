@@ -18,13 +18,12 @@ var production      = !!gutil.env.production;
 gulp.task('scripts', function () {
     return browserify({
             entries: './assets/js/index.js',
-            debug: true
+            debug: !production
         })
         .transform('babelify', {presets: ['react', 'es2015']})
         .bundle()
         .pipe(source('./assets/js/index.js'))
         .pipe(buffer())
-        .pipe(production ? sourcemaps.init({loadMaps: true}) : gutil.noop())
         .pipe(production ? uglify() : gutil.noop())
         .pipe(rename('bundle.js'))
             .on('error', gutil.log)
