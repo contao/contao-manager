@@ -5,22 +5,39 @@ const Promise       = require('bluebird');
 const Trappings     = require('./trappings.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
+const translate     = require('../helpers/translate.js');
 const request       = require('../helpers/request.js');
 const routing       = require('../helpers/routing.js');
 
 var LoginComponent = React.createClass({
 
     loginPromise: Promise.resolve(),
+    translationPromise: Promise.resolve(),
 
     getInitialState: function() {
         return {
             isLoggingIn: false,
-            credentialsIncorrect: false
+            credentialsIncorrect: false,
+            translationData: {}
         }
+    },
+
+    componentDidMount: function() {
+        var self = this;
+
+        this.translationPromise = translate.fetchData('login')
+            .then(function(data) {
+                if (!self.translationPromise.isCancelled()) {
+                    self.setState({translationData: data});
+                }
+
+                return data;
+            });
     },
 
     componentWillUnmount: function() {
         this.loginPromise.cancel();
+        this.translationPromise.cancel();
     },
 
 
@@ -73,10 +90,10 @@ var LoginComponent = React.createClass({
                 <p><Translation domain="login">Login to manage your installation.</Translation></p>
 
                 <form id="login-form" action="#" method="post">
-                    <TextWidget type="text" name="username" label="Username"
-                                placeholder="Username" error={errorMsg}/>
+                    <TextWidget type="text" name="username" label={translate.getTranslationForKey('Username', this.state.translationData)}
+                                placeholder={translate.getTranslationForKey('Username', this.state.translationData)} error={errorMsg}/>
                     <TextWidget type="password" name="password"
-                                label="Password" placeholder="Password" error={errorMsg}/>
+                                label={translate.getTranslationForKey('Password', this.state.translationData)} placeholder={translate.getTranslationForKey('Password', this.state.translationData)} error={errorMsg}/>
 
 
                     {/* @todo Implement a forgot password functionality? */}
