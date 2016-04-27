@@ -4,6 +4,7 @@ const React         = require('react');
 const Translation   = require('./translation.js');
 const eventhandler  = require('./helpers/eventhandler.js');
 const request       = require('./helpers/request.js');
+const isEqual       = require('lodash/isEqual');
 
 var TaskPopupComponent = React.createClass({
 
@@ -24,6 +25,11 @@ var TaskPopupComponent = React.createClass({
                 consoleOutput: ''
             }
         };
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     },
 
     componentDidMount: function() {

@@ -1,7 +1,8 @@
 'use strict';
 
-const React     = require('react');
-const translate = require('./helpers/translate.js');
+const React         = require('react');
+const translate     = require('./helpers/translate.js');
+const isEqual       = require('lodash/isEqual');
 
 
 var Translation = React.createClass({
@@ -12,6 +13,11 @@ var Translation = React.createClass({
         return {
             data: {}
         };
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     },
 
     componentDidMount: function() {

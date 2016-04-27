@@ -4,6 +4,7 @@ const React         = require('react');
 const forEach       = require('lodash/forEach');
 const Translation   = require('./../translation.js');
 const request       = require('./../helpers/request.js');
+const isEqual       = require('lodash/isEqual');
 
 var PackagesComponent = React.createClass({
 
@@ -22,7 +23,12 @@ var PackagesComponent = React.createClass({
         };
     },
 
-    componentWillUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
 
         if (undefined === this.props.onModified) {
             return;
@@ -30,10 +36,10 @@ var PackagesComponent = React.createClass({
 
         var wasModified = false;
 
-        if (nextState.removed !== false
-            || nextState.installed !== false
-            || nextState.enabled !== this.props.enabled
-            || nextState.constraint !== this.initialConstraint
+        if (this.state.removed !== false
+            || this.state.installed !== false
+            || this.state.enabled !== this.props.enabled
+            || this.state.constraint !== this.initialConstraint
         ) {
             wasModified = true;
         }
@@ -41,10 +47,10 @@ var PackagesComponent = React.createClass({
         this.props.onModified.call(this, {
             package: this.props.name,
             modified: wasModified,
-            removed: nextState.removed,
-            enabled: nextState.enabled,
-            installed: nextState.installed,
-            constraint: nextState.constraint
+            removed: this.state.removed,
+            enabled: this.state.enabled,
+            installed: this.state.installed,
+            constraint: this.state.constraint
         });
     },
 

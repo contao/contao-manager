@@ -1,8 +1,14 @@
 'use strict';
 
-const React = require('react');
+const React         = require('react');
+const isEqual       = require('lodash/isEqual');
 
 var Option = React.createClass({
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
+    },
 
     render: function() {
         return (
@@ -27,6 +33,11 @@ var Widget = React.createClass({
         return {
             selected: this.props.selected
         };
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     },
 
     handleChange: function(e) {

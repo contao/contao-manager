@@ -3,8 +3,14 @@
 const React         = require('react');
 const Translation   = require('./../translation.js');
 const routing       = require('./../helpers/routing.js');
+const isEqual       = require('lodash/isEqual');
 
 var Link = React.createClass({
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
+    },
 
     handleClick: function(e) {
         e.preventDefault();

@@ -8,6 +8,7 @@ const TextWidget    = require('../widgets/text.js');
 const translate     = require('../helpers/translate.js');
 const request       = require('../helpers/request.js');
 const routing       = require('../helpers/routing.js');
+const isEqual       = require('lodash/isEqual');
 
 var LoginComponent = React.createClass({
 
@@ -20,6 +21,11 @@ var LoginComponent = React.createClass({
             credentialsIncorrect: false,
             translationData: {}
         }
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     },
 
     componentDidMount: function() {

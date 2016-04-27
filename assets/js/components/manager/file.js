@@ -7,8 +7,15 @@ const request       = require('./../helpers/request.js');
 const Translation   = require('./../translation.js');
 const assign        = require('lodash/assign');
 const forEach       = require('lodash/forEach');
+const isEqual       = require('lodash/isEqual');
 
 var MessageComponent = React.createClass({
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
+    },
+
     render: function() {
 
         var line = '';
@@ -26,6 +33,7 @@ var MessageComponent = React.createClass({
 });
 
 var FileComponent = React.createClass({
+
     getInitialState: function() {
         return {
             code: '',
@@ -33,6 +41,11 @@ var FileComponent = React.createClass({
             errors: [],
             warnings: []
         };
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     },
 
     componentDidMount: function() {

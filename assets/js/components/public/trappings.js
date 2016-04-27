@@ -1,10 +1,13 @@
 'use strict';
 
-const React = require('react');
+const React         = require('react');
+const isEqual       = require('lodash/isEqual');
 
 var TrappingsComponent = React.createClass({
-    getInitialState: function() {
-        return {};
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     },
 
     render: function() {

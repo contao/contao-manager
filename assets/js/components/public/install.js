@@ -8,6 +8,7 @@ const TextWidget    = require('../widgets/text.js');
 const TensideState  = require('../helpers/tenside-state.js');
 const taskmanager   = require('../helpers/taskmanager.js');
 const request       = require('../helpers/request.js');
+const isEqual       = require('lodash/isEqual');
 
 // @todo Handle the componentWillUnmount stuff here (cancelling, unsettled promises)
 
@@ -23,6 +24,11 @@ var InstallComponent = React.createClass({
             isLoggedIn: false,
             username: ''
         };
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     },
 
     componentDidMount: function() {

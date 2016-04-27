@@ -5,6 +5,7 @@ const Navigation    = require('./navigation.js');
 const routing       = require('./../helpers/routing.js');
 const eventhandler  = require('./../helpers/eventhandler.js');
 const compact       = require('lodash/compact');
+const isEqual       = require('lodash/isEqual');
 
 var TrappingsComponent = React.createClass({
 
@@ -12,6 +13,12 @@ var TrappingsComponent = React.createClass({
         return {
             blurClass: ''
         };
+    },
+
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     },
 
     componentDidMount: function() {

@@ -1,8 +1,15 @@
 'use strict';
 
-const React = require('react');
+const React         = require('react');
+const isEqual       = require('lodash/isEqual');
 
 var ErrorMessage = React.createClass({
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
+    },
+
     render: function() {
         return (
             <p className="error">{this.props.message}</p>
@@ -16,6 +23,11 @@ var Widget = React.createClass({
         return {
             empty: true
         };
+    },
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     },
 
     handleChange: function(e) {

@@ -3,8 +3,11 @@
 const React = require('react');
 
 var PackageWarningComponent = React.createClass({
-    getInitialState: function() {
-        return {};
+
+
+    shouldComponentUpdate: function(nextProps, nextState) {
+
+        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     },
 
     render: function() {

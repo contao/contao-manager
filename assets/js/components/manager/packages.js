@@ -10,7 +10,6 @@ const forEach       = require('lodash/forEach');
 const merge         = require('lodash/merge');
 const reverse       = require('lodash/reverse');
 
-
 var PackagesComponent = React.createClass({
 
     requests: [],
