@@ -8,7 +8,9 @@ const App          = require('./components/app.js');
 const TaskPopup    = require('./components/taskpopup.js');
 const TensideState = require('./components/helpers/tenside-state.js');
 const request      = require('./components/helpers/request.js');
-const _            = require('lodash');
+const forIn        = require('lodash/forIn');
+const merge        = require('lodash/merge');
+const isFunction   = require('lodash/isFunction');
 
 var router = routing.getRouter();
 
@@ -29,12 +31,12 @@ router.routed.add(function(request, data) {
     Promise.all(requirementsPromises).then(function(resolvedPromises) {
 
         var promiseResults = {};
-        _.forIn(resolvedPromises, function(v, k) {
-            _.merge(promiseResults, v);
+        forIn(resolvedPromises, function(v, k) {
+            merge(promiseResults, v);
         });
 
         // Now compare requirement with results
-        if (undefined !== data.route.requirement && _.isFunction(data.route.requirement)) {
+        if (undefined !== data.route.requirement && isFunction(data.route.requirement)) {
 
             var fulfilled = data.route.requirement(promiseResults);
             // Redirect to returned route if not fulfilled
@@ -47,7 +49,7 @@ router.routed.add(function(request, data) {
         // Cool, all requirements have been fulfilled, access
         routing.setCurrentRoute(data.route.name);
 
-        if (undefined !== data.route.controller && _.isFunction(data.route.controller)) {
+        if (undefined !== data.route.controller && isFunction(data.route.controller)) {
             var ret = data.route.controller(request);
 
             // Redirect to returned route if not true

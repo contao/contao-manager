@@ -1,6 +1,6 @@
 const crossroads   = require('crossroads');
 const history      = require('history').createHistory();
-const _            = require('lodash');
+const forIn        = require('lodash/forIn');
 const request      = require('./request.js');
 
 var _initialized = false;
@@ -81,7 +81,7 @@ var _initialize = function() {
         }
     };
 
-    _.forIn(routesDef, function(routeDef, routeName) {
+    forIn(routesDef, function(routeDef, routeName) {
         var route = router.addRoute(routeDef.path);
         route.name = routeName;
         route.requirement = routeDef.requirement;

@@ -5,7 +5,8 @@ const Trappings     = require('./trappings.js');
 const Codemirror    = require('react-codemirror');
 const request       = require('./../helpers/request.js');
 const Translation   = require('./../translation.js');
-const _             = require('lodash');
+const assign        = require('lodash/assign');
+const forEach       = require('lodash/forEach');
 
 var MessageComponent = React.createClass({
     render: function() {
@@ -95,7 +96,7 @@ var FileComponent = React.createClass({
             autofocus: true,
             dragDrop: false
         };
-        options = _.assign(options, this.props.options);
+        options = assign(options, this.props.options);
 
         if ('OK' === this.state.status) {
             var msg = <Translation domain="file">The file is OK!</Translation>;
@@ -103,13 +104,13 @@ var FileComponent = React.createClass({
         }
 
         if (this.state.warnings.length > 0) {
-            _.forEach(this.state.warnings, function(value, key) {
+            forEach(this.state.warnings, function(value, key) {
                 messages.push(<MessageComponent key={'warning' + key} type="warning" msg={value.msg} line={value.line} />);
             });
         }
 
         if (this.state.errors.length > 0) {
-            _.forEach(this.state.errors, function(value, key) {
+            forEach(this.state.errors, function(value, key) {
                 messages.push(<MessageComponent key={'error' + key} type="error" msg={value.msg} line={value.line} />);
             });
         }

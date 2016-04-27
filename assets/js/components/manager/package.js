@@ -1,7 +1,7 @@
 'use strict';
 
 const React         = require('react');
-const _             = require('lodash');
+const forEach       = require('lodash/forEach');
 const Highlight     = require('react-highlighter');
 const Translation   = require('./../translation.js');
 const request       = require('./../helpers/request.js');
@@ -133,7 +133,7 @@ var PackagesComponent = React.createClass({
         }
 
         var licenses = [];
-        _.forEach(this.props.licenses, function(license) {
+        forEach(this.props.licenses, function(license) {
             licenses.push(license);
         });
 

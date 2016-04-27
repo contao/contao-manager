@@ -6,7 +6,9 @@ const Package       = require('./package.js');
 const request       = require('./../helpers/request.js');
 const RadioWidget   = require('./../widgets/radio.js');
 const Translation   = require('./../translation.js');
-const _             = require('lodash');
+const forEach       = require('lodash/forEach');
+const merge         = require('lodash/merge');
+const reverse       = require('lodash/reverse');
 
 
 var PackagesComponent = React.createClass({
@@ -102,7 +104,7 @@ var PackagesComponent = React.createClass({
 
     updateKeywordsOnType: function(e) {
         e.preventDefault();
-        var searchRequest = _.merge(this.state.searchRequest, {keywords: e.target.value});
+        var searchRequest = merge(this.state.searchRequest, {keywords: e.target.value});
         var mode = '' === e.target.value ? 'packages' : 'search';
 
         this.setState({
@@ -114,7 +116,7 @@ var PackagesComponent = React.createClass({
     },
 
     handleTypeChange: function(e) {
-        var searchRequest = _.merge(this.state.searchRequest, {type: e.target.value});
+        var searchRequest = merge(this.state.searchRequest, {type: e.target.value});
 
         this.setState({
             searchRequest: searchRequest
@@ -125,7 +127,7 @@ var PackagesComponent = React.createClass({
 
     handleCloseButton: function(e) {
         e.preventDefault();
-        var searchRequest = _.merge(this.state.searchRequest, {keywords: ''});
+        var searchRequest = merge(this.state.searchRequest, {keywords: ''});
 
         this.setState({
             mode: 'packages',
@@ -146,7 +148,7 @@ var PackagesComponent = React.createClass({
 
     stopRunningRequests: function() {
         var self = this;
-        _.forEach(_.reverse(this.requests), function(req, i) {
+        forEach(reverse(this.requests), function(req, i) {
             req.cancel();
             self.requests.splice(i, 1);
         });
@@ -170,7 +172,7 @@ var PackagesComponent = React.createClass({
         } else {
             packages = [];
 
-            _.forEach(this.state.packages, function(packageData) {
+            forEach(this.state.packages, function(packageData) {
                 packages.push(<Package
                     key={packageData.name}
                     name={packageData.name}
