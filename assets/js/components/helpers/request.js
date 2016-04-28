@@ -24,9 +24,7 @@ var createRequest = function(url, props) {
     var ajax = jQuery.ajax(url, props);
     return Promise.resolve(ajax)
         .then(function(response) {
-            // Check if response contains a token, then we reset it which
-            // means you will only get logged out after 10 minutes of
-            // inactivity
+            // Check if response contains a token
             var token = ajax.getResponseHeader('Authentication');
             if (token) {
                 setToken(token);
@@ -37,13 +35,8 @@ var createRequest = function(url, props) {
 };
 
 var setToken = function(token) {
-
-    var expires = new Date();
-    expires.setTime(expires.getTime() + 10 * 60 * 1000); // 10 minutes
-
     document.cookie = cookie.serialize(
         'cpm:token', token, {
-            expires: expires,
             domain: window.location.hostname,
             secure: window.location.protocol === 'https:'
         });
