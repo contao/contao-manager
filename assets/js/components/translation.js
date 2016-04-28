@@ -7,7 +7,7 @@ const isEqual       = require('lodash/isEqual');
 
 var Translation = React.createClass({
 
-    fetchDataPromise: null,
+    componentIsMounted: false,
 
     getInitialState: function() {
         return {
@@ -24,9 +24,11 @@ var Translation = React.createClass({
 
         var self = this;
 
-        this.fetchDataPromise = translate.fetchData(this.props.domain, this.props.locale)
+        this.componentIsMounted = true;
+
+        translate.fetchData(this.props.domain, this.props.locale)
             .then(function(data) {
-                if (!self.fetchDataPromise.isCancelled()) {
+                if (self.componentIsMounted) {
                     self.setState({data: data});
                 }
 
@@ -35,7 +37,7 @@ var Translation = React.createClass({
     },
 
     componentWillUnmount: function() {
-        this.fetchDataPromise.cancel();
+        this.componentIsMounted = false;
     },
 
     render: function() {
