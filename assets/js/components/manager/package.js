@@ -154,11 +154,11 @@ var PackagesComponent = React.createClass({
                         <h1>{this.props.name}</h1>
                         <p className="description">{this.props.description}</p>
                         <p className="additional">
-                            <Translation>Licenses:</Translation> {licenses.join(', ')}
+                            <Translation domain="package">Licenses</Translation>: {licenses.join(', ')}
                             &nbsp;&nbsp; | &nbsp;&nbsp;
-                            <Translation>Released on:</Translation> {this.getFormattedReleaseDate()}
+                            <Translation domain="package">Released on</Translation>: {this.getFormattedReleaseDate()}
                             &nbsp;&nbsp; | &nbsp;&nbsp;
-                            <Translation>Installed version:</Translation> {this.props.installed}
+                            <Translation domain="package">Installed version</Translation>: {this.props.installed}
                         </p>
                     </div>
 
