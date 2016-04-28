@@ -2659,12 +2659,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "39986eff915c4688dc30ba0d82049daff8eabc0c"
+                "reference": "13eb1c41053f343324b38a8aa7d1ff7c50543867"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/39986eff915c4688dc30ba0d82049daff8eabc0c",
-                "reference": "39986eff915c4688dc30ba0d82049daff8eabc0c",
+                "url": "https://api.github.com/repos/tenside/core/zipball/13eb1c41053f343324b38a8aa7d1ff7c50543867",
+                "reference": "13eb1c41053f343324b38a8aa7d1ff7c50543867",
                 "shasum": ""
             },
             "require": {
@@ -2711,7 +2711,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-04-21 16:18:51"
+            "time": "2016-04-27 22:54:02"
         },
         {
             "name": "tenside/core-bundle",
@@ -2719,12 +2719,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "31e4dd18233ef17cd129db5bbf9feec685791849"
+                "reference": "c38430ed99e40207381909e781b9b9790627e178"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/31e4dd18233ef17cd129db5bbf9feec685791849",
-                "reference": "31e4dd18233ef17cd129db5bbf9feec685791849",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/c38430ed99e40207381909e781b9b9790627e178",
+                "reference": "c38430ed99e40207381909e781b9b9790627e178",
                 "shasum": ""
             },
             "require": {
@@ -2785,7 +2785,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-04-21 19:16:12"
+            "time": "2016-04-28 02:06:51"
         }
     ],
     "packages-dev": [
