@@ -13,7 +13,7 @@ const isEqual       = require('lodash/isEqual');
 var LoginComponent = React.createClass({
 
     loginPromise: Promise.resolve(),
-    translationPromise: Promise.resolve(),
+    componentIsMounted: false,
 
     getInitialState: function() {
         return {
@@ -31,9 +31,11 @@ var LoginComponent = React.createClass({
     componentDidMount: function() {
         var self = this;
 
-        this.translationPromise = translate.fetchData('login')
+        this.componentIsMounted = true;
+
+        translate.fetchData('login')
             .then(function(data) {
-                if (!self.translationPromise.isCancelled()) {
+                if (self.componentIsMounted) {
                     self.setState({translationData: data});
                 }
 
@@ -42,10 +44,9 @@ var LoginComponent = React.createClass({
     },
 
     componentWillUnmount: function() {
+        this.componentIsMounted = false;
         this.loginPromise.cancel();
-        this.translationPromise.cancel();
     },
-
 
     handleLogin: function(e) {
         e.preventDefault();
