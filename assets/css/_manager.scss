@@ -18,20 +18,6 @@ header {
         }
     }
 
-    #logout {
-        display: block;
-        float: right;
-        margin: 10px 30px;
-
-        svg {
-            fill: $text-color;
-        }
-
-        &:hover svg {
-            fill: $contao-color;
-        }
-    }
-
     #nav-toggle {
         display: block;
         float: right;
@@ -105,6 +91,12 @@ header {
             }
         }
 
+        li.icon > a {
+            svg {
+                display: none;
+            }
+        }
+
         li li a {
             margin-left: 15px;
             text-transform: none;
@@ -120,8 +112,9 @@ header {
             top: auto;
             bottom: auto;
             min-width: 0;
-            margin-right: 15px;
+            margin-right: 60px;
             padding: 0;
+            overflow: visible;
             background: none;
             transform: none;
             transition: none;
@@ -134,6 +127,7 @@ header {
             }
 
             li {
+                position: relative;
                 display: inline-block;
                 padding: 0 8px;
 
@@ -143,12 +137,14 @@ header {
 
                 ul {
                     position: absolute;
+                    left: 50%;
                     display: none;
                     width: 180px;
                     margin-top: -3px;
                     text-align: center;
                     background: #fff;
                     border-top: 3px solid $contao-color;
+                    transform:translateX(-50%);
                 }
 
                 &:hover ul {
@@ -156,7 +152,7 @@ header {
 
                     &:before {
                         position: absolute;
-                        left: 10px;
+                        left: 86px;
                         top: -7px;
                         width: 0;
                         height: 0;
@@ -179,6 +175,33 @@ header {
                     &:first-child {
                         border-top: none;
                     }
+                }
+            }
+
+            li.icon > a {
+                padding-top: 7px;
+
+                svg {
+                    display: inline;
+                    position: relative;
+                    top: 4px;
+                    width: 22px;
+                    height: 22px;
+                    fill: $text-color;
+                }
+
+                &:hover svg {
+                    fill: $contao-color;
+                }
+
+                span {
+                    display: none;
+                }
+            }
+
+            &:hover {
+                a {
+                    border: none;
                 }
             }
         }
