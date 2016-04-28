@@ -105,7 +105,7 @@ var PackagesComponent = React.createClass({
         });
     },
 
-    getFormattedLastUpdated: function() {
+    getFormattedReleaseDate: function() {
         if (undefined === this.props.time) {
             return '';
         }
@@ -156,7 +156,7 @@ var PackagesComponent = React.createClass({
                         <p className="additional">
                             <Translation>Licenses:</Translation> {licenses.join(', ')}
                             &nbsp;&nbsp; | &nbsp;&nbsp;
-                            <Translation>Last updated:</Translation> {this.getFormattedLastUpdated()}
+                            <Translation>Released on:</Translation> {this.getFormattedReleaseDate()}
                             &nbsp;&nbsp; | &nbsp;&nbsp;
                             <Translation>Installed version:</Translation> {this.props.installed}
                         </p>
