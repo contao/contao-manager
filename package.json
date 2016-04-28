@@ -16,7 +16,9 @@
     "crossroads": "^0.12.2",
     "gulp": "^3.9.1",
     "gulp-clean-css": "^2.0.3",
+    "gulp-composer": "^0.4.0",
     "gulp-concat": "^2.6.0",
+    "gulp-install": "^0.6.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
@@ -28,6 +30,7 @@
     "react": "^15.0.1",
     "react-codemirror": "^0.2.6",
     "react-dom": "^15.0.1",
+    "run-sequence": "^1.1.5",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }

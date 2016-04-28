@@ -11,8 +11,22 @@ const rename        = require('gulp-rename');
 const sass          = require('gulp-sass');
 const cleanCSS      = require('gulp-clean-css');
 const concat        = require('gulp-concat');
+const composer      = require("gulp-composer");
+const install       = require("gulp-install");
+const runSequence   = require('run-sequence');
 
-var production      = !!gutil.env.production;
+const production    = !!gutil.env.production;
+
+// Composer install
+gulp.task('composer-install', function() {
+    return composer();
+});
+
+// npm install
+gulp.task('npm-install', function() {
+    return gulp.src('./package.json')
+        .pipe(install());
+});
 
 // Build bundle.js
 gulp.task('scripts', function () {
@@ -32,7 +46,7 @@ gulp.task('scripts', function () {
 });
 
 
-// Build bundle.css task
+// Build bundle.css
 gulp.task('sass', function () {
     return gulp.src('assets/css/bundle.scss')
         .pipe(production ? sourcemaps.init() : gutil.noop())
@@ -52,5 +66,17 @@ gulp.task('watch', function() {
     gulp.watch('assets/css/*.scss', ['sass']);
 });
 
+// Build task
+gulp.task('build', ['scripts', 'sass']);
+
 // Build and watch task
-gulp.task('build:watch', ['scripts', 'sass', 'watch']);
+gulp.task('build:watch', ['build', 'watch']);
+
+// Update task
+gulp.task('update', function() {
+    runSequence(
+        'composer-install',
+        'npm-install',
+        'build'
+    );
+});

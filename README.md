@@ -39,12 +39,19 @@ Note: For production you should use
 
 because that will enable minifying (uglyfying) JS as well as CSS files.
 
-### 3. Setting the DirectoryIndex
+### 3. Updating composer dependencies
+
+Make sure you run
+
+`$ php composer.phar install` so the whole PHP dependencies are pulled
+as well.
+
+### 4. Setting the DirectoryIndex
 
 Make sure your DirectoryIndex points to `/web` because that's where the
 project runs in (regular Symfony application).
 
-### 4. Setting the COMPOSER environment variable
+### 5. Setting the COMPOSER environment variable
 
 The underlying software that handles all the Composer commands is called
 `Tenside`. By default, `Tenside` thinks of managing an installation from
@@ -71,7 +78,7 @@ to).
 In the end, Tenside behaves exactly the same as Composer, see
 [composer docs](https://getcomposer.org/doc/03-cli.md#composer)
 
-### 5. Development and Debug modes
+### 6. Development and Debug modes
 
 By default, debugging is disabled and the package manager runs in `prod`
 mode. To change this, you can set yet another two environment variables:
@@ -84,7 +91,7 @@ SetEnv SYMFONY_DEBUG 1
 This enables extended logging and debugging features especially useful
 during development.
 
-### 6. Accessing the API documentation
+### 7. Accessing the API documentation
 
 You can see all available API calls thanks to the fantastic 
 NelmioApiBundle when accessing the route `/assets/api-doc`.
@@ -93,3 +100,13 @@ Note that this is only available in `dev` mode .
 For a pre generated version of documentation, see [doc/API.md][1]
 
 [1]: https://github.com/contao/package-manager/blob/master/doc/API.md
+
+### 8. Tips & tricks
+
+If you do have gulp installed globally already or you have
+been developing on the package manager before, it's very likely you pull
+the latest changes using git and then want to do both, an `npm install`
+as well as a `composer update` and finally also build the JS and CSS
+files using `gulp` again. To make this easier, you can just use
+
+`$ ./node_modules/.bin/gulp update`
