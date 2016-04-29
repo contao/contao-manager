@@ -27,7 +27,28 @@ var getLoggedIn = function() {
         });
 };
 
+var getSelfTest = function() {
+    return getState()
+        .then(function(state) {
+
+            var selfTestEndPoint = '/api/v1/selftest';
+
+            if (false === state.project_installed) {
+                selfTestEndPoint = '/api/v1/install/selftest';
+            }
+
+            return request.createRequest(selfTestEndPoint)
+                .then(function(response) {
+                    return response.results;
+                })
+                .catch(function() {
+                    return {};
+                });
+        });
+};
+
 module.exports = {
     getState: getState,
-    getLoggedIn: getLoggedIn
+    getLoggedIn: getLoggedIn,
+    getSelfTest: getSelfTest
 };
