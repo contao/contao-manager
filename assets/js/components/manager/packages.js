@@ -189,6 +189,7 @@ var PackagesComponent = React.createClass({
             forEach(this.state.packages, function(packageData) {
                 packages.push(<Package
                     key={packageData.name}
+                    mode={self.state.mode}
                     name={packageData.name}
                     description={packageData.description}
                     licenses={packageData.license}
