@@ -44,7 +44,7 @@ var InstallComponent = React.createClass({
             });
     },
 
-    validateConstraint: function(e, props) {
+    validateConstraint: function(e) {
 
         var self  = this,
             value = e.target.value;

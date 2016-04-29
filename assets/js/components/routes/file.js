@@ -113,7 +113,7 @@ var FileComponent = React.createClass({
 
         if ('OK' === this.state.status) {
             var msg = <Translation domain="file">The file is OK!</Translation>;
-            messages.push(<MessageComponent key="ok" type="ok" msg={msg}></MessageComponent>);
+            messages.push(<MessageComponent key="ok" type="ok" msg={msg}/>);
         }
 
         if (this.state.warnings.length > 0) {

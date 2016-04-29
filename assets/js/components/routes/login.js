@@ -54,8 +54,8 @@ var LoginComponent = React.createClass({
 
         var self = this;
         var form = document.getElementById('login-form');
-        var username = form.querySelectorAll('input[name="username"]')[0].value
-        var password = form.querySelectorAll('input[name="password"]')[0].value
+        var username = form.querySelectorAll('input[name="username"]')[0].value;
+        var password = form.querySelectorAll('input[name="password"]')[0].value;
 
         this.loginPromise = this.login(username, password)
             .then(function() {
