@@ -72,6 +72,10 @@ var _initialize = function() {
             path: '/{locale}/files/composer-json',
             requirement: _tensideOkAndLoggedIn
         },
+        'self-test': {
+            path: '/{locale}/config/self-test',
+            requirement: _tensideOkAndLoggedIn
+        },
         'logout': {
             path: '{locale}/logout',
             controller: function() {

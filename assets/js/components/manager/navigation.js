@@ -65,7 +65,7 @@ var NavigationComponent = React.createClass({
                             <span>Advanced</span>
                         </a>
                         <ul>
-                            <li><a href="#"><Translation domain="navigation">Settings</Translation></a></li>
+                            <li><Link routeName="self-test"><Translation domain="navigation">Self test</Translation></Link></li>
                             <li><Link routeName="logout"><Translation domain="navigation">Logout</Translation></Link></li>
                         </ul>
                     </li>

@@ -3,8 +3,10 @@
 const React         = require('react');
 const Install       = require('./public/install.js');
 const Login         = require('./public/login.js');
+const Trappings     = require('./manager/trappings.js');
 const Packages      = require('./manager/packages.js');
 const File          = require('./manager/file.js');
+const SelfTest      = require('./manager/selftest.js');
 const isEqual       = require('lodash/isEqual');
 
 // Load php and javascript for file edit
@@ -31,6 +33,9 @@ var AppComponent = React.createClass({
 
             case 'composer-json':
                 return <File apiEndpoint="/api/v1/composer.json" options={{ mode: {name: "javascript", json: true}, indentUnit: 4 }} />;
+
+            case 'self-test':
+                return <Trappings><SelfTest /></Trappings>;
 
             default:
                 return <Login />;
