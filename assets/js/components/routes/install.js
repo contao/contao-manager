@@ -2,7 +2,7 @@
 
 const React         = require('react');
 const Promise       = require('bluebird');
-const Trappings     = require('./trappings.js');
+const Trappings     = require('../trappings/boxed.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
 const TensideState  = require('../helpers/tenside-state.js');
@@ -218,20 +218,28 @@ var InstallComponent = React.createClass({
         }
 
         return (
-            <Trappings install={true}>
-                <form id="install-form" action="#" method="post">
-                    {usernamePart}
+            <Trappings wide={true}>
+                <header>
+                    <img src="/web-assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
+                    <p className="welcome"><strong>Welcome</strong> to Contao Manager v1.0</p>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
+                </header>
 
-                    <fieldset>
-                        <legend>Contao Installation</legend>
-                        <p>Enter a version to install or leave blank for the latest version.</p>
+                <section>
+                    <form id="install-form" action="#" method="post">
+                        {usernamePart}
 
-                        <TextWidget type="text" name="version" label="Version" placeholder="latest" onChange={this.validateConstraint} error={this.state.constraintErrorMessage} />
+                        <fieldset>
+                            <legend>Contao Installation</legend>
+                            <p>Enter a version to install or leave blank for the latest version.</p>
 
-                    </fieldset>
+                            <TextWidget type="text" name="version" label="Version" placeholder="latest" onChange={this.validateConstraint} error={this.state.constraintErrorMessage} />
 
-                    <button disabled={disableButton} type="submit" onClick={this.handleInstall}>Install</button>
-                </form>
+                        </fieldset>
+
+                        <button disabled={disableButton} type="submit" onClick={this.handleInstall}>Install</button>
+                    </form>
+                </section>
             </Trappings>
         );
     }

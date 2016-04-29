@@ -2,7 +2,7 @@
 
 const React         = require('react');
 const Promise       = require('bluebird');
-const Trappings     = require('./trappings.js');
+const Trappings     = require('../trappings/boxed.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
 const translate     = require('../helpers/translate.js');
@@ -93,23 +93,30 @@ var LoginComponent = React.createClass({
 
     return (
             <Trappings sectionClass="login">
-                <h1><Translation domain="login">Sign In</Translation></h1>
-                <p><Translation domain="login">Login to manage your installation.</Translation></p>
+                <header>
+                    <img src="/web-assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
+                    <p className="welcome"><strong>Welcome</strong> to Contao Manager v1.0</p>
+                </header>
 
-                <form id="login-form" action="#" method="post">
-                    <TextWidget type="text" name="username" label={translate.getTranslationForKey('Username', this.state.translationData)}
-                                placeholder={translate.getTranslationForKey('Username', this.state.translationData)} error={errorMsg}/>
-                    <TextWidget type="password" name="password"
-                                label={translate.getTranslationForKey('Password', this.state.translationData)} placeholder={translate.getTranslationForKey('Password', this.state.translationData)} error={errorMsg}/>
+                <section className="login">
+                    <h1><Translation domain="login">Sign In</Translation></h1>
+                    <p><Translation domain="login">Login to manage your installation.</Translation></p>
+
+                    <form id="login-form" action="#" method="post">
+                        <TextWidget type="text" name="username" label={translate.getTranslationForKey('Username', this.state.translationData)}
+                                    placeholder={translate.getTranslationForKey('Username', this.state.translationData)} error={errorMsg}/>
+                        <TextWidget type="password" name="password"
+                                    label={translate.getTranslationForKey('Password', this.state.translationData)} placeholder={translate.getTranslationForKey('Password', this.state.translationData)} error={errorMsg}/>
 
 
-                    {/* @todo Implement a forgot password functionality? */}
-                    {/* <a href="">Forgot your password?</a> */}
+                        {/* @todo Implement a forgot password functionality? */}
+                        {/* <a href="">Forgot your password?</a> */}
 
-                    <button disabled={this.state.isLoggingIn} type="submit"
-                            onClick={this.handleLogin}><Translation domain="login">Sign In</Translation>
-                    </button>
-                </form>
+                        <button disabled={this.state.isLoggingIn} type="submit"
+                                onClick={this.handleLogin}><Translation domain="login">Sign In</Translation>
+                        </button>
+                    </form>
+                </section>
             </Trappings>
         );
     }

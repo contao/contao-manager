@@ -2,19 +2,18 @@
 
 const React         = require('react');
 const Navigation    = require('./navigation.js');
-const routing       = require('./../helpers/routing.js');
-const eventhandler  = require('./../helpers/eventhandler.js');
+const routing       = require('../helpers/routing.js');
+const eventhandler  = require('../helpers/eventhandler.js');
 const compact       = require('lodash/compact');
 const isEqual       = require('lodash/isEqual');
 
-var TrappingsComponent = React.createClass({
+var MainTrappingsComponent = React.createClass({
 
     getInitialState: function() {
         return {
             blurClass: ''
         };
     },
-
 
     shouldComponentUpdate: function(nextProps, nextState) {
 
@@ -71,4 +70,4 @@ var TrappingsComponent = React.createClass({
     }
 });
 
-module.exports = TrappingsComponent;
+module.exports = MainTrappingsComponent;

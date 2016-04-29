@@ -2,8 +2,8 @@
 
 const React         = require('react');
 const forEach       = require('lodash/forEach');
-const Translation   = require('./../translation.js');
-const request       = require('./../helpers/request.js');
+const Translation   = require('../translation.js');
+const request       = require('../helpers/request.js');
 const isEqual       = require('lodash/isEqual');
 
 var PackageComponent = React.createClass({

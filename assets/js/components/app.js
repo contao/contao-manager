@@ -1,13 +1,13 @@
 'use strict';
 
-const React         = require('react');
-const Install       = require('./public/install.js');
-const Login         = require('./public/login.js');
-const Trappings     = require('./manager/trappings.js');
-const Packages      = require('./manager/packages.js');
-const File          = require('./manager/file.js');
-const SelfTest      = require('./manager/selftest.js');
-const isEqual       = require('lodash/isEqual');
+const React          = require('react');
+const Install        = require('./routes/install.js');
+const Login          = require('./routes/login.js');
+const Packages       = require('./routes/packages.js');
+const File           = require('./routes/file.js');
+const SelfTest       = require('./routes/selftest.js');
+const BoxedTrappings = require('./trappings/boxed.js');
+const isEqual        = require('lodash/isEqual');
 
 // Load php and javascript for file edit
 require('codemirror/mode/javascript/javascript');
@@ -35,7 +35,11 @@ var AppComponent = React.createClass({
                 return <File apiEndpoint="/api/v1/composer.json" options={{ mode: {name: "javascript", json: true}, indentUnit: 4 }} />;
 
             case 'self-test':
-                return <Trappings><SelfTest /></Trappings>;
+                return <BoxedTrappings wide={true}>
+                    <section>
+                        <SelfTest />
+                    </section>
+                </BoxedTrappings>;
 
             default:
                 return <Login />;

@@ -1,8 +1,8 @@
 'use strict';
 
 const React         = require('react');
-const Translation   = require('./../translation.js');
-const routing       = require('./../helpers/routing.js');
+const Translation   = require('../translation.js');
+const routing       = require('../helpers/routing.js');
 const isEqual       = require('lodash/isEqual');
 
 var Link = React.createClass({

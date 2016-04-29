@@ -1,11 +1,11 @@
 'use strict';
 
 const React         = require('react');
-const Trappings     = require('./trappings.js');
-const Package       = require('./package.js');
-const request       = require('./../helpers/request.js');
-const RadioWidget   = require('./../widgets/radio.js');
-const Translation   = require('./../translation.js');
+const Trappings     = require('../trappings/main.js');
+const Package       = require('../fragments/package.js');
+const request       = require('../helpers/request.js');
+const RadioWidget   = require('../widgets/radio.js');
+const Translation   = require('../translation.js');
 const forEach       = require('lodash/forEach');
 const merge         = require('lodash/merge');
 const reverse       = require('lodash/reverse');

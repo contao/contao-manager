@@ -2,7 +2,7 @@
 
 const React         = require('react');
 const Promise       = require('bluebird');
-const TensideState  = require('./../helpers/tenside-state.js');
+const TensideState  = require('../helpers/tenside-state.js');
 const isEqual       = require('lodash/isEqual');
 const forIn         = require('lodash/forIn');
 
