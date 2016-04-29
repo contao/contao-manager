@@ -21,17 +21,21 @@ var createRequest = function(url, props) {
         props.headers['Authorization'] = 'Bearer ' + getToken();
     }
 
-    var ajax = jQuery.ajax(url, props);
-    return Promise.resolve(ajax)
-        .then(function(response) {
-            // Check if response contains a token
-            var token = ajax.getResponseHeader('Authentication');
-            if (token) {
-                setToken(token);
-            }
+    return new Promise(function(resolve, reject, onCancel) {
+        var req = jQuery.ajax(url, props)
+            .done(function(data, textStatus, jqXHR) {
+                // Check if response contains a token
+                var token = jqXHR.getResponseHeader('Authentication');
+                if (token) {
+                    setToken(token);
+                }
 
-            return response;
-        });
+                resolve(data);
+            })
+            .fail(reject);
+
+        onCancel(function() { req.abort(); });
+    });
 };
 
 var setToken = function(token) {
