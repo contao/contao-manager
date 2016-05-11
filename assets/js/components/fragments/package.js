@@ -2,6 +2,7 @@
 
 const React         = require('react');
 const forEach       = require('lodash/forEach');
+const Highlight     = require('react-highlighter');
 const Translation   = require('../translation.js');
 const request       = require('../helpers/request.js');
 const isEqual       = require('lodash/isEqual');
@@ -135,8 +136,8 @@ var PackageComponent = React.createClass({
                     <figure><img src="" width="110" height="110" /></figure>
 
                     <div className="about">
-                        <h1>{this.props.name}</h1>
-                        <p className="description">{this.props.description}</p>
+                        <h1><Highlight search={this.props.keywords} matchElement="mark">{this.props.name}</Highlight></h1>
+                        <p className="description"><Highlight search={this.props.keywords} matchElement="mark">{this.props.description}</Highlight></p>
                         <p className="additional">
                             <Translation domain="package">Licenses</Translation>: {licenses.join(', ')}
                             &nbsp;&nbsp; | &nbsp;&nbsp;

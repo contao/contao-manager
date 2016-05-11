@@ -30,6 +30,7 @@
     "react": "^15.0.1",
     "react-codemirror": "^0.2.6",
     "react-dom": "^15.0.1",
+    "react-highlighter": "^0.3.2",
     "run-sequence": "^1.1.5",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
