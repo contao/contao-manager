@@ -5,6 +5,7 @@ const Translation   = require('./translation.js');
 const eventhandler  = require('./helpers/eventhandler.js');
 const request       = require('./helpers/request.js');
 const isEqual       = require('lodash/isEqual');
+const merge         = require('lodash/merge');
 
 var TaskPopupComponent = React.createClass({
 
@@ -62,10 +63,11 @@ var TaskPopupComponent = React.createClass({
         this.lastTaskId = this.state.taskId;
     },
 
-    show: function() {
-        this.setState({
-            show: true
-        });
+    show: function(state) {
+        state = state || {};
+        var newState = merge({}, this.state, state, {show: true});
+
+        this.setState(newState);
     },
 
     hide: function() {
