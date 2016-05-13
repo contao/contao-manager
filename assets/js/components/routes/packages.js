@@ -103,7 +103,7 @@ var PackagesComponent = React.createClass({
 
     updateKeywordsOnType: function(e) {
         e.preventDefault();
-        var searchRequest = merge(this.state.searchRequest, {keywords: e.target.value});
+        var searchRequest = merge({}, this.state.searchRequest, {keywords: e.target.value});
         var mode = '' === e.target.value ? 'packages' : 'search';
 
         this.setState({
@@ -115,7 +115,7 @@ var PackagesComponent = React.createClass({
     },
 
     handleTypeChange: function(e) {
-        var searchRequest = merge(this.state.searchRequest, {type: e.target.value});
+        var searchRequest = merge({}, this.state.searchRequest, {type: e.target.value});
 
         this.setState({
             searchRequest: searchRequest
@@ -126,7 +126,7 @@ var PackagesComponent = React.createClass({
 
     handleCloseButton: function(e) {
         e.preventDefault();
-        var searchRequest = merge(this.state.searchRequest, {keywords: ''});
+        var searchRequest = merge({}, this.state.searchRequest, {keywords: ''});
 
         this.setState({
             mode: 'packages',
