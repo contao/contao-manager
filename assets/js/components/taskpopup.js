@@ -2,8 +2,8 @@
 
 const React         = require('react');
 const Translation   = require('./translation.js');
-const eventhandler  = require('./helpers/eventhandler.js');
-const request       = require('./helpers/request.js');
+const eventhandler  = require('./../helpers/eventhandler.js');
+const request       = require('./../helpers/request.js');
 const isEqual       = require('lodash/isEqual');
 const merge         = require('lodash/merge');
 

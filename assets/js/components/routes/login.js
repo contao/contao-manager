@@ -5,9 +5,9 @@ const Promise       = require('bluebird');
 const Trappings     = require('../trappings/boxed.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
-const translate     = require('../helpers/translate.js');
-const request       = require('../helpers/request.js');
-const routing       = require('../helpers/routing.js');
+const translate     = require('../../helpers/translate.js');
+const request       = require('../../helpers/request.js');
+const routing       = require('../../helpers/routing.js');
 const isEqual       = require('lodash/isEqual');
 
 var LoginComponent = React.createClass({
@@ -33,7 +33,7 @@ var LoginComponent = React.createClass({
 
         this.componentIsMounted = true;
 
-        translate.fetchData('login')
+        translate.fetchData('login', routing.getLanguage())
             .then(function(data) {
                 if (self.componentIsMounted) {
                     self.setState({translationData: data});

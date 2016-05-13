@@ -1,7 +1,8 @@
 'use strict';
 
 const React         = require('react');
-const translate     = require('./helpers/translate.js');
+const translate     = require('./../helpers/translate.js');
+const routing       = require('./../helpers/routing.js');
 const isEqual       = require('lodash/isEqual');
 
 
@@ -25,8 +26,8 @@ var Translation = React.createClass({
         var self = this;
 
         this.componentIsMounted = true;
-
-        translate.fetchData(this.props.domain, this.props.locale)
+console.log(routing);
+        translate.fetchData(this.props.domain, routing.getLanguage())
             .then(function(data) {
                 if (self.componentIsMounted) {
                     self.setState({data: data});

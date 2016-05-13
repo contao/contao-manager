@@ -31,12 +31,12 @@ gulp.task('npm-install', function() {
 // Build bundle.js
 gulp.task('scripts', function () {
     return browserify({
-            entries: './assets/js/index.js',
+            entries: './assets/js/main.js',
             debug: !production
         })
         .transform('babelify', {presets: ['react', 'es2015']})
         .bundle()
-        .pipe(source('./assets/js/index.js'))
+        .pipe(source('./assets/js/main.js'))
         .pipe(buffer())
         .pipe(production ? uglify() : gutil.noop())
         .pipe(rename('bundle.js'))
@@ -62,7 +62,7 @@ gulp.task('default', ['scripts', 'sass']);
 
 // Watch task
 gulp.task('watch', function() {
-    gulp.watch(['./assets/js/app.js', './assets/js/**/*.js'], ['scripts']);
+    gulp.watch(['./assets/js/**/*.js'], ['scripts']);
     gulp.watch('assets/css/*.scss', ['sass']);
 });
 

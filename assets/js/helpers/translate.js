@@ -1,9 +1,7 @@
 'use strict';
 
 const Promise   = require('bluebird');
-const routing   = require('./routing.js');
 const request   = require('./request.js');
-
 
 // Enable cancelling of promises
 Promise.config({cancellation: true});
@@ -32,12 +30,6 @@ var getTranslationForKey = function(key, data, placeholders) {
 };
 
 var fetchData = function(domain, locale) {
-    domain = typeof domain !== 'undefined' ? domain : 'messages';
-    locale = typeof locale !== 'undefined' ? locale : 'fallback';
-
-    if ('fallback' === locale) {
-        locale = routing.getLanguage();
-    }
 
     var cacheKey = domain + '.' + locale;
 

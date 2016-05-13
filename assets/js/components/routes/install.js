@@ -5,9 +5,9 @@ const Promise       = require('bluebird');
 const Trappings     = require('../trappings/boxed.js');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
-const TensideState  = require('../helpers/tenside-state.js');
-const taskmanager   = require('../helpers/taskmanager.js');
-const request       = require('../helpers/request.js');
+const TensideState  = require('../../helpers/tenside-state.js');
+const taskmanager   = require('../../helpers/taskmanager.js');
+const request       = require('../../helpers/request.js');
 const isEqual       = require('lodash/isEqual');
 
 // @todo Handle the componentWillUnmount stuff here (cancelling, unsettled promises)

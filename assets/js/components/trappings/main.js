@@ -2,8 +2,8 @@
 
 const React         = require('react');
 const Navigation    = require('./navigation.js');
-const routing       = require('../helpers/routing.js');
-const eventhandler  = require('../helpers/eventhandler.js');
+const routing       = require('../../helpers/routing.js');
+const eventhandler  = require('../../helpers/eventhandler.js');
 const compact       = require('lodash/compact');
 const isEqual       = require('lodash/isEqual');
 
