@@ -185,8 +185,8 @@ var TaskPopupComponent = React.createClass({
             <div id="task-popup" className={cssClasses ? cssClasses : ''}>
                 <h1>{this.state.content.taskTitle}</h1>
 
-                <div className="status success"><i className="icono-checkCircle"></i></div>
-                <div className="status error"><i className="icono-crossCircle"></i></div>
+                <div className="status success"><i className="icono-checkCircle" /></div>
+                <div className="status error"><i className="icono-crossCircle" /></div>
                 <div className="status loading">
                     <div className="bounce1"></div>
                     <div className="bounce2"></div>
@@ -200,11 +200,11 @@ var TaskPopupComponent = React.createClass({
                 <button onClick={this.hide}>Cancel</button>
 
                 <a onClick={this.hideConsole} className="hide">
-                    <i className="icono-caretRight"></i>
+                    <i className="icono-caretRight" />
                     <Translation domain="taskpopup">Hide Console Output</Translation>
                 </a>
                 <a onClick={this.showConsole} className="show">
-                    <i className="icono-caretRight"></i>
+                    <i className="icono-caretRight" />
                     <Translation domain="taskpopup">Show Console Output</Translation>
                 </a>
                 <code>{this.state.content.consoleOutput}</code>
