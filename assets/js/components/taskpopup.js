@@ -3,7 +3,7 @@
 const React         = require('react');
 const Translation   = require('./translation.js');
 const eventhandler  = require('./../helpers/eventhandler.js');
-const request       = require('./../helpers/request.js');
+const taskmanager   = require('./../helpers/taskmanager.js');
 const isEqual       = require('lodash/isEqual');
 const merge         = require('lodash/merge');
 
@@ -99,7 +99,7 @@ var TaskPopupComponent = React.createClass({
             return;
         }
 
-        request.createRequest('/api/v1/tasks/' + taskId)
+        taskmanager.getTask(taskId)
             .then(function (response) {
                 var newState = {
                     content: {

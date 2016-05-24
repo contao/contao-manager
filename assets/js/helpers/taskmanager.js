@@ -31,6 +31,10 @@ module.exports = {
         });
     },
 
+    getTask: function() {
+        return request.createRequest('/api/v1/tasks/' + taskId)
+    },
+
     getTaskList: function() {
         return request.createRequest('/api/v1/tasks');
     },
