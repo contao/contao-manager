@@ -2,10 +2,12 @@
 
 const React         = require('react');
 const Translation   = require('../translation.js');
-const routing       = require('../../helpers/routing.js');
 const isEqual       = require('lodash/isEqual');
 
 var Link = React.createClass({
+    contextTypes: {
+        routing: React.PropTypes.object
+    },
 
     shouldComponentUpdate: function(nextProps, nextState) {
 
@@ -15,21 +17,21 @@ var Link = React.createClass({
     handleClick: function(e) {
         e.preventDefault();
 
-        routing.redirect(this.props.routeName);
+        this.context.routing.redirect(this.props.routeName);
     },
 
     generateLink: function(routeName) {
-        return routing.generateUrl(routeName);
+        return this.context.routing.generateUrl(routeName);
     },
 
     isRouteActive: function(routeName) {
-        return routing.isCurrentRoute(routeName);
+        return this.context.routing.isCurrentRoute(routeName);
     },
 
     handleLogout: function(e) {
         e.preventDefault();
 
-        routing.redirect('logout');
+        this.context.routing.redirect('logout');
     },
 
     render: function() {

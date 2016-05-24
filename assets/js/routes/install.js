@@ -2,8 +2,8 @@
 
 const React         = require('react');
 const ReactDOM      = require('react-dom');
+const App           = require('./../components/app.js');
 const Install       = require('./../components/routes/install.js');
-const TaskPopup     = require('./../components/taskpopup.js');
 
 module.exports = {
     path: '/{locale}/install',
@@ -25,9 +25,8 @@ module.exports = {
             return routing.redirect('login');
         }
     }],
-    controller: function() {
-        ReactDOM.render(<Install /> , document.getElementById('app'));
-        ReactDOM.render(<TaskPopup />, document.getElementById('popup'));
+    controller: function(request, routing) {
+        ReactDOM.render(<App routing={routing}><Install /></App>, document.getElementById('app'));
     }
 };
 

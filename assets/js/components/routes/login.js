@@ -7,13 +7,15 @@ const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
 const translate     = require('../../helpers/translate.js');
 const request       = require('../../helpers/request.js');
-const routing       = require('../../helpers/routing.js');
 const isEqual       = require('lodash/isEqual');
 
 var LoginComponent = React.createClass({
 
     loginPromise: Promise.resolve(),
     componentIsMounted: false,
+    contextTypes: {
+        routing: React.PropTypes.object
+    },
 
     getInitialState: function() {
         return {
@@ -33,7 +35,7 @@ var LoginComponent = React.createClass({
 
         this.componentIsMounted = true;
 
-        translate.fetchData('login', routing.getLanguage())
+        translate.fetchData('login', this.context.routing.getLanguage())
             .then(function(data) {
                 if (self.componentIsMounted) {
                     self.setState({translationData: data});
@@ -59,7 +61,7 @@ var LoginComponent = React.createClass({
 
         this.loginPromise = this.login(username, password)
             .then(function() {
-                routing.redirect('packages');
+                self.context.routing.redirect('packages');
             })
             .catch(function() {
                 if (!self.loginPromise.isCancelled()) {

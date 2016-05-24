@@ -2,8 +2,8 @@
 
 const React         = require('react');
 const ReactDOM      = require('react-dom');
+const App           = require('./../components/app.js');
 const Login         = require('./../components/routes/login.js');
-const TaskPopup     = require('./../components/taskpopup.js');
 
 module.exports = {
     path: '/{locale}/login',
@@ -13,9 +13,8 @@ module.exports = {
             routing.redirect('packages');
         }
     }],
-    controller: function() {
-        ReactDOM.render(<Login /> , document.getElementById('app'));
-        ReactDOM.render(<TaskPopup />, document.getElementById('popup'));
+    controller: function(request, routing) {
+        ReactDOM.render(<App routing={routing}><Login /></App>, document.getElementById('app'));
     }
 };
 

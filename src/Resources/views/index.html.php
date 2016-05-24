@@ -10,7 +10,6 @@
 <body>
 
 <div id="app"></div>
-<div id="popup"></div>
 
 <script type="application/javascript" src="<?= $js ?>"></script>
 </body>

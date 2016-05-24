@@ -2,13 +2,15 @@
 
 const React         = require('react');
 const translate     = require('./../helpers/translate.js');
-const routing       = require('./../helpers/routing.js');
 const isEqual       = require('lodash/isEqual');
 
 
 var Translation = React.createClass({
 
     componentIsMounted: false,
+    contextTypes: {
+        routing: React.PropTypes.object
+    },
 
     getInitialState: function() {
         return {
@@ -26,8 +28,8 @@ var Translation = React.createClass({
         var self = this;
 
         this.componentIsMounted = true;
-console.log(routing);
-        translate.fetchData(this.props.domain, routing.getLanguage())
+
+        translate.fetchData(this.props.domain, this.context.routing.getLanguage())
             .then(function(data) {
                 if (self.componentIsMounted) {
                     self.setState({data: data});
