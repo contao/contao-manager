@@ -66,7 +66,7 @@ var Routing = {
     },
 
     isCurrentRoute: function (routeName) {
-        return routeName === currentRoute;
+        return routeName === this.currentRoute;
     },
 
     setCurrentRoute: function (routeName) {
