@@ -211,12 +211,18 @@
             max-width: 128px;
             height: 30px;
             margin-right: 2px;
-            background: $orange-button;
-            border: none;
-            color: #fff;
-            -webkit-text-fill-color: #fff;
+            background: #fff;
+            border: 2px solid $orange-button;
+            color: #000;
+            -webkit-text-fill-color: #000;
             font-weight: bold;
             text-align: center;
+
+            &:disabled {
+                color: #fff;
+                background: $orange-button;
+                -webkit-text-fill-color: #fff;
+            }
         }
 
         button {
