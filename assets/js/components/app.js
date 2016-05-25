@@ -14,8 +14,8 @@ var AppComponent = React.createClass({
 
     render: function() {
         return (
-            <div className="inner">
-                <div id="content">{this.props.children}</div>
+            <div id="app">
+                {this.props.children}
                 <TaskPopup />
             </div>
         )

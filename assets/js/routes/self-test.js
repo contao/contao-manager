@@ -11,6 +11,6 @@ module.exports = {
     path: '/{locale}/config/self-test',
     preController: [routeChecks.ifTensideNotOkRedirectToInstall, routeChecks.ifUserNotLoggedInRedirectToLogin],
     controller: function(request, routing) {
-        ReactDOM.render(<App routing={routing}><BoxedTrappings wide={true}><section><SelfTest /></section></BoxedTrappings></App>, document.getElementById('app'));
+        ReactDOM.render(<App routing={routing}><BoxedTrappings wide={true}><section><SelfTest /></section></BoxedTrappings></App>, document.getElementById('react-container'));
     }
 };

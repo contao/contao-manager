@@ -26,7 +26,7 @@ module.exports = {
         }
     }],
     controller: function(request, routing) {
-        ReactDOM.render(<App routing={routing}><Install /></App>, document.getElementById('app'));
+        ReactDOM.render(<App routing={routing}><Install /></App>, document.getElementById('react-container'));
     }
 };
 

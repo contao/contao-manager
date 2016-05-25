@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div id="app"></div>
+<div id="react-container"></div>
 
 <script type="application/javascript" src="<?= $js ?>"></script>
 </body>

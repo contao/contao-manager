@@ -8,7 +8,7 @@ html {
     @include prefix(box-sizing, inherit, false, false);
 }
 
-html, body, #app {
+html, body, #react-container, #app {
     height: 100%;
 }
 

@@ -14,7 +14,7 @@ module.exports = {
         }
     }],
     controller: function(request, routing) {
-        ReactDOM.render(<App routing={routing}><Login /></App>, document.getElementById('app'));
+        ReactDOM.render(<App routing={routing}><Login /></App>, document.getElementById('react-container'));
     }
 };
 

@@ -13,6 +13,6 @@ module.exports = {
     path: '/{locale}/files/app-kernel',
     preController: [routeChecks.ifTensideNotOkRedirectToInstall, routeChecks.ifUserNotLoggedInRedirectToLogin],
     controller: function(request, routing) {
-        ReactDOM.render(<App routing={routing}><File apiEndpoint="/api/v1/AppKernel.php" options={{ mode: 'php', indentUnit: 4 }} /></App>, document.getElementById('app'));
+        ReactDOM.render(<App routing={routing}><File apiEndpoint="/api/v1/AppKernel.php" options={{ mode: 'php', indentUnit: 4 }} /></App>, document.getElementById('react-container'));
     }
 };
