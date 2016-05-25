@@ -176,8 +176,6 @@ var PackagesComponent = React.createClass({
             selected={this.state.searchRequest.type}
             keywords={this.state.searchRequest.keywords}
             onKeywordsChange={this.updateKeywordsOnType}
-            onApplyChanges={this.handleApplyButton}
-            onResetChanges={this.handleResetButton}
          />;
 
         if (this.state.loading) {
@@ -215,6 +213,14 @@ var PackagesComponent = React.createClass({
 
                 {packages}
 
+                <div id="package-actions" className={this.state.showApplyAndResetButtons ? 'active' : ''}>
+                    <div className="inner">
+                        <p>You have unconfirmed changes.</p>
+                        <button className="apply" onClick={this.handleApplyButton}>Apply changes</button>
+                        <button className="reset" onClick={this.handleResetButton}>Reset changes</button>
+                    </div>
+                </div>
+
             </Trappings>
         );
     }
@@ -251,26 +257,16 @@ var SearchTypeComponent = React.createClass({
             )
         }
 
-        if (true === this.props.showApplyAndResetButtons) {
-            return  (
-                <section className="search">
+        return  (
+            <section className="search">
 
-                    <button onClick={this.props.onApplyChanges}>Apply changes</button>
-                    <button onClick={this.props.onResetChanges}>Reset changes</button>
-                </section>
-            );
-        } else {
-            return  (
-                <section className="search">
+                <input id="search" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} value={this.props.keywords} />
+                <button>Check for Updates</button>
 
-                    <input id="search" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} value={this.props.keywords} />
-                    <button>Check for Updates</button>
+                {typeFilter}
 
-                    {typeFilter}
-
-                </section>
-            );
-        }
+            </section>
+        );
     }
 });
 

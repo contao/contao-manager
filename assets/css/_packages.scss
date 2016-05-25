@@ -297,3 +297,45 @@
         }
     }
 }
+
+#package-actions {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    background: #000;
+    background: rgba(0,0,0, 0.8);
+    color: #fff;
+    @include prefix(transition, height .4s ease, false);
+
+    &.active {
+        height: 80px;
+    }
+
+    .inner {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 20px 0;
+        text-align: right;
+    }
+
+    p {
+        display: inline;
+        font-weight: bold;
+    }
+
+    button {
+        width: auto;
+        margin-left: 15px;
+        padding: 0 15px;
+
+        &.apply {
+            background: $green-button;
+        }
+
+        &.reset {
+            background: $red-button;
+        }
+    }
+}
