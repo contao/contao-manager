@@ -17,12 +17,12 @@ var PackagesComponent = React.createClass({
         return {
             mode: 'packages',
             loading: false,
-            showApplyAndResetButtons: false,
             searchRequest: {
                 keywords: '',
                 threshold: 20
             },
-            packages: []
+            packages: [],
+            changes: {}
         };
     },
 
@@ -71,11 +71,11 @@ var PackagesComponent = React.createClass({
             })
             .then(function(response) {
                 // @todo should this not return a status too?
-                self.setState({packages: response, loading: false, showApplyAndResetButtons: false});
+                self.setState({packages: response, loading: false, changes: {}});
             })
             .catch(function() {
                 // @todo: what if request failed?
-                self.setState({loading: false, showApplyAndResetButtons: false});
+                self.setState({loading: false, changes: {}});
             });
 
         this.requests.push(req);
@@ -88,11 +88,11 @@ var PackagesComponent = React.createClass({
         var req = request.createRequest('/api/v1/packages')
             .then(function(response) {
                 // @todo should this not return a status too?
-                self.setState({packages: response, loading: false, showApplyAndResetButtons: false});
+                self.setState({packages: response, loading: false, changes: {}});
             })
             .catch(function() {
                 // @todo: what if request failed?
-                self.setState({loading: false, showApplyAndResetButtons: false});
+                self.setState({loading: false, changes: {}});
             });
 
         this.requests.push(req);
@@ -122,16 +122,6 @@ var PackagesComponent = React.createClass({
         this.updatePackageList(mode, searchRequest);
     },
 
-    handleTypeChange: function(e) {
-        var searchRequest = merge({}, this.state.searchRequest, {type: e.target.value});
-
-        this.setState({
-            searchRequest: searchRequest
-        });
-
-        this.updatePackageList('search', searchRequest);
-    },
-
     handleApplyButton: function(e) {
         e.preventDefault();
 
@@ -144,12 +134,17 @@ var PackagesComponent = React.createClass({
         this.updatePackageList('packages');
     },
 
-    handlePackageModified: function(data) {
+    handlePackageModified: function(name, data) {
+        var changes = this.state.changes;
+
         if (data.modified) {
-            this.setState({showApplyAndResetButtons: true});
-        } else {
-            this.setState({showApplyAndResetButtons: false});
+            changes[name] = data;
+        } else if (changes.hasOwnProperty(name)) {
+            delete changes[name];
         }
+
+        this.setState({changes: changes});
+
         // @todo request the api to modify the package
     },
 
@@ -166,7 +161,6 @@ var PackagesComponent = React.createClass({
         var self     = this;
         var search = <SearchTypeComponent
             mode={this.state.mode}
-            showApplyAndResetButtons={this.state.showApplyAndResetButtons}
             closeSearch={this.closeSearch}
             keywords={this.state.searchRequest.keywords}
             onKeywordsChange={this.updateKeywordsOnType}
@@ -207,7 +201,7 @@ var PackagesComponent = React.createClass({
 
                 {packages}
 
-                <div id="package-actions" className={this.state.showApplyAndResetButtons ? 'active' : ''}>
+                <div id="package-actions" className={Object.keys(this.state.changes).length > 0 ? 'active' : ''}>
                     <div className="inner">
                         <p>You have unconfirmed changes.</p>
                         <button className="apply" onClick={this.handleApplyButton}>Apply changes</button>

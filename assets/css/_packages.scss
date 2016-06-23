@@ -186,6 +186,10 @@ section.package-actions {
             }
         }
 
+        &.validating button svg {
+            @include prefix(animation, validating-release 2s linear infinite);
+        }
+
         time {
             display: none;
 
@@ -293,5 +297,11 @@ section.package-actions {
         &.reset {
             background: $red-button;
         }
+    }
+}
+
+@include keyframes(validating-release) {
+    100% {
+        @include prefix(transform, rotate(360deg));
     }
 }

@@ -45,8 +45,7 @@ var PackageComponent = React.createClass({
             wasModified = true;
         }
 
-        this.props.onModified.call(this, {
-            package: this.props.name,
+        this.props.onModified.call(this, this.props.name, {
             modified: wasModified,
             removed: this.state.removed,
             enabled: this.state.enabled,
@@ -76,6 +75,14 @@ var PackageComponent = React.createClass({
     handleConstraintChange: function(newConstraint) {
         this.setState({
             constraint: newConstraint
+        });
+    },
+
+    handleRevert: function(e) {
+        e.preventDefault();
+        this.setState({
+            removed: false,
+            constraint: this.initialConstraint
         });
     },
 
@@ -109,7 +116,7 @@ var PackageComponent = React.createClass({
         var release = '';
         var hintData = this.getHintMessageData();
         if ('' !== hintData[0]) {
-            hint = <HintComponent><Translation domain="package" placeholders={hintData[1]}>{hintData[0]}</Translation></HintComponent>
+            hint = <HintComponent><Translation domain="package" placeholders={hintData[1]}>{hintData[0]}</Translation> <a href="#" className="first" onClick={this.handleRevert}>Revert Changes</a></HintComponent>
         }
 
         if ('packages' === this.props.mode) {
@@ -234,24 +241,24 @@ var ReleaseComponent = React.createClass({
     getInitialState: function() {
         return {
             constraint: this.props.constraint,
-            constraintInputDisabled: true
+            constraintInputDisabled: true,
+            validating: false
         };
     },
 
     componentDidUpdate: function(prevProps, prevState) {
         this.refs.constraintInput.focus();
+
+        if (this.state.constraintInputDisabled && this.state.constraint != this.props.constraint) {
+            this.setState({constraint: this.props.constraint});
+        }
     },
 
     handleEnableConstraintInput: function() {
         this.setState({constraintInputDisabled: false});
     },
 
-    handleDisableConstraintInput: function() {
-        this.setState({constraintInputDisabled: true});
-    },
-
     handleConstraintBlur: function(e) {
-        this.handleDisableConstraintInput();
         this.validateConstraint();
     },
 
@@ -276,6 +283,7 @@ var ReleaseComponent = React.createClass({
 
     validateConstraint: function() {
         var self = this;
+        this.setState({validating: true});
 
         request.createRequest('/api/v1/constraint', {
             method: 'POST',
@@ -287,16 +295,18 @@ var ReleaseComponent = React.createClass({
                 self.fireConstraintChangeEvent(self.props.initialConstraint);
             } else {
                 self.fireConstraintChangeEvent(self.state.constraint);
+                self.setState({constraintInputDisabled: true});
             }
+            self.setState({validating: false});
         }).catch(function() {
+            self.setState({validating: false});
             // @todo: what if request failed?
         });
     },
 
     render: function() {
-
         return (
-            <div className="release">
+            <div className={'release' + (this.state.validating ? ' validating' : '')}>
                 <fieldset>
                     <input type="text" ref="constraintInput" value={this.state.constraint} onBlur={this.handleConstraintBlur} onChange={this.handleConstraintChange} onKeyUp={this.handleConstraintKey} disabled={this.state.constraintInputDisabled} />
                     <button onClick={this.handleEnableConstraintInput}>
