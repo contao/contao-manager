@@ -1,105 +1,55 @@
 @import "defaults";
 
-.search {
+section.package-actions {
     position: relative;
-    max-width: 964px;
-    margin: 0 auto 50px;
-
-    input {
-        margin-bottom: 10px;
-    }
+    margin-bottom: 50px;
+    text-align: center;
 
     button {
         height: 38px;
         border: 1px solid $border-color;
     }
 
-    @include screen(1024) {
-        padding-right: 212px;
+    button.cancel {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 38px;
+        margin: 0;
+        color: $text-color;
+        border: none;
+        background: none;
+    }
 
+    input[type=text] {
+        display: none;
+        margin-bottom: 10px;
+        padding-right: 40px;
+    }
+
+    &.search-active {
         input[type=text] {
-            float: right;
-            width: 540px;
+            display: block;
         }
+
+        button.cancel {
+            display: block;
+        }
+    }
+
+    @include screen(1024) {
 
         button {
             width: 200px;
-        }
-    }
-}
-
-.type {
-    margin-bottom: 30px;
-    padding: 15px 20px 14px 0;
-    font-size: 16px;
-    border-top: 1px solid #ccbfa2;
-    border-bottom: 1px solid #ccbfa2;
-
-    .close {
-        float: right;
-        color: $text-color;
-
-        i {
-            position: relative;
-            top: -1px;
-            right: -6px;
-            margin: 0;
-            color: $text-color;
-            @include prefix(transform, rotate(45deg) scale(0.75));
+            margin: 0 15px;
         }
 
-        svg {
-            width: 11px;
-            height: 11px;
-            margin-right: 2px;
-            fill: $text-color;
-        }
-    }
-
-    legend {
-        float: left;
-        font-weight: bold;
-    }
-
-    ul {
-        margin: 0;
-        padding: 0;
-    }
-
-    li {
-        display: inline-block;
-        margin-left: 30px;
-    }
-
-    input[type=radio]:checked + label {
-        color: #2a7887;
-    }
-}
-
-.sorting {
-    padding-right: 35px;
-    text-align: right;
-
-    li {
-        display: inline-block;
-    }
-
-    a {
-        display: block;
-        padding: 0 15px;
-        font-family: $font-regular;
-        color: $text-color;
-        line-height: 28px;
-
-        &.active,
-        &.asc,
-        &.desc {
-            background: #f0ede4;
-            border-bottom: 2px solid #2a7887;
-        }
-
-        &:hover {
-            text-decoration: none;
+        input[type=text] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
         }
     }
 }

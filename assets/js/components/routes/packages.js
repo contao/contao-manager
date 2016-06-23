@@ -4,7 +4,6 @@ const React         = require('react');
 const Trappings     = require('../trappings/main.js');
 const Package       = require('../fragments/package.js');
 const request       = require('../../helpers/request.js');
-const RadioWidget   = require('../widgets/radio.js');
 const Translation   = require('../translation.js');
 const forEach       = require('lodash/forEach');
 const merge         = require('lodash/merge');
@@ -21,7 +20,6 @@ var PackagesComponent = React.createClass({
             showApplyAndResetButtons: false,
             searchRequest: {
                 keywords: '',
-                type: 'installed',
                 threshold: 20
             },
             packages: []
@@ -44,7 +42,6 @@ var PackagesComponent = React.createClass({
 
         searchRequest = searchRequest || {
             keywords: '',
-            type: 'installed',
             threshold: 20
         };
 
@@ -64,7 +61,7 @@ var PackagesComponent = React.createClass({
 
         var searchPayload = {
             keywords:   searchRequest.keywords,
-            type:       searchRequest.type,
+            type:       'contao',
             threshold:  searchRequest.threshold
         };
 
@@ -101,6 +98,17 @@ var PackagesComponent = React.createClass({
         this.requests.push(req);
     },
 
+    closeSearch: function() {
+        var searchRequest = merge({}, this.state.searchRequest, {keywords: ''});
+
+        this.setState({
+            mode: 'packages',
+            searchRequest: searchRequest
+        });
+
+        this.updatePackageList('packages', searchRequest);
+    },
+
     updateKeywordsOnType: function(e) {
         e.preventDefault();
         var searchRequest = merge({}, this.state.searchRequest, {keywords: e.target.value});
@@ -122,18 +130,6 @@ var PackagesComponent = React.createClass({
         });
 
         this.updatePackageList('search', searchRequest);
-    },
-
-    handleCloseButton: function(e) {
-        e.preventDefault();
-        var searchRequest = merge({}, this.state.searchRequest, {keywords: ''});
-
-        this.setState({
-            mode: 'packages',
-            searchRequest: searchRequest
-        });
-
-        this.updatePackageList('packages', searchRequest);
     },
 
     handleApplyButton: function(e) {
@@ -171,9 +167,7 @@ var PackagesComponent = React.createClass({
         var search = <SearchTypeComponent
             mode={this.state.mode}
             showApplyAndResetButtons={this.state.showApplyAndResetButtons}
-            onTypeChange={this.handleTypeChange}
-            onClose={this.handleCloseButton}
-            selected={this.state.searchRequest.type}
+            closeSearch={this.closeSearch}
             keywords={this.state.searchRequest.keywords}
             onKeywordsChange={this.updateKeywordsOnType}
          />;
@@ -228,42 +222,55 @@ var PackagesComponent = React.createClass({
 
 var SearchTypeComponent = React.createClass({
 
-    options: [{
-            value: 'installed',
-            label: <Translation domain="packages">My installed packages</Translation>
-        }, {
-            value: 'contao',
-            label: <Translation domain="packages">Available packages for Contao</Translation>
-        }, {
-            value: 'all',
-            label: <Translation domain="packages">All available packages</Translation>
+    getInitialState: function() {
+        return {
+            searchActive: false
+        };
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+        if (!prevState.searchActive && this.state.searchActive) {
+            this.refs.searchInput.focus();
         }
-    ],
+    },
+
+    toggleSearch: function() {
+        this.setState({searchActive: true});
+    },
+
+    handleSearchBlur: function() {
+        if ('' == this.refs.searchInput.value) {
+            this.setState({searchActive: false});
+        }
+    },
+
+    handleSearchKey: function(e) {
+        if ('Escape' == e.key) {
+            this.props.closeSearch();
+            this.setState({searchActive: false});
+        }
+    },
+
+    handleCancel: function(e) {
+        e.preventDefault();
+        this.props.closeSearch();
+        this.setState({searchActive: false});
+    },
 
     render: function() {
+        var sectionClass = 'package-actions';
 
-        var typeFilter = '';
-
-        if ('search' === this.props.mode) {
-            typeFilter = (
-                <fieldset className="type">
-                    <legend><Translation domain="packages">Search in</Translation></legend>
-                    <a href="#close" className="close" onClick={this.props.onClose}>
-                        <i className="icono-cross" />
-                        <Translation domain="packages">Close search</Translation>
-                    </a>
-                    <RadioWidget options={this.options} onChange={this.props.onTypeChange} name="searchType" selected={this.props.selected}/>
-                </fieldset>
-            )
+        if (this.state.searchActive) {
+            sectionClass = sectionClass + ' search-active';
         }
 
         return  (
-            <section className="search">
+            <section className={sectionClass}>
 
-                <input id="search" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} value={this.props.keywords} />
-                <button>Check for Updates</button>
-
-                {typeFilter}
+                <button className="update">Check for Updates</button>
+                <button className="search" onClick={this.toggleSearch}>Search packages </button>
+                <input id="search" ref="searchInput" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} onBlur={this.handleSearchBlur} onKeyUp={this.handleSearchKey} value={this.props.keywords} />
+                <button className="cancel" onClick={this.handleCancel}>X</button>
 
             </section>
         );
