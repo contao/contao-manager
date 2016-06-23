@@ -68,7 +68,6 @@ section.package-actions {
     .warning {
         padding: 0 20px;
         font: 12px/1.8 $font-regular;
-        text-align: center;
         background: #e8c8bc;
         border-radius: 2px 2px 0 0;
 
@@ -96,7 +95,7 @@ section.package-actions {
             top: 6px;
             width: 26px;
             height: 23px;
-            margin-right: 5px;
+            margin-right: 10px;
             fill: $link-color;
         }
 
@@ -107,7 +106,7 @@ section.package-actions {
             svg {
                 width: 8px;
                 height: 8px;
-                margin-right: 2px;
+                margin-right: 5px;
                 fill: $link-color;
             }
         }

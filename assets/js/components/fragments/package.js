@@ -56,7 +56,9 @@ var PackageComponent = React.createClass({
 
     handleRemoveButton: function(e) {
         this.setState({
-            removed: true
+            removed: true,
+            enabled: this.props.enabled,
+            constraint: ''
         });
     },
 
@@ -82,6 +84,7 @@ var PackageComponent = React.createClass({
         e.preventDefault();
         this.setState({
             removed: false,
+            enabled: this.props.enabled,
             constraint: this.initialConstraint
         });
     },
@@ -96,12 +99,30 @@ var PackageComponent = React.createClass({
     },
 
     getHintMessageData: function() {
-        if (this.state.removed && this.state.constraint !== this.initialConstraint) {
-            return ['You marked this package for removal and also changed the constraint. Note that changing the constraint will not have any effect, as the package will be removed.'];
-        } else if (this.state.removed) {
-            return ['You marked this package for removal. The package will only be removed when you apply the changes.'];
+        if (this.state.removed) {
+            return ['This package will be removed when you apply the changes.'];
+        } else if (this.state.enabled !== this.props.enabled && this.state.constraint !== this.initialConstraint) {
+            if (this.state.enabled) {
+                return [
+                    'This package will be enabled and the constraints will be changed from "%old_constraint%" to "%new_constraint%" when you apply the changes.',
+                    {
+                        old_constraint: this.initialConstraint,
+                        new_constraint: this.state.constraint
+                    }
+                ];
+            } else {
+                return [
+                    'This package will be disabled and the constraints will be changed from "%old_constraint%" to "%new_constraint%" when you apply the changes.',
+                    {
+                        old_constraint: this.initialConstraint,
+                        new_constraint: this.state.constraint
+                    }
+                ];
+            }
+        } else if (this.state.enabled !== this.props.enabled) {
+            return this.state.enabled ? ['This package will be enabled when you apply the changes.'] : ['This package will be disabled when you apply the changes.'];
         } else if (this.state.constraint !== this.initialConstraint) {
-            return ['You changed the constraint of this package form "%old_constraint%" to "%new_constraint%". The package will only be updated when you apply the changes.',
+            return ['The constraint for this package will be changed from "%old_constraint%" to "%new_constraint%" when you apply the changes.',
                 {
                     old_constraint: this.initialConstraint,
                     new_constraint: this.state.constraint
@@ -116,7 +137,7 @@ var PackageComponent = React.createClass({
         var release = '';
         var hintData = this.getHintMessageData();
         if ('' !== hintData[0]) {
-            hint = <HintComponent><Translation domain="package" placeholders={hintData[1]}>{hintData[0]}</Translation> <a href="#" className="first" onClick={this.handleRevert}>Revert Changes</a></HintComponent>
+            hint = <HintComponent handleRevert={this.handleRevert}><Translation domain="package" placeholders={hintData[1]}>{hintData[0]}</Translation></HintComponent>
         }
 
         if ('packages' === this.props.mode) {
@@ -179,40 +200,40 @@ var ActionsComponent = React.createClass({
 
         var buttons = [];
 
-        if (this.props.canBeRemoved) {
-            buttons.push(
-                <button key="remove" className="uninstall" onClick={this.props.onRemove} disabled={this.props.isRemoved}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.8 105.6"><path d="M0 8.3h31.8V0H59v8.3h31.8v12.5H0V8.3zm8.3 17.8h75.8v79.5H8.3m64-70.7h-7.6v62.8h7.5l.1-62.8zm-22.7 0h-7.5v62.8h7.5V34.9zm-22.8.5h-7.5v62.8h7.5V35.4z"/></svg>
-                    Remove
-                </button>
-            );
-        }
-
         if (this.props.canBeInstalled) {
             buttons.push(
                 <button key="install" className="install" onClick={this.props.onInstall} disabled={this.props.isInstalled}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.8 105.6"><path d="M0 8.3h31.8V0H59v8.3h31.8v12.5H0V8.3zm8.3 17.8h75.8v79.5H8.3m64-70.7h-7.6v62.8h7.5l.1-62.8zm-22.7 0h-7.5v62.8h7.5V34.9zm-22.8.5h-7.5v62.8h7.5V35.4z"/></svg>
-                    Install
+                    &nbsp;Install
                 </button>
             );
         }
 
-        if (this.props.canBeEnabledOrDisabled) {
+        if (this.props.canBeEnabledOrDisabled && !this.props.isRemoved) {
             if (this.props.isEnabled) {
                 buttons.push(
-                    <button key="disable" className="disable">
+                    <button key="disable" className="disable" onClick={this.props.onEnableOrDisable}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 448"><path className="st0" d="M320 256c0-47.4-25.7-88.7-64-110.9V74.9c74.6 26.4 128 97.5 128 181.1 0 106-86 192-192 192S0 362 0 256c0-83.6 53.4-154.7 128-181.1v70.2C89.7 167.3 64 208.6 64 256c0 70.7 57.3 128 128 128s128-57.3 128-128zm-160-64V32c0-17.7 14.3-32 32-32s32 14.3 32 32v160c0 17.7-14.3 32-32 32s-32-14.3-32-32z"/></svg>
-                        Disable
+                        &nbsp;Disable
                     </button>
                 );
             } else {
                 buttons.push(
-                    <button key="enable" className="enable">
+                    <button key="enable" className="enable" onClick={this.props.onEnableOrDisable}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 448"><path className="st0" d="M320 256c0-47.4-25.7-88.7-64-110.9V74.9c74.6 26.4 128 97.5 128 181.1 0 106-86 192-192 192S0 362 0 256c0-83.6 53.4-154.7 128-181.1v70.2C89.7 167.3 64 208.6 64 256c0 70.7 57.3 128 128 128s128-57.3 128-128zm-160-64V32c0-17.7 14.3-32 32-32s32 14.3 32 32v160c0 17.7-14.3 32-32 32s-32-14.3-32-32z"/></svg>
-                        Enable
+                        &nbsp;Enable
                     </button>
                 );
             }
+        }
+
+        if (this.props.canBeRemoved) {
+            buttons.push(
+                <button key="remove" className="uninstall" onClick={this.props.onRemove} disabled={this.props.isRemoved}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.8 105.6"><path d="M0 8.3h31.8V0H59v8.3h31.8v12.5H0V8.3zm8.3 17.8h75.8v79.5H8.3m64-70.7h-7.6v62.8h7.5l.1-62.8zm-22.7 0h-7.5v62.8h7.5V34.9zm-22.8.5h-7.5v62.8h7.5V35.4z"/></svg>
+                    &nbsp;Remove
+                </button>
+            );
         }
 
         return (
@@ -225,6 +246,10 @@ var HintComponent = React.createClass({
     render: function() {
         return (
             <div className="warning hint">
+                <a href="#" className="close" onClick={this.props.handleRevert}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31.2 31.2"><path d="M18.4 15.6l12.8 12.7-2.9 2.9-12.7-12.8L2.9 31.2 0 28.3l12.8-12.7L0 2.9 2.9 0l12.7 12.8L28.3 0l2.9 2.9-12.8 12.7z"/></svg>
+                    Revert Changes
+                </a>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80.1 71.6">
                     <path d="M79.1 59.6L47 4c-1.4-2.5-4.1-4-6.9-4s-5.5 1.5-6.9 4L1.1 59.6c-1.4 2.5-1.4 5.5 0 8s4.1 4 6.9 4h64.1c2.9 0 5.5-1.5 6.9-4 1.5-2.5 1.5-5.6.1-8zM8 63.6L40 8l32.1 55.5-64.1.1z" />
                     <path d="M36 26.5v16.7c0 2.2 1.8 4 4 4s4-1.8 4-4V26.5c0-2.2-1.8-4-4-4s-4 1.8-4 4z" />
@@ -247,7 +272,7 @@ var ReleaseComponent = React.createClass({
     },
 
     componentDidUpdate: function(prevProps, prevState) {
-        this.refs.constraintInput.focus();
+        this.refs.constraintInput && this.refs.constraintInput.focus();
 
         if (this.state.constraintInputDisabled && this.state.constraint != this.props.constraint) {
             this.setState({constraint: this.props.constraint});
@@ -305,6 +330,10 @@ var ReleaseComponent = React.createClass({
     },
 
     render: function() {
+        if (this.state.constraint == '') {
+            return (<div></div>);
+        }
+
         return (
             <div className={'release' + (this.state.validating ? ' validating' : '')}>
                 <fieldset>
