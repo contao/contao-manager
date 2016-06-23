@@ -3,6 +3,7 @@
 const React         = require('react');
 const Trappings     = require('../trappings/main.js');
 const Package       = require('../fragments/package.js');
+const Loader        = require('../fragments/loader.js');
 const request       = require('../../helpers/request.js');
 const Translation   = require('../translation.js');
 const forEach       = require('lodash/forEach');
@@ -167,8 +168,7 @@ var PackagesComponent = React.createClass({
          />;
 
         if (this.state.loading) {
-            // @todo
-            packages = 'Hello, I can be a beautiful ajax spinner.';
+            packages = <Loader>{'search' === this.state.mode ? 'Searching packages' : 'Loading'} …</Loader>;
         } else {
             packages = [];
 
