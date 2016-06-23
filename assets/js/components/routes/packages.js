@@ -168,7 +168,11 @@ var PackagesComponent = React.createClass({
          />;
 
         if (this.state.loading) {
-            packages = <Loader>{'search' === this.state.mode ? 'Searching packages' : 'Loading'} …</Loader>;
+            if ('search' === this.state.mode) {
+                packages = <Loader>Searching for packages matching <i>{this.state.searchRequest.keywords}</i> …</Loader>;
+            } else {
+                packages = <Loader>Loading …</Loader>
+            }
         } else {
             packages = [];
 
