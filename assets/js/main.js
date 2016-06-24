@@ -38,6 +38,11 @@ router.routed.add(function(request, data) {
         if (undefined !== data.route.preController && isArray(data.route.preController)) {
             forIn(data.route.preController, function(callback) {
                 if (isFunction(callback)) {
+                    // No need to check for more callbacks if aborted
+                    if (false === renderController) {
+                        return;
+                    }
+
                     renderController = callback(promiseResults, routing);
                 }
             });

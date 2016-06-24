@@ -8,6 +8,12 @@ const Login         = require('./../components/routes/login.js');
 module.exports = {
     path: '/{locale}/login',
     preController: [function(results, routing) {
+        // Not configured yet
+        if (false === results['tenside_configured']) {
+            routing.redirect('install');
+            return false;
+        }
+
         // Already logged in
         if (true === results['user_loggedIn']) {
             routing.redirect('packages');
