@@ -21,7 +21,7 @@ var Widget = React.createClass({
 
     getInitialState: function() {
         return {
-            empty: true
+            value: this.props.value ? this.props.value : ''
         };
     },
 
@@ -32,11 +32,11 @@ var Widget = React.createClass({
 
     handleChange: function(e) {
         this.setState({
-            empty: '' === e.target.value
+            value: e.target.value
         });
 
         if (undefined !== this.props.onChange){
-            this.props.onChange.call(this, e, this.props);
+            this.props.onChange.call(this, this.state.value, this.props);
         }
     },
 
@@ -48,7 +48,7 @@ var Widget = React.createClass({
         if (undefined !== this.props.error && '' !== this.props.error) {
             errorMessage = <ErrorMessage message={this.props.error} />;
             cssClasses.push('invalid');
-        } else if (!this.state.empty) {
+        } else if ('' !== this.state.value) {
             cssClasses.push('valid');
         }
 
@@ -58,7 +58,7 @@ var Widget = React.createClass({
             <div className={cssClasses}>
                 {errorMessage}
                 <label htmlFor={'ctrl_' + this.props.name}>{this.props.label}</label>
-                <input type={this.props.type} id={'ctrl_' + this.props.name} name={this.props.name} placeholder={this.props.placeholder} disabled={this.props.disabled} onChange={this.handleChange} />
+                <input type={this.props.type} id={'ctrl_' + this.props.name} value={this.state.value} name={this.props.name} placeholder={this.props.placeholder} disabled={this.props.disabled} onChange={this.handleChange} />
             </div>
         );
     }

@@ -44,10 +44,9 @@ var InstallComponent = React.createClass({
             });
     },
 
-    validateConstraint: function(e) {
+    validateConstraint: function(value) {
 
-        var self  = this,
-            value = e.target.value;
+        var self  = this;
 
         if ('' === value) {
             self.setState({constraintErrorMessage: ''});
@@ -244,23 +243,30 @@ var InstallComponent = React.createClass({
 
 var UsernameComponent = React.createClass({
 
-    password: '',
-    passwordConfirm: '',
-
     getInitialState: function() {
         return {
             passwordsErrorMessage: ''
         };
     },
 
-    handlePasswordCompare: function(e, props) {
+    handlePasswordCompare: function(value, props) {
+        // @todo fix this, this is not working
+        var password = '',
+            passwordConfirm = '',
+            invalid,
+            minPasswordLenth = 8;
+
         if (props.name == 'password') {
-            this.password = e.target.value;
+            password = value;
         } else {
-            this.passwordConfirm = e.target.value;
+            passwordConfirm = value;
         }
 
-        if ('' === this.password || '' === this.passwordConfirm || this.password === this.passwordConfirm) {
+        invalid = password.length < minPasswordLenth
+            || ('' !== password && '' !== passwordConfirmpassword !== passwordConfirm);
+
+
+        if (!invalid) {
             this.setState({passwordsErrorMessage: ''});
 
             if (undefined !== this.props.onPasswordNoError){
@@ -268,7 +274,11 @@ var UsernameComponent = React.createClass({
             }
 
         } else {
-            this.setState({passwordsErrorMessage: <Translation domain="install">Passwords do not match!</Translation>});
+            this.setState({
+                passwordsErrorMessage: <Translation domain="install" placeholders={{min: minPasswordLenth}}>
+                    Passwords do not match or are shorter than %min% characters!
+                </Translation>
+            });
 
             if (undefined !== this.props.onPasswordError){
                 this.props.onPasswordError.call(this);

@@ -49,12 +49,12 @@ var LoginComponent = React.createClass({
         this.componentIsMounted = false;
     },
 
-    handleUsernameChange: function(e) {
-        this.setState({username: e.target.value, isLoggingIn: false, credentialsIncorrect: false});
+    handleUsernameChange: function(value) {
+        this.setState({username: value, isLoggingIn: false, credentialsIncorrect: false});
     },
 
-    handlePasswordChange: function(e) {
-        this.setState({password: e.target.value, isLoggingIn: false, credentialsIncorrect: false});
+    handlePasswordChange: function(value) {
+        this.setState({password: value, isLoggingIn: false, credentialsIncorrect: false});
     },
 
     handleLogin: function(e) {
