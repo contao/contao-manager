@@ -33,19 +33,23 @@ router.routed.add(function(request, data) {
         });
 
         // Check the preController callbacks now
+        var renderController = true;
+
         if (undefined !== data.route.preController && isArray(data.route.preController)) {
             forIn(data.route.preController, function(callback) {
                 if (isFunction(callback)) {
-                    callback(promiseResults, routing);
+                    renderController = callback(promiseResults, routing);
                 }
             });
         }
 
-        // Set the current route
-        routing.setCurrentRoute(data.route.name);
+        if (renderController) {
+            // Set the current route
+            routing.setCurrentRoute(data.route.name);
 
-        // Call the controller
-        data.route.controller(request, routing)
+            // Call the controller
+            data.route.controller(request, routing)
+        }
     });
 });
 

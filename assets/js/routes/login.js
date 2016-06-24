@@ -11,7 +11,10 @@ module.exports = {
         // Already logged in
         if (true === results['user_loggedIn']) {
             routing.redirect('packages');
+            return false;
         }
+
+        return true;
     }],
     controller: function(request, routing) {
         ReactDOM.render(<App routing={routing}><Login /></App>, document.getElementById('react-container'));

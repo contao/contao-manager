@@ -13,7 +13,8 @@ module.exports = {
             && true === results['project_created']
             && true === results['project_installed']
         ) {
-            return routing.redirect('login');
+            routing.redirect('login');
+            return false;
         }
 
         // Configured but not logged in yet (and not installed or not
@@ -22,8 +23,11 @@ module.exports = {
         if (true === results['tenside_configured']
             && false === results['user_loggedIn']
         ) {
-            return routing.redirect('login');
+            routing.redirect('login');
+            return false;
         }
+
+        return true;
     }],
     controller: function(request, routing) {
         ReactDOM.render(<App routing={routing}><Install /></App>, document.getElementById('react-container'));
