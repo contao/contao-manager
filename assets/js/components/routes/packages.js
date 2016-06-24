@@ -157,7 +157,7 @@ var PackagesComponent = React.createClass({
         var packages = null;
         var self     = this;
         var search = <SearchTypeComponent
-            mode={this.state.mode}
+            disableButtons={Object.keys(this.state.changes).length > 0 || 'packages' !== this.state.mode}
             closeSearch={this.closeSearch}
             keywords={this.state.searchRequest.keywords}
             onKeywordsChange={this.updateKeywordsOnType}
@@ -180,7 +180,7 @@ var PackagesComponent = React.createClass({
                     description={packageData.description}
                     licenses={packageData.license}
                     constraint={packageData.constraint}
-                    icon={packageData.extra.icon}
+                    icon={packageData.extra && packageData.extra.icon}
                     installed={packageData.installed}
                     enabled={true}
                     time={packageData.time}
@@ -264,8 +264,8 @@ var SearchTypeComponent = React.createClass({
         return  (
             <section className={sectionClass}>
 
-                <button className="update" disabled={'packages' !== this.props.mode}>Check for Updates</button>
-                <button className="search" disabled={'packages' !== this.props.mode} onClick={this.toggleSearch}>Search packages </button>
+                <button className="update" disabled={this.props.disableButtons}>Check for Updates</button>
+                <button className="search" disabled={this.props.disableButtons} onClick={this.toggleSearch}>Search packages </button>
                 <input id="search" ref="searchInput" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} onBlur={this.handleSearchBlur} onKeyUp={this.handleSearchKey} value={this.props.keywords} />
                 <button className="cancel" onClick={this.handleCancel}>X</button>
 
