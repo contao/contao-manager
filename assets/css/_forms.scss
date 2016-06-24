@@ -5,7 +5,7 @@ input:not([type=checkbox]):not([type=radio]) {
     height: 38px;
     padding: 0 12px;
     border: 1px solid $border-color;
-    @include border-radius(2px);
+    border-radius: 2px;
 
     &:focus {
         outline: none;
@@ -28,7 +28,7 @@ button {
     background: $text-color;
     color: #ffffff;
     font-weight: bold;
-    @include border-radius(2px);
+    border-radius: 2px;
 
     &:disabled {
         background: $border-color !important;

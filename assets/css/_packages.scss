@@ -58,7 +58,7 @@ section.package-actions {
     margin-bottom: 14px;
     background: #fff;
     border-bottom: 3px solid #ddd3bc;
-    @include border-radius(2px);
+    border-radius: 2px;
 
     .inside {
         overflow: hidden;
@@ -166,13 +166,7 @@ section.package-actions {
             font-weight: bold;
             text-align: center;
 
-            &:-moz-placeholder {
-                color: #fff;
-            }
-            &::-webkit-input-placeholder {
-                color: #fff;
-            }
-            &:-ms-input-placeholder {
+            &::placeholder {
                 color: #fff;
             }
 
@@ -195,7 +189,7 @@ section.package-actions {
         }
 
         &.validating button svg {
-            @include prefix(animation, validating-release 2s linear infinite);
+            animation: validating-release 2s linear infinite;
         }
 
         time {
@@ -275,7 +269,7 @@ section.package-actions {
     background: #000;
     background: rgba(0,0,0, 0.8);
     color: #fff;
-    @include prefix(transition, height .4s ease, false);
+    transition: height .4s ease;
 
     &.active {
         height: 80px;
@@ -308,8 +302,8 @@ section.package-actions {
     }
 }
 
-@include keyframes(validating-release) {
+@keyframes validating-release {
     100% {
-        @include prefix(transform, rotate(360deg));
+        transform: rotate(360deg);
     }
 }

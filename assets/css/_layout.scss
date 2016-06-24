@@ -1,11 +1,11 @@
 @import "defaults";
 
 html {
-    @include prefix(box-sizing, border-box, false, false);
+    box-sizing: border-box;
 }
 
 *, *:before, *:after {
-    @include prefix(box-sizing, inherit, false, false);
+    box-sizing: inherit;
 }
 
 html, body, #react-container, #app {
@@ -22,7 +22,7 @@ header, footer, main, nav, section, aside, article, figure, figcaption {
 }
 
 html, body, form, fieldset, p, div, h1, h2, h3, h4, h5, h6 {
-    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
 }
 
 body {

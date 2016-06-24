@@ -10,6 +10,8 @@ const sourcemaps    = require('gulp-sourcemaps');
 const rename        = require('gulp-rename');
 const sass          = require('gulp-sass');
 const cleanCSS      = require('gulp-clean-css');
+const postcss       = require('gulp-postcss');
+const autoprefixer  = require('autoprefixer');
 const concat        = require('gulp-concat');
 const composer      = require("gulp-composer");
 const install       = require("gulp-install");
@@ -47,10 +49,11 @@ gulp.task('scripts', function () {
 
 
 // Build bundle.css
-gulp.task('sass', function () {
+gulp.task('styles', function () {
     return gulp.src('assets/css/bundle.scss')
         .pipe(production ? sourcemaps.init() : gutil.noop())
         .pipe(sass())
+        .pipe(postcss([ autoprefixer({ browsers: ['> 5%'] }) ]))
         .pipe(production ? sourcemaps.write() : gutil.noop())
         .pipe(concat('bundle.css'))
         .pipe(production ? cleanCSS() : gutil.noop())
@@ -58,16 +61,16 @@ gulp.task('sass', function () {
 });
 
 // Build by default
-gulp.task('default', ['scripts', 'sass']);
+gulp.task('default', ['scripts', 'styles']);
 
 // Watch task
 gulp.task('watch', function() {
     gulp.watch(['./assets/js/**/*.js'], ['scripts']);
-    gulp.watch('assets/css/*.scss', ['sass']);
+    gulp.watch('assets/css/*.scss', ['styles']);
 });
 
 // Build task
-gulp.task('build', ['scripts', 'sass']);
+gulp.task('build', ['scripts', 'styles']);
 
 // Build and watch task
 gulp.task('build:watch', ['build', 'watch']);

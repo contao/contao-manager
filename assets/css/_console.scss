@@ -12,10 +12,10 @@
     text-align: center;
     background: #ffffff;
     border-bottom: 2px solid #ddd3bc;
-    @include border-radius(2px);
+    border-radius: 2px;
     z-index: 10;
     opacity: 1;
-    @include prefix(transition, opacity .5s linear, false);
+    transition: opacity .5s linear;
 
     &.console,
     &.status-error {
@@ -28,7 +28,7 @@
         color: #fff;
         font-weight: normal;
         line-height: 40px;
-        @include border-radius(2px);
+        border-radius: 2px;
     }
 
     h2, p {
@@ -56,14 +56,14 @@
             margin-right: 2px;
             margin-left: 0;
             color: $link-color;
-            @include prefix(transform, rotate(90deg) scale(0.5));
+            transform: rotate(90deg) scale(0.5);
         }
 
         &.hide {
             display: none;
 
             i {
-                @include prefix(transform, rotate(-90deg) scale(0.5));
+                transform: rotate(-90deg) scale(0.5);
             }
         }
     }
@@ -104,7 +104,7 @@
         &.success,
         &.error {
             margin: 27px auto 20px;
-            @include prefix(transform, scale(1.5));
+            transform: scale(1.5);
         }
 
         &.success i {
@@ -127,26 +127,26 @@
                 height: 16px;
                 margin-right: 1px;
                 background-color: $green-button;
-                @include prefix(animation, loading 1.4s infinite ease-in-out both);
+                animation: loading 1.4s infinite ease-in-out both;
             }
 
             .bounce1 {
-                @include prefix(animation-delay, -0.64s, false)
+                animation-delay: -0.64s;
             }
 
             .bounce2 {
-                @include prefix(animation-delay, -0.48s, false);
+                animation-delay: -0.48s;
             }
 
             .bounce3 {
-                @include prefix(animation-delay, -0.32s, false);
+                animation-delay: -0.32s;
             }
 
             .bounce4 {
-                @include prefix(animation-delay, -0.16s, false)
+                animation-delay: -0.16s;
             }
 
-            @include keyframes(loading) {
+            @keyframes loading {
                 0%, 90%, 100% { opacity: 0; }
                 20% { opacity: 1; }
             }
@@ -175,7 +175,7 @@
         top: -999em;
         left: -999em;
         opacity: 0;
-        @include prefix(transition, "top 0s .5s, left 0s .5s, opacity .5s linear", false)
+        transition: top 0s .5s, left 0s .5s, opacity .5s linear;
     }
 }
 
@@ -184,27 +184,27 @@
     height: 100%;
     width: 100%;
     z-index: -1;
-    @include prefix(animation, blur .5s forwards, false);
+    animation: blur .5s forwards;
 }
 
 .blur-out {
-    @include prefix(animation, blur-out .5s forwards, false);
+    animation: blur-out .5s forwards;
 }
 
-@include keyframes(blur) {
+@keyframes blur {
     0% {
-        @include prefix(filter, blur(0px));
+        filter: blur(0px);
     }
     100% {
-        @include prefix(filter, blur(4px));
+        filter: blur(4px);
     }
 }
 
-@include keyframes(blur-out) {
+@keyframes blur-out {
     0% {
-        @include prefix(filter, blur(4px));
+        filter: blur(4px);
     }
     100% {
-        @include prefix(filter, blur(0px));
+        filter: blur(0px);
     }
 }
