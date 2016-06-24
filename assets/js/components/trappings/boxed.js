@@ -18,8 +18,8 @@ var BoxedTrappingsComponent = React.createClass({
                         {this.props.children}
 
                         <footer>
-                            © 2016 <a href="http://association.contao.org/" target="_blank">Contao Association</a>
-                            <a href="#" className="support">Support</a>
+                            Contao Manager v1.0
+                            <a href="https://manager.contao.org" target="_blank" className="support">Support</a>
                         </footer>
                     </main>
                 </div>
