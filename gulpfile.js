@@ -69,11 +69,16 @@ gulp.task('watch', function() {
     gulp.watch('assets/css/*.scss', ['styles']);
 });
 
+gulp.task('watch-update', function() {
+    gulp.watch(['composer.lock', 'package.json'], ['update']);
+});
+
 // Build task
 gulp.task('build', ['scripts', 'styles']);
 
 // Build and watch task
 gulp.task('build:watch', ['build', 'watch']);
+gulp.task('update:build:watch', ['update', 'build', 'watch', 'watch-update']);
 
 // Update task
 gulp.task('update', function() {
