@@ -135,6 +135,17 @@ section.package-actions {
             width: 610px;
         }
 
+        .abandoned {
+            position: relative;
+            top: -3px;
+            margin-left: 10px;
+            padding: 2px 8px;
+            background: $red-button;
+            border-radius: 2px;
+            font-size: 12px;
+            color: #fff;
+        }
+
         .description {
             margin-bottom: 1em;
 

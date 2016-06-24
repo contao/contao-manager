@@ -182,8 +182,9 @@ var PackagesComponent = React.createClass({
                     constraint={packageData.constraint}
                     icon={packageData.extra && packageData.extra.icon}
                     version={packageData.version}
-                    enabled={true}
                     time={packageData.time}
+                    abandoned={packageData.abandoned}
+                    enabled={true}
                     keywords={self.state.searchRequest.keywords}
                     canBeRemoved={'packages' === self.state.mode}
                     canBeEnabledOrDisabled={'packages' === self.state.mode}

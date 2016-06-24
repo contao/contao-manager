@@ -134,6 +134,9 @@ var PackageComponent = React.createClass({
     render: function() {
         var hint = '';
         var release = '';
+        var badge = '';
+        var licenses = [];
+
         var hintData = this.getHintMessageData();
         if ('' !== hintData[0]) {
             hint = <Hint type="warning" close={{label: 'Revert Changes', action: this.handleRevert}}><Translation domain="package" placeholders={hintData[1]}>{hintData[0]}</Translation></Hint>
@@ -153,7 +156,10 @@ var PackageComponent = React.createClass({
             );
         }
 
-        var licenses = [];
+        if (this.props.abandoned) {
+            badge = <span className="abandoned">abandoned</span>;
+        }
+
         forEach(this.props.licenses, function(license) {
             licenses.push(license);
         });
@@ -167,11 +173,9 @@ var PackageComponent = React.createClass({
                     <figure><img src={this.props.icon ? this.props.icon : '/images/placeholder.png'} width="110" height="110" /></figure>
 
                     <div className="about">
-                        <h1><Highlight search={this.props.keywords} matchElement="mark">{this.props.name}</Highlight></h1>
+                        <h1><Highlight search={this.props.keywords} matchElement="mark">{this.props.name}</Highlight>{badge}</h1>
                         <p className="description"><Highlight search={this.props.keywords} matchElement="mark">{this.props.description}</Highlight></p>
-                        <p className="additional">
-                            <Translation domain="package">Licenses</Translation>: {licenses.join(', ')}
-                        </p>
+                        <p className="additional">{licenses.join(' / ')}</p>
                     </div>
 
                     {release}
