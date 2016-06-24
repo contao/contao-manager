@@ -163,9 +163,18 @@ section.package-actions {
             background: #fff;
             border: 2px solid $orange-button;
             color: #000;
-            -webkit-text-fill-color: #000;
             font-weight: bold;
             text-align: center;
+
+            &:-moz-placeholder {
+                color: #fff;
+            }
+            &::-webkit-input-placeholder {
+                color: #fff;
+            }
+            &:-ms-input-placeholder {
+                color: #fff;
+            }
 
             &:disabled {
                 color: #fff;
