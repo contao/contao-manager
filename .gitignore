@@ -10,6 +10,7 @@ Thumbs.db
 .external*/
 .idea/
 nbproject/
+/server_logs
 
 # composer related
 vendor/
