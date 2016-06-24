@@ -336,15 +336,15 @@ var ReleaseComponent = React.createClass({
             json: {constraint: self.state.constraint}
         }).then(function(response) {
             if ('OK' !== response.body.status) {
-                self.setState({constraint: self.props.initialConstraint});
+                self.setState({constraint: self.props.initialConstraint, validating: false});
                 self.fireConstraintChangeEvent(self.props.initialConstraint);
             } else {
                 self.fireConstraintChangeEvent(self.state.constraint);
-                self.setState({constraintInputDisabled: true});
+                self.setState({constraintInputDisabled: true, validating: false});
             }
-            self.setState({validating: false});
         }).catch(function() {
-            self.setState({validating: false});
+            self.setState({constraint: self.props.initialConstraint, validating: false});
+            self.fireConstraintChangeEvent(self.props.initialConstraint);
             // @todo: what if request failed?
         });
     },
