@@ -91,15 +91,6 @@ var PackageComponent = React.createClass({
         });
     },
 
-    getFormattedReleaseDate: function() {
-        if (undefined === this.props.time) {
-            return '';
-        }
-
-        var date = new Date(this.props.time);
-        return date.toLocaleDateString() + ' (' + date.toLocaleTimeString() + ')';
-    },
-
     getHintMessageData: function() {
         if (this.state.installed) {
             if (null !== this.state.constraint) {
@@ -154,6 +145,8 @@ var PackageComponent = React.createClass({
                     initialConstraint={this.initialConstraint}
                     constraint={this.state.constraint}
                     placeholder={'search' === this.props.mode ? 'latest version' : ''}
+                    version={'packages' === this.props.mode ? this.props.version : null}
+                    time={this.props.time}
                     mode={this.props.mode}
                     onConstraintChange={this.handleConstraintChange}
                 />
@@ -178,10 +171,6 @@ var PackageComponent = React.createClass({
                         <p className="description"><Highlight search={this.props.keywords} matchElement="mark">{this.props.description}</Highlight></p>
                         <p className="additional">
                             <Translation domain="package">Licenses</Translation>: {licenses.join(', ')}
-                            &nbsp;&nbsp; | &nbsp;&nbsp;
-                            <Translation domain="package">Released on</Translation>: {this.getFormattedReleaseDate()}
-                            &nbsp;&nbsp; | &nbsp;&nbsp;
-                            <Translation domain="package">Installed version</Translation>: {this.props.installed}
                         </p>
                     </div>
 
@@ -275,6 +264,15 @@ var ReleaseComponent = React.createClass({
         }
     },
 
+    getFormattedReleaseDate: function() {
+        if (undefined === this.props.time) {
+            return '';
+        }
+
+        var date = new Date(this.props.time);
+        return date.toLocaleString();
+    },
+
     handleEnableConstraintInput: function() {
         this.setState({constraintInputDisabled: false});
     },
@@ -332,6 +330,17 @@ var ReleaseComponent = React.createClass({
     },
 
     render: function() {
+        var version = '';
+
+        if (this.props.version) {
+            version = (
+                <div className="version">
+                    <strong><Translation domain="package">Version</Translation> {this.props.version}</strong>
+                    <time dateTime={this.props.time}><Translation domain="package">Released </Translation> {this.getFormattedReleaseDate()}</time>
+                </div>
+            )
+        }
+
         return (
             <div className={'release' + (this.state.validating ? ' validating' : '')}>
                 <fieldset>
@@ -342,6 +351,7 @@ var ReleaseComponent = React.createClass({
                         </svg>
                     </button>
                 </fieldset>
+                {version}
             </div>
         )
     }

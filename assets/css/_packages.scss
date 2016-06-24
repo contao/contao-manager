@@ -151,7 +151,6 @@ section.package-actions {
         @include screen(1024) {
             width: 160px;
             margin-left: 40px;
-            margin-bottom: 25px;
         }
 
         input[type=text] {
@@ -193,13 +192,17 @@ section.package-actions {
             animation: validating-release 2s linear infinite;
         }
 
-        time {
+        .version {
             display: none;
 
-            @include screen(1200) {
+            @include screen(1024) {
                 display: block;
                 margin-top: 25px;
                 text-align: center;
+            }
+
+            time {
+                display: block;
             }
         }
     }

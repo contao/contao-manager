@@ -2,5 +2,5 @@ You marked this package for removal and also changed the constraint. Note that c
 You marked this package for removal. The package will only be removed when you apply the changes.: Du hast dieses Paket zum Entfernen markiert. Es wird entfernt, sobald du die Änderungen übernimmst.
 You changed the constraint of this package form "%old_constraint%" to "%new_constraint%". The package will only be updated when you apply the changes.: Du hast den Versions-Constraint dieses Pakets von "%old_constraint%" auf "%new_constraint%" geändert. Das Paket wird erst aktualisiert, sobald du die Änderungen übernimmst.
 Licenses: Lizenzen
-Released on: Veröffentlicht am
-Installed version: Installierte Version
+Version: Version
+Released: Veröffentlicht
