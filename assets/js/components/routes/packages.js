@@ -28,11 +28,7 @@ var PackagesComponent = React.createClass({
     },
 
     componentDidMount: function() {
-
         this.updatePackageList('packages');
-
-        // Focus search input
-        document.getElementById('search').focus();
     },
 
     componentWillUnmount: function() {
@@ -184,6 +180,7 @@ var PackagesComponent = React.createClass({
                     description={packageData.description}
                     licenses={packageData.license}
                     constraint={packageData.constraint}
+                    icon={packageData.extra.icon}
                     installed={packageData.installed}
                     enabled={true}
                     time={packageData.time}

@@ -170,7 +170,7 @@ var PackageComponent = React.createClass({
                 {hint}
 
                 <div className="inside">
-                    <figure><img src="" width="110" height="110" /></figure>
+                    <figure><img src={this.props.icon ? this.props.icon : '/images/placeholder.png'} width="110" height="110" /></figure>
 
                     <div className="about">
                         <h1><Highlight search={this.props.keywords} matchElement="mark">{this.props.name}</Highlight></h1>
