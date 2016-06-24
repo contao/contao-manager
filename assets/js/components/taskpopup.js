@@ -40,7 +40,7 @@ var TaskPopupComponent = React.createClass({
         // Escape key
         window.addEventListener('keyup', function(e) {
             if (27 === e.keyCode) {
-                self.hide();
+                eventhandler.emit('hideTaskPopup');
             }
         });
 
@@ -68,6 +68,10 @@ var TaskPopupComponent = React.createClass({
         var newState = merge({}, this.state, state, {show: true});
 
         this.setState(newState);
+    },
+
+    handleCancel: function() {
+        eventhandler.emit('hideTaskPopup');
     },
 
     hide: function() {
@@ -198,7 +202,7 @@ var TaskPopupComponent = React.createClass({
 
                 <p>{consolePreview}</p>
 
-                <button onClick={this.hide}>Cancel</button>
+                <button onClick={this.handleCancel}>Cancel</button>
 
                 <a onClick={this.hideConsole} className="hide">
                     <i className="icono-caretRight" />
