@@ -19,6 +19,6 @@ module.exports = {
             return false;
         }
 
-        return false;
+        return true;
     }
 };
