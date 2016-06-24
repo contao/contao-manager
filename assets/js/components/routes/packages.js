@@ -267,8 +267,8 @@ var SearchTypeComponent = React.createClass({
         return  (
             <section className={sectionClass}>
 
-                <button className="update">Check for Updates</button>
-                <button className="search" onClick={this.toggleSearch}>Search packages </button>
+                <button className="update" disabled={'packages' !== this.props.mode}>Check for Updates</button>
+                <button className="search" disabled={'packages' !== this.props.mode} onClick={this.toggleSearch}>Search packages </button>
                 <input id="search" ref="searchInput" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} onBlur={this.handleSearchBlur} onKeyUp={this.handleSearchKey} value={this.props.keywords} />
                 <button className="cancel" onClick={this.handleCancel}>X</button>
 
