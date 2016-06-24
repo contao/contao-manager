@@ -4,6 +4,7 @@ const React         = require('react');
 const forEach       = require('lodash/forEach');
 const Highlight     = require('react-highlighter');
 const Translation   = require('../translation.js');
+const Hint          = require('../fragments/hint.js');
 const request       = require('../../helpers/request.js');
 const isEqual       = require('lodash/isEqual');
 
@@ -144,7 +145,7 @@ var PackageComponent = React.createClass({
         var release = '';
         var hintData = this.getHintMessageData();
         if ('' !== hintData[0]) {
-            hint = <HintComponent handleRevert={this.handleRevert}><Translation domain="package" placeholders={hintData[1]}>{hintData[0]}</Translation></HintComponent>
+            hint = <Hint type="warning" close={{label: 'Revert Changes', action: this.handleRevert}}><Translation domain="package" placeholders={hintData[1]}>{hintData[0]}</Translation></Hint>
         }
 
         if (('packages' === this.props.mode && false !== this.state.constraint ) || this.state.installed) {
@@ -246,25 +247,6 @@ var ActionsComponent = React.createClass({
 
         return (
             <fieldset className="actions">{buttons}</fieldset>
-        )
-    }
-});
-
-var HintComponent = React.createClass({
-    render: function() {
-        return (
-            <div className="warning hint">
-                <a href="#" className="close" onClick={this.props.handleRevert}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31.2 31.2"><path d="M18.4 15.6l12.8 12.7-2.9 2.9-12.7-12.8L2.9 31.2 0 28.3l12.8-12.7L0 2.9 2.9 0l12.7 12.8L28.3 0l2.9 2.9-12.8 12.7z"/></svg>
-                    Revert Changes
-                </a>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80.1 71.6">
-                    <path d="M79.1 59.6L47 4c-1.4-2.5-4.1-4-6.9-4s-5.5 1.5-6.9 4L1.1 59.6c-1.4 2.5-1.4 5.5 0 8s4.1 4 6.9 4h64.1c2.9 0 5.5-1.5 6.9-4 1.5-2.5 1.5-5.6.1-8zM8 63.6L40 8l32.1 55.5-64.1.1z" />
-                    <path d="M36 26.5v16.7c0 2.2 1.8 4 4 4s4-1.8 4-4V26.5c0-2.2-1.8-4-4-4s-4 1.8-4 4z" />
-                    <circle cx="40" cy="54.3" r="4" />
-                </svg>
-                <p>{this.props.children}</p>
-            </div>
         )
     }
 });
