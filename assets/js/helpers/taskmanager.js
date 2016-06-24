@@ -16,7 +16,7 @@ module.exports = {
             .then(function(response) {
                 if ('OK' === response.body.status) {
                     eventhandler.emit('displayTaskPopup', {
-                        taskId: response.body.task
+                        taskId: response.body.task.id
                     });
                 }
             })
@@ -31,7 +31,7 @@ module.exports = {
         });
     },
 
-    getTask: function() {
+    getTask: function(taskId) {
         return request.createRequest('/api/v1/tasks/' + taskId)
     },
 

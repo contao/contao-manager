@@ -103,11 +103,10 @@ var TaskPopupComponent = React.createClass({
             .then(function (response) {
                 var newState = {
                     content: {
-                        consoleOutput:response.output
+                        consoleOutput:response.body.task.output
                     }
                 };
-
-                switch (response.status) {
+                switch (response.body.task.status) {
                     case 'PENDING':
                     case 'RUNNING':
                         break;
@@ -121,7 +120,7 @@ var TaskPopupComponent = React.createClass({
                         window.clearInterval(self.currentInterval);
                 }
 
-                newState['content']['taskTitle'] = self.getTaskTitle(response.type);
+                newState['content']['taskTitle'] = self.getTaskTitle(response.body.task.type);
                 self.setState(newState);
             }).catch(function (err) {
                 self.setState({status: 'error'});
