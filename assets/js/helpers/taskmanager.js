@@ -25,6 +25,13 @@ module.exports = {
             });
     },
 
+    addTask: function(task) {
+        return request.createRequest('/api/v1/tasks', {
+            method: 'POST',
+            json: task
+        });
+    },
+
     deleteTask: function(taskId) {
         return request.createRequest('/api/v1/tasks/' + taskId, {
             method: 'DELETE'
