@@ -36,12 +36,10 @@ var LoginComponent = React.createClass({
         this.componentIsMounted = true;
 
         translate.fetchData('login', this.context.routing.getLanguage())
-            .then(function(data) {
+            .then(function(response) {
                 if (self.componentIsMounted) {
-                    self.setState({translationData: data});
+                    self.setState({translationData: response.body});
                 }
-
-                return data;
             });
     },
 
@@ -79,12 +77,12 @@ var LoginComponent = React.createClass({
 
         return request.createRequest('/api/v1/auth', {
                 method: 'POST',
-                data: JSON.stringify(authPayload)
+                json: authPayload
             })
             .then(function (response) {
-                if ('OK' === response.status) {
+                if ('OK' === response.body.status) {
                     // Store the JWT
-                    request.setToken(response.token);
+                    request.setToken(response.body.token);
                 }
             });
     },

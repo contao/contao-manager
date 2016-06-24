@@ -68,11 +68,11 @@ var PackagesComponent = React.createClass({
 
         var req = request.createRequest('/api/v1/search', {
                 method: 'POST',
-                data: JSON.stringify(searchPayload)
+                json: searchPayload
             })
             .then(function(response) {
                 // @todo should this not return a status too?
-                self.setState({packages: response, loading: false, changes: {}});
+                self.setState({packages: response.body, loading: false, changes: {}});
             })
             .catch(function() {
                 // @todo: what if request failed?

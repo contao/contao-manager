@@ -30,12 +30,10 @@ var Translation = React.createClass({
         this.componentIsMounted = true;
 
         translate.fetchData(this.props.domain, this.context.routing.getLanguage())
-            .then(function(data) {
+            .then(function(response) {
                 if (self.componentIsMounted) {
-                    self.setState({data: data});
+                    self.setState({data: response.body});
                 }
-
-                return data;
             });
     },
 

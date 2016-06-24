@@ -6,8 +6,8 @@ var getState = function() {
 
     return request.createRequest('/api/v1/install/get_state')
         .then(function (response) {
-            if ('OK' === response.status) {
-                return response.state;
+            if ('OK' === response.body.status) {
+                return response.body.state;
             }
         });
 };
@@ -16,8 +16,8 @@ var getLoggedIn = function() {
 
     return request.createRequest('/api/v1/auth')
         .then(function (response) {
-            if ('OK' === response.status) {
-                return {user_loggedIn: true, username: response.username};
+            if ('OK' === response.body.status) {
+                return {user_loggedIn: true, username: response.body.username};
             } else {
                 return {user_loggedIn: false};
             }
@@ -39,7 +39,7 @@ var getSelfTest = function() {
 
             return request.createRequest(selfTestEndPoint)
                 .then(function(response) {
-                    return response.results;
+                    return response.body.results;
                 })
                 .catch(function() {
                     return {};

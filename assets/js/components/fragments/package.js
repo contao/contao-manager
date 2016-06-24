@@ -333,10 +333,9 @@ var ReleaseComponent = React.createClass({
 
         request.createRequest('/api/v1/constraint', {
             method: 'POST',
-            data: JSON.stringify({constraint: self.state.constraint}),
-            dataType: 'json'
+            json: {constraint: self.state.constraint}
         }).then(function(response) {
-            if ('OK' !== response.status) {
+            if ('OK' !== response.body.status) {
                 self.setState({constraint: self.props.initialConstraint});
                 self.fireConstraintChangeEvent(self.props.initialConstraint);
             } else {

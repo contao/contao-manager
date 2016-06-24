@@ -14,9 +14,9 @@ module.exports = {
     runNextTask: function() {
         return request.createRequest('/api/v1/tasks/run')
             .then(function(response) {
-                if ('OK' === response.status) {
+                if ('OK' === response.body.status) {
                     eventhandler.emit('displayTaskPopup', {
-                        taskId: response.task
+                        taskId: response.body.task
                     });
                 }
             })
@@ -46,8 +46,8 @@ module.exports = {
 
         this.getTaskList()
             .then(function(response) {
-                if ('OK' === response.status) {
-                    forIn(response.tasks, function(data, taskId) {
+                if ('OK' === response.body.status) {
+                    forIn(response.body.tasks, function(data, taskId) {
                         var createdAt = Date.parse(data['created_at']);
                         var compare = addDays(createdAt, 7);
 

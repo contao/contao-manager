@@ -56,10 +56,9 @@ var InstallComponent = React.createClass({
 
         request.createRequest('/api/v1/constraint', {
             method: 'POST',
-            data: JSON.stringify({constraint: value}),
-            dataType: 'json'
+            json: {constraint: value}
         }).then(function(response) {
-             if ('OK' !== response.status) {
+             if ('OK' !== response.body.status) {
                 self.setState({constraintErrorMessage: <Translation>You have to enter a valid Composer version constraint!</Translation>});
             } else {
                 self.setState({constraintErrorMessage: ''});
@@ -139,10 +138,9 @@ var InstallComponent = React.createClass({
 
             return new Promise(function (resolve, reject) {
                 request.createRequest('/api/v1/install/autoconfig', {
-                    method: 'GET',
-                    dataType: 'json'
+                    method: 'GET'
                 }).then(function (response) {
-                    resolve(response);
+                    resolve(response.body);
                 }).catch(function (err) {
                     reject(new Error(err));
                 });
@@ -154,14 +152,13 @@ var InstallComponent = React.createClass({
 
                 request.createRequest('/api/v1/install/configure', {
                     method: 'POST',
-                    data: JSON.stringify(configurePayload),
-                    dataType: 'json'
+                    json: configurePayload
                 }).then(function (response) {
-                    if ('OK' === response.status) {
+                    if ('OK' === response.body.status) {
                         // Store the JWT
-                        request.setToken(response.token);
+                        request.setToken(response.body.token);
 
-                        resolve(response);
+                        resolve(response.body);
                     } else {
                         reject(new Error(response));
                     }
@@ -178,10 +175,9 @@ var InstallComponent = React.createClass({
 
             request.createRequest('/api/v1/install/create-project', {
                 method: 'POST',
-                data: JSON.stringify(createProjectPayload),
-                dataType: 'json'
+                json: createProjectPayload
             }).then(function (response) {
-                if ('OK' === response.status) {
+                if ('OK' === response.body.status) {
                     // Successfully created, adjust state
                     state.project_created = true;
 

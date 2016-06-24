@@ -60,8 +60,7 @@ var FileComponent = React.createClass({
         var self = this;
         request.createRequest(endPoint)
             .then(function (response) {
-
-                self.setState({code: response});
+                self.setState({code: response.body});
 
             }).catch(function (err) {
                 // @todo
@@ -74,21 +73,21 @@ var FileComponent = React.createClass({
 
         request.createRequest(this.props.apiEndpoint, {
                 method: 'PUT',
-                data: content
+                body: content
             })
             .then(function (response) {
 
                 var newState = {};
-                newState['status'] = response.status;
+                newState['status'] = response.body.status;
 
-                if (undefined !== response.warnings) {
-                    newState['warnings'] = response.warnings;
+                if (undefined !== response.body.warnings) {
+                    newState['warnings'] = response.body.warnings;
                 } else {
                     newState['warnings'] = [];
                 }
 
-                if (undefined !== response.errors) {
-                    newState['errors'] = response.errors;
+                if (undefined !== response.body.errors) {
+                    newState['errors'] = response.body.errors;
                 } else {
                     newState['errors'] = [];
                 }

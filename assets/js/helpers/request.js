@@ -1,8 +1,9 @@
 'use strict';
 
-const jQuery        = require('jquery');
-const cookie        = require('cookie');
-const Promise       = require('bluebird');
+const xhr       = require('xhr');
+const cookie    = require('cookie');
+const Promise   = require('bluebird');
+const merge     = require('lodash/merge');
 
 var cookies;
 
@@ -21,18 +22,20 @@ var createRequest = function(url, props) {
         props.headers['Authorization'] = 'Bearer ' + getToken();
     }
 
+    props = merge({}, {uri: url, json: true}, props);
+
     return new Promise(function(resolve, reject, onCancel) {
-        var req = jQuery.ajax(url, props)
-            .done(function(data, textStatus, jqXHR) {
-                // Check if response contains a token
-                var token = jqXHR.getResponseHeader('Authentication');
-                if (token) {
-                    setToken(token);
+        var req = xhr(props, function (err, resp, body) {
+            if (null === err) {
+                if (resp.headers && resp.headers.authentication) {
+                    setToken(resp.headers.authentication);
                 }
 
-                resolve(data);
-            })
-            .fail(reject);
+                resolve(resp);
+            } else {
+                reject(err);
+            }
+        });
 
         onCancel(function() { req.abort(); });
     });
