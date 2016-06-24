@@ -25,7 +25,7 @@ var LoaderComponent = React.createClass({
                     <div className="sk-circle11 sk-child"></div>
                     <div className="sk-circle12 sk-child"></div>
                 </div>
-                <p>{this.props.children}</p>
+                {this.props.children ? <p>{this.props.children}</p> : ''}
             </div>
         );
     }

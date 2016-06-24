@@ -65,7 +65,7 @@ section.package-actions {
         padding: 25px 20px;
     }
 
-    .warning {
+    .hint.warning {
         padding: 0 20px;
         font: 12px/1.8 $font-regular;
         background: #e8c8bc;
@@ -166,6 +166,7 @@ section.package-actions {
             font-weight: bold;
             text-align: center;
 
+            //noinspection CssInvalidPseudoSelector
             &::placeholder {
                 color: #fff;
             }

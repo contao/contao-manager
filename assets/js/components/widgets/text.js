@@ -58,7 +58,7 @@ var Widget = React.createClass({
             <div className={cssClasses}>
                 {errorMessage}
                 <label htmlFor={'ctrl_' + this.props.name}>{this.props.label}</label>
-                <input type={this.props.type} id={'ctrl_' + this.props.name} name={this.props.name} placeholder={this.props.placeholder} onChange={this.handleChange} />
+                <input type={this.props.type} id={'ctrl_' + this.props.name} name={this.props.name} placeholder={this.props.placeholder} disabled={this.props.disabled} onChange={this.handleChange} />
             </div>
         );
     }

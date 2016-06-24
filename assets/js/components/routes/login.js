@@ -1,8 +1,9 @@
 'use strict';
 
 const React         = require('react');
-const Promise       = require('bluebird');
 const Trappings     = require('../trappings/boxed.js');
+const Hint          = require('../fragments/hint.js');
+const Loader        = require('../fragments/loader');
 const Translation   = require('../translation.js');
 const TextWidget    = require('../widgets/text.js');
 const translate     = require('../../helpers/translate.js');
@@ -11,7 +12,6 @@ const isEqual       = require('lodash/isEqual');
 
 var LoginComponent = React.createClass({
 
-    loginPromise: Promise.resolve(),
     componentIsMounted: false,
     contextTypes: {
         routing: React.PropTypes.object
@@ -21,6 +21,8 @@ var LoginComponent = React.createClass({
         return {
             isLoggingIn: false,
             credentialsIncorrect: false,
+            username: '',
+            password: '',
             translationData: {}
         }
     },
@@ -45,26 +47,41 @@ var LoginComponent = React.createClass({
 
     componentWillUnmount: function() {
         this.componentIsMounted = false;
-        this.loginPromise.cancel();
+    },
+
+    handleUsernameChange: function(e) {
+        this.setState({username: e.target.value, isLoggingIn: false, credentialsIncorrect: false});
+    },
+
+    handlePasswordChange: function(e) {
+        this.setState({password: e.target.value, isLoggingIn: false, credentialsIncorrect: false});
     },
 
     handleLogin: function(e) {
         e.preventDefault();
-        this.setState({isInstalling: true});
+        this.setState({isLoggingIn: true, credentialsIncorrect: false});
 
         var self = this;
         var form = document.getElementById('login-form');
-        var username = form.querySelectorAll('input[name="username"]')[0].value;
-        var password = form.querySelectorAll('input[name="password"]')[0].value;
 
-        this.loginPromise = this.login(username, password)
-            .then(function() {
-                self.context.routing.redirect('packages');
+        return request.createRequest('/api/v1/auth', {
+                method: 'POST',
+                json: {
+                    username: this.state.username,
+                    password: this.state.password
+                }
+            })
+            .then(function (response) {
+                if ('OK' === response.body.status) {
+                    // Store the JWT
+                    request.setToken(response.body.token);
+                    self.context.routing.redirect('packages');
+                } else {
+                    self.setState({isLoggingIn: false, credentialsIncorrect: true});
+                }
             })
             .catch(function() {
-                if (!self.loginPromise.isCancelled()) {
-                    self.setState({credentialsIncorrect: true});
-                }
+                // @todo handle failed request
             });
     },
 
@@ -89,9 +106,9 @@ var LoginComponent = React.createClass({
 
     render: function() {
 
-        var errorMsg = this.state.credentialsIncorrect ? <Translation domain="login">Your credentials are incorrect!</Translation> : '';
+        var errorMsg = this.state.credentialsIncorrect ? <Hint type="warning"><Translation domain="login">Your credentials are incorrect!</Translation></Hint> : '';
 
-    return (
+        return (
             <Trappings sectionClass="login">
                 <header>
                     <img src="/web-assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
@@ -102,18 +119,28 @@ var LoginComponent = React.createClass({
                     <h1><Translation domain="login">Sign In</Translation></h1>
                     <p><Translation domain="login">Login to manage your installation.</Translation></p>
 
+                    {errorMsg}
+
                     <form id="login-form" action="#" method="post">
-                        <TextWidget type="text" name="username" label={translate.getTranslationForKey('Username', this.state.translationData)}
-                                    placeholder={translate.getTranslationForKey('Username', this.state.translationData)} error={errorMsg}/>
+                        <TextWidget type="text" name="username"
+                                    label={translate.getTranslationForKey('Username', this.state.translationData)}
+                                    placeholder={translate.getTranslationForKey('Username', this.state.translationData)}
+                                    onChange={this.handleUsernameChange}
+                                    disabled={this.state.isLoggingIn}
+                        />
                         <TextWidget type="password" name="password"
-                                    label={translate.getTranslationForKey('Password', this.state.translationData)} placeholder={translate.getTranslationForKey('Password', this.state.translationData)} error={errorMsg}/>
+                                    label={translate.getTranslationForKey('Password', this.state.translationData)}
+                                    placeholder={translate.getTranslationForKey('Password', this.state.translationData)}
+                                    disabled={this.state.isLoggingIn}
+                                    onChange={this.handlePasswordChange}
+                        />
 
 
-                        {/* @todo Implement a forgot password functionality? */}
-                        {/* <a href="">Forgot your password?</a> */}
+                        <a href="https://www.google.com" target="_blank">Forgot your password?</a>
 
-                        <button disabled={this.state.isLoggingIn} type="submit"
-                                onClick={this.handleLogin}><Translation domain="login">Sign In</Translation>
+                        <button disabled={this.state.isLoggingIn} type="submit" onClick={this.handleLogin}>
+                            <Translation domain="login">Sign In</Translation>
+                            <Loader/>
                         </button>
                     </form>
                 </section>

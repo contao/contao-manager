@@ -98,6 +98,20 @@
         button {
             margin-top: 20px;
             background: #31a64b;
+
+            .loader {
+                display: none;
+            }
+
+            &:disabled {
+                span {
+                    display: none;
+                }
+
+                .loader {
+                    display: block;
+                }
+            }
         }
 
         &.login {

@@ -1,0 +1,51 @@
+.hint {
+    margin: 5px 0 10px;
+    padding: 0 8px;
+    font: 12px/1.8 $font-regular;
+    border-radius: 2px;
+
+    > span {
+        display: inline-block;
+        margin: 0;
+        padding: 8px 0;
+    }
+
+    a {
+        display: inline-block;
+
+        &:before {
+            padding: 0 10px;
+            content: "|"
+        }
+
+        &.close:before,
+        &.first:before {
+            content: "";
+        }
+    }
+
+    > svg {
+        position: relative;
+        top: 6px;
+        width: 26px;
+        height: 23px;
+        margin-right: 10px;
+        fill: $link-color;
+    }
+
+    .close {
+        float: right;
+        padding: 8px 0;
+
+        svg {
+            width: 8px;
+            height: 8px;
+            margin-right: 5px;
+            fill: $link-color;
+        }
+    }
+
+    &.warning {
+        background: #e8c8bc;
+    }
+}

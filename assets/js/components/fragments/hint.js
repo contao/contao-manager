@@ -42,7 +42,7 @@ var HintComponent = React.createClass({
             <div className={'hint ' + this.props.type}>
                 {close}
                 {icon}
-                <p>{this.props.children}</p>
+                <span>{this.props.children}</span>
                 {buttons}
             </div>
         );
