@@ -190,7 +190,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
         foreach (Finder::create()->in($source)->ignoreDotFiles(false)->ignoreVCS(false) as $file) {
             if (!is_dir($file)) {
-                $relative = $file->getRelativePathName();
+                $relative = $file->getRelativePathname();
                 static::provideFixture($parent . $relative, $destDir . $relative);
             }
         }
