@@ -64,16 +64,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "b2cf67b1a575d7e648c742be2454339232ef32b2"
+                "reference": "30ab6f1c1753267d181839142fafe022313c3c9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/b2cf67b1a575d7e648c742be2454339232ef32b2",
-                "reference": "b2cf67b1a575d7e648c742be2454339232ef32b2",
+                "url": "https://api.github.com/repos/composer/composer/zipball/30ab6f1c1753267d181839142fafe022313c3c9a",
+                "reference": "30ab6f1c1753267d181839142fafe022313c3c9a",
                 "shasum": ""
             },
             "require": {
@@ -137,7 +137,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-05-31 18:48:12"
+            "time": "2016-06-26 14:42:08"
         },
         {
             "name": "composer/semver",
@@ -2717,12 +2717,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "36a29e5d86dde7cc70cf5381e22ed1bd735ccdbd"
+                "reference": "97f32681ada321c99e26dc7afac0d867796a847a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/36a29e5d86dde7cc70cf5381e22ed1bd735ccdbd",
-                "reference": "36a29e5d86dde7cc70cf5381e22ed1bd735ccdbd",
+                "url": "https://api.github.com/repos/tenside/core/zipball/97f32681ada321c99e26dc7afac0d867796a847a",
+                "reference": "97f32681ada321c99e26dc7afac0d867796a847a",
                 "shasum": ""
             },
             "require": {
@@ -2769,7 +2769,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-06-24 09:20:16"
+            "time": "2016-06-28 02:16:26"
         },
         {
             "name": "tenside/core-bundle",
@@ -2777,12 +2777,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "28294bd8a50122da976b800c4e0204d8dcde595c"
+                "reference": "ef12ad0db0276e9d7d223d5bac9ee9328b907727"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/28294bd8a50122da976b800c4e0204d8dcde595c",
-                "reference": "28294bd8a50122da976b800c4e0204d8dcde595c",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/ef12ad0db0276e9d7d223d5bac9ee9328b907727",
+                "reference": "ef12ad0db0276e9d7d223d5bac9ee9328b907727",
                 "shasum": ""
             },
             "require": {
@@ -2843,7 +2843,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-06-24 13:56:26"
+            "time": "2016-06-28 01:48:19"
         }
     ],
     "packages-dev": [
