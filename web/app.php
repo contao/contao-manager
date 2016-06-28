@@ -45,7 +45,7 @@ if (\Phar::running()) {
     $env   = 'phar';
     $debug = false;
 } else {
-    $env   = getenv('SYMFONY_ENV') ?: 'prod';
+    $env   = getenv('SYMFONY_ENV') ?: 'dev';
     $debug = getenv('SYMFONY_DEBUG') !== '0';
 }
 
