@@ -124,6 +124,15 @@ var PackagesComponent = React.createClass({
         this.updatePackageList(mode, searchRequest);
     },
 
+    searchUpdates: function (e) {
+        e.preventDefault();
+        var task = {
+            'type': 'upgrade',
+            'dry-run': true
+        };
+        taskmanager.addTask(task).then(taskmanager.runNextTask);
+    },
+
     handleApplyButton: function(e) {
         e.preventDefault();
 
@@ -183,6 +192,7 @@ var PackagesComponent = React.createClass({
             closeSearch={this.closeSearch}
             keywords={this.state.searchRequest.keywords}
             onKeywordsChange={this.updateKeywordsOnType}
+            onSearchUpdates={this.searchUpdates}
          />;
 
         if (this.state.loading) {
@@ -287,7 +297,7 @@ var SearchTypeComponent = React.createClass({
         return  (
             <section className={sectionClass}>
 
-                <button className="update" disabled={this.props.disableButtons}>Check for Updates</button>
+                <button className="update" disabled={this.props.disableButtons} onClick={this.props.onSearchUpdates}>Check for Updates</button>
                 <button className="search" disabled={this.props.disableButtons} onClick={this.toggleSearch}>Search packages </button>
                 <input id="search" ref="searchInput" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} onBlur={this.handleSearchBlur} onKeyUp={this.handleSearchKey} value={this.props.keywords} />
                 <button className="cancel" onClick={this.handleCancel}>X</button>
