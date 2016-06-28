@@ -1,9 +1,9 @@
-This is the contao package manager
+This is the Contao Manager
 ==================================
 
-[![Version](http://img.shields.io/packagist/v/contao/package-manager.svg?style=flat-square)](https://packagist.org/packages/contao/package-manager)
-[![Stable Build Status](http://img.shields.io/travis/contao/package-manager/master.svg?style=flat-square&label=stable%20build)](https://travis-ci.org/contao/package-manager)
-[![License](http://img.shields.io/packagist/l/contao/package-manager.svg?style=flat-square)](http://spdx.org/licenses/MIT)
+[![Version](http://img.shields.io/packagist/v/contao/contao-manager.svg?style=flat-square)](https://packagist.org/packages/contao/contao-manager)
+[![Stable Build Status](http://img.shields.io/travis/contao/contao-manager/master.svg?style=flat-square&label=stable%20build)](https://travis-ci.org/contao/contao-manager)
+[![License](http://img.shields.io/packagist/l/contao/contao-manager.svg?style=flat-square)](http://spdx.org/licenses/MIT)
 
 ## Build yourself
 
@@ -65,7 +65,7 @@ package manager itself which is likely not what you want.
 For that matter, set the `COMPOSER` environment variable to a different
 location (`test-dir` in the package manager root in that case).
 
-Example for Apache (add to file `/path/to/my/package-manager/web/.htaccess`):
+Example for Apache (add to file `/path/to/my/contao-manager/web/.htaccess`):
 
 ```
 SetEnv COMPOSER /path/to/test-dir/composer.json
@@ -99,7 +99,7 @@ Note that this is only available in `dev` mode .
 
 For a pre generated version of documentation, see [doc/API.md][1]
 
-[1]: https://github.com/contao/package-manager/blob/master/doc/API.md
+[1]: https://github.com/contao/contao-manager/blob/master/doc/API.md
 
 ### 8. Tips & tricks
 

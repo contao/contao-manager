@@ -2,7 +2,7 @@ imports:
     - { resource: config.yml }
 
 nelmio_api_doc:
-  name: Contao Package Manager
+  name: Contao Manager
   sandbox:
     authentication:
       name: authorization

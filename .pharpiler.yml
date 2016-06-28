@@ -1,12 +1,12 @@
-phar: package-manager.phar
+phar: contao-manager.phar
 
 tasks:
   - type: run-process
-    command: %package:contao/package-manager%/app/console cache:clear --env=phar --no-warmup -vvv
+    command: %package:contao/contao-manager%/app/console cache:clear --env=phar --no-warmup -vvv
   - type: run-process
-    command: %package:contao/package-manager%/app/console cache:warmup --env=phar --no-debug
+    command: %package:contao/contao-manager%/app/console cache:warmup --env=phar --no-debug
   - type: add-package
-    name: contao/package-manager
+    name: contao/contao-manager
     exclude_dependencies:
       # exclude everything needed for PHP<5.5, we are min php 5.5.
       - ircmaxell/password-compat
@@ -18,12 +18,12 @@ tasks:
       - "*.php"
       - "*.twig"
       - "(LICENSE\\.?.*)"
-      - "%package:contao/package-manager%/app/console"
+      - "%package:contao/contao-manager%/app/console"
     exclude_files: &default_exclude_files
       - "(.*[Tt]ests?\\/*)"
       - "*tests/*.php"
     package_override:
-      contao/package-manager:
+      contao/contao-manager:
         exclude_files:
           - *default_exclude_files
           - "app/cache/prod/*"
@@ -63,7 +63,7 @@ tasks:
 
 rewrites:
   - files:
-      - "%package:contao/package-manager%/app/console"
+      - "%package:contao/contao-manager%/app/console"
     filter:
       - type: replace
         "#!/usr/bin/env php": ""
@@ -81,15 +81,15 @@ rewrites:
         ahead: 2592000
 
       - type: replace
-        "@package_version@": "%version:contao/package-manager%"
+        "@package_version@": "%version:contao/contao-manager%"
 
       - type: replace
-        "@tenside_distribution@": "contao/package-manager"
+        "@tenside_distribution@": "contao/contao-manager"
 
       - type: replace
-        "@release_date@": "%date:contao/package-manager%"
+        "@release_date@": "%date:contao/contao-manager%"
       - type: replace
-        "tenside.phar": "package-manager.phar"
+        "tenside.phar": "contao-manager.phar"
 
   # keep this last
   - files: "*.php"

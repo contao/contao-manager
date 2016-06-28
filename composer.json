@@ -1,6 +1,6 @@
 {
-  "name": "contao/package-manager",
-  "description": "Contao package manager.",
+  "name": "contao/contao-manager",
+  "description": "Contao Manager",
   "keywords": ["tenside"],
   "homepage": "https://contao.org/",
   "type": "project",

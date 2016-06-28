@@ -1,8 +1,8 @@
 {
-  "name": "contao-package-manager",
+  "name": "contao-manager",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/contao/package-manager.git"
+    "url": "git+https://github.com/contao/contao-manager.git"
   },
   "license": "MIT",
   "dependencies": {
