@@ -34,6 +34,8 @@ var Translation = React.createClass({
                 if (self.componentIsMounted) {
                     self.setState({data: response.body});
                 }
+
+                return null;
             });
     },
 

@@ -19,6 +19,8 @@ module.exports = {
                         taskId: response.body.task.id
                     });
                 }
+
+                return null;
             })
             .catch(function (err) {
                 // @todo
@@ -63,6 +65,8 @@ module.exports = {
                         }
                     });
                 }
+
+                return null;
             })
             .catch(function() {
                 // noop

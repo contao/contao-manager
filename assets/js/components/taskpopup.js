@@ -126,6 +126,8 @@ var TaskPopupComponent = React.createClass({
 
                 newState['content']['taskTitle'] = self.getTaskTitle(response.body.task.type);
                 self.setState(newState);
+
+                return null;
             }).catch(function (err) {
                 self.setState({status: 'error'});
                 window.clearInterval(self.currentInterval);

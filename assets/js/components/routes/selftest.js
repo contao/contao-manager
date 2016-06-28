@@ -26,6 +26,8 @@ var SelfTestComponent = React.createClass({
         this.statePromise = TensideState.getSelfTest()
             .then(function(result) {
                 self.setState({data: result});
+
+                return null;
             });
     },
 

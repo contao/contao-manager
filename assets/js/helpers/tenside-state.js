@@ -9,6 +9,8 @@ var getState = function() {
             if ('OK' === response.body.status) {
                 return response.body.state;
             }
+
+            return null;
         });
 };
 
@@ -18,9 +20,8 @@ var getLoggedIn = function() {
         .then(function (response) {
             if ('OK' === response.body.status) {
                 return {user_loggedIn: true, username: response.body.username};
-            } else {
-                return {user_loggedIn: false};
             }
+            return {user_loggedIn: false};
         })
         .catch(function () {
             return {user_loggedIn: false};

@@ -40,7 +40,7 @@ router.routed.add(function(request, data) {
                 if (isFunction(callback)) {
                     // No need to check for more callbacks if aborted
                     if (false === renderController) {
-                        return;
+                        return null;
                     }
 
                     renderController = callback(promiseResults, routing);
@@ -55,6 +55,8 @@ router.routed.add(function(request, data) {
             // Call the controller
             data.route.controller(request, routing)
         }
+
+        return null;
     });
 });
 

@@ -70,6 +70,8 @@ var PackagesComponent = React.createClass({
             .then(function(response) {
                 // @todo should this not return a status too?
                 self.setState({packages: response.body, loading: false, changes: {}});
+
+                return null;
             })
             .catch(function() {
                 // @todo: what if request failed?
@@ -87,6 +89,8 @@ var PackagesComponent = React.createClass({
             .then(function(response) {
                 // @todo should this not return a status too?
                 self.setState({packages: response.body, loading: false, changes: {}});
+
+                return null;
             })
             .catch(function() {
                 // @todo: what if request failed?
