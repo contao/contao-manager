@@ -60,7 +60,7 @@ var FileComponent = React.createClass({
         var self = this;
         request.createRequest(endPoint)
             .then(function (response) {
-                self.setState({code: response.body});
+                self.setState({code: response.rawRequest.responseText});
 
             }).catch(function (err) {
                 // @todo
