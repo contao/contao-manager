@@ -6,6 +6,7 @@ const eventhandler  = require('./../helpers/eventhandler.js');
 const taskmanager   = require('./../helpers/taskmanager.js');
 const isEqual       = require('lodash/isEqual');
 const merge         = require('lodash/merge');
+const includes      = require('lodash/includes');
 
 var TaskPopupComponent = React.createClass({
 
@@ -204,7 +205,7 @@ var TaskPopupComponent = React.createClass({
 
                 <p>{consolePreview}</p>
 
-                <button onClick={this.handleCancel}>Cancel</button>
+                <button onClick={this.handleCancel} disabled={includes(['error', 'finished'], this.state.status)}>Cancel</button>
 
                 <a onClick={this.hideConsole} className="hide">
                     <i className="icono-caretRight" />
