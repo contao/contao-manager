@@ -12,6 +12,7 @@ module.exports = {
     preController: [routeChecks.ifTensideNotOkRedirectToInstall, routeChecks.ifUserNotLoggedInRedirectToLogin],
     controller: function(request, routing) {
         taskmanager.deleteOrphanTasks();
+        taskmanager.runNextTask();
         ReactDOM.render(<App routing={routing}><Packages /></App>, document.getElementById('react-container'));
     }
 };
