@@ -5,6 +5,7 @@ const Trappings     = require('../trappings/main.js');
 const Package       = require('../fragments/package.js');
 const Loader        = require('../fragments/loader.js');
 const request       = require('../../helpers/request.js');
+const taskmanager   = require('../../helpers/taskmanager.js');
 const Translation   = require('../translation.js');
 const forEach       = require('lodash/forEach');
 const merge         = require('lodash/merge');
@@ -122,7 +123,24 @@ var PackagesComponent = React.createClass({
     handleApplyButton: function(e) {
         e.preventDefault();
 
-        // @todo run the taskrunner
+        var removePackages = [];
+
+        forEach(this.state.changes, function(change, name) {
+            if (change.removed) {
+                removePackages.push(name);
+            }
+        });
+
+        if (removePackages.length) {
+            var task = {
+                'type': 'remove-package',
+                'package': removePackages,
+                'no-update': true
+            };
+
+            taskmanager.addTask(task)
+                .then(taskmanager.runNextTask);
+        }
     },
 
     handleResetButton: function(e) {
