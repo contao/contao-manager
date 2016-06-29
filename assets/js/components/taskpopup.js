@@ -209,7 +209,7 @@ var TaskPopupComponent = React.createClass({
 
                 <p>{consolePreview}</p>
 
-                <button onClick={this.handleCancel} disabled={includes(['error', 'finished'], this.state.status)}>Cancel</button>
+                <button onClick={this.handleCancel} disabled={!includes(['error', 'success'], this.state.status)}>Cancel</button>
 
                 <a onClick={this.hideConsole} className="hide">
                     <i className="icono-caretRight" />
