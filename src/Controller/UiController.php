@@ -78,8 +78,9 @@ class UiController extends Controller
      */
     public function assetAction($path)
     {
-        $webDir = dirname($this->container->getParameter('kernel.root_dir')) . '/web';
-        $path   = realpath($webDir . '/' . $path);
+        /** @var \Symfony\Component\HttpKernel\Kernel $kernel */
+        $kernel = $this->container->get('kernel');
+        $path   = $kernel->locateResource('@AppBundle/Resources/public/' . $path);
 
         if (false === $path) {
             throw new BadRequestHttpException('This asset does not exist!');

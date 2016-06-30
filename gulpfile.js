@@ -44,7 +44,7 @@ gulp.task('scripts', function () {
         .pipe(rename('bundle.js'))
             .on('error', gutil.log)
         .pipe(production ? sourcemaps.write() : gutil.noop())
-        .pipe(gulp.dest('./web/js'));
+        .pipe(gulp.dest('src/Resources/public/js'));
 });
 
 
@@ -57,7 +57,7 @@ gulp.task('styles', function () {
         .pipe(production ? sourcemaps.write() : gutil.noop())
         .pipe(concat('bundle.css'))
         .pipe(production ? cleanCSS() : gutil.noop())
-        .pipe(gulp.dest('web/css'));
+        .pipe(gulp.dest('src/Resources/public/css'));
 });
 
 // Build by default
