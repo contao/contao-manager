@@ -1,6 +1,11 @@
 imports:
     - { resource: config.yml }
 
+# Add twig in dev mode for nelmio docs
+framework:
+    templating:
+      engines: ['php', 'twig']
+
 nelmio_api_doc:
   name: Contao Manager
   sandbox:
