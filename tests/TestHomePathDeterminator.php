@@ -12,6 +12,7 @@
  *
  * @package    contao/contao-manager
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Yanick Witschi <yanick.witschi@terminal42.ch>
  * @copyright  2015 Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @license    https://github.com/contao/contao-manager/blob/master/LICENSE MIT
  * @link       https://github.com/contao/contao-manager
