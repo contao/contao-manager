@@ -3,6 +3,7 @@
 const eventhandler  = require('./eventhandler.js');
 const request       = require('./request.js');
 const forIn         = require('lodash/forIn');
+const merge         = require('lodash/merge');
 
 function addDays(date, days) {
     var result = new Date(date);
@@ -11,16 +12,21 @@ function addDays(date, days) {
 }
 
 module.exports = {
-    runNextTask: function() {
+    runNextTask: function(taskPopupOptions) {
         return request.createRequest('/api/v1/tasks/run')
             .then(function(response) {
                 if ('OK' === response.body.status) {
-                    eventhandler.emit('displayTaskPopup', {
-                        taskId: response.body.task.id
-                    });
+
+                    var taskOptions = merge(
+                        {},
+                        taskPopupOptions,
+                        {taskId: response.body.task.id}
+                    );
+
+                    eventhandler.emit('displayTaskPopup', taskOptions);
                 }
 
-                return null;
+                return response;
             })
             .catch(function (err) {
                 // @todo
@@ -66,7 +72,7 @@ module.exports = {
                     });
                 }
 
-                return null;
+                return response;
             })
             .catch(function() {
                 // noop

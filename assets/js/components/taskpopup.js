@@ -22,9 +22,11 @@ var TaskPopupComponent = React.createClass({
             status: 'loading',
             taskId: null,
             updateFrequency: 2000, // every 2 seconds
+            buttonCallback: null,
             content: {
                 taskTitle: '[…]',
-                consoleOutput: ''
+                consoleOutput: '',
+                buttonLabel: 'Close'
             }
         };
     },
@@ -71,12 +73,18 @@ var TaskPopupComponent = React.createClass({
         this.setState(newState);
     },
 
-    handleCancel: function() {
-        taskmanager.deleteTask(this.state.taskId).then(function () {
-            eventhandler.emit('hideTaskPopup');
+    handleButton: function() {
+        var self = this;
+        taskmanager.deleteTask(this.state.taskId)
+            .then(self.callButtonCallback);
+    },
 
-            return null;
-        });
+    callButtonCallback: function() {
+        if (null !== this.state.buttonCallback) {
+            this.state.buttonCallback.call(this, this.state);
+        } else {
+            eventhandler.emit('hideTaskPopup');
+        }
     },
 
     hide: function() {
@@ -130,11 +138,11 @@ var TaskPopupComponent = React.createClass({
                 }
 
                 newState['content']['taskTitle'] = self.getTaskTitle(response.body.task.type);
-                self.setState(newState);
+                self.setState(merge({}, self.state, newState));
 
                 return null;
             }).catch(function (err) {
-                self.setState({status: 'error'});
+                self.setState(merge({}, self.state, {status: 'error'}));
                 window.clearInterval(self.currentInterval);
             });
     },
@@ -209,7 +217,7 @@ var TaskPopupComponent = React.createClass({
 
                 <p>{consolePreview}</p>
 
-                <button onClick={this.handleCancel} disabled={!includes(['error', 'success'], this.state.status)}>Cancel</button>
+                <button onClick={this.handleButton} disabled={!includes(['error', 'success'], this.state.status)}>{this.state.content.buttonLabel}</button>
 
                 <a onClick={this.hideConsole} className="hide">
                     <i className="icono-caretRight" />
