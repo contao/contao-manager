@@ -8,21 +8,26 @@ const TextWidget    = require('../widgets/text.js');
 const TensideState  = require('../../helpers/tenside-state.js');
 const taskmanager   = require('../../helpers/taskmanager.js');
 const request       = require('../../helpers/request.js');
+const eventhandler  = require('../../helpers/eventhandler.js');
 const isEqual       = require('lodash/isEqual');
-
-// @todo Handle the componentWillUnmount stuff here (cancelling, unsettled promises)
 
 var InstallComponent = React.createClass({
 
     tensideStatePromise: null,
+    contextTypes: {
+        routing: React.PropTypes.object
+    },
 
     getInitialState: function() {
         return {
             constraintErrorMessage: '',
-            hasPasswordErrors: false,
+            passwordsErrorMessage: '',
             installing: false,
-            isLoggedIn: false,
-            username: ''
+            isLoggedIn: null,
+            username: '',
+            password: '',
+            passwordConfirm: '',
+            version: ''
         };
     },
 
@@ -40,28 +45,39 @@ var InstallComponent = React.createClass({
                         isLoggedIn: true,
                         username: result.username
                     });
+                } else {
+                    self.setState({isLoggedIn: false});
                 }
             });
     },
 
-    validateConstraint: function(value) {
+    componentWillUnmount: function() {
+        this.tensideStatePromise.cancel();
+    },
 
-        var self  = this;
+    handleVersionChange: function(version) {
+        var self  = this,
+            state = {version: version};
 
         if ('' === value) {
-            self.setState({constraintErrorMessage: ''});
+            state['constraintErrorMessage'] = '';
+            this.setState(state);
             return;
         }
 
         request.createRequest('/api/v1/constraint', {
             method: 'POST',
-            json: {constraint: value}
+            json: {constraint: version}
         }).then(function(response) {
              if ('OK' !== response.body.status) {
-                self.setState({constraintErrorMessage: <Translation>You have to enter a valid Composer version constraint!</Translation>});
+                 state['constraintErrorMessage'] = <Translation>You have to enter a valid Composer version constraint!</Translation>;
             } else {
-                self.setState({constraintErrorMessage: ''});
+                 state['constraintErrorMessage'] = '';
             }
+
+            self.setState(state);
+
+            return null;
 
         }).catch(function() {
             // @todo: what if request failed?
@@ -70,35 +86,34 @@ var InstallComponent = React.createClass({
 
     handleInstall: function(e) {
         e.preventDefault();
-
         var self = this;
-        var form = document.getElementById('install-form');
+
+        this.setState({installing: true});
 
         TensideState.getState()
             .then(function(state) {
                 // Configure tenside if not already configured
-                if (true !== state.tenside_configured) {
-                    var username = form.querySelectorAll('input[name="username"]')[0].value;
-                    var password = form.querySelectorAll('input[name="password"]')[0].value;
-
-                    return self.configure(username, password);
+                if (false === state.tenside_configured) {
+                    return self.configure(self.state.username, self.state.password)
+                        .then(function() {
+                            state.tenside_configured = true;
+                            return state;
+                        });
                 }
 
                 return state;
             })
             .then(function(state) {
                 // Create project if not already created
-                if (true !== state.project_created) {
+                if (false === state.project_created) {
                     var createProjectPayload = {
                         project: {
                             name: 'contao/standard-edition'
                         }
                     };
 
-                    var versionField = form.querySelectorAll('input[name="version"]')[0];
-
-                    if ('' !== versionField.value) {
-                        createProjectPayload.version = versionField.value;
+                    if ('' !== self.state.version) {
+                        createProjectPayload.version = self.state.version;
                     }
 
                     return self.createProject(createProjectPayload, state);
@@ -114,13 +129,19 @@ var InstallComponent = React.createClass({
                     // and the task manually deleted? running the next task
                     // will fail?
 
-                    return taskmanager.runNextTask();
+                    return taskmanager.runNextTask({
+                        buttonCallback: function() {
+                            eventhandler.emit('hideTaskPopup');
+                            self.context.routing.redirect('packages');
+                        },
+                        content: {
+                            buttonLabel: 'OK'
+                        }
+                    });
                 }
-
             })
             .catch(function(err) {
                 // @todo: what to do with those general errors
-                console.log(err);
             });
     },
 
@@ -190,27 +211,63 @@ var InstallComponent = React.createClass({
         });
     },
 
-    onPasswordError: function() {
-        this.setState({hasPasswordErrors: true});
+    handleUsernameChange: function(username) {
+        this.setState({username: username});
     },
 
-    onPasswordNoError: function() {
-        this.setState({hasPasswordErrors: false});
+    handlePasswordChange: function(value, props) {
+        var invalid,
+            minPasswordLenth = 8,
+            state = {password: this.state.password, passwordConfirm: this.state.passwordConfirm};
+
+        if (props.name == 'password') {
+            state['password'] = value;
+        } else {
+            state['passwordConfirm'] = value;
+        }
+
+        invalid = state.password.length < minPasswordLenth
+            || (
+                ('' !== state.password || '' !== state.passwordConfirm)
+                && state.password !== state.passwordConfirm
+            );
+
+        if (!invalid) {
+            state['passwordsErrorMessage'] = ''
+        } else {
+            state['passwordsErrorMessage'] = <Translation domain="install" placeholders={{min: minPasswordLenth}}>
+                    Passwords do not match or are shorter than %min% characters!
+                </Translation>;
+        }
+
+        this.setState(state);
     },
 
-    componentWillUnmount: function() {
-        this.tensideStatePromise.cancel();
+    getUsernamePart: function() {
+        if (null === this.state.isLoggedIn) {
+
+            return '';
+        }
+
+        if (this.state.isLoggedIn) {
+            return <fieldset>
+                        <legend><Translation placeholders={{ username: this.state.username }}>You are logged in as %username%.</Translation></legend>
+                   </fieldset>;
+
+        } else {
+            return <fieldset>
+                        <legend><Translation domain="install">User Account</Translation></legend>
+                        <p><Translation domain="install">Create a user account to manage your installation.</Translation></p>
+                        <TextWidget type="text" name="username" label="Username" onChange={this.handleUsernameChange} />
+                        <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordChange} error={this.state.passwordsErrorMessage} />
+                        <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordChange} error={this.state.passwordsErrorMessage} />
+                   </fieldset>;
+        }
     },
 
     render: function() {
 
-        var disableButton = this.state.hasPasswordErrors || this.state.installing;
-        var usernamePart = '';
-        if (this.state.isLoggedIn) {
-            usernamePart = <LoggedInComponent username={this.state.username} />;
-        } else {
-            usernamePart = <UsernameComponent onPasswordError={this.onPasswordError} onPasswordNoError={this.onPasswordNoError} />;
-        }
+        var disableButton = this.state.passwordsErrorMessage || this.state.installing;
 
         return (
             <Trappings wide={true}>
@@ -221,14 +278,15 @@ var InstallComponent = React.createClass({
                 </header>
 
                 <section>
-                    <form id="install-form" action="#" method="post">
-                        {usernamePart}
+                    <form action="#" method="post">
+
+                        {this.getUsernamePart()}
 
                         <fieldset>
                             <legend>Contao Installation</legend>
                             <p>Enter a version to install or leave blank for the latest version.</p>
 
-                            <TextWidget type="text" name="version" label="Version" placeholder="latest" onChange={this.validateConstraint} error={this.state.constraintErrorMessage} />
+                            <TextWidget type="text" name="version" label="Version" placeholder="latest" onChange={this.handleVersionChange} error={this.state.constraintErrorMessage} />
 
                         </fieldset>
 
@@ -237,78 +295,6 @@ var InstallComponent = React.createClass({
                 </section>
             </Trappings>
         );
-    }
-});
-
-
-var UsernameComponent = React.createClass({
-
-    getInitialState: function() {
-        return {
-            passwordsErrorMessage: ''
-        };
-    },
-
-    handlePasswordCompare: function(value, props) {
-        // @todo fix this, this is not working
-        var password = '',
-            passwordConfirm = '',
-            invalid,
-            minPasswordLenth = 8;
-
-        if (props.name == 'password') {
-            password = value;
-        } else {
-            passwordConfirm = value;
-        }
-
-        invalid = password.length < minPasswordLenth
-            || ('' !== password && '' !== passwordConfirmpassword !== passwordConfirm);
-
-
-        if (!invalid) {
-            this.setState({passwordsErrorMessage: ''});
-
-            if (undefined !== this.props.onPasswordNoError){
-                this.props.onPasswordNoError.call(this);
-            }
-
-        } else {
-            this.setState({
-                passwordsErrorMessage: <Translation domain="install" placeholders={{min: minPasswordLenth}}>
-                    Passwords do not match or are shorter than %min% characters!
-                </Translation>
-            });
-
-            if (undefined !== this.props.onPasswordError){
-                this.props.onPasswordError.call(this);
-            }
-        }
-    },
-
-    render: function() {
-        return (
-            <fieldset>
-                <legend><Translation domain="install">User Account</Translation></legend>
-                <p>Create a user account to manage your installation.</p>
-
-                <TextWidget type="text" name="username" label="Username" />
-                <TextWidget type="password" name="password" label="Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
-                <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordCompare} error={this.state.passwordsErrorMessage} />
-
-            </fieldset>
-        )
-    }
-});
-
-var LoggedInComponent = React.createClass({
-
-    render: function() {
-        return (
-            <fieldset>
-                <legend><Translation placeholders={{ username: this.props.username }}>You are logged in as %username%.</Translation></legend>
-            </fieldset>
-        )
     }
 });
 
