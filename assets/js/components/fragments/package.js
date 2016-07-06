@@ -326,6 +326,9 @@ var ReleaseComponent = React.createClass({
                 self.fireConstraintChangeEvent(self.state.constraint);
                 self.setState({constraintInputDisabled: true, validating: false});
             }
+
+            return null;
+
         }).catch(function() {
             self.setState({constraint: self.props.initialConstraint, validating: false});
             self.fireConstraintChangeEvent(self.props.initialConstraint);
