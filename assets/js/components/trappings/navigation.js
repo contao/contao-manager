@@ -57,7 +57,6 @@ var NavigationComponent = React.createClass({
                     <li>
                         <a><Translation domain="navigation">Files</Translation></a>
                         <ul>
-                            <li><Link routeName="app-kernel">AppKernel.php</Link></li>
                             <li><Link routeName="composer-json">composer.json</Link></li>
                         </ul>
                     </li>

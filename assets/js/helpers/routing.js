@@ -11,7 +11,6 @@ var Routing = {
         'install': require('./../routes/install.js'),
         'login': require('./../routes/login.js'),
         'packages': require('./../routes/packages.js'),
-        'app-kernel': require('./../routes/app-kernel.js'),
         'composer-json': require('./../routes/composer-json.js'),
         'self-test': require('./../routes/self-test.js'),
         'logout': require('./../routes/logout.js')
