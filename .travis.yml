@@ -19,7 +19,8 @@ install:
 
 script:
   - ant -keep-going
-  - ./node_modules/.bin/gulp
+  - ./vendor/bin/pharpiler compile -vvv
+  - ./contao-manager.phar
 
 # Hack to make things work again - we can not use a shallow repository.
 git:
