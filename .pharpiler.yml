@@ -2,9 +2,9 @@ phar: contao-manager.phar
 
 tasks:
   - type: run-process
-    command: %package:contao/contao-manager%/app/console cache:clear --env=phar --no-warmup -vvv
+    command: "%package:contao/contao-manager%/app/console cache:clear --env=phar --no-debug --no-warmup"
   - type: run-process
-    command: %package:contao/contao-manager%/app/console cache:warmup --env=phar --no-debug
+    command: "%package:contao/contao-manager%/app/console cache:warmup --env=phar --no-debug"
   - type: add-package
     name: contao/contao-manager
     exclude_dependencies:
