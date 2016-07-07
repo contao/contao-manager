@@ -30,8 +30,9 @@ var Routing = {
         // Router
         this.router = crossroads.create();
 
+        var baseHref = this.getBaseHref();
         forIn(this.routeDefinitions, function (routeDef, routeName) {
-            var route = self.router.addRoute(routeDef.path);
+            var route = self.router.addRoute(baseHref + routeDef.path);
             route.name = routeName;
             route.preController = routeDef.preController;
             route.controller = routeDef.controller;
@@ -91,6 +92,21 @@ var Routing = {
         }
 
         return lang;
+    },
+
+    getBaseHref: function () {
+        var href = '';
+
+        if (undefined !== document
+            && undefined !== document.getElementsByTagName('base')[0]
+            && undefined !== document.getElementsByTagName('base')[0].attributes.getNamedItem('href')) {
+            href = document.getElementsByTagName('base')[0].attributes.getNamedItem('href').nodeValue;
+            if ("/" === href.substr(href.length - 1)) {
+                href = href.substr(0, href.length - 1);
+            }
+        }
+
+        return href;
     }
 };
 

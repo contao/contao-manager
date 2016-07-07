@@ -5,7 +5,7 @@ const cookie    = require('cookie');
 const Promise   = require('bluebird');
 const merge     = require('lodash/merge');
 
-var cookies;
+var cookies, apiBaseUrl = '';
 
 // Enable cancelling of promises
 Promise.config({cancellation: true});
@@ -22,7 +22,7 @@ var createRequest = function(url, props) {
         props.headers['Authorization'] = 'Bearer ' + getToken();
     }
 
-    props = merge({}, {uri: url, json: true}, props);
+    props = merge({}, {uri: apiBaseUrl + url, json: true}, props);
 
     return new Promise(function(resolve, reject, onCancel) {
         var req = xhr(props, function (err, resp, body) {
@@ -62,6 +62,14 @@ var getToken = function() {
     return '';
 };
 
+var getApiBaseUrl = function () {
+    return apiBaseUrl;
+};
+
+var setApiBaseUrl = function (newBaseUrl) {
+    apiBaseUrl = newBaseUrl;
+};
+
 function _readCookie(name,c,C,i){
     if(cookies){ return cookies[name]; }
 
@@ -79,5 +87,7 @@ function _readCookie(name,c,C,i){
 module.exports = {
     createRequest: createRequest,
     setToken: setToken,
-    getToken: getToken
+    getToken: getToken,
+    setApiBaseUrl: setApiBaseUrl,
+    getApiBaseUrl: getApiBaseUrl
 };

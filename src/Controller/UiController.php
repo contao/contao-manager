@@ -59,9 +59,10 @@ class UiController extends Controller
     public function appAction($locale)
     {
         return $this->render('AppBundle::index.html.php', [
-            'lang'  => $locale,
-            'css'   => $this->generateUrl('asset', ['path' => 'css/bundle.css']),
-            'js'    => $this->generateUrl('asset', ['path' => 'js/bundle.js']),
+            'lang'     => $locale,
+            'css'      => $this->generateUrl('asset', ['path' => 'css/bundle.css']),
+            'js'       => $this->generateUrl('asset', ['path' => 'js/bundle.js']),
+            'baseHref' => $this->generateUrl('index'),
         ]);
     }
 
