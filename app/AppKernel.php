@@ -156,7 +156,9 @@ class AppKernel extends Kernel
         $container->addObjectResource($this);
         $this->prepareContainer($container);
 
-        $this->registerContainerConfiguration($this->getContainerLoader($container));
+        if (null !== $cont = $this->registerContainerConfiguration($this->getContainerLoader($container))) {
+            $container->merge($cont);
+        }
 
         $container->addCompilerPass(new AddClassesToCachePass($this));
         $container->addResource(new EnvParametersResource('SYMFONY__'));
