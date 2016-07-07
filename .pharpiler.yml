@@ -94,6 +94,11 @@ rewrites:
         "@release_date@": "%date:contao/contao-manager%"
       - type: replace
         "tenside.phar": "contao-manager.phar"
+  - files:
+      - "%package:contao/contao-manager%/app/cache/phar/*.php"
+    filter:
+      - type: replace
+        "%package:contao/contao-manager%": "phar://contao-manager.phar"
 
   # keep this last
   - files: "*.php"
