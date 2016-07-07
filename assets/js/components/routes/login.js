@@ -111,7 +111,7 @@ var LoginComponent = React.createClass({
         return (
             <Trappings sectionClass="login">
                 <header>
-                    <img src="/web-assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
+                    <img src="web-assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
                     <p className="welcome"><strong>Welcome</strong> to Contao Manager v1.0</p>
                 </header>
 
