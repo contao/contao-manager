@@ -20,11 +20,11 @@
   "require": {
     "php": ">=5.5",
     "composer/composer": "~1.0",
-    "symfony/monolog-bundle": "~2.8",
-    "symfony/framework-bundle": "~2.8",
-    "symfony/security-bundle": "~2.8",
-    "symfony/http-kernel": "~2.8",
-    "symfony/templating": "~2.8",
+    "symfony/monolog-bundle": "~2.9",
+    "symfony/framework-bundle": "~3.0",
+    "symfony/security-bundle": "~3.0",
+    "symfony/http-kernel": "~3.0",
+    "symfony/templating": "~3.0",
     "tenside/core": "~1.0",
     "tenside/core-bundle": "~1.0"
   },
