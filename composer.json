@@ -25,8 +25,8 @@
     "symfony/security-bundle": "~3.0",
     "symfony/http-kernel": "~3.0",
     "symfony/templating": "~3.0",
-    "tenside/core": "~1.0",
-    "tenside/core-bundle": "~1.0"
+    "tenside/core": "~1.0@dev",
+    "tenside/core-bundle": "~1.0@dev"
   },
   "require-dev": {
     "phpcq/all-tasks": "~1.1",
@@ -48,7 +48,5 @@
     "branch-alias": {
       "dev-master": "1.0.x-dev"
     }
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+  }
 }
