@@ -2,8 +2,7 @@ phar: contao-manager.phar
 
 tasks:
   - type: run-process
-    #command: "%package:contao/contao-manager%/node_modules/.bin/gulp --production"
-    command: "%package:contao/contao-manager%/node_modules/.bin/gulp"
+    command: "%package:contao/contao-manager%/node_modules/.bin/gulp --production"
   - type: run-process
     command: "%package:contao/contao-manager%/app/console cache:clear --env=phar --no-debug --no-warmup"
   - type: run-process
