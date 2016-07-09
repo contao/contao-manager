@@ -1,0 +1,23 @@
+.tests {
+  svg {
+    width: 32px;
+  }
+
+  .success {
+    svg {
+      fill: $green-button;
+    }
+  }
+
+  .warning {
+    svg {
+      fill: $orange-button;
+    }
+  }
+
+  .fail {
+    svg {
+      fill: $red-button;
+    }
+  }
+}
