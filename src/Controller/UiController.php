@@ -140,7 +140,7 @@ class UiController extends Controller
 
             return $response;
         } catch (\Exception $e) {
-            throw new BadRequestHttpException('Could not load translation');
+            throw new BadRequestHttpException('Could not load translation', $e);
         }
     }
 }
