@@ -18,8 +18,10 @@
  * @filesource
  */
 
-namespace AppBundle\Test;
+namespace AppBundle\Test\Controller;
 
+use AppBundle\Test\TestHomePathDeterminator;
+use AppBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
