@@ -44,7 +44,7 @@ class UiController extends Controller
     public function indexAction(Request $request)
     {
         // Try to find the user language
-        $locale = $request->getPreferredLanguage(['de', 'en']);
+        $locale = $request->getPreferredLanguage(['en', 'de']);
 
         return $this->redirect($this->generateUrl('app', ['locale' => $locale]));
     }
