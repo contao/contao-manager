@@ -39,6 +39,9 @@ tasks:
           - *default_exclude_files
           - bootstrap.php
           - src/Compiler.php
+        include_files:
+          - *default_include_files
+          - "(res/*)"
       seld/cli-prompt:
         include_files:
           - *default_include_files
