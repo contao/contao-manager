@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "17f659da940e6e30fefb4a5facfc4637",
-    "content-hash": "74596f1af0f5b599c3377cd52c04828c",
+    "hash": "2cd412a61380310be5b247ed99b645a3",
+    "content-hash": "82c291a166ad2f167b624da59bf513a0",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2673,12 +2673,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "f11a34a8c31d0211d896b6cc280f407b189a1529"
+                "reference": "c53edc70b91ee0cbf19ba3019acfb56185841610"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/f11a34a8c31d0211d896b6cc280f407b189a1529",
-                "reference": "f11a34a8c31d0211d896b6cc280f407b189a1529",
+                "url": "https://api.github.com/repos/tenside/core/zipball/c53edc70b91ee0cbf19ba3019acfb56185841610",
+                "reference": "c53edc70b91ee0cbf19ba3019acfb56185841610",
                 "shasum": ""
             },
             "require": {
@@ -2687,7 +2687,7 @@
                 "ext-openssl": "*",
                 "ext-zip": "*",
                 "firebase/php-jwt": "~2.2",
-                "php": ">=5.5",
+                "php": ">=5.6",
                 "symfony/console": "~3.0",
                 "symfony/finder": "~3.0",
                 "symfony/http-foundation": "~3.0",
@@ -2725,7 +2725,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-07-07 17:22:39"
+            "time": "2016-07-09 05:58:05"
         },
         {
             "name": "tenside/core-bundle",
@@ -2733,12 +2733,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "75e91c5ad1eee88c4638b3e144b1760268e32f03"
+                "reference": "25bde4a1606edfbe967a966b4e2f2e06bf15645a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/75e91c5ad1eee88c4638b3e144b1760268e32f03",
-                "reference": "75e91c5ad1eee88c4638b3e144b1760268e32f03",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/25bde4a1606edfbe967a966b4e2f2e06bf15645a",
+                "reference": "25bde4a1606edfbe967a966b4e2f2e06bf15645a",
                 "shasum": ""
             },
             "require": {
@@ -2746,7 +2746,7 @@
                 "ext-zip": "*",
                 "firebase/php-jwt": "~2.2",
                 "monolog/monolog": "~1.17",
-                "php": ">=5.5",
+                "php": ">=5.6",
                 "symfony/config": "~3.0",
                 "symfony/console": "~3.0",
                 "symfony/dependency-injection": "~3.0",
@@ -2798,7 +2798,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-07-07 17:40:00"
+            "time": "2016-07-09 06:01:38"
         }
     ],
     "packages-dev": [
@@ -5458,7 +5458,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5"
+        "php": ">=5.6"
     },
     "platform-dev": []
 }

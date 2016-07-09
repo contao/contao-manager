@@ -81,7 +81,7 @@ rewrites:
       - "%package:tenside/core%/src/Tenside.php"
     filter:
       - type: replace
-        "@@TENSIDE_MIN_PHP_VERSION@@": "5.5.0"
+        "@@TENSIDE_MIN_PHP_VERSION@@": "5.6.0"
 
       - type: warning-time
         search: "@warning_time@"
