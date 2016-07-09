@@ -243,6 +243,26 @@ class UiControllerTest extends WebTestCase
     }
 
     /**
+     * Test the asset action for an invalid file.
+     *
+     * @return void
+     */
+    public function testUnknownAssetActionFailsWithException()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', 'https://tenside.example.com/web-assets/images/non-existent.file');
+        $response = $client->getResponse();
+
+        $this->assertInstanceOf(JsonResponse::class, $response);
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals(
+            ['status' => 'ERROR', 'message' => 'This asset does not exist!'],
+            json_decode($response->getContent(), true)
+        );
+    }
+
+    /**
      * Test that the translation action returns a message catalog.
      *
      * @return void

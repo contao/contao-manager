@@ -79,12 +79,12 @@ class UiController extends Controller
      */
     public function assetAction($path)
     {
-        /** @var \Symfony\Component\HttpKernel\Kernel $kernel */
-        $kernel = $this->container->get('kernel');
-        $path   = $kernel->locateResource('@AppBundle/Resources/public/' . $path);
-
-        if (false === $path) {
-            throw new BadRequestHttpException('This asset does not exist!');
+        try {
+            /** @var \Symfony\Component\HttpKernel\Kernel $kernel */
+            $kernel = $this->container->get('kernel');
+            $path   = $kernel->locateResource('@AppBundle/Resources/public/' . $path);
+        } catch (\Exception $exception) {
+            throw new BadRequestHttpException('This asset does not exist!', $exception);
         }
 
         $file = new \SplFileInfo($path);
