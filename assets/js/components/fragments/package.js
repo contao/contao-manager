@@ -149,6 +149,8 @@ var PackageComponent = React.createClass({
                     constraint={this.state.constraint}
                     placeholder={'search' === this.props.mode ? 'latest version' : ''}
                     version={'packages' === this.props.mode ? this.props.version : null}
+                    upgrade_version={'packages' === this.props.mode ? this.props.upgrade_version : null}
+                    upgrade_time={'packages' === this.props.mode ? this.props.upgrade_time : null}
                     time={this.props.time}
                     mode={this.props.mode}
                     onConstraintChange={this.handleConstraintChange}
@@ -268,12 +270,12 @@ var ReleaseComponent = React.createClass({
         }
     },
 
-    getFormattedReleaseDate: function() {
-        if (undefined === this.props.time) {
+    getFormattedReleaseDate: function(time) {
+        if (undefined === time) {
             return '';
         }
 
-        var date = new Date(this.props.time);
+        var date = new Date(time);
         return date.toLocaleString();
     },
 
@@ -337,13 +339,21 @@ var ReleaseComponent = React.createClass({
     },
 
     render: function() {
-        var version = '';
+        var version = '', upgrade_version = '';
 
         if (this.props.version) {
             version = (
                 <div className="version">
                     <strong><Translation domain="package">Version</Translation> {this.props.version}</strong>
-                    <time dateTime={this.props.time}><Translation domain="package">Released </Translation> {this.getFormattedReleaseDate()}</time>
+                    <time dateTime={this.props.time}><Translation domain="package">Released </Translation> {this.getFormattedReleaseDate(this.props.time)}</time>
+                </div>
+            )
+        }
+        if (this.props.upgrade_version) {
+            upgrade_version = (
+                <div className="upgrade_version">
+                    <strong><Translation domain="package">Upgrade to version</Translation> {this.props.upgrade_version}</strong>
+                    <time dateTime={this.props.time}><Translation domain="package">Released </Translation> {this.getFormattedReleaseDate(this.props.upgrade_time)}</time>
                 </div>
             )
         }
@@ -359,6 +369,7 @@ var ReleaseComponent = React.createClass({
                     </button>
                 </fieldset>
                 {version}
+                {upgrade_version}
             </div>
         )
     }
