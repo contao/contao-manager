@@ -22,7 +22,7 @@ tasks:
       - "(LICENSE\\.?.*)"
       - "%package:contao/contao-manager%/app/console"
     exclude_files: &default_exclude_files
-      - "(.*[Tt]ests?\\/*)"
+      - "(.*\\/[Tt]ests?\\/*)"
       - "*tests/*.php"
     package_override:
       contao/contao-manager:
