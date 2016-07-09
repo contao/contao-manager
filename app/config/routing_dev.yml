@@ -1,17 +1,7 @@
-_main:
-    resource: routing.yml
-
+# Api doc must be included first, as the catch all otherwise will override it.
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /assets/api-doc
 
-# Fallback to UI index if no route matches
-catch_all:
-    path:     /{catchall}
-    methods:  [GET]
-    defaults:
-        _controller: FrameworkBundle:Redirect:redirect
-        route: 'index'
-        ignoreAttributes: true
-    requirements:
-        catchall: .+
+_main:
+    resource: routing.yml
