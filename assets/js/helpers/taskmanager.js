@@ -12,18 +12,13 @@ function addDays(date, days) {
 }
 
 module.exports = {
-    runNextTask: function(taskPopupOptions) {
+    runNextTask: function() {
         return request.createRequest('/api/v1/tasks/run')
             .then(function(response) {
                 if ('OK' === response.body.status) {
-
-                    var taskOptions = merge(
-                        {},
-                        taskPopupOptions,
-                        {taskId: response.body.task.id}
-                    );
-
-                    eventhandler.emit('displayTaskPopup', taskOptions);
+                    eventhandler.emit('displayTaskPopup', {
+                        taskId: response.body.task.id
+                    });
                 }
 
                 return response;

@@ -49,6 +49,12 @@ var InstallComponent = React.createClass({
                     self.setState({isLoggedIn: false});
                 }
             });
+
+        // Try to redirect to packages when the popup is closed as the
+        // last running task might have been the install task.
+        eventhandler.on('hideTaskPopup', function() {
+            self.context.routing.redirect('packages');
+        });
     },
 
     componentWillUnmount: function() {
@@ -129,15 +135,7 @@ var InstallComponent = React.createClass({
                     // and the task manually deleted? running the next task
                     // will fail?
 
-                    return taskmanager.runNextTask({
-                        buttonCallback: function() {
-                            eventhandler.emit('hideTaskPopup');
-                            self.context.routing.redirect('packages');
-                        },
-                        content: {
-                            buttonLabel: 'OK'
-                        }
-                    });
+                    return taskmanager.runNextTask();
                 }
             })
             .catch(function(err) {

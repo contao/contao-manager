@@ -22,11 +22,9 @@ var TaskPopupComponent = React.createClass({
             status: 'loading',
             taskId: null,
             updateFrequency: 2000, // every 2 seconds
-            buttonCallback: null,
             content: {
                 taskTitle: '[…]',
-                consoleOutput: '',
-                buttonLabel: 'Close'
+                consoleOutput: ''
             }
         };
     },
@@ -76,15 +74,7 @@ var TaskPopupComponent = React.createClass({
     handleButton: function() {
         var self = this;
         taskmanager.deleteTask(this.state.taskId)
-            .then(self.callButtonCallback);
-    },
-
-    callButtonCallback: function() {
-        if (null !== this.state.buttonCallback) {
-            this.state.buttonCallback.call(this, this.state);
-        } else {
-            eventhandler.emit('hideTaskPopup');
-        }
+            .then(eventhandler.emit('hideTaskPopup', this.state));
     },
 
     hide: function() {
@@ -217,7 +207,9 @@ var TaskPopupComponent = React.createClass({
 
                 <p>{consolePreview}</p>
 
-                <button onClick={this.handleButton} disabled={!includes(['error', 'success'], this.state.status)}>{this.state.content.buttonLabel}</button>
+                <button onClick={this.handleButton} disabled={!includes(['error', 'success'], this.state.status)}>
+                    <Translation domain="taskpopup">Hide Task Popup</Translation>
+                </button>
 
                 <a onClick={this.hideConsole} className="hide">
                     <i className="icono-caretRight" />
