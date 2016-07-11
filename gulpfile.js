@@ -19,6 +19,13 @@ const runSequence   = require('run-sequence');
 
 const production    = !!gutil.env.production;
 
+// Env task
+gulp.task('set-env', function() {
+    if (production) {
+        process.env.NODE_ENV = 'production';
+    }
+});
+
 // Composer install
 gulp.task('composer-install', function() {
     return composer();
@@ -40,10 +47,10 @@ gulp.task('scripts', function () {
         .bundle()
         .pipe(source('./assets/js/main.js'))
         .pipe(buffer())
-        .pipe(production ? uglify() : gutil.noop())
         .pipe(rename('bundle.js'))
             .on('error', gutil.log)
-        .pipe(production ? sourcemaps.write() : gutil.noop())
+        .pipe(production ? uglify() : gutil.noop())
+        .pipe(!production ? sourcemaps.write() : gutil.noop())
         .pipe(gulp.dest('src/Resources/public/js'));
 });
 
@@ -60,9 +67,6 @@ gulp.task('styles', function () {
         .pipe(gulp.dest('src/Resources/public/css'));
 });
 
-// Build by default
-gulp.task('default', ['scripts', 'styles']);
-
 // Watch task
 gulp.task('watch', function() {
     gulp.watch(['./assets/js/**/*.js'], ['scripts']);
@@ -74,7 +78,7 @@ gulp.task('watch-update', function() {
 });
 
 // Build task
-gulp.task('build', ['scripts', 'styles']);
+gulp.task('build', ['set-env', 'scripts', 'styles']);
 
 // Build and watch task
 gulp.task('build:watch', ['build', 'watch']);
@@ -88,3 +92,6 @@ gulp.task('update', function() {
         'build'
     );
 });
+
+// Build by default
+gulp.task('default', ['build']);
