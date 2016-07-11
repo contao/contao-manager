@@ -6,6 +6,7 @@ const Package       = require('../fragments/package.js');
 const Loader        = require('../fragments/loader.js');
 const request       = require('../../helpers/request.js');
 const taskmanager   = require('../../helpers/taskmanager.js');
+const eventhandler  = require('../../helpers/eventhandler.js');
 const Translation   = require('../translation.js');
 const forEach       = require('lodash/forEach');
 const merge         = require('lodash/merge');
@@ -30,6 +31,11 @@ var PackagesComponent = React.createClass({
 
     componentDidMount: function() {
         this.updatePackageList('packages');
+
+        // Reload packages list when install or update tasks were running
+        eventhandler.on('hideTaskPopup', function() {
+            this.updatePackageList('packages');
+        }.bind(this));
     },
 
     componentWillUnmount: function() {
