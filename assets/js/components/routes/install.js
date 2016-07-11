@@ -270,7 +270,7 @@ var InstallComponent = React.createClass({
         return (
             <Trappings wide={true}>
                 <header>
-                    <img src="/web-assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
+                    <img src="web-assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
                     <p className="welcome"><strong>Welcome</strong> to Contao Manager v1.0</p>
                     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
                 </header>
