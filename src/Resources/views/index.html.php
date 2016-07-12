@@ -7,6 +7,7 @@
     <meta name="robots" content="noindex, nofollow">
     <base href="<?= $baseHref ?>" />
     <link rel="stylesheet" href="<?= $css ?>">
+    <link rel="icon" href="data:;base64,=">
 </head>
 <body>
 
