@@ -50,7 +50,7 @@ var MainTrappingsComponent = React.createClass({
             <div id="content" className={classes.join(' ')}>
 
                 <header>
-                    <a id="logo" href="#"><img src="/web-assets/images/logo.svg" width="40" height="40" alt="Contao Logo" /> Contao Manager</a>
+                    <a id="logo" href="#"><img src="web-assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />Contao Manager</a>
                     <a id="nav-toggle"><span /><span /><span /></a>
                     <Navigation />
                 </header>
