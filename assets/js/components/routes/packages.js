@@ -32,6 +32,18 @@ var PackagesComponent = React.createClass({
     componentDidMount: function() {
         this.updatePackageList('packages');
 
+        // Reset state when search is closed
+        eventhandler.on('closeSearch', function() {
+            var searchRequest = merge({}, this.state.searchRequest, {keywords: ''});
+
+            this.setState({
+                mode: 'packages',
+                searchRequest: searchRequest
+            });
+
+            this.updatePackageList('packages', searchRequest);
+        }.bind(this));
+
         // Reload packages list when install or update tasks were running
         eventhandler.on('hideTaskPopup', function() {
             this.updatePackageList('packages');
@@ -104,17 +116,6 @@ var PackagesComponent = React.createClass({
             });
 
         this.requests.push(req);
-    },
-
-    closeSearch: function() {
-        var searchRequest = merge({}, this.state.searchRequest, {keywords: ''});
-
-        this.setState({
-            mode: 'packages',
-            searchRequest: searchRequest
-        });
-
-        this.updatePackageList('packages', searchRequest);
     },
 
     updateKeywordsOnType: function(e) {
@@ -193,7 +194,6 @@ var PackagesComponent = React.createClass({
         var self     = this;
         var search = <SearchTypeComponent
             disableButtons={Object.keys(this.state.changes).length > 0 || 'packages' !== this.state.mode}
-            closeSearch={this.closeSearch}
             keywords={this.state.searchRequest.keywords}
             onKeywordsChange={this.updateKeywordsOnType}
             onSearchUpdates={this.searchUpdates}
@@ -264,33 +264,39 @@ var SearchTypeComponent = React.createClass({
         };
     },
 
+    componentDidMount: function() {
+        eventhandler.on('closeSearch', this.closeSearch);
+    },
+
     componentDidUpdate: function(prevProps, prevState) {
         if (!prevState.searchActive && this.state.searchActive) {
             this.refs.searchInput.focus();
         }
     },
 
-    toggleSearch: function() {
+    openSearch: function() {
         this.setState({searchActive: true});
+    },
+
+    closeSearch: function() {
+        this.setState({searchActive: false});
     },
 
     handleSearchBlur: function() {
         if ('' == this.refs.searchInput.value) {
-            this.setState({searchActive: false});
+            eventhandler.emit('closeSearch');
         }
     },
 
     handleSearchKey: function(e) {
         if ('Escape' == e.key) {
-            this.props.closeSearch();
-            this.setState({searchActive: false});
+            eventhandler.emit('closeSearch');
         }
     },
 
     handleCancel: function(e) {
         e.preventDefault();
-        this.props.closeSearch();
-        this.setState({searchActive: false});
+        eventhandler.emit('closeSearch');
     },
 
     render: function() {
@@ -304,7 +310,7 @@ var SearchTypeComponent = React.createClass({
             <section className={sectionClass}>
 
                 <button className="update" disabled={this.props.disableButtons} onClick={this.props.onSearchUpdates}>Check for Updates</button>
-                <button className="search" disabled={this.props.disableButtons} onClick={this.toggleSearch}>Search packages </button>
+                <button className="search" disabled={this.props.disableButtons} onClick={this.openSearch}>Search packages </button>
                 <input id="search" ref="searchInput" type="text" placeholder="Search Packages…" onChange={this.props.onKeywordsChange} onBlur={this.handleSearchBlur} onKeyUp={this.handleSearchKey} value={this.props.keywords} />
                 <button className="cancel" onClick={this.handleCancel}>X</button>
 
