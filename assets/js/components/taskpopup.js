@@ -159,10 +159,10 @@ var TaskPopupComponent = React.createClass({
 
         var label = '';
         var lookup = {
-            'install':          'Installing packages',
-            'remove-package':   'Removing a package',
-            'require-package':  'Requiring a package',
-            'upgrade':          'Upgrading packages'
+            'install':          'Setting up a Contao Application',
+            'remove-package':   'Removing one or more packages',
+            'require-package':  'Installing one or more packages',
+            'upgrade':          'Checking for updates of all installed packages'
         };
 
         if (undefined !== lookup[type]) {
