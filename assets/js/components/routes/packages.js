@@ -178,8 +178,6 @@ var PackagesComponent = React.createClass({
         }
 
         this.setState({changes: changes});
-
-        // @todo request the api to modify the package
     },
 
     stopRunningRequests: function() {
@@ -203,7 +201,7 @@ var PackagesComponent = React.createClass({
 
         if (this.state.loading) {
             if ('search' === this.state.mode) {
-                packages = <Loader>Searching for packages matching <i>{this.state.searchRequest.keywords}</i> …</Loader>;
+                packages = <Loader>Searching for Contao packages matching <i>{this.state.searchRequest.keywords}</i> …</Loader>;
             } else {
                 packages = <Loader>Loading …</Loader>
             }

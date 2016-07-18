@@ -55,7 +55,7 @@ var PackageComponent = React.createClass({
         });
     },
 
-    handleRemoveButton: function(e) {
+    handleRemoveButton: function() {
         this.setState({
             removed: true,
             enabled: this.props.enabled,
@@ -63,13 +63,13 @@ var PackageComponent = React.createClass({
         });
     },
 
-    handleInstallButton: function(e) {
+    handleInstallButton: function() {
         this.setState({
             installed: true
         });
     },
 
-    handleEnableOrDisableButton: function(e) {
+    handleEnableOrDisableButton: function() {
         this.setState({
             enabled: !this.state.enabled
         });
