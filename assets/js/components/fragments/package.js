@@ -213,7 +213,7 @@ var ActionsComponent = React.createClass({
             );
         }
 
-        if (this.props.canBeEnabledOrDisabled && !this.props.isRemoved) {
+        /*if (this.props.canBeEnabledOrDisabled && !this.props.isRemoved) {
             if (this.props.isEnabled) {
                 buttons.push(
                     <button key="disable" className="disable" onClick={this.props.onEnableOrDisable}>
@@ -229,7 +229,7 @@ var ActionsComponent = React.createClass({
                     </button>
                 );
             }
-        }
+        }*/
 
         if (this.props.canBeRemoved) {
             buttons.push(
