@@ -46,8 +46,10 @@ var PackagesComponent = React.createClass({
 
         // Reload packages list when install or update tasks were running
         eventhandler.on('hideTaskPopup', function() {
-            this.updatePackageList('packages');
-        }.bind(this));
+            // Reset the search keywords after closing the popup
+            // which will also go to the packages list.
+            eventhandler.emit('closeSearch');
+        });
     },
 
     componentWillUnmount: function() {
