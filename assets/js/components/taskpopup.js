@@ -40,10 +40,10 @@ var TaskPopupComponent = React.createClass({
 
         // Escape key
         window.addEventListener('keyup', function(e) {
-            if (27 === e.keyCode) {
+            if (27 === e.keyCode && includes(['error', 'success'], this.state.status)) {
                 eventhandler.emit('hideTaskPopup');
             }
-        });
+        }.bind(this));
 
         eventhandler.on('displayTaskPopup', self.show);
         eventhandler.on('hideTaskPopup', self.hide);
