@@ -73,11 +73,11 @@ var TaskPopupComponent = React.createClass({
 
     handleButton: function() {
         var self = this;
-        taskmanager.deleteTask(this.state.taskId)
-            .then(eventhandler.emit('hideTaskPopup', this.state));
+        eventhandler.emit('hideTaskPopup', this.state);
     },
 
     hide: function() {
+        taskmanager.deleteTask(this.state.taskId);
         this.setState(this.getInitialState());
         window.clearInterval(this.currentInterval);
     },
