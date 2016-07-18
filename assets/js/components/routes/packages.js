@@ -145,24 +145,38 @@ var PackagesComponent = React.createClass({
     handleApplyButton: function(e) {
         e.preventDefault();
 
+        var task = null;
         var removePackages = [];
+        var installPackages = [];
 
         forEach(this.state.changes, function(change, name) {
             if (change.removed) {
                 removePackages.push(name);
             }
+
+            if (change.installed || change.modified) {
+                installPackages.push(name + ((change.constraint) ? ' ' + change.constraint : ''));
+            }
         });
 
         if (removePackages.length) {
-            var task = {
+            task = {
                 'type': 'remove-package',
-                'package': removePackages,
-                'no-update': true
-            };
-
-            taskmanager.addTask(task)
-                .then(taskmanager.runNextTask);
+                'package': removePackages
+            }
         }
+
+        // If we have an install task, we don't remove anything at all
+        // by overriding the task variable here
+        if (installPackages.length) {
+            task = {
+                'type': 'require-package',
+                'package': installPackages
+            }
+        }
+
+        taskmanager.addTask(task)
+            .then(taskmanager.runNextTask);
     },
 
     handleResetButton: function(e) {
