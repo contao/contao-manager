@@ -78,9 +78,7 @@ var TaskPopupComponent = React.createClass({
     },
 
     hide: function() {
-        this.setState({
-            show: false
-        });
+        this.setState(this.getInitialState());
         window.clearInterval(this.currentInterval);
     },
 
