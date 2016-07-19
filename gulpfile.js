@@ -16,6 +16,7 @@ const concat        = require('gulp-concat');
 const composer      = require("gulp-composer");
 const install       = require("gulp-install");
 const runSequence   = require('run-sequence');
+const clean         = require('gulp-clean');
 
 const production    = !!gutil.env.production;
 
@@ -35,6 +36,12 @@ gulp.task('composer-install', function() {
 gulp.task('npm-install', function() {
     return gulp.src('./package.json')
         .pipe(install());
+});
+
+// Clear Symfony app cache
+gulp.task('clear-app-cache', function() {
+    return gulp.src(__dirname + '/app/cache/dev', {read: false})
+        .pipe(clean({force: true}));
 });
 
 // Build bundle.js
@@ -88,6 +95,7 @@ gulp.task('update:build:watch', ['update', 'build', 'watch', 'watch-update']);
 gulp.task('update', function() {
     runSequence(
         'composer-install',
+        'clear-app-cache',
         'npm-install',
         'build'
     );
