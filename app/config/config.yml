@@ -73,3 +73,8 @@ services:
     app.postdata_authenticator:
         class: AppBundle\Security\PostDataAuthenticator
         arguments: ["@security.password_encoder"]
+    app.taskfactory:
+        class:     AppBundle\Task\AppTaskFactory
+        arguments: ["@tenside.home", "@tenside.config"]
+        tags:
+            - { name: tenside.taskfactory }
