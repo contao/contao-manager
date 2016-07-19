@@ -54,6 +54,7 @@ var NavigationComponent = React.createClass({
             <nav role="navigation">
                 <ul>
                     <li><Link routeName="packages"><Translation domain="navigation">Packages</Translation></Link></li>
+                    <li><Link routeName="maintenance"><Translation domain="navigation">Maintenance</Translation></Link></li>
                     <li>
                         <a><Translation domain="navigation">Files</Translation></a>
                         <ul>
