@@ -1,21 +1,25 @@
-.tests {
+.test {
+  margin-bottom: 20px;
+
   svg {
     width: 32px;
+    float: left;
+    margin-right: 20px;
   }
 
-  .success {
+  &.success {
     svg {
       fill: $green-button;
     }
   }
 
-  .warning {
+  &.warning {
     svg {
       fill: $orange-button;
     }
   }
 
-  .fail {
+  &.fail {
     svg {
       fill: $red-button;
     }

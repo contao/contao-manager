@@ -2,6 +2,7 @@
 
 const React         = require('react');
 const Promise       = require('bluebird');
+const Trappings     = require('../trappings/main.js');
 const TensideState  = require('../../helpers/tenside-state.js');
 const isEqual       = require('lodash/isEqual');
 const forIn         = require('lodash/forIn');
@@ -51,9 +52,7 @@ var SelfTestComponent = React.createClass({
         });
 
         return (
-            <div className="tests">
-                {tests}
-            </div>
+            <Trappings>{tests}</Trappings>
         );
     }
 });
@@ -71,7 +70,7 @@ var TestComponent = React.createClass({
         var data = this.props.data;
 
         return (
-            <div className={'test ' + data.state.toLowerCase() + ' ' + data.name}>
+            <div className={'test clearfix ' + data.state.toLowerCase() + ' ' + data.name}>
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 79.536 79.536" xmlSpace="preserve"><g><path d="M39.769,0C17.8,0,0,17.8,0,39.768c0,21.965,17.8,39.768,39.769,39.768 c21.965,0,39.768-17.803,39.768-39.768C79.536,17.8,61.733,0,39.769,0z M34.142,58.513L15.397,39.768l7.498-7.498l11.247,11.247 l22.497-22.493l7.498,7.498L34.142,58.513z" /></g></svg>
                 <div className="message">{data.message}</div>
                 <div className="explain">{data.explain}</div>
