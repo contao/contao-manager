@@ -51,6 +51,7 @@ var PackageComponent = React.createClass({
             removed: this.state.removed,
             enabled: this.state.enabled,
             installed: this.state.installed,
+            constraintChanged: this.state.constraint !== this.initialConstraint,
             constraint: this.state.constraint
         });
     },
@@ -58,8 +59,7 @@ var PackageComponent = React.createClass({
     handleRemoveButton: function() {
         this.setState({
             removed: true,
-            enabled: this.props.enabled,
-            constraint: false
+            enabled: this.props.enabled
         });
     },
 

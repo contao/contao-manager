@@ -154,7 +154,7 @@ var PackagesComponent = React.createClass({
                 removePackages.push(name);
             }
 
-            if (change.installed || change.modified) {
+            if (change.installed || change.constraintChanged) {
                 installPackages.push(name + ((change.constraint) ? ' ' + change.constraint : ''));
             }
         });
