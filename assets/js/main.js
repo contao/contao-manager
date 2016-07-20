@@ -13,8 +13,6 @@ var router = routing.getRouter();
 
 request.setApiBaseUrl(routing.getBaseHref());
 
-// @todo Cleanup tasks older than x days/weeks whatever
-
 // Route matched
 router.routed.add(function(request, data) {
 
