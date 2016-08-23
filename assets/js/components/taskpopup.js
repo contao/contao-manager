@@ -14,6 +14,7 @@ var TaskPopupComponent = React.createClass({
     lastTaskId: null,
     currentInterval: null,
     taskTitleCache: {},
+    scrolled: false,
 
     getInitialState: function() {
         return {
@@ -63,9 +64,11 @@ var TaskPopupComponent = React.createClass({
 
         this.lastTaskId = this.state.taskId;
 
-        // Scroll to bottom of console
-        var consoleOutput = this.refs.consoleOutput;
-        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        // Scroll to bottom of console if not scrolled manually
+        if (!this.scrolled) {
+            var consoleOutput = this.refs.consoleOutput;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
     },
 
     show: function(state) {
@@ -81,6 +84,7 @@ var TaskPopupComponent = React.createClass({
     },
 
     hide: function() {
+        this.scrolled = false;
         taskmanager.deleteTask(this.state.taskId);
         this.setState(this.getInitialState());
         window.clearInterval(this.currentInterval);
@@ -137,6 +141,10 @@ var TaskPopupComponent = React.createClass({
                 self.setState(merge({}, self.state, {status: 'error'}));
                 window.clearInterval(self.currentInterval);
             });
+    },
+
+    onConsoleOutputScroll: function () {
+        this.scrolled = true;
     },
 
     extractConsolePreview: function() {
@@ -221,7 +229,7 @@ var TaskPopupComponent = React.createClass({
                     <i className="icono-caretRight" />
                     <Translation domain="taskpopup">Show Console Output</Translation>
                 </a>
-                <code ref="consoleOutput">{this.state.content.consoleOutput}</code>
+                <code ref="consoleOutput" onScroll={this.onConsoleOutputScroll}>{this.state.content.consoleOutput}</code>
             </div>
         );
     }
