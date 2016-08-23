@@ -62,6 +62,10 @@ var TaskPopupComponent = React.createClass({
         }
 
         this.lastTaskId = this.state.taskId;
+
+        // Scroll to bottom of console
+        var consoleOutput = this.refs.consoleOutput;
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
     },
 
     show: function(state) {
@@ -217,7 +221,7 @@ var TaskPopupComponent = React.createClass({
                     <i className="icono-caretRight" />
                     <Translation domain="taskpopup">Show Console Output</Translation>
                 </a>
-                <code>{this.state.content.consoleOutput}</code>
+                <code ref="consoleOutput">{this.state.content.consoleOutput}</code>
             </div>
         );
     }
