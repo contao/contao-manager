@@ -144,7 +144,8 @@ var TaskPopupComponent = React.createClass({
     },
 
     onConsoleOutputScroll: function () {
-        this.scrolled = true;
+        var consoleOutput = this.refs.consoleOutput;
+        this.scrolled = consoleOutput.scrollTop !== consoleOutput.scrollHeight;
     },
 
     extractConsolePreview: function() {
