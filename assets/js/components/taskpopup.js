@@ -20,6 +20,7 @@ var TaskPopupComponent = React.createClass({
         return {
             show: false,
             showConsole: false,
+            positionFixed: false,
             status: 'loading',
             taskId: null,
             updateFrequency: 2000, // every 2 seconds
@@ -45,6 +46,9 @@ var TaskPopupComponent = React.createClass({
                 eventhandler.emit('hideTaskPopup');
             }
         }.bind(this));
+
+        window.addEventListener('resize', this.toggleFixedPosition);
+        this.toggleFixedPosition();
 
         eventhandler.on('displayTaskPopup', self.show);
         eventhandler.on('hideTaskPopup', self.hide);
@@ -96,6 +100,10 @@ var TaskPopupComponent = React.createClass({
 
     showConsole: function() {
         this.setState({showConsole: true});
+    },
+
+    toggleFixedPosition: function() {
+        this.setState({positionFixed: this.popup && this.popup.clientHeight < window.innerHeight});
     },
 
     startTaskUpdate: function() {
@@ -197,6 +205,10 @@ var TaskPopupComponent = React.createClass({
 
         if (this.state.showConsole) {
             cssClasses.push('console');
+        }
+
+        if (this.state.positionFixed) {
+            cssClasses.push('fixed');
         }
 
         cssClasses.push('status-' + this.state.status);

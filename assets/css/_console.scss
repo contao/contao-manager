@@ -17,6 +17,10 @@
     opacity: 1;
     transition: opacity .5s linear;
 
+    &.fixed {
+        position: fixed;
+    }
+
     &.console,
     &.status-error {
         height:630px;
