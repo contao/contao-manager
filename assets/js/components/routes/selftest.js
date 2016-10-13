@@ -2,7 +2,8 @@
 
 const React         = require('react');
 const Promise       = require('bluebird');
-const Trappings     = require('../trappings/main.js');
+const Trappings     = require('../trappings/boxed.js');
+const Loader        = require('../fragments/loader.js');
 const TensideState  = require('../../helpers/tenside-state.js');
 const isEqual       = require('lodash/isEqual');
 const forIn         = require('lodash/forIn');
@@ -52,7 +53,12 @@ var SelfTestComponent = React.createClass({
         });
 
         return (
-            <Trappings>{tests}</Trappings>
+            <Trappings wide={true} mainClass="selftest">
+                <section>
+                    <h1>Contao Manager – Self-Test</h1>
+                    {tests.length > 0 ? tests : <Loader>Loading test results …</Loader>}
+                </section>
+            </Trappings>
         );
     }
 });

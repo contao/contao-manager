@@ -109,13 +109,13 @@ var LoginComponent = React.createClass({
         var errorMsg = this.state.credentialsIncorrect ? <Hint type="warning"><Translation domain="login">Your credentials are incorrect!</Translation></Hint> : '';
 
         return (
-            <Trappings sectionClass="login">
+            <Trappings mainClass="login">
                 <header>
                     <img src="web-assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
                     <p className="welcome"><strong>Welcome</strong> to Contao Manager v1.0</p>
                 </header>
 
-                <section className="login">
+                <section>
                     <h1><Translation domain="login">Sign In</Translation></h1>
                     <p><Translation domain="login">Login to manage your installation.</Translation></p>
 
@@ -134,7 +134,6 @@ var LoginComponent = React.createClass({
                                     disabled={this.state.isLoggingIn}
                                     onChange={this.handlePasswordChange}
                         />
-
 
                         <a href="https://www.google.com" target="_blank">Forgot your password?</a>
 

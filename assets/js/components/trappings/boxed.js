@@ -14,7 +14,7 @@ var BoxedTrappingsComponent = React.createClass({
         return (
             <div id="content" className={"table" + (this.props.wide ? ' wide' : '')}>
                 <div className="cell">
-                    <main>
+                    <main className={this.props.mainClass ? ' '+this.props.mainClass : ''}>
                         {this.props.children}
 
                         <footer>

@@ -68,7 +68,8 @@
         }
     }
 
-    section {
+    main.login section,
+    main.install section {
         position: relative;
         max-width: 250px;
         margin: 0 auto;
@@ -113,35 +114,35 @@
                 }
             }
         }
+    }
 
-        &.login {
-            p {
-                margin-bottom: 30px;
+    main.login section {
+        p {
+            margin-bottom: 30px;
+        }
+
+        a {
+            display: block;
+            font-size: 12px;
+        }
+
+        label {
+            position: absolute;
+            right: 13px;
+            text-indent: -999em;
+
+            &[for=ctrl_username] {
+                top: 17px;
+                width: 12px;
+                height: 14px;
+                background: url("../images/user.svg") left top no-repeat;
             }
 
-            a {
-                display: block;
-                font-size: 12px;
-            }
-
-            label {
-                position: absolute;
-                right: 13px;
-                text-indent: -999em;
-
-                &[for=ctrl_username] {
-                    top: 17px;
-                    width: 12px;
-                    height: 14px;
-                    background: url("../images/user.svg") left top no-repeat;
-                }
-
-                &[for=ctrl_password] {
-                    top: 18px;
-                    width: 13px;
-                    height: 11px;
-                    background: url("../images/lock.svg") left top no-repeat;
-                }
+            &[for=ctrl_password] {
+                top: 18px;
+                width: 13px;
+                height: 11px;
+                background: url("../images/lock.svg") left top no-repeat;
             }
         }
     }
@@ -175,6 +176,12 @@
                 max-width: 940px;
             }
 
+            footer {
+                width: 840px;
+            }
+        }
+
+        main.install {
             header {
                 padding: 80px 60px 0;
 
@@ -186,10 +193,10 @@
             }
 
             section {
+                margin: 80px 50px 80px 50px;
+                max-width: none;
                 float: left;
                 width: 370px;
-                margin: 80px 60px 80px 40px;
-                max-width: none;
 
                 label {
                     float: left;
@@ -207,10 +214,6 @@
                     float: right;
                     width: 250px;
                 }
-            }
-
-            footer {
-                width: 840px;
             }
         }
     }
