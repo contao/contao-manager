@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import App      from './../components/app';
 import Install  from './../components/routes/install';
 
-module.exports = {
+export default {
+    name: 'install',
     path: '/{locale}/install',
     preController: [function(results, routing) {
         // Fully configured, never access this route
@@ -30,4 +31,4 @@ module.exports = {
     controller: function(request, routing) {
         ReactDOM.render(<App routing={routing}><Install /></App>, document.getElementById('react-container'));
     }
-};
+}

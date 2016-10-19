@@ -1,9 +1,10 @@
 import { setRequestToken } from './../helpers/request';
 
-module.exports = {
+export default {
+    name: 'logout',
     path: '/{locale}/logout',
     controller: function(request, routing) {
         setRequestToken('');
         routing.redirect('login');
     }
-};
+}

@@ -5,7 +5,8 @@ import Packages    from './../components/routes/packages';
 import routeChecks from './../helpers/common-route-checks';
 import * as taskmanager from './../helpers/taskmanager';
 
-module.exports = {
+export default {
+    name: 'packages',
     path: '/{locale}/packages',
     preController: routeChecks,
     controller: function(request, routing) {
@@ -13,4 +14,4 @@ module.exports = {
         taskmanager.runNextTask();
         ReactDOM.render(<App routing={routing}><Packages /></App>, document.getElementById('react-container'));
     }
-};
+}

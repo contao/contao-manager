@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import App      from './../components/app';
 import Login    from './../components/routes/login';
 
-module.exports = {
+export default {
+    name: 'login',
     path: '/{locale}/login',
     preController: [function(results, routing) {
         // Not configured yet
@@ -23,4 +24,4 @@ module.exports = {
     controller: function(request, routing) {
         ReactDOM.render(<App routing={routing}><Login /></App>, document.getElementById('react-container'));
     }
-};
+}

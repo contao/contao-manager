@@ -1,21 +1,12 @@
 import crossroads   from 'crossroads';
 import { createHistory } from 'history';
+import routeDefinitions from '../routes';
 import forIn        from 'lodash/forIn';
 
 const history = createHistory();
 
 // Route definitions (do not define dynamically so they get bundled by browserify)
 export default {
-    routeDefinitions: {
-        'install': require('./../routes/install'),
-        'login': require('./../routes/login'),
-        'packages': require('./../routes/packages'),
-        'maintenance': require('./../routes/maintenance'),
-        'composer-json': require('./../routes/composer-json'),
-        'self-test': require('./../routes/self-test'),
-        'logout': require('./../routes/logout')
-    },
-
     _initialized: false,
     router: null,
     routes: [],
@@ -31,12 +22,12 @@ export default {
         this.router = crossroads.create();
 
         var baseHref = this.getBaseHref();
-        forIn(this.routeDefinitions, function (routeDef, routeName) {
+        forIn(routeDefinitions, function (routeDef) {
             var route = self.router.addRoute(baseHref + routeDef.path);
-            route.name = routeName;
+            route.name = routeDef.name;
             route.preController = routeDef.preController;
             route.controller = routeDef.controller;
-            self.routes[routeName] = route;
+            self.routes[routeDef.name] = route;
         });
 
         this._initialized = true;
