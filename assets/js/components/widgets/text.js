@@ -53,7 +53,7 @@ var Widget = React.createClass({
         }
 
         cssClasses = cssClasses.join(' ');
-        
+
         return (
             <div className={cssClasses}>
                 {errorMessage}

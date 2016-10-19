@@ -20,6 +20,8 @@ vendor/
 build.properties
 tenside.phar
 app/cache
+/web/js/bundle.js
+/web/css/bundle.css
 
 # Components
 /components/
