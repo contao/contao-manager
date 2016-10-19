@@ -12,6 +12,9 @@ class MainTrappingsComponent extends React.Component {
         this.state = {
             blurClass: ''
         };
+
+        this.blurIn = this.blurIn.bind(this);
+        this.blurOut = this.blurOut.bind(this);
     }
 
     componentDidMount() {

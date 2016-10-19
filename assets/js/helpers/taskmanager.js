@@ -20,7 +20,7 @@ export function runNextTask() {
             return response;
         })
         .catch(function (err) {
-            // @todo
+            console.log(err);
         });
 }
 
@@ -41,16 +41,12 @@ export function getTask(taskId) {
     return createRequest('/api/v1/tasks/' + taskId)
 }
 
-export function getTaskList() {
-    return createRequest('/api/v1/tasks');
-}
-
 export function deleteOrphanTasks() {
     // Delete tasks older than a week
     var now = new Date();
     var self = this;
 
-    this.getTaskList()
+    createRequest('/api/v1/tasks')
         .then(function(response) {
             if ('OK' === response.body.status) {
                 forIn(response.body.tasks, function(data, taskId) {

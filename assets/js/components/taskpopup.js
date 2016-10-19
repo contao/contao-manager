@@ -16,27 +16,19 @@ class TaskPopupComponent extends React.Component {
         this.taskTitleCache = {};
         this.scrolled = false;
 
-        this.state = {
-            show: false,
-            showConsole: false,
-            positionFixed: false,
-            status: 'loading',
-            taskId: null,
-            updateFrequency: 2000, // every 2 seconds
-            content: {
-                taskTitle: '[…]',
-                consoleOutput: ''
-            }
-        };
+        this.state = TaskPopupComponent.initialState;
 
+        this.startTaskUpdate = this.startTaskUpdate.bind(this);
+        this.taskUpdate = this.taskUpdate.bind(this);
         this.handleButton = this.handleButton.bind(this);
         this.hideConsole = this.hideConsole.bind(this);
         this.showConsole = this.showConsole.bind(this);
         this.onConsoleOutputScroll = this.onConsoleOutputScroll.bind(this);
+        this.show = this.show.bind(this);
+        this.hide = this.hide.bind(this);
     }
 
     componentDidMount() {
-        var self = this;
         this.popup = document.getElementById('task-popup');
 
         // Escape key
@@ -49,13 +41,13 @@ class TaskPopupComponent extends React.Component {
         window.addEventListener('resize', this.toggleFixedPosition);
         this.toggleFixedPosition();
 
-        eventhandler.on('displayTaskPopup', self.show);
-        eventhandler.on('hideTaskPopup', self.hide);
+        eventhandler.on('displayTaskPopup', this.show);
+        eventhandler.on('hideTaskPopup', this.hide);
     }
 
     componentWillUnmount() {
-        eventhandler.removeListener('displayTaskPopup', self.show);
-        eventhandler.removeListener('hideTaskPopup', self.hide);
+        eventhandler.removeListener('displayTaskPopup', this.show);
+        eventhandler.removeListener('hideTaskPopup', this.hide);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -82,14 +74,13 @@ class TaskPopupComponent extends React.Component {
     }
 
     handleButton() {
-        var self = this;
         eventhandler.emit('hideTaskPopup', this.state);
     }
 
     hide() {
         this.scrolled = false;
         taskmanager.deleteTask(this.state.taskId);
-        this.setState(this.getInitialState());
+        this.setState(TaskPopupComponent.initialState);
         window.clearInterval(this.currentInterval);
     }
 
@@ -246,5 +237,18 @@ class TaskPopupComponent extends React.Component {
         );
     }
 }
+
+TaskPopupComponent.initialState = {
+    show: false,
+    showConsole: false,
+    positionFixed: false,
+    status: 'loading',
+    taskId: null,
+    updateFrequency: 2000, // every 2 seconds
+    content: {
+        taskTitle: '[…]',
+        consoleOutput: ''
+    }
+};
 
 export default TaskPopupComponent;
