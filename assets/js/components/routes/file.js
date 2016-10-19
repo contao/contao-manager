@@ -7,22 +7,19 @@ import assign      from 'lodash/assign';
 import forEach     from 'lodash/forEach';
 import isEqual     from 'lodash/isEqual';
 
-class MessageComponent extends React.Component {
+function Message(props) {
 
-    render() {
+    var line = '';
+    var msg = props.msg;
 
-        var line = '';
-        var msg = this.props.msg;
-
-        if (this.props.line > 0) {
-            line = <Translation domain="file" placeholders={{ line: this.props.line }}>Line %line%</Translation>;
-            msg = ': ' + msg;
-        }
-
-        return (
-            <p className={this.props.type}>{line}{msg}</p>
-        )
+    if (props.line > 0) {
+        line = <Translation domain="file" placeholders={{ line: props.line }}>Line %line%</Translation>;
+        msg = ': ' + msg;
     }
+
+    return (
+        <p className={props.type}>{line}{msg}</p>
+    )
 }
 
 class FileComponent extends React.Component {
@@ -102,28 +99,25 @@ class FileComponent extends React.Component {
 
         if ('OK' === this.state.status) {
             var msg = <Translation domain="file">The file is OK!</Translation>;
-            messages.push(<MessageComponent key="ok" type="ok" msg={msg}/>);
+            messages.push(<Message key="ok" type="ok" msg={msg}/>);
         }
 
         if (this.state.warnings.length > 0) {
             forEach(this.state.warnings, function(value, key) {
-                messages.push(<MessageComponent key={'warning' + key} type="warning" msg={value.msg} line={value.line} />);
+                messages.push(<Message key={'warning' + key} type="warning" msg={value.msg} line={value.line} />);
             });
         }
 
         if (this.state.errors.length > 0) {
             forEach(this.state.errors, function(value, key) {
-                messages.push(<MessageComponent key={'error' + key} type="error" msg={value.msg} line={value.line} />);
+                messages.push(<Message key={'error' + key} type="error" msg={value.msg} line={value.line} />);
             });
         }
 
         return (
             <Trappings>
-
-            <div className="messages">{messages}</div>
-
-            <Codemirror value={this.state.code} onChange={this.updateContent} options={options} />
-
+                <div className="messages">{messages}</div>
+                <Codemirror value={this.state.code} onChange={this.updateContent} options={options} />
             </Trappings>
         );
     }

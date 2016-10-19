@@ -4,29 +4,24 @@
 
 import React from 'react';
 
-class LoaderComponent extends React.Component {
-
-    render() {
-        return (
-            <div className="loader">
-                <div className="sk-circle">
-                    <div className="sk-circle1 sk-child"></div>
-                    <div className="sk-circle2 sk-child"></div>
-                    <div className="sk-circle3 sk-child"></div>
-                    <div className="sk-circle4 sk-child"></div>
-                    <div className="sk-circle5 sk-child"></div>
-                    <div className="sk-circle6 sk-child"></div>
-                    <div className="sk-circle7 sk-child"></div>
-                    <div className="sk-circle8 sk-child"></div>
-                    <div className="sk-circle9 sk-child"></div>
-                    <div className="sk-circle10 sk-child"></div>
-                    <div className="sk-circle11 sk-child"></div>
-                    <div className="sk-circle12 sk-child"></div>
-                </div>
-                {this.props.children ? <p>{this.props.children}</p> : ''}
+export default function(props) {
+    return (
+        <div className="loader">
+            <div className="sk-circle">
+                <div className="sk-circle1 sk-child"></div>
+                <div className="sk-circle2 sk-child"></div>
+                <div className="sk-circle3 sk-child"></div>
+                <div className="sk-circle4 sk-child"></div>
+                <div className="sk-circle5 sk-child"></div>
+                <div className="sk-circle6 sk-child"></div>
+                <div className="sk-circle7 sk-child"></div>
+                <div className="sk-circle8 sk-child"></div>
+                <div className="sk-circle9 sk-child"></div>
+                <div className="sk-circle10 sk-child"></div>
+                <div className="sk-circle11 sk-child"></div>
+                <div className="sk-circle12 sk-child"></div>
             </div>
-        );
-    }
+            {props.children ? <p>{props.children}</p> : ''}
+        </div>
+    );
 }
-
-export default LoaderComponent;

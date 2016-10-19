@@ -1,13 +1,10 @@
 import React    from 'react';
 import isEqual  from 'lodash/isEqual';
 
-class ErrorMessage extends React.Component {
-
-    render() {
-        return (
-            <p className="error">{this.props.message}</p>
-        );
-    }
+function ErrorMessage(props) {
+    return (
+        <p className="error">{props.message}</p>
+    );
 }
 
 class Widget extends React.Component {

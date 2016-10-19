@@ -1,23 +1,20 @@
 import React    from 'react';
 import isEqual  from 'lodash/isEqual';
 
-class Option extends React.Component {
-
-    render() {
-        return (
-            <span>
-                <input
-                    type="radio"
-                    name={this.props.name}
-                    id={this.props.id}
-                    value={this.props.value}
-                    checked={this.props.selected}
-                    onChange={this.props.onChange}
-                />
-                <label htmlFor={this.props.id}>{this.props.label}</label>
-            </span>
-        )
-    }
+function Option(props) {
+    return (
+        <span>
+            <input
+                type="radio"
+                name={props.name}
+                id={props.id}
+                value={props.value}
+                checked={props.selected}
+                onChange={props.onChange}
+            />
+            <label htmlFor={props.id}>{props.label}</label>
+        </span>
+    )
 }
 
 class Widget extends React.Component {

@@ -43,7 +43,7 @@ class SelfTestComponent extends React.Component {
         var tests = [];
 
         forIn(this.state.data, function(data, key) {
-            tests.push(<TestComponent key={key} data={data} />);
+            tests.push(<Test key={key} data={data} />);
         });
 
         return (
@@ -58,20 +58,16 @@ class SelfTestComponent extends React.Component {
 }
 
 
-class TestComponent extends React.Component {
+function Test(props) {
+    var data = props.data;
 
-    render() {
-
-        var data = this.props.data;
-
-        return (
-            <div className={'test clearfix ' + data.state.toLowerCase() + ' ' + data.name}>
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 79.536 79.536" xmlSpace="preserve"><g><path d="M39.769,0C17.8,0,0,17.8,0,39.768c0,21.965,17.8,39.768,39.769,39.768 c21.965,0,39.768-17.803,39.768-39.768C79.536,17.8,61.733,0,39.769,0z M34.142,58.513L15.397,39.768l7.498-7.498l11.247,11.247 l22.497-22.493l7.498,7.498L34.142,58.513z" /></g></svg>
-                <div className="message">{data.message}</div>
-                <div className="explain">{data.explain}</div>
-            </div>
-        );
-    }
+    return (
+        <div className={'test clearfix ' + data.state.toLowerCase() + ' ' + data.name}>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 79.536 79.536" xmlSpace="preserve"><g><path d="M39.769,0C17.8,0,0,17.8,0,39.768c0,21.965,17.8,39.768,39.769,39.768 c21.965,0,39.768-17.803,39.768-39.768C79.536,17.8,61.733,0,39.769,0z M34.142,58.513L15.397,39.768l7.498-7.498l11.247,11.247 l22.497-22.493l7.498,7.498L34.142,58.513z" /></g></svg>
+            <div className="message">{data.message}</div>
+            <div className="explain">{data.explain}</div>
+        </div>
+    );
 }
 
 export default SelfTestComponent;
