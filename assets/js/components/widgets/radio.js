@@ -3,11 +3,6 @@ import isEqual  from 'lodash/isEqual';
 
 class Option extends React.Component {
 
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    }
-
     render() {
         return (
             <span>
@@ -35,11 +30,6 @@ class Widget extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     }
 
     handleChange(e) {

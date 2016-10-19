@@ -3,11 +3,6 @@ import isEqual  from 'lodash/isEqual';
 
 class ErrorMessage extends React.Component {
 
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    }
-
     render() {
         return (
             <p className="error">{this.props.message}</p>
@@ -25,11 +20,6 @@ class Widget extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     }
 
     handleChange(e) {

@@ -33,11 +33,6 @@ class InstallComponent extends React.Component {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    }
-
     componentDidMount() {
         var self = this;
         this.tensideStatePromise = TensideState.getLoggedIn()

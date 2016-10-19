@@ -11,11 +11,6 @@ class Link extends React.Component {
         this.handleLogout = this.handleLogout.bind(this);
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    }
-
     handleClick(e) {
         e.preventDefault();
 

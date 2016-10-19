@@ -18,11 +18,6 @@ class SelfTestComponent extends React.Component {
         };
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    }
-
     componentDidMount() {
         var self = this;
         this.statePromise = TensideState.getSelfTest()
@@ -64,11 +59,6 @@ class SelfTestComponent extends React.Component {
 
 
 class TestComponent extends React.Component {
-
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    }
 
     render() {
 

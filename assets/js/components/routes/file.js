@@ -9,11 +9,6 @@ import isEqual     from 'lodash/isEqual';
 
 class MessageComponent extends React.Component {
 
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    }
-
     render() {
 
         var line = '';
@@ -41,11 +36,6 @@ class FileComponent extends React.Component {
             errors: [],
             warnings: []
         };
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
     }
 
     componentDidMount() {

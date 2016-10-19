@@ -36,11 +36,6 @@ class TaskPopupComponent extends React.Component {
         this.onConsoleOutputScroll = this.onConsoleOutputScroll.bind(this);
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    }
-
     componentDidMount() {
         var self = this;
         this.popup = document.getElementById('task-popup');

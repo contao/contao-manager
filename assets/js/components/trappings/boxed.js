@@ -3,11 +3,6 @@ import isEqual from 'lodash/isEqual';
 
 class BoxedTrappingsComponent extends React.Component {
 
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    }
-
     render() {
         return (
             <div id="content" className={"table" + (this.props.wide ? ' wide' : '')}>

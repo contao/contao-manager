@@ -28,11 +28,6 @@ class LoginComponent extends React.Component {
         this.handleLogin = this.handleLogin.bind(this);
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-
-        return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    }
-
     componentDidMount() {
         var self = this;
 
