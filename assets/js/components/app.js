@@ -1,7 +1,7 @@
 'use strict';
 
 const React         = require('react');
-const TaskPopup     = require('./taskpopup.js');
+const TaskPopup     = require('./taskpopup');
 
 var AppComponent = React.createClass({
     childContextTypes: {

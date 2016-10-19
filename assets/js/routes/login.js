@@ -2,8 +2,8 @@
 
 const React         = require('react');
 const ReactDOM      = require('react-dom');
-const App           = require('./../components/app.js');
-const Login         = require('./../components/routes/login.js');
+const App           = require('./../components/app');
+const Login         = require('./../components/routes/login');
 
 module.exports = {
     path: '/{locale}/login',

@@ -1,7 +1,7 @@
 'use strict';
 
 const React         = require('react');
-const translate     = require('./../helpers/translate.js');
+const translate     = require('./../helpers/translate');
 const isEqual       = require('lodash/isEqual');
 
 

@@ -2,9 +2,9 @@
 
 const React         = require('react');
 const Promise       = require('bluebird');
-const Trappings     = require('../trappings/boxed.js');
-const Loader        = require('../fragments/loader.js');
-const TensideState  = require('../../helpers/tenside-state.js');
+const Trappings     = require('../trappings/boxed');
+const Loader        = require('../fragments/loader');
+const TensideState  = require('../../helpers/tenside-state');
 const isEqual       = require('lodash/isEqual');
 const forIn         = require('lodash/forIn');
 

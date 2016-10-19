@@ -1,9 +1,9 @@
 'use strict';
 
 const React         = require('react');
-const Translation   = require('./translation.js');
-const eventhandler  = require('./../helpers/eventhandler.js');
-const taskmanager   = require('./../helpers/taskmanager.js');
+const Translation   = require('./translation');
+const eventhandler  = require('./../helpers/eventhandler');
+const taskmanager   = require('./../helpers/taskmanager');
 const isEqual       = require('lodash/isEqual');
 const merge         = require('lodash/merge');
 const includes      = require('lodash/includes');

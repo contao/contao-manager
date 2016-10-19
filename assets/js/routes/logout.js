@@ -1,6 +1,6 @@
 'use strict';
 
-const requestHelper = require('./../helpers/request.js');
+const requestHelper = require('./../helpers/request');
 
 module.exports = {
     path: '/{locale}/logout',

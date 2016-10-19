@@ -2,9 +2,9 @@
 
 const React         = require('react');
 const ReactDOM      = require('react-dom');
-const App           = require('./../components/app.js');
-const File          = require('./../components/routes/file.js');
-const routeChecks   = require('./../helpers/common-route-checks.js');
+const App           = require('./../components/app');
+const File          = require('./../components/routes/file');
+const routeChecks   = require('./../helpers/common-route-checks');
 
 // Load php highlight mode
 require('codemirror/mode/javascript/javascript');

@@ -2,13 +2,13 @@
 
 const React         = require('react');
 const Promise       = require('bluebird');
-const Trappings     = require('../trappings/boxed.js');
-const Translation   = require('../translation.js');
-const TextWidget    = require('../widgets/text.js');
-const TensideState  = require('../../helpers/tenside-state.js');
-const taskmanager   = require('../../helpers/taskmanager.js');
-const request       = require('../../helpers/request.js');
-const eventhandler  = require('../../helpers/eventhandler.js');
+const Trappings     = require('../trappings/boxed');
+const Translation   = require('../translation');
+const TextWidget    = require('../widgets/text');
+const TensideState  = require('../../helpers/tenside-state');
+const taskmanager   = require('../../helpers/taskmanager');
+const request       = require('../../helpers/request');
+const eventhandler  = require('../../helpers/eventhandler');
 const isEqual       = require('lodash/isEqual');
 
 var InstallComponent = React.createClass({

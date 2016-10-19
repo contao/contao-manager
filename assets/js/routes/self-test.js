@@ -2,9 +2,9 @@
 
 const React          = require('react');
 const ReactDOM       = require('react-dom');
-const App           = require('./../components/app.js');
-const SelfTest       = require('./../components/routes/selftest.js');
-const routeChecks    = require('./../helpers/common-route-checks.js');
+const App           = require('./../components/app');
+const SelfTest       = require('./../components/routes/selftest');
+const routeChecks    = require('./../helpers/common-route-checks');
 
 module.exports = {
     path: '/{locale}/config/self-test',

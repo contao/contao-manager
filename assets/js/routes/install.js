@@ -2,8 +2,8 @@
 
 const React         = require('react');
 const ReactDOM      = require('react-dom');
-const App           = require('./../components/app.js');
-const Install       = require('./../components/routes/install.js');
+const App           = require('./../components/app');
+const Install       = require('./../components/routes/install');
 
 module.exports = {
     path: '/{locale}/install',

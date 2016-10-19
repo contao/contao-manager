@@ -3,18 +3,18 @@
 const crossroads   = require('crossroads');
 const history      = require('history').createHistory();
 const forIn        = require('lodash/forIn');
-const request      = require('./request.js');
+const request      = require('./request');
 
 // Route definitions (do not define dynamically so they get bundled by browserify)
 var Routing = {
     routeDefinitions: {
-        'install': require('./../routes/install.js'),
-        'login': require('./../routes/login.js'),
-        'packages': require('./../routes/packages.js'),
-        'maintenance': require('./../routes/maintenance.js'),
-        'composer-json': require('./../routes/composer-json.js'),
-        'self-test': require('./../routes/self-test.js'),
-        'logout': require('./../routes/logout.js')
+        'install': require('./../routes/install'),
+        'login': require('./../routes/login'),
+        'packages': require('./../routes/packages'),
+        'maintenance': require('./../routes/maintenance'),
+        'composer-json': require('./../routes/composer-json'),
+        'self-test': require('./../routes/self-test'),
+        'logout': require('./../routes/logout')
     },
 
     _initialized: false,

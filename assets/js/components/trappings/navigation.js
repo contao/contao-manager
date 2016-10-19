@@ -1,7 +1,7 @@
 'use strict';
 
 const React         = require('react');
-const Translation   = require('../translation.js');
+const Translation   = require('../translation');
 const isEqual       = require('lodash/isEqual');
 
 var Link = React.createClass({

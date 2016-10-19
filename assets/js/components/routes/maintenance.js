@@ -1,8 +1,8 @@
 'use strict';
 
 const React         = require('react');
-const Trappings     = require('../trappings/main.js');
-const taskmanager   = require('../../helpers/taskmanager.js');
+const Trappings     = require('../trappings/main');
+const taskmanager   = require('../../helpers/taskmanager');
 
 var MaintenanceComponent = React.createClass({
 

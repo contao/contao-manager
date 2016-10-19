@@ -1,7 +1,7 @@
 'use strict';
 
 const Promise   = require('bluebird');
-const request   = require('./request.js');
+const request   = require('./request');
 
 // Enable cancelling of promises
 Promise.config({cancellation: true});

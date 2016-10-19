@@ -3,9 +3,9 @@
 const React         = require('react');
 const forEach       = require('lodash/forEach');
 const Highlight     = require('react-highlighter');
-const Translation   = require('../translation.js');
-const Hint          = require('../fragments/hint.js');
-const request       = require('../../helpers/request.js');
+const Translation   = require('../translation');
+const Hint          = require('../fragments/hint');
+const request       = require('../../helpers/request');
 const isEqual       = require('lodash/isEqual');
 
 var PackageComponent = React.createClass({

@@ -1,9 +1,9 @@
 'use strict';
 
 const Promise      = require('bluebird');
-const routing      = require('./helpers/routing.js');
-const TensideState = require('./helpers/tenside-state.js');
-const request      = require('./helpers/request.js');
+const routing      = require('./helpers/routing');
+const TensideState = require('./helpers/tenside-state');
+const request      = require('./helpers/request');
 const forIn        = require('lodash/forIn');
 const merge        = require('lodash/merge');
 const isFunction   = require('lodash/isFunction');

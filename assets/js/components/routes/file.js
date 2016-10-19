@@ -1,10 +1,10 @@
 'use strict';
 
 const React         = require('react');
-const Trappings     = require('../trappings/main.js');
+const Trappings     = require('../trappings/main');
 const Codemirror    = require('react-codemirror');
-const request       = require('../../helpers/request.js');
-const Translation   = require('../translation.js');
+const request       = require('../../helpers/request');
+const Translation   = require('../translation');
 const assign        = require('lodash/assign');
 const forEach       = require('lodash/forEach');
 const isEqual       = require('lodash/isEqual');

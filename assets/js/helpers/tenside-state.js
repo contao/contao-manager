@@ -1,6 +1,6 @@
 'use strict';
 
-const request       = require('./request.js');
+const request       = require('./request');
 
 var getState = function() {
 

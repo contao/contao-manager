@@ -1,13 +1,13 @@
 'use strict';
 
 const React         = require('react');
-const Trappings     = require('../trappings/boxed.js');
-const Hint          = require('../fragments/hint.js');
+const Trappings     = require('../trappings/boxed');
+const Hint          = require('../fragments/hint');
 const Loader        = require('../fragments/loader');
-const Translation   = require('../translation.js');
-const TextWidget    = require('../widgets/text.js');
-const translate     = require('../../helpers/translate.js');
-const request       = require('../../helpers/request.js');
+const Translation   = require('../translation');
+const TextWidget    = require('../widgets/text');
+const translate     = require('../../helpers/translate');
+const request       = require('../../helpers/request');
 const isEqual       = require('lodash/isEqual');
 
 var LoginComponent = React.createClass({

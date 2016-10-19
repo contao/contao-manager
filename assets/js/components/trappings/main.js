@@ -1,8 +1,8 @@
 'use strict';
 
 const React         = require('react');
-const Navigation    = require('./navigation.js');
-const eventhandler  = require('../../helpers/eventhandler.js');
+const Navigation    = require('./navigation');
+const eventhandler  = require('../../helpers/eventhandler');
 const compact       = require('lodash/compact');
 const isEqual       = require('lodash/isEqual');
 

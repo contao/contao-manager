@@ -1,7 +1,7 @@
 'use strict';
 
-const eventhandler  = require('./eventhandler.js');
-const request       = require('./request.js');
+const eventhandler  = require('./eventhandler');
+const request       = require('./request');
 const forIn         = require('lodash/forIn');
 const merge         = require('lodash/merge');
 
