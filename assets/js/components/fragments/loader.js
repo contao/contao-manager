@@ -2,8 +2,6 @@
  * see http://tobiasahlin.com/spinkit/
  */
 
-'use strict';
-
 import React from 'react';
 
 var LoaderComponent = React.createClass({

@@ -1,5 +1,3 @@
-'use strict';
-
 import React       from 'react';
 import forEach     from 'lodash/forEach';
 import Highlight   from 'react-highlighter';

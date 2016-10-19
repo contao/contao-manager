@@ -1,5 +1,3 @@
-'use strict';
-
 import requestHelper from './../helpers/request';
 
 module.exports = {

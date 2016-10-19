@@ -1,5 +1,3 @@
-'use strict';
-
 import React        from 'react';
 import Trappings    from '../trappings/main';
 import Package      from '../fragments/package';

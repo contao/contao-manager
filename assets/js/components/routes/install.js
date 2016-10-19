@@ -1,5 +1,3 @@
-'use strict';
-
 import React        from 'react';
 import Promise      from 'bluebird';
 import Trappings    from '../trappings/boxed';

@@ -1,5 +1,3 @@
-'use strict';
-
 import crossroads   from 'crossroads';
 import { createHistory } from 'history';
 import forIn        from 'lodash/forIn';

@@ -1,5 +1,3 @@
-'use strict';
-
 import React        from 'react';
 import translate    from './../helpers/translate';
 import isEqual      from 'lodash/isEqual';

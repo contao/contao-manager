@@ -1,5 +1,3 @@
-'use strict';
-
 import Promise      from 'bluebird';
 import routing      from './helpers/routing';
 import TensideState from './helpers/tenside-state';

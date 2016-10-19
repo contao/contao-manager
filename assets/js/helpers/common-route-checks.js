@@ -1,5 +1,3 @@
-'use strict';
-
 export default {
     ifTensideNotOkRedirectToInstall: function (results, routing) {
         if (false === results['tenside_configured']

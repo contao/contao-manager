@@ -1,5 +1,3 @@
-'use strict';
-
 import eventhandler from './eventhandler';
 import request      from './request';
 import forIn        from 'lodash/forIn';

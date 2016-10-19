@@ -1,5 +1,3 @@
-'use strict';
-
 import React        from 'react';
 import Translation  from './translation';
 import eventhandler from './../helpers/eventhandler';

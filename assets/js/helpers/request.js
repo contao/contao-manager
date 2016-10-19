@@ -1,5 +1,3 @@
-'use strict';
-
 import xhr      from 'xhr';
 import cookie   from 'cookie';
 import Promise  from 'bluebird';

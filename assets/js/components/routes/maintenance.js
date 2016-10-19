@@ -1,5 +1,3 @@
-'use strict';
-
 import React        from 'react';
 import Trappings    from '../trappings/main';
 import taskmanager  from '../../helpers/taskmanager';

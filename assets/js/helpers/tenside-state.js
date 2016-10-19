@@ -1,5 +1,3 @@
-'use strict';
-
 import request from './request';
 
 var getState = function() {
