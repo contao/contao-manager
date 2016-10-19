@@ -1,14 +1,14 @@
 import React    from 'react';
 import isEqual  from 'lodash/isEqual';
 
-var Option = React.createClass({
+class Option extends React.Component {
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <span>
                 <input
@@ -23,22 +23,26 @@ var Option = React.createClass({
             </span>
         )
     }
-});
+}
 
-var Widget = React.createClass({
+class Widget extends React.Component {
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state ={
             selected: this.props.selected
         };
-    },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    handleChange: function(e) {
+    handleChange(e) {
         this.setState({
             selected: e.target.value
         });
@@ -46,9 +50,9 @@ var Widget = React.createClass({
         if (undefined !== this.props.onChange){
             this.props.onChange.call(this, e, this.props);
         }
-    },
+    }
 
-    render: function() {
+    render() {
 
         var name = this.props.name;
         var self = this;
@@ -73,6 +77,6 @@ var Widget = React.createClass({
             </fieldset>
         )
     }
-});
+}
 
 export default Widget;

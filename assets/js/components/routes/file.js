@@ -7,14 +7,14 @@ import assign      from 'lodash/assign';
 import forEach     from 'lodash/forEach';
 import isEqual     from 'lodash/isEqual';
 
-var MessageComponent = React.createClass({
+class MessageComponent extends React.Component {
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    render: function() {
+    render() {
 
         var line = '';
         var msg = this.props.msg;
@@ -28,33 +28,35 @@ var MessageComponent = React.createClass({
             <p className={this.props.type}>{line}{msg}</p>
         )
     }
-});
+}
 
-var FileComponent = React.createClass({
+class FileComponent extends React.Component {
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             code: '',
             status: 'OK',
             errors: [],
             warnings: []
         };
-    },
+    }
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.loadInitial(this.props.apiEndpoint);
-    },
+    }
 
-    componentWillReceiveProps: function(nextProps) {
+    componentWillReceiveProps(nextProps) {
         this.loadInitial(nextProps.apiEndpoint);
-    },
+    }
 
-    loadInitial: function(endPoint) {
+    loadInitial(endPoint) {
         var self = this;
         request.createRequest(endPoint)
             .then(function (response) {
@@ -63,9 +65,9 @@ var FileComponent = React.createClass({
             }).catch(function (err) {
                 // @todo
             });
-    },
+    }
 
-    updateContent: function(content) {
+    updateContent(content) {
         var self = this;
         self.setState({code: content});
 
@@ -96,9 +98,9 @@ var FileComponent = React.createClass({
             .catch(function (err) {
                 // @todo
             });
-    },
+    }
 
-    render: function() {
+    render() {
 
         var messages = [];
         var options = {
@@ -135,6 +137,6 @@ var FileComponent = React.createClass({
             </Trappings>
         );
     }
-});
+}
 
 export default FileComponent;

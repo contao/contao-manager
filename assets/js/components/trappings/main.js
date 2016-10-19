@@ -4,38 +4,39 @@ import eventhandler from '../../helpers/eventhandler';
 import compact      from 'lodash/compact';
 import isEqual      from 'lodash/isEqual';
 
-var MainTrappingsComponent = React.createClass({
+class MainTrappingsComponent extends React.Component {
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             blurClass: ''
         };
-    },
+    }
 
-    shouldComponentUpdate: function(nextProps, nextState) {
-
+    shouldComponentUpdate(nextProps, nextState) {
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         eventhandler.on('displayTaskPopup', this.blurIn);
         eventhandler.on('hideTaskPopup', this.blurOut);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         eventhandler.removeListener('displayTaskPopup', this.blurIn);
         eventhandler.removeListener('hideTaskPopup', this.blurOut);
-    },
+    }
 
-    blurIn: function() {
+    blurIn() {
         this.setState({blurClass: 'blur-in'});
-    },
+    }
 
-    blurOut: function() {
+    blurOut() {
         this.setState({blurClass: 'blur-out'});
-    },
+    }
 
-    render: function() {
+    render() {
 
         var classes = [
             'manager',
@@ -65,6 +66,6 @@ var MainTrappingsComponent = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default MainTrappingsComponent;

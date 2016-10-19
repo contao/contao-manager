@@ -6,22 +6,24 @@ import TensideState from '../../helpers/tenside-state';
 import isEqual      from 'lodash/isEqual';
 import forIn        from 'lodash/forIn';
 
-var SelfTestComponent = React.createClass({
+class SelfTestComponent extends React.Component {
 
-    statePromise: Promise.resolve(),
+    constructor(props) {
+        super(props);
 
-    getInitialState: function() {
-        return {
+        this.statePromise = Promise.resolve();
+
+        this.state = {
             data: []
         };
-    },
+    }
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         var self = this;
         this.statePromise = TensideState.getSelfTest()
             .then(function(result) {
@@ -36,14 +38,13 @@ var SelfTestComponent = React.createClass({
 
                 return null;
             });
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this.statePromise.cancel();
-    },
+    }
 
-
-    render: function() {
+    render() {
         var tests = [];
 
         forIn(this.state.data, function(data, key) {
@@ -59,17 +60,17 @@ var SelfTestComponent = React.createClass({
             </Trappings>
         );
     }
-});
+}
 
 
-var TestComponent = React.createClass({
+class TestComponent extends React.Component {
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    render: function() {
+    render() {
 
         var data = this.props.data;
 
@@ -81,6 +82,6 @@ var TestComponent = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default SelfTestComponent;

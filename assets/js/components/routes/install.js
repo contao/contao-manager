@@ -9,15 +9,14 @@ import request      from '../../helpers/request';
 import eventhandler from '../../helpers/eventhandler';
 import isEqual      from 'lodash/isEqual';
 
-var InstallComponent = React.createClass({
+class InstallComponent extends React.Component {
 
-    tensideStatePromise: null,
-    contextTypes: {
-        routing: React.PropTypes.object
-    },
+    constructor(props) {
+        super(props);
 
-    getInitialState: function() {
-        return {
+        this.tensideStatePromise = null;
+
+        this.state = {
             constraintErrorMessage: '',
             passwordsErrorMessage: '',
             installing: false,
@@ -27,14 +26,19 @@ var InstallComponent = React.createClass({
             passwordConfirm: '',
             version: ''
         };
-    },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+        this.handleVersionChange = this.handleVersionChange.bind(this);
+        this.handleInstall = this.handleInstall.bind(this);
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         var self = this;
         this.tensideStatePromise = TensideState.getLoggedIn()
             .then(function(result) {
@@ -53,13 +57,13 @@ var InstallComponent = React.createClass({
         eventhandler.on('hideTaskPopup', function() {
             self.context.routing.redirect('packages');
         });
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this.tensideStatePromise.cancel();
-    },
+    }
 
-    handleVersionChange: function(version) {
+    handleVersionChange(version) {
         var self  = this,
             state = {version: version};
 
@@ -86,9 +90,9 @@ var InstallComponent = React.createClass({
         }).catch(function() {
             // @todo: what if request failed?
         });
-    },
+    }
 
-    handleInstall: function(e) {
+    handleInstall(e) {
         e.preventDefault();
         var self = this;
 
@@ -139,9 +143,9 @@ var InstallComponent = React.createClass({
             .catch(function(err) {
                 // @todo: what to do with those general errors
             });
-    },
+    }
 
-    configure: function(username, password) {
+    configure(username, password) {
         var configurePayload = {
             credentials: {
                 username: username,
@@ -183,9 +187,9 @@ var InstallComponent = React.createClass({
                 });
             });
         });
-    },
+    }
 
-    createProject: function(createProjectPayload, state) {
+    createProject(createProjectPayload, state) {
 
         return new Promise(function (resolve, reject) {
 
@@ -205,20 +209,24 @@ var InstallComponent = React.createClass({
                 reject(new Error(err));
             });
         });
-    },
+    }
 
-    handleUsernameChange: function(username) {
+    handleUsernameChange(username) {
         this.setState({username: username});
-    },
+    }
 
-    handlePasswordChange: function(value, props) {
+    handlePasswordChange(value, props) {
         var minPasswordLenth = 8,
-            state = {password: this.state.password, passwordConfirm: this.state.passwordConfirm};
+            state = {
+                password: this.state.password,
+                passwordConfirm: this.state.passwordConfirm,
+                passwordsErrorMessage: ''
+            };
 
         if (props.name == 'password') {
-            state.password = value;
+            state.password = String(value);
         } else {
-            state.passwordConfirm = value;
+            state.passwordConfirm = String(value);
         }
 
         if (state.password.length < minPasswordLenth
@@ -233,9 +241,9 @@ var InstallComponent = React.createClass({
         }
 
         this.setState(state);
-    },
+    }
 
-    getUsernamePart: function() {
+    getUsernamePart() {
         if (null === this.state.isLoggedIn) {
             return '';
         }
@@ -255,9 +263,9 @@ var InstallComponent = React.createClass({
                         <TextWidget type="password" name="password_confirm" label="Retype Password" onChange={this.handlePasswordChange} error={this.state.passwordsErrorMessage} />
                    </fieldset>;
         }
-    },
+    }
 
-    render: function() {
+    render() {
 
         var disableButton = this.state.passwordsErrorMessage || this.state.installing;
 
@@ -288,6 +296,10 @@ var InstallComponent = React.createClass({
             </Trappings>
         );
     }
-});
+}
+
+InstallComponent.contextTypes = {
+    routing: React.PropTypes.object
+};
 
 export default InstallComponent;

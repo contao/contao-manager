@@ -6,29 +6,34 @@ import Hint        from '../fragments/hint';
 import request     from '../../helpers/request';
 import isEqual     from 'lodash/isEqual';
 
-var PackageComponent = React.createClass({
+class PackageComponent extends React.Component {
 
-    initialConstraint: null,
-
-    getInitialState: function() {
+    constructor(props) {
+        super(props);
 
         this.initialConstraint = this.props.constraint;
 
-        return {
+        this.state = {
             removed: false,
             installed: false,
             enabled: this.props.enabled,
             constraint: this.initialConstraint,
             constraintInputDisabled: true
         };
-    },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+        this.handleRemoveButton = this.handleRemoveButton.bind(this);
+        this.handleInstallButton = this.handleInstallButton.bind(this);
+        this.handleEnableOrDisableButton = this.handleEnableOrDisableButton.bind(this);
+        this.handleConstraintChange = this.handleConstraintChange.bind(this);
+        this.handleRevert = this.handleRevert.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    componentDidUpdate: function(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
 
         if (undefined === this.props.onModified) {
             return;
@@ -52,34 +57,34 @@ var PackageComponent = React.createClass({
             constraintChanged: this.state.constraint !== this.initialConstraint,
             constraint: this.state.constraint
         });
-    },
+    }
 
-    handleRemoveButton: function() {
+    handleRemoveButton() {
         this.setState({
             removed: true,
             enabled: this.props.enabled
         });
-    },
+    }
 
-    handleInstallButton: function() {
+    handleInstallButton() {
         this.setState({
             installed: true
         });
-    },
+    }
 
-    handleEnableOrDisableButton: function() {
+    handleEnableOrDisableButton() {
         this.setState({
             enabled: !this.state.enabled
         });
-    },
+    }
 
-    handleConstraintChange: function(newConstraint) {
+    handleConstraintChange(newConstraint) {
         this.setState({
             constraint: newConstraint
         });
-    },
+    }
 
-    handleRevert: function(e) {
+    handleRevert(e) {
         e.preventDefault();
         this.setState({
             removed: false,
@@ -87,9 +92,9 @@ var PackageComponent = React.createClass({
             enabled: this.props.enabled,
             constraint: this.initialConstraint
         });
-    },
+    }
 
-    getHintMessageData: function() {
+    getHintMessageData() {
         if (this.state.installed) {
             if (null !== this.state.constraint) {
                 return ['This package will be installed with constraint "%constraint%" when you apply the changes.', {constraint: this.state.constraint}];
@@ -127,9 +132,9 @@ var PackageComponent = React.createClass({
         } else {
             return [''];
         }
-    },
+    }
 
-    render: function() {
+    render() {
         var hint = '';
         var release = '';
         var badge = '';
@@ -196,10 +201,11 @@ var PackageComponent = React.createClass({
             </section>
         );
     }
-});
+}
 
-var ActionsComponent = React.createClass({
-    render: function() {
+class ActionsComponent extends React.Component {
+
+    render() {
 
         var buttons = [];
 
@@ -242,19 +248,26 @@ var ActionsComponent = React.createClass({
             <fieldset className="actions">{buttons}</fieldset>
         )
     }
-});
+}
 
-var ReleaseComponent = React.createClass({
+class ReleaseComponent extends React.Component {
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             constraint: this.props.constraint,
             constraintInputDisabled: true,
             validating: false
         };
-    },
 
-    componentDidUpdate: function(prevProps, prevState) {
+        this.handleEnableConstraintInput = this.handleEnableConstraintInput.bind(this);
+        this.handleConstraintBlur = this.handleConstraintBlur.bind(this);
+        this.handleConstraintChange = this.handleConstraintChange.bind(this);
+        this.handleConstraintKey = this.handleConstraintKey.bind(this);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
         if (this.refs.constraintInput) {
             if (this.state.constraintInputDisabled) {
                 this.refs.constraintInput.blur();
@@ -266,45 +279,45 @@ var ReleaseComponent = React.createClass({
         if (this.state.constraintInputDisabled && this.state.constraint != this.props.constraint) {
             this.setState({constraint: this.props.constraint});
         }
-    },
+    }
 
-    getFormattedReleaseDate: function(time) {
+    getFormattedReleaseDate(time) {
         if (undefined === time) {
             return '';
         }
 
         var date = new Date(time);
         return date.toLocaleString();
-    },
+    }
 
-    handleEnableConstraintInput: function() {
+    handleEnableConstraintInput() {
         this.setState({constraintInputDisabled: false});
-    },
+    }
 
-    handleConstraintBlur: function(e) {
+    handleConstraintBlur() {
         this.validateConstraint();
-    },
+    }
 
-    handleConstraintChange: function(e) {
+    handleConstraintChange(e) {
         this.setState({constraint: e.target.value});
-    },
+    }
 
-    handleConstraintKey: function(e) {
+    handleConstraintKey(e) {
         if ('Enter' == e.key) {
             this.handleConstraintBlur();
         } else if ('Escape' == e.key) {
             this.setState({constraint: this.props.constraint});
             this.handleConstraintBlur();
         }
-    },
+    }
 
-    fireConstraintChangeEvent: function(newConstraint) {
+    fireConstraintChangeEvent(newConstraint) {
         if (undefined !== this.props.onConstraintChange) {
             this.props.onConstraintChange.call(this, newConstraint);
         }
-    },
+    }
 
-    validateConstraint: function() {
+    validateConstraint() {
         var self = this;
 
         if ('' === this.state.constraint || null === this.state.constraint) {
@@ -334,9 +347,9 @@ var ReleaseComponent = React.createClass({
             self.fireConstraintChangeEvent(self.props.initialConstraint);
             // @todo: what if request failed?
         });
-    },
+    }
 
-    render: function() {
+    render() {
         var version = '', upgrade_version = '';
 
         if (this.props.version) {
@@ -371,6 +384,6 @@ var ReleaseComponent = React.createClass({
             </div>
         )
     }
-});
+}
 
 export default PackageComponent;

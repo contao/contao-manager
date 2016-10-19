@@ -2,37 +2,41 @@ import React        from 'react';
 import Translation  from '../translation';
 import isEqual      from 'lodash/isEqual';
 
-var Link = React.createClass({
-    contextTypes: {
-        routing: React.PropTypes.object
-    },
+class Link extends React.Component {
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    constructor(props) {
+        super(props);
+
+        this.handleClick = this.handleClick.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    handleClick: function(e) {
+    handleClick(e) {
         e.preventDefault();
 
         this.context.routing.redirect(this.props.routeName);
-    },
+    }
 
-    generateLink: function(routeName) {
+    generateLink(routeName) {
         return this.context.routing.generateUrl(routeName);
-    },
+    }
 
-    isRouteActive: function(routeName) {
+    isRouteActive(routeName) {
         return this.context.routing.isCurrentRoute(routeName);
-    },
+    }
 
-    handleLogout: function(e) {
+    handleLogout(e) {
         e.preventDefault();
 
         this.context.routing.redirect('logout');
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <a onClick={this.handleClick}
                href={this.generateLink(this.props.routeName)}
@@ -40,14 +44,14 @@ var Link = React.createClass({
             >{this.props.children}</a>
         )
     }
-});
+}
 
-var NavigationComponent = React.createClass({
-    getInitialState: function() {
-        return {};
-    },
+Link.contextTypes = {
+    routing: React.PropTypes.object
+};
 
-    render: function() {
+class NavigationComponent extends React.Component {
+    render() {
         return (
             <nav role="navigation">
                 <ul>
@@ -73,6 +77,6 @@ var NavigationComponent = React.createClass({
             </nav>
         );
     }
-});
+}
 
 export default NavigationComponent;

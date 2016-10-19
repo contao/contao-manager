@@ -1,7 +1,6 @@
 import crossroads   from 'crossroads';
 import { createHistory } from 'history';
 import forIn        from 'lodash/forIn';
-import request      from './request';
 
 const history = createHistory();
 

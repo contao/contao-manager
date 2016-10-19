@@ -8,29 +8,32 @@ import translate   from '../../helpers/translate';
 import request     from '../../helpers/request';
 import isEqual     from 'lodash/isEqual';
 
-var LoginComponent = React.createClass({
+class LoginComponent extends React.Component {
 
-    componentIsMounted: false,
-    contextTypes: {
-        routing: React.PropTypes.object
-    },
+    constructor(props) {
+        super(props);
 
-    getInitialState: function() {
-        return {
+        this.componentIsMounted = false;
+
+        this.state = {
             isLoggingIn: false,
             credentialsIncorrect: false,
             username: '',
             password: '',
             translationData: {}
-        }
-    },
+        };
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         var self = this;
 
         this.componentIsMounted = true;
@@ -41,21 +44,21 @@ var LoginComponent = React.createClass({
                     self.setState({translationData: response.body});
                 }
             });
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this.componentIsMounted = false;
-    },
+    }
 
-    handleUsernameChange: function(value) {
+    handleUsernameChange(value) {
         this.setState({username: value, isLoggingIn: false, credentialsIncorrect: false});
-    },
+    }
 
-    handlePasswordChange: function(value) {
+    handlePasswordChange(value) {
         this.setState({password: value, isLoggingIn: false, credentialsIncorrect: false});
-    },
+    }
 
-    handleLogin: function(e) {
+    handleLogin(e) {
         e.preventDefault();
         this.setState({isLoggingIn: true, credentialsIncorrect: false});
 
@@ -81,9 +84,9 @@ var LoginComponent = React.createClass({
             .catch(function() {
                 // @todo handle failed request
             });
-    },
+    }
 
-    login: function(username, password) {
+    login(username, password) {
 
         var authPayload = {
             username: username,
@@ -100,9 +103,9 @@ var LoginComponent = React.createClass({
                     request.setToken(response.body.token);
                 }
             });
-    },
+    }
 
-    render: function() {
+    render() {
 
         var errorMsg = this.state.credentialsIncorrect ? <Hint type="warning"><Translation domain="login">Your credentials are incorrect!</Translation></Hint> : '';
 
@@ -144,6 +147,10 @@ var LoginComponent = React.createClass({
             </Trappings>
         );
     }
-});
+}
+
+LoginComponent.contextTypes = {
+    routing: React.PropTypes.object
+};
 
 export default LoginComponent;

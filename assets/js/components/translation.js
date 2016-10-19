@@ -3,25 +3,24 @@ import translate    from './../helpers/translate';
 import isEqual      from 'lodash/isEqual';
 
 
-var Translation = React.createClass({
+class Translation extends React.Component {
 
-    componentIsMounted: false,
-    contextTypes: {
-        routing: React.PropTypes.object
-    },
+    constructor(props) {
+        super(props);
 
-    getInitialState: function() {
-        return {
+        this.componentIsMounted = false;
+
+        this.state = {
             data: {}
         };
-    },
+    }
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
 
         var self = this;
 
@@ -35,13 +34,13 @@ var Translation = React.createClass({
 
                 return null;
             });
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this.componentIsMounted = false;
-    },
+    }
 
-    render: function() {
+    render() {
 
         var label = translate.getTranslationForKey(this.props.children, this.state.data, this.props.placeholders);
 
@@ -49,6 +48,10 @@ var Translation = React.createClass({
             <span>{label}</span>
         )
     }
-});
+}
+
+Translation.contextTypes = {
+    routing: React.PropTypes.object
+};
 
 export default Translation;

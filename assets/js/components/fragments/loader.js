@@ -4,9 +4,9 @@
 
 import React from 'react';
 
-var LoaderComponent = React.createClass({
+class LoaderComponent extends React.Component {
 
-    render: function() {
+    render() {
         return (
             <div className="loader">
                 <div className="sk-circle">
@@ -27,6 +27,6 @@ var LoaderComponent = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default LoaderComponent;

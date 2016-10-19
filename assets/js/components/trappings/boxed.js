@@ -1,14 +1,14 @@
 import React from 'react';
 import isEqual from 'lodash/isEqual';
 
-var BoxedTrappingsComponent = React.createClass({
+class BoxedTrappingsComponent extends React.Component {
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div id="content" className={"table" + (this.props.wide ? ' wide' : '')}>
                 <div className="cell">
@@ -24,6 +24,6 @@ var BoxedTrappingsComponent = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default BoxedTrappingsComponent;

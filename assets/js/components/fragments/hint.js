@@ -1,8 +1,8 @@
 import React from 'react';
 
-var HintComponent = React.createClass({
+class HintComponent extends React.Component {
 
-    render: function() {
+    render() {
         var icon = '';
         var close = '';
         var buttons = [];
@@ -45,6 +45,6 @@ var HintComponent = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default HintComponent;

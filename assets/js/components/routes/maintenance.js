@@ -2,19 +2,14 @@ import React        from 'react';
 import Trappings    from '../trappings/main';
 import taskmanager  from '../../helpers/taskmanager';
 
-var MaintenanceComponent = React.createClass({
+class MaintenanceComponent extends React.Component {
 
-    getInitialState: function() {
-        return {};
-    },
-
-    handleCacheClear: function() {
+    handleCacheClear() {
         var task = {'type': 'contao-cache-clear'};
         taskmanager.addTask(task).then(taskmanager.runNextTask);
-    },
+    }
 
-    render: function() {
-
+    render() {
         return (
             <Trappings>
                 <h2>Cache clear and warmup</h2>
@@ -23,6 +18,6 @@ var MaintenanceComponent = React.createClass({
             </Trappings>
         );
     }
-});
+}
 
 export default MaintenanceComponent;

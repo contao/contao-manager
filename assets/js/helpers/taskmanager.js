@@ -1,7 +1,6 @@
 import eventhandler from './eventhandler';
 import request      from './request';
 import forIn        from 'lodash/forIn';
-import merge        from 'lodash/merge';
 
 function addDays(date, days) {
     var result = new Date(date);

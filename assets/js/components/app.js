@@ -1,16 +1,13 @@
 import React from 'react';
 import TaskPopup from './taskpopup';
 
-var AppComponent = React.createClass({
-    childContextTypes: {
-        routing: React.PropTypes.object
-    },
+class AppComponent extends React.Component {
 
-    getChildContext: function() {
+    getChildContext() {
         return {routing: this.props.routing};
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div id="app">
                 {this.props.children}
@@ -18,6 +15,10 @@ var AppComponent = React.createClass({
             </div>
         )
     }
-});
+}
+
+AppComponent.childContextTypes = {
+    routing: React.PropTypes.object
+};
 
 export default AppComponent;

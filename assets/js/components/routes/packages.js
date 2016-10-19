@@ -10,12 +10,14 @@ import forEach      from 'lodash/forEach';
 import merge        from 'lodash/merge';
 import reverse      from 'lodash/reverse';
 
-var PackagesComponent = React.createClass({
+class PackagesComponent extends React.Component {
 
-    requests: [],
+    constructor(props) {
+        super(props);
 
-    getInitialState: function() {
-        return {
+        this.requests = [];
+
+        this.state = {
             mode: 'packages',
             loading: false,
             searchRequest: {
@@ -25,9 +27,15 @@ var PackagesComponent = React.createClass({
             packages: [],
             changes: {}
         };
-    },
 
-    componentDidMount: function() {
+        this.handleApplyButton = this.handleApplyButton.bind(this);
+        this.handlePackageModified = this.handlePackageModified.bind(this);
+        this.handleResetButton = this.handleResetButton.bind(this);
+        this.updateKeywordsOnType = this.updateKeywordsOnType.bind(this);
+        this.searchUpdates = this.searchUpdates.bind(this);
+    }
+
+    componentDidMount() {
         this.updatePackageList('packages');
 
         // Reset state when search is closed
@@ -48,13 +56,13 @@ var PackagesComponent = React.createClass({
             // which will also go to the packages list.
             eventhandler.emit('closeSearch');
         });
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this.stopRunningRequests();
-    },
+    }
 
-    updatePackageList: function(mode, searchRequest) {
+    updatePackageList(mode, searchRequest) {
 
         searchRequest = searchRequest || {
             keywords: '',
@@ -68,10 +76,9 @@ var PackagesComponent = React.createClass({
         } else {
             this.loadSearchPackages(searchRequest);
         }
-    },
+    }
 
-
-    loadSearchPackages: function(searchRequest) {
+    loadSearchPackages(searchRequest) {
         var self = this;
         this.setState({loading: true});
 
@@ -97,9 +104,9 @@ var PackagesComponent = React.createClass({
             });
 
         this.requests.push(req);
-    },
+    }
 
-    loadPackagesPackages: function() {
+    loadPackagesPackages() {
         var self = this;
         this.setState({loading: true});
 
@@ -116,9 +123,9 @@ var PackagesComponent = React.createClass({
             });
 
         this.requests.push(req);
-    },
+    }
 
-    updateKeywordsOnType: function(e) {
+    updateKeywordsOnType(e) {
         e.preventDefault();
         var searchRequest = merge({}, this.state.searchRequest, {keywords: e.target.value});
         var mode = '' === e.target.value ? 'packages' : 'search';
@@ -129,18 +136,18 @@ var PackagesComponent = React.createClass({
         });
 
         this.updatePackageList(mode, searchRequest);
-    },
+    }
 
-    searchUpdates: function (e) {
+    searchUpdates(e) {
         e.preventDefault();
         var task = {
             'type': 'upgrade',
             'dry-run': true
         };
         taskmanager.addTask(task).then(taskmanager.runNextTask);
-    },
+    }
 
-    handleApplyButton: function(e) {
+    handleApplyButton(e) {
         e.preventDefault();
 
         var task = null;
@@ -175,15 +182,15 @@ var PackagesComponent = React.createClass({
 
         taskmanager.addTask(task)
             .then(taskmanager.runNextTask);
-    },
+    }
 
-    handleResetButton: function(e) {
+    handleResetButton(e) {
         e.preventDefault();
 
         this.updatePackageList('packages');
-    },
+    }
 
-    handlePackageModified: function(name, data) {
+    handlePackageModified(name, data) {
         var changes = this.state.changes;
 
         if (data.modified) {
@@ -193,17 +200,17 @@ var PackagesComponent = React.createClass({
         }
 
         this.setState({changes: changes});
-    },
+    }
 
-    stopRunningRequests: function() {
+    stopRunningRequests() {
         var self = this;
         forEach(reverse(this.requests), function(req, i) {
             req.cancel();
             self.requests.splice(i, 1);
         });
-    },
+    }
 
-    render: function() {
+    render() {
         var packages = null;
         var self     = this;
         var search = <SearchTypeComponent
@@ -268,52 +275,58 @@ var PackagesComponent = React.createClass({
             </Trappings>
         );
     }
-});
+}
 
-var SearchTypeComponent = React.createClass({
+class SearchTypeComponent extends React.Component {
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             searchActive: false
         };
-    },
 
-    componentDidMount: function() {
+        this.openSearch = this.openSearch.bind(this);
+        this.closeSearch = this.closeSearch.bind(this);
+        this.handleSearchBlur = this.handleSearchBlur.bind(this);
+    }
+
+    componentDidMount() {
         eventhandler.on('closeSearch', this.closeSearch);
-    },
+    }
 
-    componentDidUpdate: function(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
         if (!prevState.searchActive && this.state.searchActive) {
             this.refs.searchInput.focus();
         }
-    },
+    }
 
-    openSearch: function() {
+    openSearch() {
         this.setState({searchActive: true});
-    },
+    }
 
-    closeSearch: function() {
+    closeSearch() {
         this.setState({searchActive: false});
-    },
+    }
 
-    handleSearchBlur: function() {
+    handleSearchBlur() {
         if ('' == this.refs.searchInput.value) {
             eventhandler.emit('closeSearch');
         }
-    },
+    }
 
-    handleSearchKey: function(e) {
+    handleSearchKey(e) {
         if ('Escape' == e.key) {
             eventhandler.emit('closeSearch');
         }
-    },
+    }
 
-    handleCancel: function(e) {
+    handleCancel(e) {
         e.preventDefault();
         eventhandler.emit('closeSearch');
-    },
+    }
 
-    render: function() {
+    render() {
         var sectionClass = 'package-actions';
 
         if (this.state.searchActive) {
@@ -331,6 +344,6 @@ var SearchTypeComponent = React.createClass({
             </section>
         );
     }
-});
+}
 
 export default PackagesComponent;

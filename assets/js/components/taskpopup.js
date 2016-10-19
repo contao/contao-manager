@@ -6,16 +6,18 @@ import isEqual      from 'lodash/isEqual';
 import merge        from 'lodash/merge';
 import includes     from 'lodash/includes';
 
-var TaskPopupComponent = React.createClass({
+class TaskPopupComponent extends React.Component {
 
-    popup: null,
-    lastTaskId: null,
-    currentInterval: null,
-    taskTitleCache: {},
-    scrolled: false,
+    constructor(props) {
+        super(props);
 
-    getInitialState: function() {
-        return {
+        this.popup = null;
+        this.lastTaskId = null;
+        this.currentInterval = null;
+        this.taskTitleCache = {};
+        this.scrolled = false;
+
+        this.state = {
             show: false,
             showConsole: false,
             positionFixed: false,
@@ -27,14 +29,19 @@ var TaskPopupComponent = React.createClass({
                 consoleOutput: ''
             }
         };
-    },
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+        this.handleButton = this.handleButton.bind(this);
+        this.hideConsole = this.hideConsole.bind(this);
+        this.showConsole = this.showConsole.bind(this);
+        this.onConsoleOutputScroll = this.onConsoleOutputScroll.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
 
         return !isEqual(nextProps, this.props) || !isEqual(nextState, this.state);
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         var self = this;
         this.popup = document.getElementById('task-popup');
 
@@ -50,14 +57,14 @@ var TaskPopupComponent = React.createClass({
 
         eventhandler.on('displayTaskPopup', self.show);
         eventhandler.on('hideTaskPopup', self.hide);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         eventhandler.removeListener('displayTaskPopup', self.show);
         eventhandler.removeListener('hideTaskPopup', self.hide);
-    },
+    }
 
-    componentDidUpdate: function(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
 
         // If task has changed, start update
         if (this.lastTaskId !== this.state.taskId) {
@@ -71,44 +78,44 @@ var TaskPopupComponent = React.createClass({
             var consoleOutput = this.refs.consoleOutput;
             consoleOutput.scrollTop = consoleOutput.scrollHeight;
         }
-    },
+    }
 
-    show: function(state) {
+    show(state) {
         state = state || {};
         var newState = merge({}, this.state, state, {show: true});
 
         this.setState(newState);
-    },
+    }
 
-    handleButton: function() {
+    handleButton() {
         var self = this;
         eventhandler.emit('hideTaskPopup', this.state);
-    },
+    }
 
-    hide: function() {
+    hide() {
         this.scrolled = false;
         taskmanager.deleteTask(this.state.taskId);
         this.setState(this.getInitialState());
         window.clearInterval(this.currentInterval);
-    },
+    }
 
-    hideConsole: function() {
+    hideConsole() {
         this.setState({showConsole: false});
-    },
+    }
 
-    showConsole: function() {
+    showConsole() {
         this.setState({showConsole: true});
-    },
+    }
 
-    toggleFixedPosition: function() {
+    toggleFixedPosition() {
         this.setState({positionFixed: this.popup && this.popup.clientHeight < window.innerHeight});
-    },
+    }
 
-    startTaskUpdate: function() {
+    startTaskUpdate() {
         this.currentInterval = window.setInterval(this.taskUpdate, this.state.updateFrequency);
-    },
+    }
 
-    taskUpdate: function() {
+    taskUpdate() {
 
         var taskId = this.state.taskId;
         var self = this;
@@ -147,14 +154,14 @@ var TaskPopupComponent = React.createClass({
                 self.setState(merge({}, self.state, {status: 'error'}));
                 window.clearInterval(self.currentInterval);
             });
-    },
+    }
 
-    onConsoleOutputScroll: function () {
+    onConsoleOutputScroll () {
         var consoleOutput = this.refs.consoleOutput;
         this.scrolled = consoleOutput.scrollTop !== consoleOutput.scrollHeight;
-    },
+    }
 
-    extractConsolePreview: function() {
+    extractConsolePreview() {
         // get the last line (with content from a string
         var chunks = this.state.content.consoleOutput.split("\n").reverse();
         for (var i=0;i<chunks.length;i++) {
@@ -167,9 +174,9 @@ var TaskPopupComponent = React.createClass({
         }
 
         return '[…]';
-    },
+    }
 
-    getTaskTitle: function(type) {
+    getTaskTitle(type) {
 
         if (undefined !== this.taskTitleCache[type]) {
 
@@ -190,9 +197,9 @@ var TaskPopupComponent = React.createClass({
 
         this.taskTitleCache[type] = <Translation domain="taskpopup">{label}</Translation>;
         return this.taskTitleCache[type];
-    },
+    }
 
-    render: function() {
+    render() {
 
         var cssClasses = [];
         var consolePreview = this.extractConsolePreview();
@@ -244,6 +251,6 @@ var TaskPopupComponent = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default TaskPopupComponent;
