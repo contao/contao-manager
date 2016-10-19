@@ -1,9 +1,9 @@
 'use strict';
 
-const React         = require('react');
-const ReactDOM      = require('react-dom');
-const App           = require('./../components/app');
-const Login         = require('./../components/routes/login');
+import React    from 'react';
+import ReactDOM from 'react-dom';
+import App      from './../components/app';
+import Login    from './../components/routes/login';
 
 module.exports = {
     path: '/{locale}/login',
@@ -26,7 +26,3 @@ module.exports = {
         ReactDOM.render(<App routing={routing}><Login /></App>, document.getElementById('react-container'));
     }
 };
-
-
-
-

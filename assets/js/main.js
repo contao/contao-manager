@@ -1,13 +1,13 @@
 'use strict';
 
-const Promise      = require('bluebird');
-const routing      = require('./helpers/routing');
-const TensideState = require('./helpers/tenside-state');
-const request      = require('./helpers/request');
-const forIn        = require('lodash/forIn');
-const merge        = require('lodash/merge');
-const isFunction   = require('lodash/isFunction');
-const isArray      = require('lodash/isArray');
+import Promise      from 'bluebird';
+import routing      from './helpers/routing';
+import TensideState from './helpers/tenside-state';
+import request      from './helpers/request';
+import forIn        from 'lodash/forIn';
+import merge        from 'lodash/merge';
+import isFunction   from 'lodash/isFunction';
+import isArray      from 'lodash/isArray';
 
 var router = routing.getRouter();
 

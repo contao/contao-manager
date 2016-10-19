@@ -4,7 +4,7 @@
 
 'use strict';
 
-const React = require('react');
+import React from 'react';
 
 var LoaderComponent = React.createClass({
 
@@ -31,4 +31,4 @@ var LoaderComponent = React.createClass({
     }
 });
 
-module.exports = LoaderComponent;
+export default LoaderComponent;

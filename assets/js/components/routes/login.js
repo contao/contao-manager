@@ -1,14 +1,14 @@
 'use strict';
 
-const React         = require('react');
-const Trappings     = require('../trappings/boxed');
-const Hint          = require('../fragments/hint');
-const Loader        = require('../fragments/loader');
-const Translation   = require('../translation');
-const TextWidget    = require('../widgets/text');
-const translate     = require('../../helpers/translate');
-const request       = require('../../helpers/request');
-const isEqual       = require('lodash/isEqual');
+import React       from 'react';
+import Trappings   from '../trappings/boxed';
+import Hint        from '../fragments/hint';
+import Loader      from '../fragments/loader';
+import Translation from '../translation';
+import TextWidget  from '../widgets/text';
+import translate   from '../../helpers/translate';
+import request     from '../../helpers/request';
+import isEqual     from 'lodash/isEqual';
 
 var LoginComponent = React.createClass({
 
@@ -148,4 +148,4 @@ var LoginComponent = React.createClass({
     }
 });
 
-module.exports = LoginComponent;
+export default LoginComponent;

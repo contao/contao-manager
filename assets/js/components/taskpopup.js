@@ -1,12 +1,12 @@
 'use strict';
 
-const React         = require('react');
-const Translation   = require('./translation');
-const eventhandler  = require('./../helpers/eventhandler');
-const taskmanager   = require('./../helpers/taskmanager');
-const isEqual       = require('lodash/isEqual');
-const merge         = require('lodash/merge');
-const includes      = require('lodash/includes');
+import React        from 'react';
+import Translation  from './translation';
+import eventhandler from './../helpers/eventhandler';
+import taskmanager  from './../helpers/taskmanager';
+import isEqual      from 'lodash/isEqual';
+import merge        from 'lodash/merge';
+import includes     from 'lodash/includes';
 
 var TaskPopupComponent = React.createClass({
 
@@ -248,4 +248,4 @@ var TaskPopupComponent = React.createClass({
     }
 });
 
-module.exports = TaskPopupComponent;
+export default TaskPopupComponent;

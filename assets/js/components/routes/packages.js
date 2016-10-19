@@ -1,16 +1,16 @@
 'use strict';
 
-const React         = require('react');
-const Trappings     = require('../trappings/main');
-const Package       = require('../fragments/package');
-const Loader        = require('../fragments/loader');
-const request       = require('../../helpers/request');
-const taskmanager   = require('../../helpers/taskmanager');
-const eventhandler  = require('../../helpers/eventhandler');
-const Translation   = require('../translation');
-const forEach       = require('lodash/forEach');
-const merge         = require('lodash/merge');
-const reverse       = require('lodash/reverse');
+import React        from 'react';
+import Trappings    from '../trappings/main';
+import Package      from '../fragments/package';
+import Loader       from '../fragments/loader';
+import request      from '../../helpers/request';
+import taskmanager  from '../../helpers/taskmanager';
+import eventhandler from '../../helpers/eventhandler';
+import Translation  from '../translation';
+import forEach      from 'lodash/forEach';
+import merge        from 'lodash/merge';
+import reverse      from 'lodash/reverse';
 
 var PackagesComponent = React.createClass({
 
@@ -335,4 +335,4 @@ var SearchTypeComponent = React.createClass({
     }
 });
 
-module.exports = PackagesComponent;
+export default PackagesComponent;

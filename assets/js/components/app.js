@@ -1,7 +1,7 @@
 'use strict';
 
-const React         = require('react');
-const TaskPopup     = require('./taskpopup');
+import React from 'react';
+import TaskPopup from './taskpopup';
 
 var AppComponent = React.createClass({
     childContextTypes: {
@@ -22,4 +22,4 @@ var AppComponent = React.createClass({
     }
 });
 
-module.exports = AppComponent;
+export default AppComponent;

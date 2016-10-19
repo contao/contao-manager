@@ -1,11 +1,11 @@
 'use strict';
 
-const React         = require('react');
-const ReactDOM      = require('react-dom');
-const App           = require('./../components/app');
-const Maintenance   = require('./../components/routes/maintenance');
-const routeChecks   = require('./../helpers/common-route-checks');
-const taskmanager   = require('./../helpers/taskmanager');
+import React from 'react';
+import ReactDOM     from 'react-dom';
+import App          from './../components/app';
+import Maintenance  from './../components/routes/maintenance';
+import routeChecks  from './../helpers/common-route-checks';
+import taskmanager  from './../helpers/taskmanager';
 
 module.exports = {
     path: '/{locale}/maintenance',

@@ -1,8 +1,8 @@
 'use strict';
 
-const React         = require('react');
-const Translation   = require('../translation');
-const isEqual       = require('lodash/isEqual');
+import React        from 'react';
+import Translation  from '../translation';
+import isEqual      from 'lodash/isEqual';
 
 var Link = React.createClass({
     contextTypes: {
@@ -77,4 +77,4 @@ var NavigationComponent = React.createClass({
     }
 });
 
-module.exports = NavigationComponent;
+export default NavigationComponent;

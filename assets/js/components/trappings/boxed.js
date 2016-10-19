@@ -1,7 +1,7 @@
 'use strict';
 
-const React         = require('react');
-const isEqual       = require('lodash/isEqual');
+import React from 'react';
+import isEqual from 'lodash/isEqual';
 
 var BoxedTrappingsComponent = React.createClass({
 
@@ -28,4 +28,4 @@ var BoxedTrappingsComponent = React.createClass({
     }
 });
 
-module.exports = BoxedTrappingsComponent;
+export default BoxedTrappingsComponent;

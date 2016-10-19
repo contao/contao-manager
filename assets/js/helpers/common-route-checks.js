@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = {
+export default {
     ifTensideNotOkRedirectToInstall: function (results, routing) {
         if (false === results['tenside_configured']
             || false === results['project_created']

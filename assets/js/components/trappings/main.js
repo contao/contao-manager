@@ -1,10 +1,10 @@
 'use strict';
 
-const React         = require('react');
-const Navigation    = require('./navigation');
-const eventhandler  = require('../../helpers/eventhandler');
-const compact       = require('lodash/compact');
-const isEqual       = require('lodash/isEqual');
+import React        from 'react';
+import Navigation   from './navigation';
+import eventhandler from '../../helpers/eventhandler';
+import compact      from 'lodash/compact';
+import isEqual      from 'lodash/isEqual';
 
 var MainTrappingsComponent = React.createClass({
 
@@ -69,4 +69,4 @@ var MainTrappingsComponent = React.createClass({
     }
 });
 
-module.exports = MainTrappingsComponent;
+export default MainTrappingsComponent;

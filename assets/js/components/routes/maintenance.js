@@ -1,8 +1,8 @@
 'use strict';
 
-const React         = require('react');
-const Trappings     = require('../trappings/main');
-const taskmanager   = require('../../helpers/taskmanager');
+import React        from 'react';
+import Trappings    from '../trappings/main';
+import taskmanager  from '../../helpers/taskmanager';
 
 var MaintenanceComponent = React.createClass({
 
@@ -27,4 +27,4 @@ var MaintenanceComponent = React.createClass({
     }
 });
 
-module.exports = MaintenanceComponent;
+export default MaintenanceComponent;

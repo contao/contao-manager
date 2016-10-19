@@ -1,6 +1,6 @@
 'use strict';
 
-const request       = require('./request');
+import request from './request';
 
 var getState = function() {
 
@@ -48,7 +48,7 @@ var getSelfTest = function() {
         });
 };
 
-module.exports = {
+export default {
     getState: getState,
     getLoggedIn: getLoggedIn,
     getSelfTest: getSelfTest

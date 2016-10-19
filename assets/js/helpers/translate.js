@@ -1,7 +1,7 @@
 'use strict';
 
-const Promise   = require('bluebird');
-const request   = require('./request');
+import Promise from 'bluebird';
+import request from './request';
 
 // Enable cancelling of promises
 Promise.config({cancellation: true});
@@ -41,7 +41,7 @@ var fetchData = function(domain, locale) {
     return cache[cacheKey] = request.createRequest('/translation/' + locale + '/' + domain);
 };
 
-module.exports = {
+export default {
     fetchData: fetchData,
     getTranslationForKey: getTranslationForKey
 };

@@ -1,12 +1,12 @@
 'use strict';
 
-const React         = require('react');
-const forEach       = require('lodash/forEach');
-const Highlight     = require('react-highlighter');
-const Translation   = require('../translation');
-const Hint          = require('../fragments/hint');
-const request       = require('../../helpers/request');
-const isEqual       = require('lodash/isEqual');
+import React       from 'react';
+import forEach     from 'lodash/forEach';
+import Highlight   from 'react-highlighter';
+import Translation from '../translation';
+import Hint        from '../fragments/hint';
+import request     from '../../helpers/request';
+import isEqual     from 'lodash/isEqual';
 
 var PackageComponent = React.createClass({
 
@@ -375,4 +375,4 @@ var ReleaseComponent = React.createClass({
     }
 });
 
-module.exports = PackageComponent;
+export default PackageComponent;

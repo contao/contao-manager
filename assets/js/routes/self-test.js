@@ -1,10 +1,10 @@
 'use strict';
 
-const React          = require('react');
-const ReactDOM       = require('react-dom');
-const App           = require('./../components/app');
-const SelfTest       = require('./../components/routes/selftest');
-const routeChecks    = require('./../helpers/common-route-checks');
+import React from 'react';
+import ReactDOM    from 'react-dom';
+import App        from './../components/app';
+import SelfTest    from './../components/routes/selftest';
+import routeChecks from './../helpers/common-route-checks';
 
 module.exports = {
     path: '/{locale}/config/self-test',

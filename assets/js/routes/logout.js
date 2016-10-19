@@ -1,6 +1,6 @@
 'use strict';
 
-const requestHelper = require('./../helpers/request');
+import requestHelper from './../helpers/request';
 
 module.exports = {
     path: '/{locale}/logout',
@@ -9,7 +9,3 @@ module.exports = {
         routing.redirect('login');
     }
 };
-
-
-
-

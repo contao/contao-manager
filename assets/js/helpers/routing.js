@@ -1,12 +1,14 @@
 'use strict';
 
-const crossroads   = require('crossroads');
-const history      = require('history').createHistory();
-const forIn        = require('lodash/forIn');
-const request      = require('./request');
+import crossroads   from 'crossroads';
+import { createHistory } from 'history';
+import forIn        from 'lodash/forIn';
+import request      from './request';
+
+const history = createHistory();
 
 // Route definitions (do not define dynamically so they get bundled by browserify)
-var Routing = {
+export default {
     routeDefinitions: {
         'install': require('./../routes/install'),
         'login': require('./../routes/login'),
@@ -109,6 +111,4 @@ var Routing = {
 
         return href;
     }
-};
-
-module.exports = Routing;
+}

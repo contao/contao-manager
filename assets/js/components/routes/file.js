@@ -1,13 +1,13 @@
 'use strict';
 
-const React         = require('react');
-const Trappings     = require('../trappings/main');
-const Codemirror    = require('react-codemirror');
-const request       = require('../../helpers/request');
-const Translation   = require('../translation');
-const assign        = require('lodash/assign');
-const forEach       = require('lodash/forEach');
-const isEqual       = require('lodash/isEqual');
+import React       from 'react';
+import Trappings   from '../trappings/main';
+import Codemirror  from 'react-codemirror';
+import request     from '../../helpers/request';
+import Translation from '../translation';
+import assign      from 'lodash/assign';
+import forEach     from 'lodash/forEach';
+import isEqual     from 'lodash/isEqual';
 
 var MessageComponent = React.createClass({
 
@@ -139,4 +139,4 @@ var FileComponent = React.createClass({
     }
 });
 
-module.exports = FileComponent;
+export default FileComponent;

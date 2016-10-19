@@ -1,9 +1,9 @@
 'use strict';
 
-const xhr       = require('xhr');
-const cookie    = require('cookie');
-const Promise   = require('bluebird');
-const merge     = require('lodash/merge');
+import xhr      from 'xhr';
+import cookie   from 'cookie';
+import Promise  from 'bluebird';
+import merge    from 'lodash/merge';
 
 var cookies, apiBaseUrl = '';
 
@@ -84,7 +84,7 @@ function _readCookie(name,c,C,i){
     return cookies[name];
 }
 
-module.exports = {
+export default {
     createRequest: createRequest,
     setToken: setToken,
     getToken: getToken,

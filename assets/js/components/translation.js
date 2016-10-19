@@ -1,8 +1,8 @@
 'use strict';
 
-const React         = require('react');
-const translate     = require('./../helpers/translate');
-const isEqual       = require('lodash/isEqual');
+import React        from 'react';
+import translate    from './../helpers/translate';
+import isEqual      from 'lodash/isEqual';
 
 
 var Translation = React.createClass({
@@ -53,4 +53,4 @@ var Translation = React.createClass({
     }
 });
 
-module.exports = Translation;
+export default Translation;

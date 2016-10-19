@@ -1,6 +1,6 @@
 'use strict';
 
-const React = require('react');
+import React from 'react';
 
 var HintComponent = React.createClass({
 
@@ -49,4 +49,4 @@ var HintComponent = React.createClass({
     }
 });
 
-module.exports = HintComponent;
+export default HintComponent;

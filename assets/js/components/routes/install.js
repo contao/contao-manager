@@ -1,15 +1,15 @@
 'use strict';
 
-const React         = require('react');
-const Promise       = require('bluebird');
-const Trappings     = require('../trappings/boxed');
-const Translation   = require('../translation');
-const TextWidget    = require('../widgets/text');
-const TensideState  = require('../../helpers/tenside-state');
-const taskmanager   = require('../../helpers/taskmanager');
-const request       = require('../../helpers/request');
-const eventhandler  = require('../../helpers/eventhandler');
-const isEqual       = require('lodash/isEqual');
+import React        from 'react';
+import Promise      from 'bluebird';
+import Trappings    from '../trappings/boxed';
+import Translation  from '../translation';
+import TextWidget   from '../widgets/text';
+import TensideState from '../../helpers/tenside-state';
+import taskmanager  from '../../helpers/taskmanager';
+import request      from '../../helpers/request';
+import eventhandler from '../../helpers/eventhandler';
+import isEqual      from 'lodash/isEqual';
 
 var InstallComponent = React.createClass({
 
@@ -292,4 +292,4 @@ var InstallComponent = React.createClass({
     }
 });
 
-module.exports = InstallComponent;
+export default InstallComponent;

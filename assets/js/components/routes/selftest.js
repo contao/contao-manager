@@ -1,12 +1,12 @@
 'use strict';
 
-const React         = require('react');
-const Promise       = require('bluebird');
-const Trappings     = require('../trappings/boxed');
-const Loader        = require('../fragments/loader');
-const TensideState  = require('../../helpers/tenside-state');
-const isEqual       = require('lodash/isEqual');
-const forIn         = require('lodash/forIn');
+import React        from 'react';
+import Promise      from 'bluebird';
+import Trappings    from '../trappings/boxed';
+import Loader       from '../fragments/loader';
+import TensideState from '../../helpers/tenside-state';
+import isEqual      from 'lodash/isEqual';
+import forIn        from 'lodash/forIn';
 
 var SelfTestComponent = React.createClass({
 
@@ -85,4 +85,4 @@ var TestComponent = React.createClass({
     }
 });
 
-module.exports = SelfTestComponent;
+export default SelfTestComponent;

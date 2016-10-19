@@ -1,9 +1,9 @@
 'use strict';
 
-const React         = require('react');
-const ReactDOM      = require('react-dom');
-const App           = require('./../components/app');
-const Install       = require('./../components/routes/install');
+import React    from 'react';
+import ReactDOM from 'react-dom';
+import App      from './../components/app';
+import Install  from './../components/routes/install';
 
 module.exports = {
     path: '/{locale}/install',
@@ -33,4 +33,3 @@ module.exports = {
         ReactDOM.render(<App routing={routing}><Install /></App>, document.getElementById('react-container'));
     }
 };
-

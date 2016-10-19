@@ -1,7 +1,7 @@
 'use strict';
 
-const React         = require('react');
-const isEqual       = require('lodash/isEqual');
+import React    from 'react';
+import isEqual  from 'lodash/isEqual';
 
 var Option = React.createClass({
 
@@ -77,4 +77,4 @@ var Widget = React.createClass({
     }
 });
 
-module.exports = Widget;
+export default Widget;

@@ -1,9 +1,9 @@
 'use strict';
 
-const eventhandler  = require('./eventhandler');
-const request       = require('./request');
-const forIn         = require('lodash/forIn');
-const merge         = require('lodash/merge');
+import eventhandler from './eventhandler';
+import request      from './request';
+import forIn        from 'lodash/forIn';
+import merge        from 'lodash/merge';
 
 function addDays(date, days) {
     var result = new Date(date);
@@ -11,7 +11,7 @@ function addDays(date, days) {
     return result;
 }
 
-module.exports = {
+export default {
     runNextTask: function() {
         return request.createRequest('/api/v1/tasks/run')
             .then(function(response) {
