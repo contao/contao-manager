@@ -1,7 +1,5 @@
 import React        from 'react';
-import translate    from './../helpers/translate';
-import isEqual      from 'lodash/isEqual';
-
+import { getTranslationForKey, fetchTranslationData } from './../helpers/translate';
 
 class Translation extends React.Component {
 
@@ -21,7 +19,7 @@ class Translation extends React.Component {
 
         this.componentIsMounted = true;
 
-        translate.fetchData(this.props.domain, this.context.routing.getLanguage())
+        fetchTranslationData(this.props.domain, this.context.routing.getLanguage())
             .then(function(response) {
                 if (self.componentIsMounted) {
                     self.setState({data: response.body});
@@ -37,7 +35,7 @@ class Translation extends React.Component {
 
     render() {
 
-        var label = translate.getTranslationForKey(this.props.children, this.state.data, this.props.placeholders);
+        var label = getTranslationForKey(this.props.children, this.state.data, this.props.placeholders);
 
         return (
             <span>{label}</span>

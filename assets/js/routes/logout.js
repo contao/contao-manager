@@ -1,9 +1,9 @@
-import requestHelper from './../helpers/request';
+import { setRequestToken } from './../helpers/request';
 
 module.exports = {
     path: '/{locale}/logout',
     controller: function(request, routing) {
-        requestHelper.setToken('');
+        setRequestToken('');
         routing.redirect('login');
     }
 };

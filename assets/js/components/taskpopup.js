@@ -1,8 +1,7 @@
 import React        from 'react';
 import Translation  from './translation';
 import eventhandler from './../helpers/eventhandler';
-import taskmanager  from './../helpers/taskmanager';
-import isEqual      from 'lodash/isEqual';
+import * as taskmanager from './../helpers/taskmanager';
 import merge        from 'lodash/merge';
 import includes     from 'lodash/includes';
 

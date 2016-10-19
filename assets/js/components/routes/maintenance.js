@@ -1,6 +1,6 @@
 import React        from 'react';
 import Trappings    from '../trappings/main';
-import taskmanager  from '../../helpers/taskmanager';
+import * as taskmanager from '../../helpers/taskmanager';
 
 class MaintenanceComponent extends React.Component {
 

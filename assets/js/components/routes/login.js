@@ -4,9 +4,8 @@ import Hint        from '../fragments/hint';
 import Loader      from '../fragments/loader';
 import Translation from '../translation';
 import TextWidget  from '../widgets/text';
-import translate   from '../../helpers/translate';
-import request     from '../../helpers/request';
-import isEqual     from 'lodash/isEqual';
+import { getTranslationForKey, fetchTranslationData } from '../../helpers/translate';
+import { createRequest, setRequestToken } from '../../helpers/request';
 
 class LoginComponent extends React.Component {
 
@@ -33,7 +32,7 @@ class LoginComponent extends React.Component {
 
         this.componentIsMounted = true;
 
-        translate.fetchData('login', this.context.routing.getLanguage())
+        fetchTranslationData('login', this.context.routing.getLanguage())
             .then(function(response) {
                 if (self.componentIsMounted) {
                     self.setState({translationData: response.body});
@@ -60,7 +59,7 @@ class LoginComponent extends React.Component {
         var self = this;
         var form = document.getElementById('login-form');
 
-        return request.createRequest('/api/v1/auth', {
+        return createRequest('/api/v1/auth', {
                 method: 'POST',
                 json: {
                     username: this.state.username,
@@ -70,7 +69,7 @@ class LoginComponent extends React.Component {
             .then(function (response) {
                 if ('OK' === response.body.status) {
                     // Store the JWT
-                    request.setToken(response.body.token);
+                    setRequestToken(response.body.token);
                     self.context.routing.redirect('packages');
                 } else {
                     self.setState({isLoggingIn: false, credentialsIncorrect: true});
@@ -88,14 +87,14 @@ class LoginComponent extends React.Component {
             password: password
         };
 
-        return request.createRequest('/api/v1/auth', {
+        return createRequest('/api/v1/auth', {
                 method: 'POST',
                 json: authPayload
             })
             .then(function (response) {
                 if ('OK' === response.body.status) {
                     // Store the JWT
-                    request.setToken(response.body.token);
+                    setRequestToken(response.body.token);
                 }
             });
     }
@@ -119,14 +118,14 @@ class LoginComponent extends React.Component {
 
                     <form id="login-form" action="#" method="post">
                         <TextWidget type="text" name="username"
-                                    label={translate.getTranslationForKey('Username', this.state.translationData)}
-                                    placeholder={translate.getTranslationForKey('Username', this.state.translationData)}
+                                    label={getTranslationForKey('Username', this.state.translationData)}
+                                    placeholder={getTranslationForKey('Username', this.state.translationData)}
                                     onChange={this.handleUsernameChange}
                                     disabled={this.state.isLoggingIn}
                         />
                         <TextWidget type="password" name="password"
-                                    label={translate.getTranslationForKey('Password', this.state.translationData)}
-                                    placeholder={translate.getTranslationForKey('Password', this.state.translationData)}
+                                    label={getTranslationForKey('Password', this.state.translationData)}
+                                    placeholder={getTranslationForKey('Password', this.state.translationData)}
                                     disabled={this.state.isLoggingIn}
                                     onChange={this.handlePasswordChange}
                         />

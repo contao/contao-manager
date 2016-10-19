@@ -1,12 +1,12 @@
 import Promise from 'bluebird';
-import request from './request';
+import { createRequest } from './request';
 
 // Enable cancelling of promises
 Promise.config({cancellation: true});
 
 var cache = {};
 
-var getTranslationForKey = function(key, data, placeholders) {
+export function getTranslationForKey(key, data, placeholders) {
     data         = typeof data !== 'undefined' ? data : {};
     placeholders = typeof placeholders !== 'undefined' ? placeholders : {};
 
@@ -25,9 +25,9 @@ var getTranslationForKey = function(key, data, placeholders) {
     }
 
     return translation;
-};
+}
 
-var fetchData = function(domain, locale) {
+export function fetchTranslationData(domain, locale) {
 
     var cacheKey = domain + '.' + locale;
 
@@ -36,10 +36,5 @@ var fetchData = function(domain, locale) {
         return cache[cacheKey];
     }
 
-    return cache[cacheKey] = request.createRequest('/translation/' + locale + '/' + domain);
-};
-
-export default {
-    fetchData: fetchData,
-    getTranslationForKey: getTranslationForKey
-};
+    return cache[cacheKey] = createRequest('/translation/' + locale + '/' + domain);
+}

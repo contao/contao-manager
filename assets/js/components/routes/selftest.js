@@ -2,8 +2,7 @@ import React        from 'react';
 import Promise      from 'bluebird';
 import Trappings    from '../trappings/boxed';
 import Loader       from '../fragments/loader';
-import TensideState from '../../helpers/tenside-state';
-import isEqual      from 'lodash/isEqual';
+import { getSelfTest } from '../../helpers/tenside-state';
 import forIn        from 'lodash/forIn';
 
 class SelfTestComponent extends React.Component {
@@ -20,7 +19,7 @@ class SelfTestComponent extends React.Component {
 
     componentDidMount() {
         var self = this;
-        this.statePromise = TensideState.getSelfTest()
+        this.statePromise = getSelfTest()
             .then(function(result) {
                 var sortRef = {
                     FAIL: 3,

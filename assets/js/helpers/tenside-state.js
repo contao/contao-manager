@@ -1,8 +1,8 @@
-import request from './request';
+import { createRequest } from './request';
 
-var getState = function() {
+export function getState() {
 
-    return request.createRequest('/api/v1/install/get_state')
+    return createRequest('/api/v1/install/get_state')
         .then(function (response) {
             if ('OK' === response.body.status) {
                 return response.body.state;
@@ -10,11 +10,11 @@ var getState = function() {
 
             return null;
         });
-};
+}
 
-var getLoggedIn = function() {
+export function getLoggedIn() {
 
-    return request.createRequest('/api/v1/auth')
+    return createRequest('/api/v1/auth')
         .then(function (response) {
             if ('OK' === response.body.status) {
                 return {user_loggedIn: true, username: response.body.username};
@@ -24,9 +24,9 @@ var getLoggedIn = function() {
         .catch(function () {
             return {user_loggedIn: false};
         });
-};
+}
 
-var getSelfTest = function() {
+export function getSelfTest() {
     return getState()
         .then(function(state) {
 
@@ -36,7 +36,7 @@ var getSelfTest = function() {
                 selfTestEndPoint = '/api/v1/install/selftest';
             }
 
-            return request.createRequest(selfTestEndPoint)
+            return createRequest(selfTestEndPoint)
                 .then(function(response) {
                     return response.body.results;
                 })
@@ -44,10 +44,4 @@ var getSelfTest = function() {
                     return {};
                 });
         });
-};
-
-export default {
-    getState: getState,
-    getLoggedIn: getLoggedIn,
-    getSelfTest: getSelfTest
-};
+}

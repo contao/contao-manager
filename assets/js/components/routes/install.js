@@ -3,11 +3,10 @@ import Promise      from 'bluebird';
 import Trappings    from '../trappings/boxed';
 import Translation  from '../translation';
 import TextWidget   from '../widgets/text';
-import TensideState from '../../helpers/tenside-state';
-import taskmanager  from '../../helpers/taskmanager';
-import request      from '../../helpers/request';
+import { getState, getLoggedIn } from '../../helpers/tenside-state';
+import { runNextTask }  from '../../helpers/taskmanager';
+import { createRequest, setRequestToken } from '../../helpers/request';
 import eventhandler from '../../helpers/eventhandler';
-import isEqual      from 'lodash/isEqual';
 
 class InstallComponent extends React.Component {
 
@@ -35,7 +34,7 @@ class InstallComponent extends React.Component {
 
     componentDidMount() {
         var self = this;
-        this.tensideStatePromise = TensideState.getLoggedIn()
+        this.tensideStatePromise = getLoggedIn()
             .then(function(result) {
                 if (true === result.user_loggedIn) {
                     self.setState({
@@ -68,7 +67,7 @@ class InstallComponent extends React.Component {
             return;
         }
 
-        request.createRequest('/api/v1/constraint', {
+        createRequest('/api/v1/constraint', {
             method: 'POST',
             json: {constraint: version}
         }).then(function(response) {
@@ -93,7 +92,7 @@ class InstallComponent extends React.Component {
 
         this.setState({installing: true});
 
-        TensideState.getState()
+        getState()
             .then(function(state) {
                 // Configure tenside if not already configured
                 if (false === state.tenside_configured) {
@@ -132,7 +131,7 @@ class InstallComponent extends React.Component {
                     // and the task manually deleted? running the next task
                     // will fail?
 
-                    return taskmanager.runNextTask();
+                    return runNextTask();
                 }
             })
             .catch(function(err) {
@@ -152,7 +151,7 @@ class InstallComponent extends React.Component {
         return new Promise(function (resolve, reject) {
 
             return new Promise(function (resolve, reject) {
-                request.createRequest('/api/v1/install/autoconfig', {
+                createRequest('/api/v1/install/autoconfig', {
                     method: 'GET'
                 }).then(function (response) {
                     resolve(response.body);
@@ -165,13 +164,13 @@ class InstallComponent extends React.Component {
                 var config = { configuration: autoconfig};
                 configurePayload = Object.assign(configurePayload, config);
 
-                request.createRequest('/api/v1/install/configure', {
+                createRequest('/api/v1/install/configure', {
                     method: 'POST',
                     json: configurePayload
                 }).then(function (response) {
                     if ('OK' === response.body.status) {
                         // Store the JWT
-                        request.setToken(response.body.token);
+                        setRequestToken(response.body.token);
 
                         resolve(response.body);
                     } else {
@@ -188,7 +187,7 @@ class InstallComponent extends React.Component {
 
         return new Promise(function (resolve, reject) {
 
-            request.createRequest('/api/v1/install/create-project', {
+            createRequest('/api/v1/install/create-project', {
                 method: 'POST',
                 json: createProjectPayload
             }).then(function (response) {

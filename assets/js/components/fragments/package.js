@@ -3,7 +3,7 @@ import forEach     from 'lodash/forEach';
 import Highlight   from 'react-highlighter';
 import Translation from '../translation';
 import Hint        from '../fragments/hint';
-import request     from '../../helpers/request';
+import { createRequest } from '../../helpers/request';
 import isEqual     from 'lodash/isEqual';
 
 class PackageComponent extends React.Component {
@@ -328,7 +328,7 @@ class ReleaseComponent extends React.Component {
 
         this.setState({validating: true});
 
-        request.createRequest('/api/v1/constraint', {
+        createRequest('/api/v1/constraint', {
             method: 'POST',
             json: {constraint: self.state.constraint}
         }).then(function(response) {

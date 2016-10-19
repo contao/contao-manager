@@ -2,8 +2,8 @@ import React        from 'react';
 import Trappings    from '../trappings/main';
 import Package      from '../fragments/package';
 import Loader       from '../fragments/loader';
-import request      from '../../helpers/request';
-import taskmanager  from '../../helpers/taskmanager';
+import { createRequest } from '../../helpers/request';
+import * as taskmanager from '../../helpers/taskmanager';
 import eventhandler from '../../helpers/eventhandler';
 import Translation  from '../translation';
 import forEach      from 'lodash/forEach';
@@ -88,7 +88,7 @@ class PackagesComponent extends React.Component {
             threshold:  searchRequest.threshold
         };
 
-        var req = request.createRequest('/api/v1/search', {
+        var req = createRequest('/api/v1/search', {
                 method: 'POST',
                 json: searchPayload
             })
@@ -110,7 +110,7 @@ class PackagesComponent extends React.Component {
         var self = this;
         this.setState({loading: true});
 
-        var req = request.createRequest('/api/v1/packages')
+        var req = createRequest('/api/v1/packages')
             .then(function(response) {
                 // @todo should this not return a status too?
                 self.setState({packages: response.body, loading: false, changes: {}});

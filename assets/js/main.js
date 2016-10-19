@@ -1,7 +1,7 @@
 import Promise      from 'bluebird';
 import routing      from './helpers/routing';
-import TensideState from './helpers/tenside-state';
-import request      from './helpers/request';
+import { getState, getLoggedIn } from './helpers/tenside-state';
+import { setApiBaseUrl } from './helpers/request';
 import forIn        from 'lodash/forIn';
 import merge        from 'lodash/merge';
 import isFunction   from 'lodash/isFunction';
@@ -9,7 +9,7 @@ import isArray      from 'lodash/isArray';
 
 var router = routing.getRouter();
 
-request.setApiBaseUrl(routing.getBaseHref());
+setApiBaseUrl(routing.getBaseHref());
 
 // Route matched
 router.routed.add(function(request, data) {
@@ -17,16 +17,16 @@ router.routed.add(function(request, data) {
     // Route requirement promises
     var requirementsPromises = [
         // Tenside state
-        TensideState.getState(),
+        getState(),
         // Logged in or not?
-        TensideState.getLoggedIn()
+        getLoggedIn()
     ];
 
     // Wait for requirement promises to resolve
     Promise.all(requirementsPromises).then(function(resolvedPromises) {
 
         var promiseResults = {};
-        forIn(resolvedPromises, function(v, k) {
+        forIn(resolvedPromises, function(v) {
             merge(promiseResults, v);
         });
 

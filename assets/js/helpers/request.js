@@ -3,12 +3,12 @@ import cookie   from 'cookie';
 import Promise  from 'bluebird';
 import merge    from 'lodash/merge';
 
-var cookies, apiBaseUrl = '';
+let cookies, apiBaseUrl = '';
 
 // Enable cancelling of promises
 Promise.config({cancellation: true});
 
-var createRequest = function(url, props) {
+export function createRequest(url, props) {
 
     props = props || {};
 
@@ -23,10 +23,10 @@ var createRequest = function(url, props) {
     props = merge({}, {uri: apiBaseUrl + url, json: true}, props);
 
     return new Promise(function(resolve, reject, onCancel) {
-        var req = xhr(props, function (err, resp, body) {
+        let req = xhr(props, function (err, resp) {
             if (null === err) {
                 if (resp.headers && resp.headers.authentication) {
-                    setToken(resp.headers.authentication);
+                    setRequestToken(resp.headers.authentication);
                 }
 
                 resolve(resp);
@@ -37,9 +37,9 @@ var createRequest = function(url, props) {
 
         onCancel(function() { req.abort(); });
     });
-};
+}
 
-var setToken = function(token) {
+export function setRequestToken(token) {
     document.cookie = cookie.serialize(
         'cpm:token', token, {
             domain: window.location.hostname,
@@ -48,25 +48,21 @@ var setToken = function(token) {
 
     // reset cookie cache
     cookies['cpm:token'] = token;
-};
+}
 
-var getToken = function() {
+export function getToken() {
 
-    var token = _readCookie('cpm:token');
+    let token = _readCookie('cpm:token');
     if (token) {
         return token;
     }
 
     return '';
-};
+}
 
-var getApiBaseUrl = function () {
-    return apiBaseUrl;
-};
-
-var setApiBaseUrl = function (newBaseUrl) {
+export function setApiBaseUrl(newBaseUrl) {
     apiBaseUrl = newBaseUrl;
-};
+}
 
 function _readCookie(name,c,C,i){
     if(cookies){ return cookies[name]; }
@@ -81,11 +77,3 @@ function _readCookie(name,c,C,i){
 
     return cookies[name];
 }
-
-export default {
-    createRequest: createRequest,
-    setToken: setToken,
-    getToken: getToken,
-    setApiBaseUrl: setApiBaseUrl,
-    getApiBaseUrl: getApiBaseUrl
-};

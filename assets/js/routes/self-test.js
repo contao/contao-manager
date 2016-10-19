@@ -6,7 +6,7 @@ import routeChecks from './../helpers/common-route-checks';
 
 module.exports = {
     path: '/{locale}/config/self-test',
-    preController: [routeChecks.ifTensideNotOkRedirectToInstall, routeChecks.ifUserNotLoggedInRedirectToLogin],
+    preController: routeChecks,
     controller: function(request, routing) {
         ReactDOM.render(<App routing={routing}><SelfTest /></App>, document.getElementById('react-container'));
     }

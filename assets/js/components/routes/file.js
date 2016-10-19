@@ -1,11 +1,10 @@
 import React       from 'react';
 import Trappings   from '../trappings/main';
 import Codemirror  from 'react-codemirror';
-import request     from '../../helpers/request';
+import { createRequest } from '../../helpers/request';
 import Translation from '../translation';
 import assign      from 'lodash/assign';
 import forEach     from 'lodash/forEach';
-import isEqual     from 'lodash/isEqual';
 
 function Message(props) {
 
@@ -45,7 +44,7 @@ class FileComponent extends React.Component {
 
     loadInitial(endPoint) {
         var self = this;
-        request.createRequest(endPoint)
+        createRequest(endPoint)
             .then(function (response) {
                 self.setState({code: response.rawRequest.responseText});
 
@@ -58,7 +57,7 @@ class FileComponent extends React.Component {
         var self = this;
         self.setState({code: content});
 
-        request.createRequest(this.props.apiEndpoint, {
+        createRequest(this.props.apiEndpoint, {
                 method: 'PUT',
                 body: content
             })
