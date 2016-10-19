@@ -214,26 +214,22 @@ var InstallComponent = React.createClass({
     },
 
     handlePasswordChange: function(value, props) {
-        var invalid,
-            minPasswordLenth = 8,
+        var minPasswordLenth = 8,
             state = {password: this.state.password, passwordConfirm: this.state.passwordConfirm};
 
         if (props.name == 'password') {
-            state['password'] = value;
+            state.password = value;
         } else {
-            state['passwordConfirm'] = value;
+            state.passwordConfirm = value;
         }
 
-        invalid = state.password.length < minPasswordLenth
+        if (state.password.length < minPasswordLenth
             || (
                 ('' !== state.password || '' !== state.passwordConfirm)
                 && state.password !== state.passwordConfirm
-            );
-
-        if (!invalid) {
-            state['passwordsErrorMessage'] = ''
-        } else {
-            state['passwordsErrorMessage'] = <Translation domain="install" placeholders={{min: minPasswordLenth}}>
+            )
+        ) {
+            state.passwordsErrorMessage = <Translation domain="install" placeholders={{min: minPasswordLenth}}>
                     Passwords do not match or are shorter than %min% characters!
                 </Translation>;
         }
@@ -243,13 +239,13 @@ var InstallComponent = React.createClass({
 
     getUsernamePart: function() {
         if (null === this.state.isLoggedIn) {
-
             return '';
         }
 
         if (this.state.isLoggedIn) {
             return <fieldset>
-                        <legend><Translation placeholders={{ username: this.state.username }}>You are logged in as %username%.</Translation></legend>
+                <legend><Translation domain="install">User Account</Translation></legend>
+                        <p><Translation placeholders={{ username: this.state.username }}>You are logged in as %username%.</Translation></p>
                    </fieldset>;
 
         } else {
