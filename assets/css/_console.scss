@@ -198,17 +198,21 @@
 @keyframes blur {
     0% {
         filter: blur(0px);
+        opacity: 1;
     }
     100% {
         filter: blur(4px);
+        opacity: 0.5;
     }
 }
 
 @keyframes blur-out {
     0% {
         filter: blur(4px);
+        opacity: 0.5;
     }
     100% {
         filter: blur(0px);
+        opacity: 1;
     }
 }
