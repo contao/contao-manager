@@ -158,7 +158,7 @@ class TaskPopupComponent extends React.Component {
             }
         }
 
-        return '[…]';
+        return '';
     }
 
     getTaskTitle(type) {
@@ -171,9 +171,9 @@ class TaskPopupComponent extends React.Component {
         var label = '';
         var lookup = {
             'install':          'Setting up a Contao Application',
-            'remove-package':   'Removing one or more packages',
-            'require-package':  'Installing one or more packages',
-            'upgrade':          'Checking for updates of all installed packages'
+            'remove-package':   'Removing packages',
+            'require-package':  'Installing packages',
+            'upgrade':          'Checking for updates of installed packages'
         };
 
         if (undefined !== lookup[type]) {
@@ -246,7 +246,7 @@ TaskPopupComponent.initialState = {
     taskId: null,
     updateFrequency: 2000, // every 2 seconds
     content: {
-        taskTitle: '[…]',
+        taskTitle: 'Starting task …',
         consoleOutput: ''
     }
 };

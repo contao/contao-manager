@@ -2,7 +2,6 @@ import React        from 'react';
 import Navigation   from './navigation';
 import eventhandler from '../../helpers/eventhandler';
 import compact      from 'lodash/compact';
-import isEqual      from 'lodash/isEqual';
 
 class MainTrappingsComponent extends React.Component {
 
