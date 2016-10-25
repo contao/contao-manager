@@ -1,7 +1,6 @@
 import xhr      from 'xhr';
 import cookie   from 'cookie';
 import Promise  from 'bluebird';
-import merge    from 'lodash/merge';
 
 let cookies, apiBaseUrl = '';
 
@@ -20,7 +19,11 @@ export function createRequest(url, props) {
         props.headers['Authorization'] = 'Bearer ' + getToken();
     }
 
-    props = merge({}, {uri: apiBaseUrl + url, json: true}, props);
+    props.uri = apiBaseUrl + url;
+
+    if (!("body" in props) && !("json" in props)) {
+        props.json = true;
+    }
 
     return new Promise(function(resolve, reject, onCancel) {
         let req = xhr(props, function (err, resp) {
