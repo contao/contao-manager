@@ -1,6 +1,7 @@
 import React        from 'react';
 import Promise      from 'bluebird';
 import Trappings    from '../trappings/boxed';
+import Loader       from '../fragments/loader';
 import Translation  from '../translation';
 import TextWidget   from '../widgets/text';
 import { getState, getLoggedIn } from '../../helpers/tenside-state';
@@ -284,7 +285,10 @@ class InstallComponent extends React.Component {
 
                         </fieldset>
 
-                        <button disabled={disableButton} type="submit" onClick={this.handleInstall}>Install</button>
+                        <button disabled={disableButton} type="submit" onClick={this.handleInstall}>
+                            <Translation domain="login">Install</Translation>
+                            <Loader/>
+                        </button>
                     </form>
                 </section>
             </Trappings>
