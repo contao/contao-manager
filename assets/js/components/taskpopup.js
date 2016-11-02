@@ -23,6 +23,7 @@ class TaskPopupComponent extends React.Component {
         this.handleButton = this.handleButton.bind(this);
         this.hideConsole = this.hideConsole.bind(this);
         this.showConsole = this.showConsole.bind(this);
+        this.toggleFixedPosition = this.toggleFixedPosition.bind(this);
         this.onConsoleOutputScroll = this.onConsoleOutputScroll.bind(this);
         this.show = this.show.bind(this);
         this.hide = this.hide.bind(this);
