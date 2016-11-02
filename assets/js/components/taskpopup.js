@@ -40,7 +40,6 @@ class TaskPopupComponent extends React.Component {
         }.bind(this));
 
         window.addEventListener('resize', this.toggleFixedPosition);
-        this.toggleFixedPosition();
 
         eventhandler.on('displayTaskPopup', this.show);
         eventhandler.on('hideTaskPopup', this.hide);
@@ -72,6 +71,7 @@ class TaskPopupComponent extends React.Component {
         var newState = merge({}, this.state, state, {show: true});
 
         this.setState(newState);
+        this.toggleFixedPosition();
     }
 
     handleButton() {
@@ -247,7 +247,7 @@ TaskPopupComponent.initialState = {
     taskId: null,
     updateFrequency: 2000, // every 2 seconds
     content: {
-        taskTitle: 'Starting task …',
+        taskTitle: 'Loading task …',
         consoleOutput: ''
     }
 };
