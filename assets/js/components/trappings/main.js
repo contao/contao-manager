@@ -22,8 +22,8 @@ class MainTrappingsComponent extends React.Component {
     }
 
     componentWillUnmount() {
-        eventhandler.removeListener('displayTaskPopup', this.blurIn);
-        eventhandler.removeListener('hideTaskPopup', this.blurOut);
+        eventhandler.off('displayTaskPopup', this.blurIn);
+        eventhandler.off('hideTaskPopup', this.blurOut);
     }
 
     blurIn() {

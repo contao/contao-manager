@@ -47,8 +47,8 @@ class TaskPopupComponent extends React.Component {
     }
 
     componentWillUnmount() {
-        eventhandler.removeListener('displayTaskPopup', this.show);
-        eventhandler.removeListener('hideTaskPopup', this.hide);
+        eventhandler.off('displayTaskPopup', this.show);
+        eventhandler.off('hideTaskPopup', this.hide);
     }
 
     componentDidUpdate(prevProps, prevState) {
