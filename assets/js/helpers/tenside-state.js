@@ -1,4 +1,4 @@
-import { createRequest } from './request';
+import { createRequest, getToken } from './request';
 
 export function getState() {
 
@@ -13,6 +13,12 @@ export function getState() {
 }
 
 export function getLoggedIn() {
+
+    if ('' === getToken()) {
+        return new Promise(function (resolve) {
+            resolve({user_loggedIn: false});
+        });
+    }
 
     return createRequest('/api/v1/auth')
         .then(function (response) {
