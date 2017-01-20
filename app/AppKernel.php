@@ -111,9 +111,15 @@ class AppKernel extends Kernel
      */
     protected function getKernelParameters()
     {
-        $bundles = array();
+        $bundles         = array();
+        $bundlesMetadata = array();
         foreach ($this->bundles as $name => $bundle) {
-            $bundles[$name] = get_class($bundle);
+            $bundles[$name]         = get_class($bundle);
+            $bundlesMetadata[$name] = array(
+                'parent'    => $bundle->getParent(),
+                'path'      => $bundle->getPath(),
+                'namespace' => $bundle->getNamespace(),
+            );
         }
 
         return array_merge(
@@ -124,6 +130,7 @@ class AppKernel extends Kernel
                 'kernel.name' => $this->name,
                 'kernel.cache_dir' => realpath($this->getCacheDir()) ?: $this->getCacheDir(),
                 'kernel.bundles' => $bundles,
+                'kernel.bundles_metadata' => $bundlesMetadata,
                 'kernel.charset' => $this->getCharset(),
                 'kernel.container_class' => $this->getContainerClass(),
             ),
