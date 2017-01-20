@@ -26,7 +26,9 @@
     "symfony/http-kernel": "~3.0",
     "symfony/templating": "~3.0",
     "tenside/core": "~1.0@dev",
-    "tenside/core-bundle": "~1.0@dev"
+    "tenside/core-bundle": "~1.0@dev",
+    "symfony/asset": "~3.0",
+    "symfony/translation": "~3.0"
   },
   "require-dev": {
     "phpcq/all-tasks": "~1.1",
