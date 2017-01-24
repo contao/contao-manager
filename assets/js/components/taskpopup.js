@@ -13,7 +13,6 @@ class TaskPopupComponent extends React.Component {
         this.popup = null;
         this.lastTaskId = null;
         this.currentInterval = null;
-        this.taskTitleCache = {};
         this.scrolled = false;
 
         this.state = TaskPopupComponent.initialState;
@@ -132,7 +131,7 @@ class TaskPopupComponent extends React.Component {
                         window.clearInterval(self.currentInterval);
                 }
 
-                newState['content']['taskTitle'] = self.getTaskTitle(response.body.task.type);
+                newState['content']['taskTitle'] = self.getTaskTitle(response.body.task);
                 self.setState(merge({}, self.state, newState));
 
                 return null;
@@ -162,27 +161,16 @@ class TaskPopupComponent extends React.Component {
         return '';
     }
 
-    getTaskTitle(type) {
+    getTaskTitle(task) {
 
-        if (undefined !== this.taskTitleCache[type]) {
-
-            return this.taskTitleCache[type];
-        }
-
-        var label = '';
-        var lookup = {
+        var labels = {
             'install':          'Setting up a Contao Application',
-            'remove-package':   'Removing packages',
-            'require-package':  'Installing packages',
-            'upgrade':          'Checking for updates of installed packages'
+            'upgrade':          'Checking for updates of installed packages',
+            'require-package':  'Installing packages …',
+            'remove-package':   'Removing packages …'
         };
 
-        if (undefined !== lookup[type]) {
-            label = lookup[type];
-        }
-
-        this.taskTitleCache[type] = <Translation domain="taskpopup">{label}</Translation>;
-        return this.taskTitleCache[type];
+        return <Translation domain="taskpopup">{labels[task.type]}</Translation>;
     }
 
     render() {
