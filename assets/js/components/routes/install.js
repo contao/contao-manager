@@ -4,8 +4,8 @@ import Trappings    from '../trappings/boxed';
 import Loader       from '../fragments/loader';
 import Translation  from '../translation';
 import TextWidget   from '../widgets/text';
+import * as taskmanager from '../../helpers/taskmanager';
 import { getState, getLoggedIn } from '../../helpers/tenside-state';
-import { runNextTask }  from '../../helpers/taskmanager';
 import { createRequest, setRequestToken } from '../../helpers/request';
 import eventhandler from '../../helpers/eventhandler';
 
@@ -89,7 +89,7 @@ class InstallComponent extends React.Component {
 
     handleInstall(e) {
         e.preventDefault();
-        var self = this;
+        let self = this;
 
         this.setState({installing: true});
 
@@ -107,102 +107,81 @@ class InstallComponent extends React.Component {
                 return state;
             })
             .then(function(state) {
+
                 // Create project if not already created
                 if (false === state.project_created) {
-                    var createProjectPayload = {
-                        project: {
-                            name: 'contao/standard-edition'
-                        }
-                    };
+                    return self.createProject(self.state.version)
+                    /*.then(function () {
+                        getState()
+                        .then(function (state) {
+                            if (false === state.project_created || false === state.project_installed) {
+                                throw new Error('Project could not be installed');
+                            }
 
-                    if ('' !== self.state.version) {
-                        createProjectPayload.version = self.state.version;
-                    }
-
-                    return self.createProject(createProjectPayload, state);
-                }
-
-                return state;
-            })
-            .then(function(state) {
-                // Install project if not already installed
-                if (true !== state.project_installed) {
-
-                    // @todo what if the project was created but not installed
-                    // and the task manually deleted? running the next task
-                    // will fail?
-
-                    return runNextTask();
+                            return state;
+                        });
+                    })*/;
                 }
             })
-            .catch(function(err) {
-                // @todo: what to do with those general errors
-            });
     }
 
     configure(username, password) {
-        var configurePayload = {
+        let configurePayload = {
             credentials: {
                 username: username,
                 password: password
             }
         };
 
-        // First do an autoconfigure and then merge the data with the user
-        return new Promise(function (resolve, reject) {
+        return createRequest('/api/v1/install/autoconfig', {
+            method: 'GET'
+        })
+        .then(function (response) {
+            return response.body;
+        })
+        .then(function(autoconfig) {
 
-            return new Promise(function (resolve, reject) {
-                createRequest('/api/v1/install/autoconfig', {
-                    method: 'GET'
-                }).then(function (response) {
-                    resolve(response.body);
-                }).catch(function (err) {
-                    reject(new Error(err));
-                });
+            let config = { configuration: autoconfig};
+            configurePayload = Object.assign(configurePayload, config);
+
+            return createRequest('/api/v1/install/configure', {
+                method: 'POST',
+                json: configurePayload
             })
-            .then(function(autoconfig) {
+            .then(function (response) {
+                if ('OK' === response.body.status) {
+                    // Store the JWT
+                    setRequestToken(response.body.token);
+                    return;
+                }
 
-                var config = { configuration: autoconfig};
-                configurePayload = Object.assign(configurePayload, config);
-
-                createRequest('/api/v1/install/configure', {
-                    method: 'POST',
-                    json: configurePayload
-                }).then(function (response) {
-                    if ('OK' === response.body.status) {
-                        // Store the JWT
-                        setRequestToken(response.body.token);
-
-                        resolve(response.body);
-                    } else {
-                        reject(new Error(response));
-                    }
-                }).catch(function (err) {
-                    reject(new Error(err));
-                });
+                throw new Error(response);
             });
         });
     }
 
-    createProject(createProjectPayload, state) {
+    createProject(version) {
 
-        return new Promise(function (resolve, reject) {
+        let createProjectPayload = {
+            project: {
+                name: 'contao/managed-edition'
+            }
+        };
 
-            createRequest('/api/v1/install/create-project', {
-                method: 'POST',
-                json: createProjectPayload
-            }).then(function (response) {
-                if ('OK' === response.body.status) {
-                    // Successfully created, adjust state
-                    state.project_created = true;
+        if ('' !== version) {
+            createProjectPayload.version = version;
+        }
 
-                    resolve(state);
-                } else {
-                    reject(new Error(response));
-                }
-            }).catch(function (err) {
-                reject(new Error(err));
-            });
+        return createRequest('/api/v1/install/create-project', {
+            method: 'POST',
+            json: createProjectPayload
+        })
+        .then(function (response) {
+            if ('OK' !== response.body.status) {
+                throw new Error(response);
+            }
+
+            return taskmanager.runNextTask();
         });
     }
 

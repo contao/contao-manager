@@ -8,7 +8,7 @@ export function getState() {
                 return response.body.state;
             }
 
-            return null;
+            throw new Error(response.body);
         });
 }
 

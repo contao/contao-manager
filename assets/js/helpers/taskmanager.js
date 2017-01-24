@@ -19,9 +19,6 @@ export function runNextTask() {
 
             return response;
         })
-        .catch(function (err) {
-            console.log(err);
-        });
 }
 
 export function addTask(task) {
@@ -44,7 +41,6 @@ export function getTask(taskId) {
 export function deleteOrphanTasks() {
     // Delete tasks older than a week
     var now = new Date();
-    var self = this;
 
     createRequest('/api/v1/tasks')
         .then(function(response) {
@@ -54,7 +50,7 @@ export function deleteOrphanTasks() {
                     var compare = addDays(createdAt, 7);
 
                     if (compare < now) {
-                        self.deleteTask(taskId);
+                        deleteTask(taskId);
                     }
                 });
             }
