@@ -139,6 +139,7 @@ header {
                     background: #fff;
                     border-top: 3px solid $contao-color;
                     transform:translateX(-50%);
+                    z-index: 100;
                 }
 
                 &:hover ul {
