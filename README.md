@@ -93,7 +93,7 @@ during development.
 
 ### 7. Accessing the API documentation
 
-You can see all available API calls thanks to the fantastic 
+You can see all available API calls thanks to the fantastic
 NelmioApiBundle when accessing the route `/assets/api-doc`.
 Note that this is only available in `dev` mode .
 
@@ -110,3 +110,20 @@ as well as a `composer update` and finally also build the JS and CSS
 files using `gulp` again. To make this easier, you can just use
 
 `$ ./node_modules/.bin/gulp update`
+
+# Building a .phar
+
+**Note:** Currently only "release mode" is supported in the phar - debug
+environment phar compilation will eventually follow.
+
+Building the phar is pretty straight forward.
+
+1. Install the node.js dependencies: `$ npm install`
+2. Install composer dependencies: `$ php composer.phar install`
+3. Build the phar: `php ./vendor/bin/pharpiler compile`
+
+... and a phar file will get created.
+
+**Hint:** Ensure that phar write support has been set in your `php.ini` by
+specifying `phar.readonly = Off`.
+See [php.net](http://php.net/phar.readonly) for details.
