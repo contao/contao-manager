@@ -2,7 +2,7 @@
 
 section.package-actions {
     position: relative;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     text-align: center;
 
     button {
@@ -62,7 +62,7 @@ section.package-actions {
 
     .inside {
         overflow: hidden;
-        padding: 25px 20px;
+        padding: 25px 20px 20px;
     }
 
     .hint.warning {
@@ -124,15 +124,13 @@ section.package-actions {
     }
 
     .about {
-        margin-bottom: 20px;
-
         @include screen(1024) {
             float: left;
-            width: 390px;
+            width: 340px;
         }
 
         @include screen(1180) {
-            width: 610px;
+            width: 560px;
         }
 
         .abandoned {
@@ -160,7 +158,7 @@ section.package-actions {
         width: 33%;
 
         @include screen(1024) {
-            width: 160px;
+            width: 210px;
             margin-left: 40px;
         }
 
@@ -209,7 +207,6 @@ section.package-actions {
             @include screen(1024) {
                 display: block;
                 margin-top: 25px;
-                text-align: center;
             }
 
             time {

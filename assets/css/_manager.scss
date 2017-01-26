@@ -15,6 +15,7 @@ header {
         img {
             float: left;
             margin-right: 10px;
+            margin-left: 78px;
         }
     }
 
@@ -219,7 +220,7 @@ main, footer {
 @import "packages";
 
 footer {
-    margin-top: 52px;
+    margin-top: 32px;
     padding: 20px 0;
     border-top: 1px solid #bbbbbb;
     font-size: 12px;
