@@ -120,7 +120,7 @@ Building the phar is pretty straight forward.
 
 1. Install the node.js dependencies: `$ npm install`
 2. Install composer dependencies: `$ php composer.phar install`
-3. Build the phar: `php ./vendor/bin/pharpiler compile`
+3. Build the phar: `php ./vendor/bin/pharpiler compile` (or `./vendor/bin/pharpiler.bat compile` under Windows)
 
 ... and a phar file will get created.
 
