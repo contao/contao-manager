@@ -8,3 +8,4 @@ build.default.properties export-ignore
 build.xml export-ignore
 
 *.php text eol=lf
+console text eol=lf
