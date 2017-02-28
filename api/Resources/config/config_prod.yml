@@ -1,0 +1,14 @@
+imports:
+    - { resource: config.yml }
+
+monolog:
+    handlers:
+        main:
+            type: fingers_crossed
+            action_level: error
+            handler: file
+
+        file:
+            type: rotating_file
+            path: "%kernel.logs_dir/api.log"
+            channels: [!event]

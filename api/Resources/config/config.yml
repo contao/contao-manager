@@ -1,0 +1,51 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: services.yml }
+
+# The secret is only used to sign fragment URLs which is not used
+framework:
+    secret: ''
+
+security:
+    providers:
+            tenside_core_user_provider:
+                id: tenside.user_provider
+
+    encoders:
+            Symfony\Component\Security\Core\User\UserInterface: bcrypt
+
+    firewalls:
+            public:
+                pattern: /(api/v1/install|api/v1/constraint|api/v1/install/get_state)
+                stateless: true
+                anonymous: ~
+
+            # Allow basic auth and token auth on login route.
+            login:
+                pattern: ^/api/v1/auth
+                stateless: true
+                simple_preauth:
+                    authenticator: tenside.jwt_authenticator
+                http_basic: ~
+                guard:
+                    authenticators:
+                        - app.postdata_authenticator
+
+            # Allow only token auth on any API.
+            secured_area:
+                pattern: ^/api/v1
+                stateless: true
+                simple_preauth:
+                    authenticator: tenside.jwt_authenticator
+
+    access_control:
+        # Anonymous access for the login route - otherwise we can not log in.
+        - { path: ^/api/v1/auth, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        # Anonymous access for the install route - otherwise we can not install (Will refuse to install anyway).
+        - { path: ^/api/v1/install, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        # Anonymous access for the constraint route
+        - { path: ^/api/v1/constraint, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        # Anonymous access for the state route
+        - { path: ^/api/v1/install/get_state, role: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        # Delegate everything else from the API to the role checking service.
+        - { path: ^/api, role: [ROLE_CHECK] }

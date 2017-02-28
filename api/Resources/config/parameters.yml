@@ -1,0 +1,8 @@
+parameters:
+    # Path to the script to run when in non-phar mode - relative to the app root.
+    tenside.script_name: console
+
+    # self update related.
+    tenside.self_update.base_url: "store.contao.org"
+    tenside.self_update.origin_name: "contao.org"
+    tenside.self_update.phar_name: "contao-manager.phar"

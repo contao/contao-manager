@@ -1,0 +1,216 @@
+@import "defaults";
+
+.table {
+    display: table;
+    width: 100%;
+    height: 100%;
+
+    .cell {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    main {
+        position: relative;
+        max-width: 380px;
+        margin: 20px auto;
+        background: #fff;
+
+        &:after {
+            content: "";
+            display: table;
+            clear: both
+        }
+
+        &:before {
+            position: absolute;
+            display: block;
+            width: 100px;
+            top: 40px;
+            bottom: 60px;
+            left: -100px;
+            content: "";
+            box-shadow: 15px 0 60px 25px #ebe6db inset, -5px 0 10px -4px rgba(0, 0, 0, .8) inset;
+        }
+
+        &:after {
+            position: absolute;
+            display: block;
+            width: 100px;
+            top: 40px;
+            bottom: 60px;
+            right: -100px;
+            content: "";
+            box-shadow: -15px 0 60px 25px #ebe6db inset, 5px 0 10px -4px rgba(0, 0, 0, .8) inset;
+        }
+    }
+
+    header {
+        margin-bottom: 80px;
+        text-align: center;
+
+        img {
+            margin-top: 40px;
+        }
+
+        .welcome {
+            margin-top: 15px;
+            margin-bottom: 40px;
+            font-weight: bold;
+            font-style: italic;
+
+            strong {
+                display: block;
+                font: 60px $font-hairline;
+                font-weight: normal;
+                font-style: normal;
+            }
+        }
+    }
+
+    main.login section,
+    main.install section {
+        position: relative;
+        max-width: 250px;
+        margin: 0 auto;
+
+        .widget {
+            position: relative;
+        }
+
+        fieldset {
+            overflow: hidden;
+            margin-top: 2em;
+
+            legend {
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            p {
+                margin: .5em 0 1em;
+            }
+        }
+
+        input,
+        select {
+            margin: 5px 0 10px;
+        }
+
+        button {
+            margin-top: 20px;
+        }
+    }
+
+    main.login section {
+        h1 {
+            margin-bottom: 0;
+        }
+
+        p {
+            margin-bottom: 30px;
+        }
+
+        a {
+            display: block;
+            font-size: 12px;
+        }
+
+        label {
+            position: absolute;
+            text-indent: -999em;
+
+            &[for=ctrl_username] {
+                top: 17px;
+                right: 13px;
+                width: 16px;
+                height: 16px;
+                background: url("../assets/images/person.svg") left top no-repeat;
+                background-size: 16px 16px;
+                z-index: 10;
+            }
+
+            &[for=ctrl_password] {
+                top: 17px;
+                right: 12px;
+                width: 16px;
+                height: 16px;
+                background: url("../assets/images/lock.svg") left top no-repeat;
+                background-size: 14px 14px;
+                z-index: 10;
+            }
+        }
+    }
+
+    footer {
+        clear: both;
+        width: 250px;
+        margin: 80px auto 0;
+        padding: 15px 0;
+        font-size: 12px;
+        border-top: 1px solid #eee;
+
+        &:before {
+            content: "";
+            display: table;
+            clear: both
+        }
+
+        a {
+            color: $footer-link;
+        }
+
+        .help {
+            float: right;
+        }
+    }
+
+    @include screen(960) {
+        &.wide {
+            main {
+                max-width: 940px;
+            }
+
+            footer {
+                width: 840px;
+            }
+        }
+
+        main.install {
+            header {
+                padding: 80px 60px 0;
+
+                @include screen(960) {
+                    float: left;
+                    width: 50%;
+                    padding-top: 60px;
+                }
+            }
+
+            section {
+                margin: 80px 50px 80px 50px;
+                max-width: none;
+                float: left;
+                width: 370px;
+
+                label {
+                    float: left;
+                    width: 120px;
+                    padding-top: 15px;
+                    font-family: $font-regular;
+                }
+
+                input[type=text],
+                input[type=password],
+                select {
+                    width: 250px;
+                }
+
+                button {
+                    float: right;
+                    width: 250px;
+                }
+            }
+        }
+    }
+}

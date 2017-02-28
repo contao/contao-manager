@@ -1,0 +1,35 @@
+services:
+#    contao_manager.controller.app:
+#        class: Contao\ManagerApi\Controller\AppController
+#        calls:
+#            - [setContainer, ["@service_container"]]
+
+    app.taskfactory:
+        class:     Contao\ManagerApi\Tenside\TaskFactory
+        arguments: ["@tenside.home", "@tenside.config"]
+        tags:
+            - { name: tenside.taskfactory }
+
+    app.postdata_authenticator:
+        class: Contao\ManagerApi\Security\PostDataAuthenticator
+        arguments: ["@security.password_encoder"]
+
+
+###
+# Override Tenside services to adjust for Contao Manager
+###
+
+    tenside.home:
+        class:  Contao\ManagerApi\Tenside\HomePathDeterminator
+        synthetic: true
+
+    tenside.config:
+        class:          Tenside\Core\Config\TensideJsonConfig
+        factory:        [Contao\ManagerApi\Tenside\JsonConfigFactory, create]
+        arguments:      ["@tenside.home"]
+        public:         true
+
+    tenside.status:
+        class:     Contao\ManagerApi\Tenside\InstallationStatusDeterminator
+        arguments: ["@tenside.home"]
+        public: true

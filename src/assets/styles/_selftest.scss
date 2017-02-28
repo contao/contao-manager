@@ -1,0 +1,41 @@
+main.selftest {
+    h1 {
+        display: block;
+        padding: 30px 0;
+        font: 60px $font-hairline;
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    section {
+        margin: 0 50px;
+    }
+
+    .test {
+        margin-bottom: 20px;
+
+        svg {
+            width: 32px;
+            float: left;
+            margin-right: 20px;
+        }
+
+        &.success {
+            svg {
+                fill: $green-button;
+            }
+        }
+
+        &.warning {
+            svg {
+                fill: $orange-button;
+            }
+        }
+
+        &.fail {
+            svg {
+                fill: $red-button;
+            }
+        }
+    }
+}

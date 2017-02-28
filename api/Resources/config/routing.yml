@@ -1,0 +1,9 @@
+# status:
+#     path: /api/status
+#     defaults: { _controller: contao_manager.controller.app:statusAction }
+#     methods: [GET]
+
+
+TensideCoreBundle:
+    resource: "@TensideCoreBundle/Resources/config/routing.yml"
+    prefix: /api

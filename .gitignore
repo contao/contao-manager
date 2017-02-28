@@ -1,0 +1,9 @@
+# Dependencies
+/vendor
+/node_modules
+
+# Generated
+/api/Resources/cache
+/test-dir
+/web/assets
+/web/index.html

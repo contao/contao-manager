@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<project name="Contao Manager" default="phar" basedir=".">
+    <exec executable="git" outputProperty="version" checkreturn="true">
+        <arg value="describe" />
+        <arg value="--tags" />
+    </exec>
+
+    <target name="phar" depends="clone, composer, cache, npm, build, box, finish">
+        <echo message="Contao Manager ${version} build complete" />
+    </target>
+
+    <target name="clone">
+        <echo message="Cloning into contao-manager-${version}" />
+        <exec executable="git">
+            <arg value="clone" />
+            <arg value="." />
+            <arg value="contao-manager-${version}" />
+        </exec>
+        <exec executable="git" dir="contao-manager-${version}">
+            <arg value="checkout" />
+            <arg value="--quiet" />
+            <arg value="${version}" />
+        </exec>
+        <exec executable="git" dir="contao-manager-${version}">
+            <arg value="reset" />
+            <arg value="--hard" />
+        </exec>
+    </target>
+
+    <target name="composer">
+        <echo message="Installing API dependencies" />
+        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://getcomposer.org/installer | php" />
+        <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
+            <arg value="composer.phar" />
+            <arg value="install" />
+            <arg value="--prefer-dist" />
+            <arg value="--no-dev" />
+            <arg value="--optimize-autoloader" />
+            <arg value="--ignore-platform-reqs" />
+            <arg value="--no-interaction" />
+        </exec>
+    </target>
+
+    <target name="cache">
+        <echo message="Builing chache for the API application" />
+        <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
+            <arg value="api/console" />
+            <arg value="cache:warmup" />
+            <arg value="--env=prod" />
+            <arg value="--no-debug" />
+        </exec>
+    </target>
+
+
+    <target name="npm">
+        <echo message="Installing UI dependencies" />
+        <exec executable="npm" dir="contao-manager-${version}" checkreturn="true">
+            <arg value="install" />
+            <arg value="--only=prod" />
+            <arg value="--no-bin-links" />
+            <arg value="--no-optional" />
+        </exec>
+    </target>
+
+    <target name="build">
+        <echo message="Compiling UI files" />
+        <exec executable="npm" dir="contao-manager-${version}">
+            <arg value="run" />
+            <arg value="build" />
+        </exec>
+    </target>
+
+    <target name="box">
+        <echo message="Creating the .phar file" />
+        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://box-project.github.io/box2/installer.php | php" />
+        <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
+            <arg value="box.phar" />
+            <arg value="build" />
+        </exec>
+    </target>
+
+    <target name="finish">
+        <move file="contao-manager-${version}/contao-manager.phar.php" tofile="contao-manager.phar.php" overwrite="true"/>
+        <delete dir="contao-manager-${version}" />
+    </target>
+</project>

@@ -1,0 +1,64 @@
+@import "defaults";
+
+input:not([type=checkbox]):not([type=radio]),
+select {
+    position: relative;
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    background: transparent;
+    border: 1px solid $border-color;
+    border-radius: 2px;
+    color: $text-color;
+    -webkit-appearance: none;
+
+    &:focus {
+        outline: none;
+        background-color: #f9f9f9;
+    }
+
+    .widget.valid & {
+        border-color: $green-button
+    }
+
+    .widget.invalid & {
+        border-color: $red-button;
+        animation: input-error .15s linear 3;
+    }
+}
+
+button,
+a.button {
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: $text-color;
+    color: #fff;
+    font-weight: bold;
+    line-height: 40px;
+    text-decoration: none;
+    cursor: default;
+    border-radius: 2px;
+
+    &.primary {
+        background: $green-button;
+    }
+
+    &.warning {
+        background: $orange-button;
+    }
+
+    &.alert {
+        background: $red-button;
+    }
+
+    &:hover {
+
+    }
+
+    &:disabled {
+        background: $border-color !important;
+    }
+}

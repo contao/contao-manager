@@ -1,0 +1,37 @@
+<?php
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2017 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
+use Contao\ManagerApi\ApiApplication;
+use Contao\ManagerApi\ApiKernel;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Debug\Debug;
+
+set_time_limit(0);
+ini_set('memory_limit', '2G');
+
+/** @var \Composer\Autoload\ClassLoader $loader */
+$loader = require __DIR__.'/../vendor/autoload.php';
+
+$input = new ArgvInput();
+if (\Phar::running()) {
+    $env   = 'prod';
+    $debug = false;
+} else {
+    $env   = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');
+    $debug = getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(array('--no-debug', '')) && $env !== 'prod';
+}
+
+if ($debug) {
+    Debug::enable();
+}
+
+$kernel = new ApiKernel($env, $debug);
+$application = new ApiApplication($kernel);
+$application->run($input);

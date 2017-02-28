@@ -1,0 +1,19 @@
+{
+    "directories": ["api", "web"],
+    "files": [
+        "LICENSE"
+    ],
+    "blacklist": [
+        "api/Tests"
+    ],
+    "finder": [
+        {
+            "name": "*",
+            "exclude": ["Tests", "tests"],
+            "in": "vendor"
+        }
+    ],
+    "git-version": "package_version",
+    "stub": "build/stub.php",
+    "output": "contao-manager.phar.php"
+}

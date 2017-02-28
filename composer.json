@@ -1,0 +1,26 @@
+{
+    "name": "contao/contao-manager",
+    "description": "The Contao Manager API",
+    "license": "GPL-3.0+",
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/framework-bundle": "^3.2",
+        "symfony/security-bundle": "^3.2",
+        "symfony/console": "^3.2",
+        "symfony/yaml": "^3.2",
+
+        "symfony/monolog-bundle": "~2.9",
+        "ircmaxell/password-compat": "^1.0",
+        "tenside/core-bundle": "~1.0@dev",
+        "tenside/core": "~1.0@dev"
+    },
+    "require-dev": {
+        "symfony/process": "^3.2",
+        "friendsofphp/php-cs-fixer": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Contao\\ManagerApi\\": "api/"
+        }
+    }
+}
