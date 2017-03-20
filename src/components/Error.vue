@@ -1,19 +1,17 @@
 <template>
-    <boxed-layout mainClass="login">
-        <header slot="header">
-            <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
-        </header>
-        <section slot="section">
-            <h1>Application Error</h1>
-            <p>Contao Manager is unable to run.</p>
-        </section>
-    </boxed-layout>
+    <div class="error">
+        <div>
+            <span>ERROR</span> {{ error.message }}
+
+{{ error.exception }}
+        </div>
+    </div>
 </template>
 
 <script>
-    import BoxedLayout from './layouts/Boxed';
+    import { mapState } from 'vuex';
 
     export default {
-        components: { BoxedLayout },
+        computed: mapState(['error']),
     };
 </script>

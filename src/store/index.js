@@ -16,11 +16,16 @@ const store = new Vuex.Store({
 
     state: {
         status: null,
+        error: null,
     },
 
     mutations: {
         setStatus(state, status) {
             state.status = status;
+        },
+
+        setError(state, error) {
+            state.error = error;
         },
     },
 

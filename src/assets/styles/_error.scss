@@ -1,0 +1,25 @@
+#app > .error {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: auto;
+    padding: 10px;
+    color: rgb(232, 232, 232);
+    font-family: Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.2;
+    white-space: pre;
+    background-color: rgba(0, 0, 0, 0.85098);
+    background-position: initial;
+    background-repeat: initial;
+    z-index: 9998;
+
+    span {
+        padding: 2px 4px;
+        color: #fff;
+        background-color: #E36049;
+        border-radius: 2px
+    }
+}
