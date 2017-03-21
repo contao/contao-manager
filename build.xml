@@ -72,9 +72,7 @@
 
     <target name="box">
         <echo message="Creating the .phar file" />
-        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://box-project.github.io/box2/installer.php | php" />
-        <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
-            <arg value="box.phar" />
+        <exec executable="box" dir="contao-manager-${version}" checkreturn="true">
             <arg value="build" />
         </exec>
     </target>
