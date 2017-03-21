@@ -29,9 +29,7 @@
 
     <target name="composer">
         <echo message="Installing API dependencies" />
-        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://getcomposer.org/installer | php" />
-        <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
-            <arg value="composer.phar" />
+        <exec executable="composer" dir="contao-manager-${version}" checkreturn="true">
             <arg value="install" />
             <arg value="--prefer-dist" />
             <arg value="--no-dev" />
