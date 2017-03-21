@@ -107,15 +107,13 @@
                 } else {
                     this.$store
                         .dispatch('configure', { username: this.username, password: this.password })
-                        .then(
-                            () => {
-                                this.$store.dispatch('install', this.version).then(
-                                    () => {
-                                        this.installComplete = true;
-                                    },
-                                );
-                            },
-                        );
+                        .then(() => {
+                            this.$store.dispatch('install', this.version).then(
+                                () => {
+                                    this.installComplete = true;
+                                },
+                            );
+                        });
                 }
             },
         },
