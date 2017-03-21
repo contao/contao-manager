@@ -2,7 +2,7 @@
 <project name="Contao Manager" default="phar" basedir=".">
     <exec executable="git" outputProperty="version" checkreturn="true">
         <arg value="describe" />
-        <arg value="--tags" />
+        <arg value="--always" />
     </exec>
 
     <target name="phar" depends="clone, composer, cache, npm, build, box, finish">
