@@ -8,17 +8,10 @@ import Packages from '../components/packages/Base';
 import PackagesList from '../components/packages/List';
 import PackagesSearch from '../components/packages/Search';
 
-import store from '../store';
-import apiStatus from '../api/status';
-
 Vue.use(Router);
 
 const router = new Router({
     routes: [
-        {
-            path: '/',
-            redirect: '/login',
-        },
         {
             name: 'login',
             path: '/login',
@@ -55,23 +48,11 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    store.dispatch('fetchStatus').then(
-        (status) => {
-            if (status === apiStatus.AUTHENTICATE && to.name !== 'login') {
-                next('login');
-            }
-
-            if ((status === apiStatus.NEW || status === apiStatus.EMPTY) && to.name !== 'install') {
-                next('install');
-            }
-
-            if ((status === apiStatus.CONFLICT || status === apiStatus.ERROR) && to.name !== 'error') {
-                next('error');
-            }
-
-            next();
-        },
-    );
+    if (to.name === null || (router.allowed !== undefined && router.allowed !== to.name)) {
+        next(false);
+    } else {
+        next();
+    }
 });
 
 export default router;
