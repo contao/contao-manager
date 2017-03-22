@@ -6,49 +6,31 @@ export default {
     fetchStatus() {
         const handleStatus = (response) => {
             if (response.status === 401) {
-                return apiStatus.AUTHENTICATE;
+                return { status: apiStatus.AUTHENTICATE };
+            }
+
+            if (response.status === 500 && response.body.status === apiStatus.CONFLICT) {
+                return {
+                    status: apiStatus.CONFLICT,
+                    selftest: response.body.selftest || null,
+                };
             }
 
             if (!response.ok) {
-                return apiStatus.CONFLICT;
+                return {
+                    status: apiStatus.CONFLICT,
+                    error: response.body.status === 'ERROR' ? response.body : response.statusText,
+                };
             }
 
-            if (!response.body.state.tenside_configured) {
-                return apiStatus.NEW;
+            if (response.status === 200) {
+                return response.body;
             }
 
-            if (response.body.state.project_created || response.body.state.project_installed) {
-                return apiStatus.OK;
-            }
-
-            return apiStatus.EMPTY;
+            return { status: apiStatus.CONFLICT, error: response.statusText };
         };
 
-        return Vue.http.get('api/v1/install/get_state').then(handleStatus, handleStatus);
-
-        /*
-        return Vue.http.get('api/status')
-            .then(
-                (response) => {
-                    if (response.status === 204) {
-                        return apiStatus.NEW;
-                    }
-
-                    if (response.status === 200) {
-                        return apiStatus.OK;
-                    }
-
-                    return apiStatus.CONFLICT;
-                },
-                (response) => {
-                    if (response.status === 401) {
-                        return apiStatus.AUTHENTICATE;
-                    }
-
-                    return apiStatus.CONFLICT;
-                },
-            );
-            */
+        return Vue.http.get('api/status').then(handleStatus, handleStatus);
     },
 
     login(username, password) {

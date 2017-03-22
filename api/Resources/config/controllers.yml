@@ -1,0 +1,8 @@
+services:
+    contao_manager.controller.status:
+        class: Contao\ManagerApi\Controller\StatusController
+        arguments:
+            - "@tenside.status"
+            - "@contao_manager.self_test"
+        calls:
+            - [setContainer, ["@service_container"]]

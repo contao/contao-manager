@@ -1,7 +1,7 @@
-# status:
-#     path: /api/status
-#     defaults: { _controller: contao_manager.controller.app:statusAction }
-#     methods: [GET]
+status:
+    path: /api/status
+    defaults: { _controller: contao_manager.controller.status:statusAction }
+    methods: [GET]
 
 
 TensideCoreBundle:

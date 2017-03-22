@@ -16,12 +16,16 @@ const store = new Vuex.Store({
 
     state: {
         status: null,
+        selftest: null,
+        autoconfig: null,
         error: null,
     },
 
     mutations: {
-        setStatus(state, status) {
+        setStatus(state, { status, selftest, autoconfig }) {
             state.status = status;
+            state.selftest = selftest;
+            state.autoconfig = autoconfig;
         },
 
         setError(state, error) {
@@ -30,31 +34,31 @@ const store = new Vuex.Store({
     },
 
     actions: {
-        fetchStatus: ({ state, rootState, commit, dispatch }, force) => {
+        fetchStatus: ({ state, commit, dispatch }, force) => {
             if (!force && state.status !== null) {
                 return state.status;
             }
 
             return api.fetchStatus().then(
-                (status) => {
-                    if (status !== apiStatus.NEW && !rootState.auth.isLoggedIn) {
-                        status = apiStatus.AUTHENTICATE;
+                (result) => {
+                    commit('setStatus', result);
+
+                    if (result.error) {
+                        commit('setError', result.error);
                     }
 
-                    commit('setStatus', status);
-
-                    if (status !== apiStatus.NEW && status !== apiStatus.AUTHENTICATE) {
+                    if (result.status === apiStatus.OK || result.status === apiStatus.EMPTY) {
                         dispatch('tasks/reload').catch(() => {});
                     }
 
-                    return status;
+                    return result.status;
                 },
             );
         },
 
-        configure: ({ dispatch }, { username, password, config }) => (
-            api.configure(username, password, config).then(
-                () => (dispatch('auth/login', { username, password })),
+        configure: ({ state, dispatch }, { username, password, config }) => (
+            api.configure(username, password, config || state.autoconfig).then(
+                () => dispatch('auth/login', { username, password }),
             )
         ),
 

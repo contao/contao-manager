@@ -16,8 +16,10 @@ security:
 
     firewalls:
         public:
-            pattern: /(api/v1/install|api/v1/constraint|api/v1/install/get_state)
+            pattern: ^/api/status$
             stateless: true
+            simple_preauth:
+                authenticator: tenside.jwt_authenticator
             anonymous: ~
 
         # Allow basic auth and token auth on login route.

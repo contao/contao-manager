@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 import Login from '../components/Login';
 import Install from '../components/Install';
-import Error from '../components/Error';
+import SelfTest from '../components/SelfTest';
 import Packages from '../components/packages/Base';
 import PackagesList from '../components/packages/List';
 import PackagesSearch from '../components/packages/Search';
@@ -23,9 +23,9 @@ const router = new Router({
             component: Install,
         },
         {
-            name: 'error',
-            path: '/error',
-            component: Error,
+            name: 'selftest',
+            path: '/selftest',
+            component: SelfTest,
         },
         {
             path: '/packages',

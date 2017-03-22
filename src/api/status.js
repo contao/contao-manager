@@ -15,6 +15,6 @@ export default {
     // Contao is ready
     OK: 'ok',
 
-    // Contao has error
-    ERROR: 'error',
+    // Contao is broken
+    BROKEN: 'broken',
 };

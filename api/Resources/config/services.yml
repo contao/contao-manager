@@ -1,9 +1,8 @@
-services:
-#    contao_manager.controller.app:
-#        class: Contao\ManagerApi\Controller\AppController
-#        calls:
-#            - [setContainer, ["@service_container"]]
+imports:
+    - { resource: controllers.yml }
+    - { resource: selftest.yml }
 
+services:
     app.taskfactory:
         class:     Contao\ManagerApi\Tenside\TaskFactory
         arguments: ["@tenside.home", "@tenside.config"]
