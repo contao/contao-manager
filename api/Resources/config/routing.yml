@@ -3,7 +3,56 @@ status:
     defaults: { _controller: contao_manager.controller.status:statusAction }
     methods: [GET]
 
+auth:
+    path:     /api/auth
+    defaults: { _controller: TensideCoreBundle:Auth:checkAuth }
+    methods:  [POST]
 
-TensideCoreBundle:
-    resource: "@TensideCoreBundle/Resources/config/routing.yml"
-    prefix: /api
+packages_get:
+    path:     /api/packages
+    defaults: { _controller: TensideCoreBundle:Package:packageList }
+    methods:  [GET]
+
+constraint_check:
+    path:     /api/constraint
+    defaults: { _controller: TensideCoreBundle:VersionConstraint:checkVersionConstraint }
+    methods:  [POST]
+
+tasks_get:
+    path:     /api/tasks
+    defaults: { _controller: TensideCoreBundle:TaskRunner:getTasks }
+    methods:  [GET]
+
+tasks_run:
+    path:     /api/tasks/run
+    defaults: { _controller: TensideCoreBundle:TaskRunner:run }
+    methods:  [GET]
+
+task_get:
+    path:     /api/tasks/{taskId}
+    defaults: { _controller: TensideCoreBundle:TaskRunner:getTask }
+    methods:  [GET]
+    requirements:
+        taskId: "[a-z0-9]+"
+
+task_add:
+    path:     /api/tasks
+    defaults: { _controller: TensideCoreBundle:TaskRunner:addTask }
+    methods:  [POST]
+
+task_delete:
+    path:     /api/tasks/{taskId}
+    defaults: { _controller: TensideCoreBundle:TaskRunner:deleteTask }
+    methods:  [DELETE]
+    requirements:
+        taskId: "[a-z0-9]+"
+
+install_configure:
+    path:     /api/install/configure
+    defaults: { _controller: TensideCoreBundle:InstallProject:configure }
+    methods:  [POST]
+
+install_create_project:
+    path:     /api/install/create-project
+    defaults: { _controller: TensideCoreBundle:InstallProject:createProject }
+    methods:  [POST]

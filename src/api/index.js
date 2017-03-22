@@ -34,7 +34,7 @@ export default {
     },
 
     login(username, password) {
-        return Vue.http.post('api/v1/auth', { username, password })
+        return Vue.http.post('api/auth', { username, password })
             .then(
                 response => ({
                     token: response.body.token,
@@ -53,22 +53,10 @@ export default {
             credentials: { username, password },
         };
 
-        const submit = payload => (
-            Vue.http.post('api/v1/install/configure', payload)
-        );
+        data.configuration.php_can_fork = false;
+        data.configuration.php_force_background = true;
 
-        if (!config) {
-            return Vue.http.get('api/v1/install/autoconfig')
-                .then((response) => {
-                    data.configuration = response.body;
-                    data.configuration.php_can_fork = false;
-                    data.configuration.php_force_background = true;
-
-                    return submit(data);
-                });
-        }
-
-        return submit(data);
+        return Vue.http.post('api/install/configure', data);
     },
 
     install(version) {
@@ -82,25 +70,25 @@ export default {
             data.version = version;
         }
 
-        return Vue.http.post('api/v1/install/create-project', data).then(
+        return Vue.http.post('api/install/create-project', data).then(
             response => response.body.task,
         );
     },
 
     runNextTask() {
-        return Vue.http.get('api/v1/tasks/run').then(
+        return Vue.http.get('api/tasks/run').then(
             response => response.body.task.id,
         );
     },
 
     getTasks() {
-        return Vue.http.get('api/v1/tasks').then(
+        return Vue.http.get('api/tasks').then(
             response => response.body.tasks,
         );
     },
 
     getTask(taskId) {
-        return Vue.http.get(`api/v1/tasks/${taskId}`).then(
+        return Vue.http.get(`api/tasks/${taskId}`).then(
             response => ({
                 status: response.body.task.status,
                 type: response.body.task.type,
@@ -110,23 +98,23 @@ export default {
     },
 
     addTask(task) {
-        return Vue.http.post('api/v1/tasks', task).then(
+        return Vue.http.post('api/tasks', task).then(
             response => response.body.task.id,
         );
     },
 
     deleteTask(taskId) {
-        return Vue.http.delete(`api/v1/tasks/${taskId}`);
+        return Vue.http.delete(`api/tasks/${taskId}`);
     },
 
     getPackages() {
-        return Vue.http.get('api/v1/packages').then(
+        return Vue.http.get('api/packages').then(
             response => (response.body),
         );
     },
 
     validateConstraint(constraint) {
-        return Vue.http.post('api/v1/constraint', { constraint }).then(
+        return Vue.http.post('api/constraint', { constraint }).then(
             response => response.body.status === 'OK',
         );
     },
