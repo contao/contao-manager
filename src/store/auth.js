@@ -38,14 +38,17 @@ export default {
             (status) => {
                 commit('setLogin', { token: status.token, error: status.error, username });
 
-                return dispatch('fetchStatus', true, { root: true }).then(
-                    () => status.token !== null,
-                );
+                if (status.token === null) {
+                    return new Promise(resolve => resolve(false));
+                }
+
+                return dispatch('fetchStatus', true, { root: true }).then(() => true);
             },
         ),
-        logout: ({ commit }) => new Promise((resolve) => {
+        logout: ({ commit, dispatch }) => {
             commit('setLogout');
-            resolve(true);
-        }),
+
+            return dispatch('fetchStatus', true, { root: true }).then(() => true);
+        },
     },
 };
