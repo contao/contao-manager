@@ -4,8 +4,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-if (version_compare(phpversion(), '5.3.2', '<')) {
-    die('You need at least PHP 5.3.2 to execute .phar files.');
+if (version_compare(phpversion(), '5.5.9', '<')) {
+    die('You need at least PHP 5.5.9 to run the Contao Manager.');
 }
 
 if (!extension_loaded('Phar')) {
@@ -28,17 +28,19 @@ if (false !== ($suhosin = ini_get('suhosin.executor.include.whitelist'))) {
     }
 }
 
-function is_disabled($value) {
+$isDisabled = function ($value) {
     return '' === $value || 0 === (int) $value || 'Off' === $value;
-}
+};
 
-if (false !== ($multibyte = ini_get('zend.multibyte')) && !is_disabled($multibyte)) {
+if (false !== ($multibyte = ini_get('zend.multibyte')) && !$isDisabled($multibyte)) {
     $unicode = ini_get(version_compare(phpversion(), '5.4', '<') ? 'detect_unicode' : 'zend.detect_unicode');
 
-    if (!is_disabled($unicode)) {
+    if (!$isDisabled($unicode)) {
         die('The detect_unicode setting needs to be disabled in your php.ini.');
     }
 }
+
+unset($isDisabled, $multibyte, $unicode);
 
 if ('cgi-fcgi' === php_sapi_name() && extension_loaded('eaccelerator') && ini_get('eaccelerator.enable')) {
     die('The PHP eAccelerator extension cannot handle .phar files.');
