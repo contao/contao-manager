@@ -1,5 +1,5 @@
 <template>
-    <div class="widget">
+    <div class="widget text-field">
         <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
         <input
             ref="input"

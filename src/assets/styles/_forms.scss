@@ -34,31 +34,37 @@ a.button {
     height: 40px;
     padding: 0;
     border: none;
-    background: $text-color;
+    background-color: $text-color;
     color: #fff;
     font-weight: bold;
     line-height: 40px;
     text-decoration: none;
+    text-align: center;
     cursor: default;
     border-radius: 2px;
 
     &.primary {
-        background: $green-button;
+        background-color: $green-button;
     }
 
     &.warning {
-        background: $orange-button;
+        background-color: $orange-button;
     }
 
     &.alert {
-        background: $red-button;
+        background-color: $red-button;
     }
 
     &:hover {
 
     }
 
-    &:disabled {
-        background: $border-color !important;
+    &:disabled,
+    &.disabled {
+        background-color: $border-color !important;
     }
+}
+
+label {
+    padding: 0;
 }

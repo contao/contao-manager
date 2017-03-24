@@ -53,9 +53,6 @@ export default {
             credentials: { username, password },
         };
 
-        data.configuration.php_can_fork = false;
-        data.configuration.php_force_background = true;
-
         return Vue.http.post('api/install/configure', data);
     },
 

@@ -10,6 +10,10 @@
         vertical-align: middle;
     }
 
+    p {
+        margin: .5em 0 1em;
+    }
+
     main {
         position: relative;
         max-width: 380px;
@@ -68,11 +72,13 @@
         }
     }
 
-    main.login section,
-    main.install section {
-        position: relative;
-        max-width: 250px;
-        margin: 0 auto;
+    main.login,
+    main.install {
+        section {
+            position: relative;
+            max-width: 250px;
+            margin: 0 auto;
+        }
 
         .widget {
             position: relative;
@@ -82,13 +88,13 @@
             overflow: hidden;
             margin-top: 2em;
 
+            &.submit {
+                margin-top: 0;
+            }
+
             legend {
                 font-size: 18px;
                 font-weight: bold;
-            }
-
-            p {
-                margin: .5em 0 1em;
             }
         }
 
@@ -97,12 +103,13 @@
             margin: 5px 0 10px;
         }
 
-        button {
+        button,
+        a.button {
             margin-top: 20px;
         }
     }
 
-    main.login section {
+    main.login {
         h1 {
             margin-bottom: 0;
         }
@@ -139,6 +146,21 @@
                 background-size: 14px 14px;
                 z-index: 10;
             }
+        }
+    }
+
+    main.install {
+        button {
+            float: left;
+            margin-right: 10px;
+            width: 200px;
+        }
+
+        .advanced {
+            width: 40px;
+            background: $text-color url('../assets/images/settings.svg') center no-repeat;
+            background-size: 20px 20px;
+            text-indent: -999em;
         }
     }
 
@@ -193,11 +215,16 @@
                 float: left;
                 width: 370px;
 
-                label {
+                .text-field label,
+                .select label {
                     float: left;
                     width: 120px;
                     padding-top: 15px;
                     font-family: $font-regular;
+                }
+
+                .checkbox {
+                    margin-left: 120px;
                 }
 
                 input[type=text],
@@ -207,8 +234,7 @@
                 }
 
                 button {
-                    float: right;
-                    width: 250px;
+                    margin-left: 120px;
                 }
             }
         }

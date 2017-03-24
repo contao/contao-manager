@@ -28,14 +28,25 @@
 
             <fieldset>
                 <legend>Contao Installation</legend>
-                <p>Enter a version to install or leave blank for the latest version.</p>
+                <p>Select the Contao version to install.</p>
                 <select-menu name="version" label="Version" class="inline" v-bind="version" :options="versions"></select-menu>
             </fieldset>
 
-            <button class="primary install" @click="install" :disabled="!inputValid || installing">
-                <span v-if="!installing">Install</span>
-                <loader v-else></loader>
-            </button>
+            <fieldset v-if="advanced">
+                <legend>Expert Settings</legend>
+                <p>Configure the Contao Manager to run on your webserver.</p>
+                <text-field name="php_cli" label="PHP binary" :disabled="installing" v-model="php_cli" @enter="install"></text-field>
+                <checkbox name="php_can_fork" label="PHP can fork" :disabled="installing" v-model="php_can_fork"></checkbox>
+                <checkbox name="php_force_background" label="Force PHP to background" :disabled="installing" v-model="php_force_background"></checkbox>
+            </fieldset>
+
+            <fieldset class="submit">
+                <button class="primary install" @click="install" :disabled="!inputValid || installing">
+                    <span v-if="!installing">Install</span>
+                    <loader v-else></loader>
+                </button>
+                <a href="#" :class="{ button: true, advanced: true, disabled: advanced }" @click.prevent="enableAdvanced">Advanced</a>
+            </fieldset>
 
         </section>
 
@@ -49,19 +60,24 @@
     import BoxedLayout from './layouts/Boxed';
     import TextField from './widgets/TextField';
     import SelectMenu from './widgets/SelectMenu';
+    import Checkbox from './widgets/Checkbox';
     import Loader from './fragments/Loader';
 
     export default {
-        components: { BoxedLayout, TextField, SelectMenu, Loader },
+        components: { BoxedLayout, TextField, SelectMenu, Checkbox, Loader },
         data: () => ({
             username: '',
             password: '',
             password_confirm: '',
             version: '',
             versions: { '4.3.*': '4.3 (latest)' },
+            php_cli: '',
+            php_can_fork: false,
+            php_force_background: false,
 
             installing: false,
             installComplete: false,
+            advanced: false,
         }),
         computed: {
             inputValid() {
@@ -106,8 +122,15 @@
                     );
                 } else {
                     this.$store
-                        .dispatch('configure', { username: this.username, password: this.password })
-                        .then(() => {
+                        .dispatch('configure', {
+                            username: this.username,
+                            password: this.password,
+                            config: {
+                                php_cli: this.php_cli,
+                                php_can_fork: this.php_can_fork,
+                                php_force_background: this.php_force_background,
+                            },
+                        }).then(() => {
                             this.$store.dispatch('install', this.version).then(
                                 () => {
                                     this.installComplete = true;
@@ -115,6 +138,10 @@
                             );
                         });
                 }
+            },
+
+            enableAdvanced() {
+                this.advanced = true;
             },
         },
         beforeRouteEnter(to, from, next) {
@@ -130,6 +157,10 @@
             if (this.$refs.username) {
                 this.$refs.username.focus();
             }
+
+            this.php_cli = this.$store.state.autoconfig.php_cli;
+            this.php_can_fork = this.$store.state.autoconfig.php_can_fork;
+            this.php_force_background = this.$store.state.autoconfig.php_force_background;
         },
     };
 </script>

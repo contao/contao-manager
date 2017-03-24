@@ -1,14 +1,15 @@
 <template>
-    <div class="widget select">
-        <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
-        <select
+    <div class="widget checkbox">
+        <input
+            ref="input"
+            type="checkbox"
             :id="label ? 'ctrl_'+name : ''"
             :name="name"
             :disabled="disabled"
-            @change="input($event.target.value)"
+            :checked="value"
+            @input="toggle($event.target.checked)"
         >
-            <option v-for="(v, k) in options" :name="k" :selected="v === value">{{ v }}</option>
-        </select>
+        <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
     </div>
 </template>
 
@@ -23,19 +24,16 @@
                 type: String,
             },
             value: {
-                type: String,
+                type: Boolean,
             },
             disabled: {
                 type: Boolean,
             },
-            options: {
-                type: Object,
-                required: true,
-            },
         },
         methods: {
-            input(value) {
-                this.$emit('input', value);
+            toggle(value) {
+                console.log(value);
+                this.$emit('checked', value);
             },
         },
     };
