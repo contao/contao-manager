@@ -156,11 +156,17 @@
             width: 200px;
         }
 
-        .advanced {
+        a.button {
             width: 40px;
             background: $text-color url('../assets/images/settings.svg') center no-repeat;
             background-size: 20px 20px;
             text-indent: -999em;
+        }
+
+        .advanced {
+            button {
+                width: 250px;
+            }
         }
     }
 

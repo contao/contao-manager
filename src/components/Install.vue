@@ -40,12 +40,12 @@
                 <checkbox name="php_force_background" label="Force PHP to background" :disabled="installing" v-model="php_force_background"></checkbox>
             </fieldset>
 
-            <fieldset class="submit">
+            <fieldset :class="{ submit: true, advanced: advanced }">
                 <button class="primary install" @click="install" :disabled="!inputValid || installing">
                     <span v-if="!installing">Install</span>
                     <loader v-else></loader>
                 </button>
-                <a href="#" :class="{ button: true, advanced: true, disabled: advanced }" @click.prevent="enableAdvanced">Advanced</a>
+                <a href="#" class="button" v-if="!advanced" @click.prevent="enableAdvanced">Advanced</a>
             </fieldset>
 
         </section>
