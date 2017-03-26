@@ -24,10 +24,10 @@ class StatusController extends Controller
 {
     const STATUS_NEW = 'new'; // Manager not installed
     const STATUS_AUTHENTICATE = 'auth'; // Manager installed, requires authentication
-    const STATUS_CONFLICT = 'conflict'; // Manager has conflict
+    const STATUS_FAIL = 'fail'; // Manager has failed
     const STATUS_EMPTY = 'empty'; // Contao not installed
     const STATUS_OK = 'ok'; // Contao is ready
-    const STATUS_BROKEN = 'broken'; // Contao is broken
+    const STATUS_CONFLICT = 'conflict'; // Contao has conflict
 
     /**
      * @var InstallationStatusDeterminator
@@ -112,7 +112,7 @@ class StatusController extends Controller
 
         return new JsonResponse(
             [
-                'status' => self::STATUS_CONFLICT,
+                'status' => self::STATUS_FAIL,
                 'selftest' => $this->prepareResults($results),
             ],
             Response::HTTP_INTERNAL_SERVER_ERROR

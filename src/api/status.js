@@ -7,7 +7,7 @@ export default {
     AUTHENTICATE: 'auth',
 
     // Manager has conflict
-    CONFLICT: 'conflict',
+    FAIL: 'fail',
 
     // Contao not installed
     EMPTY: 'empty',
@@ -16,5 +16,5 @@ export default {
     OK: 'ok',
 
     // Contao is broken
-    BROKEN: 'broken',
+    CONFLICT: 'conflict',
 };

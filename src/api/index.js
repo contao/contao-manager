@@ -9,16 +9,16 @@ export default {
                 return { status: apiStatus.AUTHENTICATE };
             }
 
-            if (response.status === 500 && response.body.status === apiStatus.CONFLICT) {
+            if (response.status === 500 && response.body.status === apiStatus.FAIL) {
                 return {
-                    status: apiStatus.CONFLICT,
+                    status: apiStatus.FAIL,
                     selftest: response.body.selftest || null,
                 };
             }
 
             if (!response.ok) {
                 return {
-                    status: apiStatus.CONFLICT,
+                    status: apiStatus.FAIL,
                     error: response.body.status === 'ERROR' ? response.body : response.statusText,
                 };
             }
@@ -27,7 +27,7 @@ export default {
                 return response.body;
             }
 
-            return { status: apiStatus.CONFLICT, error: response.statusText };
+            return { status: apiStatus.FAIL, error: response.statusText };
         };
 
         return Vue.http.get('api/status').then(handleStatus, handleStatus);
