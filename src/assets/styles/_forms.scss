@@ -63,6 +63,12 @@ a.button {
     &.disabled {
         background-color: $border-color !important;
     }
+
+    &.inline {
+        width: auto;
+        min-width: 100px;
+        padding: 0 20px;
+    }
 }
 
 label {

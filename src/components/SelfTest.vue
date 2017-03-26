@@ -6,13 +6,18 @@
             </header>
         </div>
         <section slot="section">
-            <table v-if="selftest.length">
-                <tr :class="'test '+result.state.toLowerCase()" v-for="result in selftest">
-                    <td><svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 79.536 79.536" xmlSpace="preserve"><g><path d="M39.769,0C17.8,0,0,17.8,0,39.768c0,21.965,17.8,39.768,39.769,39.768 c21.965,0,39.768-17.803,39.768-39.768C79.536,17.8,61.733,0,39.769,0z M34.142,58.513L15.397,39.768l7.498-7.498l11.247,11.247 l22.497-22.493l7.498,7.498L34.142,58.513z" /></g></svg></td>
-                    <td class="message">{{ result.message }}</td>
-                    <td><span class="explain">{{ result.explain }}</span></td>
-                </tr>
-            </table>
+            <div v-if="selftest.length">
+                <table>
+                    <tr :class="'test '+result.state.toLowerCase()" v-for="result in selftest">
+                        <td><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/></svg></td>
+                        <td class="message">{{ result.message }}</td>
+                        <td><span class="explain">{{ result.explain }}</span></td>
+                    </tr>
+                </table>
+                <fieldset v-if="$router.scope !== 'fail'">
+                    <a href="#" class="button inline" @click.prevent="back()">Back</a>
+                </fieldset>
+            </div>
             <loader v-else></loader>
         </section>
     </boxed-layout>
@@ -27,7 +32,7 @@
 
         computed: {
             selftest() {
-                if (!this.$store.state.selftest) {
+                if (!Array.isArray(this.$store.state.selftest)) {
                     return [];
                 }
 
@@ -42,6 +47,12 @@
                 });
 
                 return tests.FAIL.concat(tests.WARNING, tests.SUCCESS);
+            },
+        },
+
+        methods: {
+            back() {
+                this.$router.back();
             },
         },
     };

@@ -150,6 +150,33 @@
     }
 
     main.install {
+        .selftest {
+            margin-top: 30px;
+            padding: 4px 8px 4px 6px;
+            border-radius: 2px;
+            background: $green-button;
+            text-align: left;
+
+            &.warnings {
+                background: $orange-button;
+            }
+
+            img {
+                float: left;
+                margin: 0 6px 0 0;
+            }
+
+            p, a {
+                margin: 0;
+                color: #fff;
+                line-height: 24px;
+            }
+
+            a {
+                float: right;
+            }
+        }
+
         button {
             float: left;
             margin-right: 10px;

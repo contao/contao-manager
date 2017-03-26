@@ -1,6 +1,15 @@
 <template>
     <boxed-layout wide="1" mainClass="install">
-        <p slot="intro">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
+        <div slot="intro">
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
+
+            <div :class="{ selftest: true, warnings: selftestWarnings > 0 }" v-if="selftestWarnings !== null">
+                <router-link :to="{ name: 'install-check' }">Details</router-link>
+                <img src="assets/images/selftest.svg" width="24" height="24">
+                <p v-if="selftestWarnings > 0"><strong>Self Test:</strong> {{ selftestWarnings }} warning(s)</p>
+                <p v-else><strong>Self Test:</strong> all good!</p>
+            </div>
+        </div>
 
         <section class="install-complete" slot="section" v-if="installComplete">
             <h1>Congratulations!</h1>
@@ -105,6 +114,21 @@
             },
             authUsername() {
                 return this.$store.state.auth.username;
+            },
+            selftestWarnings() {
+                if (!Array.isArray(this.$store.state.selftest)) {
+                    return null;
+                }
+
+                let warnings = 0;
+
+                this.$store.state.selftest.forEach((result) => {
+                    if (result.state === 'WARNING') {
+                        warnings += 1;
+                    }
+                });
+
+                return warnings;
             },
         },
         methods: {
