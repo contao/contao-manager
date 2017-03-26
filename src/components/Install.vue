@@ -26,7 +26,7 @@
                 <legend>User Account</legend>
                 <p>Create a user account to manage your installation.</p>
                 <text-field ref="username" name="username" label="Username" class="inline" :disabled="installing" v-model="username" @enter="install"></text-field>
-                <text-field type="password" name="password" label="Password" :class="passwordClass" :disabled="installing" v-model="password" @enter="install"></text-field>
+                <text-field type="password" name="password" label="Password" placeholder="min. 8 characters" :class="passwordClass" :disabled="installing" v-model="password" @enter="install"></text-field>
                 <text-field type="password" name="password_confirm" label="Retype Password" :class="passwordClass" :disabled="installing" v-model="password_confirm" @enter="install"></text-field>
             </fieldset>
 
@@ -49,12 +49,12 @@
                 <checkbox name="php_force_background" label="Force PHP to background" :disabled="installing" v-model="php_force_background"></checkbox>
             </fieldset>
 
-            <fieldset :class="{ submit: true, advanced: advanced }">
+            <fieldset :class="{ submit: true, advanced: advanced || installing }">
                 <button class="primary install" @click="install" :disabled="!inputValid || installing">
                     <span v-if="!installing">Install</span>
                     <loader v-else></loader>
                 </button>
-                <a href="#" class="button" v-if="!advanced" @click.prevent="enableAdvanced">Advanced</a>
+                <a href="#" class="button" v-if="!advanced && !installing" @click.prevent="enableAdvanced">Advanced</a>
             </fieldset>
 
         </section>
@@ -166,6 +166,10 @@
             },
 
             enableAdvanced() {
+                if (this.installing) {
+                    return;
+                }
+
                 this.advanced = true;
             },
         },
