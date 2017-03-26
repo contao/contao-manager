@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <div class="https-warning" v-if="insecure"><strong>!! Insecure Connection !!</strong><span> Without HTTPS, your confidential data will be transferred unencryptedly.</span></div>
+        <div class="https-warning" v-if="insecure"><strong>!! Insecure Connection !!</strong><span> Without HTTPS, your confidential data will be transferred unencryptedly.</span> <a href="#" target="_blank">More Info</a></div>
         <router-view :class="taskRunning ? 'blur-in' : 'blur-out'"></router-view>
         <keep-alive><task-popup v-if="taskRunning"></task-popup></keep-alive>
         <error v-if="hasError"></error>
