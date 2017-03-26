@@ -44,7 +44,9 @@
             <fieldset v-if="advanced">
                 <legend>Expert Settings</legend>
                 <p>Configure the Contao Manager to run on your webserver.</p>
+                <text-field name="github_oauth_token" label="GitHub Token" :disabled="installing" v-model="github_oauth_token" @enter="install"></text-field>
                 <text-field name="php_cli" label="PHP binary" :disabled="installing" v-model="php_cli" @enter="install"></text-field>
+                <text-field name="php_cli_arguments" label="CLI arguments" :disabled="installing" v-model="php_cli_arguments" @enter="install"></text-field>
                 <checkbox name="php_can_fork" label="PHP can fork" :disabled="installing" v-model="php_can_fork"></checkbox>
                 <checkbox name="php_force_background" label="Force PHP to background" :disabled="installing" v-model="php_force_background"></checkbox>
             </fieldset>
@@ -81,9 +83,12 @@
             password_confirm: '',
             version: '',
             versions: { '4.3.*': '4.3 (latest)' },
+
             php_cli: '',
+            php_cli_arguments: '',
             php_can_fork: false,
             php_force_background: false,
+            github_oauth_token: '',
 
             installing: false,
             installComplete: false,
@@ -146,15 +151,22 @@
                         },
                     );
                 } else {
+                    const config = {
+                        php_cli: this.php_cli,
+                        php_cli_arguments: this.php_cli_arguments,
+                        php_can_fork: this.php_can_fork,
+                        php_force_background: this.php_force_background,
+                    };
+
+                    if (this.github_oauth_token) {
+                        config.github_oauth_token = this.github_oauth_token;
+                    }
+
                     this.$store
                         .dispatch('configure', {
                             username: this.username,
                             password: this.password,
-                            config: {
-                                php_cli: this.php_cli,
-                                php_can_fork: this.php_can_fork,
-                                php_force_background: this.php_force_background,
-                            },
+                            config,
                         }).then(() => {
                             this.$store.dispatch('install', this.version).then(
                                 () => {
