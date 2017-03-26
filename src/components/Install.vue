@@ -56,6 +56,7 @@
 <script>
     import store from '../store';
     import apiStatus from '../api/status';
+    import routes from '../router/routes';
 
     import BoxedLayout from './layouts/Boxed';
     import TextField from './widgets/TextField';
@@ -117,7 +118,7 @@
                 if (this.isLoggedIn) {
                     this.$store.dispatch('install', this.version).then(
                         () => {
-                            this.$router.push('/packages');
+                            this.$router.push(routes.packages);
                         },
                     );
                 } else {
@@ -147,7 +148,7 @@
         beforeRouteEnter(to, from, next) {
             store.dispatch('fetchStatus').then((status) => {
                 if (status === apiStatus.OK) {
-                    next({ name: 'packages' });
+                    next(routes.packages);
                 }
 
                 next();

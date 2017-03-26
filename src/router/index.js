@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import scopes from './scopes';
+import routes from './routes';
+
 import Login from '../components/Login';
 import Install from '../components/Install';
 import SelfTest from '../components/SelfTest';
@@ -13,18 +16,31 @@ Vue.use(Router);
 const router = new Router({
     routes: [
         {
-            name: 'login',
+            path: '/',
+            redirect: routes.login,
+        },
+        {
+            name: routes.fail.name,
+            path: '/fail',
+            meta: { scope: scopes.FAIL },
+            component: SelfTest,
+        },
+        {
+            name: routes.login.name,
             path: '/login',
+            meta: { scope: scopes.LOGIN },
             component: Login,
         },
         {
-            name: 'install',
+            name: routes.install.name,
             path: '/install',
+            meta: { scope: scopes.INSTALL },
             component: Install,
         },
         {
-            name: 'selftest',
-            path: '/selftest',
+            name: routes.installCheck.name,
+            path: '/install/check',
+            meta: { scope: scopes.INSTALL },
             component: SelfTest,
         },
         {
@@ -32,13 +48,15 @@ const router = new Router({
             component: Packages,
             children: [
                 {
-                    name: 'packages',
+                    name: routes.packages.name,
                     path: '',
+                    meta: { scope: scopes.MANAGER },
                     component: PackagesList,
                 },
                 {
-                    name: 'packages-search',
+                    name: routes.packagesSearch.name,
                     path: 'search',
+                    meta: { scope: scopes.MANAGER },
                     component: PackagesSearch,
                     props: true,
                 },
@@ -48,7 +66,10 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.name === null || (router.allowed !== undefined && router.allowed !== to.name)) {
+    if (to.meta.scope === undefined
+        || (router.scope !== undefined && router.scope !== to.meta.scope)
+    ) {
+        console.log(`routing "${to.name}" is denied in scope "${router.scope}"`);
         next(false);
     } else {
         next();

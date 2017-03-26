@@ -22,6 +22,8 @@
 </template>
 
 <script>
+    import routes from '../../router/routes';
+
     import MainLayout from '../layouts/Main';
 
     export default {
@@ -32,7 +34,7 @@
         }),
         methods: {
             startSearch() {
-                this.$router.push({ name: 'packages-search' });
+                this.$router.push(routes.packagesSearch);
                 this.$nextTick(() => {
                     // run twice to await router rendering
                     this.$nextTick(() => {
@@ -42,11 +44,16 @@
             },
             stopSearch() {
                 this.searchInput = '';
-                this.$router.push({ name: 'packages' });
+                this.$router.push(routes.packages);
             },
             search() {
-                if (this.$route.name === 'packages-search') {
-                    this.$router.push({ name: 'packages-search', query: { q: this.searchInput } });
+                if (this.$route.name === routes.packagesSearch.name) {
+                    this.$router.push(
+                        Object.assign(
+                            { query: { q: this.searchInput } },
+                            routes.packagesSearch,
+                        ),
+                    );
                 }
             },
             setHasChanges(value) {
@@ -63,7 +70,7 @@
             $route(route) {
                 this.hasChanges = false;
 
-                if (route.name !== 'packages-search') {
+                if (route.name !== routes.packagesSearch.name) {
                     this.searchInput = '';
                 }
             },

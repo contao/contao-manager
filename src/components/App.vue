@@ -8,6 +8,8 @@
 
 <script>
     import apiStatus from '../api/status';
+    import scopes from '../router/scopes';
+    import routes from '../router/routes';
 
     import TaskPopup from './fragments/TaskPopup';
     import Error from './Error';
@@ -35,20 +37,20 @@
             },
 
             status(status) {
-                let route = null;
-                delete this.$router.allowed;
+                delete this.$router.scope;
 
                 if ((status === apiStatus.NEW || status === apiStatus.EMPTY)) {
-                    route = 'install';
-                } else if (status === apiStatus.CONFLICT) {
-                    route = 'selftest';
+                    this.$router.scope = scopes.INSTALL;
+                    this.$router.replace(routes.install);
                 } else if (status === apiStatus.AUTHENTICATE) {
-                    route = 'login';
-                }
-
-                if (route !== null) {
-                    this.$router.allowed = route;
-                    this.$router.replace({ name: route });
+                    this.$router.scope = scopes.LOGIN;
+                    this.$router.replace(routes.login);
+                } else if (status === apiStatus.OK) {
+                    this.$router.scope = scopes.MANAGER;
+                    this.$router.replace(routes.packages);
+                } else {
+                    this.$router.scope = scopes.FAIL;
+                    this.$router.replace(routes.fail);
                 }
             },
         },

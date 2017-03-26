@@ -39,6 +39,8 @@
     import debounce from 'lodash.debounce';
     import throttle from 'lodash.throttle';
 
+    import routes from '../../router/routes';
+
     import Package from './Package';
     import Loader from '../fragments/Loader';
 
@@ -146,7 +148,7 @@
 
                 this.$store.dispatch('tasks/execute', task).then(
                     () => {
-                        this.$router.push({ name: 'packages' });
+                        this.$router.push(routes.packages);
                     },
                 );
             },
