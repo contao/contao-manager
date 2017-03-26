@@ -2,7 +2,6 @@ services:
     contao_manager.self_test:
         class: Tenside\Core\SelfTest\SelfTest
         calls:
-            - [addTest, ['@contao_manager.self_test.https']]
             - [addTest, ['@contao_manager.self_test.file_owner']]
             - [addTest, ['@contao_manager.self_test.url_fopen']]
             - [addTest, ['@contao_manager.self_test.env']]
@@ -11,9 +10,6 @@ services:
             - [addTest, ['@contao_manager.self_test.cli_arguments']]
             #- [addTest, ['@contao_manager.self_test.cli_fork']]
             - [addTest, ['@contao_manager.self_test.cli_os']]
-
-    contao_manager.self_test.https:
-        class: Tenside\Core\SelfTest\Generic\SelfTestCalledViaHttps
 
     contao_manager.self_test.file_owner:
         class: Tenside\Core\SelfTest\Generic\SelfTestFileOwnerMatches

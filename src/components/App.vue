@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <div class="https-warning" v-if="insecure"><strong>!! Insecure Connection !!</strong><span> Without HTTPS, your confidential data will be transferred unencryptedly.</span></div>
         <router-view :class="taskRunning ? 'blur-in' : 'blur-out'"></router-view>
         <keep-alive><task-popup v-if="taskRunning"></task-popup></keep-alive>
         <error v-if="hasError"></error>
@@ -28,6 +29,10 @@
 
             status() {
                 return this.$store.state.status;
+            },
+
+            insecure() {
+                return window.location.protocol !== 'https:';
             },
         },
 

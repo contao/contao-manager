@@ -23,3 +23,22 @@
         border-radius: 2px
     }
 }
+
+#app > .https-warning {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 4px 8px;
+    background: $orange-button;
+    color: #fff;
+    text-align: center;
+
+    span {
+        display: none;
+
+        @include screen(600) {
+            display: inline;
+        }
+    }
+}
