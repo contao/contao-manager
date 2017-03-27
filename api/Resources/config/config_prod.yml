@@ -10,5 +10,5 @@ monolog:
 
         file:
             type: rotating_file
-            path: "%kernel.logs_dir/api.log"
+            path: "%kernel.logs_dir%/api.log"
             channels: [!event]
