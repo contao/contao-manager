@@ -153,10 +153,13 @@
                 } else {
                     const config = {
                         php_cli: this.php_cli,
-                        php_cli_arguments: this.php_cli_arguments,
                         php_can_fork: this.php_can_fork,
                         php_force_background: this.php_force_background,
                     };
+
+                    if (this.php_cli_arguments) {
+                        config.php_cli_arguments = this.php_cli_arguments;
+                    }
 
                     if (this.github_oauth_token) {
                         config.github_oauth_token = this.github_oauth_token;
