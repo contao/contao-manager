@@ -7,3 +7,7 @@
 /test-dir
 /web/assets
 /web/index.html
+
+# Local
+/box.json
+/build.xml
