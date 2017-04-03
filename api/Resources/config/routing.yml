@@ -8,6 +8,16 @@ auth:
     defaults: { _controller: TensideCoreBundle:Auth:checkAuth }
     methods:  [POST]
 
+install_configure:
+    path:     /api/install/configure
+    defaults: { _controller: contao_manager.controller.config }
+    methods:  [POST]
+
+install_create_project:
+    path:     /api/install/create-project
+    defaults: { _controller: TensideCoreBundle:InstallProject:createProject }
+    methods:  [POST]
+
 packages_get:
     path:     /api/packages
     defaults: { _controller: TensideCoreBundle:Package:packageList }
@@ -46,13 +56,3 @@ task_delete:
     methods:  [DELETE]
     requirements:
         taskId: "[a-z0-9]+"
-
-install_configure:
-    path:     /api/install/configure
-    defaults: { _controller: TensideCoreBundle:InstallProject:configure }
-    methods:  [POST]
-
-install_create_project:
-    path:     /api/install/create-project
-    defaults: { _controller: TensideCoreBundle:InstallProject:createProject }
-    methods:  [POST]

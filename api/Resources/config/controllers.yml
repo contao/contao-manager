@@ -6,3 +6,11 @@ services:
             - "@contao_manager.self_test"
         calls:
             - [setContainer, ["@service_container"]]
+
+    contao_manager.controller.config:
+        class: Contao\ManagerApi\Controller\ConfigController
+        arguments:
+            - "@tenside.home"
+            - "@filesystem"
+        calls:
+            - [setContainer, ["@service_container"]]
