@@ -54,7 +54,7 @@ class StatusController extends Controller
     /**
      * @return JsonResponse
      */
-    public function statusAction()
+    public function __invoke()
     {
         if (!$this->status->isTensideConfigured()) {
             $results = $this->selfTest->perform();

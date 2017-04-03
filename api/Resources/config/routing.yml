@@ -1,6 +1,6 @@
 status:
     path: /api/status
-    defaults: { _controller: contao_manager.controller.status:statusAction }
+    defaults: { _controller: contao_manager.controller.status }
     methods: [GET]
 
 auth:
