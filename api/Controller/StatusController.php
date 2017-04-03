@@ -12,10 +12,8 @@ namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Tenside\InstallationStatusDeterminator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Tenside\Core\Config\TensideJsonConfig;
 use Tenside\Core\SelfTest\SelfTest;
 use Tenside\Core\SelfTest\SelfTestResult;
@@ -57,6 +55,17 @@ class StatusController extends Controller
     public function __invoke()
     {
         if (!$this->status->isTensideConfigured()) {
+            if ($this->status->isProjectPresent() || $this->status->isProjectInstalled()) {
+                return new JsonResponse(
+                    [
+                        'status' => 'ERROR',
+                        'message' => 'Existing installation found',
+                        'exception' => 'This version of Contao Manager cannot be added to an existing Contao installation.',
+                    ],
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+
             $results = $this->selfTest->perform();
 
             return $this->getResponse(self::STATUS_NEW, $results);
