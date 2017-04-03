@@ -25,7 +25,6 @@
 
 <script>
     import store from '../../store';
-    import routes from '../../router/routes';
 
     export default {
         methods: {
@@ -38,11 +37,7 @@
             },
 
             logout() {
-                store.dispatch('auth/logout').then(
-                    () => {
-                        this.$router.push(routes.login);
-                    },
-                );
+                store.dispatch('auth/logout');
             },
         },
     };

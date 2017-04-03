@@ -12,6 +12,7 @@ export default {
         username: null,
         error: null,
     },
+
     mutations: {
         setLogin(state, { token, error, username }) {
             state.token = token;
@@ -31,8 +32,10 @@ export default {
             state.error = null;
             state.username = null;
             state.isLoggedIn = false;
+            Vue.http.headers.common.Authorization = null;
         },
     },
+
     actions: {
         login: ({ commit, dispatch }, { username, password }) => api.login(username, password).then(
             (status) => {
