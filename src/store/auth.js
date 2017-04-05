@@ -48,7 +48,11 @@ export default {
                 return dispatch('fetchStatus', true, { root: true }).then(() => true);
             },
         ),
-        logout: ({ commit, dispatch }) => {
+        logout: ({ state, commit, dispatch }) => {
+            if (!state.isLoggedIn) {
+                return false;
+            }
+
             commit('setLogout');
 
             return dispatch('fetchStatus', true, { root: true }).then(() => true);

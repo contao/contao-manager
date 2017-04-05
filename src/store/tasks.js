@@ -113,11 +113,8 @@ export default {
         },
 
         deleteCurrent(store) {
-            return api.deleteTask(store.state.currentId).then(
-                () => {
-                    store.commit('setTaskId', null);
-                },
-            );
+            const deleteTask = () => store.commit('setTaskId', null);
+            return api.deleteTask(store.state.currentId).then(deleteTask, deleteTask);
         },
     },
 };
