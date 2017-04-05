@@ -49,7 +49,8 @@ class RebuildCacheTask extends AbstractCliSpawningTask
     public function doPerform()
     {
         $this->deleteCacheDirectory('prod');
-        $this->runCacheClearCommand('prod');
+        $this->runSymfonyCommand('cache:clear', ['--no-warmup']);
+        $this->runSymfonyCommand('cache:warmup');
     }
 
     /**
@@ -71,14 +72,21 @@ class RebuildCacheTask extends AbstractCliSpawningTask
     }
 
     /**
-     * Runs the cache clear command.
+     * Runs a Symfony command.
      *
+     * @param string $command
+     * @param array  $arguments
      * @param string $environment
      */
-    private function runCacheClearCommand($environment)
+    private function runSymfonyCommand($command, array $arguments = [], $environment = 'prod')
     {
         $process = ProcessBuilder::create($this->config->getPhpCliBinary())
-            ->setArguments(['vendor/bin/contao-console', 'cache:clear', '--env='.$environment])
+            ->setArguments(
+                array_merge(
+                    ['vendor/bin/contao-console', $command, '--env='.$environment],
+                    $arguments
+                )
+            )
             ->setWorkingDirectory($this->home->homeDir())
             ->generate()
         ;
