@@ -64,7 +64,7 @@ export default {
         };
 
         if (version !== '') {
-            data.version = version;
+            data.project.version = version;
         }
 
         return Vue.http.post('api/install/create-project', data).then(
