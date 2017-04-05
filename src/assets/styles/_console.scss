@@ -219,31 +219,12 @@
     height: 100%;
     width: 100%;
     z-index: -1;
-    animation: blur .5s forwards;
+    opacity: 0.5;
+    filter: blur(4px);
+    transition: opacity .5s, filter .5s;
 }
 
 .blur-out {
-    animation: blur-out .5s forwards;
-}
-
-@keyframes blur {
-    0% {
-        filter: blur(0px);
-        opacity: 1;
-    }
-    100% {
-        filter: blur(4px);
-        opacity: 0.5;
-    }
-}
-
-@keyframes blur-out {
-    0% {
-        filter: blur(4px);
-        opacity: 0.5;
-    }
-    100% {
-        filter: blur(0px);
-        opacity: 1;
-    }
+    opacity: 1;
+    transition: opacity .5s;
 }

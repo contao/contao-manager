@@ -5,7 +5,8 @@ section.package-actions {
     margin-bottom: 40px;
     text-align: center;
 
-    button {
+    button.update,
+    button.search {
         height: 38px;
         margin-bottom: 10px;
         line-height: 36px;
@@ -377,6 +378,7 @@ section.package-actions {
 
 #package-actions {
     position: fixed;
+    overflow: hidden;
     left: 0;
     right: 0;
     bottom: 0;
