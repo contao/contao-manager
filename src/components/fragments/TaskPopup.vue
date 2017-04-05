@@ -1,31 +1,33 @@
 <template>
-    <div ref="popup" id="task-popup" :class="popupClass">
-        <h1>{{ taskTitle }}</h1>
+    <div class="popup-overlay">
+        <div ref="popup" id="task-popup" :class="popupClass">
+            <h1>{{ taskTitle }}</h1>
 
-        <div class="status success"><i class="icono-checkCircle"></i></div>
-        <div class="status error"><i class="icono-crossCircle"></i></div>
-        <div class="status loading">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
-            <div class="bounce4"></div>
-            <div class="bounce5"></div>
+            <div class="status success"><i class="icono-checkCircle"></i></div>
+            <div class="status error"><i class="icono-crossCircle"></i></div>
+            <div class="status loading">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+                <div class="bounce4"></div>
+                <div class="bounce5"></div>
+            </div>
+
+            <h2>{{ progressTitle ? progressTitle : 'Loading…' }}</h2>
+            <p>{{ progressText ? progressText : '&nbsp;' }}</p>
+
+            <button :disabled="(this.taskStatus !== 'success' && this.taskStatus !== 'error')" @click="hidePopup">
+                <span>Confirm &amp; Close</span>
+            </button>
+
+            <a @click.prevent="toggleConsole" :class="showConsole ? 'hide' : 'show'">
+                <i class="icono-caretRight"></i>
+                <span v-if="showConsole">Hide Console Output</span>
+                <span v-else>Show Console Output</span>
+            </a>
+
+            <code ref="console" @scroll="scrolled">{{ consoleOutput }}</code>
         </div>
-
-        <h2>{{ progressTitle ? progressTitle : 'Loading…' }}</h2>
-        <p>{{ progressText ? progressText : '&nbsp;' }}</p>
-
-        <button :disabled="(this.taskStatus !== 'success' && this.taskStatus !== 'error')" @click="hidePopup">
-            <span>Confirm &amp; Close</span>
-        </button>
-
-        <a @click.prevent="toggleConsole" :class="showConsole ? 'hide' : 'show'">
-            <i class="icono-caretRight"></i>
-            <span v-if="showConsole">Hide Console Output</span>
-            <span v-else>Show Console Output</span>
-        </a>
-
-        <code ref="console" @scroll="scrolled">{{ consoleOutput }}</code>
     </div>
 </template>
 
