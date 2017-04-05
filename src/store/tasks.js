@@ -3,37 +3,31 @@
 import api from '../api';
 
 const pollTask = ({ commit }, taskId, resolve, reject) => {
-    commit('setTaskId', taskId);
-    commit('setStatus', 'running');
-    commit('setProgress', null);
+    const fetch = () => (api.getTask(taskId).then(
+        ({ status, type, output }) => {
+            commit('setProgress', { type, output });
 
-    const interval = setInterval(
-        () => (api.getTask(taskId).then(
-            ({ status, type, output }) => {
-                commit('setProgress', { type, output });
+            switch (status) {
+                case 'PENDING':
+                case 'RUNNING':
+                    commit('setStatus', 'running');
+                    setTimeout(fetch, 1000);
+                    break;
 
-                switch (status) {
-                    case 'PENDING':
-                    case 'RUNNING':
-                        commit('setStatus', 'running');
-                        break;
+                case 'FINISHED':
+                    commit('setStatus', 'success');
+                    resolve();
+                    break;
 
-                    case 'FINISHED':
-                        commit('setStatus', 'success');
-                        clearInterval(interval);
-                        resolve();
-                        break;
+                case 'ERROR':
+                default:
+                    commit('setStatus', 'error');
+                    reject();
+            }
+        },
+    ));
 
-                    case 'ERROR':
-                    default:
-                        commit('setStatus', 'error');
-                        clearInterval(interval);
-                        reject();
-                }
-            },
-        )),
-        1000,
-    );
+    fetch();
 };
 
 export default {
@@ -82,6 +76,10 @@ export default {
                                 if (task.status === 'PENDING') {
                                     api.deleteTask(task.id);
                                 } else {
+                                    store.commit('setTaskId', task.id);
+                                    store.commit('setStatus', 'running');
+                                    store.commit('setProgress', null);
+
                                     pollTask(store, task.id, resolve, reject);
                                     return;
                                 }
@@ -100,9 +98,13 @@ export default {
                     reject();
                 }
 
-                api.runNextTask();
+                store.commit('setTaskId', taskId);
+                store.commit('setStatus', 'running');
+                store.commit('setProgress', null);
 
-                pollTask(store, taskId, resolve, reject);
+                api.runNextTask().then(() => {
+                    pollTask(store, taskId, resolve, reject);
+                });
             });
         },
 
