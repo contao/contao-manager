@@ -9,6 +9,5 @@ monolog:
             handler: file
 
         file:
-            type: rotating_file
-            path: "%kernel.logs_dir%/api.log"
+            type: error_log
             channels: [!event]

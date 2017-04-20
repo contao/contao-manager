@@ -37,6 +37,16 @@ class ApiKernel extends Kernel
     /**
      * {@inheritdoc}
      */
+    public function __construct($environment, $debug)
+    {
+        parent::__construct($environment, $debug);
+
+        ini_set('error_log', $this->getLogDir().DIRECTORY_SEPARATOR.'api-'.date('Y-m-d').'.log');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function registerBundles()
     {
         return [
@@ -61,7 +71,27 @@ class ApiKernel extends Kernel
      */
     public function getLogDir()
     {
-        return $this->getHome()->tensideDataDir().'/logs';
+        return $this->getManagerDir().'/logs';
+    }
+
+    /**
+     * Gets the directory where Contao is installed.
+     *
+     * @return string
+     */
+    public function getContaoDir()
+    {
+        return $this->getHome()->homeDir();
+    }
+
+    /**
+     * Gets the directory where to place manager files like config and logs.
+     *
+     * @return string
+     */
+    public function getManagerDir()
+    {
+        return $this->getContaoDir().DIRECTORY_SEPARATOR.'contao-manager';
     }
 
     /**

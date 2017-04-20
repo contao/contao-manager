@@ -4,6 +4,6 @@ imports:
 monolog:
     handlers:
         main:
-            type: stream
-            path: "php://stderr"
+            type: error_log
+            level: INFO
             channels: [!event]
