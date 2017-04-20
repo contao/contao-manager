@@ -1,0 +1,5 @@
+services:
+    contao_manager.listener.json_request:
+        class: Contao\ManagerApi\EventListener\JsonRequestListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 100 }
