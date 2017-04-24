@@ -8,30 +8,76 @@
  * @license LGPL-3.0+
  */
 
+/** @var \Composer\Autoload\ClassLoader $loader */
+$loader = require __DIR__.'/../vendor/autoload.php';
+
+use Composer\Factory;
+use Composer\XdebugHandler;
 use Contao\ManagerApi\ApiApplication;
 use Contao\ManagerApi\ApiKernel;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Debug\Debug;
+
+error_reporting(-1);
 
 set_time_limit(0);
 ini_set('memory_limit', '2G');
 
-/** @var \Composer\Autoload\ClassLoader $loader */
-$loader = require __DIR__.'/../vendor/autoload.php';
+// Create output for XdebugHandler and Application
+$output = Factory::createOutput();
+
+$xdebug = new XdebugHandler($output);
+$xdebug->check();
+unset($xdebug);
+
+if (function_exists('ini_set')) {
+    @ini_set('display_errors', 1);
+
+    $memoryInBytes = function ($value) {
+        $unit = strtolower(substr($value, -1, 1));
+        $value = (int) $value;
+        switch($unit) {
+            case 'g':
+                $value *= 1024;
+            // no break (cumulative multiplier)
+            case 'm':
+                $value *= 1024;
+            // no break (cumulative multiplier)
+            case 'k':
+                $value *= 1024;
+        }
+
+        return $value;
+    };
+
+    $memoryLimit = trim(ini_get('memory_limit'));
+    // Increase memory_limit if it is lower than 1.5GB
+    if ($memoryLimit != -1 && $memoryInBytes($memoryLimit) < 1024 * 1024 * 1536) {
+        @ini_set('memory_limit', '1536M');
+    }
+    unset($memoryInBytes, $memoryLimit);
+}
+
+putenv('COMPOSER_BINARY='.realpath($_SERVER['argv'][0]));
+
+if (\Phar::running()) {
+    // TODO run in prod if phar is active
+    $env   = 'dev';
+    $debug = true;
+} else {
+    $env   = 'dev';
+    $debug = true;
+}
 
 $input = new ArgvInput();
-if (\Phar::running()) {
-    $env   = 'prod';
-    $debug = false;
+
+if ('composer' === $input->getFirstArgument()) {
+    $application = new \Composer\Console\Application();
+    $argv = $_SERVER['argv'];
+    array_shift($argv);
+    $input = new ArgvInput($argv);
 } else {
-    $env   = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');
-    $debug = getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(array('--no-debug', '')) && $env !== 'prod';
+    $kernel = new ApiKernel($env, $debug);
+    $application = new ApiApplication($kernel);
 }
 
-if ($debug) {
-    Debug::enable();
-}
-
-$kernel = new ApiKernel($env, $debug);
-$application = new ApiApplication($kernel);
-$application->run($input);
+$application->run($input, $output);

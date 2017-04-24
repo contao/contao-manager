@@ -11,6 +11,7 @@
 namespace Contao\ManagerApi;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Tenside\Core\Util\RuntimeHelper;
 use Tenside\CoreBundle\Command\RunTaskCommand;
@@ -29,6 +30,18 @@ class ApiApplication extends Application
 
         $this->setName('Contao Manager');
         $this->setVersion('@package_version@');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultCommands()
+    {
+        $commands = parent::getDefaultCommands();
+
+        $commands[] = (new Command('composer'))->setDescription('Run Composer within Contao Manager');
+
+        return $commands;
     }
 
     protected function registerCommands()

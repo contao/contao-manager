@@ -1,8 +1,11 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+error_reporting(-1);
+
+if (function_exists('ini_set')) {
+    @ini_set('display_errors', 1);
+    @ini_set('display_startup_errors', 1);
+}
 
 if (version_compare(phpversion(), '5.5.9', '<')) {
     die('You need at least PHP 5.5.9 to run the Contao Manager.');

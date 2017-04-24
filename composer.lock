@@ -2648,12 +2648,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "4c4f4c26802dc05ec2226e09b3a93618b2675bf7"
+                "reference": "3779a390200c44c7a0662784a8dc3b4a96c4e748"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/4c4f4c26802dc05ec2226e09b3a93618b2675bf7",
-                "reference": "4c4f4c26802dc05ec2226e09b3a93618b2675bf7",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/3779a390200c44c7a0662784a8dc3b4a96c4e748",
+                "reference": "3779a390200c44c7a0662784a8dc3b4a96c4e748",
                 "shasum": ""
             },
             "require": {
@@ -2713,7 +2713,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2017-04-24 15:37:17"
+            "time": "2017-04-24 18:59:59"
         },
         {
             "name": "terminal42/background-process",
