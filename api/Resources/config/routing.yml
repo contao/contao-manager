@@ -3,14 +3,48 @@ status:
     defaults: { _controller: contao_manager.controller.status }
     methods: [GET]
 
-auth:
-    path:     /api/auth
-    defaults: { _controller: TensideCoreBundle:Auth:checkAuth }
+login:
+    path:     /api/session
+    defaults: { _controller: contao_manager.controller.session:login }
     methods:  [POST]
+
+logout:
+    path:     /api/session
+    defaults: { _controller: contao_manager.controller.session:logout }
+    methods:  [DELETE]
+
+users_list:
+    path:     /api/users
+    defaults: { _controller: contao_manager.controller.users:listUsers }
+    methods:  [GET]
+
+users_create:
+    path:     /api/users
+    defaults: { _controller: contao_manager.controller.users:createUser }
+    methods:  [POST]
+
+user_get:
+    path:     /api/users/{username}
+    defaults: { _controller: contao_manager.controller.users:retrieveUser }
+    methods:  [GET]
+
+user_put:
+    path:     /api/users/{username}
+    defaults: { _controller: contao_manager.controller.users:replaceUser }
+    methods:  [PUT]
+
+user_delete:
+    path:     /api/users/{username}
+    defaults: { _controller: contao_manager.controller.users:deleteUser }
+    methods:  [DELETE]
+
+
+
+
 
 install_configure:
     path:     /api/install/configure
-    defaults: { _controller: contao_manager.controller.config }
+    defaults: { _controller: TensideCoreBundle:InstallProject:configure }
     methods:  [POST]
 
 install_create_project:

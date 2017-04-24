@@ -3,16 +3,46 @@ imports:
     - { resource: selftest.yml }
 
 services:
+    contao_manager.config.manager:
+        class: Contao\ManagerApi\Config\ManagerConfig
+        arguments:
+            - "@kernel"
+            - "@filesystem"
+
+    contao_manager.config.user:
+        class: Contao\ManagerApi\Config\UserConfig
+        arguments:
+            - "@kernel"
+            - "@security.password_encoder"
+            - "@filesystem"
+
+    contao_manager.security.jwt_manager:
+        class: Contao\ManagerApi\Security\JwtManager
+        arguments:
+            - "@contao_manager.config.manager"
+
+    contao_manager.security.jwt_authenticator:
+        class: Contao\ManagerApi\Security\JwtAuthenticator
+        arguments:
+            - "@contao_manager.security.jwt_manager"
+
+    contao_manager.security.user_provider:
+        class: Symfony\Component\Security\Core\User\InMemoryUserProvider
+        factory: [Contao\ManagerApi\Security\UserProviderFactory, createUserProvider]
+        arguments:
+            - "@contao_manager.config.user"
+
+
     app.taskfactory:
         class:     Contao\ManagerApi\Tenside\TaskFactory
         arguments: ["@tenside.home", "@tenside.config"]
         tags:
             - { name: tenside.taskfactory }
 
-    app.postdata_authenticator:
-        class: Contao\ManagerApi\Security\PostDataAuthenticator
-        arguments: ["@security.password_encoder"]
-
+    app.command.background_task:
+        class: Terminal42\BackgroundProcess\Command\ProcessRunnerCommand
+        tags:
+            - { name: console.command }
 
 ###
 # Override Tenside services to adjust for Contao Manager
@@ -30,5 +60,7 @@ services:
 
     tenside.status:
         class:     Contao\ManagerApi\Tenside\InstallationStatusDeterminator
-        arguments: ["@tenside.home"]
+        arguments:
+            - "@contao_manager.config.user"
+            - "@tenside.home"
         public: true

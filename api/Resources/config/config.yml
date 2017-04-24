@@ -9,33 +9,20 @@ framework:
 
 security:
     providers:
-        tenside_core_user_provider:
-            id: tenside.user_provider
+        contao_manager_user_provider:
+            id: contao_manager.security.user_provider
 
     encoders:
         Symfony\Component\Security\Core\User\UserInterface: bcrypt
 
     firewalls:
-        public:
-            pattern: ^/api/(status|install/configure)$
+        api:
             stateless: true
-            simple_preauth:
-                authenticator: tenside.jwt_authenticator
-            anonymous: ~
-
-        # Allow basic auth and token auth on login route.
-        login:
-            pattern: ^/api/auth$
-            stateless: true
-            simple_preauth:
-                authenticator: tenside.jwt_authenticator
             guard:
                 authenticators:
-                    - app.postdata_authenticator
+                    - contao_manager.security.jwt_authenticator
+            anonymous: ~
 
-        # Allow only token auth on any API.
-        secured_area:
-            pattern: ^/api
-            stateless: true
-            simple_preauth:
-                authenticator: tenside.jwt_authenticator
+    access_control:
+        - { path: ^/api/(status|session)$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

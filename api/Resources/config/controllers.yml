@@ -2,15 +2,34 @@ services:
     contao_manager.controller.status:
         class: Contao\ManagerApi\Controller\StatusController
         arguments:
+            - "@kernel"
             - "@tenside.status"
             - "@contao_manager.self_test"
+            - "@filesystem"
+        calls:
+            - [setContainer, ["@service_container"]]
+
+    contao_manager.controller.session:
+        class: Contao\ManagerApi\Controller\SessionController
+        arguments:
+            - "@contao_manager.config.user"
+            - "@contao_manager.security.jwt_manager"
+            - "@security.password_encoder"
         calls:
             - [setContainer, ["@service_container"]]
 
     contao_manager.controller.config:
         class: Contao\ManagerApi\Controller\ConfigController
         arguments:
-            - "@tenside.home"
+            - "@kernel"
             - "@filesystem"
         calls:
             - [setContainer, ["@service_container"]]
+
+    contao_manager.controller.users:
+            class: Contao\ManagerApi\Controller\UserController
+            arguments:
+                - "@contao_manager.config.user"
+            calls:
+                - [setContainer, ["@service_container"]]
+

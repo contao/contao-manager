@@ -10,8 +10,10 @@
 
 namespace Contao\ManagerApi\Controller;
 
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Tenside\InstallationStatusDeterminator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Tenside\Core\Config\TensideJsonConfig;
@@ -28,6 +30,11 @@ class StatusController extends Controller
     const STATUS_CONFLICT = 'conflict'; // Contao has conflict
 
     /**
+     * @var ApiKernel
+     */
+    private $kernel;
+
+    /**
      * @var InstallationStatusDeterminator
      */
     private $status;
@@ -38,15 +45,28 @@ class StatusController extends Controller
     private $selfTest;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * Constructor.
      *
+     * @param ApiKernel                      $kernel
      * @param InstallationStatusDeterminator $status
      * @param SelfTest                       $selfTest
+     * @param Filesystem|null                $filesystem
      */
-    public function __construct(InstallationStatusDeterminator $status, SelfTest $selfTest)
-    {
+    public function __construct(
+        ApiKernel $kernel,
+        InstallationStatusDeterminator $status,
+        SelfTest $selfTest,
+        Filesystem $filesystem = null
+    ) {
+        $this->kernel = $kernel;
         $this->status = $status;
         $this->selfTest = $selfTest;
+        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**
@@ -54,7 +74,9 @@ class StatusController extends Controller
      */
     public function __invoke()
     {
-        if (!$this->status->isTensideConfigured()) {
+        $this->createHtaccess();
+
+        if (!$this->status->hasUsers()) {
             if ($this->status->isProjectPresent() || $this->status->isProjectInstalled()) {
                 return new JsonResponse(
                     [
@@ -91,6 +113,7 @@ class StatusController extends Controller
         return $this->getErrorResponse($results) ?: new JsonResponse(
             [
                 'status' => $status,
+                'username' => (string) $this->getUser(),
                 'selftest' => $this->prepareResults($results),
                 'autoconfig' => $this->prepareAutoConfig($this->selfTest->getAutoConfig()),
             ]
@@ -177,5 +200,23 @@ class StatusController extends Controller
         $result['php_can_fork'] = $config->isForkingAvailable();
 
         return $result;
+    }
+
+    /**
+     * Creates a .htaccess file in the Contao root to prevent Composer from adding it.
+     */
+    private function createHtaccess()
+    {
+        $htaccess = $this->kernel->getContaoDir().DIRECTORY_SEPARATOR.'.htaccess';
+
+        if (!file_exists($htaccess)) {
+            $this->filesystem->dumpFile(
+                $htaccess,
+                <<<'TAG'
+# This file must be present to prevent Composer from creating it
+# see https://github.com/contao/contao-manager/issues/58
+TAG
+            );
+        }
     }
 }

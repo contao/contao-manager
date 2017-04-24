@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\Tenside;
 
+use Contao\ManagerApi\Config\UserConfig;
 use Tenside\CoreBundle\Util\InstallationStatusDeterminator as BaseInstallationStatusDeterminator;
 
 class InstallationStatusDeterminator extends BaseInstallationStatusDeterminator
@@ -18,13 +19,24 @@ class InstallationStatusDeterminator extends BaseInstallationStatusDeterminator
     private $isConfigured;
 
     /**
+     * @var UserConfig
+     */
+    private $config;
+
+    /**
      * {@inheritdoc}
      */
-    public function __construct(HomePathDeterminator $homePathDeterminator)
+    public function __construct(UserConfig $config, HomePathDeterminator $homePathDeterminator)
     {
         parent::__construct($homePathDeterminator);
 
         $this->home = $homePathDeterminator;
+        $this->config = $config;
+    }
+
+    public function hasUsers()
+    {
+        return !$this->config->isEmpty();
     }
 
     /**
