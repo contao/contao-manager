@@ -47,8 +47,6 @@
                 <text-field name="github_oauth_token" label="GitHub Token" :disabled="installing" v-model="github_oauth_token" @enter="install"></text-field>
                 <text-field name="php_cli" label="PHP binary" :disabled="installing" v-model="php_cli" @enter="install"></text-field>
                 <text-field name="php_cli_arguments" label="CLI arguments" :disabled="installing" v-model="php_cli_arguments" @enter="install"></text-field>
-                <checkbox name="php_can_fork" label="PHP can fork" :disabled="installing" v-model="php_can_fork"></checkbox>
-                <checkbox name="php_force_background" label="Force PHP to background" :disabled="installing" v-model="php_force_background"></checkbox>
             </fieldset>
 
             <fieldset :class="{ submit: true, advanced: advanced || installing }">
@@ -86,8 +84,6 @@
 
             php_cli: '',
             php_cli_arguments: '',
-            php_can_fork: false,
-            php_force_background: false,
             github_oauth_token: '',
 
             installing: false,
@@ -164,8 +160,8 @@
                 }).then(() => {
                     const config = {
                         php_cli: this.php_cli,
-                        php_can_fork: this.php_can_fork,
-                        php_force_background: this.php_force_background,
+                        php_can_fork: false,
+                        php_force_background: false,
                     };
 
                     if (this.php_cli_arguments) {
@@ -209,8 +205,6 @@
             }
 
             this.php_cli = this.$store.state.autoconfig.php_cli;
-            this.php_can_fork = this.$store.state.autoconfig.php_can_fork;
-            this.php_force_background = this.$store.state.autoconfig.php_force_background;
         },
     };
 </script>

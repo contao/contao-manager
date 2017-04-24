@@ -78,9 +78,20 @@ export default {
     },
 
     runNextTask() {
-        return Vue.http.get('api/tasks/run').then(
-            response => response.body.task.id,
-        );
+        return new Promise((resolve) => {
+            let request;
+
+            Vue.http.get('api/tasks/run', {
+                before: (r) => {
+                    request = r;
+                },
+            });
+
+            setTimeout(() => {
+                request.abort();
+                resolve();
+            }, 500);
+        });
     },
 
     getTasks() {

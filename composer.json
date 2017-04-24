@@ -14,6 +14,8 @@
         "firebase/php-jwt": "^4.0",
         "tenside/core-bundle": "dev-develop as 1.0",
         "tenside/core": "~1.0@dev",
+
+        "terminal42/background-process": "dev-master"
     },
     "require-dev": {
         "symfony/process": "^3.2",
@@ -23,5 +25,11 @@
         "psr-4": {
             "Contao\\ManagerApi\\": "api/"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "/Users/aschempp/Projects/Open Source/background-process/"
+        }
+    ]
 }

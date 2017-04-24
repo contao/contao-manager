@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Tenside\Core\Util\RuntimeHelper;
 use Tenside\CoreBundle\Command\RunTaskCommand;
+use Terminal42\BackgroundProcess\Command\ProcessRunnerCommand;
 
 class ApiApplication extends Application
 {
@@ -49,6 +50,7 @@ class ApiApplication extends Application
             $command->setContainer($container);
 
             $this->add($command);
+            $this->add(new ProcessRunnerCommand());
 
             //$this->setDefaultCommand('tenside:runtask', true);
         } else {
