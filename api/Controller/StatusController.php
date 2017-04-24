@@ -139,8 +139,8 @@ class StatusController extends Controller
 
         foreach ($results as $result) {
             $data[] = [
-                'name'    => $result->getTestClass(),
-                'state'   => $result->getState(),
+                'name' => $result->getTestClass(),
+                'state' => $result->getState(),
                 'message' => $result->getMessage(),
                 'explain' => $result->getExplain(),
             ];
