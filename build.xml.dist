@@ -1,13 +1,17 @@
 <?xml version="1.0"?>
-<project name="Contao Manager" default="phar" basedir=".">
+<project name="Contao Manager" default="prod" basedir=".">
     <exec executable="git" outputProperty="version" checkreturn="true">
         <arg value="describe" />
         <arg value="--always" />
     </exec>
 
-    <target name="phar" depends="clone, composer, cache, npm, build, box, finish">
+    <target name="prod" depends="clone, composer, cache, npm, build-prod, box-prod, finish">
         <echo message="Contao Manager ${version} build complete" />
     </target>
+
+    <target name="dev" depends="build-dev, box-dev">
+            <echo message="Contao Manager ${version} build complete" />
+        </target>
 
     <target name="clone">
         <echo message="Cloning into contao-manager-${version}" />
@@ -62,7 +66,7 @@
         </exec>
     </target>
 
-    <target name="build">
+    <target name="build-prod">
         <echo message="Compiling UI files" />
         <exec executable="npm" dir="contao-manager-${version}">
             <arg value="run" />
@@ -70,11 +74,26 @@
         </exec>
     </target>
 
-    <target name="box">
+    <target name="build-dev">
+        <echo message="Compiling UI files" />
+        <exec executable="npm" passthru="true">
+            <arg value="run" />
+            <arg value="build" />
+        </exec>
+    </target>
+
+    <target name="box-prod">
         <echo message="Creating the .phar file" />
         <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://box-project.github.io/box2/installer.php | php" />
         <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
             <arg value="box.phar" />
+            <arg value="build" />
+        </exec>
+    </target>
+
+    <target name="box-dev">
+        <echo message="Creating the .phar file" />
+        <exec executable="box" checkreturn="true" passthru="true">
             <arg value="build" />
         </exec>
     </target>
