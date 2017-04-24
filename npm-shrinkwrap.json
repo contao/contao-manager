@@ -3524,6 +3524,11 @@
       "resolved": "https://registry.npmjs.org/js-beautify/-/js-beautify-1.6.8.tgz",
       "dev": true
     },
+    "js-cookie": {
+      "version": "2.1.4",
+      "from": "js-cookie@latest",
+      "resolved": "https://registry.npmjs.org/js-cookie/-/js-cookie-2.1.4.tgz"
+    },
     "js-tokens": {
       "version": "3.0.1",
       "from": "js-tokens@>=3.0.0 <4.0.0",

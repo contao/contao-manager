@@ -43,6 +43,12 @@ const store = new Vuex.Store({
                 (result) => {
                     commit('setStatus', result);
 
+                    if (result.username) {
+                        commit('auth/setLogin', result.username);
+                    } else {
+                        commit('auth/setLogout');
+                    }
+
                     if (result.error) {
                         commit('setError', result.error);
                     }
@@ -56,10 +62,8 @@ const store = new Vuex.Store({
             );
         },
 
-        configure: ({ state, dispatch }, { username, password, config }) => (
-            api.configure(username, password, config || state.autoconfig).then(
-                () => dispatch('auth/login', { username, password }),
-            )
+        configure: ({ state, dispatch }, config) => (
+            api.configure(config || state.autoconfig)
         ),
 
         install: ({ dispatch }, version) => (

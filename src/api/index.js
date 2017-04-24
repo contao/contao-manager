@@ -34,23 +34,28 @@ export default {
     },
 
     login(username, password) {
-        return Vue.http.post('api/auth', { username, password })
-            .then(
-                response => ({
-                    token: response.body.token,
-                    error: null,
-                }),
-                response => ({
-                    token: null,
-                    error: response.body.message,
-                }),
-            );
+        return Vue.http.post('api/session', { username, password }).then(
+            response => ({
+                success: true,
+                username: response.username,
+            }),
+            response => ({
+                success: false,
+                error: response.body.message,
+            }),
+        );
     },
 
-    configure(username, password, config) {
+    logout() {
+        return Vue.http.delete('api/session').then(
+            () => true,
+            () => false,
+        );
+    },
+
+    configure(config) {
         const data = {
             configuration: config,
-            credentials: { username, password },
         };
 
         return Vue.http.post('api/install/configure', data);

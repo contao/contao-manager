@@ -32,7 +32,7 @@
 
             <fieldset v-else>
                 <legend>User Account</legend>
-                <p>A user account has already been configured. You are logged in as {{ authUsername }}.</p>
+                <p>You are logged in as {{ authUsername }}.</p>
             </fieldset>
 
             <fieldset>
@@ -144,13 +144,24 @@
 
                 this.installing = true;
 
-                if (this.isLoggedIn) {
-                    this.$store.dispatch('install', this.version).then(
+                new Promise((resolve) => {
+                    if (this.isLoggedIn) {
+                        resolve();
+                        return;
+                    }
+
+                    this.$store.dispatch(
+                        'auth/login',
+                        {
+                            username: this.username,
+                            password: this.password,
+                        },
+                    ).then(
                         () => {
-                            this.$router.push(routes.packages);
+                            resolve();
                         },
                     );
-                } else {
+                }).then(() => {
                     const config = {
                         php_cli: this.php_cli,
                         php_can_fork: this.php_can_fork,
@@ -165,19 +176,14 @@
                         config.github_oauth_token = this.github_oauth_token;
                     }
 
-                    this.$store
-                        .dispatch('configure', {
-                            username: this.username,
-                            password: this.password,
-                            config,
-                        }).then(() => {
-                            this.$store.dispatch('install', this.version).then(
-                                () => {
-                                    this.installComplete = true;
-                                },
-                            );
-                        });
-                }
+                    return this.$store.dispatch('configure', config);
+                }).then(() => {
+                    this.$store.dispatch('install', this.version).then(
+                        () => {
+                            this.installComplete = true;
+                        },
+                    );
+                });
             },
 
             enableAdvanced() {

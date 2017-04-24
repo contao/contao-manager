@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource';
+import Cookies from 'js-cookie';
 
 import router from './router';
 import store from './store';
@@ -11,11 +12,13 @@ Vue.use(VueResource);
 Vue.http.options.emulateHTTP = true;
 
 Vue.http.interceptors.push((request, next) => {
+    request.headers.set('X-XSRF-Token', Cookies.get('contao_manager_xsrf'));
+
     next((response) => {
         if (response.status === 500 && response.body.status === 'ERROR') {
             store.commit('setError', response.body);
-        } else if (response.status === 401) {
-            store.dispatch('auth/logout');
+        } else if (response.status === 401 && request.url !== 'api/status') {
+            store.dispatch('fetchStatus', true);
         }
     });
 });
