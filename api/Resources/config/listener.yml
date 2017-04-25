@@ -1,4 +1,11 @@
 services:
+    contao_manager.listener.exception:
+        class: Contao\ManagerApi\EventListener\ExceptionListener
+        arguments:
+          logger:  "@logger"
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 10 }
+
     contao_manager.listener.security:
         class: Contao\ManagerApi\EventListener\SecurityListener
         arguments:

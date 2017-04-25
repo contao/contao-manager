@@ -49,10 +49,6 @@ const store = new Vuex.Store({
                         commit('auth/setLogout');
                     }
 
-                    if (result.error) {
-                        commit('setError', result.error);
-                    }
-
                     if (result.status === apiStatus.OK || result.status === apiStatus.EMPTY) {
                         dispatch('tasks/reload').catch(() => {});
                     }

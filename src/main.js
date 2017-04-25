@@ -15,8 +15,8 @@ Vue.http.interceptors.push((request, next) => {
     request.headers.set('X-XSRF-Token', Cookies.get('contao_manager_xsrf'));
 
     next((response) => {
-        if (response.status === 500 && response.body.status === 'ERROR') {
-            store.commit('setError', response.body);
+        if (response.headers.get('Content-Type') === 'application/problem+json') {
+            store.commit('setError', response.data);
         } else if (response.status === 401 && request.url !== 'api/status') {
             store.dispatch('fetchStatus', true);
         }

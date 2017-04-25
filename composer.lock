@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "de3d53bd6e3e1a931c792aedb8de3953",
+    "content-hash": "6d4df277824823fb4f5ffb11bde8f972",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -264,6 +264,60 @@
                 "validator"
             ],
             "time": "2017-04-03T19:08:52+00:00"
+        },
+        {
+            "name": "crell/api-problem",
+            "version": "2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Crell/ApiProblem.git",
+                "reference": "1e8dc70f9bf4363571087dc9d95f09bc8ba7d314"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Crell/ApiProblem/zipball/1e8dc70f9bf4363571087dc9d95f09bc8ba7d314",
+                "reference": "1e8dc70f9bf4363571087dc9d95f09bc8ba7d314",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5 || ^7.0"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Crell\\ApiProblem\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Larry Garfield",
+                    "email": "larry@garfieldtech.com",
+                    "homepage": "http://www.garfieldtech.com/"
+                }
+            ],
+            "description": "PHP wrapper for the api-problem IETF specification",
+            "homepage": "https://github.com/Crell/ApiProblem",
+            "keywords": [
+                "api-problem",
+                "http",
+                "json",
+                "rest",
+                "xml"
+            ],
+            "time": "2016-07-24T18:53:45+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -2648,12 +2702,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "3779a390200c44c7a0662784a8dc3b4a96c4e748"
+                "reference": "50f0354872f85a54e5c1f2ad1d2881770a65b0b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/3779a390200c44c7a0662784a8dc3b4a96c4e748",
-                "reference": "3779a390200c44c7a0662784a8dc3b4a96c4e748",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/50f0354872f85a54e5c1f2ad1d2881770a65b0b7",
+                "reference": "50f0354872f85a54e5c1f2ad1d2881770a65b0b7",
                 "shasum": ""
             },
             "require": {
@@ -2713,7 +2767,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2017-04-24 18:59:59"
+            "time": "2017-04-24 20:18:50"
         },
         {
             "name": "terminal42/background-process",

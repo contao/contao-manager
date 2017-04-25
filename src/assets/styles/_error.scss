@@ -6,21 +6,34 @@
     bottom: 0;
     overflow: auto;
     padding: 10px;
-    color: rgb(232, 232, 232);
+    color: #e8e8e8;
     font-family: Menlo, Consolas, monospace;
     font-size: 13px;
     line-height: 1.2;
-    white-space: pre;
     background-color: rgba(0, 0, 0, 0.85098);
     background-position: initial;
     background-repeat: initial;
     z-index: 9998;
 
-    span {
-        padding: 2px 4px;
-        color: #fff;
-        background-color: #E36049;
-        border-radius: 2px
+    h1 {
+        display: inline;
+        font-size: 1em;
+        font-weight: normal;
+
+        span {
+            padding: 2px 4px;
+            background-color: #E36049;
+            border-radius: 2px
+        }
+    }
+
+    a {
+        color: #e8e8e8;
+        text-decoration: underline;
+    }
+
+    > span {
+        white-space: pre;
     }
 }
 

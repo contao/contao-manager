@@ -19,7 +19,6 @@ export default {
             if (!response.ok) {
                 return {
                     status: apiStatus.FAIL,
-                    error: response.body.status === 'ERROR' ? response.body : response.statusText,
                 };
             }
 
@@ -27,7 +26,7 @@ export default {
                 return response.body;
             }
 
-            return { status: apiStatus.FAIL, error: response.statusText };
+            return { status: apiStatus.FAIL };
         };
 
         return Vue.http.get('api/status').then(handleStatus, handleStatus);
@@ -39,9 +38,8 @@ export default {
                 success: true,
                 username: response.username,
             }),
-            response => ({
+            () => ({
                 success: false,
-                error: response.body.message,
             }),
         );
     },
