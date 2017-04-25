@@ -20,3 +20,8 @@ services:
         class: Contao\ManagerApi\EventListener\JsonRequestListener
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 100 }
+
+    contao_manager.listener.windows:
+        class: Contao\ManagerApi\EventListener\WindowsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 255 }
