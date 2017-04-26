@@ -32,7 +32,7 @@
             },
 
             insecure() {
-                return window.location.protocol !== 'https:';
+                return window.location.protocol !== 'https:' && window.location.hostname !== 'localhost';
             },
         },
 
