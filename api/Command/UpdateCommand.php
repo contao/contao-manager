@@ -68,7 +68,7 @@ class UpdateCommand extends Command
         /** @var GithubStrategy $strategy */
         $strategy = $updater->getStrategy();
 
-        $strategy->setPackageName('contao/manager');
+        $strategy->setPackageName('contao/contao-manager');
         $strategy->setPharName('contao-manager.phar.php');
         $strategy->setCurrentLocalVersion($this->getApplication()->getVersion());
 
