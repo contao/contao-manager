@@ -10,20 +10,18 @@
 
 namespace Contao\ManagerApi\EventListener;
 
-use Contao\ManagerApi\Exception\ApiProblemException;
+use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class WindowsListener
 {
     /**
      * Windows platform is currently not supported.
      *
-     * @param KernelEvent $event
-     *
-     * @throws ApiProblemException
+     * @param GetResponseEvent $event
      */
-    public function onKernelRequest(KernelEvent $event)
+    public function onKernelRequest(GetResponseEvent $event)
     {
         if ('\\' !== DIRECTORY_SEPARATOR) {
             return;
@@ -34,6 +32,8 @@ class WindowsListener
             'https://github.com/contao/contao-manager/issues/66'
         );
 
-        throw new ApiProblemException($problem);
+        $problem->setStatus(ApiProblemResponse::HTTP_NOT_IMPLEMENTED);
+
+        $event->setResponse(new ApiProblemResponse($problem));
     }
 }

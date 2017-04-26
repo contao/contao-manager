@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2017 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\Exception;
 
 use Crell\ApiProblem\ApiProblem;
@@ -14,11 +22,6 @@ class ApiProblemException extends HttpException
      * @var ApiProblem
      */
     private $problem;
-
-    /**
-     * @var array
-     */
-    private $headers;
 
     /**
      * Constructor.

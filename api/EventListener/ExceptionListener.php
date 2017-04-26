@@ -1,11 +1,17 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2017 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\EventListener;
 
-use Contao\ManagerApi\Exception\ApiProblemException;
-use Crell\ApiProblem\ApiProblem;
+use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -17,52 +23,68 @@ class ExceptionListener
     private $logger;
 
     /**
+     * @var bool
+     */
+    private $debug;
+
+    /**
      * Constructor.
      *
      * @param LoggerInterface $logger
+     * @param bool            $debug
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, $debug = false)
     {
         $this->logger = $logger;
+        $this->debug = $debug;
     }
 
     /**
+     * Responds with application/problem+json on kernel.exception.
+     *
      * @param GetResponseForExceptionEvent $event
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
+        if ('json' !== $event->getRequest()->getContentType()) {
+            return;
+        }
+
         $exception = $event->getException();
 
-        if ($exception instanceof ApiProblemException) {
-            $problem = $exception->getApiProblem();
-        } else {
-            $problem = $this->convertException($exception);
-        }
+        $this->logException($exception);
 
-        if (!$problem->getStatus()) {
-            $problem->setStatus(500);
-        }
-
-        $response = new Response(
-            $problem->asJson(),
-            $problem->getStatus(),
-            ['Content-Type' => 'application/problem+json']
+        $event->setResponse(
+            ApiProblemResponse::createFromException(
+                $exception,
+                $this->debug
+            )
         );
-
-        $event->setResponse($response);
     }
 
-    private function convertException(\Exception $exception)
+    /**
+     * Logs the exception if a logger is available.
+     *
+     * @param \Exception $exception
+     */
+    private function logException(\Exception $exception)
     {
-        $problem = new ApiProblem($exception->getMessage());
-
-        if ($exception instanceof HttpExceptionInterface) {
-            $problem->setStatus($exception->getStatusCode());
-        } else {
-            $problem->setStatus(500);
-            $problem->setDetail($exception->getTraceAsString());
+        if (null === $this->logger) {
+            return;
         }
 
-        return $problem;
+        $message = sprintf(
+            'Uncaught PHP Exception %s: "%s" at %s line %s',
+            get_class($exception),
+            $exception->getMessage(),
+            $exception->getFile(),
+            $exception->getLine()
+        );
+
+        if (!$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500) {
+            $this->logger->critical($message, ['exception' => $exception]);
+        } else {
+            $this->logger->error($message, ['exception' => $exception]);
+        }
     }
 }
