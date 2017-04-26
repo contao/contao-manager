@@ -2771,10 +2771,10 @@
         },
         {
             "name": "terminal42/background-process",
-            "version": "dev-master",
+            "version": "master",
             "source": {
                 "type": "git",
-                "url": "/Users/aschempp/Projects/Open Source/background-process/",
+                "url": "https://github.com/terminal42/background-process/",
                 "reference": "6de1a466b1a023adf96b3683b37bdf645f500e8a"
             },
             "require": {
