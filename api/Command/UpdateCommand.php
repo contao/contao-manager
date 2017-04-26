@@ -63,7 +63,7 @@ class UpdateCommand extends Command
 
         $updater = new Updater(null, false);
         $updater->setStrategy(Updater::STRATEGY_GITHUB);
-        $updater->setBackupPath($backupPath.'/contao-manager.old.phar.php');
+        $updater->setBackupPath($backupPath.'/contao-manager-old.phar.php');
 
         /** @var GithubStrategy $strategy */
         $strategy = $updater->getStrategy();
