@@ -19,6 +19,6 @@ class JsonConfigFactory extends TensideJsonConfigFactory
 {
     public static function create(TensideHomePathDeterminator $home)
     {
-        return new TensideJsonConfig(new JsonFile($home->tensideDataDir().DIRECTORY_SEPARATOR.'config.json'));
+        return new TensideJsonConfig(new JsonFile($home->tensideDataDir().DIRECTORY_SEPARATOR.'manager.json'));
     }
 }

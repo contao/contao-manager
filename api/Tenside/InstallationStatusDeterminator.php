@@ -36,7 +36,7 @@ class InstallationStatusDeterminator extends BaseInstallationStatusDeterminator
 
     public function hasUsers()
     {
-        return !$this->config->isEmpty();
+        return 0 !== $this->config->count();
     }
 
     /**
@@ -49,7 +49,7 @@ class InstallationStatusDeterminator extends BaseInstallationStatusDeterminator
         }
 
         return $this->isConfigured = file_exists(
-            $this->home->tensideDataDir().DIRECTORY_SEPARATOR.'config.json'
+            $this->home->tensideDataDir().DIRECTORY_SEPARATOR.'manager.json'
         );
     }
 }

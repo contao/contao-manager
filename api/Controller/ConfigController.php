@@ -10,50 +10,45 @@
 
 namespace Contao\ManagerApi\Controller;
 
-use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Config\AbstractConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ConfigController extends Controller
 {
     /**
-     * @var ApiKernel
+     * @var AbstractConfig
      */
-    private $kernel;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
+    private $config;
 
     /**
      * Constructor.
      *
-     * @param ApiKernel       $kernel
-     * @param Filesystem|null $filesystem
+     * @param AbstractConfig $config
      */
-    public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
+    public function __construct(AbstractConfig $config)
     {
-        $this->filesystem = $filesystem ?: new Filesystem();
-        $this->kernel = $kernel;
+        $this->config = $config;
     }
 
-    public function __invoke()
+    public function getAction()
     {
-        // If the action is unsuccessful, the Tenside controller will throw an exception
-        $response = $this->forward('TensideCoreBundle:InstallProject:configure');
-        $htaccess = $this->kernel->getContaoDir().DIRECTORY_SEPARATOR.'.htaccess';
+        return new JsonResponse($this->config->all());
+    }
 
-        if (!file_exists($htaccess)) {
-            $this->filesystem->dumpFile(
-                $htaccess,
-                <<<'TAG'
-# This file must be present to prevent Composer from creating it
-# see https://github.com/contao/contao-manager/issues/58
-TAG
-            );
-        }
+    public function putAction(Request $request)
+    {
+        $this->config->replace($request->request->all());
 
-        return $response;
+        return new Response('', Response::HTTP_NO_CONTENT);
+    }
+
+    public function patchAction(Request $request)
+    {
+        $this->config->add($request->request->all());
+
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }

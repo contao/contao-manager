@@ -68,7 +68,7 @@ class SessionController extends Controller
         $username = $request->request->get('username');
         $password = $request->request->get('password');
 
-        if ($this->config->isEmpty()) {
+        if (0 === $this->config->count()) {
             $this->config->addUser(
                 $this->config->createUser($username, $password)
             );

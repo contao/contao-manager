@@ -46,7 +46,7 @@ class UserConfig extends AbstractConfig
      */
     public function getUsers()
     {
-        if ($this->isEmpty()) {
+        if (0 === $this->count()) {
             return [];
         }
 

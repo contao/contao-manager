@@ -13,6 +13,12 @@ logout:
     defaults: { _controller: contao_manager.controller.session:logout }
     methods:  [DELETE]
 
+
+
+#############
+#   Users   #
+#############
+
 users_list:
     path:     /api/users
     defaults: { _controller: contao_manager.controller.users:listUsers }
@@ -40,12 +46,60 @@ user_delete:
 
 
 
+#####################
+#   Configuration   #
+#####################
+
+config_manager_get:
+    path:     /api/config/manager
+    defaults: { _controller: contao_manager.controller.config_manager:getAction }
+    methods:  [GET]
+
+config_manager_put:
+    path:     /api/config/manager
+    defaults: { _controller: contao_manager.controller.config_manager:putAction }
+    methods:  [PUT]
+
+config_manager_patch:
+    path:     /api/config/manager
+    defaults: { _controller: contao_manager.controller.config_manager:patchAction }
+    methods:  [PATCH]
+
+config_auth_get:
+    path:     /api/config/auth
+    defaults: { _controller: contao_manager.controller.config_auth:getAction }
+    methods:  [GET]
+
+config_auth_put:
+    path:     /api/config/auth
+    defaults: { _controller: contao_manager.controller.config_auth:putAction }
+    methods:  [PUT]
+
+config_auth_patch:
+    path:     /api/config/auth
+    defaults: { _controller: contao_manager.controller.config_auth:patchAction }
+    methods:  [PATCH]
+
+config_composer_get:
+    path:     /api/config/composer
+    defaults: { _controller: contao_manager.controller.config_composer:getAction }
+    methods:  [GET]
+
+config_composer_put:
+    path:     /api/config/composer
+    defaults: { _controller: contao_manager.controller.config_composer:putAction }
+    methods:  [PUT]
+
+config_composer_patch:
+    path:     /api/config/composer
+    defaults: { _controller: contao_manager.controller.config_composer:patchAction }
+    methods:  [PATCH]
 
 
-install_configure:
-    path:     /api/install/configure
-    defaults: { _controller: TensideCoreBundle:InstallProject:configure }
-    methods:  [POST]
+
+###############
+#   Tenside   #
+###############
 
 install_create_project:
     path:     /api/install/create-project

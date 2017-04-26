@@ -52,11 +52,7 @@ export default {
     },
 
     configure(config) {
-        const data = {
-            configuration: config,
-        };
-
-        return Vue.http.post('api/install/configure', data);
+        return Vue.http.patch('api/config/manager', config);
     },
 
     install(version) {
