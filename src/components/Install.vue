@@ -13,7 +13,7 @@
 
         <section slot="section">
 
-            <fieldset v-if="!isLoggedIn">
+            <fieldset v-if="!authUsername">
                 <legend>User Account</legend>
                 <p>Create a user account to manage your installation.</p>
                 <text-field ref="username" name="username" label="Username" class="inline" :disabled="installing" v-model="username" @enter="install"></text-field>
@@ -26,10 +26,15 @@
                 <p>You are logged in as <i>{{ authUsername }}</i>.</p>
             </fieldset>
 
-            <fieldset>
+            <fieldset v-if="!contaoVersion">
                 <legend>Contao Installation</legend>
                 <p>Select the Contao version to install.</p>
                 <select-menu name="version" label="Version" class="inline" v-bind="version" :options="versions"></select-menu>
+            </fieldset>
+
+            <fieldset v-else>
+                <legend>Contao Installation</legend>
+                <p>An existing Contao installation has been detected.</p>
             </fieldset>
 
             <fieldset v-if="advanced">
@@ -66,6 +71,7 @@
 
     export default {
         components: { BoxedLayout, TextField, SelectMenu, Checkbox, Loader },
+
         data: () => ({
             username: '',
             password: '',
@@ -80,9 +86,10 @@
             installing: false,
             advanced: false,
         }),
+
         computed: {
             inputValid() {
-                if (this.isLoggedIn) {
+                if (this.authUsername) {
                     return true;
                 }
 
@@ -100,13 +107,14 @@
                     || (this.password === this.password_confirm
                         && this.password.length >= 8);
             },
-            isLoggedIn() {
-                return this.$store.state.auth.isLoggedIn;
+            contaoVersion() {
+                return this.$store.state.version;
             },
             authUsername() {
                 return this.$store.state.auth.username;
             },
         },
+
         methods: {
             install() {
                 if (!this.inputValid) {
@@ -116,7 +124,7 @@
                 this.installing = true;
 
                 new Promise((resolve) => {
-                    if (this.isLoggedIn) {
+                    if (this.authUsername) {
                         resolve();
                         return;
                     }
@@ -149,7 +157,11 @@
 
                     return this.$store.dispatch('configure', config);
                 }).then(() => {
-                    this.$store.dispatch('install', this.version);
+                    if (this.contaoVersion) {
+                        return this.$store.dispatch('fetchStatus', true);
+                    }
+
+                    return this.$store.dispatch('install', this.version);
                 });
             },
 
@@ -161,6 +173,7 @@
                 this.advanced = true;
             },
         },
+
         beforeRouteEnter(to, from, next) {
             store.dispatch('fetchStatus').then((status) => {
                 if (status === apiStatus.OK) {
@@ -170,6 +183,7 @@
                 next();
             });
         },
+
         mounted() {
             if (this.$refs.username) {
                 this.$refs.username.focus();

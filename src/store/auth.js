@@ -6,17 +6,14 @@ export default {
     namespaced: true,
 
     state: {
-        isLoggedIn: false,
         username: null,
     },
 
     mutations: {
         setLogin(state, username) {
-            state.isLoggedIn = true;
             state.username = username;
         },
         setLogout(state) {
-            state.isLoggedIn = false;
             state.username = null;
         },
     },

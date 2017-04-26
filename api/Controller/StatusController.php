@@ -83,15 +83,6 @@ class StatusController extends Controller
         $this->createHtaccess();
 
         if (!$this->status->hasUsers()) {
-            if ($this->status->isProjectPresent() || $this->status->isProjectInstalled()) {
-                return new ApiProblemResponse(
-                    (new ApiProblem(
-                        'This version of Contao Manager cannot be added to an existing installation.',
-                        'https://github.com/contao/contao-manager/issues/53'
-                    ))->setStatus(Response::HTTP_NOT_IMPLEMENTED)
-                );
-            }
-
             return $this->runIntegrityChecks() ?: $this->getResponse(self::STATUS_NEW);
         }
 
@@ -140,11 +131,19 @@ class StatusController extends Controller
      */
     private function getResponse($status, $code = 200)
     {
+        $version = null;
+
+        if ($this->status->isProjectPresent() || $this->status->isProjectInstalled()) {
+            // TODO report correct Contao version
+            $version = 'x.x.x';
+        }
+
         return new JsonResponse(
             [
                 'status' => $status,
                 'username' => (string) $this->getUser(),
                 'config' => $this->getConfig(),
+                'version' => $version,
             ],
             $code
         );

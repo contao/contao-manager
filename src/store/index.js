@@ -18,12 +18,14 @@ const store = new Vuex.Store({
         status: null,
         config: null,
         error: null,
+        versino: null,
     },
 
     mutations: {
-        setStatus(state, { status, config }) {
+        setStatus(state, { status, config, version }) {
             state.status = status;
             state.config = config;
+            state.version = version;
         },
 
         setError(state, error) {

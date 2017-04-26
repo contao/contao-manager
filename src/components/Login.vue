@@ -28,6 +28,7 @@
 
     export default {
         components: { BoxedLayout, TextField, Loader },
+
         data: () => ({
             username: '',
             password: '',
@@ -35,11 +36,13 @@
             logging_in: false,
             login_failed: false,
         }),
+
         computed: {
             inputValid() {
                 return this.username !== '' && this.password !== '' && this.password.length >= 8;
             },
         },
+
         methods: {
             login() {
                 if (!this.inputValid) {
@@ -53,7 +56,7 @@
                     password: this.password,
                 })
                 .then(() => {
-                    if (this.$store.state.auth.isLoggedIn) {
+                    if (this.$store.state.auth.username) {
                         this.$router.push(routes.install);
                     } else {
                         this.logging_in = false;
@@ -65,6 +68,7 @@
                 this.login_failed = false;
             },
         },
+
         beforeRouteEnter(to, from, next) {
             store.dispatch('fetchStatus').then((status) => {
                 if (status === apiStatus.OK) {
@@ -74,6 +78,7 @@
                 next();
             });
         },
+
         mounted() {
             this.$refs.username.focus();
         },
