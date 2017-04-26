@@ -27,10 +27,5 @@
             "Contao\\ManagerApi\\": "api/"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "/Users/aschempp/Projects/Open Source/background-process/"
-        }
-    ]
+
 }
