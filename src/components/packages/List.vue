@@ -23,6 +23,7 @@
             originals: null,
             changes: null,
         }),
+
         methods: {
             listPackages() {
                 this.packages = null;
@@ -30,8 +31,13 @@
 
                 api.getPackages().then(
                     (packages) => {
-                        this.packages = packages;
-                        this.originals = this.changes = Immutable.fromJS(packages);
+                        this.packages = Object.assign(
+                            {},
+                            { 'contao/manager-bundle': packages['contao/manager-bundle'] },
+                            packages,
+                        );
+
+                        this.originals = this.changes = Immutable.fromJS(this.packages);
                     },
                 );
             },

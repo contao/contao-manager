@@ -11,8 +11,35 @@
             </div>
         </transition>
 
-        <div class="inside">
-            <figure><img src="../../assets/images/placeholder.png" width="110" height="110" /></figure>
+        <div class="inside" v-if="isContao">
+            <figure><img src="../../assets/images/logo.svg" /></figure>
+
+            <div class="about">
+                <h1>Contao Open Source CMS</h1>
+                <p class="description">Contao is an Open Source PHP Content Management System. <a href="https://www.contao.org/" target="_blank" class="more">Project Website</a></p>
+                <p class="additional" v-if="additional">
+                    <span v-for="item in additional">{{ item }}</span>
+                </p>
+            </div>
+
+            <div v-if="changed.get('constraint') !== undefined && changed.get('constraint') !== null" :class="{release: true, validating: this.constraintValidating, error: this.constraintError}">
+                <fieldset>
+                    <input ref="constraint" type="text" :placeholder="!original.get('constraint') ? 'latest version' : ''" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
+                    <button @click="editConstraint">Edit</button>
+                </fieldset>
+                <div class="version" v-if="package.version">
+                    <strong>Version {{ package.version }}</strong>
+                    <time :dateTime="package.time">({{ released }})</time>
+                </div>
+            </div>
+
+            <fieldset class="actions">
+                <button class="uninstall" disabled>Remove</button>
+            </fieldset>
+        </div>
+
+        <div class="inside" v-else>
+            <figure><img src="../../assets/images/placeholder.png" /></figure>
 
             <div class="about">
                 <h1 class="badge" v-if="incompatible">{{ name }}<span title="This bundle could not be enabled because it does not provide a Contao Manager Plugin.">incompatible</span></h1>
@@ -22,6 +49,7 @@
                 <p class="description">{{ package.description }} <a :href="package.url" target="_blank" class="more" v-if="package.url">More</a></p>
                 <p class="additional" v-if="additional">
                     <span v-for="item in additional">{{ item }}</span>
+                </p>
             </div>
 
             <div v-if="changed.get('constraint') !== undefined && changed.get('constraint') !== null" :class="{release: true, validating: this.constraintValidating, error: this.constraintError}">
@@ -120,6 +148,10 @@
                 }
 
                 return false;
+            },
+
+            isContao() {
+                return this.name === 'contao/manager-bundle';
             },
         },
 

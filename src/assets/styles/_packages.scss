@@ -88,7 +88,6 @@ section.package-actions {
 }
 
 .packages .scope {
-    padding: 2px;
     padding: 10px 0;
     margin-bottom: 30px;
     text-align: center;
@@ -119,15 +118,6 @@ section.package-actions {
     background: #fff;
     border-bottom: 3px solid #ddd3bc;
     border-radius: 2px;
-
-    .inside {
-        overflow: hidden;
-        padding: 10px 20px 20px;
-
-        @include screen(1024) {
-            padding: 25px 20px;
-        }
-    }
 
     .hint {
         position: relative;
@@ -161,13 +151,28 @@ section.package-actions {
         }
     }
 
+    .inside {
+        overflow: hidden;
+        padding: 10px 20px 20px;
+
+        @include screen(1024) {
+            padding: 25px 20px;
+        }
+    }
+
     figure {
         display: none;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
 
         @include screen(1024) {
             display: block;
             float: left;
-            width: 110px;
+            width: 90px;
+            height: 90px;
             margin-right: 20px;
         }
     }
@@ -187,6 +192,7 @@ section.package-actions {
 
         h1 {
             position: relative;
+            margin-bottom: 5px;
 
             &.badge {
                 padding-right: 100px;
@@ -218,10 +224,6 @@ section.package-actions {
         .description {
             margin-bottom: 1em;
 
-            @include screen(1024) {
-                min-height: 2.8em;
-            }
-
             a.more {
                 margin-left: 5px;
             }
@@ -247,6 +249,7 @@ section.package-actions {
         @include screen(1024) {
             width: 160px;
             margin-left: 40px;
+            margin-bottom: 0;
         }
 
         input[type=text] {
@@ -296,7 +299,7 @@ section.package-actions {
 
             @include screen(1024) {
                 display: block;
-                margin-top: 25px;
+                margin-top: 20px;
                 text-align: center;
             }
 
