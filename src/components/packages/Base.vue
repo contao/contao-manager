@@ -2,7 +2,7 @@
     <main-layout>
 
         <section :class="{'package-actions': true, 'search-active': $route.name === 'packages-search'}">
-            <button class="update" disabled style="text-decoration: line-through">Check for Updates</button>
+            <button class="update" @click="updatePackages">Update Packages</button>
             <button class="search" :disabled="hasChanges" @click="startSearch">Search packages</button>
             <input ref="search" id="search" type="text" placeholder="Search Packages…" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
             <button class="cancel" @click="stopSearch">X</button>
@@ -33,6 +33,23 @@
             searchInput: '',
         }),
         methods: {
+            updatePackages() {
+                if (!confirm('All packages will be updated to their latest version. Do you want to continue?')) {
+                    return;
+                }
+
+                this.$store.dispatch(
+                    'tasks/execute',
+                    {
+                        type: 'upgrade',
+                    },
+                ).then(
+                    () => {
+                        this.$emit('changed', false);
+                        this.listPackages();
+                    },
+                );
+            },
             startSearch() {
                 this.$router.push(routes.packagesSearch);
                 this.$nextTick(() => {

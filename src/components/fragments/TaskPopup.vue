@@ -32,7 +32,7 @@
             </div>
             <div v-else-if="taskStatus === 'success' && (taskType === 'upgrade' || taskType === 'require-package' || taskType === 'remove-package')">
                 <h2>Contao packages updated!</h2>
-                <p>Please open the Install Tool to run any necessary database updates.</p>
+                <p>Please open the Install Tool to apply any necessary database changes.</p>
 
                 <a class="button primary" href="/install.php" target="_blank">Install Tool</a>
                 <button @click="hidePopup"><span>Confirm & Close</span></button>
@@ -87,9 +87,9 @@
 
                 const titles = {
                     install: 'Setting up your Contao Application',
-                    upgrade: 'Checking for updates of installed packages',
-                    'require-package': 'Installing packages …',
-                    'remove-package': 'Removing packages …',
+                    upgrade: 'Updating Packages',
+                    'require-package': 'Installing Packages',
+                    'remove-package': 'Removing Packages',
                     'rebuild-cache': 'Rebuilding Contao cache',
                 };
 
