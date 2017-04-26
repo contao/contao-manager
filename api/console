@@ -68,6 +68,8 @@ if (\Phar::running()) {
     $debug = true;
 }
 
+// Always create kernel to initialize the application
+$kernel = new ApiKernel($env, $debug);
 $input = new ArgvInput();
 
 if ('composer' === $input->getFirstArgument()) {
@@ -76,7 +78,6 @@ if ('composer' === $input->getFirstArgument()) {
     array_shift($argv);
     $input = new ArgvInput($argv);
 } else {
-    $kernel = new ApiKernel($env, $debug);
     $application = new ApiApplication($kernel);
 }
 

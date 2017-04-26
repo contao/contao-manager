@@ -12,17 +12,27 @@ namespace Contao\ManagerApi;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Tenside\Core\Util\RuntimeHelper;
 use Tenside\CoreBundle\Command\RunTaskCommand;
 use Terminal42\BackgroundProcess\Command\ProcessRunnerCommand;
 
 class ApiApplication extends Application
 {
+    /**
+     * @var ApiKernel
+     */
     private $kernel;
-    private $commandsRegistered;
 
-    public function __construct(KernelInterface $kernel)
+    /**
+     * @var bool
+     */
+    private $commandsRegistered = false;
+
+    /**
+     * Constructor.
+     *
+     * @param ApiKernel $kernel
+     */
+    public function __construct(ApiKernel $kernel)
     {
         $this->kernel = $kernel;
 
@@ -44,6 +54,9 @@ class ApiApplication extends Application
         return $commands;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function registerCommands()
     {
         if ($this->commandsRegistered) {
@@ -55,8 +68,6 @@ class ApiApplication extends Application
         $this->kernel->boot();
 
         $container = $this->kernel->getContainer();
-
-        RuntimeHelper::setupHome($container->get('tenside.home')->homeDir());
 
         if (\Phar::running()) {
             $command = new RunTaskCommand();

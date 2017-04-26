@@ -10,7 +10,6 @@
 
 namespace Contao\ManagerApi;
 
-use Contao\ManagerApi\Tenside\HomePathDeterminator;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\MonologBundle\MonologBundle;
@@ -20,6 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
+use Tenside\Core\Util\RuntimeHelper;
 use Tenside\CoreBundle\TensideCoreBundle;
 
 /**
@@ -42,6 +42,8 @@ class ApiKernel extends Kernel
         parent::__construct($environment, $debug);
 
         ini_set('error_log', $this->getLogDir().DIRECTORY_SEPARATOR.'api-'.date('Y-m-d').'.log');
+
+        RuntimeHelper::setupHome($this->getContaoDir());
     }
 
     /**
