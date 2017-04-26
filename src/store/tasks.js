@@ -16,10 +16,11 @@ const pollTask = ({ commit }, taskId, resolve, reject) => {
                     if (pending > 5) {
                         commit('setStatus', 'failed');
                         reject();
+                        return;
                     }
 
                     api.runNextTask().then(() => {
-                        setTimeout(fetch, 1000);
+                        setTimeout(fetch, 2000);
                     });
                     break;
 
@@ -34,8 +35,12 @@ const pollTask = ({ commit }, taskId, resolve, reject) => {
                     break;
 
                 case 'ERROR':
-                default:
                     commit('setStatus', 'error');
+                    reject();
+                    break;
+
+                default:
+                    commit('setStatus', 'failed');
                     reject();
             }
         },
