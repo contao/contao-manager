@@ -63,13 +63,13 @@ class UpdateCommand extends Command
 
         $updater = new Updater(null, false);
         $updater->setStrategy(Updater::STRATEGY_GITHUB);
-        $updater->setBackupPath($backupPath.'/contao-manager.old.phar');
+        $updater->setBackupPath($backupPath.'/contao-manager.old.phar.php');
 
         /** @var GithubStrategy $strategy */
         $strategy = $updater->getStrategy();
 
         $strategy->setPackageName('contao/manager');
-        $strategy->setPharName('contao-manager.phar');
+        $strategy->setPharName('contao-manager.phar.php');
         $strategy->setCurrentLocalVersion($this->getApplication()->getVersion());
 
         $result = $updater->update();
@@ -101,7 +101,7 @@ class UpdateCommand extends Command
     private function rollback(OutputInterface $output): int
     {
         $updater = new Updater(null, false);
-        $updater->setRestorePath($this->getApplication()->getKernel()->getManagerDir().'/contao-manager-old.phar');
+        $updater->setRestorePath($this->getApplication()->getKernel()->getManagerDir().'/contao-manager-old.phar.php');
 
         $result = $updater->rollback();
 
