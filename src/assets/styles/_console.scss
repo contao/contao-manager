@@ -38,16 +38,13 @@
         }
     }
 
-    button {
+    button,
+    a.button {
         width: auto;
         height: 35px;
-        margin: 2em 0;
+        margin: 2em 5px;
         padding: 0 30px;
         line-height: 35px;
-    }
-
-    a.toggle {
-        display: none;
     }
 
     code {
@@ -104,20 +101,8 @@
                 transform: rotate(90deg) scale(0.5);
             }
 
-            &.hide {
-                display: none;
-
-                i {
-                    transform: rotate(-90deg) scale(0.5);
-                }
-            }
-        }
-
-        &.console a {
-            display: none;
-
-            &.hide {
-                display: block;
+            &.hide i {
+                transform: rotate(-90deg) scale(0.5);
             }
         }
 

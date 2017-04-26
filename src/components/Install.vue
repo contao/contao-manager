@@ -2,8 +2,8 @@
     <boxed-layout wide="1" mainClass="install">
         <div slot="intro">
             <p>
-                You are running a pre-release version of Contao Manager.
-                Please do not share this file without permission of the developer team.
+                This is a pre-release version of Contao Manager.
+                Please do not share without permission of the developer team.
                 <br><br>
                 We are not yet collecting minor issues (like styling, missing features, etc.).
                 If you encounter a major issue, please do NOT use GitHub to report it,
@@ -11,16 +11,7 @@
             </p>
         </div>
 
-        <section class="install-complete" slot="section" v-if="installComplete">
-            <h1>Congratulations!</h1>
-            <p>Contao has been successfully installed. To complete the setup process, you must open the Install Tool and enter your database credentials.</p>
-            <fieldset>
-                <a class="button primary" href="/install.php" target="_blank">Install Tool</a>
-                <a class="button" @click.prevent="gotToPackages()">Packages</a>
-            </fieldset>
-        </section>
-
-        <section slot="section" v-else>
+        <section slot="section">
 
             <fieldset v-if="!isLoggedIn">
                 <legend>User Account</legend>
@@ -32,7 +23,7 @@
 
             <fieldset v-else>
                 <legend>User Account</legend>
-                <p>You are logged in as {{ authUsername }}.</p>
+                <p>You are logged in as <i>{{ authUsername }}</i>.</p>
             </fieldset>
 
             <fieldset>
@@ -115,9 +106,6 @@
             authUsername() {
                 return this.$store.state.auth.username;
             },
-            installComplete() {
-                return this.$store.state.installComplete;
-            },
         },
         methods: {
             install() {
@@ -171,10 +159,6 @@
                 }
 
                 this.advanced = true;
-            },
-
-            gotToPackages() {
-                this.$store.dispatch('fetchStatus', true);
             },
         },
         beforeRouteEnter(to, from, next) {

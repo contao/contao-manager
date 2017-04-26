@@ -23,14 +23,28 @@
 
                 <button @click="hidePopup"><span>Close</span></button>
             </div>
+            <div v-else-if="taskStatus === 'success' && taskType === 'install'">
+                <h2>Installation complete!</h2>
+                <p>To complete the setup process, please open the Install Tool and enter your database credentials.</p>
+
+                <a class="button primary" href="/install.php" target="_blank">Install Tool</a>
+                <button @click="hidePopup">Confirm & Close</button>
+            </div>
+            <div v-else-if="taskStatus === 'success' && (taskType === 'upgrade' || taskType === 'require-package' || taskType === 'remove-package')">
+                <h2>Contao packages updated!</h2>
+                <p>Please open the Install Tool to run any necessary database updates.</p>
+
+                <a class="button primary" href="/install.php" target="_blank">Install Tool</a>
+                <button @click="hidePopup"><span>Confirm & Close</span></button>
+            </div>
             <div v-else>
                 <h2 class="progress">{{ progressTitle ? progressTitle : 'Loading…' }}</h2>
                 <p class="progress">{{ progressText ? progressText : '&nbsp;' }}</p>
 
-                <button :disabled="(this.taskStatus !== 'success' && this.taskStatus !== 'error')" @click="hidePopup">
-                    <span>Confirm &amp; Close</span>
-                </button>
+                <button :disabled="taskStatus !== 'success' && taskStatus !== 'error'" @click="hidePopup">Confirm &amp; Close</button>
+            </div>
 
+            <div v-if="taskStatus !== 'failed'">
                 <a @click.prevent="toggleConsole" :class="showConsole ? 'toggle hide' : 'toggle show'">
                     <i class="icono-caretRight"></i>
                     <span v-if="showConsole">Hide Console Output</span>

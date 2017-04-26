@@ -18,7 +18,6 @@ const store = new Vuex.Store({
         status: null,
         config: null,
         error: null,
-        installComplete: false,
     },
 
     mutations: {
@@ -49,14 +48,7 @@ const store = new Vuex.Store({
                     }
 
                     if (result.status === apiStatus.OK || result.status === apiStatus.EMPTY) {
-                        dispatch('tasks/reload').then(
-                            (task) => {
-                                if (task.type === 'install') {
-                                    state.installComplete = true;
-                                }
-                            },
-                            () => {},
-                        );
+                        dispatch('tasks/reload').catch(() => {});
                     }
 
                     return result.status;
@@ -75,11 +67,11 @@ const store = new Vuex.Store({
             api.configure(config);
         },
 
-        install: ({ state, dispatch }, version) => (
+        install: ({ dispatch }, version) => (
             api.install(version).then(
                 taskId => dispatch('tasks/run', taskId, { root: true }),
             ).then(
-                () => { state.installComplete = true; },
+                () => dispatch('fetchStatus', true, { root: true }),
             )
         ),
     },
