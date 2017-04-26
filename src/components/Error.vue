@@ -2,7 +2,7 @@
     <div class="error">
         <div>
             <h1>
-                <span>ERROR <a :href="'https://httpstatuses.com/'+error.status" target="_blank">{{ error.status }}</a></span>
+                <span>ERROR <a :href="'https://httpstatuses.com/'+error.status" target="_blank" v-if="error.status">{{ error.status }}</a></span>
                 {{ error.title }}
             </h1>
             <a :href="error.type" target="_blank" v-if="error.type !== 'about:blank'">More Information</a>

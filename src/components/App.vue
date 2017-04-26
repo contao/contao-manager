@@ -54,8 +54,10 @@
                     this.$router.scope = scopes.MANAGER;
                     this.$router.replace(routes.packages);
                 } else {
-                    this.$router.scope = scopes.FAIL;
-                    this.$router.replace(routes.fail);
+                    this.$store.commit('setError', {
+                        title: 'Unknown API status encountered',
+                        type: 'error.type',
+                    });
                 }
             },
         },

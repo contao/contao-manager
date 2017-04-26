@@ -26,7 +26,6 @@ class StatusController extends Controller
 {
     const STATUS_NEW = 'new'; // Manager not installed
     const STATUS_AUTHENTICATE = 'auth'; // Manager installed, requires authentication
-    const STATUS_FAIL = 'fail'; // Manager has failed
     const STATUS_EMPTY = 'empty'; // Contao not installed
     const STATUS_OK = 'ok'; // Contao is ready
     const STATUS_CONFLICT = 'conflict'; // Contao has conflict
@@ -97,7 +96,7 @@ class StatusController extends Controller
         }
 
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new Response('', 401);
+            return $this->getResponse(self::STATUS_AUTHENTICATE, 401);
         }
 
         if (null !== ($response = $this->runIntegrityChecks())) {
@@ -135,17 +134,19 @@ class StatusController extends Controller
 
     /**
      * @param string $status
+     * @param int    $code
      *
      * @return JsonResponse
      */
-    private function getResponse($status)
+    private function getResponse($status, $code = 200)
     {
         return new JsonResponse(
             [
                 'status' => $status,
                 'username' => (string) $this->getUser(),
                 'config' => $this->getConfig(),
-            ]
+            ],
+            $code
         );
     }
 

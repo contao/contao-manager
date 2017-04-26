@@ -1,34 +1,11 @@
 import Vue from 'vue';
 
-import apiStatus from './status';
-
 export default {
     fetchStatus() {
-        const handleStatus = (response) => {
-            if (response.status === 401) {
-                return { status: apiStatus.AUTHENTICATE };
-            }
-
-            if (response.status === 500 && response.body.status === apiStatus.FAIL) {
-                return {
-                    status: apiStatus.FAIL,
-                };
-            }
-
-            if (!response.ok) {
-                return {
-                    status: apiStatus.FAIL,
-                };
-            }
-
-            if (response.status === 200) {
-                return response.body;
-            }
-
-            return { status: apiStatus.FAIL };
-        };
-
-        return Vue.http.get('api/status').then(handleStatus, handleStatus);
+        return Vue.http.get('api/status').then(
+            response => response.body,
+            response => response.body,
+        );
     },
 
     login(username, password) {

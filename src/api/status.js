@@ -6,9 +6,6 @@ export default {
     // Manager installed, requires authentication
     AUTHENTICATE: 'auth',
 
-    // Manager has conflict
-    FAIL: 'fail',
-
     // Contao not installed
     EMPTY: 'empty',
 
