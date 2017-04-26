@@ -30,12 +30,11 @@
 
     h2, p, a {
         margin: 0 15px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
 
-        @include screen(960) {
-            margin: 0 70px;
+        &.progress {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
@@ -47,7 +46,7 @@
         line-height: 35px;
     }
 
-    a {
+    a.toggle {
         display: none;
     }
 
@@ -92,7 +91,7 @@
             margin: 0 70px;
         }
 
-        a {
+        a.toggle {
             display: block;
             text-align: left;
 
@@ -207,7 +206,8 @@
         }
     }
 
-    &.status-error {
+    &.status-error,
+    &.status-failed {
         h1 {
             background-color: $red-button;
         }

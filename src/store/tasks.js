@@ -3,12 +3,26 @@
 import api from '../api';
 
 const pollTask = ({ commit }, taskId, resolve, reject) => {
+    let pending = 0;
+
     const fetch = () => (api.getTask(taskId).then(
         ({ status, type, output }) => {
             commit('setProgress', { type, output });
 
             switch (status) {
                 case 'PENDING':
+                    pending += 1;
+
+                    if (pending > 5) {
+                        commit('setStatus', 'failed');
+                        reject();
+                    }
+
+                    api.runNextTask().then(() => {
+                        setTimeout(fetch, 1000);
+                    });
+                    break;
+
                 case 'RUNNING':
                     commit('setStatus', 'running');
                     setTimeout(fetch, 1000);
@@ -102,9 +116,7 @@ export default {
                 store.commit('setStatus', 'running');
                 store.commit('setProgress', null);
 
-                api.runNextTask().then(() => {
-                    pollTask(store, taskId, resolve, reject);
-                });
+                pollTask(store, taskId, resolve, reject);
             });
         },
 

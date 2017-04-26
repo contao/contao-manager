@@ -13,20 +13,32 @@
                 <div class="bounce5"></div>
             </div>
 
-            <h2>{{ progressTitle ? progressTitle : 'Loading…' }}</h2>
-            <p>{{ progressText ? progressText : '&nbsp;' }}</p>
+            <div v-if="taskStatus === 'failed'">
+                <h2>Contao Manager failed to run a background task!</h2>
+                <p>
+                    Something went wrong while trying to execute the task in the background.<br>
+                    If this happens again, your server might not be supported.<br>
+                    <br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">Report a Problem</a>
+                </p>
 
-            <button :disabled="(this.taskStatus !== 'success' && this.taskStatus !== 'error')" @click="hidePopup">
-                <span>Confirm &amp; Close</span>
-            </button>
+                <button @click="hidePopup"><span>Close</span></button>
+            </div>
+            <div v-else>
+                <h2 class="progress">{{ progressTitle ? progressTitle : 'Loading…' }}</h2>
+                <p class="progress">{{ progressText ? progressText : '&nbsp;' }}</p>
 
-            <a @click.prevent="toggleConsole" :class="showConsole ? 'hide' : 'show'">
-                <i class="icono-caretRight"></i>
-                <span v-if="showConsole">Hide Console Output</span>
-                <span v-else>Show Console Output</span>
-            </a>
+                <button :disabled="(this.taskStatus !== 'success' && this.taskStatus !== 'error')" @click="hidePopup">
+                    <span>Confirm &amp; Close</span>
+                </button>
 
-            <code ref="console" @scroll="scrolled">{{ consoleOutput }}</code>
+                <a @click.prevent="toggleConsole" :class="showConsole ? 'toggle hide' : 'toggle show'">
+                    <i class="icono-caretRight"></i>
+                    <span v-if="showConsole">Hide Console Output</span>
+                    <span v-else>Show Console Output</span>
+                </a>
+
+                <code ref="console" @scroll="scrolled">{{ consoleOutput }}</code>
+            </div>
         </div>
     </div>
 </template>
@@ -50,6 +62,7 @@
                     'status-running': this.taskStatus === 'running',
                     'status-success': this.taskStatus === 'success',
                     'status-error': this.taskStatus === 'error',
+                    'status-failed': this.taskStatus === 'failed',
                 };
             },
 
