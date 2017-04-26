@@ -6,16 +6,16 @@ const pollTask = ({ commit }, taskId, resolve, reject) => {
     let pending = 0;
 
     const fetch = () => (api.getTask(taskId).then(
-        ({ status, type, output }) => {
-            commit('setProgress', { type, output });
+        (task) => {
+            commit('setProgress', task);
 
-            switch (status) {
+            switch (task.status) {
                 case 'PENDING':
                     pending += 1;
 
                     if (pending > 5) {
                         commit('setStatus', 'failed');
-                        reject();
+                        reject(task);
                         return;
                     }
 
@@ -31,17 +31,17 @@ const pollTask = ({ commit }, taskId, resolve, reject) => {
 
                 case 'FINISHED':
                     commit('setStatus', 'success');
-                    resolve();
+                    resolve(task);
                     break;
 
                 case 'ERROR':
                     commit('setStatus', 'error');
-                    reject();
+                    reject(task);
                     break;
 
                 default:
                     commit('setStatus', 'failed');
-                    reject();
+                    reject(task);
             }
         },
     ));

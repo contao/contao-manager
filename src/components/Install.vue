@@ -16,7 +16,7 @@
             <p>Contao has been successfully installed. To complete the setup process, you must open the Install Tool and enter your database credentials.</p>
             <fieldset>
                 <a class="button primary" href="/install.php" target="_blank">Install Tool</a>
-                <router-link class="button" :to="{ name: 'packages' }">Packages</router-link>
+                <a class="button" @click.prevent="gotToPackages()">Packages</a>
             </fieldset>
         </section>
 
@@ -54,7 +54,7 @@
                     <span v-if="!installing">Install</span>
                     <loader v-else></loader>
                 </button>
-                <a href="#" class="button" v-if="!advanced && !installing" @click.prevent="enableAdvanced">Advanced</a>
+                <a href="#" class="button advanced" v-if="!advanced && !installing" @click.prevent="enableAdvanced">Advanced</a>
             </fieldset>
 
         </section>
@@ -87,7 +87,6 @@
             github_oauth_token: '',
 
             installing: false,
-            installComplete: false,
             advanced: false,
         }),
         computed: {
@@ -115,6 +114,9 @@
             },
             authUsername() {
                 return this.$store.state.auth.username;
+            },
+            installComplete() {
+                return this.$store.state.installComplete;
             },
         },
         methods: {
@@ -159,11 +161,7 @@
 
                     return this.$store.dispatch('configure', config);
                 }).then(() => {
-                    this.$store.dispatch('install', this.version).then(
-                        () => {
-                            this.installComplete = true;
-                        },
-                    );
+                    this.$store.dispatch('install', this.version);
                 });
             },
 
@@ -173,6 +171,10 @@
                 }
 
                 this.advanced = true;
+            },
+
+            gotToPackages() {
+                this.$store.dispatch('fetchStatus', true);
             },
         },
         beforeRouteEnter(to, from, next) {

@@ -19,10 +19,10 @@ Vue.http.interceptors.push((request, next) => {
     next((response) => {
         console.log(response);
 
-        if (response.headers.get('Content-Type') === 'application/problem+json') {
-            store.commit('setError', response.data);
-        } else if (response.status === 401 && request.url !== 'api/status') {
+        if (response.status === 401 && request.url !== 'api/status') {
             store.dispatch('fetchStatus', true);
+        } else if (response.headers.get('Content-Type') === 'application/problem+json') {
+            store.commit('setError', response.data);
         }
     });
 });
