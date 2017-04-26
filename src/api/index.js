@@ -12,7 +12,6 @@ export default {
             if (response.status === 500 && response.body.status === apiStatus.FAIL) {
                 return {
                     status: apiStatus.FAIL,
-                    selftest: response.body.selftest || null,
                 };
             }
 

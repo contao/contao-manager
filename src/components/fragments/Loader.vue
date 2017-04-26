@@ -26,8 +26,7 @@
         height: 25px;
         position: relative;
 
-        .manager &,
-        .selftest & {
+        .manager & {
             margin: 0 auto 40px;
             width: 100px;
             height: 100px;
@@ -104,8 +103,7 @@
         }
     }
 
-    .manager .loader,
-    .selftest .loader {
+    .manager .loader {
         margin: 100px 0;
         text-align: center;
         font-size: 20px;

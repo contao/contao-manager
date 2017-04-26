@@ -11,16 +11,16 @@
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\IntegrityCheck\IntegrityCheckInterface;
 use Contao\ManagerApi\Tenside\InstallationStatusDeterminator;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Tenside\Core\Config\TensideJsonConfig;
-use Tenside\Core\SelfTest\SelfTest;
-use Tenside\Core\SelfTest\SelfTestResult;
+use Symfony\Component\Process\PhpExecutableFinder;
 
 class StatusController extends Controller
 {
@@ -37,14 +37,14 @@ class StatusController extends Controller
     private $kernel;
 
     /**
+     * @var ManagerConfig
+     */
+    private $config;
+
+    /**
      * @var InstallationStatusDeterminator
      */
     private $status;
-
-    /**
-     * @var SelfTest
-     */
-    private $selfTest;
 
     /**
      * @var Filesystem
@@ -52,22 +52,27 @@ class StatusController extends Controller
     private $filesystem;
 
     /**
+     * @var IntegrityCheckInterface[]
+     */
+    private $checks = [];
+
+    /**
      * Constructor.
      *
      * @param ApiKernel                      $kernel
+     * @param ManagerConfig                  $config
      * @param InstallationStatusDeterminator $status
-     * @param SelfTest                       $selfTest
      * @param Filesystem|null                $filesystem
      */
     public function __construct(
         ApiKernel $kernel,
+        ManagerConfig $config,
         InstallationStatusDeterminator $status,
-        SelfTest $selfTest,
         Filesystem $filesystem = null
     ) {
         $this->kernel = $kernel;
+        $this->config = $config;
         $this->status = $status;
-        $this->selfTest = $selfTest;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -88,116 +93,76 @@ class StatusController extends Controller
                 );
             }
 
-            $results = $this->selfTest->perform();
-
-            return $this->getResponse(self::STATUS_NEW, $results);
+            return $this->runIntegrityChecks() ?: $this->getResponse(self::STATUS_NEW);
         }
 
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new JsonResponse('', 401);
+            return new Response('', 401);
         }
 
-        $results = $this->selfTest->perform();
+        if (null !== ($response = $this->runIntegrityChecks())) {
+            return $response;
+        }
 
-        return $this->getResponse($this->status->isComplete() ? self::STATUS_OK : self::STATUS_EMPTY, $results);
+        return $this->getResponse($this->status->isComplete() ? self::STATUS_OK : self::STATUS_EMPTY);
+    }
+
+    /**
+     * Adds an integrity check.
+     *
+     * @param IntegrityCheckInterface $check
+     */
+    public function addIntegrityCheck(IntegrityCheckInterface $check)
+    {
+        $this->checks[] = $check;
+    }
+
+    /**
+     * Runs integrity checks and returns response of the first failure.
+     *
+     * @return ApiProblemResponse|null
+     */
+    private function runIntegrityChecks()
+    {
+        foreach ($this->checks as $check) {
+            if (($problem = $check->run()) instanceof ApiProblem) {
+                return new ApiProblemResponse($problem);
+            }
+        }
+
+        return null;
     }
 
     /**
      * @param string $status
-     * @param array  $results
      *
      * @return JsonResponse
      */
-    private function getResponse($status, array $results)
+    private function getResponse($status)
     {
-        return $this->getErrorResponse($results) ?: new JsonResponse(
+        return new JsonResponse(
             [
                 'status' => $status,
                 'username' => (string) $this->getUser(),
-                'selftest' => $this->prepareResults($results),
-                'autoconfig' => $this->prepareAutoConfig($this->selfTest->getAutoConfig()),
+                'config' => $this->getConfig(),
             ]
         );
     }
 
     /**
-     * @param SelfTestResult[] $results
-     *
-     * @return bool
-     */
-    private function hasError(array $results)
-    {
-        foreach ($results as $result) {
-            if (SelfTestResult::STATE_FAIL === $result->getState()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function getErrorResponse(array $results)
-    {
-        if (!$this->hasError($results)) {
-            return null;
-        }
-
-        return new JsonResponse(
-            [
-                'status' => self::STATUS_FAIL,
-                'selftest' => $this->prepareResults($results),
-            ],
-            Response::HTTP_INTERNAL_SERVER_ERROR
-        );
-    }
-
-    /**
-     * @param SelfTestResult[] $results
-     *
      * @return array
      */
-    private function prepareResults(array $results)
+    private function getConfig()
     {
-        $data = [];
+        $result = $this->config->all();
 
-        foreach ($results as $result) {
-            $data[] = [
-                'name' => $result->getTestClass(),
-                'state' => $result->getState(),
-                'message' => $result->getMessage(),
-                'explain' => $result->getExplain(),
-            ];
+        if (!isset($result['php_cli'])) {
+            $result['php_cli'] = (new PhpExecutableFinder())->find(false);
         }
 
-        return $data;
-    }
-
-    /**
-     * @param TensideJsonConfig $config
-     *
-     * @return array
-     */
-    private function prepareAutoConfig(TensideJsonConfig $config)
-    {
-        $result = [];
-
-        if ($phpCli = $config->getPhpCliBinary()) {
-            $result['php_cli'] = $phpCli;
+        if (!isset($result['php_cli_arguments'])) {
+            $result['php_cli_arguments'] = (new PhpExecutableFinder())->findArguments();
         }
-
-        if ($phpArguments = $config->getPhpCliArguments()) {
-            $result['php_cli_arguments'] = $phpArguments;
-        }
-
-        if ($phpEnvironment = $config->getPhpCliEnvironment()) {
-            $result['php_cli_environment'] = $phpEnvironment;
-        }
-
-        if ($phpEnvironment = $config->isForceToBackgroundEnabled()) {
-            $result['php_force_background'] = true;
-        }
-
-        $result['php_can_fork'] = $config->isForkingAvailable();
 
         return $result;
     }

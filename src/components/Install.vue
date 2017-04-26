@@ -1,14 +1,14 @@
 <template>
     <boxed-layout wide="1" mainClass="install">
         <div slot="intro">
-            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
-
-            <div :class="{ selftest: true, warnings: selftestWarnings > 0 }" v-if="selftestWarnings !== null">
-                <router-link :to="{ name: 'install-check' }">Details</router-link>
-                <img src="../assets/images/selftest.svg" width="24" height="24">
-                <p v-if="selftestWarnings > 0"><strong>Self Test:</strong> {{ selftestWarnings }} warning(s)</p>
-                <p v-else><strong>Self Test:</strong> all good!</p>
-            </div>
+            <p>
+                You are running a pre-release version of Contao Manager.
+                Please do not share this file without permission of the developer team.
+                <br><br>
+                We are not yet collecting minor issues (like styling, missing features, etc.).
+                If you encounter a major issue, please do NOT use GitHub to report it,
+                but contact the person who supplied you with this file.
+            </p>
         </div>
 
         <section class="install-complete" slot="section" v-if="installComplete">
@@ -116,21 +116,6 @@
             authUsername() {
                 return this.$store.state.auth.username;
             },
-            selftestWarnings() {
-                if (!Array.isArray(this.$store.state.selftest)) {
-                    return null;
-                }
-
-                let warnings = 0;
-
-                this.$store.state.selftest.forEach((result) => {
-                    if (result.state === 'WARNING') {
-                        warnings += 1;
-                    }
-                });
-
-                return warnings;
-            },
         },
         methods: {
             install() {
@@ -204,7 +189,8 @@
                 this.$refs.username.focus();
             }
 
-            this.php_cli = this.$store.state.autoconfig.php_cli;
+            this.php_cli = this.$store.state.config.php_cli;
+            this.php_cli_arguments = this.$store.state.config.php_cli_arguments;
         },
     };
 </script>

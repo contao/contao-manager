@@ -3,11 +3,15 @@ services:
         class: Contao\ManagerApi\Controller\StatusController
         arguments:
             - "@kernel"
+            - "@contao_manager.config.manager"
             - "@tenside.status"
-            - "@contao_manager.self_test"
             - "@filesystem"
         calls:
             - [setContainer, ["@service_container"]]
+            - [addIntegrityCheck, ["@contao_manager.integrity.allow_url_fopen"]]
+            - [addIntegrityCheck, ["@contao_manager.integrity.openssl"]]
+            - [addIntegrityCheck, ["@contao_manager.integrity.proc_open"]]
+            - [addIntegrityCheck, ["@contao_manager.integrity.windows"]]
 
     contao_manager.controller.session:
         class: Contao\ManagerApi\Controller\SessionController

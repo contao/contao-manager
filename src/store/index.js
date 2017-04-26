@@ -16,16 +16,14 @@ const store = new Vuex.Store({
 
     state: {
         status: null,
-        selftest: null,
-        autoconfig: null,
+        config: null,
         error: null,
     },
 
     mutations: {
-        setStatus(state, { status, selftest, autoconfig }) {
+        setStatus(state, { status, config }) {
             state.status = status;
-            state.selftest = selftest;
-            state.autoconfig = autoconfig;
+            state.config = config;
         },
 
         setError(state, error) {
@@ -59,7 +57,7 @@ const store = new Vuex.Store({
         },
 
         configure: ({ state }, props) => {
-            const config = props || state.autoconfig;
+            const config = props || state.config;
 
             if (config.github_oauth_token) {
                 api.setGithubToken(config.github_oauth_token);

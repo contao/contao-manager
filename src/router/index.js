@@ -6,7 +6,6 @@ import routes from './routes';
 
 import Login from '../components/Login';
 import Install from '../components/Install';
-import SelfTest from '../components/SelfTest';
 import Packages from '../components/packages/Base';
 import PackagesList from '../components/packages/List';
 import PackagesSearch from '../components/packages/Search';
@@ -20,12 +19,6 @@ const router = new Router({
             redirect: routes.login,
         },
         {
-            name: routes.fail.name,
-            path: '/fail',
-            meta: { scope: scopes.FAIL },
-            component: SelfTest,
-        },
-        {
             name: routes.login.name,
             path: '/login',
             meta: { scope: scopes.LOGIN },
@@ -36,12 +29,6 @@ const router = new Router({
             path: '/install',
             meta: { scope: scopes.INSTALL },
             component: Install,
-        },
-        {
-            name: routes.installCheck.name,
-            path: '/install/check',
-            meta: { scope: scopes.INSTALL },
-            component: SelfTest,
         },
         {
             path: '/packages',

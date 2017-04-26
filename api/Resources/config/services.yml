@@ -1,6 +1,5 @@
 imports:
     - { resource: controllers.yml }
-    - { resource: selftest.yml }
 
 services:
     contao_manager.config.auth:
@@ -27,6 +26,18 @@ services:
             - "@kernel"
             - "@security.password_encoder"
             - "@filesystem"
+
+    contao_manager.integrity.openssl:
+        class: Contao\ManagerApi\IntegrityCheck\OpenSSLCheck
+
+    contao_manager.integrity.proc_open:
+        class: Contao\ManagerApi\IntegrityCheck\ProcOpenCheck
+
+    contao_manager.integrity.allow_url_fopen:
+        class: Contao\ManagerApi\IntegrityCheck\AllowUrlFopenCheck
+
+    contao_manager.integrity.windows:
+        class: Contao\ManagerApi\IntegrityCheck\WindowsPlatformCheck
 
     contao_manager.security.jwt_manager:
         class: Contao\ManagerApi\Security\JwtManager

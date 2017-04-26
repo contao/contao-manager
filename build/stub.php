@@ -15,10 +15,6 @@ if (!extension_loaded('Phar')) {
     die('The PHP Phar extension is not enabled.');
 }
 
-if (!extension_loaded('openssl')) {
-    die('The PHP OpenSSL extension is not enabled.');
-}
-
 if (function_exists('ioncube_loader_iversion') && ioncube_loader_iversion() < 40009) {
     die('The PHP ionCube Loader extension prior to version 4.0.9 cannot handle .phar files.');
 }
