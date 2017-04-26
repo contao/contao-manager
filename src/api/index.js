@@ -55,6 +55,10 @@ export default {
         return Vue.http.patch('api/config/manager', config);
     },
 
+    setGithubToken(token) {
+        return Vue.http.put('api/config/auth/github-oauth', { token });
+    },
+
     install(version) {
         const data = {
             project: {

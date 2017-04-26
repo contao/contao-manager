@@ -80,6 +80,11 @@ config_auth_patch:
     defaults: { _controller: contao_manager.controller.config_auth:patchAction }
     methods:  [PATCH]
 
+config_auth_github:
+    path:     /api/config/auth/github-oauth
+    defaults: { _controller: contao_manager.controller.config_auth:putGithubToken }
+    methods:  [PUT]
+
 config_composer_get:
     path:     /api/config/composer
     defaults: { _controller: contao_manager.controller.config_composer:getAction }

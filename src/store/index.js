@@ -58,9 +58,16 @@ const store = new Vuex.Store({
             );
         },
 
-        configure: ({ state, dispatch }, config) => (
-            api.configure(config || state.autoconfig)
-        ),
+        configure: ({ state }, props) => {
+            const config = props || state.autoconfig;
+
+            if (config.github_oauth_token) {
+                api.setGithubToken(config.github_oauth_token);
+                delete config.github_oauth_token;
+            }
+
+            api.configure(config);
+        },
 
         install: ({ dispatch }, version) => (
             api.install(version).then(
