@@ -40,14 +40,16 @@
 }
 
 #app > .https-warning {
-    position: relative;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
+    height: 27px;
     padding: 4px 8px;
     background: $orange-button;
     color: #fff;
     text-align: center;
+    z-index: 100;
 
     span {
         display: none;
@@ -60,5 +62,9 @@
     a {
         color: #fff;
         text-decoration: underline;
+    }
+
+    + div {
+        padding-top: 25px;
     }
 }
