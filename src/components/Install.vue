@@ -5,7 +5,7 @@
 
             <div :class="{ selftest: true, warnings: selftestWarnings > 0 }" v-if="selftestWarnings !== null">
                 <router-link :to="{ name: 'install-check' }">Details</router-link>
-                <img src="assets/images/selftest.svg" width="24" height="24">
+                <img src="../assets/images/selftest.svg" width="24" height="24">
                 <p v-if="selftestWarnings > 0"><strong>Self Test:</strong> {{ selftestWarnings }} warning(s)</p>
                 <p v-else><strong>Self Test:</strong> all good!</p>
             </div>

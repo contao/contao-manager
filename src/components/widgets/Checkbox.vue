@@ -32,7 +32,6 @@
         },
         methods: {
             toggle(value) {
-                console.log(value);
                 this.$emit('checked', value);
             },
         },
