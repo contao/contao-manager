@@ -15,8 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 require __DIR__.'/../vendor/autoload.php';
 
 if (\Phar::running()) {
-    $env = 'prod';
-    $debug = false;
+    // TODO run in prod if phar is active
+    $env = 'dev';
+    $debug = true;
 } else {
     $env = getenv('SYMFONY_ENV') ?: 'dev';
     $debug = getenv('SYMFONY_DEBUG') !== '0';

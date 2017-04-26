@@ -74,7 +74,7 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      *
      * @param array $data
      */
-    public function replace(array $data = array())
+    public function replace(array $data = [])
     {
         $this->data = $data;
 
@@ -86,7 +86,7 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      *
      * @param array $data
      */
-    public function add(array $data = array())
+    public function add(array $data = [])
     {
         $this->data = array_replace($this->data, $data);
 

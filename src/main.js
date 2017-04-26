@@ -12,9 +12,13 @@ Vue.use(VueResource);
 Vue.http.options.emulateHTTP = true;
 
 Vue.http.interceptors.push((request, next) => {
+    console.log(request);
+
     request.headers.set('X-XSRF-Token', Cookies.get('contao_manager_xsrf'));
 
     next((response) => {
+        console.log(response);
+
         if (response.headers.get('Content-Type') === 'application/problem+json') {
             store.commit('setError', response.data);
         } else if (response.status === 401 && request.url !== 'api/status') {
