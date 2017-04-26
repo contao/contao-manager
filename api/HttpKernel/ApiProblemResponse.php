@@ -17,7 +17,6 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class ApiProblemResponse extends Response
 {
-
     /**
      * Constructor.
      *
@@ -26,9 +25,13 @@ class ApiProblemResponse extends Response
      */
     public function __construct(ApiProblem $problem, array $headers = [])
     {
+        if (!$problem->getStatus()) {
+            $problem->setStatus(500);
+        }
+
         parent::__construct(
             $problem->asJson(),
-            $problem->getStatus() ?: 500,
+            $problem->getStatus(),
             array_merge($headers, ['Content-Type' => 'application/problem+json'])
         );
     }
