@@ -13,7 +13,10 @@ namespace Contao\ManagerApi\EventListener;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class ExceptionListener
 {
@@ -50,7 +53,7 @@ class ExceptionListener
             return;
         }
 
-        $exception = $event->getException();
+        $exception = $this->convertException($event->getException());
 
         $this->logException($exception);
 
@@ -86,5 +89,23 @@ class ExceptionListener
         } else {
             $this->logger->error($message, ['exception' => $exception]);
         }
+    }
+
+    /**
+     * Tries to convert known exceptions to a HttpException.
+     *
+     * @param \Exception $exception
+     *
+     * @return \Exception
+     */
+    private function convertException(\Exception $exception)
+    {
+        switch (true) {
+            case $exception instanceof AccessDeniedException:
+            case $exception instanceof AuthenticationException:
+                return new AccessDeniedHttpException($exception->getMessage(), $exception);
+        }
+
+        return $exception;
     }
 }
