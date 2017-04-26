@@ -11,7 +11,9 @@
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Tenside\InstallationStatusDeterminator;
+use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -70,7 +72,7 @@ class StatusController extends Controller
     }
 
     /**
-     * @return JsonResponse
+     * @return Response
      */
     public function __invoke()
     {
@@ -78,13 +80,11 @@ class StatusController extends Controller
 
         if (!$this->status->hasUsers()) {
             if ($this->status->isProjectPresent() || $this->status->isProjectInstalled()) {
-                return new JsonResponse(
-                    [
-                        'status' => 'ERROR',
-                        'message' => 'Existing installation found',
-                        'exception' => 'This version of Contao Manager cannot be added to an existing Contao installation.',
-                    ],
-                    Response::HTTP_INTERNAL_SERVER_ERROR
+                return new ApiProblemResponse(
+                    (new ApiProblem(
+                        'This version of Contao Manager cannot be added to an existing installation.',
+                        'https://github.com/contao/contao-manager/issues/53'
+                    ))->setStatus(Response::HTTP_NOT_IMPLEMENTED)
                 );
             }
 
