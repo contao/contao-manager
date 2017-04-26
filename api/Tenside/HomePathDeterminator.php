@@ -10,25 +10,30 @@
 
 namespace Contao\ManagerApi\Tenside;
 
+use Contao\ManagerApi\ApiKernel;
 use Tenside\Core\Util\HomePathDeterminator as BaseHomePathDeterminator;
 
 class HomePathDeterminator extends BaseHomePathDeterminator
 {
-    public function homeDir()
+    /**
+     * @var ApiKernel
+     */
+    private $kernel;
+
+    /**
+     * Constructor.
+     *
+     * @param ApiKernel $kernel
+     */
+    public function __construct(ApiKernel $kernel)
     {
-        try {
-            return parent::homeDir();
-        } catch (\RuntimeException $e) {
-            throw new \RuntimeException(
-                'Contao Manager must be placed in the "web" directory',
-                $e->getCode(),
-                $e
-            );
-        }
+        $this->kernel = $kernel;
+
+        parent::__construct($kernel->getContaoDir());
     }
 
     public function tensideDataDir()
     {
-        return $this->homeDir().DIRECTORY_SEPARATOR.'contao-manager';
+        return $this->kernel->getManagerDir();
     }
 }

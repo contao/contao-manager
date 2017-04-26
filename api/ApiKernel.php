@@ -30,9 +30,9 @@ class ApiKernel extends Kernel
     use MicroKernelTrait;
 
     /**
-     * @var HomePathDeterminator
+     * @var string
      */
-    private $home;
+    private $contaoDir;
 
     /**
      * {@inheritdoc}
@@ -81,7 +81,18 @@ class ApiKernel extends Kernel
      */
     public function getContaoDir()
     {
-        return $this->getHome()->homeDir();
+        if (null === $this->contaoDir) {
+            if (false !== ($composer = getenv('COMPOSER'))) {
+                // @see https://getcomposer.org/doc/03-cli.md#composer
+                $this->contaoDir = dirname($composer);
+            } else if ('' !== ($phar = \Phar::running())) {
+                $this->contaoDir = dirname(dirname(substr($phar, 7)));
+            } else {
+                $this->contaoDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'test-dir';
+            }
+        }
+
+        return $this->contaoDir;
     }
 
     /**
@@ -108,29 +119,5 @@ class ApiKernel extends Kernel
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
     {
         $loader->load(__DIR__.'/Resources/config/config_'.$c->getParameter('kernel.environment').'.yml');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function initializeContainer()
-    {
-        parent::initializeContainer();
-
-        $this->container->set('tenside.home', $this->getHome());
-    }
-
-    /**
-     * Initializes and returns the HomePathDeterminator.
-     *
-     * @return HomePathDeterminator
-     */
-    private function getHome()
-    {
-        if (null === $this->home) {
-            return new HomePathDeterminator();
-        }
-
-        return $this->home;
     }
 }

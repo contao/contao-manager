@@ -62,7 +62,8 @@ services:
 
     tenside.home:
         class:  Contao\ManagerApi\Tenside\HomePathDeterminator
-        synthetic: true
+        arguments:
+            - "@kernel"
 
     tenside.config:
         class:          Tenside\Core\Config\TensideJsonConfig
