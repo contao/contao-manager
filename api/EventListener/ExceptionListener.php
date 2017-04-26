@@ -46,7 +46,7 @@ class ExceptionListener
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if ('json' !== $event->getRequest()->getContentType()) {
+        if (!in_array('application/json', $event->getRequest()->getAcceptableContentTypes(), true)) {
             return;
         }
 
