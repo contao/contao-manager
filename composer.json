@@ -26,6 +26,6 @@
         "psr-4": {
             "Contao\\ManagerApi\\": "api/"
         }
-    },
+    }
 
 }
