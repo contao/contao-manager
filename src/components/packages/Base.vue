@@ -2,7 +2,7 @@
     <main-layout>
 
         <section :class="{'package-actions': true, 'search-active': $route.name === 'packages-search'}">
-            <button class="update" @click="updatePackages">Update Packages</button>
+            <button class="update" :disabled="hasChanges" @click="updatePackages">Update Packages</button>
             <button class="search" :disabled="hasChanges" @click="startSearch">Search packages</button>
             <input ref="search" id="search" type="text" placeholder="Search Packages…" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
             <button class="cancel" @click="stopSearch">X</button>
