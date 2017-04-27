@@ -17,7 +17,7 @@
     main {
         position: relative;
         max-width: 380px;
-        margin: 20px auto;
+        margin: 0 auto;
         background: #fff;
 
         &:after {
@@ -74,6 +74,12 @@
 
     main.login,
     main.install {
+        header {
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         section {
             position: relative;
             max-width: 250px;
@@ -207,6 +213,11 @@
     }
 
     @include screen(960) {
+        main {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
         &.wide {
             main {
                 max-width: 940px;
@@ -225,6 +236,7 @@
 
         main.install {
             header {
+                max-width: none;
                 padding: 80px 60px 0;
 
                 @include screen(960) {

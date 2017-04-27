@@ -230,9 +230,16 @@ section.package-actions {
         }
 
         .additional {
-            span:not(:first-child):before {
+            *:not(:last-child):after {
                 margin: 0 10px;
+                font-weight: normal;
                 content: "|";
+            }
+
+            @include screen(1024) {
+                .version {
+                    display: none;
+                }
             }
         }
     }
@@ -271,6 +278,7 @@ section.package-actions {
 
             &:disabled {
                 color: #fff;
+                opacity: 1;
                 background: $orange-button;
                 -webkit-text-fill-color: #fff;
             }

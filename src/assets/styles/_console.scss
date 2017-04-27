@@ -6,6 +6,7 @@
     right: 0;
     bottom: 0;
     left: 0;
+    z-index: 100;
 }
 
 #task-popup {
@@ -36,6 +37,10 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+    }
+
+    a.toggle {
+        display: none;
     }
 
     button,

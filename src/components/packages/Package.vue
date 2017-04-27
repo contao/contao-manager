@@ -17,7 +17,8 @@
             <div class="about">
                 <h1>Contao Open Source CMS</h1>
                 <p class="description">Contao is an Open Source PHP Content Management System. <a href="https://www.contao.org/" target="_blank" class="more">Project Website</a></p>
-                <p class="additional" v-if="additional">
+                <p class="additional">
+                    <strong class="version">Version {{ package.version }}</strong>
                     <span v-for="item in additional">{{ item }}</span>
                 </p>
             </div>
@@ -47,7 +48,8 @@
                 <h1 v-else>{{ name }}</h1>
 
                 <p class="description">{{ package.description }} <a :href="package.url" target="_blank" class="more" v-if="package.url">More</a></p>
-                <p class="additional" v-if="additional">
+                <p class="additional">
+                    <strong class="version">Version {{ package.version }}</strong>
                     <span v-for="item in additional">{{ item }}</span>
                 </p>
             </div>

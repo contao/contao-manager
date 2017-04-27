@@ -11,6 +11,7 @@
             :value="value"
             @input="input($event.target.value)"
             @keypress.enter.prevent="enter"
+            autocapitalize="none"
         >
     </div>
 </template>
