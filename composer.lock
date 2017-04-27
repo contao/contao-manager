@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d4df277824823fb4f5ffb11bde8f972",
+    "content-hash": "3e8c53f39fdf49025befcb068cc290a0",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2702,12 +2702,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "50f0354872f85a54e5c1f2ad1d2881770a65b0b7"
+                "reference": "4fbf3da1d10518e3fe286a19988f6026a94e5215"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/50f0354872f85a54e5c1f2ad1d2881770a65b0b7",
-                "reference": "50f0354872f85a54e5c1f2ad1d2881770a65b0b7",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/4fbf3da1d10518e3fe286a19988f6026a94e5215",
+                "reference": "4fbf3da1d10518e3fe286a19988f6026a94e5215",
                 "shasum": ""
             },
             "require": {
@@ -2767,15 +2767,21 @@
                 "dependency",
                 "package"
             ],
-            "time": "2017-04-24 20:18:50"
+            "time": "2017-04-27 14:32:07"
         },
         {
             "name": "terminal42/background-process",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "/Users/aschempp/Projects/Open Source/background-process/",
+                "url": "https://github.com/terminal42/background-process.git",
                 "reference": "6de1a466b1a023adf96b3683b37bdf645f500e8a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/terminal42/background-process/zipball/6de1a466b1a023adf96b3683b37bdf645f500e8a",
+                "reference": "6de1a466b1a023adf96b3683b37bdf645f500e8a",
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9",
@@ -2794,22 +2800,26 @@
                     "Terminal42\\BackgroundProcess\\": "src/"
                 }
             },
+            "support": {
+                "source": "https://github.com/terminal42/background-process/tree/master",
+                "issues": "https://github.com/terminal42/background-process/issues"
+            },
             "time": "2017-04-19 10:49:46"
         }
     ],
     "packages-dev": [
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v2.3.0",
+            "version": "v2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "ab8c61329ddd896e287a84c7663d06cf1bed3907"
+                "reference": "d5257f7433bb490299c4f300d95598fd911a8ab0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/ab8c61329ddd896e287a84c7663d06cf1bed3907",
-                "reference": "ab8c61329ddd896e287a84c7663d06cf1bed3907",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/d5257f7433bb490299c4f300d95598fd911a8ab0",
+                "reference": "d5257f7433bb490299c4f300d95598fd911a8ab0",
                 "shasum": ""
             },
             "require": {
@@ -2873,7 +2883,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2017-04-21T17:17:40+00:00"
+            "time": "2017-04-25T20:50:30+00:00"
         },
         {
             "name": "sebastian/diff",
