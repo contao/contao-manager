@@ -19,7 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
-use Tenside\Core\Util\RuntimeHelper;
 use Tenside\CoreBundle\TensideCoreBundle;
 
 /**
@@ -43,7 +42,7 @@ class ApiKernel extends Kernel
 
         ini_set('error_log', $this->getLogDir().DIRECTORY_SEPARATOR.'api-'.date('Y-m-d').'.log');
 
-        RuntimeHelper::setupHome($this->getContaoDir());
+        $this->configureComposerEnvironment();
     }
 
     /**
@@ -121,5 +120,18 @@ class ApiKernel extends Kernel
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
     {
         $loader->load(__DIR__.'/Resources/config/config_'.$c->getParameter('kernel.environment').'.yml');
+    }
+
+    /**
+     * Configures the Composer environment variables to match the current setup.
+     */
+    private function configureComposerEnvironment()
+    {
+        $root = $this->getContaoDir();
+
+        putenv('COMPOSER='.$root.DIRECTORY_SEPARATOR.'composer.json');
+        putenv('COMPOSER_HOME='.$this->getManagerDir());
+
+        chdir($root);
     }
 }

@@ -9,7 +9,6 @@
  */
 
 use Contao\ManagerApi\ApiKernel;
-use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__.'/../vendor/autoload.php';
