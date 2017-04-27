@@ -14,20 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__.'/../vendor/autoload.php';
 
-if (\Phar::running()) {
-    // TODO run in prod if phar is active
-    $env = 'dev';
-    $debug = true;
-} else {
-    $env = getenv('SYMFONY_ENV') ?: 'dev';
-    $debug = getenv('SYMFONY_DEBUG') !== '0';
-}
+$env = '@symfony_env@' === 'prod' ? 'prod' : 'dev';
 
-if ($debug) {
-    Debug::enable();
-}
-
-$kernel = new ApiKernel($env, $debug);
+$kernel = new ApiKernel($env, 'dev' === $env);
 
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);

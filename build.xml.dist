@@ -29,6 +29,18 @@
             <arg value="reset" />
             <arg value="--hard" />
         </exec>
+        <exec executable="sed" dir="contao-manager-${version}" passthru="true">
+            <arg value="-i" />
+            <arg value="--" />
+            <arg value="s/@symfony_env@/prod/g" />
+            <arg value="api/console" />
+        </exec>
+        <exec executable="sed" dir="contao-manager-${version}" passthru="true">
+            <arg value="-i" />
+            <arg value="--" />
+            <arg value="s/@symfony_env@/prod/g" />
+            <arg value="web/api.php" />
+        </exec>
     </target>
 
     <target name="composer">

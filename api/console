@@ -59,17 +59,10 @@ if (function_exists('ini_set')) {
 
 putenv('COMPOSER_BINARY='.realpath($_SERVER['argv'][0]));
 
-if (\Phar::running()) {
-    // TODO run in prod if phar is active
-    $env   = 'dev';
-    $debug = true;
-} else {
-    $env   = 'dev';
-    $debug = true;
-}
+$env = '@symfony_env@' === 'prod' ? 'prod' : 'dev';
 
 // Always create kernel to initialize the application
-$kernel = new ApiKernel($env, $debug);
+$kernel = new ApiKernel($env, 'dev' === $env);
 $input = new ArgvInput();
 
 if ('composer' === $input->getFirstArgument()) {
