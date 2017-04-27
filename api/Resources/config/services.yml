@@ -39,6 +39,17 @@ services:
     contao_manager.integrity.windows:
         class: Contao\ManagerApi\IntegrityCheck\WindowsPlatformCheck
 
+    contao_manager.process.commandline:
+        class: Contao\ManagerApi\Process\CommandLine
+        arguments:
+            - "@kernel"
+            - "@contao_manager.config.manager"
+
+    contao_manager.process.contao_api:
+        class: Contao\ManagerApi\Process\ContaoApi
+        arguments:
+            - "@contao_manager.process.commandline"
+
     contao_manager.security.jwt_manager:
         class: Contao\ManagerApi\Security\JwtManager
         arguments:
@@ -54,6 +65,8 @@ services:
         factory: [Contao\ManagerApi\Security\UserProviderFactory, createUserProvider]
         arguments:
             - "@contao_manager.config.user"
+
+
 
 
     app.taskfactory:

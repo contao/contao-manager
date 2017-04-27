@@ -34,7 +34,7 @@
 
             <fieldset v-else>
                 <legend>Contao Installation</legend>
-                <p>An existing Contao installation has been detected.</p>
+                <p>An existing Contao {{ contaoVersion }} installation has been detected.</p>
             </fieldset>
 
             <fieldset v-if="advanced">

@@ -12,6 +12,7 @@ namespace Contao\ManagerApi\Config;
 
 use Contao\ManagerApi\ApiKernel;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\PhpExecutableFinder;
 
 class ManagerConfig extends AbstractConfig
 {
@@ -26,6 +27,20 @@ class ManagerConfig extends AbstractConfig
         $configFile = $kernel->getManagerDir().DIRECTORY_SEPARATOR.'manager.json';
 
         parent::__construct($configFile, $filesystem);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function all()
+    {
+        $data = parent::all();
+
+        $data['secret'] = $this->getSecret();
+        $data['php_cli'] = $this->getPhpExecutable();
+        $data['php_cli_arguments'] = implode(' ', $this->getPhpArguments());
+
+        return $data;
     }
 
     /**
@@ -56,5 +71,33 @@ class ManagerConfig extends AbstractConfig
         $this->data['secret'] = (string) $secret;
 
         $this->save();
+    }
+
+    /**
+     * Gets the PHP executable from config or PhpExecutableFinder.
+     *
+     * @return string
+     */
+    public function getPhpExecutable()
+    {
+        if (isset($this->data['php_cli'])) {
+            return $this->data['php_cli'];
+        }
+
+        return (new PhpExecutableFinder())->find(false);
+    }
+
+    /**
+     * Gets the PHP executable arguments from config or PhpExecutableFinder.
+     *
+     * @return array
+     */
+    public function getPhpArguments()
+    {
+        if (isset($this->data['php_cli_arguments'])) {
+            return explode(' ', $this->data['php_cli_arguments']);
+        }
+
+        return (new PhpExecutableFinder())->findArguments();
     }
 }

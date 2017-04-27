@@ -12,15 +12,16 @@ namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
+use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\IntegrityCheck\IntegrityCheckInterface;
+use Contao\ManagerApi\Process\ContaoApi;
 use Contao\ManagerApi\Tenside\InstallationStatusDeterminator;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Process\PhpExecutableFinder;
 
 class StatusController extends Controller
 {
@@ -41,9 +42,14 @@ class StatusController extends Controller
     private $config;
 
     /**
-     * @var InstallationStatusDeterminator
+     * @var UserConfig
      */
-    private $status;
+    private $users;
+
+    /**
+     * @var ContaoApi
+     */
+    private $contaoApi;
 
     /**
      * @var Filesystem
@@ -60,18 +66,22 @@ class StatusController extends Controller
      *
      * @param ApiKernel                      $kernel
      * @param ManagerConfig                  $config
+     * @param UserConfig                     $users
+     * @param ContaoApi                      $contaoApi
      * @param InstallationStatusDeterminator $status
      * @param Filesystem|null                $filesystem
      */
     public function __construct(
         ApiKernel $kernel,
         ManagerConfig $config,
-        InstallationStatusDeterminator $status,
+        UserConfig $users,
+        ContaoApi $contaoApi,
         Filesystem $filesystem = null
     ) {
         $this->kernel = $kernel;
         $this->config = $config;
-        $this->status = $status;
+        $this->users = $users;
+        $this->contaoApi = $contaoApi;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -82,7 +92,7 @@ class StatusController extends Controller
     {
         $this->createHtaccess();
 
-        if (!$this->status->hasUsers()) {
+        if (0 === $this->users->count()) {
             return $this->runIntegrityChecks() ?: $this->getResponse(self::STATUS_NEW);
         }
 
@@ -94,7 +104,7 @@ class StatusController extends Controller
             return $response;
         }
 
-        return $this->getResponse($this->status->isComplete() ? self::STATUS_OK : self::STATUS_EMPTY);
+        return $this->getResponse();
     }
 
     /**
@@ -129,42 +139,23 @@ class StatusController extends Controller
      *
      * @return JsonResponse
      */
-    private function getResponse($status, $code = 200)
+    private function getResponse($status = null, $code = 200)
     {
-        $version = null;
+        $version = $this->contaoApi->getContaoVersion();
 
-        if ($this->status->isProjectPresent() || $this->status->isProjectInstalled()) {
-            // TODO report correct Contao version
-            $version = 'x.x.x';
+        if (null === $status) {
+            $status = $version ? self::STATUS_OK : self::STATUS_EMPTY;
         }
 
         return new JsonResponse(
             [
                 'status' => $status,
                 'username' => (string) $this->getUser(),
-                'config' => $this->getConfig(),
+                'config' => $this->config->all(),
                 'version' => $version,
             ],
             $code
         );
-    }
-
-    /**
-     * @return array
-     */
-    private function getConfig()
-    {
-        $result = $this->config->all();
-
-        if (!isset($result['php_cli'])) {
-            $result['php_cli'] = (new PhpExecutableFinder())->find(false);
-        }
-
-        if (!isset($result['php_cli_arguments'])) {
-            $result['php_cli_arguments'] = (new PhpExecutableFinder())->findArguments();
-        }
-
-        return $result;
     }
 
     /**

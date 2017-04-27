@@ -4,7 +4,8 @@ services:
         arguments:
             - "@kernel"
             - "@contao_manager.config.manager"
-            - "@tenside.status"
+            - "@contao_manager.config.user"
+            - "@contao_manager.process.contao_api"
             - "@filesystem"
         calls:
             - [setContainer, ["@service_container"]]

@@ -18,7 +18,7 @@ const store = new Vuex.Store({
         status: null,
         config: null,
         error: null,
-        versino: null,
+        version: null,
     },
 
     mutations: {
