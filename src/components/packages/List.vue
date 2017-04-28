@@ -27,7 +27,8 @@
         methods: {
             listPackages() {
                 this.packages = null;
-                this.originals = this.changes = null;
+                this.originals = null;
+                this.changes = null;
 
                 api.getPackages().then(
                     (packages) => {
@@ -37,7 +38,8 @@
                             packages,
                         );
 
-                        this.originals = this.changes = Immutable.fromJS(this.packages);
+                        this.originals = Immutable.fromJS(this.packages);
+                        this.changes = this.originals;
                     },
                 );
             },

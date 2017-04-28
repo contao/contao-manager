@@ -67,12 +67,6 @@
                 this.searchPackages(this, this.query);
             },
             query(value) {
-                /*
-                if (this.packages !== null && !Object.keys(this.packages).length) {
-                    this.packages = null;
-                }
-                */
-
                 this.searchPackages(this, value);
             },
         },
@@ -81,7 +75,9 @@
             searchPackages: debounce(
                 (vm, value) => {
                     if (!value) {
-                        vm.originals = vm.changes = vm.packages = null;
+                        vm.originals = null;
+                        vm.changes = null;
+                        vm.packages = null;
                         return;
                     }
 
@@ -122,7 +118,8 @@
                         vm.packages[pkg.name] = pkg;
                     });
 
-                    vm.originals = vm.changes = Immutable.fromJS(vm.packages);
+                    vm.originals = Immutable.fromJS(vm.packages);
+                    vm.changes = vm.originals;
                 },
                 1000,
             ),
