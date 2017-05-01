@@ -1,0 +1,424 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="">
+        <body>
+
+            <!-- fragments/Footer.vue -->
+            <trans-unit id="ui.footer.help">
+                <source>ui.footer.help</source>
+                <target>Help</target>
+            </trans-unit>
+            <trans-unit id="ui.footer.helpHref">
+                <source>ui.footer.helpHref</source>
+                <target>https://docs.contao.org</target>
+            </trans-unit>
+            <trans-unit id="ui.footer.reportProblem">
+                <source>ui.footer.reportProblem</source>
+                <target>Report a Problem</target>
+            </trans-unit>
+
+
+            <!-- fragments/Navigation.vue -->
+            <trans-unit id="ui.navigation.packages">
+                <source>ui.navigation.packages</source>
+                <target>Packages</target>
+            </trans-unit>
+            <trans-unit id="ui.navigation.maintenance">
+                <source>ui.navigation.maintenance</source>
+                <target>Maintenance</target>
+            </trans-unit>
+            <trans-unit id="ui.navigation.rebuildCache">
+                <source>ui.navigation.rebuildCache</source>
+                <target>Rebuild Cache</target>
+            </trans-unit>
+            <trans-unit id="ui.navigation.advanced">
+                <source>ui.navigation.advanced</source>
+                <target>Advanced</target>
+            </trans-unit>
+            <trans-unit id="ui.navigation.logout">
+                <source>ui.navigation.logout</source>
+                <target>Logout</target>
+            </trans-unit>
+
+
+            <!-- fragments/TaskPopup.vue -->
+            <trans-unit id="ui.taskpopup.failedHeadline">
+                <source>ui.taskpopup.failedHeadline</source>
+                <target>Contao Manager failed to run a background task!</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.failedDescription">
+                <source>ui.taskpopup.failedDescription</source>
+                <target><![CDATA[
+                    Something went wrong while trying to execute the task in the background.<br>
+                    If this happens again, your server might not be supported.
+                ]]></target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.reportProblem">
+                <source>ui.taskpopup.reportProblem</source>
+                <target>Report a Problem</target>
+            </trans-unit>
+
+            <trans-unit id="ui.taskpopup.installHeadline">
+                <source>ui.taskpopup.installHeadline</source>
+                <target>Installation complete!</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.installDescription">
+                <source>ui.taskpopup.installDescription</source>
+                <target>To complete the setup process, please open the Install Tool and enter your database credentials.</target>
+            </trans-unit>
+
+            <trans-unit id="ui.taskpopup.packagesHeadline">
+                <source>ui.taskpopup.packagesHeadline</source>
+                <target>Contao packages updated!</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.packagesDescription">
+                <source>ui.taskpopup.packagesDescription</source>
+                <target>Please open the Install Tool to apply any necessary database changes.</target>
+            </trans-unit>
+
+            <trans-unit id="ui.taskpopup.taskStarting">
+                <source>ui.taskpopup.taskStarting</source>
+                <target>Starting Task …</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.taskInstall">
+                <source>ui.taskpopup.taskInstall</source>
+                <target>Setting up your Contao Application</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.taskUpdate">
+                <source>ui.taskpopup.taskUpdate</source>
+                <target>Updating Packages</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.taskRequire">
+                <source>ui.taskpopup.taskRequire</source>
+                <target>Installing Packages</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.taskRemove">
+                <source>ui.taskpopup.taskRemove</source>
+                <target>Removing Packages</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.taskCache">
+                <source>ui.taskpopup.taskCache</source>
+                <target>Rebuilding Contao cache</target>
+            </trans-unit>
+
+            <trans-unit id="ui.taskpopup.buttonInstallTool">
+                <source>ui.taskpopup.buttonInstallTool</source>
+                <target>Install Tool</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.buttonClose">
+                <source>ui.taskpopup.buttonClose</source>
+                <target>Close</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.buttonConfirm">
+                <source>ui.taskpopup.buttonConfirm</source>
+                <target>Confirm &amp; Close</target>
+            </trans-unit>
+
+            <trans-unit id="ui.taskpopup.consoleShow">
+                <source>ui.taskpopup.consoleShow</source>
+                <target>Show Console Output</target>
+            </trans-unit>
+            <trans-unit id="ui.taskpopup.consoleHide">
+                <source>ui.taskpopup.consoleHide</source>
+                <target>Hide Console Output</target>
+            </trans-unit>
+
+
+            <!-- layouts/Boxed.vue -->
+            <trans-unit id="ui.boxed.welcome">
+                <source>ui.boxed.welcome</source>
+                <target><![CDATA[<strong>Welcome</strong> to {product}]]></target>
+            </trans-unit>
+
+
+            <!-- packages/Base.vue -->
+            <trans-unit id="ui.packages.updateButton">
+                <source>ui.packages.updateButton</source>
+                <target>Update Packages</target>
+            </trans-unit>
+            <trans-unit id="ui.packages.updateConfirm">
+                <source>ui.packages.updateConfirm</source>
+                <target>All packages will be updated to their latest version. Do you want to continue?</target>
+            </trans-unit>
+            <trans-unit id="ui.packages.searchButton">
+                <source>ui.packages.searchButton</source>
+                <target>Search packages</target>
+            </trans-unit>
+            <trans-unit id="ui.packages.searchPlaceholder">
+                <source>ui.packages.searchPlaceholder</source>
+                <target>Search Packages…</target>
+            </trans-unit>
+            <trans-unit id="ui.packages.changesMessage">
+                <source>ui.packages.changesMessage</source>
+                <target>You have unconfirmed changes.</target>
+            </trans-unit>
+            <trans-unit id="ui.packages.changesApply">
+                <source>ui.packages.changesApply</source>
+                <target>Apply changes</target>
+            </trans-unit>
+            <trans-unit id="ui.packages.changesReset">
+                <source>ui.packages.changesReset</source>
+                <target>Reset changes</target>
+            </trans-unit>
+
+
+            <!-- packages/List.vue -->
+            <trans-unit id="ui.packagelist.loading">
+                <source>ui.packagelist.loading</source>
+                <target>Loading …</target>
+            </trans-unit>
+
+
+            <!-- packages/Package.vue -->
+            <trans-unit id="ui.package.hintRevert">
+                <source>ui.package.hintRevert</source>
+                <target>Revert Changes</target>
+            </trans-unit>
+            <trans-unit id="ui.package.hintConstraintBest">
+                <source>ui.package.hintConstraintBest</source>
+                <target>This package will be installed in the best available version when you apply the changes.</target>
+            </trans-unit>
+            <trans-unit id="ui.package.hintConstraint">
+                <source>ui.package.hintConstraint</source>
+                <target>This package will be installed with constraint {constraint} when you apply the changes.</target>
+            </trans-unit>
+            <trans-unit id="ui.package.hintRemoved">
+                <source>ui.package.hintRemoved</source>
+                <target>This package will be removed when you apply the changes.</target>
+            </trans-unit>
+            <trans-unit id="ui.package.hintConstraintChange">
+                <source>ui.package.</source>
+                <target>The constraint for this package will be changed from "{from}" to "{to}" when you apply the changes.</target>
+            </trans-unit>
+
+            <trans-unit id="ui.package.incompatibleTitle">
+                <source>ui.package.incompatibleTitle</source>
+                <target>incompatible</target>
+            </trans-unit>
+            <trans-unit id="ui.package.incompatibleText">
+                <source>ui.package.incompatibleText</source>
+                <target>This bundle could not be enabled because it does not provide a Contao Manager Plugin.</target>
+            </trans-unit>
+            <trans-unit id="ui.package.abandonedTitle">
+                <source>ui.package.abandonedTitle</source>
+                <target>abandoned</target>
+            </trans-unit>
+            <trans-unit id="ui.package.abandonedText">
+                <source>ui.package.abandonedText</source>
+                <target>This package is marked as abandoned.</target>
+            </trans-unit>
+
+            <trans-unit id="ui.package.homepage">
+                <source>ui.package.homepage</source>
+                <target>More</target>
+            </trans-unit>
+            <trans-unit id="ui.package.version">
+                <source>ui.package.version</source>
+                <target>Version {version}</target>
+            </trans-unit>
+            <trans-unit id="ui.package.additionalDownloads">
+                <source>ui.package.additionalDownloads</source>
+                <target>{count} Download ::: {count} Downloads</target>
+            </trans-unit>
+            <trans-unit id="ui.package.additionalStars">
+                <source>ui.package.additionalStars</source>
+                <target>{count} Star ::: {count} Stars</target>
+            </trans-unit>
+            <trans-unit id="ui.package.editConstraint">
+                <source>ui.package.editConstraint</source>
+                <target>Edit</target>
+            </trans-unit>
+            <trans-unit id="ui.package.removeButton">
+                <source>ui.package.removeButton</source>
+                <target>Remove</target>
+            </trans-unit>
+            <trans-unit id="ui.package.installButton">
+                <source>ui.package.installButton</source>
+                <target>Check &amp; Install</target>
+            </trans-unit>
+
+
+            <!-- packages/Search.vue -->
+            <trans-unit id="ui.packagesearch.typeHeadline">
+                <source>ui.packagesearch.typeHeadline</source>
+                <target>Search for</target>
+            </trans-unit>
+            <trans-unit id="ui.packagesearch.typeBundle">
+                <source>ui.packagesearch.typeBundle</source>
+                <target>Contao 4 bundles</target>
+            </trans-unit>
+            <trans-unit id="ui.packagesearch.typeModule">
+                <source>ui.packagesearch.typeModule</source>
+                <target>Contao 3 extensions</target>
+            </trans-unit>
+            <trans-unit id="ui.packagesearch.offline">
+                <source>ui.packagesearch.offline</source>
+                <target>Could not fetch results. Are you online?</target>
+            </trans-unit>
+            <trans-unit id="ui.packagesearch.start">
+                <source>ui.packagesearch.start</source>
+                <target>Enter a keyword to start searching …</target>
+            </trans-unit>
+            <trans-unit id="ui.packagesearch.searching">
+                <source>ui.packagesearch.searching</source>
+                <target><![CDATA[Searching for Contao packages matching <i>{query}</i> …]]></target>
+            </trans-unit>
+            <trans-unit id="ui.packagesearch.empty">
+                <source>ui.packagesearch.empty</source>
+                <target><![CDATA[No results for <i>{query}</i>]]></target>
+            </trans-unit>
+            <trans-unit id="ui.packagesearch.searchBundles">
+                <source>ui.packagesearch.searchBundles</source>
+                <target>Search for Contao 4 bundles</target>
+            </trans-unit>
+            <trans-unit id="ui.packagesearch.searchModules">
+                <source>ui.packagesearch.searchModules</source>
+                <target>Search for Contao 3 extensions</target>
+            </trans-unit>
+
+
+            <!-- App.vue -->
+            <trans-unit id="ui.app.httpsHeadline">
+                <source>ui.app.httpsHeadline</source>
+                <target>!! Insecure Connection !!</target>
+            </trans-unit>
+            <trans-unit id="ui.app.httpsDescription">
+                <source>ui.app.httpsDescription</source>
+                <target>Without HTTPS, your confidential data will be transferred unencryptedly.</target>
+            </trans-unit>
+            <trans-unit id="ui.app.moreLink">
+                <source>ui.app.moreLink</source>
+                <target>More Info</target>
+            </trans-unit>
+            <trans-unit id="ui.app.moreHref">
+                <source>ui.app.moreHref</source>
+                <target>https://https.cio.gov/everything/</target>
+            </trans-unit>
+
+            <trans-unit id="ui.app.apiError">
+                <source>ui.app.apiError</source>
+                <target>Unexpected API status</target>
+            </trans-unit>
+
+
+            <!-- Error.vue -->
+            <trans-unit id="ui.error.moreLink">
+                <source>ui.error.moreLink</source>
+                <target>More Information</target>
+            </trans-unit>
+
+
+            <!-- Install.vue -->
+            <trans-unit id="ui.install.intro">
+                <source>ui.install.intro</source>
+                <target><![CDATA[
+                    This is a pre-release version of Contao Manager.
+                    Please <strong>do not share</strong> without permission of the developer team.
+                    <br><br>
+                    If you encounter a problem, please <strong>do not report it on GitHub</strong>
+                    and contact the person who supplied you with this file instead. Note that we are not
+                    yet collecting minor issues like styling problems, missing features or alike.
+                ]]></target>
+            </trans-unit>
+
+            <trans-unit id="ui.install.accountHeadline">
+                <source>ui.install.accountHeadline</source>
+                <target>User Account</target>
+            </trans-unit>
+            <trans-unit id="ui.install.accountCreate">
+                <source>ui.install.accountCreate</source>
+                <target>Create a user account to manage your installation.</target>
+            </trans-unit>
+            <trans-unit id="ui.install.accountCreated">
+                <source>ui.install.accountCreated</source>
+                <target><![CDATA[You are logged in as <i>{username}</i>.]]></target>
+            </trans-unit>
+            <trans-unit id="ui.install.accountUsername">
+                <source>ui.install.accountUsername</source>
+                <target>Username</target>
+            </trans-unit>
+            <trans-unit id="ui.install.accountPassword">
+                <source>ui.install.accountPassword</source>
+                <target>Password</target>
+            </trans-unit>
+            <trans-unit id="ui.install.accountPasswordPlaceholder">
+                <source>ui.install.accountPasswordPlaceholder</source>
+                <target>min. 8 characters</target>
+            </trans-unit>
+
+            <trans-unit id="ui.install.contaoHeadline">
+                <source>ui.install.contaoHeadline</source>
+                <target>Contao Installation</target>
+            </trans-unit>
+            <trans-unit id="ui.install.contaoSelect">
+                <source>ui.install.contaoSelect</source>
+                <target>Select the Contao version to install.</target>
+            </trans-unit>
+            <trans-unit id="ui.install.contaoVersion">
+                <source>ui.install.contaoVersion</source>
+                <target>Version</target>
+            </trans-unit>
+            <trans-unit id="ui.install.contaoSelected">
+                <source>ui.install.contaoSelected</source>
+                <target>An existing Contao {version} installation has been detected.</target>
+            </trans-unit>
+
+            <trans-unit id="ui.install.expertHeadline">
+                <source>ui.install.expertHeadline</source>
+                <target>Expert Settings</target>
+            </trans-unit>
+            <trans-unit id="ui.install.expertDescription">
+                <source>ui.install.expertDescription</source>
+                <target>Configure the Contao Manager to run on your webserver.</target>
+            </trans-unit>
+            <trans-unit id="ui.install.expertGithub">
+                <source>ui.install.expertGithub</source>
+                <target>GitHub Token</target>
+            </trans-unit>
+            <trans-unit id="ui.install.expertPhp">
+                <source>ui.install.expertPhp</source>
+                <target>PHP binary</target>
+            </trans-unit>
+            <trans-unit id="ui.install.expertArguments">
+                <source>ui.install.expertArguments</source>
+                <target>CLI arguments</target>
+            </trans-unit>
+
+            <trans-unit id="ui.install.buttonInstall">
+                <source>ui.install.buttonInstall</source>
+                <target>Install</target>
+            </trans-unit>
+            <trans-unit id="ui.install.buttonExpert">
+                <source>ui.install.buttonExpert</source>
+                <target>Advanced</target>
+            </trans-unit>
+
+
+            <!-- Login.vue -->
+            <trans-unit id="ui.login.headline">
+                <source>ui.login.headline</source>
+                <target>Sign In</target>
+            </trans-unit>
+            <trans-unit id="ui.login.description">
+                <source>ui.login.description</source>
+                <target>Login to manage your installation.</target>
+            </trans-unit>
+            <trans-unit id="ui.login.username">
+                <source>ui.login.username</source>
+                <target>Username</target>
+            </trans-unit>
+            <trans-unit id="ui.login.password">
+                <source>ui.login.password</source>
+                <target>Password</target>
+            </trans-unit>
+            <trans-unit id="ui.login.forgotPassword">
+                <source>ui.login.forgotPassword</source>
+                <target>Forgot your password?</target>
+            </trans-unit>
+            <trans-unit id="">
+                <source>ui.login.button</source>
+                <target>Sign In</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

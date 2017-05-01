@@ -1,16 +1,16 @@
 <template>
     <boxed-layout mainClass="login">
         <section slot="section">
-            <h1>Sign In</h1>
-            <p>Login to manage your installation.</p>
+            <h1>{{ 'ui.login.headline' | translate }}</h1>
+            <p>{{ 'ui.login.description' | translate }}</p>
 
-            <text-field ref="username" name="username" label="Username" placeholder="Username" :class="login_failed ? 'invalid' : ''" :disabled="logging_in" v-model="username" @enter="login" @input="reset"></text-field>
-            <text-field type="password" name="password" label="Password" placeholder="Password" :class="login_failed ? 'invalid' : ''" :disabled="logging_in" v-model="password" @enter="login" @input="reset"></text-field>
+            <text-field ref="username" name="username" :label="'ui.login.username' | translate" :placeholder="'ui.login.username' | translate" :class="login_failed ? 'invalid' : ''" :disabled="logging_in" v-model="username" @enter="login" @input="reset"></text-field>
+            <text-field type="password" name="password" :label="'ui.login.password' | translate" :placeholder="'ui.login.password' | translate" :class="login_failed ? 'invalid' : ''" :disabled="logging_in" v-model="password" @enter="login" @input="reset"></text-field>
 
-            <a href="https://manager.contao.org/en/forgot-password.html" target="_blank">Forgot your password?</a>
+            <a href="https://manager.contao.org/en/forgot-password.html" target="_blank">{{ 'ui.login.forgotPassword' | translate }}</a>
 
             <button class="primary" @click="login" :disabled="!inputValid || logging_in || login_failed">
-                <span v-if="!logging_in">Sign In</span>
+                <span v-if="!logging_in">{{ 'ui.login.button' | translate }}</span>
                 <loader v-else></loader>
             </button>
         </section>

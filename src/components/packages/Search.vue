@@ -2,28 +2,28 @@
     <div class="packages">
 
         <div class="scope">
-            <h2>Search for</h2>
+            <h2>{{ 'ui.packagesearch.typeHeadline' | translate }}</h2>
             <fieldset :class="{ active: scope === 'contao-bundle' }">
                 <input type="radio" name="scope" id="scope-bundle" value="contao-bundle" v-model="scope">
-                <label for="scope-bundle">Contao 4 bundles</label>
+                <label for="scope-bundle">{{ 'ui.packagesearch.typeBundle' | translate }}</label>
             </fieldset>
             <fieldset :class="{ active: scope === 'contao-module' }">
                 <input type="radio" name="scope" id="scope-module" value="contao-module" v-model="scope">
-                <label for="scope-module">Contao 3 extensions</label>
+                <label for="scope-module">{{ 'ui.packagesearch.typeModule' | translate }}</label>
             </fieldset>
         </div>
 
         <div v-if="packages === false" class="offline">
-            <p>Could not fetch results. Are you online?</p>
+            <p>{{ 'ui.packagesearch.offline' | translate }}</p>
         </div>
         <loader v-else-if="packages === null">
-            <p v-if="!query">Enter a keyword to start searching …</p>
-            <p v-else>Searching for Contao packages matching <i>{{ query }}</i> …</p>
+            <p v-if="!query">{{ 'ui.packagesearch.start' | translate }}</p>
+            <p v-else v-html="$t('ui.packagesearch.searching', { query })"></p>
         </loader>
         <div v-else-if="!Object.keys(packages).length" class="empty">
-            <p>No results for <i>{{ query }}</i></p>
-            <a v-if="scope === 'contao-module'" @click="scope = 'contao-bundle'">Search for Contao 4 bundles</a>
-            <a v-else-if="scope === 'contao-bundle'" @click="scope = 'contao-module'">Search for Contao 3 extensions</a>
+            <p v-html="$t('ui.packagesearch.empty', { query })"></p>
+            <a v-if="scope === 'contao-module'" @click="scope = 'contao-bundle'">{{ 'ui.packagesearch.searchBundles' | translate }}</a>
+            <a v-else-if="scope === 'contao-bundle'" @click="scope = 'contao-module'">{{ 'ui.packagesearch.searchModules' | translate }}</a>
         </div>
 
         <transition-group name="package">

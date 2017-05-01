@@ -2,9 +2,9 @@
     <main-layout>
 
         <section :class="{'package-actions': true, 'search-active': $route.name === 'packages-search'}">
-            <button class="update" :disabled="hasChanges" @click="updatePackages">Update Packages</button>
-            <button class="search" :disabled="hasChanges" @click="startSearch">Search packages</button>
-            <input ref="search" id="search" type="text" placeholder="Search Packages…" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
+            <button class="update" :disabled="hasChanges" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
+            <button class="search" :disabled="hasChanges" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
+            <input ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
             <button class="cancel" @click="stopSearch">X</button>
         </section>
 
@@ -12,9 +12,9 @@
 
         <div id="package-actions" :class="{ active: hasChanges }">
             <div class="inner">
-                <p>You have unconfirmed changes.</p>
-                <button class="primary" @click="applyChanges">Apply changes</button>
-                <button class="alert" @click="resetChanges">Reset changes</button>
+                <p>{{ 'ui.packages.changesMessage' | translate }}</p>
+                <button class="primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
+                <button class="alert" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
             </div>
         </div>
 
@@ -34,7 +34,7 @@
         }),
         methods: {
             updatePackages() {
-                if (!confirm('All packages will be updated to their latest version. Do you want to continue?')) {
+                if (!confirm(this.$t('ui.packages.updateConfirm'))) {
                     return;
                 }
 

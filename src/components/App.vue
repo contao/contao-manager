@@ -1,6 +1,10 @@
 <template>
     <div id="app">
-        <div class="https-warning" v-if="insecure"><strong>!! Insecure Connection !!</strong><span> Without HTTPS, your confidential data will be transferred unencryptedly.</span> <a href="#" target="_blank">More Info</a></div>
+        <div class="https-warning" v-if="insecure">
+            <strong>{{ 'ui.app.httpsHeadline' | translate }}</strong>
+            <span>{{ 'ui.app.httpsDescription' | translate }}</span>
+            <a :href="$t('ui.app.moreHref')" target="_blank">{{ 'ui.app.moreLink' | translate }}</a>
+        </div>
         <router-view :class="taskRunning ? 'blur-in' : 'blur-out'"></router-view>
         <keep-alive><task-popup v-if="taskRunning"></task-popup></keep-alive>
         <error v-if="hasError"></error>
@@ -55,7 +59,7 @@
                     this.$router.replace(routes.packages);
                 } else {
                     this.$store.commit('setError', {
-                        title: 'Unexpected API status',
+                        title: this.$t('ui.app.apiError'),
                         type: 'about:blank',
                     });
                 }

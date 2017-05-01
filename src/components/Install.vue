@@ -1,56 +1,49 @@
 <template>
     <boxed-layout wide="1" mainClass="install">
         <div slot="intro">
-            <p>
-                This is a pre-release version of Contao Manager.
-                Please do not share without permission of the developer team.
-                <br><br>
-                We are not yet collecting minor issues (like styling, missing features, etc.).
-                If you encounter a major issue, please do NOT use GitHub to report it,
-                but contact the person who supplied you with this file.
-            </p>
+            <p v-html="$t('ui.install.intro')"></p>
         </div>
 
         <section slot="section">
 
             <fieldset v-if="!authUsername">
-                <legend>User Account</legend>
-                <p>Create a user account to manage your installation.</p>
-                <text-field ref="username" name="username" label="Username" class="inline" :disabled="installing" v-model="username" @enter="install"></text-field>
-                <text-field type="password" name="password" label="Password" placeholder="min. 8 characters" :class="passwordClass" :disabled="installing" v-model="password" @enter="install"></text-field>
+                <legend>{{ 'ui.install.accountHeadline' | translate }}</legend>
+                <p>{{ 'ui.install.accountCreate' | translate }}</p>
+                <text-field ref="username" name="username" :label="$t('ui.install.accountUsername')" class="inline" :disabled="installing" v-model="username" @enter="install"></text-field>
+                <text-field type="password" name="password" :label="$t('ui.install.accountPassword')" placeholder="" :class="passwordClass" :disabled="installing" v-model="password" @enter="install"></text-field>
                 <text-field type="password" name="password_confirm" label="Retype Password" :class="passwordClass" :disabled="installing" v-model="password_confirm" @enter="install"></text-field>
             </fieldset>
 
             <fieldset v-else>
-                <legend>User Account</legend>
-                <p>You are logged in as <i>{{ authUsername }}</i>.</p>
+                <legend>{{ 'ui.install.accountHeadline' | translate }}</legend>
+                <p v-html="$t('ui.install.accountCreated', { username: authUsername })"></p>
             </fieldset>
 
             <fieldset v-if="!contaoVersion">
-                <legend>Contao Installation</legend>
-                <p>Select the Contao version to install.</p>
-                <select-menu name="version" label="Version" class="inline" v-bind="version" :options="versions"></select-menu>
+                <legend>{{ 'ui.install.contaoHeadline' | translate }}</legend>
+                <p>{{ 'ui.install.contaoSelect' | translate }}</p>
+                <select-menu name="version" :label="$t('ui.install.contaoVersion')" class="inline" v-bind="version" :options="versions"></select-menu>
             </fieldset>
 
             <fieldset v-else>
-                <legend>Contao Installation</legend>
-                <p>An existing Contao {{ contaoVersion }} installation has been detected.</p>
+                <legend>{{ 'ui.install.contaoHeadline' | translate }}</legend>
+                <p>{{ 'ui.install.contaoSelected' | translate({ version: contaoVersion }) }}</p>
             </fieldset>
 
             <fieldset v-if="advanced">
-                <legend>Expert Settings</legend>
-                <p>Configure the Contao Manager to run on your webserver.</p>
-                <text-field name="github_oauth_token" label="GitHub Token" :disabled="installing" v-model="github_oauth_token" @enter="install"></text-field>
-                <text-field name="php_cli" label="PHP binary" :disabled="installing" v-model="php_cli" @enter="install"></text-field>
-                <text-field name="php_cli_arguments" label="CLI arguments" :disabled="installing" v-model="php_cli_arguments" @enter="install"></text-field>
+                <legend>{{ 'ui.install.expertHeadline' | translate }}</legend>
+                <p>{{ 'ui.install.expertDescription' | translate }}</p>
+                <text-field name="github_oauth_token" :label="$t('ui.install.expertGithub')" :disabled="installing" v-model="github_oauth_token" @enter="install"></text-field>
+                <text-field name="php_cli" :label="$t('ui.install.expertPhp')" :disabled="installing" v-model="php_cli" @enter="install"></text-field>
+                <text-field name="php_cli_arguments" :label="$t('ui.install.expertArguments')" :disabled="installing" v-model="php_cli_arguments" @enter="install"></text-field>
             </fieldset>
 
             <fieldset :class="{ submit: true, advanced: advanced || installing }">
                 <button class="primary install" @click="install" :disabled="!inputValid || installing">
-                    <span v-if="!installing">Install</span>
+                    <span v-if="!installing">{{ 'ui.install.buttonInstall' | translate }}</span>
                     <loader v-else></loader>
                 </button>
-                <a href="#" class="button advanced" v-if="!advanced && !installing" @click.prevent="enableAdvanced">Advanced</a>
+                <a href="#" class="button advanced" v-if="!advanced && !installing" @click.prevent="enableAdvanced">{{ 'ui.install.buttonExpert' | translate }}</a>
             </fieldset>
 
         </section>

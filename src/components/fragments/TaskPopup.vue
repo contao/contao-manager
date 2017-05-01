@@ -14,41 +14,38 @@
             </div>
 
             <div v-if="taskStatus === 'failed'">
-                <h2>Contao Manager failed to run a background task!</h2>
-                <p>
-                    Something went wrong while trying to execute the task in the background.<br>
-                    If this happens again, your server might not be supported.<br>
-                    <br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">Report a Problem</a>
-                </p>
+                <h2>{{ 'ui.taskpopup.failedHeadline' | translate }}</h2>
+                <p v-html="$t('ui.taskpopup.failedDescription')"></p>
+                <p><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ 'ui.taskpopup.reportProblem' | translate }}</a></p>
 
-                <button @click="hidePopup"><span>Close</span></button>
+                <button @click="hidePopup"><span>{{ 'ui.taskpopup.buttonClose' | translate }}</span></button>
             </div>
             <div v-else-if="taskStatus === 'success' && taskType === 'install'">
-                <h2>Installation complete!</h2>
-                <p>To complete the setup process, please open the Install Tool and enter your database credentials.</p>
+                <h2>{{ 'ui.taskpopup.installHeadline' | translate }}</h2>
+                <p>{{ 'ui.taskpopup.installDescription' | translate }}</p>
 
-                <a class="button primary" href="/install.php" target="_blank">Install Tool</a>
+                <a class="button primary" href="/contao/install" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
                 <button @click="hidePopup">Confirm & Close</button>
             </div>
             <div v-else-if="taskStatus === 'success' && (taskType === 'upgrade' || taskType === 'require-package' || taskType === 'remove-package')">
-                <h2>Contao packages updated!</h2>
-                <p>Please open the Install Tool to apply any necessary database changes.</p>
+                <h2>{{ 'ui.taskpopup.packagesHeadline' | translate }}</h2>
+                <p>{{ 'ui.taskpopup.packagesDescription' | translate }}</p>
 
-                <a class="button primary" href="/install.php" target="_blank">Install Tool</a>
-                <button @click="hidePopup"><span>Confirm & Close</span></button>
+                <a class="button primary" href="/contao/install" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
+                <button @click="hidePopup"><span>{{ 'ui.taskpopup.buttonConfirm' | translate }}</span></button>
             </div>
             <div v-else>
-                <h2 class="progress">{{ progressTitle ? progressTitle : 'Loading…' }}</h2>
+                <h2 class="progress">{{ progressTitle ? progressTitle : $t('ui.taskpopup.taskStarting') }}</h2>
                 <p class="progress">{{ progressText ? progressText : '&nbsp;' }}</p>
 
-                <button :disabled="taskStatus !== 'success' && taskStatus !== 'error'" @click="hidePopup">Confirm &amp; Close</button>
+                <button :disabled="taskStatus !== 'success' && taskStatus !== 'error'" @click="hidePopup">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
             </div>
 
             <div v-if="taskStatus !== 'failed'">
                 <a @click.prevent="toggleConsole" :class="showConsole ? 'toggle hide' : 'toggle show'">
                     <i class="icono-caretRight"></i>
-                    <span v-if="showConsole">Hide Console Output</span>
-                    <span v-else>Show Console Output</span>
+                    <span v-if="showConsole">{{ 'ui.taskpopup.consoleHide' | translate }}</span>
+                    <span v-else>{{ 'ui.taskpopup.consoleShow' | translate }}</span>
                 </a>
 
                 <code ref="console" @scroll="scrolled">{{ consoleOutput }}</code>
@@ -82,15 +79,15 @@
 
             taskTitle() {
                 if (!this.taskType) {
-                    return 'Starting task …';
+                    return this.$t('ui.taskpopup.taskStarting');
                 }
 
                 const titles = {
-                    install: 'Setting up your Contao Application',
-                    upgrade: 'Updating Packages',
-                    'require-package': 'Installing Packages',
-                    'remove-package': 'Removing Packages',
-                    'rebuild-cache': 'Rebuilding Contao cache',
+                    install: this.$t('ui.taskpopup.taskInstall'),
+                    upgrade: this.$t('ui.taskpopup.taskUpdate'),
+                    'require-package': this.$t('ui.taskpopup.taskRequire'),
+                    'remove-package': this.$t('ui.taskpopup.taskRemove'),
+                    'rebuild-cache': this.$t('ui.taskpopup.taskCache'),
                 };
 
                 return titles[this.taskType];
