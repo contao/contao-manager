@@ -55,8 +55,8 @@
                     this.$router.replace(routes.packages);
                 } else {
                     this.$store.commit('setError', {
-                        title: 'Unknown API status encountered',
-                        type: 'error.type',
+                        title: 'Unexpected API status',
+                        type: 'about:blank',
                     });
                 }
             },
