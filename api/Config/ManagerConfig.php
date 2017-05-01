@@ -11,8 +11,8 @@
 namespace Contao\ManagerApi\Config;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Process\PhpExecutableFinder;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\PhpExecutableFinder;
 
 class ManagerConfig extends AbstractConfig
 {
