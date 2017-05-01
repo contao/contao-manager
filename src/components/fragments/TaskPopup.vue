@@ -109,7 +109,15 @@
                 }
             },
             hidePopup() {
-                this.$store.dispatch('tasks/deleteCurrent');
+                const reload = this.taskStatus === 'failed';
+
+                this.$store.dispatch('tasks/deleteCurrent').then(
+                    () => {
+                        if (reload) {
+                            window.location.reload();
+                        }
+                    },
+                );
             },
             scrolled() {
                 if (!this.swallowScroll) {
