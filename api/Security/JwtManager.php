@@ -53,6 +53,10 @@ class JwtManager
      */
     public function getPayload(Request $request)
     {
+        if (!$request->cookies->has(self::COOKIE_AUTH)) {
+            return null;
+        }
+
         try {
             return JWT::decode(
                 $request->cookies->get(self::COOKIE_AUTH),

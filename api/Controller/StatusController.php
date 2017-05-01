@@ -90,21 +90,39 @@ class StatusController extends Controller
      */
     public function __invoke()
     {
-        $this->createHtaccess();
-
-        if (0 === $this->users->count()) {
-            return $this->runIntegrityChecks() ?: $this->getResponse(self::STATUS_NEW);
-        }
-
-        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->getResponse(self::STATUS_AUTHENTICATE, 401);
+        if (0 !== $this->users->count() && !$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return new JsonResponse(
+                [
+                    'status' => self::STATUS_AUTHENTICATE,
+                ],
+                Response::HTTP_UNAUTHORIZED
+            );
         }
 
         if (null !== ($response = $this->runIntegrityChecks())) {
             return $response;
         }
 
-        return $this->getResponse();
+        $this->createHtaccess();
+
+        $version = $this->contaoApi->getContaoVersion();
+
+        if (0 === $this->users->count()) {
+            $status = self::STATUS_NEW;
+        } elseif ($version) {
+            $status = self::STATUS_OK;
+        } else {
+            $status = self::STATUS_EMPTY;
+        }
+
+        return new JsonResponse(
+            [
+                'status' => $status,
+                'username' => (string) $this->getUser(),
+                'config' => $this->config->all(),
+                'version' => $version,
+            ]
+        );
     }
 
     /**
@@ -131,31 +149,6 @@ class StatusController extends Controller
         }
 
         return null;
-    }
-
-    /**
-     * @param string $status
-     * @param int    $code
-     *
-     * @return JsonResponse
-     */
-    private function getResponse($status = null, $code = 200)
-    {
-        $version = $this->contaoApi->getContaoVersion();
-
-        if (null === $status) {
-            $status = $version ? self::STATUS_OK : self::STATUS_EMPTY;
-        }
-
-        return new JsonResponse(
-            [
-                'status' => $status,
-                'username' => (string) $this->getUser(),
-                'config' => $this->config->all(),
-                'version' => $version,
-            ],
-            $code
-        );
     }
 
     /**
