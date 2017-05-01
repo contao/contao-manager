@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2017 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -9,7 +17,6 @@ use Symfony\Component\Translation\TranslatorBagInterface;
 
 class I18nController extends Controller
 {
-
     public function getAction(Request $request)
     {
         /** @var TranslatorBagInterface $translator */

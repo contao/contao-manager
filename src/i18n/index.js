@@ -11,7 +11,6 @@ Vue.i18n.set('en');
 export default {
     detect() {
         const userLang = navigator.language || navigator.userLanguage;
-        console.log(userLang);
 
         return this.load(userLang);
     },
