@@ -67,7 +67,6 @@
         </exec>
     </target>
 
-
     <target name="npm">
         <echo message="Installing UI dependencies" />
         <exec executable="npm" dir="contao-manager-${version}" checkreturn="true">
