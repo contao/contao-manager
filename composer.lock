@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8974c89c64f9d0bad6b39a053501f04",
+    "content-hash": "8b8be140e19a25f8c40541fbd2d9d2e7",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2766,12 +2766,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
-                "reference": "4fbf3da1d10518e3fe286a19988f6026a94e5215"
+                "reference": "aed3a59677f6c5ade11d79cdf6c1483c5a18acd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/4fbf3da1d10518e3fe286a19988f6026a94e5215",
-                "reference": "4fbf3da1d10518e3fe286a19988f6026a94e5215",
+                "url": "https://api.github.com/repos/tenside/core-bundle/zipball/aed3a59677f6c5ade11d79cdf6c1483c5a18acd2",
+                "reference": "aed3a59677f6c5ade11d79cdf6c1483c5a18acd2",
                 "shasum": ""
             },
             "require": {
@@ -2831,7 +2831,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2017-04-27 14:32:07"
+            "time": "2017-05-01 10:00:19"
         },
         {
             "name": "terminal42/background-process",
@@ -2839,12 +2839,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/terminal42/background-process.git",
-                "reference": "6de1a466b1a023adf96b3683b37bdf645f500e8a"
+                "reference": "24e60d51a049349ed5786d6b0eab2ed0538a8933"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/terminal42/background-process/zipball/6de1a466b1a023adf96b3683b37bdf645f500e8a",
-                "reference": "6de1a466b1a023adf96b3683b37bdf645f500e8a",
+                "url": "https://api.github.com/repos/terminal42/background-process/zipball/24e60d51a049349ed5786d6b0eab2ed0538a8933",
+                "reference": "24e60d51a049349ed5786d6b0eab2ed0538a8933",
                 "shasum": ""
             },
             "require": {
@@ -2868,7 +2868,7 @@
                 "source": "https://github.com/terminal42/background-process/tree/master",
                 "issues": "https://github.com/terminal42/background-process/issues"
             },
-            "time": "2017-04-19 10:49:46"
+            "time": "2017-05-01 09:57:19"
         }
     ],
     "packages-dev": [
