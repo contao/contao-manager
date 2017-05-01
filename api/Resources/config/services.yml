@@ -27,14 +27,17 @@ services:
             - "@security.password_encoder"
             - "@filesystem"
 
+    contao_manager.integrity.allow_url_fopen:
+        class: Contao\ManagerApi\IntegrityCheck\AllowUrlFopenCheck
+
     contao_manager.integrity.openssl:
         class: Contao\ManagerApi\IntegrityCheck\OpenSSLCheck
 
     contao_manager.integrity.proc_open:
-        class: Contao\ManagerApi\IntegrityCheck\ProcOpenCheck
+            class: Contao\ManagerApi\IntegrityCheck\ProcOpenCheck
 
-    contao_manager.integrity.allow_url_fopen:
-        class: Contao\ManagerApi\IntegrityCheck\AllowUrlFopenCheck
+    contao_manager.integrity.web_root:
+        class: Contao\ManagerApi\IntegrityCheck\WebRootCheck
 
     contao_manager.integrity.windows:
         class: Contao\ManagerApi\IntegrityCheck\WindowsPlatformCheck

@@ -12,6 +12,7 @@ services:
             - [addIntegrityCheck, ["@contao_manager.integrity.allow_url_fopen"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.openssl"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.proc_open"]]
+            - [addIntegrityCheck, ["@contao_manager.integrity.web_root"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.windows"]]
 
     contao_manager.controller.session:
