@@ -12,7 +12,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class OpenSSLCheck implements IntegrityCheckInterface
+class OpenSSLCheck extends AbstractIntegrityCheck
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class OpenSSLCheck implements IntegrityCheckInterface
         }
 
         return new ApiProblem(
-            'The PHP OpenSSL extension is not available.',
+            $this->trans('openssl.title'),
             'https://php.net/openssl'
         );
     }

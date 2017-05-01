@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="">
+        <body>
+            <trans-unit id="integrity.allow_url_fopen.title">
+                <source>integrity.allow_url_fopen.title</source>
+                <target>The PHP setting "allow_url_fopen" is not enabled on the server.</target>
+            </trans-unit>
+            <trans-unit id="integrity.openssl.title">
+                <source>integrity.openssl.title</source>
+                <target>The PHP OpenSSL extension is not available.</target>
+            </trans-unit>
+            <trans-unit id="integrity.proc_open.title">
+                <source>integrity.proc_open.title</source>
+                <target>The PHP function "proc_open" is not available on the server.</target>
+            </trans-unit>
+            <trans-unit id="integrity.web_root.title">
+                <source>integrity.web_root.title</source>
+                <target>The Phar file must be located in the /web folder.</target>
+            </trans-unit>
+            <trans-unit id="integrity.windows.title">
+                <source>integrity.windows.title</source>
+                <target>This version of Contao Manager is currently not supported on Windows.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

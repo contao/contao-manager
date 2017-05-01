@@ -12,7 +12,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class AllowUrlFopenCheck implements IntegrityCheckInterface
+class AllowUrlFopenCheck extends AbstractIntegrityCheck
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class AllowUrlFopenCheck implements IntegrityCheckInterface
         }
 
         return new ApiProblem(
-            'The PHP setting "allow_url_fopen" is not enabled on the server.',
+            $this->trans('allow_url_fopen.title'),
             'https://php.net/allow_url_fopen'
         );
     }

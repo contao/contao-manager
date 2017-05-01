@@ -13,7 +13,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\Response;
 
-class WebRootCheck implements IntegrityCheckInterface
+class WebRootCheck extends AbstractIntegrityCheck
 {
     public function run()
     {
@@ -22,7 +22,7 @@ class WebRootCheck implements IntegrityCheckInterface
         }
 
         return (new ApiProblem(
-            'The Phar file must be located in the /web folder.'/*,
+            $this->trans('web_root.title')/*,
             'https://github.com/contao/contao-manager/issues/66'*/
         ))->setStatus(Response::HTTP_NOT_IMPLEMENTED);
     }

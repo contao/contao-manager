@@ -13,7 +13,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\Response;
 
-class WindowsPlatformCheck implements IntegrityCheckInterface
+class WindowsPlatformCheck extends AbstractIntegrityCheck
 {
     public function run()
     {
@@ -22,7 +22,7 @@ class WindowsPlatformCheck implements IntegrityCheckInterface
         }
 
         return (new ApiProblem(
-            'This version of Contao Manager is currently not supported on Windows.',
+            $this->trans('windows.title'),
             'https://github.com/contao/contao-manager/issues/66'
         ))->setStatus(Response::HTTP_NOT_IMPLEMENTED);
     }

@@ -12,7 +12,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class ProcOpenCheck implements IntegrityCheckInterface
+class ProcOpenCheck extends AbstractIntegrityCheck
 {
     public function run()
     {
@@ -21,7 +21,7 @@ class ProcOpenCheck implements IntegrityCheckInterface
         }
 
         return new ApiProblem(
-            'The PHP function "proc_open" is not available on the server.',
+            $this->trans('proc_open.title'),
             'https://php.net/proc_open'
         );
     }
