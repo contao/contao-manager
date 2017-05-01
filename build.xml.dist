@@ -58,7 +58,7 @@
     </target>
 
     <target name="cache">
-        <echo message="Builing chache for the API application" />
+        <echo message="Builing cache for the API application" />
         <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
             <arg value="api/console" />
             <arg value="cache:warmup" />
@@ -79,7 +79,7 @@
 
     <target name="build-prod">
         <echo message="Compiling UI files" />
-        <exec executable="npm" dir="contao-manager-${version}">
+        <exec executable="npm" dir="contao-manager-${version}" checkreturn="true">
             <arg value="run" />
             <arg value="build" />
         </exec>
@@ -87,7 +87,7 @@
 
     <target name="build-dev">
         <echo message="Compiling UI files" />
-        <exec executable="npm" passthru="true">
+        <exec executable="npm" passthru="true" checkreturn="true">
             <arg value="run" />
             <arg value="build" />
         </exec>
