@@ -51,7 +51,7 @@ export default {
         );
     },
 
-    runNextTask() {
+    runNextTask(timeout = 1000) {
         return new Promise((resolve) => {
             let request;
 
@@ -64,7 +64,7 @@ export default {
             setTimeout(() => {
                 request.abort();
                 resolve();
-            }, 500);
+            }, timeout);
         });
     },
 

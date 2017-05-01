@@ -5,46 +5,48 @@ import api from '../api';
 const pollTask = ({ commit }, taskId, resolve, reject) => {
     let pending = 0;
 
-    const fetch = () => (api.getTask(taskId).then(
-        (task) => {
-            commit('setProgress', task);
+    const fetch = () => {
+        api.getTask(taskId).then(
+            (task) => {
+                commit('setProgress', task);
 
-            switch (task.status) {
-                case 'PENDING':
-                    pending += 1;
+                switch (task.status) {
+                    case 'PENDING':
+                        pending += 1;
 
-                    if (pending > 5) {
+                        if (pending > 5) {
+                            commit('setStatus', 'failed');
+                            reject(task);
+                            return;
+                        }
+
+                        api.runNextTask(pending * 500).then(() => {
+                            setTimeout(fetch, pending * 1000);
+                        });
+                        break;
+
+                    case 'RUNNING':
+                        commit('setStatus', 'running');
+                        setTimeout(fetch, 1000);
+                        break;
+
+                    case 'FINISHED':
+                        commit('setStatus', 'success');
+                        resolve(task);
+                        break;
+
+                    case 'ERROR':
+                        commit('setStatus', 'error');
+                        reject(task);
+                        break;
+
+                    default:
                         commit('setStatus', 'failed');
                         reject(task);
-                        return;
-                    }
-
-                    api.runNextTask().then(() => {
-                        setTimeout(fetch, 2000);
-                    });
-                    break;
-
-                case 'RUNNING':
-                    commit('setStatus', 'running');
-                    setTimeout(fetch, 1000);
-                    break;
-
-                case 'FINISHED':
-                    commit('setStatus', 'success');
-                    resolve(task);
-                    break;
-
-                case 'ERROR':
-                    commit('setStatus', 'error');
-                    reject(task);
-                    break;
-
-                default:
-                    commit('setStatus', 'failed');
-                    reject(task);
-            }
-        },
-    ));
+                }
+            },
+        );
+    };
 
     fetch();
 };
