@@ -13,23 +13,25 @@ namespace Contao\ManagerApi\Process;
 class ContaoApi
 {
     /**
-     * @var CommandLine
+     * @var ConsoleProcessFactory
      */
-    private $commandLine;
+    private $console;
 
     /**
      * Constructor.
      *
-     * @param CommandLine $commandLine
+     * @param ConsoleProcessFactory $console
      */
-    public function __construct(CommandLine $commandLine)
+    public function __construct(ConsoleProcessFactory $console)
     {
-        $this->commandLine = $commandLine;
+        $this->console = $console;
     }
 
     public function getContaoVersion($throwException = false)
     {
-        $process = $this->commandLine->runContaoConsole(['contao:version']);
+        $process = $this->console->createContaoConsoleProcess(['contao:version']);
+
+        $process->run();
 
         if ($process->isSuccessful()) {
             return trim($process->getOutput());

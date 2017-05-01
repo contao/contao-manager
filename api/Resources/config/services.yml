@@ -39,16 +39,17 @@ services:
     contao_manager.integrity.windows:
         class: Contao\ManagerApi\IntegrityCheck\WindowsPlatformCheck
 
-    contao_manager.process.commandline:
-        class: Contao\ManagerApi\Process\CommandLine
+    contao_manager.process.console_factory:
+        class: Contao\ManagerApi\Process\ConsoleProcessFactory
         arguments:
             - "@kernel"
             - "@contao_manager.config.manager"
+            - "@logger"
 
     contao_manager.process.contao_api:
         class: Contao\ManagerApi\Process\ContaoApi
         arguments:
-            - "@contao_manager.process.commandline"
+            - "@contao_manager.process.console_factory"
 
     contao_manager.security.jwt_manager:
         class: Contao\ManagerApi\Security\JwtManager
