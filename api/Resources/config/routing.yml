@@ -13,6 +13,12 @@ logout:
     defaults: { _controller: contao_manager.controller.session:logout }
     methods:  [DELETE]
 
+i18n:
+    path:     /api/i18n/{locale}
+    defaults: { _controller: contao_manager.controller.i18n:getAction }
+    methods:  [GET]
+    requirements:
+        locale: '[a-z]{2}(\-[A-Z]{2})?'
 
 
 #############

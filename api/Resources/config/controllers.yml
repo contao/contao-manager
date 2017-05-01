@@ -23,6 +23,11 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
 
+    contao_manager.controller.i18n:
+        class: Contao\ManagerApi\Controller\I18nController
+        calls:
+            - [setContainer, ["@service_container"]]
+
     contao_manager.controller.config_auth:
             class: Contao\ManagerApi\Controller\ConfigController
             arguments:

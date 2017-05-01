@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 
 import router from './router';
 import store from './store';
+import i18n from './i18n';
 
 import App from './components/App';
 
@@ -13,13 +14,15 @@ Vue.http.options.emulateHTTP = true;
 
 Vue.http.interceptors.push((request, next) => {
     console.log(request);
+    const url = request.url;
 
     request.headers.set('X-XSRF-Token', Cookies.get('contao_manager_xsrf'));
+    request.url = `${request.url}?_locale=${Vue.i18n.locale()}`;
 
     next((response) => {
         console.log(response);
 
-        if (response.status === 403 || (response.status === 401 && request.url !== 'api/status')) {
+        if (response.status === 403 || (response.status === 401 && url !== 'api/status')) {
             store.dispatch('fetchStatus', true);
         } else if (response.headers.get('Content-Type') === 'application/problem+json') {
             store.commit('setError', response.data);
@@ -27,10 +30,12 @@ Vue.http.interceptors.push((request, next) => {
     });
 });
 
-/* eslint-disable no-new */
-new Vue({
-    router,
-    store,
-    el: '#app',
-    render: h => h(App),
+i18n.detect().then(() => {
+    /* eslint-disable no-new */
+    new Vue({
+        router,
+        store,
+        el: '#app',
+        render: h => h(App),
+    });
 });
