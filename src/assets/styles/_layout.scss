@@ -68,6 +68,11 @@ select, input, textarea {
         -webkit-text-fill-color: $text-color;
         cursor: text;
     }
+
+    &::-ms-clear,
+    &::-ms-reveal {
+        display: none;
+    }
 }
 
 .invisible {
