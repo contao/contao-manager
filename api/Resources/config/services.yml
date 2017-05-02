@@ -27,30 +27,35 @@ services:
             - "@security.password_encoder"
             - "@filesystem"
 
+    contao_manager.i18n.translator:
+        class: Contao\ManagerApi\I18n\Translator
+        arguments:
+            - "@request_stack"
+
     contao_manager.integrity.allow_url_fopen:
         class: Contao\ManagerApi\IntegrityCheck\AllowUrlFopenCheck
         arguments:
-            - "@translator"
+            - "@contao_manager.i18n.translator"
 
     contao_manager.integrity.openssl:
         class: Contao\ManagerApi\IntegrityCheck\OpenSSLCheck
         arguments:
-            - "@translator"
+            - "@contao_manager.i18n.translator"
 
     contao_manager.integrity.proc_open:
         class: Contao\ManagerApi\IntegrityCheck\ProcOpenCheck
         arguments:
-            - "@translator"
+            - "@contao_manager.i18n.translator"
 
     contao_manager.integrity.web_root:
         class: Contao\ManagerApi\IntegrityCheck\WebRootCheck
         arguments:
-            - "@translator"
+            - "@contao_manager.i18n.translator"
 
     contao_manager.integrity.windows:
         class: Contao\ManagerApi\IntegrityCheck\WindowsPlatformCheck
         arguments:
-            - "@translator"
+            - "@contao_manager.i18n.translator"
 
     contao_manager.process.console_factory:
         class: Contao\ManagerApi\Process\ConsoleProcessFactory

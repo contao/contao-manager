@@ -1,0 +1,12 @@
+en:
+    integrity:
+        allow_url_fopen:
+            title: 'The PHP setting "allow_url_fopen" is not enabled on the server.'
+        openssl:
+            title: 'The PHP OpenSSL extension is not available.'
+        proc_open:
+            title: 'The PHP function "proc_open" is not available on the server.'
+        web_root:
+            title: 'The Phar file must be located in the /web folder.'
+        windows:
+            title: 'This version of Contao Manager is currently not supported on Windows.'

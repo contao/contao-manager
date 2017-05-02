@@ -8,7 +8,6 @@
         "symfony/security-bundle": "^3.2",
         "symfony/console": "^3.2",
         "symfony/yaml": "^3.2",
-        "symfony/translation": "^3.2",
 
         "symfony/monolog-bundle": "~2.9",
         "ircmaxell/password-compat": "^1.0",

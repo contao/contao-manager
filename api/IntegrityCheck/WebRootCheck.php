@@ -22,8 +22,7 @@ class WebRootCheck extends AbstractIntegrityCheck
         }
 
         return (new ApiProblem(
-            $this->trans('web_root.title')/*,
-            'https://github.com/contao/contao-manager/issues/66'*/
+            $this->trans('web_root.title')
         ))->setStatus(Response::HTTP_NOT_IMPLEMENTED);
     }
 }

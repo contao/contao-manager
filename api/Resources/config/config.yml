@@ -6,7 +6,7 @@ imports:
 # The secret is only required to sign fragment URLs which is not used
 framework:
     secret: ''
-    translator: { fallbacks: [en] }
+    default_locale: en
 
 security:
     providers:
@@ -25,5 +25,5 @@ security:
             anonymous: ~
 
     access_control:
-        - { path: ^/api/(status|session|i18n), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/(status|session), roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

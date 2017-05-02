@@ -10,21 +10,21 @@
 
 namespace Contao\ManagerApi\IntegrityCheck;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use Contao\ManagerApi\I18n\Translator;
 
 abstract class AbstractIntegrityCheck implements IntegrityCheckInterface
 {
     /**
-     * @var TranslatorInterface
+     * @var Translator
      */
     private $translator;
 
     /**
      * Constructor.
      *
-     * @param TranslatorInterface $translator
+     * @param Translator $translator
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(Translator $translator)
     {
         $this->translator = $translator;
     }
@@ -33,12 +33,11 @@ abstract class AbstractIntegrityCheck implements IntegrityCheckInterface
      * Translates a string from the "integrity" domain.
      *
      * @param string $id
-     * @param array  $parameters
      *
      * @return string
      */
-    protected function trans($id, array $parameters = [])
+    protected function trans($id)
     {
-        return $this->translator->trans('integrity.'.$id, $parameters, 'integrity');
+        return $this->translator->trans('integrity.'.$id);
     }
 }

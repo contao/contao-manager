@@ -16,8 +16,10 @@ Vue.http.interceptors.push((request, next) => {
     console.log(request);
     const url = request.url;
 
-    request.headers.set('X-XSRF-Token', Cookies.get('contao_manager_xsrf'));
-    request.url = `${request.url}?_locale=${Vue.i18n.locale()}`;
+    if (request.url.slice(0, 4) === 'api/') {
+        request.headers.set('X-XSRF-Token', Cookies.get('contao_manager_xsrf'));
+        request.url = `${request.url}?_locale=${Vue.i18n.locale()}`;
+    }
 
     next((response) => {
         console.log(response);
