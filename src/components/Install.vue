@@ -30,20 +30,20 @@
                 <p>{{ 'ui.install.contaoSelected' | translate({ version: contaoVersion }) }}</p>
             </fieldset>
 
-            <fieldset v-if="advanced">
+            <fieldset v-if="showAdvanced">
                 <legend>{{ 'ui.install.expertHeadline' | translate }}</legend>
                 <p>{{ 'ui.install.expertDescription' | translate }}</p>
                 <text-field name="github_oauth_token" :label="$t('ui.install.expertGithub')" :disabled="installing" v-model="github_oauth_token" @enter="install"></text-field>
-                <text-field name="php_cli" :label="$t('ui.install.expertPhp')" :disabled="installing" v-model="php_cli" @enter="install"></text-field>
+                <text-field name="php_cli" :label="$t('ui.install.expertPhp')" :class="!php_cli ? 'invalid' : ''" :disabled="installing" v-model="php_cli" @enter="install"></text-field>
                 <text-field name="php_cli_arguments" :label="$t('ui.install.expertArguments')" :disabled="installing" v-model="php_cli_arguments" @enter="install"></text-field>
             </fieldset>
 
-            <fieldset :class="{ submit: true, advanced: advanced || installing }">
+            <fieldset :class="{ submit: true, advanced: showAdvanced || installing }">
                 <button class="primary install" @click="install" :disabled="!inputValid || installing">
                     <span v-if="!installing">{{ 'ui.install.buttonInstall' | translate }}</span>
                     <loader v-else></loader>
                 </button>
-                <a href="#" class="button advanced" v-if="!advanced && !installing" @click.prevent="enableAdvanced">{{ 'ui.install.buttonExpert' | translate }}</a>
+                <a href="#" class="button advanced" v-if="!showAdvanced && !installing" @click.prevent="enableAdvanced">{{ 'ui.install.buttonExpert' | translate }}</a>
             </fieldset>
 
         </section>
@@ -81,7 +81,15 @@
         }),
 
         computed: {
+            showAdvanced() {
+                return this.advanced || !this.php_cli;
+            },
+
             inputValid() {
+                if (!this.php_cli) {
+                    return false;
+                }
+
                 if (this.authUsername) {
                     return true;
                 }

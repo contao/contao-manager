@@ -1,12 +1,20 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2017 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\Process;
 
 use Symfony\Component\Process\PhpExecutableFinder as BasePhpExecutableFinder;
 
 class PhpExecutableFinder extends BasePhpExecutableFinder
 {
-    private $suffixes = array('.exe', '.bat', '.cmd', '.com');
+    private $suffixes = ['.exe', '.bat', '.cmd', '.com'];
 
     /**
      * This is a duplicate of the parent method, but we don't use the ExecutableFinder.
@@ -24,7 +32,7 @@ class PhpExecutableFinder extends BasePhpExecutableFinder
         }
 
         // PHP_BINARY return the current sapi executable
-        if (PHP_BINARY && in_array(PHP_SAPI, array('cli', 'cli-server', 'phpdbg')) && is_file(PHP_BINARY)) {
+        if (PHP_BINARY && in_array(PHP_SAPI, ['cli', 'cli-server', 'phpdbg'], true) && is_file(PHP_BINARY)) {
             return PHP_BINARY.$args;
         }
 
@@ -42,7 +50,7 @@ class PhpExecutableFinder extends BasePhpExecutableFinder
             }
         }
 
-        $dirs = array(PHP_BINDIR);
+        $dirs = [PHP_BINDIR];
         if ('\\' === DIRECTORY_SEPARATOR) {
             $dirs[] = 'C:\xampp\php\\';
         }
@@ -52,18 +60,21 @@ class PhpExecutableFinder extends BasePhpExecutableFinder
 
     /**
      * This is a duplicate of ExecutableFinder::find() but we're checking the $extraDirs first.
+     *
+     * @param mixed      $name
+     * @param null|mixed $default
      */
-    private function findExecutable($name, $default = null, array $extraDirs = array())
+    private function findExecutable($name, $default = null, array $extraDirs = [])
     {
         if (ini_get('open_basedir')) {
             $searchPath = explode(PATH_SEPARATOR, ini_get('open_basedir'));
-            $dirs = array();
+            $dirs = [];
             foreach ($searchPath as $path) {
                 // Silencing against https://bugs.php.net/69240
                 if (@is_dir($path)) {
                     $dirs[] = $path;
                 } else {
-                    if (basename($path) == $name && @is_executable($path)) {
+                    if (basename($path) === $name && @is_executable($path)) {
                         return $path;
                     }
                 }
@@ -75,7 +86,7 @@ class PhpExecutableFinder extends BasePhpExecutableFinder
             );
         }
 
-        $suffixes = array('');
+        $suffixes = [''];
         if ('\\' === DIRECTORY_SEPARATOR) {
             $pathExt = getenv('PATHEXT');
             $suffixes = array_merge($suffixes, $pathExt ? explode(PATH_SEPARATOR, $pathExt) : $this->suffixes);

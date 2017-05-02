@@ -156,19 +156,15 @@ class ConsoleProcessFactory
      */
     private function buildCommandLine($console, array $arguments)
     {
-        $php = $this->config->getPhpExecutable();
-
-        if (null === $php) {
-            throw new \RuntimeException('Unable to find the PHP executable.');
+        if (null !== ($phpCli = $this->config->getPhpExecutable())) {
+            $cmd = $phpCli;
+            $args = array_merge($this->config->getPhpArguments(), [$console], $arguments);
+        } else {
+            $cmd = $console;
+            $args = $arguments;
         }
 
-        return sprintf(
-            '%s %s %s %s',
-            escapeshellcmd($php),
-            implode(' ', array_map('escapeshellarg', $this->config->getPhpArguments())),
-            escapeshellarg($console),
-            implode(' ', array_map('escapeshellarg', $arguments))
-        );
+        return escapeshellcmd($cmd).' '.implode(' ', array_map('escapeshellarg', $args));
     }
 
     /**
