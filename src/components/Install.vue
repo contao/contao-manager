@@ -35,7 +35,6 @@
                 <p>{{ 'ui.install.expertDescription' | translate }}</p>
                 <text-field name="github_oauth_token" :label="$t('ui.install.expertGithub')" :disabled="installing" v-model="github_oauth_token" @enter="install"></text-field>
                 <text-field name="php_cli" :label="$t('ui.install.expertPhp')" :class="!php_cli ? 'invalid' : ''" :disabled="installing" v-model="php_cli" @enter="install"></text-field>
-                <text-field name="php_cli_arguments" :label="$t('ui.install.expertArguments')" :disabled="installing" v-model="php_cli_arguments" @enter="install"></text-field>
             </fieldset>
 
             <fieldset :class="{ submit: true, advanced: showAdvanced || installing }">
@@ -73,7 +72,6 @@
             versions: { '4.3.*': '4.3 (latest)' },
 
             php_cli: '',
-            php_cli_arguments: '',
             github_oauth_token: '',
 
             installing: false,
@@ -148,10 +146,6 @@
                         php_force_background: false,
                     };
 
-                    if (this.php_cli_arguments) {
-                        config.php_cli_arguments = this.php_cli_arguments;
-                    }
-
                     if (this.github_oauth_token) {
                         config.github_oauth_token = this.github_oauth_token;
                     }
@@ -191,7 +185,6 @@
             }
 
             this.php_cli = this.$store.state.config.php_cli;
-            this.php_cli_arguments = this.$store.state.config.php_cli_arguments;
         },
     };
 </script>

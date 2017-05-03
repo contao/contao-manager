@@ -10,9 +10,7 @@
 
 namespace Contao\ManagerApi\Process;
 
-use Symfony\Component\Process\PhpExecutableFinder as BasePhpExecutableFinder;
-
-class PhpExecutableFinder extends BasePhpExecutableFinder
+class PhpExecutableFinder
 {
     private $suffixes = ['.exe', '.bat', '.cmd', '.com'];
 
@@ -21,19 +19,11 @@ class PhpExecutableFinder extends BasePhpExecutableFinder
      *
      * {@inheritdoc}
      */
-    public function find($includeArgs = true)
+    public function find()
     {
-        $args = $this->findArguments();
-        $args = $includeArgs && $args ? ' '.implode(' ', $args) : '';
-
-        // HHVM support
-        if (defined('HHVM_VERSION')) {
-            return (getenv('PHP_BINARY') ?: PHP_BINARY).$args;
-        }
-
         // PHP_BINARY return the current sapi executable
         if (PHP_BINARY && in_array(PHP_SAPI, ['cli', 'cli-server', 'phpdbg'], true) && is_file(PHP_BINARY)) {
-            return PHP_BINARY.$args;
+            return PHP_BINARY;
         }
 
         if ($php = getenv('PHP_PATH')) {

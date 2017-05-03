@@ -80,7 +80,6 @@
     "ui.install.expertDescription": "Configure the Contao Manager to run on your webserver.",
     "ui.install.expertGithub": "GitHub Token",
     "ui.install.expertPhp": "PHP binary",
-    "ui.install.expertArguments": "CLI arguments",
     "ui.install.buttonInstall": "Install",
     "ui.install.buttonExpert": "Advanced",
     "ui.login.headline": "Sign In",

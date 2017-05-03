@@ -158,13 +158,14 @@ class ConsoleProcessFactory
     {
         if (null !== ($phpCli = $this->config->getPhpExecutable())) {
             $cmd = $phpCli;
-            $args = array_merge($this->config->getPhpArguments(), [$console], $arguments);
+            array_unshift($arguments, $console);
         } else {
             $cmd = $console;
-            $args = $arguments;
         }
 
-        return escapeshellcmd($cmd).' '.implode(' ', array_map('escapeshellarg', $args));
+        $args = implode(' ', array_map('escapeshellarg', $arguments));
+
+        return escapeshellcmd($cmd).' '.$args;
     }
 
     /**

@@ -38,7 +38,6 @@ class ManagerConfig extends AbstractConfig
 
         $data['secret'] = $this->getSecret();
         $data['php_cli'] = $this->getPhpExecutable();
-        $data['php_cli_arguments'] = implode(' ', $this->getPhpArguments());
 
         return $data;
     }
@@ -84,20 +83,6 @@ class ManagerConfig extends AbstractConfig
             return $this->data['php_cli'];
         }
 
-        return (new PhpExecutableFinder())->find(false);
-    }
-
-    /**
-     * Gets the PHP executable arguments from config or PhpExecutableFinder.
-     *
-     * @return array
-     */
-    public function getPhpArguments()
-    {
-        if (isset($this->data['php_cli_arguments'])) {
-            return explode(' ', $this->data['php_cli_arguments']);
-        }
-
-        return (new PhpExecutableFinder())->findArguments();
+        return (new PhpExecutableFinder())->find();
     }
 }
