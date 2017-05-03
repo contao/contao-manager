@@ -58,7 +58,7 @@
     </target>
 
     <target name="cache">
-        <echo message="Builing cache for the API application" />
+        <echo message="Building cache for the API application" />
         <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
             <arg value="api/console" />
             <arg value="cache:warmup" />

@@ -14,7 +14,7 @@
     "ui.navigation.advanced": "Advanced",
     "ui.navigation.logout": "Logout",
     "ui.taskpopup.failedHeadline": "Contao Manager failed to run a background task!",
-    "ui.taskpopup.failedDescription": "\n                    Something went wrong while trying to execute the task in the background.<br>\n                    If this happens again, your server might not be supported.\n                ",
+    "ui.taskpopup.failedDescription": "Something went wrong while trying to execute the task in the background.<br>If this happens again, your server might not be supported.",
     "ui.taskpopup.reportProblem": "Report a Problem",
     "ui.taskpopup.installHeadline": "Installation complete!",
     "ui.taskpopup.installDescription": "To complete the setup process, please open the Install Tool and enter your database credentials.",

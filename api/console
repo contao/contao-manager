@@ -20,7 +20,6 @@ use Symfony\Component\Console\Input\ArgvInput;
 error_reporting(-1);
 
 set_time_limit(0);
-ini_set('memory_limit', '2G');
 
 // Create output for XdebugHandler and Application
 $output = Factory::createOutput();

@@ -69,7 +69,7 @@
             popupClass() {
                 return {
                     fixed: !this.$refs.popup || this.$refs.popup.clientHeight < window.innerHeight,
-                    console: this.showConsole,
+                    console: this.showConsole && this.taskStatus !== 'failed',
                     'status-running': this.taskStatus === 'running',
                     'status-success': this.taskStatus === 'success',
                     'status-error': this.taskStatus === 'error',
