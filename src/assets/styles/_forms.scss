@@ -86,7 +86,7 @@ a.button {
     line-height: 40px;
     text-decoration: none;
     text-align: center;
-    cursor: default;
+    cursor: pointer;
     border-radius: 2px;
 
     &.primary {
@@ -107,7 +107,6 @@ a.button {
 
     &:disabled,
     &.disabled {
-        text-decoration: line-through;
         background-color: $border-color !important;
     }
 
