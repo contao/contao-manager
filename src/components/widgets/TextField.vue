@@ -1,5 +1,5 @@
 <template>
-    <div class="widget text-field">
+    <div :class="'widget text-field' + (error ? ' invalid' : '')">
         <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
         <input
             ref="input"
@@ -13,6 +13,7 @@
             @keypress.enter.prevent="enter"
             autocapitalize="none"
         >
+        <p class="error" v-if="error">{{ error }}</p>
     </div>
 </template>
 
@@ -38,6 +39,9 @@
             },
             disabled: {
                 type: Boolean,
+            },
+            error: {
+                type: String,
             },
         },
         methods: {

@@ -61,12 +61,29 @@ const store = new Vuex.Store({
         configure: ({ state }, props) => {
             const config = props || state.config;
 
-            if (config.github_oauth_token) {
-                api.setGithubToken(config.github_oauth_token);
-                delete config.github_oauth_token;
-            }
+            return new Promise((resolve, reject) => {
+                if (!config.github_oauth_token) {
+                    resolve();
+                    return;
+                }
 
-            api.configure(config);
+                api.setGithubToken(config.github_oauth_token).then(
+                    () => {
+                        delete config.github_oauth_token;
+                        resolve();
+                    },
+                    () => {
+                        reject({
+                            key: 'github_oauth_token',
+                            error: 'Unknown Error',
+                        });
+                    },
+                );
+            }).then(() => api.configure(config).catch(
+                (response) => {
+                    throw response.body;
+                },
+            ));
         },
 
         install: ({ dispatch }, version) => (

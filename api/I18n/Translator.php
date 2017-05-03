@@ -39,10 +39,11 @@ class Translator
      * Gets label for given ID from translation files.
      *
      * @param string $id
+     * @param array  $params
      *
      * @return string
      */
-    public function trans($id)
+    public function trans($id, array $params = [])
     {
         $locales = ['en'];
         $locale = $this->requestStack->getCurrentRequest()->getLocale();
@@ -53,7 +54,7 @@ class Translator
 
         array_unshift($locales, $locale);
 
-        return $this->findLabel($id, $locales);
+        return $this->replaceParameters($this->findLabel($id, $locales), $params);
     }
 
     /**
@@ -75,6 +76,28 @@ class Translator
         }
 
         return $id;
+    }
+
+    /**
+     * Replaces parameters in label.
+     *
+     * @param string $label
+     * @param array  $params
+     *
+     * @return string
+     */
+    private function replaceParameters($label, array $params)
+    {
+        if (empty($params)) {
+            return $label;
+        }
+
+        $replace = [];
+        foreach ($params as $k => $v) {
+            $replace['{'.$k.'}'] = $v;
+        }
+
+        return strtr($label, $replace);
     }
 
     /**

@@ -19,11 +19,18 @@ export default {
     },
 
     actions: {
-        login: ({ dispatch }, { username, password }) => api.login(username, password).then(
-            () => dispatch('fetchStatus', true, { root: true }).then(() => true),
-        ),
-        logout: ({ dispatch }) => api.logout().then(
-            () => dispatch('fetchStatus', true, { root: true }).then(() => true),
-        ),
+        createAccount(store, { username, password }) {
+            return api.login(username, password);
+        },
+        login({ dispatch }, { username, password }) {
+            return api.login(username, password).then(
+                () => dispatch('fetchStatus', true, { root: true }).then(() => true),
+            );
+        },
+        logout({ dispatch }) {
+            return api.logout().then(
+                () => dispatch('fetchStatus', true, { root: true }).then(() => true),
+            );
+        },
     },
 };
