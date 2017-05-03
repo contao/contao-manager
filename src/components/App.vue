@@ -48,7 +48,7 @@
             status(status) {
                 delete this.$router.scope;
 
-                if ((status === apiStatus.NEW || status === apiStatus.EMPTY)) {
+                if (status === apiStatus.INSTALL) {
                     this.$router.scope = scopes.INSTALL;
                     this.$router.replace(routes.install);
                 } else if (status === apiStatus.AUTHENTICATE) {

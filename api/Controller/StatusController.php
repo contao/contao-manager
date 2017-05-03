@@ -25,11 +25,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StatusController extends Controller
 {
-    const STATUS_NEW = 'new'; // Manager not installed
-    const STATUS_AUTHENTICATE = 'auth'; // Manager installed, requires authentication
-    const STATUS_EMPTY = 'empty'; // Contao not installed
-    const STATUS_OK = 'ok'; // Contao is ready
-    const STATUS_CONFLICT = 'conflict'; // Contao has conflict
+    const STATUS_INSTALL = 'install';
+    const STATUS_AUTHENTICATE = 'auth';
+    const STATUS_OK = 'ok';
 
     /**
      * @var ApiKernel
@@ -108,11 +106,11 @@ class StatusController extends Controller
         $version = $this->contaoApi->getContaoVersion();
 
         if (0 === $this->users->count()) {
-            $status = self::STATUS_NEW;
-        } elseif ($version) {
+            $status = self::STATUS_INSTALL;
+        } elseif ($this->config->has('php_cli') && $version) {
             $status = self::STATUS_OK;
         } else {
-            $status = self::STATUS_EMPTY;
+            $status = self::STATUS_INSTALL;
         }
 
         return new JsonResponse(
