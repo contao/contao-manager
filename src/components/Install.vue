@@ -34,7 +34,7 @@
                 <legend>{{ 'ui.install.expertHeadline' | translate }}</legend>
                 <p>{{ 'ui.install.expertDescription' | translate }}</p>
                 <text-field ref="github_oauth_token" name="github_oauth_token" :label="$t('ui.install.expertGithub')" :disabled="installing" :error="errors.github_oauth_token" v-model="github_oauth_token" @enter="install"></text-field>
-                <text-field ref="php_cli" name="php_cli" :label="$t('ui.install.expertPhp')" :disabled="installing" :error="errors.php_cli" v-model="php_cli" @enter="install"></text-field>
+                <text-field ref="php_cli" name="php_cli" :label="$t('ui.install.expertPhp')" :disabled="installing" :error="errors.php_cli" :mandatory="true" :mandatoryMessage="$t('ui.install.phpMissing')" v-model="php_cli" @enter="install"></text-field>
             </fieldset>
 
             <fieldset :class="{ submit: true, advanced: advanced || installing }">

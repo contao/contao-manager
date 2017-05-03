@@ -107,6 +107,7 @@ a.button {
 
     &:disabled,
     &.disabled {
+        text-decoration: line-through;
         background-color: $border-color !important;
     }
 
