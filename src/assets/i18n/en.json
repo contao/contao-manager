@@ -35,7 +35,7 @@
     "ui.boxed.welcome": "<strong>Welcome</strong> to {product}",
     "ui.packages.updateButton": "Update Packages",
     "ui.packages.updateConfirm": "All packages will be updated to their latest version. Do you want to continue?",
-    "ui.packages.searchButton": "Search packages",
+    "ui.packages.searchButton": "Install Packages",
     "ui.packages.searchPlaceholder": "Search Packages…",
     "ui.packages.changesMessage": "You have unconfirmed changes.",
     "ui.packages.changesApply": "Apply changes",
