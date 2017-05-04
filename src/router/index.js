@@ -53,12 +53,9 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    console.log(`routing from "${from.name}" to "${to.name}"`);
-
     if (to.meta.scope === undefined
         || (router.scope !== undefined && router.scope !== to.meta.scope)
     ) {
-        console.log(`routing "${to.name}" is denied in scope "${router.scope}"`);
         next(false);
     } else {
         next();

@@ -13,7 +13,6 @@ Vue.use(VueResource);
 Vue.http.options.emulateHTTP = true;
 
 Vue.http.interceptors.push((request, next) => {
-    console.log(request);
     const url = request.url;
 
     if (request.url.slice(0, 4) === 'api/') {
@@ -22,8 +21,6 @@ Vue.http.interceptors.push((request, next) => {
     }
 
     next((response) => {
-        console.log(response);
-
         if (response.status === 403 || (response.status === 401 && url !== 'api/status')) {
             store.dispatch('fetchStatus', true);
         } else if (response.headers.get('Content-Type') === 'application/problem+json') {
