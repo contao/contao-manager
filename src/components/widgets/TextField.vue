@@ -1,5 +1,5 @@
 <template>
-    <div :class="'widget text-field' + (errorMessage ? ' invalid' : '')">
+    <div :class="'widget text-field' + (error ? ' invalid' : '')">
         <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
         <input
             ref="input"
@@ -13,7 +13,7 @@
             @keypress.enter.prevent="enter"
             autocapitalize="none"
         >
-        <p class="error" v-if="errorMessage">{{ errorMessage }}</p>
+        <p class="error" v-if="error">{{ error }}</p>
     </div>
 </template>
 
@@ -43,41 +43,11 @@
             error: {
                 type: String,
             },
-            mandatory: {
-                type: Boolean,
-            },
-            mandatoryMessage: {
-                type: String,
-            },
-        },
-
-        data: () => ({
-            invalid: null,
-        }),
-
-        computed: {
-            errorMessage() {
-                if (this.error) {
-                    return this.error;
-                }
-
-                if (this.invalid) {
-                    return this.invalid;
-                }
-
-                return null;
-            },
         },
 
         methods: {
             input(value) {
                 this.$emit('input', value);
-
-                this.invalid = null;
-
-                if (value.length === 0 && this.mandatory) {
-                    this.invalid = this.mandatoryMessage || this.$t('ui.widget.mandatory');
-                }
             },
             enter() {
                 this.$emit('enter');
@@ -88,9 +58,7 @@
         },
 
         mounted() {
-            if (!this.value && this.mandatory) {
-                this.invalid = this.mandatoryMessage || this.$t('ui.widget.mandatory');
-            }
+            this.$emit('input', this.$refs.input.value);
         },
     };
 </script>

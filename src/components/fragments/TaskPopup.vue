@@ -20,18 +20,18 @@
 
                 <button @click="hidePopup"><span>{{ 'ui.taskpopup.buttonClose' | translate }}</span></button>
             </div>
-            <div v-else-if="taskStatus === 'success' && taskType === 'install'">
+            <div v-else-if="taskStatus === 'success' && showInstall && taskType === 'install'">
                 <h2>{{ 'ui.taskpopup.installHeadline' | translate }}</h2>
                 <p>{{ 'ui.taskpopup.installDescription' | translate }}</p>
 
-                <a class="button primary" href="/contao/install" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
+                <a class="button primary" href="/contao/install" @click="hideInstall" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
                 <button @click="hidePopup">Confirm & Close</button>
             </div>
-            <div v-else-if="taskStatus === 'success' && (taskType === 'upgrade' || taskType === 'require-package' || taskType === 'remove-package')">
+            <div v-else-if="taskStatus === 'success' && showInstall && (taskType === 'upgrade' || taskType === 'require-package' || taskType === 'remove-package')">
                 <h2>{{ 'ui.taskpopup.packagesHeadline' | translate }}</h2>
                 <p>{{ 'ui.taskpopup.packagesDescription' | translate }}</p>
 
-                <a class="button primary" href="/contao/install" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
+                <a class="button primary" href="/contao/install" @click="hideInstall" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
                 <button @click="hidePopup"><span>{{ 'ui.taskpopup.buttonConfirm' | translate }}</span></button>
             </div>
             <div v-else>
@@ -62,6 +62,7 @@
             showConsole: false,
             scrollToBottom: true,
             swallowScroll: true,
+            showInstall: false,
             progressTitle: null,
             progressText: null,
         }),
@@ -108,6 +109,11 @@
                     this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
                 }
             },
+
+            hideInstall() {
+                this.showInstall = false;
+            },
+
             hidePopup() {
                 const reload = this.taskStatus === 'failed';
 
@@ -119,6 +125,7 @@
                     },
                 );
             },
+
             scrolled() {
                 if (!this.swallowScroll) {
                     const el = this.$refs.console;
@@ -174,6 +181,7 @@
         activated() {
             this.showConsole = false;
             this.scrollToBottom = true;
+            this.showInstall = true;
         },
         deactivated() {
             this.$store.commit('tasks/setStatus', null);

@@ -10,8 +10,8 @@
                 <legend>{{ 'ui.install.accountHeadline' | translate }}</legend>
                 <p>{{ 'ui.install.accountCreate' | translate }}</p>
                 <text-field ref="username" name="username" :label="$t('ui.install.accountUsername')" class="inline" :disabled="installing" v-model="username" @enter="install"></text-field>
-                <text-field type="password" name="password" :label="$t('ui.install.accountPassword')" :placeholder="$t('ui.install.accountPasswordPlaceholder')" :class="passwordClass" :disabled="installing" v-model="password" @enter="install"></text-field>
-                <text-field type="password" name="password_confirm" label="Retype Password" :class="passwordClass" :disabled="installing" v-model="password_confirm" @enter="install"></text-field>
+                <text-field type="password" name="password" :label="$t('ui.install.accountPassword')" :placeholder="$t('ui.install.accountPasswordPlaceholder')" :error="errors.password" :disabled="installing" v-model="password" @input="validatePassword" @enter="install"></text-field>
+                <text-field type="password" name="password_confirm" label="Retype Password" :disabled="installing" :error="errors.password_confirm" v-model="password_confirm" @input="validatePasswordConfirm" @enter="install"></text-field>
             </fieldset>
 
             <fieldset v-else>
@@ -33,13 +33,13 @@
             <fieldset v-if="advanced">
                 <legend>{{ 'ui.install.expertHeadline' | translate }}</legend>
                 <p>{{ 'ui.install.expertDescription' | translate }}</p>
-                <text-field ref="github_oauth_token" name="github_oauth_token" :label="$t('ui.install.expertGithub')" :disabled="installing" :error="errors.github_oauth_token" v-model="github_oauth_token" @enter="install"></text-field>
-                <text-field ref="php_cli" name="php_cli" :label="$t('ui.install.expertPhp')" :disabled="installing" :error="errors.php_cli" :mandatory="true" :mandatoryMessage="$t('ui.install.phpMissing')" v-model="php_cli" @enter="install"></text-field>
+                <text-field ref="github_oauth_token" name="github_oauth_token" :label="$t('ui.install.expertGithub')" :placeholder="$t('ui.install.optional')" :disabled="installing" :error="errors.github_oauth_token" v-model="github_oauth_token" @enter="install"></text-field>
+                <text-field ref="php_cli" name="php_cli" :label="$t('ui.install.expertPhp')" :disabled="installing" :error="errors.php_cli" v-model="php_cli" @input="validatePhpCli" @enter="install"></text-field>
             </fieldset>
 
             <fieldset :class="{ submit: true, advanced: advanced || installing }">
                 <button class="primary install" @click="install" :disabled="!inputValid || installing">
-                    <span v-if="!installing">{{ 'ui.install.buttonInstall' | translate }}</span>
+                    <span v-if="!installing">{{ buttonLabel }}</span>
                     <loader v-else></loader>
                 </button>
                 <a href="#" class="button advanced" v-if="!advanced && !installing" @click.prevent="enableAdvanced">{{ 'ui.install.buttonExpert' | translate }}</a>
@@ -75,6 +75,7 @@
             github_oauth_token: '',
 
             errors: {
+                password: '',
                 github_oauth_token: '',
                 php_cli: '',
             },
@@ -84,6 +85,7 @@
         }),
 
         computed: {
+
             inputValid() {
                 if (!this.php_cli) {
                     return false;
@@ -95,27 +97,78 @@
 
                 return !(this.username === '' || this.password === '' || this.password_confirm === '' || !this.passwordValid);
             },
-            passwordClass() {
-                return {
-                    inline: true,
-                    invalid: !this.passwordValid,
-                };
-            },
+
             passwordValid() {
                 return this.password === ''
                     || this.password_confirm === ''
                     || (this.password === this.password_confirm
                         && this.password.length >= 8);
             },
+
+            buttonLabel() {
+                if (!this.contaoVersion) {
+                    return this.$t('ui.install.buttonInstall');
+                }
+
+                if (!this.authUsername) {
+                    return this.$t('ui.install.buttonAccount');
+                }
+
+                return this.$t('ui.install.buttonConfigure');
+            },
+
             contaoVersion() {
                 return this.$store.state.version;
             },
+
             authUsername() {
                 return this.$store.state.auth.username;
             },
         },
 
         methods: {
+            validatePassword() {
+                this.errors.password = null;
+                this.errors.password_confirm = null;
+
+                if (this.password === '' && this.password_confirm === '') {
+                    return;
+                }
+
+                if (this.password === '') {
+                    this.errors.password = this.$t('ui.widget.mandatory');
+                } else if (this.password.length < 8) {
+                    this.errors.password = this.$t('ui.install.accountPasswortLength');
+                } else if (this.password !== this.password_confirm) {
+                    this.errors.password_confirm = this.$t('ui.install.accountPasswortDifferent');
+                }
+            },
+
+            validatePasswordConfirm() {
+                this.errors.password = null;
+                this.errors.password_confirm = null;
+
+                if (this.password === '' && this.password_confirm === '') {
+                    return;
+                }
+
+                if (this.password_confirm === '') {
+                    this.errors.password_confirm = this.$t('ui.widget.mandatory');
+                } else if (this.password_confirm.length < 8) {
+                    this.errors.password_confirm = this.$t('ui.install.accountPasswortLength');
+                } else if (this.password !== this.password_confirm) {
+                    this.errors.password_confirm = this.$t('ui.install.accountPasswortDifferent');
+                }
+            },
+
+            validatePhpCli(value) {
+                this.errors.php_cli = null;
+
+                if (value.length === 0) {
+                    this.errors.php_cli = this.$t('ui.install.phpMissing');
+                }
+            },
+
             install() {
                 if (!this.inputValid) {
                     return;
@@ -137,7 +190,9 @@
                         },
                     ).then(
                         () => {
-                            resolve();
+                            this.$store.dispatch('fetchStatus', true).then(() => {
+                                resolve();
+                            });
                         },
                     );
                 }).then(() => {
