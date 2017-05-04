@@ -11,12 +11,12 @@
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Config\AuthConfig;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\IntegrityCheck\IntegrityCheckInterface;
 use Contao\ManagerApi\Process\ContaoApi;
-use Contao\ManagerApi\Tenside\InstallationStatusDeterminator;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
@@ -38,6 +38,11 @@ class StatusController extends Controller
      * @var ManagerConfig
      */
     private $config;
+
+    /**
+     * @var AuthConfig
+     */
+    private $auth;
 
     /**
      * @var UserConfig
@@ -62,22 +67,26 @@ class StatusController extends Controller
     /**
      * Constructor.
      *
-     * @param ApiKernel                      $kernel
-     * @param ManagerConfig                  $config
-     * @param UserConfig                     $users
-     * @param ContaoApi                      $contaoApi
-     * @param InstallationStatusDeterminator $status
-     * @param Filesystem|null                $filesystem
+     * @param ApiKernel       $kernel
+     * @param ManagerConfig   $config
+     * @param AuthConfig      $auth
+     * @param UserConfig      $users
+     * @param ContaoApi       $contaoApi
+     * @param Filesystem|null $filesystem
+     *
+     * @internal param InstallationStatusDeterminator $status
      */
     public function __construct(
         ApiKernel $kernel,
         ManagerConfig $config,
+        AuthConfig $auth,
         UserConfig $users,
         ContaoApi $contaoApi,
         Filesystem $filesystem = null
     ) {
         $this->kernel = $kernel;
         $this->config = $config;
+        $this->auth = $auth;
         $this->users = $users;
         $this->contaoApi = $contaoApi;
         $this->filesystem = $filesystem ?: new Filesystem();
@@ -113,11 +122,14 @@ class StatusController extends Controller
             $status = self::STATUS_INSTALL;
         }
 
+        $config = $this->config->all();
+        $config['github_oauth_token'] = $this->auth->getGithubToken();
+
         return new JsonResponse(
             [
                 'status' => $status,
                 'username' => (string) $this->getUser(),
-                'config' => $this->config->all(),
+                'config' => $config,
                 'version' => $version,
             ]
         );

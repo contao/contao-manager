@@ -29,6 +29,20 @@ class AuthConfig extends AbstractConfig
     }
 
     /**
+     * Returns the GitHub OAuth token from the config file.
+     *
+     * @return string|null
+     */
+    public function getGithubToken()
+    {
+        if (!isset($this->data['github-oauth'], $this->data['github-oauth']['github.com'])) {
+            return null;
+        }
+
+        return $this->data['github-oauth']['github.com'];
+    }
+
+    /**
      * Stores the GitHub OAuth token in the config file.
      *
      * @param string $token
