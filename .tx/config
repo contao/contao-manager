@@ -1,0 +1,14 @@
+[main]
+host = https://www.transifex.com
+
+[contao-manager.ui]
+source_file = src/assets/i18n/en.json
+source_lang = en
+file_filter = src/assets/i18n/<lang>.json
+type = KEYVALUEJSON
+
+[contao-manager.api]
+source_file = api/Resources/i18n/en.yml
+source_lang = en
+file_filter = api/Resources/i18n/<lang>.yml
+type = YML
