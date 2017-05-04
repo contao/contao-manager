@@ -10,7 +10,7 @@
                 <legend>{{ 'ui.install.accountHeadline' | translate }}</legend>
                 <p>{{ 'ui.install.accountCreate' | translate }}</p>
                 <text-field ref="username" name="username" :label="$t('ui.install.accountUsername')" class="inline" :disabled="installing" v-model="username" @enter="install"></text-field>
-                <text-field type="password" name="password" :label="$t('ui.install.accountPassword')" placeholder="" :class="passwordClass" :disabled="installing" v-model="password" @enter="install"></text-field>
+                <text-field type="password" name="password" :label="$t('ui.install.accountPassword')" :placeholder="$t('ui.install.accountPasswordPlaceholder')" :class="passwordClass" :disabled="installing" v-model="password" @enter="install"></text-field>
                 <text-field type="password" name="password_confirm" label="Retype Password" :class="passwordClass" :disabled="installing" v-model="password_confirm" @enter="install"></text-field>
             </fieldset>
 
