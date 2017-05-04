@@ -7,7 +7,7 @@
             <text-field ref="username" name="username" :label="'ui.login.username' | translate" :placeholder="'ui.login.username' | translate" :class="login_failed ? 'invalid' : ''" :disabled="logging_in" v-model="username" @enter="login" @input="reset"></text-field>
             <text-field type="password" name="password" :label="'ui.login.password' | translate" :placeholder="'ui.login.password' | translate" :class="login_failed ? 'invalid' : ''" :disabled="logging_in" v-model="password" @enter="login" @input="reset"></text-field>
 
-            <a href="https://manager.contao.org/en/forgot-password.html" target="_blank">{{ 'ui.login.forgotPassword' | translate }}</a>
+            <a href="https://github.com/contao/contao-manager/issues/14" target="_blank">{{ 'ui.login.forgotPassword' | translate }}</a>
 
             <button class="primary" @click="login" :disabled="!inputValid || logging_in || login_failed">
                 <span v-if="!logging_in">{{ 'ui.login.button' | translate }}</span>
