@@ -8,13 +8,12 @@
         "symfony/security-bundle": "^3.2",
         "symfony/console": "^3.2",
         "symfony/yaml": "^3.2",
-
         "symfony/monolog-bundle": "~2.9",
         "ircmaxell/password-compat": "^1.0",
         "firebase/php-jwt": "^4.0",
+        "padraic/phar-updater": "^1.0",
         "tenside/core-bundle": "dev-develop as 1.0",
         "tenside/core": "~1.0@dev",
-
         "terminal42/background-process": "dev-master",
         "crell/api-problem": "^2.0"
     },
