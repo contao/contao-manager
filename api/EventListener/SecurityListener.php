@@ -10,8 +10,9 @@
 
 namespace Contao\ManagerApi\EventListener;
 
+use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Security\JwtManager;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -67,16 +68,12 @@ class SecurityListener
 
         $payload = $this->jwtManager->getPayload($event->getRequest());
 
-        if (($xsrf = $request->headers->get('X-XSRF-Token', null, true)) === null
+        if (($xsrf = $request->headers->get('XSRF-TOKEN', null, true)) === null
             || $payload->xsrf !== $xsrf
         ) {
             $event->setResponse(
-                new JsonResponse(
-                    [
-                        'status' => 'ERROR',
-                        'message' => 'XSRF token does not match',
-                    ],
-                    Response::HTTP_BAD_REQUEST
+                new ApiProblemResponse(
+                    (new ApiProblem('XSRF token does not match'))->setStatus(Response::HTTP_BAD_REQUEST)
                 )
             );
         }
