@@ -12,6 +12,7 @@ namespace Contao\ManagerApi\EventListener;
 
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -52,6 +53,8 @@ class ExceptionListener
         if (!in_array('application/json', $event->getRequest()->getAcceptableContentTypes(), true)) {
             return;
         }
+
+        Response::closeOutputBuffers(0, false);
 
         $exception = $this->convertException($event->getException());
 

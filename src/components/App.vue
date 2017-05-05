@@ -61,6 +61,7 @@
                     this.$store.commit('setError', {
                         title: this.$t('ui.app.apiError'),
                         type: 'about:blank',
+                        status: 500,
                     });
                 }
             },
