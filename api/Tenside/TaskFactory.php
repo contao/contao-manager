@@ -10,8 +10,9 @@
 
 namespace Contao\ManagerApi\Tenside;
 
+use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Tenside\Task\RebuildCacheTask;
-use Tenside\Core\Config\TensideJsonConfig;
 use Tenside\Core\Task\TaskFactoryInterface;
 use Tenside\Core\Util\JsonArray;
 
@@ -21,29 +22,25 @@ use Tenside\Core\Util\JsonArray;
 class TaskFactory implements TaskFactoryInterface
 {
     /**
-     * The home path.
-     *
-     * @var HomePathDeterminator
+     * @var ApiKernel
      */
-    private $home;
+    private $kernel;
 
     /**
-     * The configuration in use.
-     *
-     * @var TensideJsonConfig
+     * @var ConsoleProcessFactory
      */
-    private $config;
+    private $processFactory;
 
     /**
      * Constructor.
      *
-     * @param HomePathDeterminator $home
-     * @param TensideJsonConfig    $config
+     * @param ApiKernel             $kernel
+     * @param ConsoleProcessFactory $processFactory
      */
-    public function __construct(HomePathDeterminator $home, TensideJsonConfig $config)
+    public function __construct(ApiKernel $kernel, ConsoleProcessFactory $processFactory)
     {
-        $this->home = $home;
-        $this->config = $config;
+        $this->kernel = $kernel;
+        $this->processFactory = $processFactory;
     }
 
     /**
@@ -63,6 +60,6 @@ class TaskFactory implements TaskFactoryInterface
             throw new \InvalidArgumentException(sprintf('Unsupported task type "%s"', $taskType));
         }
 
-        return new RebuildCacheTask($this->home, $this->config, $metaData);
+        return new RebuildCacheTask($this->kernel, $this->processFactory, $metaData);
     }
 }

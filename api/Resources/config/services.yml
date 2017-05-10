@@ -90,7 +90,9 @@ services:
 
     app.taskfactory:
         class:     Contao\ManagerApi\Tenside\TaskFactory
-        arguments: ["@tenside.home", "@tenside.config"]
+        arguments:
+            - "@kernel"
+            - "@contao_manager.process.console_factory"
         tags:
             - { name: tenside.taskfactory }
 

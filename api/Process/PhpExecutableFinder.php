@@ -16,8 +16,6 @@ class PhpExecutableFinder
 
     /**
      * This is a duplicate of the parent method, but we don't use the ExecutableFinder.
-     *
-     * {@inheritdoc}
      */
     public function find()
     {

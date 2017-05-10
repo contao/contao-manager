@@ -10,12 +10,11 @@
 
 namespace Contao\ManagerApi\Tenside\Task;
 
-use Contao\ManagerApi\Tenside\HomePathDeterminator;
+use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Symfony\Component\Filesystem\Filesystem;
-use Tenside\Core\Config\TensideJsonConfig;
 use Tenside\Core\Task\AbstractCliSpawningTask;
 use Tenside\Core\Util\JsonArray;
-use Tenside\Core\Util\ProcessBuilder;
 
 /**
  * This class runs the cache clear command.
@@ -23,24 +22,24 @@ use Tenside\Core\Util\ProcessBuilder;
 class RebuildCacheTask extends AbstractCliSpawningTask
 {
     /**
-     * @var HomePathDeterminator
+     * @var ApiKernel
      */
-    private $home;
+    private $kernel;
 
     /**
-     * @var TensideJsonConfig
+     * @var ConsoleProcessFactory
      */
-    private $config;
+    private $processFactory;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(HomePathDeterminator $home, TensideJsonConfig $config, JsonArray $file)
+    public function __construct(ApiKernel $kernel, ConsoleProcessFactory $processFactory, JsonArray $file)
     {
         parent::__construct($file);
 
-        $this->home = $home;
-        $this->config = $config;
+        $this->kernel = $kernel;
+        $this->processFactory = $processFactory;
     }
 
     /**
@@ -68,7 +67,7 @@ class RebuildCacheTask extends AbstractCliSpawningTask
      */
     private function deleteCacheDirectory($environment)
     {
-        (new Filesystem())->remove($this->home->homeDir().'/var/cache/'.$environment);
+        (new Filesystem())->remove($this->kernel->getContaoDir().'/var/cache/'.$environment);
     }
 
     /**
@@ -80,16 +79,9 @@ class RebuildCacheTask extends AbstractCliSpawningTask
      */
     private function runSymfonyCommand($command, array $arguments = [], $environment = 'prod')
     {
-        $process = ProcessBuilder::create($this->config->getPhpCliBinary())
-            ->setArguments(
-                array_merge(
-                    ['vendor/bin/contao-console', $command, '--env='.$environment],
-                    $arguments
-                )
-            )
-            ->setWorkingDirectory($this->home->homeDir())
-            ->generate()
-        ;
+        $process = $this->processFactory->createContaoConsoleProcess(
+            array_merge([$command, '--env='.$environment], $arguments)
+        );
 
         $this->runProcess($process);
     }
