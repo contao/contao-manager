@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e8c53f39fdf49025befcb068cc290a0",
+    "content-hash": "c6a366fc9d25c36747be6bb0a226b6dc",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2639,16 +2639,16 @@
         },
         {
             "name": "tenside/core",
-            "version": "dev-master",
+            "version": "dev-contao-manager",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "56422fa8cdecf03cb431bb6654c2942ade39bf7b"
+                "reference": "39c1a8c00852d567091420a77dad2947b3652f2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/56422fa8cdecf03cb431bb6654c2942ade39bf7b",
-                "reference": "56422fa8cdecf03cb431bb6654c2942ade39bf7b",
+                "url": "https://api.github.com/repos/tenside/core/zipball/39c1a8c00852d567091420a77dad2947b3652f2d",
+                "reference": "39c1a8c00852d567091420a77dad2947b3652f2d",
                 "shasum": ""
             },
             "require": {
@@ -2694,11 +2694,11 @@
                 "dependency",
                 "package"
             ],
-            "time": "2017-04-24 14:18:12"
+            "time": "2017-05-10 12:06:01"
         },
         {
             "name": "tenside/core-bundle",
-            "version": "dev-develop",
+            "version": "dev-contao-manager",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core-bundle.git",
@@ -3168,8 +3168,14 @@
         {
             "alias": "1.0",
             "alias_normalized": "1.0.0.0",
-            "version": "dev-develop",
+            "version": "dev-contao-manager",
             "package": "tenside/core-bundle"
+        },
+        {
+            "alias": "1.0",
+            "alias_normalized": "1.0.0.0",
+            "version": "dev-contao-manager",
+            "package": "tenside/core"
         }
     ],
     "minimum-stability": "stable",

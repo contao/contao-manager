@@ -7,6 +7,7 @@
 /test-dir
 /web/assets
 /web/index.html
+/contao-manager.phar.php
 
 # Local
 /box.json
