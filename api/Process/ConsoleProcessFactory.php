@@ -103,6 +103,18 @@ class ConsoleProcessFactory
     }
 
     /**
+     * Restores the ProcessController for given task ID.
+     *
+     * @param string $uuid
+     *
+     * @return ProcessController
+     */
+    public function restoreBackgroundProcess($uuid)
+    {
+        return ProcessController::restore($this->kernel->getManagerDir(), $uuid);
+    }
+
+    /**
      * @param string $console
      * @param array  $arguments
      *
