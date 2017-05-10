@@ -103,6 +103,7 @@
         methods: {
             toggleConsole() {
                 this.showConsole = !this.showConsole;
+                window.localStorage.setItem('contao_manager_console', this.showConsole ? '1' : '0');
 
                 if (this.showConsole) {
                     this.scrollToBottom = true;
@@ -179,7 +180,7 @@
             },
         },
         activated() {
-            this.showConsole = false;
+            this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
             this.scrollToBottom = true;
             this.showInstall = true;
         },
