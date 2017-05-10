@@ -45,6 +45,10 @@ if ('cgi-fcgi' === php_sapi_name() && extension_loaded('eaccelerator') && ini_ge
     die('The PHP eAccelerator extension cannot handle .phar files.');
 }
 
+if (function_exists('date_default_timezone_set') && function_exists('date_default_timezone_get')) {
+    date_default_timezone_set(@date_default_timezone_get());
+}
+
 if ('cli' === PHP_SAPI) {
     Phar::mapPhar('contao-manager.phar');
     /** @noinspection UntrustedInclusionInspection */
