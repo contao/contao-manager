@@ -25,6 +25,7 @@ Vue.http.interceptors.push((request, next) => {
             store.dispatch('fetchStatus', true);
         } else if (response.headers.get('Content-Type') === 'application/problem+json') {
             store.commit('setError', response.data);
+            throw response.data;
         }
     });
 });
