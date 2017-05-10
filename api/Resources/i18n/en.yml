@@ -10,6 +10,9 @@ en:
             title: 'The Phar file must be located in the /web folder.'
         windows:
             title: 'This version of Contao Manager is currently not supported on Windows.'
+        systempdir:
+            title: 'Unable to write to the temporary system directory.'
+            detail: 'This is most likely a problem with your hosting configuration. Make sure either open_basedir does allow access to the temporary directory, or the sys_temp_dir is correctly configured.'
 
     config:
         php_cli:
