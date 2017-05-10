@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: services.yml }
+    - { resource: commands.yml }
     - { resource: listener.yml }
 
 # The secret is only required to sign fragment URLs which is not used

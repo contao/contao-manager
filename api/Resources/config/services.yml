@@ -50,6 +50,11 @@ services:
         arguments:
             - "@contao_manager.i18n.translator"
 
+    contao_manager.integrity.memory_limit:
+        class: Contao\ManagerApi\IntegrityCheck\MemoryLimitCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
+
     contao_manager.integrity.process:
         class: Contao\ManagerApi\IntegrityCheck\ProcessCheck
         arguments:

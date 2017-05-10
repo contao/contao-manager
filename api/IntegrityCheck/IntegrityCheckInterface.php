@@ -10,7 +10,12 @@
 
 namespace Contao\ManagerApi\IntegrityCheck;
 
+use Crell\ApiProblem\ApiProblem;
+
 interface IntegrityCheckInterface
 {
+    /**
+     * @return ApiProblem|null
+     */
     public function run();
 }

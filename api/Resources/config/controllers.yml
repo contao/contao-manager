@@ -6,6 +6,7 @@ services:
             - "@contao_manager.config.manager"
             - "@contao_manager.config.auth"
             - "@contao_manager.config.user"
+            - "@contao_manager.process.console_factory"
             - "@contao_manager.process.contao_api"
             - "@filesystem"
         calls:

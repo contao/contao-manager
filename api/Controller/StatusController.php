@@ -16,6 +16,7 @@ use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\IntegrityCheck\IntegrityCheckInterface;
+use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Process\ContaoApi;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -50,6 +51,11 @@ class StatusController extends Controller
     private $users;
 
     /**
+     * @var ConsoleProcessFactory
+     */
+    private $processFactory;
+
+    /**
      * @var ContaoApi
      */
     private $contaoApi;
@@ -67,12 +73,13 @@ class StatusController extends Controller
     /**
      * Constructor.
      *
-     * @param ApiKernel       $kernel
-     * @param ManagerConfig   $config
-     * @param AuthConfig      $auth
-     * @param UserConfig      $users
-     * @param ContaoApi       $contaoApi
-     * @param Filesystem|null $filesystem
+     * @param ApiKernel             $kernel
+     * @param ManagerConfig         $config
+     * @param AuthConfig            $auth
+     * @param UserConfig            $users
+     * @param ConsoleProcessFactory $processFactory
+     * @param ContaoApi             $contaoApi
+     * @param Filesystem|null       $filesystem
      *
      * @internal param InstallationStatusDeterminator $status
      */
@@ -81,6 +88,7 @@ class StatusController extends Controller
         ManagerConfig $config,
         AuthConfig $auth,
         UserConfig $users,
+        ConsoleProcessFactory $processFactory,
         ContaoApi $contaoApi,
         Filesystem $filesystem = null
     ) {
@@ -90,6 +98,7 @@ class StatusController extends Controller
         $this->users = $users;
         $this->contaoApi = $contaoApi;
         $this->filesystem = $filesystem ?: new Filesystem();
+        $this->processFactory = $processFactory;
     }
 
     /**
@@ -156,6 +165,13 @@ class StatusController extends Controller
             if (($problem = $check->run()) instanceof ApiProblem) {
                 return new ApiProblemResponse($problem);
             }
+        }
+
+        $process = $this->processFactory->createManagerConsoleProcess(['contao-manager:check', '--format=json']);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            return new ApiProblemResponse(ApiProblem::fromJson($process->getOutput()));
         }
 
         return null;

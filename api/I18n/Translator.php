@@ -46,13 +46,16 @@ class Translator
     public function trans($id, array $params = [])
     {
         $locales = ['en'];
-        $locale = $this->requestStack->getCurrentRequest()->getLocale();
 
-        if (5 === strlen($locale)) {
-            array_unshift($locales, substr($locale, 0, 2));
+        if (null !== ($request = $this->requestStack->getCurrentRequest())) {
+            $locale = $request->getLocale();
+
+            if (5 === strlen($locale)) {
+                array_unshift($locales, substr($locale, 0, 2));
+            }
+
+            array_unshift($locales, $locale);
         }
-
-        array_unshift($locales, $locale);
 
         return $this->replaceParameters($this->findLabel($id, $locales), $params);
     }

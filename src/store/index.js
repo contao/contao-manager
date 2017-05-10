@@ -29,7 +29,9 @@ const store = new Vuex.Store({
         },
 
         setError(state, error) {
-            state.error = error;
+            if (state.error === null) {
+                state.error = error;
+            }
         },
     },
 
