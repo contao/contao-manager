@@ -75,10 +75,8 @@ class ApiApplication extends Application
 
             $this->add($command);
             $this->add(new ProcessRunnerCommand());
-
-            //$this->setDefaultCommand('tenside:runtask', true);
+            $this->add($container->get('contao_manager.command.integrity_check'));
         } else {
-            // Necessary to warmup the cache
             parent::registerCommands();
         }
     }

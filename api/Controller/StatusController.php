@@ -167,11 +167,18 @@ class StatusController extends Controller
             }
         }
 
-        $process = $this->processFactory->createManagerConsoleProcess(['contao-manager:check', '--format=json']);
-        $process->run();
+        if ($this->config->get('php_cli')) {
+            $process = $this->processFactory->createManagerConsoleProcess(
+                [
+                    'contao-manager:check',
+                    '--format=json'
+                ]
+            );
+            $process->run();
 
-        if (!$process->isSuccessful()) {
-            return new ApiProblemResponse(ApiProblem::fromJson($process->getOutput()));
+            if (!$process->isSuccessful()) {
+                return new ApiProblemResponse(ApiProblem::fromJson($process->getOutput()));
+            }
         }
 
         return null;

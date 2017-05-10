@@ -190,6 +190,7 @@
                         },
                     ).then(
                         () => {
+                            // Refresh status to show the logged in user
                             this.$store.dispatch('fetchStatus', true).then(() => {
                                 resolve();
                             });
@@ -227,11 +228,16 @@
                         return false;
                     }
 
-                    if (this.contaoVersion) {
-                        return this.$store.dispatch('fetchStatus', true);
-                    }
+                    // Refresh status to run integrity check for the newly set php_cli
+                    return this.$store.dispatch('fetchStatus', true).then(
+                        () => {
+                            if (this.contaoVersion) {
+                                return true;
+                            }
 
-                    return this.$store.dispatch('install', this.version);
+                            return this.$store.dispatch('install', this.version).then(() => true);
+                        },
+                    );
                 });
             },
 
