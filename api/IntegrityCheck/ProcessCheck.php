@@ -12,17 +12,17 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class ProcOpenCheck extends AbstractIntegrityCheck
+class ProcessCheck extends AbstractIntegrityCheck
 {
     public function run()
     {
-        if (function_exists('proc_open')) {
+        if (function_exists('proc_open') && function_exists('proc_close')) {
             return null;
         }
 
         return (new ApiProblem(
-            $this->trans('proc_open.title'),
+            $this->trans('process.title'),
             'https://php.net/proc_open'
-        ))->setDetail($this->trans('proc_open.detail'));
+        ))->setDetail($this->trans('process.detail'));
     }
 }

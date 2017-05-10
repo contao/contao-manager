@@ -50,8 +50,8 @@ services:
         arguments:
             - "@contao_manager.i18n.translator"
 
-    contao_manager.integrity.proc_open:
-        class: Contao\ManagerApi\IntegrityCheck\ProcOpenCheck
+    contao_manager.integrity.process:
+        class: Contao\ManagerApi\IntegrityCheck\ProcessCheck
         arguments:
             - "@contao_manager.i18n.translator"
 
