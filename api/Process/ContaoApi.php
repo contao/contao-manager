@@ -15,30 +15,30 @@ class ContaoApi
     /**
      * @var ConsoleProcessFactory
      */
-    private $console;
+    private $processFactory;
 
     /**
      * Constructor.
      *
-     * @param ConsoleProcessFactory $console
+     * @param ConsoleProcessFactory $processFactory
      */
-    public function __construct(ConsoleProcessFactory $console)
+    public function __construct(ConsoleProcessFactory $processFactory)
     {
-        $this->console = $console;
+        $this->processFactory = $processFactory;
     }
 
-    public function getContaoVersion($throwException = false)
+    public function getContaoVersion()
     {
-        $process = $this->console->createContaoConsoleProcess(['contao:version']);
+        $process = $this->processFactory->createContaoConsoleProcess(['contao:version']);
 
         $process->run();
 
         if ($process->isSuccessful()) {
-            return trim($process->getOutput());
-        }
+            $version = trim($process->getOutput());
 
-        if ($throwException) {
-            throw new \RuntimeException('Could not find Contao version');
+            if (preg_match('/^\d+\.\d+\.\d+$/', $version)) {
+                return $version;
+            }
         }
 
         return null;
