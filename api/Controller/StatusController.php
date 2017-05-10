@@ -171,7 +171,7 @@ class StatusController extends Controller
             $process = $this->processFactory->createManagerConsoleProcess(
                 [
                     'contao-manager:check',
-                    '--format=json'
+                    '--format=json',
                 ]
             );
             $process->run();

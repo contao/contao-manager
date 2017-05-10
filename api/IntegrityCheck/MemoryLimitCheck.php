@@ -42,11 +42,11 @@ class MemoryLimitCheck extends AbstractIntegrityCheck
         $memoryLimit = (int) $memoryLimit;
 
         switch ($unit) {
-            /** @noinspection PhpMissingBreakStatementInspection */
+            /* @noinspection PhpMissingBreakStatementInspection */
             case 'g':
                 $memoryLimit *= 1024;
                 // no break (cumulative multiplier)
-            /** @noinspection PhpMissingBreakStatementInspection */
+            /* @noinspection PhpMissingBreakStatementInspection */
             case 'm':
                 $memoryLimit *= 1024;
                 // no break (cumulative multiplier)
