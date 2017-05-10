@@ -20,9 +20,9 @@ class ProcOpenCheck extends AbstractIntegrityCheck
             return null;
         }
 
-        return new ApiProblem(
+        return (new ApiProblem(
             $this->trans('proc_open.title'),
             'https://php.net/proc_open'
-        );
+        ))->setDetail($this->trans('proc_open.detail'));
     }
 }

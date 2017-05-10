@@ -6,6 +6,7 @@ en:
             title: 'The PHP OpenSSL extension is not available.'
         proc_open:
             title: 'The PHP function "proc_open" is not available on the server.'
+            detail: 'The "proc_open" function is necessary to run command line tasks in the background. Check with your hosting provider why this method is not available, neither the Contao Manager nor Contao 4 will run correctly without it.'
         web_root:
             title: 'The Phar file must be located in the /web folder.'
         windows:
