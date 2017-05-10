@@ -33,11 +33,12 @@ abstract class AbstractIntegrityCheck implements IntegrityCheckInterface
      * Translates a string from the "integrity" domain.
      *
      * @param string $id
+     * @param array  $params
      *
      * @return string
      */
-    protected function trans($id)
+    protected function trans($id, array $params = [])
     {
-        return $this->translator->trans('integrity.'.$id);
+        return $this->translator->trans('integrity.'.$id, $params);
     }
 }

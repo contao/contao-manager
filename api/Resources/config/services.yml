@@ -37,6 +37,14 @@ services:
         arguments:
             - "@contao_manager.i18n.translator"
 
+    contao_manager.integrity.contao:
+        class: Contao\ManagerApi\IntegrityCheck\ContaoCheck
+        arguments:
+            - "@kernel"
+            - "@contao_manager.process.contao_api"
+            - "@contao_manager.i18n.translator"
+            - "@filesystem"
+
     contao_manager.integrity.openssl:
         class: Contao\ManagerApi\IntegrityCheck\OpenSSLCheck
         arguments:

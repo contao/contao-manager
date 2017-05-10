@@ -18,6 +18,11 @@ class ContaoApi
     private $processFactory;
 
     /**
+     * @var string
+     */
+    private $contaoVersion = false;
+
+    /**
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
@@ -27,20 +32,28 @@ class ContaoApi
         $this->processFactory = $processFactory;
     }
 
+    /**
+     * Gets the Contao version by trying to run the contao:version command.
+     *
+     * @return null|string
+     */
     public function getContaoVersion()
     {
-        $process = $this->processFactory->createContaoConsoleProcess(['contao:version']);
+        if (false === $this->contaoVersion) {
+            $this->contaoVersion = null;
 
-        $process->run();
+            $process = $this->processFactory->createContaoConsoleProcess(['contao:version']);
+            $process->run();
 
-        if ($process->isSuccessful()) {
-            $version = trim($process->getOutput());
+            if ($process->isSuccessful()) {
+                $version = trim($process->getOutput());
 
-            if (preg_match('/^\d+\.\d+\.\d+$/', $version)) {
-                return $version;
+                if (preg_match('/^\d+\.\d+\.\d+$/', $version)) {
+                    $this->contaoVersion = $version;
+                }
             }
         }
 
-        return null;
+        return $this->contaoVersion;
     }
 }
