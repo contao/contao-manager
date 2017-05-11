@@ -6,8 +6,5 @@ services:
             - [addIntegrityCheck, ["@contao_manager.integrity.allow_url_fopen"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.openssl"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.process"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.contao"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.web_root"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.windows"]]
         tags:
             - { name: console.command }

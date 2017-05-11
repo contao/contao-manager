@@ -1,5 +1,8 @@
 imports:
     - { resource: controllers.yml }
+    - { resource: commands.yml }
+    - { resource: listener.yml }
+    - { resource: integrity.yml }
 
 services:
     contao_manager.config.auth:
@@ -31,44 +34,6 @@ services:
         class: Contao\ManagerApi\I18n\Translator
         arguments:
             - "@request_stack"
-
-    contao_manager.integrity.allow_url_fopen:
-        class: Contao\ManagerApi\IntegrityCheck\AllowUrlFopenCheck
-        arguments:
-            - "@contao_manager.i18n.translator"
-
-    contao_manager.integrity.contao:
-        class: Contao\ManagerApi\IntegrityCheck\ContaoCheck
-        arguments:
-            - "@kernel"
-            - "@contao_manager.process.contao_api"
-            - "@contao_manager.i18n.translator"
-            - "@filesystem"
-
-    contao_manager.integrity.openssl:
-        class: Contao\ManagerApi\IntegrityCheck\OpenSSLCheck
-        arguments:
-            - "@contao_manager.i18n.translator"
-
-    contao_manager.integrity.memory_limit:
-        class: Contao\ManagerApi\IntegrityCheck\MemoryLimitCheck
-        arguments:
-            - "@contao_manager.i18n.translator"
-
-    contao_manager.integrity.process:
-        class: Contao\ManagerApi\IntegrityCheck\ProcessCheck
-        arguments:
-            - "@contao_manager.i18n.translator"
-
-    contao_manager.integrity.web_root:
-        class: Contao\ManagerApi\IntegrityCheck\WebRootCheck
-        arguments:
-            - "@contao_manager.i18n.translator"
-
-    contao_manager.integrity.windows:
-        class: Contao\ManagerApi\IntegrityCheck\WindowsPlatformCheck
-        arguments:
-            - "@contao_manager.i18n.translator"
 
     contao_manager.process.console_factory:
         class: Contao\ManagerApi\Process\ConsoleProcessFactory

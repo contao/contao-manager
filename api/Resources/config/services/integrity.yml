@@ -1,0 +1,38 @@
+services:
+    contao_manager.integrity.allow_url_fopen:
+        class: Contao\ManagerApi\IntegrityCheck\AllowUrlFopenCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
+
+    contao_manager.integrity.contao:
+        class: Contao\ManagerApi\IntegrityCheck\ContaoCheck
+        arguments:
+            - "@kernel"
+            - "@contao_manager.process.contao_api"
+            - "@contao_manager.i18n.translator"
+            - "@filesystem"
+
+    contao_manager.integrity.openssl:
+        class: Contao\ManagerApi\IntegrityCheck\OpenSSLCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
+
+    contao_manager.integrity.memory_limit:
+        class: Contao\ManagerApi\IntegrityCheck\MemoryLimitCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
+
+    contao_manager.integrity.process:
+        class: Contao\ManagerApi\IntegrityCheck\ProcessCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
+
+    contao_manager.integrity.web_root:
+        class: Contao\ManagerApi\IntegrityCheck\WebRootCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
+
+    contao_manager.integrity.windows:
+        class: Contao\ManagerApi\IntegrityCheck\WindowsPlatformCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
