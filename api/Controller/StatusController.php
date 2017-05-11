@@ -12,6 +12,7 @@ namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\AuthConfig;
+use Contao\ManagerApi\Config\ComposerConfig;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
@@ -38,17 +39,22 @@ class StatusController extends Controller
     /**
      * @var ManagerConfig
      */
-    private $config;
+    private $managerConfig;
 
     /**
      * @var AuthConfig
      */
-    private $auth;
+    private $authConfig;
 
     /**
      * @var UserConfig
      */
-    private $users;
+    private $userConfig;
+
+    /**
+     * @var ComposerConfig
+     */
+    private $composerConfig;
 
     /**
      * @var ConsoleProcessFactory
@@ -74,9 +80,10 @@ class StatusController extends Controller
      * Constructor.
      *
      * @param ApiKernel             $kernel
-     * @param ManagerConfig         $config
-     * @param AuthConfig            $auth
-     * @param UserConfig            $users
+     * @param ManagerConfig         $managerConfig
+     * @param AuthConfig            $authConfig
+     * @param UserConfig            $userConfig
+     * @param ComposerConfig        $composerConfig
      * @param ConsoleProcessFactory $processFactory
      * @param ContaoApi             $contaoApi
      * @param Filesystem|null       $filesystem
@@ -85,17 +92,19 @@ class StatusController extends Controller
      */
     public function __construct(
         ApiKernel $kernel,
-        ManagerConfig $config,
-        AuthConfig $auth,
-        UserConfig $users,
+        ManagerConfig $managerConfig,
+        AuthConfig $authConfig,
+        UserConfig $userConfig,
+        ComposerConfig $composerConfig,
         ConsoleProcessFactory $processFactory,
         ContaoApi $contaoApi,
         Filesystem $filesystem = null
     ) {
         $this->kernel = $kernel;
-        $this->config = $config;
-        $this->auth = $auth;
-        $this->users = $users;
+        $this->managerConfig = $managerConfig;
+        $this->authConfig = $authConfig;
+        $this->userConfig = $userConfig;
+        $this->composerConfig = $composerConfig;
         $this->contaoApi = $contaoApi;
         $this->filesystem = $filesystem ?: new Filesystem();
         $this->processFactory = $processFactory;
@@ -106,7 +115,7 @@ class StatusController extends Controller
      */
     public function __invoke()
     {
-        if (0 !== $this->users->count() && !$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if (0 !== $this->userConfig->count() && !$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return new JsonResponse(
                 [
                     'status' => self::STATUS_AUTHENTICATE,
@@ -120,19 +129,17 @@ class StatusController extends Controller
         }
 
         $this->createHtaccess();
+        $this->composerConfig->initialize();
 
         $version = $this->contaoApi->getContaoVersion();
+        $status = self::STATUS_OK;
 
-        if (0 === $this->users->count()) {
-            $status = self::STATUS_INSTALL;
-        } elseif ($this->config->has('php_cli') && $version) {
-            $status = self::STATUS_OK;
-        } else {
+        if (0 === $this->userConfig->count() || !$this->managerConfig->has('php_cli') || !$version) {
             $status = self::STATUS_INSTALL;
         }
 
-        $config = $this->config->all();
-        $config['github_oauth_token'] = $this->auth->getGithubToken();
+        $config = $this->managerConfig->all();
+        $config['github_oauth_token'] = $this->authConfig->getGithubToken();
 
         return new JsonResponse(
             [
@@ -167,7 +174,7 @@ class StatusController extends Controller
             }
         }
 
-        if ($this->config->get('php_cli')) {
+        if ($this->managerConfig->get('php_cli')) {
             $process = $this->processFactory->createManagerConsoleProcess(
                 [
                     'contao-manager:check',
