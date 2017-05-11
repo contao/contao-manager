@@ -59,7 +59,7 @@ if ('cli' === PHP_SAPI) {
         'contao-manager.phar',
         'index.html',
         null,
-        [],
+        array(),
         function () {
             // The function argument is unreliable across servers, Nginx for example is always empty
             list(,$url) = explode(basename(__FILE__), $_SERVER['REQUEST_URI'], 2);
