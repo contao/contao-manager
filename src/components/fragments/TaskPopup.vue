@@ -123,7 +123,7 @@
             },
 
             hidePopup() {
-                const reload = this.taskStatus === 'failed';
+                const reload = this.taskStatus === 'failed' || this.taskStatus === 'error';
 
                 this.$store.dispatch('tasks/deleteCurrent').then(
                     () => {
