@@ -154,11 +154,11 @@ class ConsoleProcessFactory
         );
 
         if ($this->kernel->isDebug() && $this->config->get('fork_debug')) {
-            $process->addForker(new DebugForker($backgroundCommand, $this->logger));
+            $process->addForker((new DebugForker($backgroundCommand, $this->logger))->setTimeout(5000));
         }
 
-        $process->addForker(new DisownForker($backgroundCommand, $this->logger));
-        $process->addForker(new NohupForker($backgroundCommand, $this->logger));
+        $process->addForker((new DisownForker($backgroundCommand, $this->logger))->setTimeout(5000));
+        $process->addForker((new NohupForker($backgroundCommand, $this->logger))->setTimeout(5000));
 
         return $process;
     }
