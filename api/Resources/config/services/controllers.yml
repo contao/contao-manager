@@ -57,3 +57,9 @@ services:
                 - "@contao_manager.config.user"
             calls:
                 - [setContainer, ["@service_container"]]
+
+    contao_manager.controller.tasks:
+            class: Contao\ManagerApi\Controller\TaskController
+            arguments:
+                - "@contao_manager.process.console_factory"
+                - "@tenside.tasks"

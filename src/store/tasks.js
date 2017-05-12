@@ -2,11 +2,11 @@
 
 import api from '../api';
 
-const pollTask = ({ commit }, taskId, resolve, reject) => {
+const pollTask = ({ commit }, resolve, reject) => {
     let pending = 0;
 
     const fetch = () => {
-        api.getTask(taskId).then(
+        api.getTask().then(
             (task) => {
                 commit('setProgress', task);
 
@@ -20,7 +20,7 @@ const pollTask = ({ commit }, taskId, resolve, reject) => {
                             return;
                         }
 
-                        api.runNextTask(pending * 500).then(() => {
+                        api.runTask(pending * 500).then(() => {
                             setTimeout(fetch, pending * 1000);
                         });
                         break;
@@ -45,6 +45,10 @@ const pollTask = ({ commit }, taskId, resolve, reject) => {
                         reject(task);
                 }
             },
+            () => {
+                commit('setStatus', null);
+                commit('setProgress', null);
+            },
         );
     };
 
@@ -55,16 +59,12 @@ export default {
     namespaced: true,
 
     state: {
-        currentId: null,
         status: null,
         type: null,
         consoleOutput: '',
     },
 
     mutations: {
-        setTaskId(state, taskId) {
-            state.currentId = taskId;
-        },
         setStatus(state, status) {
             state.status = status;
         },
@@ -82,29 +82,20 @@ export default {
     actions: {
         reload(store) {
             return new Promise((resolve, reject) => {
-                if (store.state.currentId !== null) {
+                if (store.state.status !== null) {
                     reject();
                 }
 
-                api.getTasks().then(
-                    (tasks) => {
-                        const keys = Object.keys(tasks);
+                api.getTask().then(
+                    (task) => {
+                        if (task.status === 'PENDING') {
+                            api.deleteTask();
+                        } else {
+                            store.commit('setStatus', 'running');
+                            store.commit('setProgress', null);
 
-                        if (keys.length) {
-                            for (let i = 0; i < keys.length; i += 1) {
-                                const task = tasks[keys[i]];
-
-                                if (task.status === 'PENDING') {
-                                    api.deleteTask(task.id);
-                                } else {
-                                    store.commit('setTaskId', task.id);
-                                    store.commit('setStatus', 'running');
-                                    store.commit('setProgress', null);
-
-                                    pollTask(store, task.id, resolve, reject);
-                                    return;
-                                }
-                            }
+                            pollTask(store, resolve, reject);
+                            return;
                         }
 
                         resolve();
@@ -113,29 +104,54 @@ export default {
             });
         },
 
-        run(store, taskId) {
+        run(store) {
             return new Promise((resolve, reject) => {
-                if (store.state.currentId !== null) {
+                if (store.state.status !== null) {
                     reject();
                 }
 
-                store.commit('setTaskId', taskId);
                 store.commit('setStatus', 'running');
                 store.commit('setProgress', null);
 
-                pollTask(store, taskId, resolve, reject);
+                pollTask(store, resolve, reject);
             });
         },
 
-        execute({ dispatch }, task) {
-            return api.addTask(task).then(
-                taskId => dispatch('run', taskId),
-            );
+        execute(store, task) {
+            return new Promise((resolve, reject) => {
+                if (store.state.status !== null) {
+                    reject();
+                }
+
+                store.commit('setStatus', 'running');
+                store.commit('setProgress', null);
+
+                api.addTask(task).then(() => {
+                    pollTask(store, resolve, reject);
+                });
+            });
+        },
+
+        stop(store) {
+            return new Promise((resolve, reject) => {
+                if (store.state.status === null) {
+                    reject();
+                }
+
+                api.stopTask().then(
+                    () => {
+                        resolve();
+                    },
+                    () => {
+                        reject();
+                    },
+                );
+            });
         },
 
         deleteCurrent(store) {
-            const deleteTask = () => store.commit('setTaskId', null);
-            return api.deleteTask(store.state.currentId).then(deleteTask, deleteTask);
+            const deleteTask = () => store.commit('setStatus', null);
+            return api.deleteTask().then(deleteTask, deleteTask);
         },
     },
 };

@@ -24,6 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Tenside\Core\Task\Task;
 use Tenside\Core\Task\TaskList;
 
 class StatusController extends Controller
@@ -79,7 +80,7 @@ class StatusController extends Controller
     /**
      * @var TaskList
      */
-    private $tasks;
+    private $taskList;
 
     /**
      * Constructor.
@@ -91,7 +92,7 @@ class StatusController extends Controller
      * @param ComposerConfig        $composerConfig
      * @param ConsoleProcessFactory $processFactory
      * @param ContaoApi             $contaoApi
-     * @param TaskList              $tasks
+     * @param TaskList              $taskList
      * @param Filesystem|null       $filesystem
      *
      * @internal param InstallationStatusDeterminator $status
@@ -104,7 +105,7 @@ class StatusController extends Controller
         ComposerConfig $composerConfig,
         ConsoleProcessFactory $processFactory,
         ContaoApi $contaoApi,
-        TaskList $tasks,
+        TaskList $taskList,
         Filesystem $filesystem = null
     ) {
         $this->kernel = $kernel;
@@ -114,7 +115,7 @@ class StatusController extends Controller
         $this->composerConfig = $composerConfig;
         $this->processFactory = $processFactory;
         $this->contaoApi = $contaoApi;
-        $this->tasks = $tasks;
+        $this->taskList = $taskList;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -149,13 +150,18 @@ class StatusController extends Controller
         $config = $this->managerConfig->all();
         $config['github_oauth_token'] = $this->authConfig->getGithubToken();
 
+        $taskId = null;
+        if (($task = $this->taskList->getNext()) instanceof Task) {
+            $taskId = $task->getId();
+        }
+
         return new JsonResponse(
             [
                 'status' => $status,
                 'username' => (string) $this->getUser(),
                 'config' => $config,
                 'version' => $version,
-                'tasks' => $this->tasks->getIds(),
+                'task' => $taskId,
             ]
         );
     }

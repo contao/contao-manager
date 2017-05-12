@@ -20,6 +20,12 @@
 
                 <button @click="hidePopup"><span>{{ 'ui.taskpopup.buttonClose' | translate }}</span></button>
             </div>
+            <div v-if="taskStatus === 'error'">
+                <h2>{{ 'ui.taskpopup.errorHeadline' | translate }}</h2>
+                <p v-html="$t('ui.taskpopup.errorDescription')"></p>
+
+                <button @click="hidePopup"><span>{{ 'ui.taskpopup.buttonConfirm' | translate }}</span></button>
+            </div>
             <div v-else-if="taskStatus === 'success' && showInstall && taskType === 'install'">
                 <h2>{{ 'ui.taskpopup.installHeadline' | translate }}</h2>
                 <p>{{ 'ui.taskpopup.installDescription' | translate }}</p>
@@ -38,7 +44,8 @@
                 <h2 class="progress">{{ progressTitle ? progressTitle : $t('ui.taskpopup.taskStarting') }}</h2>
                 <p class="progress">{{ progressText ? progressText : '&nbsp;' }}</p>
 
-                <button :disabled="taskStatus !== 'success' && taskStatus !== 'error'" @click="hidePopup">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
+                <button v-if="taskStatus !== 'running'" @click="hidePopup">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
+                <button v-else @click="cancelTask">{{ 'ui.taskpopup.buttonCancel' | translate }}</button>
             </div>
 
             <div v-if="taskStatus !== 'failed'">
@@ -125,6 +132,12 @@
                         }
                     },
                 );
+            },
+
+            cancelTask() {
+                if (confirm(this.$t('ui.taskpopup.confirmCancel'))) {
+                    this.$store.dispatch('tasks/stop');
+                }
             },
 
             scrolled() {

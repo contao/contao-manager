@@ -24,7 +24,7 @@
 
         computed: {
             taskRunning() {
-                return this.$store.state.tasks.currentId !== null;
+                return this.$store.state.tasks.status !== null;
             },
 
             hasError() {

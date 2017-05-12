@@ -51,11 +51,11 @@ export default {
         );
     },
 
-    runNextTask(timeout = 1000) {
+    runTask(timeout = 1000) {
         return new Promise((resolve) => {
             let request;
 
-            Vue.http.get('api/tasks/run', {
+            Vue.http.put('api/task/status', { status: 'RUNNING' }, {
                 before: (r) => {
                     request = r;
                 },
@@ -68,30 +68,38 @@ export default {
         });
     },
 
-    getTasks() {
-        return Vue.http.get('api/tasks').then(
-            response => response.body.tasks,
+    stopTask() {
+        return Vue.http.put('api/task/status', { status: 'STOPPED' }).then(
+            response => response.body,
         );
     },
 
-    getTask(taskId) {
-        return Vue.http.get(`api/tasks/${taskId}`).then(
-            response => ({
-                status: response.body.task.status,
-                type: response.body.task.type,
-                output: response.body.task.output,
-            }),
+    getTask() {
+        return Vue.http.get('api/task').then(
+            response => response.body,
+            () => null,
         );
     },
 
     addTask(task) {
-        return Vue.http.post('api/tasks', task).then(
-            response => response.body.task.id,
-        );
+        return new Promise((resolve) => {
+            let request;
+
+            Vue.http.put('api/task', task, {
+                before: (r) => {
+                    request = r;
+                },
+            });
+
+            setTimeout(() => {
+                request.abort();
+                resolve();
+            }, 1000);
+        });
     },
 
-    deleteTask(taskId) {
-        return Vue.http.delete(`api/tasks/${taskId}`);
+    deleteTask() {
+        return Vue.http.delete('api/task');
     },
 
     getPackages() {

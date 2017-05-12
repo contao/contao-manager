@@ -51,7 +51,7 @@ const store = new Vuex.Store({
                         commit('auth/setLogout');
                     }
 
-                    if (result.status === apiStatus.OK && result.tasks.length > 0) {
+                    if (result.status === apiStatus.OK && result.task) {
                         dispatch('tasks/reload').catch(() => {});
                     }
 
@@ -90,7 +90,7 @@ const store = new Vuex.Store({
 
         install: ({ dispatch }, version) => (
             api.install(version).then(
-                taskId => dispatch('tasks/run', taskId, { root: true }),
+                () => dispatch('tasks/run', null, { root: true }),
             ).then(
                 () => dispatch('fetchStatus', true, { root: true }),
             )

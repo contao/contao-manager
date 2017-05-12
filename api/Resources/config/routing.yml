@@ -100,6 +100,29 @@ config_composer_patch:
     methods:  [PATCH]
 
 
+#############
+#   Tasks   #
+#############
+
+task_get:
+    path:     /api/task
+    defaults: { _controller: contao_manager.controller.tasks:getTask }
+    methods:  [GET]
+
+task_put:
+    path:     /api/task
+    defaults: { _controller: contao_manager.controller.tasks:putTask }
+    methods:  [PUT]
+
+task_delete:
+    path:     /api/task
+    defaults: { _controller: contao_manager.controller.tasks:deleteTask }
+    methods:  [DELETE]
+
+task_status:
+    path:     /api/task/status
+    defaults: { _controller: contao_manager.controller.tasks:putTaskStatus }
+    methods:  [PUT]
 
 ###############
 #   Tenside   #
@@ -119,32 +142,3 @@ constraint_check:
     path:     /api/constraint
     defaults: { _controller: TensideCoreBundle:VersionConstraint:checkVersionConstraint }
     methods:  [POST]
-
-tasks_get:
-    path:     /api/tasks
-    defaults: { _controller: TensideCoreBundle:TaskRunner:getTasks }
-    methods:  [GET]
-
-tasks_run:
-    path:     /api/tasks/run
-    defaults: { _controller: TensideCoreBundle:TaskRunner:run }
-    methods:  [GET]
-
-task_get:
-    path:     /api/tasks/{taskId}
-    defaults: { _controller: TensideCoreBundle:TaskRunner:getTask }
-    methods:  [GET]
-    requirements:
-        taskId: "[a-z0-9]+"
-
-task_add:
-    path:     /api/tasks
-    defaults: { _controller: TensideCoreBundle:TaskRunner:addTask }
-    methods:  [POST]
-
-task_delete:
-    path:     /api/tasks/{taskId}
-    defaults: { _controller: TensideCoreBundle:TaskRunner:deleteTask }
-    methods:  [DELETE]
-    requirements:
-        taskId: "[a-z0-9]+"

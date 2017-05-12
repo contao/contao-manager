@@ -256,7 +256,7 @@
                     next(routes.packages);
                 }
 
-                if (result.tasks && result.tasks.length > 0) {
+                if (result.task) {
                     store.dispatch('tasks/reload').then(
                         () => store.dispatch('fetchStatus', true),
                         () => {},
