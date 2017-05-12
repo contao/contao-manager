@@ -69,13 +69,13 @@ class ConsoleProcessFactory
      * Creates a background process for the Manager console.
      *
      * @param array       $arguments
-     * @param string|null $uuid
+     * @param string|null $id
      *
      * @return ProcessController
      */
-    public function createManagerConsoleBackgroundProcess(array $arguments, $uuid = null)
+    public function createManagerConsoleBackgroundProcess(array $arguments, $id = null)
     {
-        return $this->createBackgroundProcess($this->getManagerConsolePath(), $arguments, $uuid);
+        return $this->createBackgroundProcess($this->getManagerConsolePath(), $arguments, $id);
     }
 
     /**
@@ -94,25 +94,25 @@ class ConsoleProcessFactory
      * Creates a foreground process for the Contao console.
      *
      * @param array       $arguments
-     * @param string|null $uuid
+     * @param string|null $id
      *
      * @return ProcessController
      */
-    public function createContaoConsoleBackgroundProcess(array $arguments, $uuid = null)
+    public function createContaoConsoleBackgroundProcess(array $arguments, $id = null)
     {
-        return $this->createBackgroundProcess($this->getContaoConsolePath(), $arguments, $uuid);
+        return $this->createBackgroundProcess($this->getContaoConsolePath(), $arguments, $id);
     }
 
     /**
      * Restores the ProcessController for given task ID.
      *
-     * @param string $uuid
+     * @param string $id
      *
      * @return ProcessController
      */
-    public function restoreBackgroundProcess($uuid)
+    public function restoreBackgroundProcess($id)
     {
-        return ProcessController::restore($this->kernel->getManagerDir(), $uuid);
+        return ProcessController::restore($this->kernel->getManagerDir(), $id);
     }
 
     /**
@@ -132,17 +132,17 @@ class ConsoleProcessFactory
     /**
      * @param string      $console
      * @param array       $arguments
-     * @param string|null $uuid
+     * @param string|null $id
      *
      * @return ProcessController
      */
-    private function createBackgroundProcess($console, array $arguments, $uuid = null)
+    private function createBackgroundProcess($console, array $arguments, $id = null)
     {
         $process = ProcessController::create(
             $this->kernel->getManagerDir(),
             $this->buildCommandLine($console, $arguments),
             $this->kernel->getContaoDir(),
-            $uuid
+            $id
         );
 
         $backgroundCommand = $this->buildCommandLine(
