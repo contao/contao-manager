@@ -9,6 +9,7 @@ services:
             - "@contao_manager.config.composer"
             - "@contao_manager.process.console_factory"
             - "@contao_manager.process.contao_api"
+            - "@tenside.tasks"
             - "@filesystem"
         calls:
             - [setContainer, ["@service_container"]]

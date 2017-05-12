@@ -70,8 +70,8 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            store.dispatch('fetchStatus').then((status) => {
-                if (status === apiStatus.OK) {
+            store.dispatch('fetchStatus').then((result) => {
+                if (result.status === apiStatus.OK) {
                     next(routes.packages);
                 }
 

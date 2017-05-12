@@ -15,6 +15,7 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ContaoApi;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\Filesystem\Filesystem;
+use Tenside\Core\Task\TaskList;
 
 class ContaoCheck extends AbstractIntegrityCheck
 {
@@ -29,21 +30,40 @@ class ContaoCheck extends AbstractIntegrityCheck
     private $contaoApi;
 
     /**
+     * @var TaskList
+     */
+    private $tasks;
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
 
-    public function __construct(ApiKernel $kernel, ContaoApi $contaoApi, Translator $translator, Filesystem $filesystem = null)
+    /**
+     * Constructor.
+     *
+     * @param ApiKernel       $kernel
+     * @param ContaoApi       $contaoApi
+     * @param Translator      $translator
+     * @param TaskList        $tasks
+     * @param Filesystem|null $filesystem
+     */
+    public function __construct(ApiKernel $kernel, ContaoApi $contaoApi, Translator $translator, TaskList $tasks, Filesystem $filesystem = null)
     {
         parent::__construct($translator);
 
         $this->kernel = $kernel;
         $this->contaoApi = $contaoApi;
         $this->filesystem = $filesystem ?: new Filesystem();
+        $this->tasks = $tasks;
     }
 
     public function run()
     {
+        if (!empty($this->tasks->getIds())) {
+            return null;
+        }
+
         if (!$this->hasInstallation()) {
             return null;
         }

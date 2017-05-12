@@ -251,9 +251,16 @@
         },
 
         beforeRouteEnter(to, from, next) {
-            store.dispatch('fetchStatus').then((status) => {
-                if (status === apiStatus.OK) {
+            store.dispatch('fetchStatus').then((result) => {
+                if (result.status === apiStatus.OK) {
                     next(routes.packages);
+                }
+
+                if (result.tasks && result.tasks.length > 0) {
+                    store.dispatch('tasks/reload').then(
+                        () => store.dispatch('fetchStatus', true),
+                        () => {},
+                    );
                 }
 
                 next();

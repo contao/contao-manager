@@ -24,6 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Tenside\Core\Task\TaskList;
 
 class StatusController extends Controller
 {
@@ -75,6 +76,10 @@ class StatusController extends Controller
      * @var IntegrityCheckInterface[]
      */
     private $checks = [];
+    /**
+     * @var TaskList
+     */
+    private $tasks;
 
     /**
      * Constructor.
@@ -86,6 +91,7 @@ class StatusController extends Controller
      * @param ComposerConfig        $composerConfig
      * @param ConsoleProcessFactory $processFactory
      * @param ContaoApi             $contaoApi
+     * @param TaskList              $tasks
      * @param Filesystem|null       $filesystem
      *
      * @internal param InstallationStatusDeterminator $status
@@ -98,6 +104,7 @@ class StatusController extends Controller
         ComposerConfig $composerConfig,
         ConsoleProcessFactory $processFactory,
         ContaoApi $contaoApi,
+        TaskList $tasks,
         Filesystem $filesystem = null
     ) {
         $this->kernel = $kernel;
@@ -105,9 +112,10 @@ class StatusController extends Controller
         $this->authConfig = $authConfig;
         $this->userConfig = $userConfig;
         $this->composerConfig = $composerConfig;
-        $this->contaoApi = $contaoApi;
-        $this->filesystem = $filesystem ?: new Filesystem();
         $this->processFactory = $processFactory;
+        $this->contaoApi = $contaoApi;
+        $this->tasks = $tasks;
+        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**
@@ -147,6 +155,7 @@ class StatusController extends Controller
                 'username' => (string) $this->getUser(),
                 'config' => $config,
                 'version' => $version,
+                'tasks' => $this->tasks->getIds(),
             ]
         );
     }

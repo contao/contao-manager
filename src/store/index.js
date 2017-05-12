@@ -51,11 +51,11 @@ const store = new Vuex.Store({
                         commit('auth/setLogout');
                     }
 
-                    if (result.status === apiStatus.OK || result.status === apiStatus.EMPTY) {
+                    if (result.status === apiStatus.OK && result.tasks.length > 0) {
                         dispatch('tasks/reload').catch(() => {});
                     }
 
-                    return result.status;
+                    return result;
                 },
             );
         },

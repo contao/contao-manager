@@ -10,6 +10,7 @@ services:
             - "@kernel"
             - "@contao_manager.process.contao_api"
             - "@contao_manager.i18n.translator"
+            - "@tenside.tasks"
             - "@filesystem"
 
     contao_manager.integrity.openssl:
