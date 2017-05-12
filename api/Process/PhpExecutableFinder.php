@@ -20,8 +20,14 @@ class PhpExecutableFinder
     public function find()
     {
         // PHP_BINARY return the current sapi executable
-        if (PHP_BINARY && in_array(PHP_SAPI, ['cli', 'cli-server', 'phpdbg'], true) && is_file(PHP_BINARY)) {
-            return PHP_BINARY;
+        if (PHP_BINARY) {
+            if (in_array(PHP_SAPI, ['cli', 'cli-server', 'phpdbg'], true) && is_file(PHP_BINARY)) {
+                return PHP_BINARY;
+            }
+
+            if (is_file(PHP_BINARY.'-cli')) {
+                return PHP_BINARY.'-cli';
+            }
         }
 
         if ($php = getenv('PHP_PATH')) {
