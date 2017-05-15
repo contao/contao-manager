@@ -33,7 +33,7 @@ class MemoryLimitCheck extends AbstractIntegrityCheck
     {
         $memoryLimit = trim(ini_get('memory_limit'));
 
-        if (-1 === $memoryLimit) {
+        if ($memoryLimit == -1) {
             return true;
         }
 
