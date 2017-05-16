@@ -30,8 +30,14 @@ class PhpExecutableFinder
         $paths = [];
 
         if (PHP_BINARY) {
-            $paths[] = PHP_BINARY;
             $paths[] = PHP_BINARY.'-cli';
+            $paths[] = PHP_BINARY;
+
+            if (false !== ($suffix = strrchr(basename(PHP_BINARY), '-'))) {
+                $php = substr(PHP_BINARY, 0, -strlen($suffix));
+                $paths[] = $php.'-cli';
+                $paths[] = $php;
+            }
 
             $this->includePath($paths, dirname(PHP_BINARY));
         }
