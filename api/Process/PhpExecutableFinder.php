@@ -10,89 +10,173 @@
 
 namespace Contao\ManagerApi\Process;
 
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+
 class PhpExecutableFinder
 {
-    private $suffixes = ['.exe', '.bat', '.cmd', '.com'];
+    private $names = ['php-cli', 'php'];
 
     /**
-     * This is a duplicate of the parent method, but we don't use the ExecutableFinder.
+     * Finds the best matching PHP executable on the system.
+     *
+     * Contrary to symfony/process PhpExecutableFinder we actually test if the binary is
+     * the same version as the currently running web process.
+     *
+     * @return string|null
      */
     public function find()
     {
-        // PHP_BINARY return the current sapi executable
-        if (PHP_BINARY) {
-            if (in_array(PHP_SAPI, ['cli', 'cli-server', 'phpdbg'], true) && is_file(PHP_BINARY)) {
-                return PHP_BINARY;
-            }
+        $paths = [];
 
-            if (is_file(PHP_BINARY.'-cli')) {
-                return PHP_BINARY.'-cli';
-            }
+        if (PHP_BINARY) {
+            $paths[] = PHP_BINARY;
+            $paths[] = PHP_BINARY.'-cli';
+
+            $this->includePath($paths, dirname(PHP_BINARY));
+        }
+
+        if (PHP_BINDIR) {
+            $this->includePath($paths, PHP_BINDIR);
         }
 
         if ($php = getenv('PHP_PATH')) {
-            if (!is_executable($php)) {
-                return false;
-            }
-
-            return $php;
+            $paths[] = $php;
         }
 
         if ($php = getenv('PHP_PEAR_PHP_BIN')) {
-            if (is_executable($php)) {
-                return $php;
-            }
+            $paths[] = $php;
         }
 
-        $dirs = [PHP_BINDIR];
-        if ('\\' === DIRECTORY_SEPARATOR) {
-            $dirs[] = 'C:\xampp\php\\';
-        }
+        $paths = array_merge($paths, $this->findExecutables());
 
-        return $this->findExecutable('php', null, $dirs);
+        return $this->findBinary(array_unique($paths));
     }
 
     /**
-     * This is a duplicate of ExecutableFinder::find() but we're checking the $extraDirs first.
+     * Finds PHP executables within open_basedir or PATH environment variable.
      *
-     * @param mixed      $name
-     * @param null|mixed $default
+     * @return array
      */
-    private function findExecutable($name, $default = null, array $extraDirs = [])
+    private function findExecutables()
     {
+        $results = [];
+
         if (ini_get('open_basedir')) {
             $searchPath = explode(PATH_SEPARATOR, ini_get('open_basedir'));
             $dirs = [];
+
             foreach ($searchPath as $path) {
                 // Silencing against https://bugs.php.net/69240
                 if (@is_dir($path)) {
                     $dirs[] = $path;
                 } else {
-                    if (basename($path) === $name && @is_executable($path)) {
-                        return $path;
+                    if (in_array(basename($path), $this->names) && @is_executable($path)) {
+                        $results[] = $path;
                     }
                 }
             }
         } else {
-            $dirs = array_merge(
-                $extraDirs,
-                explode(PATH_SEPARATOR, getenv('PATH') ?: getenv('Path'))
-            );
+            $dirs = explode(PATH_SEPARATOR, getenv('PATH') ?: getenv('Path'));
+
+            if ('\\' === DIRECTORY_SEPARATOR) {
+                $dirs[] = 'C:\xampp\php\\';
+            }
         }
 
         $suffixes = [''];
         if ('\\' === DIRECTORY_SEPARATOR) {
             $pathExt = getenv('PATHEXT');
-            $suffixes = array_merge($suffixes, $pathExt ? explode(PATH_SEPARATOR, $pathExt) : $this->suffixes);
+            $suffixes = array_merge(
+                $suffixes,
+                $pathExt ? explode(PATH_SEPARATOR, $pathExt) : ['.exe', '.bat', '.cmd', '.com']
+            );
         }
-        foreach ($suffixes as $suffix) {
-            foreach ($dirs as $dir) {
-                if (@is_file($file = $dir.DIRECTORY_SEPARATOR.$name.$suffix) && ('\\' === DIRECTORY_SEPARATOR || is_executable($file))) {
-                    return $file;
+
+        foreach ($this->names as $name) {
+            foreach ($suffixes as $suffix) {
+                foreach ($dirs as $dir) {
+                    if (@is_file($file = $dir . DIRECTORY_SEPARATOR . $name . $suffix)
+                        && ('\\' === DIRECTORY_SEPARATOR || is_executable($file))
+                    ) {
+                        $results[] = $file;
+                    }
                 }
             }
         }
 
-        return $default;
+        return $results;
+    }
+
+    private function findBinary(array $paths)
+    {
+        $fallback = null;
+
+        if ($openBasedir = ini_get('open_basedir')) {
+            $openBasedir = explode(PATH_SEPARATOR, $openBasedir);
+        }
+
+        foreach ($paths as $path) {
+            // we only test for is_executable if no open_basedir restrictions are set
+            // or the target is within allowed paths. If the path is not within open_basedir
+            // we can still execute the binary on the command line and check the version.
+
+            if ((!$openBasedir || $this->isAllowed($path, $openBasedir)) && !is_executable($path)) {
+                continue;
+            }
+
+            try {
+                $process = (new Process(escapeshellcmd($path)." -r 'echo PHP_VERSION;'"))->mustRun();
+                $version = trim($process->getOutput());
+            } catch (ProcessFailedException $e) {
+                continue;
+            }
+
+            if (version_compare(PHP_VERSION, $version, 'eq')) {
+                return $path;
+            }
+
+            $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
+            $vCli = vsprintf('%s.%s', explode('.', $version));
+
+            if (null === $fallback && version_compare($vWeb, $vCli, 'eq')) {
+                $fallback = $path;
+                continue;
+            }
+        }
+
+        return $fallback;
+    }
+
+    /**
+     * Tests if the given path is within any of the given directories.
+     *
+     * @param string $path
+     * @param array $dirs
+     *
+     * @return bool
+     */
+    private function isAllowed($path, array $dirs)
+    {
+        foreach ($dirs as $dir) {
+            if (0 === strpos($path, $dir)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Adds the all binaries for given path to paths array.
+     *
+     * @param array  $paths
+     * @param string $path
+     */
+    private function includePath(array &$paths, $path)
+    {
+        foreach ($this->names as $name) {
+            $paths[] = $path.DIRECTORY_SEPARATOR.$name;
+        }
     }
 }
