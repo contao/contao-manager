@@ -62,7 +62,7 @@ class SessionController extends Controller
     public function login(Request $request)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new Response('', Response::HTTP_UNAUTHORIZED);
+            return new Response('User is already logged in', Response::HTTP_BAD_REQUEST);
         }
 
         $username = $request->request->get('username');

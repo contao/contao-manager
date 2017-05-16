@@ -58,7 +58,7 @@ class TaskController
     public function putTask(Request $request)
     {
         if (null !== $this->taskList->getNext()) {
-            throw new BadRequestHttpException('No active task');
+            throw new BadRequestHttpException('A task is already active');
         }
 
         $metaData = null;
