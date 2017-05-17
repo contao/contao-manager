@@ -10,6 +10,8 @@
     "ui.footer.helpHref": "https://docs.contao.org",
     "ui.footer.reportProblem": "Report a Problem",
     "ui.navigation.packages": "Packages",
+    "ui.navigation.tools": "Tools",
+    "ui.navigation.installTool": "Install Tool",
     "ui.navigation.maintenance": "Maintenance",
     "ui.navigation.rebuildCache": "Rebuild Cache",
     "ui.navigation.advanced": "Advanced",

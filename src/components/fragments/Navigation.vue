@@ -2,7 +2,13 @@
     <nav role="navigation">
         <a id="nav-toggle" @click.prevent="toggleNavigation"><span></span><span></span><span></span></a>
         <ul>
-            <router-link tag="li" :to="{ name: 'packages' }"><a>{{ 'ui.navigation.packages' | translate }}</a></router-link>
+            <router-link tag="li" :to="routes.packages"><a>{{ 'ui.navigation.packages' | translate }}</a></router-link>
+            <li>
+                <a>{{ 'ui.navigation.tools' | translate }}</a>
+                <ul>
+                    <li><a href="/contao/install" target="_blank">{{ 'ui.navigation.installTool' | translate }}</a></li>
+                </ul>
+            </li>
             <li>
                 <a>{{ 'ui.navigation.maintenance' | translate }}</a>
                 <ul>
@@ -24,8 +30,13 @@
 
 <script>
     import store from '../../store';
+    import routes from '../../router/routes';
 
     export default {
+        data: () => ({
+            routes,
+        }),
+
         methods: {
             toggleNavigation() {
                 const classes = document.body.className.split(' ');
