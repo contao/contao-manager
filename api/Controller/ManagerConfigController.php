@@ -49,6 +49,8 @@ class ManagerConfigController extends ConfigController
 
     /**
      * @param Request $request
+     *
+     * @return Response|null
      */
     private function validatePhpExecutable(Request $request)
     {

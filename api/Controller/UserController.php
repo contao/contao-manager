@@ -74,7 +74,7 @@ class UserController extends Controller
      *
      * @param string $username
      *
-     * @return JsonResponse
+     * @return Response
      */
     public function retrieveUser($username)
     {
@@ -132,7 +132,7 @@ class UserController extends Controller
      * @param int                           $status
      * @param bool                          $addLocation
      *
-     * @return JsonResponse
+     * @return Response
      */
     private function getResponse($user, $status = Response::HTTP_OK, $addLocation = false)
     {

@@ -158,7 +158,7 @@ class PhpExecutableFinder
      * Tests if the given path is within any of the given directories.
      *
      * @param string $path
-     * @param array $dirs
+     * @param array  $dirs
      *
      * @return bool
      */

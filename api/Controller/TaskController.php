@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2017 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
@@ -62,7 +70,7 @@ class TaskController
         }
 
         $metaData = null;
-        $content  = $request->getContent();
+        $content = $request->getContent();
         if (empty($content)) {
             throw new BadRequestHttpException('Invalid payload');
         }
@@ -106,8 +114,9 @@ class TaskController
     public function putTaskStatus(Request $request)
     {
         $task = $this->getCurrentTask();
+        $status = $request->request->get('status');
 
-        switch ($request->request->get('status')) {
+        switch ($status) {
             case Task::STATE_RUNNING:
                 if (Task::STATE_RUNNING !== $this->getTaskStatus($task)) {
                     $this->startTask($task);
@@ -122,7 +131,7 @@ class TaskController
                 break;
 
             default:
-                throw new BadRequestHttpException('Unknown or unsupported task status');
+                throw new BadRequestHttpException(sprintf('Unsupported task status "%s"', $status));
         }
 
         return new JsonResponse(['status' => $task->getStatus()]);
@@ -174,11 +183,11 @@ class TaskController
         }
 
         $data = [
-            'id'         => $task->getId(),
-            'status'     => $this->getTaskStatus($task),
-            'type'       => $task->getType(),
+            'id' => $task->getId(),
+            'status' => $this->getTaskStatus($task),
+            'type' => $task->getType(),
             'created_at' => $task->getCreatedAt()->format(\DateTime::ISO8601),
-            'output'     => $output,
+            'output' => $output,
         ];
 
         return $data;
@@ -212,7 +221,7 @@ class TaskController
                 'tenside:runtask',
                 $task->getId(),
                 '-v',
-                '--no-interaction'
+                '--no-interaction',
             ],
             $task->getId()
         );

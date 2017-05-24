@@ -75,12 +75,15 @@ class IntegrityCheckCommand extends Command
                     $output->writeln($detail);
                 }
                 break;
+
             case 'json':
                 $output->write($problem->asJson(true));
                 break;
+
             case 'xml':
                 $output->write($problem->asXml(true));
                 break;
+
             default:
                 throw new \InvalidArgumentException(sprintf('Unknown output format "%s"', $format));
         }

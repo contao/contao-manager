@@ -20,7 +20,7 @@
 
                 <button @click="hidePopup"><span>{{ 'ui.taskpopup.buttonClose' | translate }}</span></button>
             </div>
-            <div v-if="taskStatus === 'error'">
+            <div v-else-if="taskStatus === 'error'">
                 <h2>{{ 'ui.taskpopup.errorHeadline' | translate }}</h2>
                 <p v-html="$t('ui.taskpopup.errorDescription')"></p>
 
