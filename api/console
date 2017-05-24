@@ -60,7 +60,7 @@ putenv('COMPOSER_BINARY='.realpath($_SERVER['argv'][0]));
 
 $input = new ArgvInput();
 
-if (\Phar::running()) {
+if (\Phar::running(false)) {
     $env = '@symfony_env@' === 'prod' ? 'prod' : 'dev';
     $debug = 'dev' === $env;
 } else {

@@ -86,8 +86,8 @@ class ApiKernel extends Kernel
             if (false !== ($composer = getenv('COMPOSER'))) {
                 // @see https://getcomposer.org/doc/03-cli.md#composer
                 $this->contaoDir = dirname($composer);
-            } elseif ('' !== ($phar = \Phar::running())) {
-                $this->contaoDir = dirname(dirname(substr($phar, 7)));
+            } elseif ('' !== ($phar = \Phar::running(false))) {
+                $this->contaoDir = dirname(dirname($phar));
             } else {
                 $this->contaoDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'test-dir';
             }

@@ -69,7 +69,7 @@ class ApiApplication extends Application
 
         $container = $this->kernel->getContainer();
 
-        if (\Phar::running()) {
+        if (\Phar::running(false)) {
             $command = new RunTaskCommand();
             $command->setContainer($container);
 

@@ -192,8 +192,8 @@ class ConsoleProcessFactory
      */
     private function getManagerConsolePath()
     {
-        if ('' !== ($phar = \Phar::running())) {
-            return substr($phar, 7);
+        if ('' !== ($phar = \Phar::running(false))) {
+            return $phar;
         }
 
         return $this->kernel->getRootDir().'/console';
