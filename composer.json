@@ -3,7 +3,7 @@
     "description": "The Contao Manager API",
     "license": "GPL-3.0+",
     "require": {
-        "php": ">=5.5.9",
+        "php": "^5.5.9 || ^7.0",
         "symfony/framework-bundle": "^3.2",
         "symfony/security-bundle": "^3.2",
         "symfony/console": "^3.2",
@@ -32,5 +32,10 @@
             "type": "vcs",
             "url": "https://github.com/terminal42/background-process.git"
         }
-    ]
+    ],
+    "config": {
+        "platform": {
+            "php": "5.5.9"
+        }
+    }
 }
