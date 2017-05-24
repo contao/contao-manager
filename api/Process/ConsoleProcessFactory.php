@@ -125,7 +125,8 @@ class ConsoleProcessFactory
     {
         return new Process(
             $this->buildCommandLine($console, $arguments),
-            $this->kernel->getContaoDir()
+            $this->kernel->getContaoDir(),
+            []
         );
     }
 
@@ -154,11 +155,11 @@ class ConsoleProcessFactory
         );
 
         if ($this->kernel->isDebug() && $this->config->get('fork_debug')) {
-            $process->addForker((new DebugForker($backgroundCommand, $this->logger))->setTimeout(5000));
+            $process->addForker((new DebugForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
         }
 
-        $process->addForker((new DisownForker($backgroundCommand, $this->logger))->setTimeout(5000));
-        $process->addForker((new NohupForker($backgroundCommand, $this->logger))->setTimeout(5000));
+        $process->addForker((new DisownForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
+        $process->addForker((new NohupForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
 
         return $process;
     }
@@ -175,7 +176,7 @@ class ConsoleProcessFactory
     {
         if (null !== ($phpCli = $this->config->getPhpExecutable())) {
             $cmd = $phpCli;
-            array_unshift($arguments, $console);
+            array_unshift($arguments, '-q', $console);
         } else {
             $cmd = $console;
         }

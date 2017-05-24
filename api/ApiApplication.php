@@ -76,6 +76,7 @@ class ApiApplication extends Application
             $this->add($command);
             $this->add(new ProcessRunnerCommand());
             $this->add($container->get('contao_manager.command.integrity_check'));
+            $this->add($container->get('contao_manager.command.debug'));
         } else {
             parent::registerCommands();
         }

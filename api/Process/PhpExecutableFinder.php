@@ -10,7 +10,7 @@
 
 namespace Contao\ManagerApi\Process;
 
-use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 
 class PhpExecutableFinder
@@ -30,14 +30,14 @@ class PhpExecutableFinder
         $paths = [];
 
         if (PHP_BINARY) {
-            $paths[] = PHP_BINARY.'-cli';
-            $paths[] = PHP_BINARY;
-
             if (false !== ($suffix = strrchr(basename(PHP_BINARY), '-'))) {
                 $php = substr(PHP_BINARY, 0, -strlen($suffix));
                 $paths[] = $php.'-cli';
                 $paths[] = $php;
             }
+
+            $paths[] = PHP_BINARY.'-cli';
+            $paths[] = PHP_BINARY;
 
             $this->includePath($paths, dirname(PHP_BINARY));
         }
@@ -56,7 +56,36 @@ class PhpExecutableFinder
 
         $paths = array_merge($paths, $this->findExecutables());
 
-        return $this->findBinary(array_unique($paths));
+        return $this->findBestBinary(array_unique($paths));
+    }
+
+    /**
+     * @param string $cli
+     *
+     * @return array|null
+     */
+    public function getDebugInfo($cli)
+    {
+        $arguments = ['-q'];
+
+        if ('' !== ($phar = \Phar::running(false))) {
+            $arguments[] = $phar;
+            $arguments[] = 'contao-manager:debug';
+            $arguments[] = '--json';
+        } else {
+            $arguments[] = '-r';
+            $arguments[] = "echo json_encode(array('php_version' => PHP_VERSION, 'php_sapi' => PHP_SAPI));";
+        }
+
+        $commandline = escapeshellcmd($cli).' '.implode(' ', array_map('escapeshellarg', $arguments));
+
+        try {
+            $process = (new Process($commandline, null, []))->mustRun();
+
+            return json_decode(trim($process->getOutput()), true);
+        } catch (RuntimeException $e) {
+            return null;
+        }
     }
 
     /**
@@ -77,7 +106,7 @@ class PhpExecutableFinder
                 if (@is_dir($path)) {
                     $dirs[] = $path;
                 } else {
-                    if (in_array(basename($path), $this->names) && @is_executable($path)) {
+                    if (in_array(basename($path), $this->names, true) && @is_executable($path)) {
                         $results[] = $path;
                     }
                 }
@@ -102,7 +131,7 @@ class PhpExecutableFinder
         foreach ($this->names as $name) {
             foreach ($suffixes as $suffix) {
                 foreach ($dirs as $dir) {
-                    if (@is_file($file = $dir . DIRECTORY_SEPARATOR . $name . $suffix)
+                    if (@is_file($file = $dir.DIRECTORY_SEPARATOR.$name.$suffix)
                         && ('\\' === DIRECTORY_SEPARATOR || is_executable($file))
                     ) {
                         $results[] = $file;
@@ -114,9 +143,15 @@ class PhpExecutableFinder
         return $results;
     }
 
-    private function findBinary(array $paths)
+    /**
+     * @param array $paths
+     *
+     * @return string|null
+     */
+    private function findBestBinary(array $paths)
     {
         $fallback = null;
+        $sapi = null;
 
         if ($openBasedir = ini_get('open_basedir')) {
             $openBasedir = explode(PATH_SEPARATOR, $openBasedir);
@@ -131,23 +166,24 @@ class PhpExecutableFinder
                 continue;
             }
 
-            try {
-                $process = (new Process(escapeshellcmd($path)." -r 'echo PHP_VERSION;'"))->mustRun();
-                $version = trim($process->getOutput());
-            } catch (ProcessFailedException $e) {
+            $info = $this->getDebugInfo($path);
+
+            if (!is_array($info)) {
                 continue;
             }
 
-            if (version_compare(PHP_VERSION, $version, 'eq')) {
+            if ('cli' === $info['php_sapi'] && version_compare(PHP_VERSION, $info['php_version'], 'eq')) {
                 return $path;
             }
 
             $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
-            $vCli = vsprintf('%s.%s', explode('.', $version));
+            $vCli = vsprintf('%s.%s', explode('.', $info['php_version']));
 
-            if (null === $fallback && version_compare($vWeb, $vCli, 'eq')) {
+            if ((null === $fallback || ('cli' !== $sapi && $info['php_sapi'] === 'cli'))
+                && version_compare($vWeb, $vCli, 'eq')
+            ) {
                 $fallback = $path;
-                continue;
+                $sapi = $info['php_sapi'];
             }
         }
 

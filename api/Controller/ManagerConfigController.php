@@ -12,10 +12,10 @@ namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\I18n\Translator;
+use Contao\ManagerApi\Process\PhpExecutableFinder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Process\Process;
 
 class ManagerConfigController extends ConfigController
 {
@@ -58,13 +58,9 @@ class ManagerConfigController extends ConfigController
             return null;
         }
 
-        $cli = escapeshellcmd($request->request->get('php_cli'));
+        $info = (new PhpExecutableFinder())->getDebugInfo($request->request->get('php_cli'));
 
-        $process = new Process($cli." -r 'echo PHP_VERSION;'");
-
-        $process->run();
-
-        if (!$process->isSuccessful()) {
+        if (null === $info) {
             return new JsonResponse(
                 [
                     'key' => 'php_cli',
@@ -74,7 +70,7 @@ class ManagerConfigController extends ConfigController
         }
 
         $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
-        $vCli = vsprintf('%s.%s', explode('.', $process->getOutput()));
+        $vCli = vsprintf('%s.%s', explode('.', $info['php_version']));
 
         if (version_compare($vWeb, $vCli, '<>')) {
             return new JsonResponse(

@@ -1,4 +1,9 @@
 services:
+    contao_manager.command.debug:
+        class: Contao\ManagerApi\Command\DebugCommand
+        tags:
+            - { name: console.command }
+
     contao_manager.command.integrity_check:
         class: Contao\ManagerApi\Command\IntegrityCheckCommand
         calls:

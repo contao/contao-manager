@@ -45,7 +45,7 @@ if (function_exists('date_default_timezone_set') && function_exists('date_defaul
     date_default_timezone_set(@date_default_timezone_get());
 }
 
-if ('cli' === PHP_SAPI) {
+if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
     Phar::mapPhar('contao-manager.phar');
     /** @noinspection UntrustedInclusionInspection */
     /** @noinspection PhpIncludeInspection */
