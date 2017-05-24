@@ -64,7 +64,7 @@ class ContaoCheck extends AbstractIntegrityCheck
             return null;
         }
 
-        if (!$this->hasInstallation()) {
+        if (0 === count($files = $this->getProjectFiles())) {
             return null;
         }
 
@@ -73,7 +73,7 @@ class ContaoCheck extends AbstractIntegrityCheck
         if (null === $version) {
             return (new ApiProblem(
                 $this->trans('contao_unknown.title')
-            ))->setDetail($this->trans('contao_unknown.detail'));
+            ))->setDetail($this->trans('contao_unknown.detail', ['files' => ' - '.implode("\n - ", $files)]));
         }
 
         if (version_compare($version, '4.3.5', '>=')) {
@@ -86,16 +86,16 @@ class ContaoCheck extends AbstractIntegrityCheck
     }
 
     /**
-     * Checks if any "unknown" files are found in the web directory.
+     * Gets a list of files in the project root directory, excluding what is allowed to install Contao.
      *
-     * @return bool
+     * @return array
      */
-    private function hasInstallation()
+    private function getProjectFiles()
     {
         $content = scandir($this->kernel->getContaoDir());
         $content = array_diff($content, ['.', '..', 'contao-manager', 'web', '.htaccess']);
 
-        return !empty($content);
+        return $content;
     }
 
     /**

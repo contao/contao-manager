@@ -19,10 +19,10 @@ en:
             detail: 'This is most likely a problem with your hosting configuration. Make sure either open_basedir does allow access to the temporary directory, or the sys_temp_dir is correctly configured.'
         contao_old:
             title: 'Incompatible Contao version'
-            detail: 'Contao version {version} is not compatible with the Contao Manager, please update your installation.'
+            detail: 'Contao version {version} is not compatible with the Contao Manager, please manually update your installation.'
         contao_unknown:
             title: 'Unknown installation status'
-            detail: 'Some files were detected on your server, but no functional Contao application could be found. All files must be removed before you can use the Contao Manager.'
+            detail: "Some files were found on your server, but no known Contao version could be detected.\nYou must either manually repair your application or remove the following files to install Contao:\n\n{files}"
 
     config:
         php_cli:
