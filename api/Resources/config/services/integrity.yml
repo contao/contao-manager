@@ -13,6 +13,11 @@ services:
             - "@tenside.tasks"
             - "@filesystem"
 
+    contao_manager.integrity.intl:
+        class: Contao\ManagerApi\IntegrityCheck\IntlCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
+
     contao_manager.integrity.openssl:
         class: Contao\ManagerApi\IntegrityCheck\OpenSSLCheck
         arguments:

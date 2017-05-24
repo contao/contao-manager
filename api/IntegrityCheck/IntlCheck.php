@@ -12,17 +12,17 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class OpenSSLCheck extends AbstractIntegrityCheck
+class IntlCheck extends AbstractIntegrityCheck
 {
     public function run()
     {
-        if (extension_loaded('openssl')) {
+        if (extension_loaded('intl')) {
             return null;
         }
 
         return (new ApiProblem(
-            $this->trans('openssl.title'),
-            'https://php.net/openssl'
-        ))->setDetail($this->trans('openssl.detail'));
+            $this->trans('intl.title'),
+            'https://php.net/intl'
+        ))->setDetail($this->trans('intl.detail'));
     }
 }

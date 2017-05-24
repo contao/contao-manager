@@ -4,9 +4,13 @@ en:
             title: 'The PHP setting "allow_url_fopen" is not enabled on the server.'
         openssl:
             title: 'The PHP OpenSSL extension is not available.'
+            detail: 'Contao Manager requires the OpenSSL extension to download files over encrypted connections (https).'
         proc_open:
             title: 'The PHP function "proc_open" and/or "proc_close" is not available on the server.'
             detail: 'The "proc_open" and "proc_close" functions are necessary to run command line tasks in the background. Check with your hosting provider why this method is not available, neither the Contao Manager nor Contao 4 will run correctly without it.'
+        intl:
+            title: 'The PHP Intl extension is not available.'
+            detail: 'Contao 4 requires the Intl extension for internationalization purposes.'
         web_root:
             title: 'The Phar file must be located in the /web folder.'
         windows:
@@ -22,7 +26,7 @@ en:
             detail: 'Contao version {version} is not compatible with the Contao Manager, please manually update your installation.'
         contao_unknown:
             title: 'Unknown installation status'
-            detail: "Some files were found on your server, but no known Contao version could be detected.\nYou must either manually repair your application or remove the following files to install Contao:\n\n{files}"
+            detail: "Some files were found on your server, but no known Contao version could be detected.\nYou must either manually repair your application or remove the following files and folders to install Contao:\n\n{files}"
 
     config:
         php_cli:
