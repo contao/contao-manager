@@ -29,17 +29,17 @@ class PhpExecutableFinder
     {
         $paths = [];
 
-        if (PHP_BINARY) {
-            if (false !== ($suffix = strrchr(basename(PHP_BINARY), '-'))) {
-                $php = substr(PHP_BINARY, 0, -strlen($suffix));
+        if ($bin = constant('PHP_BINARY')) {
+            if (false !== ($suffix = strrchr(basename($bin), '-'))) {
+                $php = substr($bin, 0, -strlen($suffix));
                 $paths[] = $php.'-cli';
                 $paths[] = $php;
             }
 
-            $paths[] = PHP_BINARY.'-cli';
-            $paths[] = PHP_BINARY;
+            $paths[] = $bin.'-cli';
+            $paths[] = $bin;
 
-            $this->includePath($paths, dirname(PHP_BINARY));
+            $this->includePath($paths, dirname($bin));
         }
 
         if (PHP_BINDIR) {
