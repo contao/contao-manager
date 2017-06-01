@@ -72,7 +72,6 @@
     "ui.packagesearch.empty": "No results for <i>{query}</i>",
     "ui.packagesearch.searchBundles": "Search for Contao 4 bundles",
     "ui.packagesearch.searchModules": "Search for Contao 3 extensions",
-    "ui.install.intro": "This is a pre-release version of Contao Manager. Please <strong>do not share</strong> without permission of the developer team.<br><br>If you encounter a problem, please <strong>do not report it on GitHub</strong> and contact the person who supplied you with this file instead. Note that we are not yet collecting minor issues like styling problems, missing features or alike.",
     "ui.install.accountHeadline": "User Account",
     "ui.install.accountCreate": "Create a user account to manage your installation.",
     "ui.install.accountCreated": "You are logged in as <i>{username}</i>.",
