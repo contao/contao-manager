@@ -171,42 +171,6 @@
         }
     }
 
-    footer {
-        clear: both;
-        width: 250px;
-        margin: 80px auto 0;
-        padding: 15px 0;
-        font-size: 12px;
-        text-align: center;
-        border-top: 1px solid #eee;
-
-        &:before {
-            content: "";
-            display: table;
-            clear: both
-        }
-
-        .links {
-            margin: 5px 0 0;
-            padding: 0;
-            list-style-type: none;
-
-            li {
-                display: inline-block;
-
-                &:not(:first-child):before {
-                    content: "|";
-                    padding: 0 10px 0 8px;
-                }
-            }
-
-            a {
-                display: inline;
-                color: $footer-link;
-            }
-        }
-    }
-
     @include screen(960) {
         main {
             margin-top: 20px;
@@ -216,16 +180,6 @@
         &.wide {
             main {
                 max-width: 940px;
-            }
-
-            footer {
-                width: 840px;
-                text-align: left;
-
-                .links {
-                    float: right;
-                    margin: 0;
-                }
             }
         }
 

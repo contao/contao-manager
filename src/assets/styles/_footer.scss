@@ -1,0 +1,119 @@
+footer {
+    clear: both;
+    width: 250px;
+    margin: 80px auto 0;
+    padding: 15px 0;
+    font-size: 12px;
+    text-align: center;
+    border-top: 1px solid #eee;
+
+    .manager & {
+        width: auto;
+        margin-top: 52px !important;
+        padding: 20px 0;
+        border-top: 1px solid #bbbbbb;
+    }
+
+    &:before {
+        content: "";
+        display: table;
+        clear: both
+    }
+
+    strong {
+        font-weight: normal;
+    }
+
+    .widget.select {
+        display: inline-block;
+        margin-top: 10px;
+        line-height: 20px;
+
+        label {
+            position: static !important;
+            float: left;
+            height: 20px;
+            width: 20px;
+            margin-right: 5px;
+            text-indent: -999em;
+            background: url(../assets/images/language.svg) center center no-repeat;
+        }
+
+        select {
+            width: auto;
+            height: auto;
+            margin: 0 !important;
+            padding: 0;
+            border: none;
+            background: none;
+        }
+    }
+
+    .links {
+        margin: 5px 0 0;
+        padding: 0;
+        list-style-type: none;
+
+        li {
+            display: inline-block;
+
+            &:not(:first-child):before {
+                content: "|";
+                padding: 0 10px 0 8px;
+            }
+        }
+
+        a {
+            display: inline !important;
+            color: $footer-link;
+        }
+    }
+}
+
+/*.manager footer {
+    .links {
+        float: right;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+
+        li {
+            float: left;
+
+            &:not(:first-child):before {
+                content: "|";
+                padding: 0 10px;
+            }
+        }
+
+        a {
+            color: $footer-link;
+        }
+    }
+}*/
+
+@include screen(960) {
+    .table.wide {
+        footer {
+            width: 840px;
+        }
+    }
+
+    .table.wide,
+    .manager {
+        footer {
+            strong {
+                float: left;
+            }
+
+            .links {
+                float: right;
+                margin: 0;
+            }
+
+            .widget.select {
+                margin: 0;
+            }
+        }
+    }
+}

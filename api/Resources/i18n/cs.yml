@@ -1,0 +1,33 @@
+cs:
+  integrity:
+    allow_url_fopen:
+      title: 'Služba PHP "allow_url_fopen" není na tomto serveru spuštěna.'
+    openssl:
+      title: 'Rozšíření PHP OpenSSL není na tomto serveru spuštěno.'
+      detail: 'Manažer Contao vyžaduje rozšíření OpenSSL, aby mohl stahovat soubory přes zabezpečené spojení (https)'
+    proc_open:
+      title: 'Funkce PHP "proc_open" a/nebo "proc_close" nejsou na tomto serveru spuštěné.'
+      detail: 'Funkce PHP "proc_open" a "proc_close" jsou zapotřebí, aby se mohly spouštět příkazy na pozadí. Obraťte se na Vašeho poskytovatele hostingu, proč není tato metoda spuštěná, jinak nebude Manažer Contaa ani Contao 4 fungovat správně. '
+    intl:
+      title: 'Rozšíření PHP Intl není na tomto serveru spuštěno.'
+      detail: 'Contao 4 vyžaduje rozšíření Intl kvůli mezinárodnímu určení.'
+    web_root:
+      title: 'Soubor .phar musí být umístěný ve složce /web.'
+    windows:
+      title: 'Tato verze Manažera Contaa není momentálně podporovaná na Windows.'
+    memory_limit:
+      title: 'Nedostatečné množství paměti pro PHP'
+      detail: 'Vaše nastavení PHP umožňuje pouze {limit} paměti (pro příkazy přes konzulu). To není dostatečné pro spuštění composeru a nedalo se dané omezení automaticky navýšit. Obraťte se prosím o pomoc na Vašeho poskytovatele služeb.'
+    systempdir:
+      title: 'Nelze zapisovat do dočasné složky systému.'
+      detail: 'Jde o problém s nastavením hostingových služeb. Ujistěte se, jestli služba open_basedir dovoluje přístup k dočasné složce, nebo jestli je sys_temp_dir správně nastavená.'
+    contao_old:
+      title: 'Nekompatibilní verze Contaa'
+      detail: 'Verze Contao {version} není kompatibilní s Manažerem Contaa. Zaktualizujte prosím Vaši instalaci Contaa manuálně. '
+    contao_unknown:
+      title: 'Neznámý status instalace'
+      detail: "Některé soubory byly na Vašem serveru nalezeny, ale nemohla být nalezená žádná známá verze Contaa.\nBuď musíte instalaci opravit ručně nebo smazat následující soubory a složky, abyste mohli nainstalovat Contao:\n\n{files}"
+  config:
+    php_cli:
+      not_found: 'Tato cesta neobsahuje platné binární PHP.'
+      incompatible: 'Tato verze je verze PHP {cli}, ale Váš server je ve verzi {web}.'

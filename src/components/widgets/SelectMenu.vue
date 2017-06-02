@@ -7,7 +7,7 @@
             :disabled="disabled"
             @change="input($event.target.value)"
         >
-            <option v-for="(v, k) in options" :name="k" :selected="v === value">{{ v }}</option>
+            <option v-for="(v, k) in options" :value="k" :selected="k === value">{{ v }}</option>
         </select>
     </div>
 </template>

@@ -1,0 +1,33 @@
+ja:
+  integrity:
+    allow_url_fopen:
+      title: 'サーバーのPHPの設定で"allow_url_fopen"が有効ではありません。'
+    openssl:
+      title: 'PHPのOpenSSL拡張を利用できません。'
+      detail: 'Contao Managerは、暗号化した通信(https)上でファイルをダウンロードするためにOpenSSL拡張を必要とします。'
+    proc_open:
+      title: 'サーバーでPHPの関数"proc_open"と"proc_close"の両方または一方を利用できません。'
+      detail: '"proc_open"と"proc_close"関数はコマンド行のタスクをバックグラウンドで動作するために必要です。ホスティングサービスの提供者に、何故これらのメソッドを利用できないか確認してください。これらがないと、Contao ManagerやContao 4は正しく動作しません。'
+    intl:
+      title: 'PHPのIntl拡張を利用できません。'
+      detail: 'Contao 4は国際化の目的にIntl拡張を必要とします。'
+    web_root:
+      title: 'Pharファイルが/webフォルダーになければなりません。'
+    windows:
+      title: 'このバージョンのContao Managerでは現在Windowsをサポートしていません。'
+    memory_limit:
+      title: 'PHPのメモリの制限が不足しています。'
+      detail: 'PHPの構成は(コマンド行では){limit}のメモリだけの使用を許可しています。これはComposerを実行するのには十分ではなく、この制限値を自動的に拡大できませんでした。ホスティングサービスの提供者に支援を求めてください。'
+    systempdir:
+      title: 'システムの一時ディレクトリに書き込みできませんでした。'
+      detail: 'たぶんホスティングサービスの構成に問題があります。open_basedirが一時ディレクトリのアクセスを許可しているか、sys_temp_dirが正しく構成されているか確認してください。'
+    contao_old:
+      title: '互換性がないContaoのバージョン'
+      detail: 'Contaoのバージョン{version}はContao Managerと互換性がありません。インストールしているContaoを手作業で更新してください。'
+    contao_unknown:
+      title: 'インストールの状態が不明'
+      detail: "サーバーにいくつかのファイルがありますが、Contaoのバージョンを検出できませんでした。\n手作業でアプリケーションを修復するか、Contaoをインストールするために以下のファイルとフォルダーを削除してください:\n\n{files}"
+  config:
+    php_cli:
+      not_found: 'このパスに有効なPHPの実行ファイルがありません。'
+      incompatible: 'この実行ファイルはPHPのバージョンは{cli}ですが、ウェブサーバーでのバージョンは{web}です。'
