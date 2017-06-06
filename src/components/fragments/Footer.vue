@@ -1,5 +1,5 @@
 <template>
-    <footer v-once>
+    <footer>
         <strong>Contao Manager @package_version@</strong>
         <ul class="links">
             <li><a :href="$t('ui.footer.helpHref')" target="_blank">{{ 'ui.footer.help' | translate }}</a></li>
