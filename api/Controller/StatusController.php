@@ -192,7 +192,7 @@ class StatusController extends Controller
         if ($this->managerConfig->get('php_cli')) {
             $process = $this->processFactory->createManagerConsoleProcess(
                 [
-                    'contao-manager:check',
+                    'integrity-check',
                     '--format=json',
                 ]
             );

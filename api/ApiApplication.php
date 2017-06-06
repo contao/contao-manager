@@ -10,6 +10,8 @@
 
 namespace Contao\ManagerApi;
 
+use Symfony\Bundle\FrameworkBundle\Command\CacheClearCommand;
+use Symfony\Bundle\FrameworkBundle\Command\CacheWarmupCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Tenside\CoreBundle\Command\RunTaskCommand;
@@ -69,16 +71,22 @@ class ApiApplication extends Application
 
         $container = $this->kernel->getContainer();
 
-        if (\Phar::running(false)) {
-            $command = new RunTaskCommand();
-            $command->setContainer($container);
+        $command = new RunTaskCommand();
+        $command->setContainer($container);
+        $this->add($command);
 
+        $this->add((new ProcessRunnerCommand())->setName('run'));
+        $this->add($container->get('contao_manager.command.integrity_check'));
+        $this->add($container->get('contao_manager.command.about'));
+
+        if (!\Phar::running(false)) {
+            $command = new CacheClearCommand();
+            $command->setContainer($container);
             $this->add($command);
-            $this->add(new ProcessRunnerCommand());
-            $this->add($container->get('contao_manager.command.integrity_check'));
-            $this->add($container->get('contao_manager.command.debug'));
-        } else {
-            parent::registerCommands();
+
+            $command = new CacheWarmupCommand();
+            $command->setContainer($container);
+            $this->add($command);
         }
     }
 }

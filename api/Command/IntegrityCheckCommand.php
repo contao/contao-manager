@@ -40,8 +40,8 @@ class IntegrityCheckCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('contao-manager:check')
-            ->setDescription('Performs integrity check for the Contao Manager.')
+            ->setName('integrity-check')
+            ->setDescription('Performs integrity check for the Contao Manager')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Use "text", "json" or "xml" to output the check results accordingly.', 'text')
         ;
     }

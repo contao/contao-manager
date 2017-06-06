@@ -150,7 +150,7 @@ class ConsoleProcessFactory
             $this->getManagerConsolePath(),
             [
                 '--no-interaction',
-                'background-task:run',
+                'run',
             ]
         );
 

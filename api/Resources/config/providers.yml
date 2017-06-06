@@ -1,0 +1,38 @@
+cyon.ch:
+    provider: Cyon
+    website: www.cyon.ch
+    last_update: 2017-05-31
+    issues: []
+    php:
+        - /opt/alt/php{major}{minor}/usr/bin/php
+
+ispgateway.de:
+    provider: 1&1
+    website: www.1und1.de
+    last_update: 2017-05-31
+    issues: []
+    php:
+        - /usr/local/bin/php{major}-{major}{minor}LATEST-CLI
+
+rzone.de:
+    provider: Strato AG
+    website: www.strato.de
+    last_update: 2017-05-31
+    issues: [memory]
+
+sui-inter.net:
+    provider: Metanet AG
+    website: www.metanet.ch
+    last_update: 2017-05-31
+    issues: []
+    php:
+        - /opt/php{major}{minor}/bin/php
+        - /usr/bin/php
+
+tophost.ch:
+    provider: Novatrend
+    website: www.novatrend.ch
+    last_update: 2017-05-31
+    issues: [cputime]
+    php:
+        - /usr/local/bin/php

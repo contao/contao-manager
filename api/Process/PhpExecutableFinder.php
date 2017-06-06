@@ -64,18 +64,18 @@ class PhpExecutableFinder
      *
      * @return array|null
      */
-    public function getDebugInfo($cli)
+    public function getServerInfo($cli)
     {
         $arguments = ['-q'];
 
         if ('' !== ($phar = \Phar::running(false))) {
             $arguments[] = $phar;
-            $arguments[] = 'contao-manager:debug';
-            $arguments[] = '--json';
         } else {
-            $arguments[] = '-r';
-            $arguments[] = "echo json_encode(array('php_version' => PHP_VERSION, 'php_sapi' => PHP_SAPI));";
+            $arguments[] = dirname(__DIR__).'/console';
         }
+
+        $arguments[] = 'about';
+        $arguments[] = '--json';
 
         $commandline = escapeshellcmd($cli).' '.implode(' ', array_map('escapeshellarg', $arguments));
 
@@ -166,24 +166,24 @@ class PhpExecutableFinder
                 continue;
             }
 
-            $info = $this->getDebugInfo($path);
+            $info = $this->getServerInfo($path);
 
             if (!is_array($info)) {
                 continue;
             }
 
-            if ('cli' === $info['php_sapi'] && version_compare(PHP_VERSION, $info['php_version'], 'eq')) {
+            if ('cli' === $info['php']['sapi'] && version_compare(PHP_VERSION, $info['php']['version'], 'eq')) {
                 return $path;
             }
 
             $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
-            $vCli = vsprintf('%s.%s', explode('.', $info['php_version']));
+            $vCli = vsprintf('%s.%s', explode('.', $info['php']['version']));
 
-            if ((null === $fallback || ('cli' !== $sapi && $info['php_sapi'] === 'cli'))
+            if ((null === $fallback || ('cli' !== $sapi && $info['php']['sapi'] === 'cli'))
                 && version_compare($vWeb, $vCli, 'eq')
             ) {
                 $fallback = $path;
-                $sapi = $info['php_sapi'];
+                $sapi = $info['php']['sapi'];
             }
         }
 

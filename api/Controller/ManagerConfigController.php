@@ -58,7 +58,7 @@ class ManagerConfigController extends ConfigController
             return null;
         }
 
-        $info = (new PhpExecutableFinder())->getDebugInfo($request->request->get('php_cli'));
+        $info = (new PhpExecutableFinder())->getServerInfo($request->request->get('php_cli'));
 
         if (null === $info) {
             return new JsonResponse(
@@ -70,7 +70,7 @@ class ManagerConfigController extends ConfigController
         }
 
         $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
-        $vCli = vsprintf('%s.%s', explode('.', $info['php_version']));
+        $vCli = vsprintf('%s.%s', explode('.', $info['php']['version']));
 
         if (version_compare($vWeb, $vCli, '<>')) {
             return new JsonResponse(

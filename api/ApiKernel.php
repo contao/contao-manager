@@ -18,7 +18,9 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\RouteCollectionBuilder;
+use Symfony\Component\Yaml\Yaml;
 use Tenside\CoreBundle\TensideCoreBundle;
 
 /**
@@ -122,6 +124,64 @@ class ApiKernel extends Kernel
     public function getManagerDir()
     {
         return $this->getContaoDir().DIRECTORY_SEPARATOR.'contao-manager';
+    }
+
+    /**
+     * Collects information about the current server.
+     *
+     * @return array
+     */
+    public function getServerInfo()
+    {
+        $hostname = gethostbyaddr(file_get_contents('https://api.ipify.org'));
+        $provider = [];
+        $version = '@package_version@';
+
+        if ($version === ('@'.'package_version'.'@')) {
+            $git = new Process('git describe --always');
+            $git->run();
+            $version = trim($git->getOutput());
+        }
+
+        $offset = 0;
+        $providers = Yaml::parse(__DIR__.'/Resources/config/providers.yml');
+
+        while ($dot = strpos($hostname, '.', $offset)) {
+            if (isset($providers[substr($hostname, $offset)])) {
+                $provider = $providers[substr($hostname, $offset)];
+                break;
+            }
+            $offset = $dot+1;
+        }
+
+        $data = [
+            'app' => [
+                'version' => $version,
+                'env' => $this->getEnvironment(),
+                'debug' => $this->isDebug(),
+                'cache_dir' => $this->getCacheDir(),
+                'log_dir' => $this->getLogDir(),
+                'contao_dir' => $this->getContaoDir(),
+                'manager_dir' => $this->getManagerDir(),
+            ],
+            'php' => [
+                'version' => PHP_VERSION,
+                'version_id' => PHP_VERSION_ID,
+                'sapi' => PHP_SAPI,
+                'arch' => PHP_INT_SIZE * 8,
+                'locale' => class_exists('Locale', false) && \Locale::getDefault() ? \Locale::getDefault() : 'n/a',
+                'timezone' => date_default_timezone_get(),
+            ],
+            'server' => [
+                'hostname' => $hostname,
+                'os_name' => php_uname('s'),
+                'os_version' => php_uname('r'),
+                'arch' => php_uname('m'),
+            ],
+            'provider' => $provider,
+        ];
+
+        return $data;
     }
 
     /**

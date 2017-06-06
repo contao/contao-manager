@@ -1,6 +1,8 @@
 services:
-    contao_manager.command.debug:
-        class: Contao\ManagerApi\Command\DebugCommand
+    contao_manager.command.about:
+        class: Contao\ManagerApi\Command\AboutCommand
+        calls:
+            - [setContainer, ["@service_container"]]
         tags:
             - { name: console.command }
 
