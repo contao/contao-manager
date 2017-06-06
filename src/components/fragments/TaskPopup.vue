@@ -31,7 +31,7 @@
                 <p>{{ 'ui.taskpopup.installDescription' | translate }}</p>
 
                 <a class="button primary" href="/contao/install" @click="hideInstall" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
-                <button @click="hidePopup">Confirm & Close</button>
+                <button @click="hidePopup">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
             </div>
             <div v-else-if="taskStatus === 'success' && showInstall && (taskType === 'upgrade' || taskType === 'require-package' || taskType === 'remove-package')">
                 <h2>{{ 'ui.taskpopup.packagesHeadline' | translate }}</h2>

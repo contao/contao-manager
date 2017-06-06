@@ -18,24 +18,24 @@
                 <h1>Contao Open Source CMS</h1>
                 <p class="description">Contao is an Open Source PHP Content Management System. <a href="https://www.contao.org/" target="_blank" class="more">Project Website</a></p>
                 <p class="additional">
-                    <strong class="version">Version {{ package.version }}</strong>
+                    <strong class="version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                     <span v-for="item in additional">{{ item }}</span>
                 </p>
             </div>
 
             <div v-if="changed.get('constraint') !== undefined && changed.get('constraint') !== null" :class="{release: true, validating: this.constraintValidating, error: this.constraintError}">
                 <fieldset>
-                    <input ref="constraint" type="text" :placeholder="!original.get('constraint') ? 'latest version' : ''" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button @click="editConstraint">Edit</button>
+                    <input ref="constraint" type="text" :placeholder="!original.get('constraint') ? $t('ui.package.latestConstraint') : ''" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
+                    <button @click="editConstraint">{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
                 <div class="version" v-if="package.version">
-                    <strong>Version {{ package.version }}</strong>
+                    <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                     <time :dateTime="package.time">({{ released }})</time>
                 </div>
             </div>
 
             <fieldset class="actions">
-                <button class="uninstall" disabled>Remove</button>
+                <button class="uninstall" disabled>{{ 'ui.package.removeButton' | translate }}</button>
             </fieldset>
         </div>
 
@@ -56,7 +56,7 @@
 
             <div v-if="changed.get('constraint') !== undefined && changed.get('constraint') !== null" :class="{release: true, validating: this.constraintValidating, error: this.constraintError}">
                 <fieldset>
-                    <input ref="constraint" type="text" :placeholder="!original.get('constraint') ? 'latest version' : ''" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
+                    <input ref="constraint" type="text" :placeholder="!original.get('constraint') ? $t('ui.package.latestConstraint') : ''" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
                     <button @click="editConstraint">{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
                 <div class="version" v-if="package.version">
