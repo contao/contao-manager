@@ -1,0 +1,33 @@
+de:
+  integrity:
+    allow_url_fopen:
+      title: 'Die PHP-Einstellung "allow_url_fopen" ist auf dem Server deaktiviert.'
+    openssl:
+      title: 'Die PHP OpenSSL-Erweiterung ist nicht verfügbar.'
+      detail: 'Der Contao Manager benötigt die OpenSSL-Erweiterung, um Dateien über eine verschlüsselte Verbindung (https) herunterzuladen.'
+    proc_open:
+      title: 'Die PHP-Funktion "proc_open" und/oder "proc_close" ist auf dem Server nicht verfügbar.'
+      detail: 'Die Funktionen "proc_open" und "proc_close" sind notwendig, um Kommanozeilentasks im Hintergrund auszuführen. Bitte fragen Sie bei Ihrem Hosting-Anbieter nach, warum die Funktion nicht verfügbar ist; weder der Contao Manager noch Contao 4 laufen ohne sie.'
+    intl:
+      title: 'Die PHP Intl-Erweiterung ist nicht verfügbar.'
+      detail: 'Contao 4 benötigt die Intl-Erweiterung für die Internationalisierung der Anwendung.'
+    web_root:
+      title: 'Die Phar-Datei muss sich im /web-Ordner befinden.'
+    windows:
+      title: 'Diese Version des Contao Managers kann auf Windows nicht betrieben werden.'
+    memory_limit:
+      title: 'Ungenügendes PHP Memory-Limit'
+      detail: 'Ihre PHP-Konfiguration erlaubt nur {limit} RAM (auf der Kommandozeile). Das ist nicht genug, um Composer auszuführen, und das Limit konnte auch nicht automatisch erhöht werden. Bitte kontaktieren Sie Ihren Hosting-Anbieter.'
+    systempdir:
+      title: 'Konnte nicht in den temporären Systemordner schreiben.'
+      detail: 'Dies ist höchstwahrscheinlich ein Problem mit Ihrer Serverkonfiguration. Stellen Sie sicher, dass entweder open_basedir den Zugriff auf den temporären Ordner erlaubt oder dass sys_temp_dir korrekt gesetzt ist.'
+    contao_old:
+      title: 'Inkompatible Contao-Version'
+      detail: 'Contao {version} ist nicht kompatibel mit dem Contao Manager; bitte aktualisieren Sie Ihre Installation manuell.'
+    contao_unknown:
+      title: 'Unbekannter Installationsstatus'
+      detail: "Die Dateien auf Ihrem Server konnten keiner bekannten Contao-Version zugeordnet werden.\nUm Contao zu installieren, müssen Sie entweder Ihre Installation manuell reparieren oder folgende Dateien und Ordner entfernen:\n\n{files}"
+  config:
+    php_cli:
+      not_found: 'Der Pfad enthält kein gültiges PHP-Binary.'
+      incompatible: 'Dieses Binary beinhaltet PHP {cli}, der Webprozess verwendet jedoch PHP {web}.'

@@ -1,0 +1,33 @@
+nl:
+  integrity:
+    allow_url_fopen:
+      title: 'De PHP instelling "allow_url_fopen" is niet ingeschakeld op de server.'
+    openssl:
+      title: 'De PHP OpenSSL extensie is niet beschikbaar.'
+      detail: 'Contao Manager vereist de OpenSSL-extensie om bestanden over versleutelde verbindingen (https) te downloaden.'
+    proc_open:
+      title: 'De PHP functie "proc_open" and/or "proc_close" is niet beschikbaar op de server.'
+      detail: 'De "proc_open" en "proc_close" functies zijn nodig om de opdrachtregeltaken op de achtergrond te kunnen uitvoeren. Vraag na bij uw hostingprovider waarom deze methode niet beschikbaar is. Zowel de Contao Manager als Contao 4 zal niet goed werken zonder deze functies.'
+    intl:
+      title: 'De PHP Intl extensie is niet beschikbaar.'
+      detail: 'Contao 4 vereist de Intl extension voor internationalisering.'
+    web_root:
+      title: 'Het Phar bestand moet zich bevinden in de /web map.'
+    windows:
+      title: 'Deze versie van Contao Manager wordt momenteel niet ondersteund door Windows.'
+    memory_limit:
+      title: 'Limiet PHP-geheugen onvoldoende'
+      detail: 'Uw PHP-configuratie staat alleen {limit} geheugen toe (op de opdrachtregel). Dit is niet genoeg om Composer uit te voeren, het was niet mogelijk om deze limiet automatisch te verhogen. Neem contact op met uw hostingprovider voor ondersteuning.'
+    systempdir:
+      title: 'Tijdelijke systeem directory niet beschrijfbaar.'
+      detail: 'Er is waarschijnlijk een probleem met uw hostingconfiguratie. Zorg ervoor dat open_basedir toegang geeft tot de tijdelijke directory, of dat sys_temp_dir correct is geconfigureerd.'
+    contao_old:
+      title: 'Incompatibele Contao versie'
+      detail: 'Contao versie {version} is niet compatibel met de Contao Manager, installatie handmatig updaten.'
+    contao_unknown:
+      title: 'Installatiestatus onbekend'
+      detail: "Er zijn enkele bestanden op uw server gevonden maar geen bekende Contao versie.\nU dient uw applicatie handmatig te repareren of de volgende bestanden en mappen verwijderen om Contao te installeren:\n\n{files}"
+  config:
+    php_cli:
+      not_found: 'Dit pad bevat geen geldige PHP binary.'
+      incompatible: 'Dit binary is een PHP versie {cli} maar uw webserver is versie {web}.'

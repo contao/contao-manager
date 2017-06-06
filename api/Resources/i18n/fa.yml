@@ -1,0 +1,27 @@
+fa:
+  integrity:
+    allow_url_fopen:
+      title: 'تنظیم PHP "allow_url_fopen" در سرور فعال نیست.'
+    openssl:
+      title: 'افزونه‌ی PHP OpenSSL موجود نیست.'
+    proc_open:
+      title: 'تابع PHP «proc_open» و/یا «proc_close» در سرور وجود ندارد.'
+    intl:
+      title: 'افزونه PHP Intl موجود نیست.'
+      detail: 'کانتائو ۴ افزونه Intl را برای اهداف بین‌المللی کردن نیاز دارد.'
+    web_root:
+      title: 'پرونده‌ی Phar باید در پوشه‌ی /web قرار داشته باشد.'
+    windows:
+      title: 'این نسخه از مدیریت کانتائو در حال حاضر در ویندوز پشتیبانی نمی‌شود.'
+    memory_limit:
+      title: 'محدویت حافظه‌ی PHP ناکافی'
+    systempdir:
+      title: 'قادر به نوشتن دایرکتوری سیستم موقت نیست.'
+    contao_old:
+      title: 'نسخه‌ی کانتائو ناسازگار'
+      detail: 'کانتائو نسخه {version} با مدیریت کانتائو سازگار نیست، لطفا به صورت دستی نصب خود را به‌روزرسانی کنید.'
+    contao_unknown:
+      title: 'وضعیت نصب نامعلوم'
+  config:
+    php_cli:
+      not_found: 'این مسیر شما یک باینری PHP معتبر نیست.'
