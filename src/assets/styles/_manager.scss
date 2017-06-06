@@ -18,7 +18,7 @@ body {
         padding: 8px;
         margin-bottom: 30px;
         background: #ffffff;
-        border-bottom: 1px solid #ccbfa2;
+        box-shadow: $shadow-color 0 1px;
 
         #logo {
             color: $text-color;
@@ -86,10 +86,10 @@ body {
                 right: -$nav-offset;
                 width: $nav-offset;
                 padding: 20px;
-                border-left: 1px solid #ccbfa2;
                 overflow-y: auto;
                 overflow-scrolling: touch;
                 background: #fff;
+                box-shadow: $shadow-color -1px 0;
                 z-index: 10;
             }
 
@@ -124,7 +124,7 @@ body {
                     padding: 0;
                     overflow: visible;
                     background: none;
-                    border-left: 0;
+                    box-shadow: none;
                     transform: none;
                     transition: none;
                 }
@@ -147,20 +147,22 @@ body {
                         position: absolute;
                         left: 50%;
                         display: block;
-                        width: 180px;
+                        min-width: 180px;
                         margin-top: -3px;
                         text-align: center;
                         background: #fff;
                         border-top: 3px solid $contao-color;
                         transform: translateX(-50%);
                         z-index: 100;
+                        box-shadow: $shadow-color 0 1px 2px;
 
                         &:before {
                             position: absolute;
-                            left: 86px;
+                            left: 50%;
                             top: -7px;
                             width: 0;
                             height: 0;
+                            margin-left: -4px;
                             border-style: solid;
                             border-width: 0 3.5px 4px 3.5px;
                             border-color: transparent transparent $contao-color transparent;
@@ -168,11 +170,13 @@ body {
                         }
 
                         &.right {
-                            left: -50%;
+                            left: auto;
+                            right: 7px;
+                            transform: translateX(0);
 
                             &:before {
                                 left: auto;
-                                right: 25px;
+                                right: 22px;
                             }
                         }
                     }

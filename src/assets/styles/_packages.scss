@@ -398,6 +398,7 @@ section.package-actions {
     background: rgba(0,0,0, 0.8);
     color: #fff;
     transition: height .4s ease;
+    z-index: 100;
 
     &.active {
         height: 80px;
