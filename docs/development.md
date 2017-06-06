@@ -5,32 +5,28 @@ of Vue components in the frontend. To develop the application, two
 servers are required.
 
 
-## PHP API Client
+## PHP Backend API
 
-The PHP API client handles RESTful requests to composer. It is based on
-[tenside/core] and [tenside/core-bundle] API. To start the API, we need
-two things:
-
-1. Composer needs to know where the test installation should be
-    located. This is done by defining an environment variable named
-    `COMPOSER`.
-2. The PHP server needs to be started on localhost:8080.
-
-The most simple way to achieve this to run the build-in PHP server
-provided by the Symfony console. Simply run the following command:
+The backend is a RESTful API written in PHP using the Symfony framework.
+PHP offers an internal web server for development purposes, which we
+can use to run the backend API.
 
 ```
-$ export COMPOSER=/path/to/your/test/composer.json && php api/console server:run
+$ php -S 127.0.0.1:8000 --docroot=web/
 ```
 
-The path to the composer.json should point to the root directory of
-the Contao installation to manage.
+By default, the API places all Contao files in a `test-dir` folder inside
+your GIT project root. You can override the location of Contao by setting
+the `COMPOSER` environment variable according to the [Composer documentation].
+
+*Be aware that the server must run on port 8000 for the dev frontend to
+work correctly.*
 
 
 ## Javascript Frontend UI
 
-The frontend is build using Vue.js. To start the NPM server run the
-following command.
+The frontend is a SPA (Single Page Application) build using Vue.js.
+To start the frontend server run the following command:
 
 ```
 $ npm run dev
@@ -40,5 +36,4 @@ This will automatically open your default browser with the frontend.
 
 
 [hot-reloading]: https://vue-loader.vuejs.org/en/features/hot-reload.html
-[tenside/core]: https://github.com/tenside/core
-[tenside/core-bundle]: https://github.com/tenside/core-bundle
+[Composer documentation]: https://getcomposer.org/doc/03-cli.md#composer

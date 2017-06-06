@@ -1,13 +1,30 @@
 {
     "name": "contao/contao-manager",
-    "description": "The Contao Manager API",
+    "description": "Contao Manager is the management tool for Contao 4 Open Source CMS",
+    "type": "project",
+    "keywords": ["contao", "cms", "php", "vuejs", "symfony", "symfony-application", "manager", "installer"],
+    "homepage": "https://contao.org",
     "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Andreas Schempp",
+            "homepage": "https://github.com/aschempp",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/contao/contao-manager/issues",
+        "forum": "https://community.contao.org",
+        "source": "https://github.com/contao/contao-manager",
+        "docs": "https://docs.contao.org"
+    },
     "require": {
         "php": "^5.5.9 || ^7.0",
-        "symfony/framework-bundle": "^3.2",
-        "symfony/security-bundle": "^3.2",
-        "symfony/console": "^3.2",
-        "symfony/yaml": "^3.2",
+        "symfony/framework-bundle": "3.3.*",
+        "symfony/security-bundle": "3.3.*",
+        "symfony/console": "3.3.*",
+        "symfony/process": "3.3.*",
+        "symfony/yaml": "3.3.*",
 
         "symfony/monolog-bundle": "~2.9",
         "ircmaxell/password-compat": "^1.0",
@@ -15,11 +32,10 @@
         "tenside/core-bundle": "dev-contao-manager as 1.0",
         "tenside/core": "dev-contao-manager as 1.0",
 
-        "terminal42/background-process": "dev-master",
+        "terminal42/background-process": "dev-master@dev",
         "crell/api-problem": "^2.0"
     },
     "require-dev": {
-        "symfony/process": "^3.2",
         "friendsofphp/php-cs-fixer": "^2.1"
     },
     "autoload": {
@@ -37,5 +53,8 @@
         "platform": {
             "php": "5.5.9"
         }
+    },
+    "scripts": {
+        "pre-update-cmd": "@php api/console cache:clear --no-warmup"
     }
 }

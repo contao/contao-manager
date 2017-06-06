@@ -50,13 +50,31 @@ class ApiKernel extends Kernel
      */
     public function registerBundles()
     {
-        return [
+        $bundles = [
             new FrameworkBundle(),
             new SecurityBundle(),
 
             new MonologBundle(),
             new TensideCoreBundle(),
         ];
+
+        return $bundles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRootDir()
+    {
+        return __DIR__;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProjectDir()
+    {
+        return dirname(__DIR__);
     }
 
     /**

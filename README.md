@@ -10,7 +10,14 @@ with this repository if you want to help with development of the app.
 
 ## System requirements
 
-*TBD*
+- PHP >= 5.5.9 or PHP 7.*
+- PHP Intl extension
+- PHP OpenSSL extension
+- *allow_url_fopen* must be enabled in PHP
+- *proc_open* and *proc_close* PHP functions
+
+**Contao Manager does currently not work on Windows, support for
+Windows will be added in a later version (see [issue #66])
 
 
 ## Installation
@@ -44,3 +51,4 @@ The full license text is available in the LICENSE file.
 
 [Composer]: http://getcomposer.org
 [Contao]: https://contao.org
+[issue #66]: https://github.com/contao/contao-manager/issues/66
