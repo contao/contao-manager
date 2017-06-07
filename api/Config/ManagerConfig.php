@@ -17,6 +17,11 @@ use Symfony\Component\Filesystem\Filesystem;
 class ManagerConfig extends AbstractConfig
 {
     /**
+     * @var ApiKernel
+     */
+    private $kernel;
+
+    /**
      * Constructor.
      *
      * @param ApiKernel  $kernel
@@ -27,6 +32,8 @@ class ManagerConfig extends AbstractConfig
         $configFile = $kernel->getManagerDir().DIRECTORY_SEPARATOR.'manager.json';
 
         parent::__construct($configFile, $filesystem);
+
+        $this->kernel = $kernel;
     }
 
     /**
@@ -83,6 +90,15 @@ class ManagerConfig extends AbstractConfig
             return $this->data['php_cli'];
         }
 
-        return (new PhpExecutableFinder())->find();
+        $paths = [];
+        $server = $this->kernel->getServerInfo();
+
+        if (isset($server['provider']['php'])) {
+            foreach ($server['provider']['php'] as $path) {
+                $paths[] = str_replace(['{major}', '{minor}'], [PHP_MAJOR_VERSION, PHP_MINOR_VERSION], $path);
+            }
+        }
+
+        return (new PhpExecutableFinder())->find($paths);
     }
 }

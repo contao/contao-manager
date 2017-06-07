@@ -19,16 +19,15 @@ class PhpExecutableFinder
 
     /**
      * Finds the best matching PHP executable on the system.
-     *
      * Contrary to symfony/process PhpExecutableFinder we actually test if the binary is
      * the same version as the currently running web process.
      *
-     * @return string|null
+     * @param array $paths
+     *
+     * @return null|string
      */
-    public function find()
+    public function find(array $paths = [])
     {
-        $paths = [];
-
         if ($bin = constant('PHP_BINARY')) {
             if (false !== ($suffix = strrchr(basename($bin), '-'))) {
                 $php = substr($bin, 0, -strlen($suffix));
