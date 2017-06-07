@@ -16,6 +16,7 @@ const utils = require('./utils');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 let webpackConfig = require('./webpack.config.js');
 
@@ -81,7 +82,15 @@ webpackConfig = merge(webpackConfig, {
         new webpack.optimize.CommonsChunkPlugin({
             name: 'manifest',
             chunks: ['vendor']
-        })
+        }),
+        // copy custom static assets
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(__dirname, '../src/assets/i18n'),
+                to: utils.assetsPath('i18n'),
+                ignore: ['.*']
+            }
+        ])
     ]
 });
 
