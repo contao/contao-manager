@@ -151,7 +151,7 @@ class ApiKernel extends Kernel
                 $provider = $providers[substr($hostname, $offset)];
                 break;
             }
-            $offset = $dot+1;
+            $offset = $dot + 1;
         }
 
         $data = [

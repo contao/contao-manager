@@ -43,6 +43,7 @@ class AboutCommand extends ContainerAwareCommand
 
         if ($input->getOption('json')) {
             $output->writeln(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+
             return;
         }
 
