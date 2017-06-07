@@ -80,7 +80,20 @@ if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
         'contao-manager.phar',
         'index.html',
         null,
-        array(),
+        array(
+            'log' => 'text/plain',
+            'txt' => 'text/plain',
+            'php' => Phar::PHP, // parse as PHP
+            'css' => 'text/css',
+            'gif' => 'image/gif',
+            'html' => 'text/html',
+            'ico' => 'image/x-ico',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'js' => 'application/x-javascript',
+            'png' => 'image/png',
+            'json' => 'application/json'
+        ),
         'rewrites'
     );
 }

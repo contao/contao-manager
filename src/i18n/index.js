@@ -14,7 +14,7 @@ Vue.i18n.set('en');
 Vue.i18n.fallback('en');
 
 export default {
-    detect() {
+    init() {
         let userLang = window.localStorage.getItem('contao_manager_locale');
 
         if (!userLang) {
@@ -41,10 +41,11 @@ export default {
         }
 
         return Vue.http.get(`assets/i18n/${locale}.json`).then(
-            (response) => {
-                Vue.i18n.add(locale, response.body);
+            response => response.json().then((json) => {
+                console.log(json);
+                Vue.i18n.add(locale, json);
                 Vue.i18n.set(locale);
-            },
+            }),
             () => {},
         );
     },

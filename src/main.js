@@ -30,7 +30,7 @@ Vue.http.interceptors.push((request, next) => {
     });
 });
 
-i18n.detect().then(() => {
+i18n.init().then(() => {
     /* eslint-disable no-new */
     new Vue({
         router,
