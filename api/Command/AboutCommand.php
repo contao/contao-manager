@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\Command;
 
+use Contao\ManagerApi\ApiKernel;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,7 +37,9 @@ class AboutCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $data = $this->getContainer()->get('kernel')->getServerInfo();
+        /** @var ApiKernel $kernel */
+        $kernel = $this->getContainer()->get('kernel');
+        $data = $kernel->getServerInfo();
 
         if ($input->getOption('json')) {
             $output->writeln(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
@@ -82,6 +85,7 @@ class AboutCommand extends ContainerAwareCommand
         if (!empty($data['provider'])) {
             $rows[] = new TableSeparator();
             $rows[] = ['<info>Hosting Provider</info>'];
+            $rows[] = new TableSeparator();
             $rows[] = ['Name', $data['provider']['name']];
             $rows[] = ['Website', $data['provider']['website']];
         }

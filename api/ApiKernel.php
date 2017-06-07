@@ -144,7 +144,7 @@ class ApiKernel extends Kernel
         }
 
         $offset = 0;
-        $providers = Yaml::parse(__DIR__.'/Resources/config/providers.yml');
+        $providers = Yaml::parse(file_get_contents(__DIR__.'/Resources/config/providers.yml'));
 
         while ($dot = strpos($hostname, '.', $offset)) {
             if (isset($providers[substr($hostname, $offset)])) {
