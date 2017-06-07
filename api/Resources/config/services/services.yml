@@ -63,8 +63,10 @@ services:
         arguments:
             - "@contao_manager.config.user"
 
-
-
+    contao_manager.self_update.updater:
+        class: Contao\ManagerApi\SelfUpdate\Updater
+        arguments:
+            - "@kernel"
 
     app.taskfactory:
         class:     Contao\ManagerApi\Tenside\TaskFactory

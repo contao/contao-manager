@@ -53,8 +53,5 @@
         "platform": {
             "php": "5.5.9"
         }
-    },
-    "scripts": {
-        "pre-update-cmd": "@php api/console cache:clear --no-warmup"
     }
 }

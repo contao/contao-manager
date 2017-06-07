@@ -33,6 +33,11 @@ class ApiKernel extends Kernel
     /**
      * @var string
      */
+    private $version = '@package_version@';
+
+    /**
+     * @var string
+     */
     private $contaoDir;
 
     /**
@@ -127,6 +132,16 @@ class ApiKernel extends Kernel
     }
 
     /**
+     * Gets the current Contao Manager version.
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
      * Collects information about the current server.
      *
      * @return array
@@ -135,7 +150,7 @@ class ApiKernel extends Kernel
     {
         $hostname = gethostbyaddr(file_get_contents('https://api.ipify.org'));
         $provider = [];
-        $version = '@package_version@';
+        $version = $this->getVersion();
 
         if ($version === ('@'.'package_version'.'@')) {
             $git = new Process('git describe --always');

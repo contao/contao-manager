@@ -3,8 +3,6 @@ services:
         class: Contao\ManagerApi\Command\AboutCommand
         calls:
             - [setContainer, ["@service_container"]]
-        tags:
-            - { name: console.command }
 
     contao_manager.command.integrity_check:
         class: Contao\ManagerApi\Command\IntegrityCheckCommand
@@ -14,5 +12,8 @@ services:
             - [addIntegrityCheck, ["@contao_manager.integrity.openssl"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.intl"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.process"]]
-        tags:
-            - { name: console.command }
+
+    contao_manager.command.update:
+        class: Contao\ManagerApi\Command\UpdateCommand
+        calls:
+            - [setContainer, ["@service_container"]]

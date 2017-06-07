@@ -10,10 +10,11 @@
 
 namespace Contao\ManagerApi;
 
-use Symfony\Bundle\FrameworkBundle\Command\CacheClearCommand;
 use Symfony\Bundle\FrameworkBundle\Command\CacheWarmupCommand;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Tenside\CoreBundle\Command\RunTaskCommand;
 use Terminal42\BackgroundProcess\Command\ProcessRunnerCommand;
 
@@ -38,10 +39,31 @@ class ApiApplication extends Application
     {
         $this->kernel = $kernel;
 
-        parent::__construct($kernel);
+        parent::__construct('Contao Manager', $kernel->getVersion());
+    }
 
-        $this->setName('Contao Manager');
-        $this->setVersion('@package_version@');
+    /**
+     * Gets the Kernel associated with this Console.
+     *
+     * @return ApiKernel
+     */
+    public function getKernel()
+    {
+        return $this->kernel;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        $this->registerCommands();
+
+        if ('self-update' !== $this->getCommandName($input)) {
+            $this->setDispatcher($this->kernel->getContainer()->get('event_dispatcher'));
+        }
+
+        return parent::doRun($input, $output);
     }
 
     /**
@@ -59,7 +81,7 @@ class ApiApplication extends Application
     /**
      * {@inheritdoc}
      */
-    protected function registerCommands()
+    private function registerCommands()
     {
         if ($this->commandsRegistered) {
             return;
@@ -76,14 +98,11 @@ class ApiApplication extends Application
         $this->add($command);
 
         $this->add((new ProcessRunnerCommand())->setName('run'));
-        $this->add($container->get('contao_manager.command.integrity_check'));
         $this->add($container->get('contao_manager.command.about'));
+        $this->add($container->get('contao_manager.command.integrity_check'));
+        $this->add($container->get('contao_manager.command.update'));
 
         if (!\Phar::running(false)) {
-            $command = new CacheClearCommand();
-            $command->setContainer($container);
-            $this->add($command);
-
             $command = new CacheWarmupCommand();
             $command->setContainer($container);
             $this->add($command);
