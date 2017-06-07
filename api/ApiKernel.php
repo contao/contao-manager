@@ -38,9 +38,9 @@ class ApiKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function __construct($environment, $debug)
+    public function __construct($environment)
     {
-        parent::__construct($environment, $debug);
+        parent::__construct($environment, $environment === 'dev');
 
         ini_set('error_log', $this->getLogDir().DIRECTORY_SEPARATOR.'api-'.date('Y-m-d').'.log');
 

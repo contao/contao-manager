@@ -62,8 +62,6 @@
         <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
             <arg value="api/console" />
             <arg value="cache:warmup" />
-            <arg value="--env=prod" />
-            <arg value="--no-debug" />
         </exec>
     </target>
 

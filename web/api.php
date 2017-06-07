@@ -13,9 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__.'/../vendor/autoload.php';
 
-$env = '@symfony_env@' === 'prod' ? 'prod' : 'dev';
-
-$kernel = new ApiKernel($env, 'dev' === $env);
+$kernel = new ApiKernel('@symfony_env@' === 'prod' ? 'prod' : 'dev');
 
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
