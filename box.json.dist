@@ -15,5 +15,5 @@
     ],
     "git-version": "package_version",
     "stub": "build/stub.php",
-    "output": "contao-manager.phar.php"
+    "output": "contao-manager.phar"
 }

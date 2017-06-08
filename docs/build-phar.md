@@ -4,7 +4,7 @@ The build process requires several parts. To ease everything,
 you can use [Phing] and run the provided `build.xml` file.
 
 Simply install Phing on your local computer and run it in the
-root directory. The result will be a `contao-manager.phar.php` file
+root directory. The result will be a `contao-manager.phar` file
 in the root.
 
 

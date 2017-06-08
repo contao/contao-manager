@@ -14,7 +14,7 @@ use Contao\ManagerApi\ApiKernel;
 
 class Updater
 {
-    const DOWNLOAD_URL = 'https://download.contao.org/contao-manager.phar.php';
+    const DOWNLOAD_URL = 'https://download.contao.org/contao-manager.phar';
     const VERSION_URL = 'https://download.contao.org/contao-manager.version';
 
     /**
@@ -99,8 +99,8 @@ class Updater
         $remote = $this->getRemoteInfo();
 
         $phar = \Phar::running(false);
-        $filename = basename(basename($phar, '.phar'), '.php');
-        $backupFile = $this->kernel->getManagerDir().'/'.$filename.'-old.phar.php';
+        list($filename, $extension) = $this->splitFilename($phar);
+        $backupFile = $this->kernel->getManagerDir().'/'.$filename.'-old'.$extension;
         $tempFile = dirname($phar).'/'.$filename.'.temp';
 
         $this->backup($phar, $backupFile);
@@ -201,5 +201,25 @@ class Updater
     private function install($tempFile, $phar)
     {
         rename($tempFile, $phar);
+    }
+
+    /**
+     * Gets filename and extension from current Phar file.
+     *
+     * @param string $phar
+     *
+     * @return array
+     */
+    private function splitFilename($phar)
+    {
+        $extension = '.phar.php';
+        $filename = basename($phar, $extension);
+
+        if ($filename === $phar) {
+            $extension = '.phar';
+            $filename = basename($phar, $extension);
+        }
+
+        return [$filename, $extension];
     }
 }
