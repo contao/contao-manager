@@ -59,6 +59,8 @@ class IntegrityCheckCommand extends Command
             }
         }
 
+        $output->writeln('<info>All checks successful.</info>');
+
         return 0;
     }
 
