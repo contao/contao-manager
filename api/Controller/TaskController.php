@@ -108,6 +108,14 @@ class TaskController
         $this->taskList->remove($task->getId());
         $process->delete();
 
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+
+        if (function_exists('apc_clear_cache') && !ini_get('apc.stat')) {
+            apc_clear_cache();
+        }
+
         return new JsonResponse($this->describeTask($task, $process));
     }
 
