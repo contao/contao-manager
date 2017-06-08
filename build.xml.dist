@@ -110,5 +110,9 @@
     <target name="finish">
         <move file="contao-manager-${version}/contao-manager.phar.php" tofile="contao-manager.phar.php" overwrite="true"/>
         <delete dir="contao-manager-${version}" />
+        <exec executable="php" checkreturn="true">
+            <arg value="-r" />
+            <arg value="file_put_contents('contao-manager.version', json_encode(['version' => '${version}', 'sha1' => sha1_file('contao-manager.phar.php')]));" />
+        </exec>
     </target>
 </project>

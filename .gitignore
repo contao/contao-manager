@@ -8,6 +8,7 @@
 /web/assets
 /web/index.html
 /contao-manager.phar.php
+/contao-manager.version
 
 # Local
 /box.json
