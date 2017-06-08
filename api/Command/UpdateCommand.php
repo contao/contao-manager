@@ -11,6 +11,7 @@
 namespace Contao\ManagerApi\Command;
 
 use Contao\ManagerApi\ApiApplication;
+use Contao\ManagerApi\SelfUpdate\Updater;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,16 +34,13 @@ class UpdateCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $kernel = $this->getApplication()->getKernel();
+        $updater = $this->getContainer()->get('contao_manager.self_update.updater');
 
-        if ($kernel->getVersion() === '@'.'package_version'.'@'
-            || $kernel->getEnvironment() !== 'prod'
-            || $kernel->isDebug()
-        ) {
+        if (!$updater->canUpdate()) {
             throw new \RuntimeException('This development build of Contao Manager cannot be automatically updated.');
         }
 
-        return $this->update($output);
+        return $this->update($updater, $output);
     }
 
     /**
@@ -63,10 +61,8 @@ class UpdateCommand extends ContainerAwareCommand
      *
      * @return int
      */
-    private function update(OutputInterface $output)
+    private function update(Updater $updater, OutputInterface $output)
     {
-        $updater = $this->getContainer()->get('contao_manager.self_update.updater');
-
         $result = $updater->update();
 
         if (false === $result) {

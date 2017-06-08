@@ -10,15 +10,16 @@ services:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.process.contao_api"
             - "@tenside.tasks"
+            - "@contao_manager.self_update.updater"
             - "@filesystem"
         calls:
             - [setContainer, ["@service_container"]]
+            - [addIntegrityCheck, ["@contao_manager.integrity.web_root"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.allow_url_fopen"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.openssl"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.intl"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.process"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.contao"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.web_root"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.windows"]]
 
     contao_manager.controller.session:

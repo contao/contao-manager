@@ -38,13 +38,27 @@ class Updater
     }
 
     /**
+     * Returns whether the current application can be updated.
+     *
+     * @return bool
+     */
+    public function canUpdate()
+    {
+        return '' !== \Phar::running(false)
+            && $this->kernel->getVersion() !== '@'.'package_version'.'@'
+            && $this->kernel->getEnvironment() === 'prod'
+            && !$this->kernel->isDebug()
+        ;
+    }
+
+    /**
      * Returns whether there is an update available.
      *
      * @return bool
      */
     public function hasUpdate()
     {
-        return $this->getOldVersion() !== $this->getNewVersion();
+        return $this->canUpdate() && $this->getOldVersion() !== $this->getNewVersion();
     }
 
     /**
@@ -72,9 +86,9 @@ class Updater
     /**
      * Updates the current Phar to the latest version available.
      *
-     * @return bool
-     *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function update()
     {
@@ -115,7 +129,7 @@ class Updater
             $data = json_decode($content, true);
 
             if (!isset($data['version'], $data['sha1'])
-                || !preg_match('@^\d+\.\d+\.\d+(-[a-z0-9]+)?$@', $data['version'])
+                || !preg_match('@^\d+\.\d+\.\d+(-[a-z0-9\-]+)?$@', $data['version'])
                 || !preg_match('%^[a-z0-9]{40}%', $data['sha1'])
             ) {
                 throw new \RuntimeException('Version request returned incorrectly formatted response.');

@@ -55,6 +55,10 @@ const store = new Vuex.Store({
                         dispatch('tasks/reload').catch(() => {});
                     }
 
+                    if (result.update === true) {
+                        dispatch('tasks/execute', { type: 'self-update' });
+                    }
+
                     return result;
                 },
             );

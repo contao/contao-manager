@@ -19,6 +19,7 @@ use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\IntegrityCheck\IntegrityCheckInterface;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Process\ContaoApi;
+use Contao\ManagerApi\SelfUpdate\Updater;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
@@ -69,6 +70,16 @@ class StatusController extends Controller
     private $contaoApi;
 
     /**
+     * @var TaskList
+     */
+    private $taskList;
+
+    /**
+     * @var Updater
+     */
+    private $updater;
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -77,10 +88,6 @@ class StatusController extends Controller
      * @var IntegrityCheckInterface[]
      */
     private $checks = [];
-    /**
-     * @var TaskList
-     */
-    private $taskList;
 
     /**
      * Constructor.
@@ -93,6 +100,7 @@ class StatusController extends Controller
      * @param ConsoleProcessFactory $processFactory
      * @param ContaoApi             $contaoApi
      * @param TaskList              $taskList
+     * @param Updater               $updater
      * @param Filesystem|null       $filesystem
      *
      * @internal param InstallationStatusDeterminator $status
@@ -106,6 +114,7 @@ class StatusController extends Controller
         ConsoleProcessFactory $processFactory,
         ContaoApi $contaoApi,
         TaskList $taskList,
+        Updater $updater,
         Filesystem $filesystem = null
     ) {
         $this->kernel = $kernel;
@@ -116,6 +125,7 @@ class StatusController extends Controller
         $this->processFactory = $processFactory;
         $this->contaoApi = $contaoApi;
         $this->taskList = $taskList;
+        $this->updater = $updater;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -162,6 +172,7 @@ class StatusController extends Controller
                 'config' => $config,
                 'version' => $version,
                 'task' => $taskId,
+                'update' => $this->hasUpdate(),
             ]
         );
     }
@@ -221,6 +232,33 @@ class StatusController extends Controller
 # see https://github.com/contao/contao-manager/issues/58
 TAG
             );
+        }
+    }
+
+    /**
+     * Checks for new versions once a day.
+     *
+     * @return bool
+     */
+    private function hasUpdate()
+    {
+        if (!$this->updater->canUpdate()) {
+            return false;
+        }
+
+        if ($this->managerConfig->has('last_update')
+            && false !== ($lastUpdate = new \DateTime($this->managerConfig->get('last_update')))
+            && $lastUpdate > new \DateTime('-1 day')
+        ) {
+            return false;
+        }
+
+        $this->managerConfig->set('last_update', (new \DateTime())->format('c'));
+
+        try {
+            return $this->updater->hasUpdate();
+        } catch (\Exception $e) {
+            return false;
         }
     }
 }

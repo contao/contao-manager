@@ -13,6 +13,7 @@ namespace Contao\ManagerApi\Tenside;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Tenside\Task\RebuildCacheTask;
+use Contao\ManagerApi\Tenside\Task\SelfUpdateTask;
 use Tenside\Core\Task\TaskFactoryInterface;
 use Tenside\Core\Util\JsonArray;
 
@@ -48,7 +49,7 @@ class TaskFactory implements TaskFactoryInterface
      */
     public function isTypeSupported($taskType)
     {
-        return 'rebuild-cache' === $taskType;
+        return in_array($taskType, ['rebuild-cache', 'self-update'], true);
     }
 
     /**
@@ -56,10 +57,14 @@ class TaskFactory implements TaskFactoryInterface
      */
     public function createInstance($taskType, JsonArray $metaData)
     {
-        if (!$this->isTypeSupported($taskType)) {
-            throw new \InvalidArgumentException(sprintf('Unsupported task type "%s"', $taskType));
+        switch ($taskType) {
+            case 'rebuild-cache':
+                return new RebuildCacheTask($this->kernel, $this->processFactory, $metaData);
+
+            case 'self-update':
+                return new SelfUpdateTask($this->processFactory, $metaData);
         }
 
-        return new RebuildCacheTask($this->kernel, $this->processFactory, $metaData);
+        throw new \InvalidArgumentException(sprintf('Unsupported task type "%s"', $taskType));
     }
 }

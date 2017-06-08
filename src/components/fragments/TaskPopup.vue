@@ -96,6 +96,7 @@
                     'require-package': this.$t('ui.taskpopup.taskRequire'),
                     'remove-package': this.$t('ui.taskpopup.taskRemove'),
                     'rebuild-cache': this.$t('ui.taskpopup.taskCache'),
+                    'self-update': this.$t('ui.taskpopup.taskSelfUpdate'),
                 };
 
                 return titles[this.taskType];
