@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Command\CacheWarmupCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tenside\CoreBundle\Command\RunTaskCommand;
 use Terminal42\BackgroundProcess\Command\ProcessRunnerCommand;
@@ -40,6 +41,8 @@ class ApiApplication extends Application
         $this->kernel = $kernel;
 
         parent::__construct('Contao Manager', $kernel->getVersion());
+
+        $this->getDefinition()->addOption(new InputOption('disable-events', null, InputOption::VALUE_NONE, 'Disables the event dispatcher.'));
     }
 
     /**
@@ -59,7 +62,9 @@ class ApiApplication extends Application
     {
         $this->registerCommands();
 
-        if ('self-update' !== $this->getCommandName($input)) {
+        if ('self-update' !== $this->getCommandName($input)
+            && !$input->hasParameterOption(array('--disable-events'), true)
+        ) {
             $this->setDispatcher($this->kernel->getContainer()->get('event_dispatcher'));
         }
 

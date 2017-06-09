@@ -11,6 +11,7 @@
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
+use Contao\ManagerApi\Tenside\Task\SelfUpdateTask;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -224,13 +225,19 @@ class TaskController
 
     private function startTask(Task $task)
     {
+        $arguments = [
+            'tenside:runtask',
+            $task->getId(),
+            '-v',
+            '--no-interaction',
+        ];
+
+        if ($task instanceof SelfUpdateTask) {
+            $arguments[] = '--disable-events';
+        }
+
         $process = $this->processFactory->createManagerConsoleBackgroundProcess(
-            [
-                'tenside:runtask',
-                $task->getId(),
-                '-v',
-                '--no-interaction',
-            ],
+            $arguments,
             $task->getId()
         );
 
