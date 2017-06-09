@@ -31,6 +31,7 @@
     "ui.taskpopup.taskRequire": "Instalación de paquetes",
     "ui.taskpopup.taskRemove": "Eliminación de paquetes",
     "ui.taskpopup.taskCache": "Reconstruir la caché de Contao",
+    "ui.taskpopup.taskSelfUpdate": "Updating Contao Manager",
     "ui.taskpopup.buttonInstallTool": "Herramienta de instalación",
     "ui.taskpopup.buttonClose": "Cerrar",
     "ui.taskpopup.buttonConfirm": "Confirmar y cerrar",

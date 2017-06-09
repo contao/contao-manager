@@ -31,6 +31,7 @@
     "ui.taskpopup.taskRequire": "Установка пакетов",
     "ui.taskpopup.taskRemove": "Удаление пакетов",
     "ui.taskpopup.taskCache": "Перестроение кеша Contao",
+    "ui.taskpopup.taskSelfUpdate": "Updating Contao Manager",
     "ui.taskpopup.buttonInstallTool": "Мастер установки",
     "ui.taskpopup.buttonClose": "Закрыть",
     "ui.taskpopup.buttonConfirm": "Подтвердить и закрыть",

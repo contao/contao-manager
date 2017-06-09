@@ -31,6 +31,7 @@
     "ui.taskpopup.taskRequire": "Pakketten installeren",
     "ui.taskpopup.taskRemove": "Pakketten verwijderen",
     "ui.taskpopup.taskCache": "Contao cache opnieuw opbouwen",
+    "ui.taskpopup.taskSelfUpdate": "Updating Contao Manager",
     "ui.taskpopup.buttonInstallTool": "Installatie Tool",
     "ui.taskpopup.buttonClose": "Sluit",
     "ui.taskpopup.buttonConfirm": "Bevestig & Sluit",

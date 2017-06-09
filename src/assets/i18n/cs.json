@@ -31,6 +31,7 @@
     "ui.taskpopup.taskRequire": "Instalování balíčků",
     "ui.taskpopup.taskRemove": "Mazání balíčků",
     "ui.taskpopup.taskCache": "Přetváření meziúložiště Contaa",
+    "ui.taskpopup.taskSelfUpdate": "Updating Contao Manager",
     "ui.taskpopup.buttonInstallTool": "Instalační nástroj",
     "ui.taskpopup.buttonClose": "Zavřít",
     "ui.taskpopup.buttonConfirm": "Potvrdit a zavřít",

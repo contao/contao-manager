@@ -31,6 +31,7 @@
     "ui.taskpopup.taskRequire": "نصب بسته‌ها",
     "ui.taskpopup.taskRemove": "حذف بسته‌ها",
     "ui.taskpopup.taskCache": "بازسازی نهان‌گاه کانتائو",
+    "ui.taskpopup.taskSelfUpdate": "Updating Contao Manager",
     "ui.taskpopup.buttonInstallTool": "ابزار نصب",
     "ui.taskpopup.buttonClose": "بستن",
     "ui.taskpopup.buttonConfirm": "تایید و بستن",
