@@ -96,11 +96,12 @@ class JwtManager
             'xsrf' => $this->getXsrfToken($request, $response),
         ];
 
-        // TODO optimize cookie configuration
         $response->headers->setCookie(
-            new Cookie(
+            $this->createCookie(
                 self::COOKIE_AUTH,
-                JWT::encode($payload, $this->config->getSecret(), 'HS256')
+                JWT::encode($payload, $this->config->getSecret(), 'HS256'),
+                $request,
+                true
             )
         );
     }
@@ -131,17 +132,8 @@ class JwtManager
 
         $token = $this->tokenGenerator->generateToken();
 
-        // TODO optimize cookie configuration
         $response->headers->setCookie(
-            new Cookie(
-                self::COOKIE_XSRF,
-                $token,
-                0,
-                '/',
-                null,
-                false,
-                false
-            )
+            $this->createCookie(self::COOKIE_XSRF, $token, $request, false)
         );
 
         return $token;
@@ -167,5 +159,30 @@ class JwtManager
         }
 
         return false;
+    }
+
+    /**
+     * Creates a cookie configured for Contao Manager.
+     *
+     * @param string  $name
+     * @param string  $value
+     * @param Request $request
+     * @param bool    $httpOnly
+     *
+     * @return Cookie
+     */
+    private function createCookie($name, $value, Request $request, $httpOnly)
+    {
+        return new Cookie(
+            $name,
+            $value,
+            0,
+            $request->getBaseUrl().'/',
+            null,
+            $request->isSecure(),
+            $httpOnly,
+            false,
+            Cookie::SAMESITE_STRICT
+        );
     }
 }
