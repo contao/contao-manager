@@ -95,7 +95,7 @@ class SecurityListener
         if (null !== $token && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $this->jwtManager->addToken($event->getRequest(), $event->getResponse(), $token->getUsername());
         } else {
-            $this->jwtManager->removeToken($event->getResponse());
+            $this->jwtManager->removeToken($event->getRequest(), $event->getResponse());
         }
     }
 }

@@ -97,7 +97,7 @@ class SessionController extends Controller
      *
      * @return Response
      */
-    public function logout()
+    public function logout(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -107,7 +107,7 @@ class SessionController extends Controller
             ]
         );
 
-        $this->jwtManager->removeToken($response);
+        $this->jwtManager->removeToken($request, $response);
 
         return $response;
     }

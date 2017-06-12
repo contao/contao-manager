@@ -109,11 +109,18 @@ class JwtManager
     /**
      * Clears the JWT cookie in the response.
      *
+     * @param Request  $request
      * @param Response $response
      */
-    public function removeToken(Response $response)
+    public function removeToken(Request $request, Response $response)
     {
-        $response->headers->clearCookie(self::COOKIE_AUTH);
+        $response->headers->clearCookie(
+            self::COOKIE_AUTH,
+            \Phar::running(false) ? $request->getBaseUrl().'/' : '/',
+            null,
+            $request->isSecure(),
+            true
+        );
     }
 
     /**
@@ -177,7 +184,7 @@ class JwtManager
             $name,
             $value,
             0,
-            $request->getBaseUrl().'/',
+            \Phar::running(false) ? $request->getBaseUrl().'/' : '/',
             null,
             $request->isSecure(),
             $httpOnly,
