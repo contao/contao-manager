@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi;
 
+use Contao\ManagerApi\Command\SecurityReportCommand;
 use Symfony\Bundle\FrameworkBundle\Command\CacheWarmupCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -103,6 +104,7 @@ class ApiApplication extends Application
         $this->add($command);
 
         $this->add((new ProcessRunnerCommand())->setName('run'));
+        $this->add(new SecurityReportCommand($this->kernel));
         $this->add($container->get('contao_manager.command.about'));
         $this->add($container->get('contao_manager.command.integrity_check'));
         $this->add($container->get('contao_manager.command.update'));
