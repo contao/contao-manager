@@ -2,7 +2,8 @@
     <main-layout>
 
         <section :class="{'package-actions': true, 'search-active': $route.name === 'packages-search'}">
-            <button class="update" :disabled="hasChanges" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
+            <button v-if="securityIssues" class="update alert" :disabled="hasChanges">{{ 'Security Report' | translate }}</button>
+            <button v-else class="update" :disabled="hasChanges" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
             <button class="search" :disabled="hasChanges" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
             <input ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
             <button class="cancel" @click="stopSearch">X</button>
@@ -28,10 +29,13 @@
 
     export default {
         components: { MainLayout },
+
         data: () => ({
             hasChanges: false,
+            securityIssues: true,
             searchInput: '',
         }),
+
         methods: {
             updatePackages() {
                 if (!confirm(this.$t('ui.packages.updateConfirm'))) {
@@ -50,6 +54,7 @@
                     },
                 );
             },
+
             startSearch() {
                 this.$router.push(routes.packagesSearch);
                 this.$nextTick(() => {
@@ -59,10 +64,12 @@
                     });
                 });
             },
+
             stopSearch() {
                 this.searchInput = '';
                 this.$router.push(routes.packages);
             },
+
             search() {
                 if (this.$route.name === routes.packagesSearch.name) {
                     this.$router.push(
@@ -73,16 +80,20 @@
                     );
                 }
             },
+
             setHasChanges(value) {
                 this.hasChanges = value;
             },
+
             applyChanges() {
                 this.$refs.component.applyChanges();
             },
+
             resetChanges() {
                 this.$refs.component.resetChanges();
             },
         },
+
         watch: {
             $route(route) {
                 this.hasChanges = false;
