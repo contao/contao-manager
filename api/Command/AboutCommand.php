@@ -78,6 +78,7 @@ class AboutCommand extends ContainerAwareCommand
             new TableSeparator(),
             ['<info>Server</info>'],
             new TableSeparator(),
+            ['IP', $data['server']['ip']],
             ['Hostname', $data['server']['hostname']],
             ['Operating System', $data['server']['os_name'].' ('.$data['server']['os_version'].')'],
             ['Architecture', $data['server']['arch']],

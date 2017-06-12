@@ -148,7 +148,8 @@ class ApiKernel extends Kernel
      */
     public function getServerInfo()
     {
-        $hostname = gethostbyaddr(file_get_contents('https://api.ipify.org'));
+        $ip = file_get_contents('https://api.ipify.org');
+        $hostname = gethostbyaddr($ip);
         $provider = [];
         $version = $this->getVersion();
 
@@ -188,6 +189,7 @@ class ApiKernel extends Kernel
                 'timezone' => date_default_timezone_get(),
             ],
             'server' => [
+                'ip' => $ip,
                 'hostname' => $hostname,
                 'os_name' => php_uname('s'),
                 'os_version' => php_uname('r'),
