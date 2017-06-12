@@ -23,7 +23,9 @@ body {
         #logo {
             color: $text-color;
             text-decoration: none;
-            font: 27px/40px $font-hairline;
+            font-weight: $font-weight-light;
+            font-size: 27px;
+            line-height: 40px;
 
             img {
                 float: left;

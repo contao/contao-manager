@@ -170,13 +170,13 @@
         margin: 100px 0;
         padding-top: 110px;
         text-align: center;
-        font-family: $font-regular;
+        font-weight: $font-weight-medium;
         font-size: 20px;
 
         a {
             display: block;
             margin-top: 20px;
-            font-family: $font-default;
+            font-weight: $font-weight-normal;
             font-size: 0.8em;
             cursor: pointer;
         }

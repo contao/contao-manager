@@ -122,7 +122,9 @@ section.package-actions {
     .hint {
         position: relative;
         padding: 8px 150px 8px 56px;
-        font: 12px/1.8 $font-regular;
+        font-weight: $font-weight-medium;
+        font-size: 12px;
+        line-height: 1.8;
         border-radius: 2px 2px 0 0;
         background: #e8c8bc url('../assets/images/hint.svg') 20px 5px no-repeat;
         background-size: 28px 28px;
@@ -232,7 +234,7 @@ section.package-actions {
         .additional {
             *:not(:last-child):after {
                 margin: 0 10px;
-                font-weight: normal;
+                font-weight: $font-weight-normal;
                 content: "|";
             }
 
@@ -267,7 +269,7 @@ section.package-actions {
             background: #fff;
             border: 2px solid $orange-button;
             color: #000;
-            font-weight: bold;
+            font-weight: $font-weight-bold;
             text-align: center;
             line-height: 30px;
 
@@ -424,7 +426,7 @@ section.package-actions {
 
         @include screen(600) {
             display: inline;
-            font-weight: bold;
+            font-weight: $font-weight-bold;
         }
     }
 

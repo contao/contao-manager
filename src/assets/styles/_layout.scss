@@ -49,7 +49,7 @@ img, svg {
 
 
 body, input, textarea, button {
-    font: 14px/1.4 $font-default;
+    font: $font-weight-normal 14px/1.4 LatoLatin, Lato, Arial, sans-serif;
     color: $text-color;
 }
 
@@ -103,7 +103,7 @@ select, input, textarea {
 h1, h2, h3, h4, h5, h6 {
     font-size: inherit;
     line-height: inherit;
-    font-weight: bold;
+    font-weight: $font-weight-bold;
     margin: 0;
 }
 

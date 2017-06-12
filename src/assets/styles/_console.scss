@@ -24,7 +24,7 @@
     h1 {
         background: $contao-color;
         color: #fff;
-        font-weight: normal;
+        font-weight: $font-weight-normal;
         line-height: 40px;
         border-radius: 2px 2px 0 0;
     }

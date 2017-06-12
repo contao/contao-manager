@@ -95,7 +95,7 @@
 
             legend {
                 font-size: 18px;
-                font-weight: bold;
+                font-weight: $font-weight-bold;
             }
         }
 
@@ -206,7 +206,7 @@
                     float: left;
                     width: 120px;
                     padding-top: 15px;
-                    font-family: $font-regular;
+                    font-weight: $font-weight-medium;
                 }
 
                 .checkbox {
