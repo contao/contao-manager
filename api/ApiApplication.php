@@ -63,7 +63,7 @@ class ApiApplication extends Application
         $this->registerCommands();
 
         if ('self-update' !== $this->getCommandName($input)
-            && !$input->hasParameterOption(array('--disable-events'), true)
+            && !$input->hasParameterOption(['--disable-events'], true)
         ) {
             $this->setDispatcher($this->kernel->getContainer()->get('event_dispatcher'));
         }
