@@ -1,7 +1,11 @@
 <template>
     <boxed-layout wide="1" mainClass="install">
-        <div slot="intro">
-            <p>This is a pre-release version of Contao Manager. Please <strong>do not share</strong> without permission of the developer team.<br><br>If you encounter a problem, please <strong>do not report it on GitHub</strong> and contact the person who supplied you with this file instead. Note that we are not yet collecting minor issues like styling problems, missing features or alike.</p>
+        <div slot="header">
+            <p class="headline">
+                <strong>Contao Manager</strong>
+                {{ 'ui.package.version' | translate({ version: '@package_version@' }) }}
+            </p>
+            <p v-html="$t('ui.install.intro')"></p>
         </div>
 
         <section slot="section">

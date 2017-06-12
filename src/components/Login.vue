@@ -1,5 +1,8 @@
 <template>
     <boxed-layout mainClass="login">
+        <div slot="header">
+            <p class="headline"><strong>Contao Manager</strong></p>
+        </div>
         <section slot="section">
             <h1>{{ 'ui.login.headline' | translate }}</h1>
             <p>{{ 'ui.login.description' | translate }}</p>
