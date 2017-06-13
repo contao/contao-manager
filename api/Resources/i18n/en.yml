@@ -4,29 +4,29 @@ en:
             title: 'The PHP setting "allow_url_fopen" is not enabled on the server.'
         openssl:
             title: 'The PHP OpenSSL extension is not available.'
-            detail: 'Contao Manager requires the OpenSSL extension to download files over encrypted connections (https).'
+            detail: 'The Contao Manager requires the OpenSSL extension to download files over an encrypted connection (https).'
         proc_open:
             title: 'The PHP function "proc_open" and/or "proc_close" is not available on the server.'
-            detail: 'The "proc_open" and "proc_close" functions are necessary to run command line tasks in the background. Check with your hosting provider why this method is not available, neither the Contao Manager nor Contao 4 will run correctly without it.'
+            detail: 'The "proc_open" and "proc_close" functions are necessary to run command line tasks in the background. Check with your hosting provider why this method is not available; neither the Contao Manager nor Contao 4 will run correctly without it.'
         intl:
             title: 'The PHP Intl extension is not available.'
-            detail: 'Contao 4 requires the Intl extension for internationalization purposes.'
+            detail: 'Contao 4 requires the PHP Intl extension for internationalization purposes.'
         web_root:
             title: 'The Phar file must be located in the /web folder.'
         windows:
             title: 'This version of Contao Manager is currently not supported on Windows.'
         memory_limit:
             title: 'Insufficient PHP memory limit'
-            detail: 'Your PHP configuration only allows for {limit} memory (on the command line). This is not enough to run Composer, and it was not possible to automatically increase this limit. Contact your hosting provider for support.'
+            detail: 'Your PHP configuration only allows for {limit} memory (on the command line). This is not enough to run Composer and it was not possible to automatically increase this limit. Please contact your hosting provider for support.'
         systempdir:
             title: 'Unable to write to the temporary system directory.'
-            detail: 'This is most likely a problem with your hosting configuration. Make sure either open_basedir does allow access to the temporary directory, or the sys_temp_dir is correctly configured.'
+            detail: 'This is most likely a problem with your hosting configuration. Make sure that either open_basedir does allow access to the temporary directory or that the sys_temp_dir is correctly configured.'
         contao_old:
             title: 'Incompatible Contao version'
-            detail: 'Contao version {version} is not compatible with the Contao Manager, please manually update your installation.'
+            detail: 'Contao version {version} is not compatible with the Contao Manager, please update your installation manually.'
         contao_unknown:
             title: 'Unknown installation status'
-            detail: "Some files were found on your server, but no known Contao version could be detected.\nYou must either manually repair your application or remove the following files and folders to install Contao:\n\n{files}"
+            detail: "Some files were found on your server but no known Contao version could be detected.\nYou must either manually repair your application or remove the following files and folders to install Contao:\n\n{files}"
 
     config:
         php_cli:
