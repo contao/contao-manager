@@ -1,14 +1,22 @@
 cyon.ch:
-    name: Cyon
+    name: cyon GmbH
     website: www.cyon.ch
     last_update: 2017-05-31
     issues: []
     php:
         - /opt/alt/php{major}{minor}/usr/bin/php
 
+inetrobots.com:
+    name: Hostingwerk (Feyer Media GmbH & Co. KG)
+    website: www.hostingwerk.de
+    last_update: 2017-06-13
+    issues: []
+    php:
+        - /usr/bin/php-{major}.{minor}
+
 ispgateway.de:
-    name: 1&1
-    website: www.1und1.de
+    name: Host Europe GmbH
+    website: www.hosteurope.de
     last_update: 2017-05-31
     issues: []
     php:
@@ -30,9 +38,23 @@ sui-inter.net:
         - /usr/bin/php
 
 tophost.ch:
-    name: Novatrend
+    name: Novatrend Services GmbH
     website: www.novatrend.ch
     last_update: 2017-05-31
     issues: [cputime]
     php:
         - /usr/local/bin/php
+
+uberspace.de:
+    name: Uberspace
+    website: www.uberspace.de
+    last_update: 2017-07-12
+    issues: []
+
+vhost.io:
+    name: Hostingwerk (Feyer Media GmbH & Co. KG)
+    website: www.hostingwerk.de
+    last_update: 2017-06-13
+    issues: []
+    php:
+        - /usr/bin/php-{major}.{minor}
