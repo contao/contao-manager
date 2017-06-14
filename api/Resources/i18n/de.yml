@@ -7,7 +7,7 @@ de:
       detail: 'Der Contao Manager benötigt die OpenSSL-Erweiterung, um Dateien über eine verschlüsselte Verbindung (https) herunterzuladen.'
     proc_open:
       title: 'Die PHP-Funktion "proc_open" und/oder "proc_close" ist auf dem Server nicht verfügbar.'
-      detail: 'Die Funktionen "proc_open" und "proc_close" sind notwendig, um Kommanozeilentasks im Hintergrund auszuführen. Bitte fragen Sie bei Ihrem Hosting-Anbieter nach, warum die Funktion nicht verfügbar ist; weder der Contao Manager noch Contao 4 laufen ohne sie.'
+      detail: 'Die Funktionen "proc_open" und "proc_close" sind notwendig, um Kommanozeilentasks im Hintergrund auszuführen. Bitte fragen Sie bei Ihrem Hosting-Anbieter nach, warum die Funktionen nicht verfügbar sind; weder der Contao Manager noch Contao 4 laufen ohne sie.'
     intl:
       title: 'Die PHP Intl-Erweiterung ist nicht verfügbar.'
       detail: 'Contao 4 benötigt die Intl-Erweiterung für die Internationalisierung der Anwendung.'
@@ -26,7 +26,7 @@ de:
       detail: 'Contao {version} ist nicht kompatibel mit dem Contao Manager; bitte aktualisieren Sie Ihre Installation manuell.'
     contao_unknown:
       title: 'Unbekannter Installationsstatus'
-      detail: "Die Dateien auf Ihrem Server konnten keiner bekannten Contao-Version zugeordnet werden.\nUm Contao zu installieren, müssen Sie entweder Ihre Installation manuell reparieren oder folgende Dateien und Ordner entfernen:\n\n{files}"
+      detail: "Auf Ihrem Server wurden Dateien gefunden, die keiner bekannten Contao-Version zugeordnet werden konnten.\nUm Contao zu installieren, müssen Sie entweder Ihre Installation manuell reparieren oder folgende Dateien und Ordner entfernen:\n\n{files}"
   config:
     php_cli:
       not_found: 'Der Pfad enthält kein gültiges PHP-Binary.'
