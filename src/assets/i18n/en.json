@@ -26,7 +26,7 @@
     "ui.taskpopup.errorHeadline": "Console task terminated!",
     "ui.taskpopup.errorDescription": "The background task was cancelled or stopped unexpectedly. Please check the console protocol.",
     "ui.taskpopup.taskStarting": "Starting Console Task …",
-    "ui.taskpopup.taskInstall": "Setting up your Contao Application",
+    "ui.taskpopup.taskInstall": "Setting up Your Contao Application",
     "ui.taskpopup.taskUpdate": "Updating Packages",
     "ui.taskpopup.taskRequire": "Installing Packages",
     "ui.taskpopup.taskRemove": "Removing Packages",
