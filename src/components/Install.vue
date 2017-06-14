@@ -73,7 +73,7 @@
             password: '',
             password_confirm: '',
             version: '',
-            versions: { '4.3.*': '4.3 (latest)' },
+            versions: { '4.4.*': '4.4 (latest)' },
 
             php_cli: '',
             github_oauth_token: '',
