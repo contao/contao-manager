@@ -248,7 +248,7 @@ TAG
 
         if ($this->managerConfig->has('last_update')
             && false !== ($lastUpdate = new \DateTime($this->managerConfig->get('last_update')))
-            && $lastUpdate > new \DateTime('-1 day')
+            && $lastUpdate > new \DateTime('-1 hour')
         ) {
             return false;
         }
