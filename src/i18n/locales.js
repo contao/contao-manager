@@ -8,6 +8,7 @@ export default {
     en: 'English',
     es: 'Español (Spanish)',
     fa: 'فارسی (Persian)',
+    fr: 'Français (French)',
     ja: '日本語 (にほんご) (Japanese)',
     nl: 'Nederlands (Dutch)',
     ru: 'Русский (Russian)',

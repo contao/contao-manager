@@ -1,0 +1,27 @@
+fr:
+  integrity:
+    allow_url_fopen:
+      title: 'Le paramètre PHP "allow_url_fopen" n''est pas activé sur le serveur.'
+    openssl:
+      title: 'L''extension PHP OpenSSL n''est pas disponible.'
+      detail: 'Contao Manager requiert l''extension OpenSSL pour télécharger des fichiers via une connexion cryptée (https).'
+    proc_open:
+      title: 'La fonction PHP "proc_open" et/ou "proc_close" n''est pas disponible sur le serveur.'
+      detail: 'Les fonctions "proc_open" et "proc_close" sont nécessaires pour exécuter les tâches en ligne de commande en arrière-plan. Vérifiez auprès de votre hébergeur web pourquoi cette méthode n''est pas disponible; ni Contao Manager ni Contao 4 ne fonctionneront correctement sans cela.'
+    intl:
+      title: 'L''extension PHP Intl n''est pas disponible.'
+      detail: 'Contao 4 nécessite l''extension PHP Intl à des fins d''internationalisation.'
+    web_root:
+      title: 'Le fichier Phar doit être situé dans le dossier /web.'
+    windows:
+      title: 'Cette version de Contao Manager n''est actuellement pas prise en charge par Windows.'
+    memory_limit:
+      title: 'Limite de mémoire PHP insuffisante'
+      detail: 'Votre configuration PHP permet uniquement {limit} de mémoire (en ligne de commande). Ce n''est pas suffisant pour exécuter Composer et il n''a pas été possible d''augmenter automatiquement cette limite. Veuillez contacter votre hébergeur web pour obtenir de l''aide.'
+    contao_old:
+      title: 'Version incompatible de Contao'
+      detail: 'La version {version} de Contao n''est pas compatible avec Contao Manager, veuillez mettre à jour manuellement votre installation.'
+  config:
+    php_cli:
+      not_found: 'Ce chemin ne contient pas de binaire PHP valide.'
+      incompatible: 'Ce binaire est une version PHP {cli} mais votre serveur web est en version {web}.'
