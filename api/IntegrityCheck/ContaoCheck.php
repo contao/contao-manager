@@ -93,7 +93,7 @@ class ContaoCheck extends AbstractIntegrityCheck
     private function getProjectFiles()
     {
         $content = scandir($this->kernel->getContaoDir());
-        $content = array_diff($content, ['.', '..', 'contao-manager', 'web', '.htaccess']);
+        $content = array_diff($content, ['.', '..', 'cgi-bin', 'contao-manager', 'web', '.htaccess', '.DS_Store']);
 
         return $content;
     }
