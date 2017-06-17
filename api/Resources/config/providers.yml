@@ -1,3 +1,12 @@
+all-inkl.com:
+    name: ALL-INKL.COM
+    website: www.all-inkl.com
+    last_update: 2017-06-17
+    issues: []
+    php:
+        - /usr/bin/php{major}{minor}
+        - /usr/bin/php
+
 cyon.ch:
     name: cyon GmbH
     website: www.cyon.ch
