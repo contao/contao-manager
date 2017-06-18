@@ -184,8 +184,7 @@ class ApiKernel extends Kernel
                 'version' => PHP_VERSION,
                 'version_id' => PHP_VERSION_ID,
                 'sapi' => PHP_SAPI,
-                'arch' => PHP_INT_SIZE * 8,
-                'locale' => class_exists('Locale', false) && \Locale::getDefault() ? \Locale::getDefault() : 'n/a',
+                'locale' => class_exists('Locale', false) && \Locale::getDefault() ? \Locale::getDefault() : '',
                 'timezone' => date_default_timezone_get(),
             ],
             'server' => [
@@ -193,10 +192,14 @@ class ApiKernel extends Kernel
                 'hostname' => $hostname,
                 'os_name' => php_uname('s'),
                 'os_version' => php_uname('r'),
-                'arch' => php_uname('m'),
+                'arch' => PHP_INT_SIZE * 8,
             ],
             'provider' => $provider,
         ];
+
+        if ($data['server']['os_name'] === $data['server']['os_version']) {
+            $data['server']['os_version'] = '';
+        }
 
         return $data;
     }

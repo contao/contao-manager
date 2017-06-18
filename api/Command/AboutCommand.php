@@ -59,6 +59,8 @@ class AboutCommand extends ContainerAwareCommand
     {
         $io = new SymfonyStyle($input, $output);
 
+        $osVersion = $data['server']['os_version'] ? ' ('.$data['server']['os_version'].')' : '';
+
         $rows = [
             ['<info>Contao Manager</info>'],
             new TableSeparator(),
@@ -72,16 +74,15 @@ class AboutCommand extends ContainerAwareCommand
             ['<info>PHP</info>'],
             new TableSeparator(),
             ['Version', $data['php']['version']],
-            ['Architecture', $data['php']['arch'].' bits'],
             ['Intl locale', $data['php']['locale']],
             ['Timezone', $data['php']['timezone']],
             new TableSeparator(),
             ['<info>Server</info>'],
             new TableSeparator(),
-            ['IP', $data['server']['ip']],
-            ['Hostname', $data['server']['hostname']],
-            ['Operating System', $data['server']['os_name'].' ('.$data['server']['os_version'].')'],
-            ['Architecture', $data['server']['arch']],
+            ['IP', $data['server']['ip'] ?: 'n/a'],
+            ['Hostname', $data['server']['hostname'] ?: 'n/a'],
+            ['Operating System', $data['server']['os_name'].$osVersion],
+            ['Architecture', $data['server']['arch'].' bits'],
         ];
 
         if (!empty($data['provider'])) {
