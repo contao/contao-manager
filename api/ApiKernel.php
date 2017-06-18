@@ -148,8 +148,8 @@ class ApiKernel extends Kernel
      */
     public function getServerInfo()
     {
-        $ip = file_get_contents('https://api.ipify.org');
-        $hostname = gethostbyaddr($ip);
+        $ip = @file_get_contents('https://api.ipify.org');
+        $hostname = @gethostbyaddr($ip);
         $provider = [];
         $version = $this->getVersion();
 
