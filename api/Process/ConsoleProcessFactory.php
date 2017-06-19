@@ -14,7 +14,7 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
-use Terminal42\BackgroundProcess\Forker\DebugForker;
+use Terminal42\BackgroundProcess\Forker\InlineForker;
 use Terminal42\BackgroundProcess\Forker\DisownForker;
 use Terminal42\BackgroundProcess\Forker\NohupForker;
 use Terminal42\BackgroundProcess\ProcessController;
@@ -154,12 +154,13 @@ class ConsoleProcessFactory
             ]
         );
 
-        if ($this->kernel->isDebug() && $this->config->get('fork_debug')) {
-            $process->addForker((new DebugForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
-        }
 
-        $process->addForker((new DisownForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
-        $process->addForker((new NohupForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
+            if ($this->kernel->isDebug() && $this->config->get('fork_debug')) {
+                $process->addForker((new InlineForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
+            }
+
+            $process->addForker((new DisownForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
+            $process->addForker((new NohupForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
 
         return $process;
     }
