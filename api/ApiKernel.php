@@ -154,7 +154,7 @@ class ApiKernel extends Kernel
         $hostname = $managerConfig->get('server_hostname');
 
         if (empty($ip)) {
-            $ip = @file_get_contents('https://api.ipify.org');
+            $ip = @file_get_contents('https://api.ipify.org') ?: @file_get_contents('http://api.ipify.org');
             $managerConfig->set('server_ip', $ip);
         }
 
