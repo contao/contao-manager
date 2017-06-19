@@ -105,6 +105,7 @@
         <exec executable="box" checkreturn="true" passthru="true">
             <arg value="build" />
         </exec>
+        <move file="contao-manager.phar" tofile="contao-manager.phar.php" overwrite="true"/>
     </target>
 
     <target name="finish">
