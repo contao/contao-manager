@@ -42,7 +42,6 @@ export default {
 
         return Vue.http.get(`assets/i18n/${locale}.json`).then(
             response => response.json().then((json) => {
-                console.log(json);
                 Vue.i18n.add(locale, json);
                 Vue.i18n.set(locale);
             }),
