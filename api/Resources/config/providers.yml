@@ -6,6 +6,14 @@ cyon.ch:
     php:
         /opt/alt/php{major}{minor}/usr/bin/php: []
 
+goserver.host:
+    name: webgo GmbH
+    website: www.webgo.de
+    last_update: 2017-06-19
+    issues: []
+    php:
+        /usr/bin/php{major}{minor}: []
+
 inetrobots.com:
     name: Hostingwerk (Feyer Media GmbH & Co. KG)
     website: www.hostingwerk.de
