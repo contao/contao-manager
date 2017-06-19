@@ -193,7 +193,7 @@ class ConsoleProcessFactory
     {
         if (null !== ($phpCli = $this->config->getPhpExecutable())) {
             $cmd = $phpCli;
-            $arguments = array_merge($arguments, $this->serverInfo->getPhpArguments($phpCli), [$console]);
+            $arguments = array_merge($this->serverInfo->getPhpArguments($phpCli), [$console], $arguments);
         } else {
             $cmd = $console;
         }
