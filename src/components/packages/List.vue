@@ -4,7 +4,7 @@
             <p>{{ 'ui.packagelist.loading' | translate }}</p>
         </loader>
 
-        <package v-for="(item, name) in packages" :name="name" :package="item" :key="name" :original="originals.get(name)" :changed="changes.get(name)" @change="changePackage"></package>
+        <package v-for="(item, name) in packages" :name="name" :package="item" :key="name" :original="originals.get(name)" :changed="changes.get(name)" :disableUpdate="hasRemoves" :disableRemove="hasUpdates" @change="changePackage"></package>
     </div>
 </template>
 
@@ -23,6 +23,34 @@
             originals: null,
             changes: null,
         }),
+
+        computed: {
+            hasUpdates() {
+                let result = false;
+
+                this.changes.forEach((data, name) => {
+                    if (data.get('constraint') !== null
+                        && data.get('constraint') !== this.originals.get(name).get('constraint')
+                    ) {
+                        result = true;
+                    }
+                });
+
+                return result;
+            },
+
+            hasRemoves() {
+                let result = false;
+
+                this.changes.forEach((data) => {
+                    if (data.get('constraint') === null) {
+                        result = true;
+                    }
+                });
+
+                return result;
+            },
+        },
 
         methods: {
             listPackages() {
@@ -60,11 +88,6 @@
                         updated.push(`${name} ${data.get('constraint')}`);
                     }
                 });
-
-                if (removed.length && updated.length) {
-                    alert('Cannot remove and change constraint');
-                    return;
-                }
 
                 let task;
 

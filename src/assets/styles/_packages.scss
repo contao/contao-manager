@@ -304,6 +304,15 @@ section.package-actions {
             animation: input-error .15s linear 3;
         }
 
+        &.disabled input[type=text] {
+            background: $border-color;
+            border-color: $border-color;
+
+            &::placeholder {
+                text-decoration: line-through;
+            }
+        }
+
         .version {
             display: none;
 

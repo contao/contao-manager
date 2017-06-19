@@ -23,10 +23,10 @@
                 </p>
             </div>
 
-            <div v-if="changed.get('constraint') !== undefined && changed.get('constraint') !== null" :class="{release: true, validating: this.constraintValidating, error: this.constraintError}">
+            <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: this.disableUpdate}">
                 <fieldset>
                     <input ref="constraint" type="text" :placeholder="!original.get('constraint') ? $t('ui.package.latestConstraint') : ''" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button @click="editConstraint">{{ 'ui.package.editConstraint' | translate }}</button>
+                    <button @click="editConstraint" :disabled="disableUpdate">{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
                 <div class="version" v-if="package.version">
                     <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -54,10 +54,10 @@
                 </p>
             </div>
 
-            <div v-if="changed.get('constraint') !== undefined && changed.get('constraint') !== null" :class="{release: true, validating: this.constraintValidating, error: this.constraintError}">
+            <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: this.disableUpdate}">
                 <fieldset>
-                    <input ref="constraint" type="text" :placeholder="!original.get('constraint') ? $t('ui.package.latestConstraint') : ''" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button @click="editConstraint">{{ 'ui.package.editConstraint' | translate }}</button>
+                    <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!this.constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
+                    <button @click="editConstraint" :disabled="disableUpdate">{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
                 <div class="version" v-if="package.version">
                     <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -69,7 +69,7 @@
                 <!--<button key="enable" class="enable" v-if="changed.get('enabled') === false">Enable</button>-->
                 <!--<button key="disable" class="disable" v-if="changed.get('enabled') === true">Disable</button>-->
 
-                <button key="remove" class="uninstall" v-if="original.get('constraint')" @click="uninstall" :disabled="changed.get('constraint') === null">{{ 'ui.package.removeButton' | translate }}</button>
+                <button key="remove" class="uninstall" v-if="original.get('constraint')" @click="uninstall" :disabled="disableRemove || changed.get('constraint') === null">{{ 'ui.package.removeButton' | translate }}</button>
                 <button key="install" class="install" v-else @click="install" :disabled="changed.get('constraint')">{{ 'ui.package.installButton' | translate }}</button>
             </fieldset>
 
@@ -81,7 +81,7 @@
     import api from '../../api';
 
     export default {
-        props: ['name', 'package', 'original', 'changed'],
+        props: ['name', 'package', 'original', 'changed', 'disableUpdate', 'disableRemove'],
 
         data: () => ({
             constraint: '',
@@ -161,18 +161,33 @@
             isContao() {
                 return this.name === 'contao/manager-bundle';
             },
+
+            constraintPlaceholder() {
+                if (!this.original.get('constraint')) {
+                    return this.$t('ui.package.latestConstraint');
+                }
+
+                if (this.disableUpdate) {
+                    return this.original.get('constraint');
+                }
+
+                return '';
+            },
         },
 
         methods: {
             reset() {
                 this.$emit('change', this.name, this.original);
             },
+
             install() {
                 this.$emit('change', this.name, this.original.set('constraint', ''));
             },
+
             uninstall() {
                 this.$emit('change', this.name, this.original.set('constraint', null));
             },
+
             editConstraint() {
                 if (this.constraintValidating) {
                     return;
@@ -184,6 +199,7 @@
                     this.$refs.constraint.focus();
                 });
             },
+
             saveConstraint() {
                 if (!this.constraintEditable) {
                     return;
@@ -213,6 +229,7 @@
                     },
                 );
             },
+
             resetConstraint() {
                 if (!this.constraintEditable) {
                     return;
