@@ -4,7 +4,7 @@ cyon.ch:
     last_update: 2017-05-31
     issues: []
     php:
-        - /opt/alt/php{major}{minor}/usr/bin/php
+        /opt/alt/php{major}{minor}/usr/bin/php: []
 
 inetrobots.com:
     name: Hostingwerk (Feyer Media GmbH & Co. KG)
@@ -12,7 +12,7 @@ inetrobots.com:
     last_update: 2017-06-13
     issues: []
     php:
-        - /usr/bin/php-{major}.{minor}
+        /usr/bin/php-{major}.{minor}: []
 
 ispgateway.de:
     name: domainfactory GmbH
@@ -20,7 +20,7 @@ ispgateway.de:
     last_update: 2017-06-19
     issues: []
     php:
-        - /usr/local/bin/php{major}-{major}{minor}LATEST-CLI
+        /usr/local/bin/php{major}-{major}{minor}LATEST-CLI: []
 
 kasserver.com:
     name: ALL-INKL.COM - Neue Medien Münnich
@@ -28,13 +28,15 @@ kasserver.com:
     last_update: 2017-06-17
     issues: []
     php:
-        - /usr/bin/php{major}{minor}
-        - /usr/bin/php
+        /usr/bin/php{major}{minor}: []
+        /usr/bin/php: []
 rzone.de:
     name: Strato AG
     website: www.strato.de
     last_update: 2017-05-31
     issues: [memory]
+    php:
+        /usr/bin/php{major}.{minor}: ["-q"]
 
 serverdomain.org:
     name: WebhostOne GmbH
@@ -42,8 +44,8 @@ serverdomain.org:
     last_update: 2017-06-18
     issues: []
     php:
-        - /usr/bin/php{major}{minor}
-        - /usr/bin/php
+        /usr/bin/php{major}{minor}: []
+        /usr/bin/php: []
 
 sui-inter.net:
     name: Metanet AG
@@ -51,8 +53,8 @@ sui-inter.net:
     last_update: 2017-05-31
     issues: []
     php:
-        - /opt/php{major}{minor}/bin/php
-        - /usr/bin/php
+        /opt/php{major}{minor}/bin/php: []
+        /usr/bin/php: []
 
 tophost.ch:
     name: Novatrend Services GmbH
@@ -60,7 +62,7 @@ tophost.ch:
     last_update: 2017-05-31
     issues: [cputime]
     php:
-        - /usr/local/bin/php
+        /usr/local/bin/php: []
 
 uberspace.de:
     name: Uberspace
@@ -74,4 +76,4 @@ vhost.io:
     last_update: 2017-06-13
     issues: []
     php:
-        - /usr/bin/php-{major}.{minor}
+        /usr/bin/php-{major}.{minor}: []

@@ -14,6 +14,7 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
+use Terminal42\BackgroundProcess\Forker\ForkerInterface;
 use Terminal42\BackgroundProcess\Forker\InlineForker;
 use Terminal42\BackgroundProcess\Forker\DisownForker;
 use Terminal42\BackgroundProcess\Forker\NohupForker;
@@ -35,6 +36,11 @@ class ConsoleProcessFactory
     private $config;
 
     /**
+     * @var ServerInfo
+     */
+    private $serverInfo;
+
+    /**
      * @var null|LoggerInterface
      */
     private $logger;
@@ -44,12 +50,14 @@ class ConsoleProcessFactory
      *
      * @param ApiKernel            $kernel
      * @param ManagerConfig        $config
+     * @param ServerInfo           $serverInfo
      * @param LoggerInterface|null $logger
      */
-    public function __construct(ApiKernel $kernel, ManagerConfig $config, LoggerInterface $logger = null)
+    public function __construct(ApiKernel $kernel, ManagerConfig $config, ServerInfo $serverInfo, LoggerInterface $logger = null)
     {
         $this->kernel = $kernel;
         $this->config = $config;
+        $this->serverInfo = $serverInfo;
         $this->logger = $logger;
     }
 
@@ -177,7 +185,7 @@ class ConsoleProcessFactory
     {
         if (null !== ($phpCli = $this->config->getPhpExecutable())) {
             $cmd = $phpCli;
-            array_unshift($arguments, '-q', $console);
+            $arguments = array_merge($arguments, $this->serverInfo->getPhpArguments($phpCli), [$console]);
         } else {
             $cmd = $console;
         }

@@ -21,6 +21,7 @@ services:
         class: Contao\ManagerApi\Config\ManagerConfig
         arguments:
             - "@kernel"
+            - "@contao_manager.process.server_info"
             - "@filesystem"
 
     contao_manager.config.user:
@@ -40,12 +41,20 @@ services:
         arguments:
             - "@kernel"
             - "@contao_manager.config.manager"
+            - "@contao_manager.process.server_info"
             - "@logger"
 
     contao_manager.process.contao_api:
         class: Contao\ManagerApi\Process\ContaoApi
         arguments:
             - "@contao_manager.process.console_factory"
+
+    contao_manager.process.server_info:
+        class: Contao\ManagerApi\Process\ServerInfo
+        arguments:
+            - "@kernel"
+            - "@contao_manager.config.manager"
+            - "%kernel.root_dir%/Resources/config/providers.yml"
 
     contao_manager.security.jwt_manager:
         class: Contao\ManagerApi\Security\JwtManager

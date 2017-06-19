@@ -10,7 +10,6 @@
 
 namespace Contao\ManagerApi\Command;
 
-use Contao\ManagerApi\ApiKernel;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,9 +36,7 @@ class AboutCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ApiKernel $kernel */
-        $kernel = $this->getContainer()->get('kernel');
-        $data = $kernel->getServerInfo();
+        $data = $this->getContainer()->get('contao_manager.process.server_info')->getData();
 
         if ($input->getOption('json')) {
             $output->writeln(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));

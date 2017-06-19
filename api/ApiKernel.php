@@ -18,9 +18,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\RouteCollectionBuilder;
-use Symfony\Component\Yaml\Yaml;
 use Tenside\CoreBundle\TensideCoreBundle;
 
 /**
@@ -139,82 +137,6 @@ class ApiKernel extends Kernel
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Collects information about the current server.
-     *
-     * @return array
-     */
-    public function getServerInfo()
-    {
-        $managerConfig = $this->getContainer()->get('contao_manager.config.manager');
-
-        $ip = $managerConfig->get('server_ip');
-        $hostname = $managerConfig->get('server_hostname');
-
-        if (empty($ip)) {
-            $ip = @file_get_contents('https://api.ipify.org') ?: @file_get_contents('http://api.ipify.org');
-            $managerConfig->set('server_ip', $ip);
-        }
-
-        if (empty($hostname)) {
-            $hostname = @gethostbyaddr($ip);
-            $managerConfig->set('server_hostname', $hostname);
-        }
-
-        $provider = [];
-        $version = $this->getVersion();
-
-        if ($version === ('@'.'package_version'.'@')) {
-            $git = new Process('git describe --always');
-            $git->run();
-            $version = trim($git->getOutput());
-        }
-
-        $offset = 0;
-        $providers = Yaml::parse(file_get_contents(__DIR__.'/Resources/config/providers.yml'));
-
-        while ($dot = strpos($hostname, '.', $offset)) {
-            if (isset($providers[substr($hostname, $offset)])) {
-                $provider = $providers[substr($hostname, $offset)];
-                break;
-            }
-            $offset = $dot + 1;
-        }
-
-        $data = [
-            'app' => [
-                'version' => $version,
-                'env' => $this->getEnvironment(),
-                'debug' => $this->isDebug(),
-                'cache_dir' => $this->getCacheDir(),
-                'log_dir' => $this->getLogDir(),
-                'contao_dir' => $this->getContaoDir(),
-                'manager_dir' => $this->getManagerDir(),
-            ],
-            'php' => [
-                'version' => PHP_VERSION,
-                'version_id' => PHP_VERSION_ID,
-                'sapi' => PHP_SAPI,
-                'locale' => class_exists('Locale', false) && \Locale::getDefault() ? \Locale::getDefault() : '',
-                'timezone' => date_default_timezone_get(),
-            ],
-            'server' => [
-                'ip' => $ip,
-                'hostname' => $hostname,
-                'os_name' => php_uname('s'),
-                'os_version' => php_uname('r'),
-                'arch' => PHP_INT_SIZE * 8,
-            ],
-            'provider' => $provider,
-        ];
-
-        if ($data['server']['os_name'] === $data['server']['os_version']) {
-            $data['server']['os_version'] = '';
-        }
-
-        return $data;
     }
 
     /**
