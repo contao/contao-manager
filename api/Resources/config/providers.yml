@@ -36,6 +36,15 @@ rzone.de:
     last_update: 2017-05-31
     issues: [memory]
 
+serverdomain.org:
+    name: WebhostOne GmbH
+    website: www.webhostone.de
+    last_update: 2017-06-18
+    issues: []
+    php:
+        - /usr/bin/php{major}{minor}
+        - /usr/bin/php
+
 sui-inter.net:
     name: Metanet AG
     website: www.metanet.ch
