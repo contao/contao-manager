@@ -5,6 +5,7 @@ cyon.ch:
     issues: []
     php:
         - /opt/alt/php{major}{minor}/usr/bin/php
+
 inetrobots.com:
     name: Hostingwerk (Feyer Media GmbH & Co. KG)
     website: www.hostingwerk.de
@@ -12,13 +13,15 @@ inetrobots.com:
     issues: []
     php:
         - /usr/bin/php-{major}.{minor}
+
 ispgateway.de:
-    name: Host Europe GmbH
-    website: www.hosteurope.de
-    last_update: 2017-05-31
+    name: domainfactory GmbH
+    website: www.df.eu
+    last_update: 2017-06-19
     issues: []
     php:
         - /usr/local/bin/php{major}-{major}{minor}LATEST-CLI
+
 kasserver.com:
     name: ALL-INKL.COM - Neue Medien Münnich
     website: www.all-inkl.com
@@ -32,6 +35,7 @@ rzone.de:
     website: www.strato.de
     last_update: 2017-05-31
     issues: [memory]
+
 sui-inter.net:
     name: Metanet AG
     website: www.metanet.ch
@@ -40,6 +44,7 @@ sui-inter.net:
     php:
         - /opt/php{major}{minor}/bin/php
         - /usr/bin/php
+
 tophost.ch:
     name: Novatrend Services GmbH
     website: www.novatrend.ch
@@ -47,11 +52,13 @@ tophost.ch:
     issues: [cputime]
     php:
         - /usr/local/bin/php
+
 uberspace.de:
     name: Uberspace
     website: www.uberspace.de
     last_update: 2017-07-12
     issues: []
+
 vhost.io:
     name: Hostingwerk (Feyer Media GmbH & Co. KG)
     website: www.hostingwerk.de
