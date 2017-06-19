@@ -148,8 +148,21 @@ class ApiKernel extends Kernel
      */
     public function getServerInfo()
     {
-        $ip = @file_get_contents('https://api.ipify.org');
-        $hostname = @gethostbyaddr($ip);
+        $managerConfig = $this->getContainer()->get('contao_manager.config.manager');
+
+        $ip = $managerConfig->get('server_ip');
+        $hostname = $managerConfig->get('server_hostname');
+
+        if (empty($ip)) {
+            $ip = @file_get_contents('https://api.ipify.org');
+            $managerConfig->set('server_ip', $ip);
+        }
+
+        if (empty($hostname)) {
+            $hostname = @gethostbyaddr($ip);
+            $managerConfig->set('server_hostname', $hostname);
+        }
+
         $provider = [];
         $version = $this->getVersion();
 
