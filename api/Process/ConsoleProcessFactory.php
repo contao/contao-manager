@@ -162,13 +162,21 @@ class ConsoleProcessFactory
             ]
         );
 
+        $serverInfo = $this->serverInfo->getData();
 
+        if (isset($serverInfo['provider']['process_forker'])) {
+            /** @var ForkerInterface $forker */
+            $forker = (new $serverInfo['provider']['process_forker']($backgroundCommand, [], $this->logger));
+            $forker->setTimeout(5000);
+            $process->addForker($forker);
+        } else {
             if ($this->kernel->isDebug() && $this->config->get('fork_debug')) {
                 $process->addForker((new InlineForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
             }
 
             $process->addForker((new DisownForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
             $process->addForker((new NohupForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
+        }
 
         return $process;
     }
