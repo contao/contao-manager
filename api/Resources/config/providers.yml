@@ -30,6 +30,17 @@ kasserver.com:
     php:
         /usr/bin/php{major}{minor}: []
         /usr/bin/php: []
+
+kundenserver.de:
+    name: 1&1 Internet SE
+    website: www.1und1.de
+    last_update: 2017-06-18
+    issues: []
+    process_forker: Terminal42\BackgroundProcess\Forker\InlineForker
+    php:
+        /usr/bin/php{major}.{minor}: []
+        /usr/lib/cgi-bin/php{major}.{minor}: ["-q"]
+
 rzone.de:
     name: Strato AG
     website: www.strato.de
