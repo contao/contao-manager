@@ -43,9 +43,13 @@ class ApiKernel extends Kernel
      */
     public function __construct($environment)
     {
-        parent::__construct($environment, $environment === 'dev');
+        $debug = $environment === 'dev';
 
+        error_reporting($debug ? E_ALL : E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR);
+        ini_set('display_errors', $debug);
         ini_set('error_log', $this->getLogDir().DIRECTORY_SEPARATOR.'api-'.date('Y-m-d').'.log');
+
+        parent::__construct($environment, $debug);
 
         $this->configureComposerEnvironment();
     }
