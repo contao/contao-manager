@@ -25,8 +25,8 @@ inetrobots.com:
 ispgateway.de:
     name: domainfactory GmbH
     website: www.df.eu
-    last_update: 2017-06-19
-    issues: []
+    last_update: 2017-06-20
+    issues: [memory]
     php:
         /usr/local/bin/php{major}-{major}{minor}LATEST-CLI: []
 
@@ -42,12 +42,12 @@ kasserver.com:
 kundenserver.de:
     name: 1&1 Internet SE
     website: www.1und1.de
-    last_update: 2017-06-18
-    issues: [memory]
-    process_forker: Terminal42\BackgroundProcess\Forker\InlineForker
+    last_update: 2017-06-20
+    issues: [cputime, memory]
     php:
-        /usr/bin/php{major}.{minor}: ['-d', 'memory_limit=1536M']
-        /usr/lib/cgi-bin/php{major}.{minor}: ['-d', 'memory_limit=1536M']
+        /usr/bin/php{major}.{minor}-cli: ['-d', 'memory_limit=-1']
+        /usr/bin/php{major}.{minor}: []
+        /usr/lib/cgi-bin/php{major}.{minor}: []
 
 rzone.de:
     name: Strato AG
