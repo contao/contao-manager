@@ -103,9 +103,8 @@ class ServerInfo
             return;
         }
 
-        $ip = $this->getServerIp();
-        $hostname = $this->getServerHostname($ip);
-        $provider = $this->getProviderConfig($hostname);
+        $ipInfo = $this->getIpInfo();
+        $provider = $this->getProviderConfig($ipInfo['hostname']);
         $version = $this->getManagerVersion();
 
         $this->data = [
@@ -125,13 +124,11 @@ class ServerInfo
                 'locale' => class_exists('Locale', false) && \Locale::getDefault() ? \Locale::getDefault() : '',
                 'timezone' => date_default_timezone_get(),
             ],
-            'server' => [
-                'ip' => $ip,
-                'hostname' => $hostname,
+            'server' => array_merge($ipInfo, [
                 'os_name' => php_uname('s'),
                 'os_version' => php_uname('r'),
                 'arch' => PHP_INT_SIZE * 8,
-            ],
+            ]),
             'provider' => $provider,
         ];
 
@@ -159,27 +156,16 @@ class ServerInfo
     }
 
     /**
-     * Resolves IP of the current server.
+     * Resolves IP information of the current server.
      *
-     * @return string
+     * @return array
      */
-    private function getServerIp()
+    private function getIpInfo()
     {
         /** @noinspection UsageOfSilenceOperatorInspection */
-        return (string) @file_get_contents('https://api.ipify.org') ?: @file_get_contents('http://api.ipify.org');
-    }
+        $data = @file_get_contents('https://ipinfo.io/json') ?: @file_get_contents('http://ipinfo.io/json');
 
-    /**
-     * Resolves hostname for given IP.
-     *
-     * @param string $ip
-     *
-     * @return string
-     */
-    private function getServerHostname($ip)
-    {
-        /** @noinspection UsageOfSilenceOperatorInspection */
-        return (string) @gethostbyaddr($ip);
+        return json_decode($data, true);
     }
 
     /**

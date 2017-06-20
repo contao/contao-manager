@@ -57,6 +57,11 @@ class AboutCommand extends ContainerAwareCommand
         $io = new SymfonyStyle($input, $output);
 
         $osVersion = $data['server']['os_version'] ? ' ('.$data['server']['os_version'].')' : '';
+        $country = $data['server']['country'];
+
+        if (class_exists('Locale')) {
+            $country = \Locale::getDisplayRegion('-'.$country, 'en');
+        }
 
         $rows = [
             ['<info>Contao Manager</info>'],
@@ -76,8 +81,10 @@ class AboutCommand extends ContainerAwareCommand
             new TableSeparator(),
             ['<info>Server</info>'],
             new TableSeparator(),
-            ['IP', $data['server']['ip'] ?: 'n/a'],
-            ['Hostname', $data['server']['hostname'] ?: 'n/a'],
+            ['IP', $data['server']['ip']],
+            ['Hostname', $data['server']['hostname']],
+            ['Network Owner', $data['server']['org']],
+            ['Country', $country],
             ['Operating System', $data['server']['os_name'].$osVersion],
             ['Architecture', $data['server']['arch'].' bits'],
         ];
