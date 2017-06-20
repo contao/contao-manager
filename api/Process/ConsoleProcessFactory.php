@@ -15,7 +15,6 @@ use Contao\ManagerApi\Config\ManagerConfig;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 use Terminal42\BackgroundProcess\Forker\ForkerInterface;
-use Terminal42\BackgroundProcess\Forker\InlineForker;
 use Terminal42\BackgroundProcess\Forker\DisownForker;
 use Terminal42\BackgroundProcess\Forker\NohupForker;
 use Terminal42\BackgroundProcess\ProcessController;
@@ -99,7 +98,7 @@ class ConsoleProcessFactory
     }
 
     /**
-     * Creates a foreground process for the Contao console.
+     * Creates a background process for the Contao console.
      *
      * @param array       $arguments
      * @param string|null $id
@@ -128,6 +127,8 @@ class ConsoleProcessFactory
     }
 
     /**
+     * Creates a foreground process.
+     *
      * @param string $console
      * @param array  $arguments
      *
@@ -135,14 +136,16 @@ class ConsoleProcessFactory
      */
     private function createForegroundProcess($console, array $arguments)
     {
-        return new Process(
+        return (new Process(
             $this->buildCommandLine($console, $arguments),
             $this->kernel->getContaoDir(),
-            []
-        );
+            array_map(function () { return false; }, $_ENV)
+        ))->inheritEnvironmentVariables();
     }
 
     /**
+     * Creates a background process controller.
+     *
      * @param string      $console
      * @param array       $arguments
      * @param string|null $id
@@ -163,6 +166,11 @@ class ConsoleProcessFactory
         return $process;
     }
 
+    /**
+     * Adds forker instances to the process controller.
+     *
+     * @param ProcessController $process
+     */
     private function addForkers(ProcessController $process)
     {
         $backgroundCommand = $this->buildCommandLine(
@@ -174,19 +182,17 @@ class ConsoleProcessFactory
         );
 
         $serverInfo = $this->serverInfo->getData();
+        $forkers = [DisownForker::class, NohupForker::class];
+        $env = array_map(function () { return false; }, $_ENV);
 
         if (isset($serverInfo['provider']['process_forker'])) {
-            /** @var ForkerInterface $forker */
-            $forker = new $serverInfo['provider']['process_forker']($backgroundCommand, [], $this->logger);
-            $forker->setTimeout(5000);
-            $process->addForker($forker);
-        } else {
-            if ($this->kernel->isDebug() && $this->config->get('fork_debug')) {
-                $process->addForker((new InlineForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
-            }
+            $forkers = (array) $serverInfo['provider']['process_forker'];
+        }
 
-            $process->addForker((new DisownForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
-            $process->addForker((new NohupForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
+        foreach ($forkers as $class) {
+            /** @var ForkerInterface $forker */
+            $forker = new $class($backgroundCommand, $env, $this->logger);
+            $process->addForker($forker->setTimeout(5000));
         }
     }
 

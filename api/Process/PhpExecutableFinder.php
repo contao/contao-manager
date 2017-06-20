@@ -79,7 +79,7 @@ class PhpExecutableFinder
         $commandline = escapeshellcmd($cli).' '.implode(' ', array_map('escapeshellarg', $arguments));
 
         try {
-            $process = (new Process($commandline, null, []))->mustRun();
+            $process = (new Process($commandline))->mustRun(null, array_map(function () { return false; }, $_ENV));
 
             return json_decode(trim($process->getOutput()), true);
         } catch (RuntimeException $e) {

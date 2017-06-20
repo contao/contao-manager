@@ -3,7 +3,9 @@
 error_reporting(-1);
 
 if (function_exists('ini_set')) {
+    /** @noinspection UsageOfSilenceOperatorInspection */
     @ini_set('display_errors', 1);
+    /** @noinspection UsageOfSilenceOperatorInspection */
     @ini_set('display_startup_errors', 1);
 }
 
@@ -42,6 +44,7 @@ if ('cgi-fcgi' === php_sapi_name() && extension_loaded('eaccelerator') && ini_ge
 }
 
 if (function_exists('date_default_timezone_set') && function_exists('date_default_timezone_get')) {
+    /** @noinspection UsageOfSilenceOperatorInspection */
     date_default_timezone_set(@date_default_timezone_get());
 }
 

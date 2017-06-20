@@ -2919,21 +2919,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/terminal42/background-process.git",
-                "reference": "5966c543bd45cbf21efcf2b1ac7da496e0d2b136"
+                "reference": "c613b1612b363c496b1188be6f4d33579626954d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/terminal42/background-process/zipball/5966c543bd45cbf21efcf2b1ac7da496e0d2b136",
-                "reference": "5966c543bd45cbf21efcf2b1ac7da496e0d2b136",
+                "url": "https://api.github.com/repos/terminal42/background-process/zipball/c613b1612b363c496b1188be6f4d33579626954d",
+                "reference": "c613b1612b363c496b1188be6f4d33579626954d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9",
-                "symfony/process": "^3.2"
+                "symfony/process": "^3.3"
             },
             "require-dev": {
                 "psr/log": "^1.0",
-                "symfony/console": "^3.2"
+                "symfony/console": "^3.3"
             },
             "suggest": {
                 "psr/log": "A PSR logger to log process status information."
@@ -2948,7 +2948,7 @@
                 "source": "https://github.com/terminal42/background-process/tree/master",
                 "issues": "https://github.com/terminal42/background-process/issues"
             },
-            "time": "2017-06-19 10:58:46"
+            "time": "2017-06-20 10:07:54"
         }
     ],
     "packages-dev": [
