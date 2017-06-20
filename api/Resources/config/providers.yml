@@ -43,19 +43,19 @@ kundenserver.de:
     name: 1&1 Internet SE
     website: www.1und1.de
     last_update: 2017-06-18
-    issues: []
+    issues: [memory]
     process_forker: Terminal42\BackgroundProcess\Forker\InlineForker
     php:
-        /usr/bin/php{major}.{minor}: []
-        /usr/lib/cgi-bin/php{major}.{minor}: ["-q"]
+        /usr/bin/php{major}.{minor}: ['-d', 'memory_limit=1536M']
+        /usr/lib/cgi-bin/php{major}.{minor}: ['-d', 'memory_limit=1536M']
 
 rzone.de:
     name: Strato AG
     website: www.strato.de
     last_update: 2017-05-31
-    issues: [memory]
+    issues: [intl, memory]
     php:
-        /usr/bin/php{major}.{minor}: ["-q"]
+        /usr/bin/php{major}.{minor}: []
 
 serverdomain.org:
     name: WebhostOne GmbH

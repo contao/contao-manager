@@ -120,7 +120,11 @@ class ConsoleProcessFactory
      */
     public function restoreBackgroundProcess($id)
     {
-        return ProcessController::restore($this->kernel->getManagerDir(), $id);
+        $process = ProcessController::restore($this->kernel->getManagerDir(), $id);
+
+        $this->addForkers($process);
+
+        return $process;
     }
 
     /**
@@ -154,6 +158,13 @@ class ConsoleProcessFactory
             $id
         );
 
+        $this->addForkers($process);
+
+        return $process;
+    }
+
+    private function addForkers(ProcessController $process)
+    {
         $backgroundCommand = $this->buildCommandLine(
             $this->getManagerConsolePath(),
             [
@@ -166,7 +177,7 @@ class ConsoleProcessFactory
 
         if (isset($serverInfo['provider']['process_forker'])) {
             /** @var ForkerInterface $forker */
-            $forker = (new $serverInfo['provider']['process_forker']($backgroundCommand, [], $this->logger));
+            $forker = new $serverInfo['provider']['process_forker']($backgroundCommand, [], $this->logger);
             $forker->setTimeout(5000);
             $process->addForker($forker);
         } else {
@@ -177,8 +188,6 @@ class ConsoleProcessFactory
             $process->addForker((new DisownForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
             $process->addForker((new NohupForker($backgroundCommand, [], $this->logger))->setTimeout(5000));
         }
-
-        return $process;
     }
 
     /**
@@ -193,14 +202,12 @@ class ConsoleProcessFactory
     {
         if (null !== ($phpCli = $this->config->getPhpExecutable())) {
             $cmd = $phpCli;
-            $arguments = array_merge($this->serverInfo->getPhpArguments($phpCli), [$console], $arguments);
+            $arguments = array_merge(['-q'], $this->serverInfo->getPhpArguments($phpCli), [$console], $arguments);
         } else {
             $cmd = $console;
         }
 
-        $args = implode(' ', array_map('escapeshellarg', $arguments));
-
-        return escapeshellcmd($cmd).' '.$args;
+        return escapeshellcmd($cmd).' '.implode(' ', array_map('escapeshellarg', $arguments));
     }
 
     /**

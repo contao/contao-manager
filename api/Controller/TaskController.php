@@ -87,7 +87,7 @@ class TaskController
         }
 
         $task = $this->taskList->getNext();
-        $process = $this->startTask($task);
+        $process = $this->startTask($task->getId(), $task instanceof SelfUpdateTask, $request->request->all());
 
         return new JsonResponse(
             $this->describeTask($task, $process),
@@ -126,9 +126,14 @@ class TaskController
         $status = $request->request->get('status');
 
         switch ($status) {
-            case Task::STATE_RUNNING:
+            case 'RUNNING':
                 if (Task::STATE_RUNNING !== $this->getTaskStatus($task)) {
-                    $this->startTask($task);
+                    try {
+                        $process = $this->processFactory->restoreBackgroundProcess($task->getId());
+                        $process->start();
+                    } catch (\InvalidArgumentException $e) {
+                        $this->startTask($task->getId(), $task instanceof SelfUpdateTask, ['type' => $task->getType()]);
+                    }
                 }
                 break;
 
@@ -223,24 +228,25 @@ class TaskController
         return $status;
     }
 
-    private function startTask(Task $task)
+    private function startTask($taskId, $disableEvents, array $meta)
     {
         $arguments = [
             'tenside:runtask',
-            $task->getId(),
+            $taskId,
             '-v',
             '--no-interaction',
         ];
 
-        if ($task instanceof SelfUpdateTask) {
+        if ($disableEvents) {
             $arguments[] = '--disable-events';
         }
 
         $process = $this->processFactory->createManagerConsoleBackgroundProcess(
             $arguments,
-            $task->getId()
+            $taskId
         );
 
+        $process->setMeta($meta);
         $process->setTimeout(0);
         $process->start();
 

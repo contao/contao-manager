@@ -77,6 +77,8 @@ class ServerInfo
      */
     public function getPhpArguments($executable = null)
     {
+        $this->collect();
+
         if (null === $executable) {
             $executable = $this->getPhpExecutable();
         }
