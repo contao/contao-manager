@@ -14,8 +14,8 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
-use Terminal42\BackgroundProcess\Forker\ForkerInterface;
 use Terminal42\BackgroundProcess\Forker\DisownForker;
+use Terminal42\BackgroundProcess\Forker\ForkerInterface;
 use Terminal42\BackgroundProcess\Forker\NohupForker;
 use Terminal42\BackgroundProcess\ProcessController;
 
