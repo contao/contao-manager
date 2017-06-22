@@ -49,6 +49,7 @@ const store = new Vuex.Store({
                         commit('auth/setLogin', result.username);
                     } else {
                         commit('auth/setLogout');
+                        commit('tasks/setStatus', null);
                     }
 
                     if (result.status === apiStatus.OK && result.task) {
