@@ -173,7 +173,18 @@ class ServerInfo
         /** @noinspection UsageOfSilenceOperatorInspection */
         $data = @file_get_contents('https://ipinfo.io/json') ?: @file_get_contents('http://ipinfo.io/json');
 
-        return json_decode($data, true);
+        return array_merge(
+            [
+                'ip' => '',
+                'hostname' => '',
+                'city' => '',
+                'region' => '',
+                'country' => '',
+                'loc' => '',
+                'org' => '',
+            ],
+            json_decode($data, true)
+        );
     }
 
     /**
