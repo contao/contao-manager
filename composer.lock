@@ -2787,12 +2787,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "d5a386e1cabaf2ab1ef7b481a898240bca0f0f1d"
+                "reference": "4cb4b6cc9124156dec832e3c8a34158bd9992887"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/d5a386e1cabaf2ab1ef7b481a898240bca0f0f1d",
-                "reference": "d5a386e1cabaf2ab1ef7b481a898240bca0f0f1d",
+                "url": "https://api.github.com/repos/tenside/core/zipball/4cb4b6cc9124156dec832e3c8a34158bd9992887",
+                "reference": "4cb4b6cc9124156dec832e3c8a34158bd9992887",
                 "shasum": ""
             },
             "require": {
@@ -2838,7 +2838,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2017-05-24 16:19:31"
+            "time": "2017-06-22 07:54:44"
         },
         {
             "name": "tenside/core-bundle",
@@ -2919,12 +2919,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/terminal42/background-process.git",
-                "reference": "c613b1612b363c496b1188be6f4d33579626954d"
+                "reference": "92e715502eedabd6f2cd0957bf561c84d6d9504b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/terminal42/background-process/zipball/c613b1612b363c496b1188be6f4d33579626954d",
-                "reference": "c613b1612b363c496b1188be6f4d33579626954d",
+                "url": "https://api.github.com/repos/terminal42/background-process/zipball/92e715502eedabd6f2cd0957bf561c84d6d9504b",
+                "reference": "92e715502eedabd6f2cd0957bf561c84d6d9504b",
                 "shasum": ""
             },
             "require": {
@@ -2948,7 +2948,7 @@
                 "source": "https://github.com/terminal42/background-process/tree/master",
                 "issues": "https://github.com/terminal42/background-process/issues"
             },
-            "time": "2017-06-20 10:07:54"
+            "time": "2017-06-21 10:52:08"
         }
     ],
     "packages-dev": [
