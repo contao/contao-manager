@@ -2787,12 +2787,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "4cb4b6cc9124156dec832e3c8a34158bd9992887"
+                "reference": "b169e2ae268ab72aa4347655e2a667c7087180e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/4cb4b6cc9124156dec832e3c8a34158bd9992887",
-                "reference": "4cb4b6cc9124156dec832e3c8a34158bd9992887",
+                "url": "https://api.github.com/repos/tenside/core/zipball/b169e2ae268ab72aa4347655e2a667c7087180e4",
+                "reference": "b169e2ae268ab72aa4347655e2a667c7087180e4",
                 "shasum": ""
             },
             "require": {
@@ -2838,7 +2838,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2017-06-22 07:54:44"
+            "time": "2017-06-22 14:58:14"
         },
         {
             "name": "tenside/core-bundle",
