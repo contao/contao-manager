@@ -17,6 +17,7 @@ use Symfony\Component\Process\Process;
 use Terminal42\BackgroundProcess\Forker\DisownForker;
 use Terminal42\BackgroundProcess\Forker\ForkerInterface;
 use Terminal42\BackgroundProcess\Forker\NohupForker;
+use Terminal42\BackgroundProcess\Forker\WindowsStartForker;
 use Terminal42\BackgroundProcess\ProcessController;
 
 /**
@@ -182,7 +183,7 @@ class ConsoleProcessFactory
         );
 
         $serverInfo = $this->serverInfo->getData();
-        $forkers = [DisownForker::class, NohupForker::class];
+        $forkers = [DisownForker::class, NohupForker::class, WindowsStartForker::class];
         $env = array_map(function () { return false; }, $_ENV);
 
         if (isset($serverInfo['provider']['process_forker'])) {
