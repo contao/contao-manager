@@ -170,21 +170,29 @@ class ServerInfo
      */
     private function getIpInfo()
     {
+        $template = [
+            'ip' => '',
+            'hostname' => '',
+            'city' => '',
+            'region' => '',
+            'country' => '',
+            'loc' => '',
+            'org' => '',
+        ];
+
         /** @noinspection UsageOfSilenceOperatorInspection */
         $data = @file_get_contents('https://ipinfo.io/json') ?: @file_get_contents('http://ipinfo.io/json');
 
-        return array_merge(
-            [
-                'ip' => '',
-                'hostname' => '',
-                'city' => '',
-                'region' => '',
-                'country' => '',
-                'loc' => '',
-                'org' => '',
-            ],
-            json_decode($data, true)
-        );
+        if (!empty($data)) {
+            return array_merge($template, json_decode($data, true));
+        }
+
+        /** @noinspection UsageOfSilenceOperatorInspection */
+        $template['ip'] = (string) @file_get_contents('https://api.ipify.org') ?: @file_get_contents('http://api.ipify.org');
+        /** @noinspection UsageOfSilenceOperatorInspection */
+        $template['hostname'] = (string) @gethostbyaddr($template['ip']);
+
+        return $template;
     }
 
     /**
