@@ -184,13 +184,23 @@ class ServerInfo
         $data = @file_get_contents('https://ipinfo.io/json') ?: @file_get_contents('http://ipinfo.io/json');
 
         if (!empty($data)) {
-            return array_merge($template, json_decode($data, true));
+            $template = array_merge($template, json_decode($data, true));
         }
 
-        /** @noinspection UsageOfSilenceOperatorInspection */
-        $template['ip'] = (string) @file_get_contents('https://api.ipify.org') ?: @file_get_contents('http://api.ipify.org');
-        /** @noinspection UsageOfSilenceOperatorInspection */
-        $template['hostname'] = (string) @gethostbyaddr($template['ip']);
+        if (empty($template['ip'])) {
+            /** @noinspection UsageOfSilenceOperatorInspection */
+            $template['ip'] = (string) @file_get_contents('https://api.ipify.org');
+        }
+
+        if (empty($template['ip'])) {
+            /** @noinspection UsageOfSilenceOperatorInspection */
+            $template['ip'] = @file_get_contents('http://api.ipify.org');
+        }
+
+        if (empty($template['hostname'])) {
+            /** @noinspection UsageOfSilenceOperatorInspection */
+            $template['hostname'] = (string) @gethostbyaddr($template['ip']);
+        }
 
         return $template;
     }
