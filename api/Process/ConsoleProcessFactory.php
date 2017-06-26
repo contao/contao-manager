@@ -139,7 +139,7 @@ class ConsoleProcessFactory
         return (new Process(
             $this->buildCommandLine($console, $arguments),
             $this->kernel->getContaoDir(),
-            array_map(function () { return false; }, $_ENV)
+            $this->serverInfo->getPhpEnv($this->config->getPhpExecutable())
         ))->inheritEnvironmentVariables();
     }
 
@@ -183,7 +183,6 @@ class ConsoleProcessFactory
 
         $serverInfo = $this->serverInfo->getData();
         $forkers = [DisownForker::class, NohupForker::class];
-        $env = array_map(function () { return false; }, $_ENV);
 
         if (isset($serverInfo['provider']['process_forker'])) {
             $forkers = (array) $serverInfo['provider']['process_forker'];
@@ -191,7 +190,12 @@ class ConsoleProcessFactory
 
         foreach ($forkers as $class) {
             /** @var ForkerInterface $forker */
-            $forker = new $class($backgroundCommand, $env, $this->logger);
+            $forker = new $class(
+                $backgroundCommand,
+                $this->serverInfo->getPhpEnv($this->config->getPhpExecutable()),
+                $this->logger
+            );
+
             $process->addForker($forker->setTimeout(5000));
         }
     }

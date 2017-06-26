@@ -103,6 +103,26 @@ class ServerInfo
     }
 
     /**
+     * Gets environment variables for the PHP command line process.
+     *
+     * @param string|null $executable
+     *
+     * @return array
+     */
+    public function getPhpEnv($executable = null)
+    {
+        if (null === $executable) {
+            $executable = $this->getPhpExecutable();
+        }
+
+        $env = array_map(function () { return false; }, $_ENV);
+        $env['PATH'] = $_ENV['PATH'];
+        $env['PHP_PATH'] = $executable;
+
+        return $env;
+    }
+
+    /**
      * Collects information about current server.
      */
     private function collect()

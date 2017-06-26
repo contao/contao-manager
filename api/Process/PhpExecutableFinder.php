@@ -54,8 +54,11 @@ class PhpExecutableFinder
         }
 
         $paths = array_merge($paths, $this->findExecutables());
+        $paths = array_unique($paths);
 
-        return $this->findBestBinary(array_unique($paths));
+        ksort($paths);
+
+        return $this->findBestBinary($paths);
     }
 
     /**
