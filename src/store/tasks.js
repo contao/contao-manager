@@ -2,6 +2,12 @@
 
 import api from '../api';
 
+const statusMap = {
+    started: 'running',
+    terminated: 'success',
+    error: 'error',
+};
+
 const pollTask = ({ commit }, resolve, reject) => {
     let pending = 0;
 
@@ -11,7 +17,8 @@ const pollTask = ({ commit }, resolve, reject) => {
                 commit('setProgress', task);
 
                 switch (task.status) {
-                    case 'PENDING':
+                    case 'ready':
+                    default:
                         pending += 1;
 
                         if (pending > 5) {
@@ -25,24 +32,20 @@ const pollTask = ({ commit }, resolve, reject) => {
                         });
                         break;
 
-                    case 'RUNNING':
+                    case 'started':
                         commit('setStatus', 'running');
                         setTimeout(fetch, 1000);
                         break;
 
-                    case 'FINISHED':
+                    case 'terminated':
                         commit('setStatus', 'success');
                         resolve(task);
                         break;
 
-                    case 'ERROR':
+                    case 'error':
                         commit('setStatus', 'error');
                         reject(task);
                         break;
-
-                    default:
-                        commit('setStatus', 'failed');
-                        reject(task);
                 }
             },
             () => {
@@ -52,7 +55,7 @@ const pollTask = ({ commit }, resolve, reject) => {
         );
     };
 
-    fetch();
+    setTimeout(fetch, 1000);
 };
 
 export default {
@@ -88,11 +91,14 @@ export default {
 
                 api.getTask().then(
                     (task) => {
-                        if (task.status === 'PENDING') {
+                        if (task.status === 'ready') {
                             api.deleteTask();
+                        } else if (statusMap[task.status] !== undefined) {
+                            store.commit('setStatus', statusMap[task.status]);
+                            store.commit('setProgress', task);
                         } else {
-                            store.commit('setStatus', 'running');
-                            store.commit('setProgress', null);
+                            store.commit('setStatus', 'ready');
+                            store.commit('setProgress', task);
 
                             pollTask(store, resolve, reject);
                             return;
@@ -110,7 +116,7 @@ export default {
                     reject();
                 }
 
-                store.commit('setStatus', 'running');
+                store.commit('setStatus', 'ready');
                 store.commit('setProgress', null);
 
                 pollTask(store, resolve, reject);
@@ -123,8 +129,8 @@ export default {
                     reject();
                 }
 
-                store.commit('setStatus', 'running');
-                store.commit('setProgress', null);
+                store.commit('setStatus', 'ready');
+                store.commit('setProgress', task);
 
                 api.addTask(task).then(() => {
                     pollTask(store, resolve, reject);

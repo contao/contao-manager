@@ -2787,12 +2787,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tenside/core.git",
-                "reference": "b169e2ae268ab72aa4347655e2a667c7087180e4"
+                "reference": "fd3321edcb28ad5c6e22589ba5277a4cf67b031a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tenside/core/zipball/b169e2ae268ab72aa4347655e2a667c7087180e4",
-                "reference": "b169e2ae268ab72aa4347655e2a667c7087180e4",
+                "url": "https://api.github.com/repos/tenside/core/zipball/fd3321edcb28ad5c6e22589ba5277a4cf67b031a",
+                "reference": "fd3321edcb28ad5c6e22589ba5277a4cf67b031a",
                 "shasum": ""
             },
             "require": {
@@ -2838,7 +2838,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2017-06-22 14:58:14"
+            "time": "2017-06-26 16:32:26"
         },
         {
             "name": "tenside/core-bundle",
@@ -2919,12 +2919,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/terminal42/background-process.git",
-                "reference": "92e715502eedabd6f2cd0957bf561c84d6d9504b"
+                "reference": "47635962a90ce8f3da24a7189d1c30504f3cd4a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/terminal42/background-process/zipball/92e715502eedabd6f2cd0957bf561c84d6d9504b",
-                "reference": "92e715502eedabd6f2cd0957bf561c84d6d9504b",
+                "url": "https://api.github.com/repos/terminal42/background-process/zipball/47635962a90ce8f3da24a7189d1c30504f3cd4a0",
+                "reference": "47635962a90ce8f3da24a7189d1c30504f3cd4a0",
                 "shasum": ""
             },
             "require": {
@@ -2948,7 +2948,7 @@
                 "source": "https://github.com/terminal42/background-process/tree/master",
                 "issues": "https://github.com/terminal42/background-process/issues"
             },
-            "time": "2017-06-21 10:52:08"
+            "time": "2017-06-26 20:03:28"
         }
     ],
     "packages-dev": [
@@ -3033,23 +3033,23 @@
         },
         {
             "name": "gecko-packages/gecko-php-unit",
-            "version": "v2.0",
+            "version": "v2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GeckoPackages/GeckoPHPUnit.git",
-                "reference": "40a697ec261f3526e8196363b481b24383740c13"
+                "reference": "5b9e9622c7efd3b22655270b80c03f9e52878a6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GeckoPackages/GeckoPHPUnit/zipball/40a697ec261f3526e8196363b481b24383740c13",
-                "reference": "40a697ec261f3526e8196363b481b24383740c13",
+                "url": "https://api.github.com/repos/GeckoPackages/GeckoPHPUnit/zipball/5b9e9622c7efd3b22655270b80c03f9e52878a6e",
+                "reference": "5b9e9622c7efd3b22655270b80c03f9e52878a6e",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.3.6 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.0"
+                "phpunit/phpunit": "^4.8.35 || ^5.4.3"
             },
             "type": "library",
             "autoload": {
@@ -3068,7 +3068,7 @@
                 "filesystem",
                 "phpunit"
             ],
-            "time": "2016-11-22T11:01:27+00:00"
+            "time": "2017-06-20T11:22:48+00:00"
         },
         {
             "name": "sebastian/diff",

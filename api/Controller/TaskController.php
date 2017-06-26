@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Process\Process;
 use Tenside\Core\Task\Task;
 use Tenside\Core\Task\TaskList;
 use Tenside\Core\Util\JsonArray;
@@ -23,6 +24,8 @@ use Terminal42\BackgroundProcess\ProcessController;
 
 class TaskController
 {
+    const TASK_ID = 'background-process';
+
     /**
      * @var ConsoleProcessFactory
      */
@@ -55,18 +58,18 @@ class TaskController
 
     public function getTask()
     {
-        $task = $this->taskList->getNext();
+        $process = $this->getActiveProcess();
 
-        if (!$task instanceof Task) {
+        if (null === $process) {
             return new JsonResponse('', JsonResponse::HTTP_NO_CONTENT);
         }
 
-        return new JsonResponse($this->describeTask($task));
+        return $this->getJsonResponse($process);
     }
 
     public function putTask(Request $request)
     {
-        if (null !== $this->taskList->getNext()) {
+        if (null !== $this->getActiveProcess()) {
             throw new BadRequestHttpException('A task is already active');
         }
 
@@ -81,30 +84,28 @@ class TaskController
         }
 
         try {
-            $this->taskList->queue($metaData->get('type'), $metaData);
+            $this->taskList->queue($metaData->get('type'), $metaData, self::TASK_ID);
         } catch (\InvalidArgumentException $exception) {
             throw new BadRequestHttpException($exception->getMessage());
         }
 
-        $task = $this->taskList->getNext();
-        $process = $this->startTask($task->getId(), $task instanceof SelfUpdateTask, $request->request->all());
+        $task = $this->taskList->getTask(self::TASK_ID);
+        $process = $this->createAndRunProcess($task->getId(), $task instanceof SelfUpdateTask, $request->request->all());
 
-        return new JsonResponse(
-            $this->describeTask($task, $process),
-            JsonResponse::HTTP_CREATED
-        );
+        return $this->getJsonResponse($process, JsonResponse::HTTP_CREATED);
     }
 
     public function deleteTask()
     {
-        $task = $this->getCurrentTask();
+        if (null === ($process = $this->getActiveProcess())) {
+            throw new NotFoundHttpException('No active task');
+        }
 
-        $process = $this->processFactory->restoreBackgroundProcess($task->getId());
-
-        if ($this->getTaskStatus($task, $process) === Task::STATE_RUNNING) {
+        if (Task::STATE_RUNNING === $this->getProcessStatus($process)) {
             throw new BadRequestHttpException('Task is running and can not be deleted');
         }
 
+        $task = $this->taskList->getTask($process->getId());
         $task->removeAssets();
         $this->taskList->remove($task->getId());
         $process->delete();
@@ -117,29 +118,26 @@ class TaskController
             apc_clear_cache();
         }
 
-        return new JsonResponse($this->describeTask($task, $process));
+        return $this->getJsonResponse($process);
     }
 
     public function putTaskStatus(Request $request)
     {
-        $task = $this->getCurrentTask();
+        if (null === ($process = $this->getActiveProcess())) {
+            throw new NotFoundHttpException('No active task');
+        }
+
         $status = $request->request->get('status');
 
         switch ($status) {
-            case 'RUNNING':
-                if (Task::STATE_RUNNING !== $this->getTaskStatus($task)) {
-                    try {
-                        $process = $this->processFactory->restoreBackgroundProcess($task->getId());
-                        $process->start();
-                    } catch (\InvalidArgumentException $e) {
-                        $this->startTask($task->getId(), $task instanceof SelfUpdateTask, ['type' => $task->getType()]);
-                    }
+            case Process::STATUS_STARTED:
+                if (!$process->isRunning()) {
+                    $process->start();
                 }
                 break;
 
-            case 'STOPPED':
-                if (Task::STATE_RUNNING === $this->getTaskStatus($task)) {
-                    $process = $this->processFactory->restoreBackgroundProcess($task->getId());
+            case Process::STATUS_TERMINATED:
+                if ($process->isRunning()) {
                     $process->stop();
                 }
                 break;
@@ -148,35 +146,39 @@ class TaskController
                 throw new BadRequestHttpException(sprintf('Unsupported task status "%s"', $status));
         }
 
-        return new JsonResponse(['status' => $task->getStatus()]);
+        return new JsonResponse(['status' => $this->getProcessStatus($process)]);
     }
 
-    private function getCurrentTask()
+    private function getActiveProcess()
     {
-        $task = $this->taskList->getNext();
-
-        if (!$task instanceof Task) {
-            throw new NotFoundHttpException('No active task');
+        try {
+            $process = $this->processFactory->restoreBackgroundProcess(self::TASK_ID);
+        } catch (\InvalidArgumentException $e) {
+            return null;
         }
 
-        return $task;
+        return $process;
     }
 
-    private function describeTask(Task $task, ProcessController $process = null)
+    /**
+     * @param ProcessController $process
+     * @param int               $status
+     *
+     * @return JsonResponse
+     */
+    private function getJsonResponse(ProcessController $process, $status = JsonResponse::HTTP_OK)
     {
-        $output = $task->getOutput();
+        $output = '';
 
-        try {
-            if (null === $process) {
-                $process = $this->processFactory->restoreBackgroundProcess($task->getId());
-            }
+        if (null !== ($task = $this->taskList->getTask(self::TASK_ID))) {
+            $output = $task->getOutput();
 
             if ($out = $process->getOutput()) {
-                $output .= "\n\n".$out;
+                $output .= "\n\n" . $out;
             }
 
             if ($err = $process->getErrorOutput()) {
-                $output .= "\n\n".$err;
+                $output .= "\n\n" . $err;
             }
 
             if ($process->isTerminated() && ($exitCode = $process->getExitCode()) > 0) {
@@ -192,43 +194,32 @@ class TaskController
                     $output .= $this->getSignalText($process->getStopSignal());
                 }
             }
-        } catch (\InvalidArgumentException $e) {
-            // Process file not found
         }
 
-        $data = [
-            'id' => $task->getId(),
-            'status' => $this->getTaskStatus($task),
-            'type' => $task->getType(),
-            'created_at' => $task->getCreatedAt()->format(\DateTime::ISO8601),
-            'output' => $output,
-        ];
+        $data = array_merge(
+            $process->getMeta(),
+            [
+                'id' => $process->getId(),
+                'status' => $this->getProcessStatus($process),
+                'output' => $output,
+            ]
+        );
 
-        return $data;
+        return new JsonResponse($data, $status);
     }
 
-    private function getTaskStatus(Task $task, ProcessController $process = null)
+    private function getProcessStatus(ProcessController $process)
     {
-        $status = $task->getStatus();
+        $status = $process->getStatus();
 
-        if (Task::STATE_RUNNING === $status) {
-            try {
-                if (null === $process) {
-                    $process = $this->processFactory->restoreBackgroundProcess($task->getId());
-                }
-
-                if ($process->isTerminated()) {
-                    $status = Task::STATE_ERROR;
-                }
-            } catch (\InvalidArgumentException $e) {
-                // Process file not found
-            }
+        if ($process->isTerminated() && $process->getExitCode() > 0) {
+            $status = 'error';
         }
 
         return $status;
     }
 
-    private function startTask($taskId, $disableEvents, array $meta)
+    private function createAndRunProcess($taskId, $disableEvents, array $meta)
     {
         $arguments = [
             'tenside:runtask',

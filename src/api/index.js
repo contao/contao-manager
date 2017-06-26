@@ -55,7 +55,7 @@ export default {
         return new Promise((resolve) => {
             let request;
 
-            Vue.http.put('api/task/status', { status: 'RUNNING' }, {
+            Vue.http.put('api/task/status', { status: 'started' }, {
                 before: (r) => {
                     request = r;
                 },
@@ -69,7 +69,7 @@ export default {
     },
 
     stopTask() {
-        return Vue.http.put('api/task/status', { status: 'STOPPED' }).then(
+        return Vue.http.put('api/task/status', { status: 'terminated' }).then(
             response => response.body,
         );
     },
