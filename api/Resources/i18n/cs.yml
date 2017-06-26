@@ -4,29 +4,29 @@ cs:
       title: 'Služba PHP "allow_url_fopen" není na tomto serveru spuštěna.'
     openssl:
       title: 'Rozšíření PHP OpenSSL není na tomto serveru spuštěno.'
-      detail: 'Manažer Contao vyžaduje rozšíření OpenSSL, aby mohl stahovat soubory přes zabezpečené spojení (https)'
+      detail: 'Správce Contaa vyžaduje rozšíření OpenSSL, aby mohl stahovat soubory přes zabezpečené připojení (https).'
     proc_open:
       title: 'Funkce PHP "proc_open" a/nebo "proc_close" nejsou na tomto serveru spuštěné.'
-      detail: 'Funkce PHP "proc_open" a "proc_close" jsou zapotřebí, aby se mohly spouštět příkazy na pozadí. Obraťte se na Vašeho poskytovatele hostingu, proč není tato metoda spuštěná, jinak nebude Manažer Contaa ani Contao 4 fungovat správně. '
+      detail: 'Funkce "proc_open" a "proc_close" jsou důležité pro chod příkazů na pozadí přes konzolu. Zkontrolujte s Vaším poskytovatelem služeb, zda jsou tyto metody aktivní, jinak nebude Manažer Contaa 4 fungovat správně. '
     intl:
       title: 'Rozšíření PHP Intl není na tomto serveru spuštěno.'
-      detail: 'Contao 4 vyžaduje rozšíření Intl kvůli mezinárodnímu určení.'
+      detail: 'Contao 4 vyžaduje rozšíření PHP Intl pro mezinárodní záležitosti.'
     web_root:
       title: 'Soubor .phar musí být umístěný ve složce /web.'
     windows:
-      title: 'Tato verze Manažera Contaa není momentálně podporovaná na Windows.'
+      title: 'Tato verze Správce Contaa není momentálně podporovaná na Windows.'
     memory_limit:
       title: 'Nedostatečné množství paměti pro PHP'
-      detail: 'Vaše nastavení PHP umožňuje pouze {limit} paměti (pro příkazy přes konzulu). To není dostatečné pro spuštění composeru a nedalo se dané omezení automaticky navýšit. Obraťte se prosím o pomoc na Vašeho poskytovatele služeb.'
+      detail: 'Vaše nastavení PHP dovoluje (na příkazovém řádku) jen omezené akce kvůli omezení paměti {limit}. Ta není dostatečná pro chod Composeru a nešlo automaticky zvýšit paměť. Kontaktujte prosím Vaše poskytovatele služeb.'
     systempdir:
       title: 'Nelze zapisovat do dočasné složky systému.'
-      detail: 'Jde o problém s nastavením hostingových služeb. Ujistěte se, jestli služba open_basedir dovoluje přístup k dočasné složce, nebo jestli je sys_temp_dir správně nastavená.'
+      detail: 'Nejspíš jde o problém s Vaším nastavením služeb. Ujistěte se, že open_basedir dovoluje přístup k dočasné složce nebo zda je sys_temp_dir správně nastavená.'
     contao_old:
       title: 'Nekompatibilní verze Contaa'
-      detail: 'Verze Contao {version} není kompatibilní s Manažerem Contaa. Zaktualizujte prosím Vaši instalaci Contaa manuálně. '
+      detail: 'Verze Contaa {version} není kompatabilní se Správcem Contaa. Zaktualizujte prosím Vaši instalaci manuálně.'
     contao_unknown:
       title: 'Neznámý status instalace'
-      detail: "Některé soubory byly na Vašem serveru nalezeny, ale nemohla být nalezená žádná známá verze Contaa.\nBuď musíte instalaci opravit ručně nebo smazat následující soubory a složky, abyste mohli nainstalovat Contao:\n\n{files}"
+      detail: "Bylo nalezeno několik souborů, ale nebyla rozpoznaná žádná verze Contaa.\nNejspíš musíte opravit instalaci aplikace manuálně nebo smazat následující soubory a složky, abyste mohli nainstalovat Contao.\n\n{files}"
   config:
     php_cli:
       not_found: 'Tato cesta neobsahuje platné binární PHP.'

@@ -10,7 +10,9 @@ export default {
     fa: 'فارسی (Persian)',
     fr: 'Français (French)',
     ja: '日本語 (にほんご) (Japanese)',
+    lv: 'Latviešu Valoda (Latvian)',
     nl: 'Nederlands (Dutch)',
+    pl: 'Polszczyzna (Polish)',
     ru: 'Русский (Russian)',
     sr: 'српски језик (Serbian)',
 };

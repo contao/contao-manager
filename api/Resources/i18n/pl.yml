@@ -1,0 +1,33 @@
+pl:
+  integrity:
+    allow_url_fopen:
+      title: 'Ustawienie PHP "allow_url_fopen" nie jest włączone na serwerze.'
+    openssl:
+      title: 'Rozszerzenie PHP OpenSSL jest niedostępne.'
+      detail: 'Contao Manager wymaga rozszerzenia OpenSSL w celu pobierania plików przez szyfrowane połączenie (https).'
+    proc_open:
+      title: 'Funkcje PHP "proc_open" i/lub "proc_close" nie są dostępne na serwerze.'
+      detail: 'Funkcje "proc_open" i "proc_close" są konieczne do wykonywania zadań w linii komend w tle. Sprawdź z hostingodawcą dlaczego te metody są niedostępne; ani Contao Manager, ani Contao 4 nie mogą działać prawidłowo bez nich.'
+    intl:
+      title: 'Rozszerzenie PHP Intl jest niedostępne.'
+      detail: 'Contao 4 wymaga rozszerzenia PHP Intl w celach umiędzynarodowienia.'
+    web_root:
+      title: 'Plik Phar musi znajdować się w katalogu /web.'
+    windows:
+      title: 'Ta wersja Contao Manager nie jest wspierana na Windows.'
+    memory_limit:
+      title: 'Niewystarczający limit pamięci'
+      detail: 'Twoja konfiguracja PHP pozwala tylko na {limit} pamięci (w linii komend). To nie wystarczy na uruchomienie Composera i automatycznie podniesienie limitu nie było możliwe. Skontaktuj się z hostingodawcą.'
+    systempdir:
+      title: 'Nie udało się zapisać do tymczasowego katalogu systemowego.'
+      detail: 'To jest prawdopodobnie problem z konfiguracją hostingu. Upewnij się, że open_basedir pozwala na dostęp do tymczasowego katalogu lub, że sys_temp_dir jest poprawnie skonfigurowane.'
+    contao_old:
+      title: 'Niekompatybilna wersja Contao'
+      detail: 'Wersja Contao {version} jest niekompatybilna z Contao Manager, aktualizuj swoją instalację ręcznie.'
+    contao_unknown:
+      title: 'Nieznany status instalacji'
+      detail: "Na serwerze znaleziono niektóre pliki, ale żadna wersja Contao nie mogła być określona. \nMusisz albo ręcznie naprawić aplikację lub usunąć poniższe pliki i foldery, aby zainstalować Contao:\n\n{files}"
+  config:
+    php_cli:
+      not_found: 'Ta ścieżka nie zawiera prawidłowego PHP binary.'
+      incompatible: 'Ta wersja PHP binary to {cli}, ale wersja na serwerze to {web}.'
