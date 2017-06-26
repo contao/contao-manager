@@ -96,3 +96,12 @@ vhost.io:
     issues: []
     php:
         /usr/bin/php-{major}.{minor}: []
+
+your-server.de:
+    name: Hetzner Online GmbH
+    website: www.hetzner.de
+    last_update: 2017-06-26
+    issues: []
+    php:
+        /usr/bin/php{major}{minor}: []
+        /usr/bin/php: []
