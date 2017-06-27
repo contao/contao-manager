@@ -94,13 +94,16 @@ const store = new Vuex.Store({
             ));
         },
 
-        install: ({ dispatch }, version) => (
-            api.install(version).then(
-                () => dispatch('tasks/run', null, { root: true }),
-            ).then(
+        install: ({ dispatch }, version) => {
+            const task = {
+                type: 'install',
+                version,
+            };
+
+            return dispatch('tasks/execute', task, { root: true }).then(
                 () => dispatch('fetchStatus', true, { root: true }),
-            )
-        ),
+            );
+        },
     },
 });
 

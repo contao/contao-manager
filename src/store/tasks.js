@@ -53,7 +53,7 @@ const pollTask = ({ commit }, resolve, reject) => {
             () => {
                 commit('setStatus', null);
                 commit('setProgress', null);
-                reject(task);
+                reject();
             },
         );
     };

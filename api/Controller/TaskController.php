@@ -12,17 +12,19 @@ namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Tenside\Task\SelfUpdateTask;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Process\Process;
+use Tenside\Core\Task\Composer\InstallTask;
 use Tenside\Core\Task\Task;
 use Tenside\Core\Task\TaskList;
 use Tenside\Core\Util\JsonArray;
 use Terminal42\BackgroundProcess\ProcessController;
 
-class TaskController
+class TaskController extends Controller
 {
     const TASK_ID = 'background-process';
 
@@ -73,14 +75,19 @@ class TaskController
             throw new BadRequestHttpException('A task is already active');
         }
 
-        $metaData = null;
-        $content = $request->getContent();
-        if (empty($content)) {
+        if (!$request->request->get('type')) {
             throw new BadRequestHttpException('Invalid payload');
         }
-        $metaData = new JsonArray($content);
-        if (!$metaData->has('type')) {
-            throw new BadRequestHttpException('Invalid payload');
+
+        $metaData = new JsonArray($request->request->all());
+
+        if ('install' === $request->request->get('type')) {
+            $metaData->set(InstallTask::SETTING_DESTINATION_DIR, $this->get('kernel')->getContaoDir());
+            $metaData->set(InstallTask::SETTING_PACKAGE, 'contao/managed-edition');
+
+            if ($version = $request->request->get('version')) {
+                $metaData->set(InstallTask::SETTING_VERSION, $version);
+            }
         }
 
         try {

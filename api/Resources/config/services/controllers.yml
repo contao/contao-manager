@@ -65,3 +65,5 @@ services:
             arguments:
                 - "@contao_manager.process.console_factory"
                 - "@tenside.tasks"
+            calls:
+                - [setContainer, ["@service_container"]]

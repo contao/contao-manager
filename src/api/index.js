@@ -35,22 +35,6 @@ export default {
         return Vue.http.put('api/config/auth/github-oauth', { token });
     },
 
-    install(version) {
-        const data = {
-            project: {
-                name: 'contao/managed-edition',
-            },
-        };
-
-        if (version !== '') {
-            data.project.version = version;
-        }
-
-        return Vue.http.post('api/install/create-project', data).then(
-            response => response.body.task,
-        );
-    },
-
     runTask(timeout = 1000) {
         return new Promise((resolve) => {
             let request;
