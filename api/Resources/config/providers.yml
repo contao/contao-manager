@@ -58,6 +58,15 @@ kundenserver.de:
         /usr/bin/php{major}.{minor}: []
         /usr/lib/cgi-bin/php{major}.{minor}: []
 
+netcup.net:
+    name: netcup GmbH
+    website: www.netcup.de
+    last_update: 2017-06-27
+    issues: []
+    php:
+        /usr/local/php56/bin/php: ['-d', 'date.timezone=UTC']
+        /usr/local/php{major}{minor}/bin/php: []
+
 rzone.de:
     name: Strato AG
     website: www.strato.de

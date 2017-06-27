@@ -57,7 +57,7 @@ class ServerInfo
     }
 
     /**
-     * Gets PHP executable from manager.json or by detecting known server paths.
+     * Gets PHP executable by detecting known server paths.
      *
      * @return string|null
      */
@@ -116,7 +116,7 @@ class ServerInfo
         }
 
         $env = array_map(function () { return false; }, $_ENV);
-        $env['PATH'] = $_ENV['PATH'];
+        $env['PATH'] = isset($_ENV['PATH']) ? $_ENV['PATH'] : false;
         $env['PHP_PATH'] = $executable;
 
         return $env;
@@ -208,17 +208,17 @@ class ServerInfo
         }
 
         if (empty($template['ip'])) {
-            /** @noinspection UsageOfSilenceOperatorInspection */
+            /* @noinspection UsageOfSilenceOperatorInspection */
             $template['ip'] = (string) @file_get_contents('https://api.ipify.org');
         }
 
         if (empty($template['ip'])) {
-            /** @noinspection UsageOfSilenceOperatorInspection */
+            /* @noinspection UsageOfSilenceOperatorInspection */
             $template['ip'] = @file_get_contents('http://api.ipify.org');
         }
 
         if (empty($template['hostname'])) {
-            /** @noinspection UsageOfSilenceOperatorInspection */
+            /* @noinspection UsageOfSilenceOperatorInspection */
             $template['hostname'] = (string) @gethostbyaddr($template['ip']);
         }
 

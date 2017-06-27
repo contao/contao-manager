@@ -183,11 +183,11 @@ class TaskController
             $output = $task->getOutput();
 
             if ($out = $process->getOutput()) {
-                $output .= "\n\n" . $out;
+                $output .= "\n\n".$out;
             }
 
             if ($err = $process->getErrorOutput()) {
-                $output .= "\n\n" . $err;
+                $output .= "\n\n".$err;
             }
 
             if ($process->isTerminated() && ($exitCode = $process->getExitCode()) > 0) {
