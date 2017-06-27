@@ -152,12 +152,21 @@ class TaskController
     private function getActiveProcess()
     {
         try {
-            $process = $this->processFactory->restoreBackgroundProcess(self::TASK_ID);
+            return $this->processFactory->restoreBackgroundProcess(self::TASK_ID);
         } catch (\InvalidArgumentException $e) {
-            return null;
+            // Process with our ID was not found, try Tenside for BC reasons
         }
 
-        return $process;
+        if (($task = $this->taskList->getNext()) instanceof Task) {
+            try {
+                return $this->processFactory->restoreBackgroundProcess($task->getId());
+            } catch (\InvalidArgumentException $e) {
+                // Delete Tenside task without a process controller
+                $this->taskList->remove($task->getId());
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -170,7 +179,7 @@ class TaskController
     {
         $output = '';
 
-        if (null !== ($task = $this->taskList->getTask(self::TASK_ID))) {
+        if (null !== ($task = $this->taskList->getTask($process->getId()))) {
             $output = $task->getOutput();
 
             if ($out = $process->getOutput()) {
