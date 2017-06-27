@@ -108,13 +108,15 @@ class TaskController extends Controller
             throw new NotFoundHttpException('No active task');
         }
 
-        if (Task::STATE_RUNNING === $this->getProcessStatus($process)) {
+        if ($process->isRunning()) {
             throw new BadRequestHttpException('Task is running and can not be deleted');
         }
 
-        $task = $this->taskList->getTask($process->getId());
-        $task->removeAssets();
-        $this->taskList->remove($task->getId());
+        if (($task = $this->taskList->getTask($process->getId())) instanceof Task) {
+            $task->removeAssets();
+            $this->taskList->remove($task->getId());
+        }
+
         $process->delete();
 
         if (function_exists('opcache_reset')) {
