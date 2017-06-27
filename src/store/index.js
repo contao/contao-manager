@@ -54,12 +54,11 @@ const store = new Vuex.Store({
 
                     if (result.status === apiStatus.OK && result.task) {
                         dispatch('tasks/reload').catch(() => {});
-                    }
-
-                    if (result.update === true && result.username) {
-                        dispatch('tasks/execute', { type: 'self-update' }).then(() => {
-                            window.location.reload();
-                        });
+                    } else if (result.update === true && result.username) {
+                        dispatch('tasks/execute', { type: 'self-update' }).then(
+                            () => { window.location.reload(true); },
+                            () => { window.location.reload(true); },
+                        );
                     }
 
                     return result;

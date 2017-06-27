@@ -32,11 +32,13 @@ const pollTask = ({ commit }, resolve, reject) => {
                         });
                         break;
 
+                    case 'RUNNING': // @deprecated: BC for self-update with version < 1.0.0-alpha6
                     case 'started':
                         commit('setStatus', 'running');
                         setTimeout(fetch, 1000);
                         break;
 
+                    case 'FINISHED': // @deprecated: BC for self-update with version < 1.0.0-alpha6
                     case 'terminated':
                         commit('setStatus', 'success');
                         resolve(task);
@@ -51,6 +53,7 @@ const pollTask = ({ commit }, resolve, reject) => {
             () => {
                 commit('setStatus', null);
                 commit('setProgress', null);
+                reject(task);
             },
         );
     };

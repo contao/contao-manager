@@ -129,6 +129,11 @@ class TaskController
 
         $status = $request->request->get('status');
 
+        // @deprecated: BC for self-update with version < 1.0.0-alpha6
+        if ('RUNNING' === $status) {
+            $status = Process::STATUS_STARTED;
+        }
+
         switch ($status) {
             case Process::STATUS_STARTED:
                 if (!$process->isRunning()) {
@@ -157,6 +162,7 @@ class TaskController
             // Process with our ID was not found, try Tenside for BC reasons
         }
 
+        // @deprecated BC for self-update with version < 1.0.0-alpha6
         if (($task = $this->taskList->getNext()) instanceof Task) {
             try {
                 return $this->processFactory->restoreBackgroundProcess($task->getId());
@@ -205,8 +211,12 @@ class TaskController
             }
         }
 
+        // @deprecated: BC for self-update with version < 1.0.0-alpha6
+        $meta = $process->getMeta();
+        $meta = is_array($meta) ? $meta : ['type' => 'self-update'];
+
         $data = array_merge(
-            $process->getMeta(),
+            $meta,
             [
                 'id' => $process->getId(),
                 'status' => $this->getProcessStatus($process),
@@ -220,6 +230,11 @@ class TaskController
     private function getProcessStatus(ProcessController $process)
     {
         $status = $process->getStatus();
+
+        // @deprecated: BC for self-update with version < 1.0.0-alpha6
+        if (self::TASK_ID !== $process->getId()) {
+            $status = $process->isTerminated() ? Task::STATE_FINISHED : Task::STATE_RUNNING;
+        }
 
         if ($process->isTerminated() && $process->getExitCode() > 0) {
             $status = 'error';

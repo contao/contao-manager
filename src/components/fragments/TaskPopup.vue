@@ -93,7 +93,7 @@
 
             taskTitle() {
                 if (!this.taskType) {
-                    return this.$t('ui.taskpopup.taskStarting');
+                    return this.$t('ui.taskpopup.taskLoading');
                 }
 
                 const titles = {
@@ -112,10 +112,6 @@
                 if (this.progressTitle) {
                     return this.progressTitle;
                 }
-
-//                if (this.progressText) {
-//                    return '&nbsp;';
-//                }
 
                 if (this.taskStatus !== 'running') {
                     return this.$t('ui.taskpopup.taskLoading');
