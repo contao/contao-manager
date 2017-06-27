@@ -60,12 +60,13 @@ class ExceptionListener
 
         $this->logException($exception);
 
-        $event->setResponse(
-            ApiProblemResponse::createFromException(
-                $exception,
-                $this->debug
-            )
-        );
+        if ($exception instanceof HttpExceptionInterface) {
+            $response = new Response($exception->getMessage(), $exception->getStatusCode(), $exception->getHeaders());
+        } else {
+            $response = ApiProblemResponse::createFromException($exception, $this->debug);
+        }
+
+        $event->setResponse($response);
     }
 
     /**
