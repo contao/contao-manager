@@ -14,6 +14,15 @@ goserver.host:
     php:
         /usr/bin/php{major}{minor}: []
 
+hosteurope.de:
+    name: Host Europe GmbH
+    website: www.hosteurope.de
+    last_update: 2017-06-27
+    issues: []
+    php:
+        /usr/bin/php{major}.{minor}: ['-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
+        /usr/bin/php: ['-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
+
 inetrobots.com:
     name: Hostingwerk (Feyer Media GmbH & Co. KG)
     website: www.hostingwerk.de
