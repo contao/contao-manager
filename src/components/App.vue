@@ -57,12 +57,6 @@
                 } else if (status === apiStatus.OK) {
                     this.$router.scope = scopes.MANAGER;
                     this.$router.replace(routes.packages);
-                } else {
-                    this.$store.commit('setError', {
-                        title: this.$t('ui.app.apiError'),
-                        type: 'about:blank',
-                        status: 500,
-                    });
                 }
             },
         },

@@ -43,6 +43,17 @@ const store = new Vuex.Store({
 
             return api.fetchStatus().then(
                 (result) => {
+                    if (!(result instanceof Object)) {
+                        commit('setError', {
+                            title: Vue.i18n.translate('ui.app.apiError'),
+                            type: 'about:blank',
+                            status: 500,
+                            detail: result,
+                        });
+
+                        throw result;
+                    }
+
                     commit('setStatus', result);
 
                     if (result.username) {
