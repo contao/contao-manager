@@ -5,7 +5,7 @@ cs:
     openssl:
       title: 'Rozšíření PHP OpenSSL není na tomto serveru spuštěno.'
       detail: 'Správce Contaa vyžaduje rozšíření OpenSSL, aby mohl stahovat soubory přes zabezpečené připojení (https).'
-    proc_open:
+    process:
       title: 'Funkce PHP "proc_open" a/nebo "proc_close" nejsou na tomto serveru spuštěné.'
       detail: 'Funkce "proc_open" a "proc_close" jsou důležité pro chod příkazů na pozadí přes konzolu. Zkontrolujte s Vaším poskytovatelem služeb, zda jsou tyto metody aktivní, jinak nebude Manažer Contaa 4 fungovat správně. '
     intl:

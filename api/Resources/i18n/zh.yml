@@ -5,7 +5,7 @@ zh:
     openssl:
       title: 'PHP扩展OpenSSL不可用'
       detail: 'Contao Manager需要使用OpenSSL扩展来通过加密链接(https)下载文件。'
-    proc_open:
+    process:
       title: '服务器中PHP函数"proc_open"  "proc_close" 不可用'
     intl:
       title: 'PHP扩展Intl不可用'

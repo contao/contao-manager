@@ -5,7 +5,7 @@ en:
         openssl:
             title: 'The PHP OpenSSL extension is not available.'
             detail: 'The Contao Manager requires the OpenSSL extension to download files over an encrypted connection (https).'
-        proc_open:
+        process:
             title: 'The PHP function "proc_open" and/or "proc_close" is not available on the server.'
             detail: 'The "proc_open" and "proc_close" functions are necessary to run command line tasks in the background. Check with your hosting provider why this method is not available; neither the Contao Manager nor Contao 4 will run correctly without it.'
         intl:

@@ -5,7 +5,7 @@ it:
     openssl:
       title: 'L''estensione PHP OpenSSL non è disponibile.'
       detail: 'Contao Manager richiede l''estensione OpenSSL per scaricare files attraverso una connessione criptata (https).'
-    proc_open:
+    process:
       title: 'La funzione PHP "proc_open" e/o "proc_close" non sono disponibili sul server.'
       detail: 'Le funzioni "proc_open" e "proc_close" sono necessarie per eseguire attività di riga di comando in background. Controllare con il provider di hosting che il metodo sia disponibile, altrimenti né  Contao Manager né  Contao 4 verranno eseguiti correttamente.'
     intl:

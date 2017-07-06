@@ -5,7 +5,7 @@ ru:
     openssl:
       title: 'Расширение PHP OpenSSL недоступно.'
       detail: 'Contao Manager необходимо расширение OpenSSL для передачи файлов по зашифрованному соединению (https).'
-    proc_open:
+    process:
       title: 'Функция PHP "proc_open" и/или "proc_close" недоступна на сервере.'
       detail: 'Функции "proc_open" и "proc_close" необходимы для выполнения задач командной строки в фоновом режиме. Узнайте у вашего хостинг-провайдера, почему этот метод недоступен. Contao Manager и Contao 4 не будут корректно работать без него.'
     intl:
