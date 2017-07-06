@@ -1,0 +1,30 @@
+zh:
+  integrity:
+    allow_url_fopen:
+      title: '服务器未启用PHP设置"allow_url_fopen"'
+    openssl:
+      title: 'PHP扩展OpenSSL不可用'
+      detail: 'Contao Manager需要使用OpenSSL扩展来通过加密链接(https)下载文件。'
+    proc_open:
+      title: '服务器中PHP函数"proc_open"  "proc_close" 不可用'
+    intl:
+      title: 'PHP扩展Intl不可用'
+      detail: 'Contao 4 系统需要使用PHP Intl扩展来进行国际化'
+    web_root:
+      title: 'Phar文件必须位于/web文件夹下'
+    windows:
+      title: '目前该版本Contao Manager不支持Windows系统'
+    memory_limit:
+      title: 'PHP内存限制不足'
+    systempdir:
+      title: '系统临时目录无法写入'
+    contao_old:
+      title: 'Contao版本不兼容'
+      detail: 'Contao版本 {version}不兼容Contao Manager，请手动更新当前安装的系统。'
+    contao_unknown:
+      title: '安装状态未知'
+      detail: "在当前服务器中找到一些文件，但是无法检测到Contao版本。\n您必须手动修复您的应用或者移除以下文件和目录来安装Contao：\n\n{files}"
+  config:
+    php_cli:
+      not_found: '该路径没有包含有效的PHP二进制文件'
+      incompatible: 'PHP二进制文件版本 {cli} 但是当前服务器版本为 {web}'
