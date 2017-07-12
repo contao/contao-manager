@@ -17,6 +17,7 @@ use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 use Tenside\CoreBundle\TensideCoreBundle;
@@ -117,6 +118,7 @@ class ApiKernel extends Kernel
                 $this->contaoDir = dirname(dirname($phar));
             } else {
                 $this->contaoDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'test-dir';
+                (new Filesystem())->mkdir($this->contaoDir);
             }
         }
 
