@@ -44,7 +44,7 @@
 
             <div class="about">
                 <h1 class="badge" v-if="incompatible">{{ name }}<span :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span></h1>
-                <h1 class="badge" v-else-if="package.abandoned">{{ name }}<span title="$t('ui.package.abandonedText')">{{ 'ui.package.abandonedTitle' | translate }}</span></h1>
+                <h1 class="badge" v-else-if="package.abandoned">{{ name }}<span :title="$t('ui.package.abandonedText')">{{ 'ui.package.abandonedTitle' | translate }}</span></h1>
                 <h1 v-else>{{ name }}</h1>
 
                 <p class="description">{{ package.description }} <a :href="package.url" target="_blank" class="more" v-if="package.url">{{ 'ui.package.homepage' | translate }}</a></p>
