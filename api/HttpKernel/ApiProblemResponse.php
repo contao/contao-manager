@@ -46,20 +46,23 @@ class ApiProblemResponse extends Response
      */
     public static function createFromException(\Exception $exception, $debug = false)
     {
+        $headers = [];
+
         if ($exception instanceof ApiProblemException) {
             $problem = $exception->getApiProblem();
         } else {
             $problem = new ApiProblem($exception->getMessage());
+
+            if ($exception instanceof HttpExceptionInterface) {
+                $problem->setStatus($exception->getStatusCode());
+            }
 
             if ($debug) {
                 $problem->setDetail($exception->getTraceAsString());
             }
         }
 
-        $headers = [];
-
         if ($exception instanceof HttpExceptionInterface) {
-            $problem->setStatus($exception->getStatusCode());
             $headers = $exception->getHeaders();
         }
 
