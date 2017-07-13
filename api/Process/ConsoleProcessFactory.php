@@ -12,8 +12,11 @@ namespace Contao\ManagerApi\Process;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
+use Contao\ManagerApi\Exception\ApiProblemException;
+use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
+use Terminal42\BackgroundProcess\Exception\InvalidJsonException;
 use Terminal42\BackgroundProcess\Forker\DisownForker;
 use Terminal42\BackgroundProcess\Forker\ForkerInterface;
 use Terminal42\BackgroundProcess\Forker\NohupForker;
@@ -116,10 +119,20 @@ class ConsoleProcessFactory
      * @param string $id
      *
      * @return ProcessController
+     *
+     * @throws ApiProblemException
      */
     public function restoreBackgroundProcess($id)
     {
-        $process = ProcessController::restore($this->kernel->getManagerDir(), $id);
+        try {
+            $process = ProcessController::restore($this->kernel->getManagerDir(), $id);
+        } catch (InvalidJsonException $e) {
+            $problem = (new ApiProblem($e->getMessage()))
+                ->setDetail($e->getJsonErrorMessage()."\n\n".$e->getContent())
+            ;
+
+            throw new ApiProblemException($problem, $e);
+        }
 
         $this->addForkers($process);
 

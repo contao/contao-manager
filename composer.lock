@@ -2921,12 +2921,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/terminal42/background-process.git",
-                "reference": "cd81301078cfd35a37ef836af92e6f2fa2e05371"
+                "reference": "d4d143011f7e6a9860f945c6601346d3eb78a4bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/terminal42/background-process/zipball/cd81301078cfd35a37ef836af92e6f2fa2e05371",
-                "reference": "cd81301078cfd35a37ef836af92e6f2fa2e05371",
+                "url": "https://api.github.com/repos/terminal42/background-process/zipball/d4d143011f7e6a9860f945c6601346d3eb78a4bb",
+                "reference": "d4d143011f7e6a9860f945c6601346d3eb78a4bb",
                 "shasum": ""
             },
             "require": {
@@ -2950,7 +2950,7 @@
                 "source": "https://github.com/terminal42/background-process/tree/master",
                 "issues": "https://github.com/terminal42/background-process/issues"
             },
-            "time": "2017-07-07 13:25:59"
+            "time": "2017-07-13 06:22:34"
         }
     ],
     "packages-dev": [
