@@ -7,7 +7,7 @@ ja:
       detail: 'Contao Managerは、暗号化した接続(https)でファイルをダウンロードするためにOpenSSL拡張が必要です。'
     process:
       title: 'サーバーでPHPの関数"proc_open"と"proc_close"の両方または一方を利用できません。'
-      detail: '"proc_open"と"proc_close"関数はコマンド行のタスクをバックグラウンドで動作させるために必要です。ホスティングサービスの提供者に、これらのメソッドを利用できない理由を確認してください。これらなしでは、Contao ManagerもContao 4も正しく動作しません。'
+      detail: '"proc_open"と"proc_close"関数はコマンド行のタスクをバックグラウンドで動作させるために必要です。ホスティングサービスの提供者に、これらのメソッドを利用できない理由を確認してください。これらがないと、Contao ManagerもContao 4も正しく動作しません。'
     intl:
       title: 'PHPのIntl拡張を利用できません。'
       detail: 'Contao 4は国際化の目的でPHPのIntl拡張を必要とします。'

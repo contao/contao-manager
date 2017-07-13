@@ -1,0 +1,20 @@
+lv:
+  integrity:
+    openssl:
+      title: 'PHP OpenSSL paplašinājums nav pieejams.'
+    intl:
+      title: 'PHP Intl paplašinājums nav pieejams.'
+      detail: 'Contao 4 ir nepieciešams PHP Intl paplašinājums internacionalizācijas vajadzībām.'
+    web_root:
+      title: 'Phar datnei jāatrod mapē /web.'
+    windows:
+      title: 'Šī Contao pārvaldnieka versija pašlaik netiek atbalstīta operētājsistēmā Windows.'
+    memory_limit:
+      title: 'Nepietiekams PHP atmiņas ierobežojums'
+    systempdir:
+      title: 'Nevar rakstīt sistēmas pagaidu direktorijā.'
+    contao_old:
+      title: 'Nesaderīga Contao versija'
+      detail: 'Contao versija {versija} nav savietojama ar Contao pārvaldnieku, lūdzu, manuāli atjauniniet instalāciju.'
+    contao_unknown:
+      title: 'Nezināms instalācijas statuss'
