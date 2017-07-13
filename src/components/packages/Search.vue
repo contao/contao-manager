@@ -1,18 +1,5 @@
 <template>
     <div class="packages">
-
-        <div class="scope">
-            <h2>{{ 'ui.packagesearch.typeHeadline' | translate }}</h2>
-            <fieldset :class="{ active: scope === 'contao-bundle' }">
-                <input type="radio" name="scope" id="scope-bundle" value="contao-bundle" v-model="scope">
-                <label for="scope-bundle">{{ 'ui.packagesearch.typeBundle' | translate }}</label>
-            </fieldset>
-            <fieldset :class="{ active: scope === 'contao-module' }">
-                <input type="radio" name="scope" id="scope-module" value="contao-module" v-model="scope">
-                <label for="scope-module">{{ 'ui.packagesearch.typeModule' | translate }}</label>
-            </fieldset>
-        </div>
-
         <div v-if="packages === false" class="offline">
             <p>{{ 'ui.packagesearch.offline' | translate }}</p>
         </div>
@@ -22,13 +9,11 @@
         </loader>
         <div v-else-if="!Object.keys(packages).length" class="empty">
             <p v-html="$t('ui.packagesearch.empty', { query })"></p>
-            <a v-if="scope === 'contao-module'" @click="scope = 'contao-bundle'">{{ 'ui.packagesearch.searchBundles' | translate }}</a>
-            <a v-else-if="scope === 'contao-bundle'" @click="scope = 'contao-module'">{{ 'ui.packagesearch.searchModules' | translate }}</a>
         </div>
 
-        <transition-group name="package">
-            <package v-for="item in packages" :name="item.name" :package="item" :key="item.name" :original="originals.get(item.name)" :changed="changes.get(item.name)" @change="changePackage"></package>
-        </transition-group>
+        <package v-for="item in packages" :name="item.name" :package="item" :key="item.name" :original="originals.get(item.name)" :changed="changes.get(item.name)" @change="changePackage"></package>
+
+        <a href="https://www.algolia.com/" target="_blank" class="algolia"><img src="../../assets/images/search-by-algolia.svg" width="200"></a>
     </div>
 </template>
 
@@ -36,8 +21,7 @@
     /* eslint-disable no-param-reassign */
 
     import Immutable from 'immutable';
-    import debounce from 'lodash.debounce';
-    import throttle from 'lodash.throttle';
+    import algolia from 'algoliasearch';
 
     import routes from '../../router/routes';
 
@@ -52,7 +36,7 @@
             originals: null,
             changes: null,
             previousRequest: null,
-            scope: 'contao-bundle',
+            algolia: algolia('60DW2LJW0P', 'e6efbab031852e115032f89065b3ab9f').initIndex('v1'),
         }),
 
         computed: {
@@ -62,67 +46,38 @@
         },
 
         watch: {
-            scope() {
-                this.packages = null;
-                this.searchPackages(this, this.query);
-            },
             query(value) {
                 this.searchPackages(this, value);
             },
         },
 
         methods: {
-            searchPackages: debounce(
-                (vm, value) => {
-                    if (!value) {
-                        vm.originals = null;
-                        vm.changes = null;
-                        vm.packages = null;
-                        return;
+            searchPackages(vm, value) {
+                if (!value) {
+                    vm.originals = null;
+                    vm.changes = null;
+                    vm.packages = null;
+                    return;
+                }
+
+                vm.algolia.search(value, (err, content) => {
+                    if (err) {
+                        vm.packages = false;
+                    } else if (content.nbHits === 0) {
+                        vm.packages = {};
+                    } else {
+                        vm.packages = {};
+
+                        content.hits.forEach((pkg) => {
+                            vm.packages[pkg.name] = pkg;
+                            console.log(pkg);
+                        });
+
+                        vm.originals = Immutable.fromJS(vm.packages);
+                        vm.changes = vm.originals;
                     }
-
-                    vm.$http.get(
-                        `https://packagist.org/search.json?per_page=10&type=${vm.scope}&q=${value}`,
-                        {
-                            before(request) {
-                                if (this.previousRequest) {
-                                    this.previousRequest.abort();
-                                }
-
-                                this.previousRequest = request;
-                            },
-                        },
-                    ).then(
-                        response => response.json().then(
-                            (data) => {
-                                vm.updatePackages(vm, data);
-                            },
-                        ),
-                        (response) => {
-                            if (response.status === 0) {
-                                vm.packages = false;
-                            } else {
-                                throw response;
-                            }
-                        },
-                    );
-                },
-                100,
-            ),
-
-            updatePackages: throttle(
-                (vm, data) => {
-                    vm.packages = {};
-
-                    data.results.forEach((pkg) => {
-                        vm.packages[pkg.name] = pkg;
-                    });
-
-                    vm.originals = Immutable.fromJS(vm.packages);
-                    vm.changes = vm.originals;
-                },
-                1000,
-            ),
+                });
+            },
 
             changePackage(name, changed) {
                 this.changes = this.changes.set(name, changed);
@@ -190,18 +145,5 @@
     .packages .offline {
         background: url('../../assets/images/offline.svg') top center no-repeat;
         background-size: 100px 100px;
-    }
-
-    .package {
-        display: block;
-        width: 100%;
-        transition: all 1s;
-    }
-    .package-enter, .package-leave-to {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    .package-leave-active {
-        position: absolute;
     }
 </style>

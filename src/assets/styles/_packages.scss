@@ -87,32 +87,6 @@ section.package-actions {
     }
 }
 
-.packages .scope {
-    padding: 10px 0;
-    margin-bottom: 30px;
-    text-align: center;
-    font-size: 1.1em;
-    line-height: 25px;
-    border-top: 1px solid #cdc8a8;
-    border-bottom: 1px solid #cdc8a8;
-
-    @include screen(600) {
-        h2 {
-            display: inline-block;
-        }
-    }
-
-    fieldset {
-        display: inline-block;
-        padding: 0 10px;
-        margin-left: 10px;
-
-        &.active {
-            color: $footer-link;
-        }
-    }
-}
-
 .package {
     margin-bottom: 14px;
     background: #fff;
@@ -196,6 +170,11 @@ section.package-actions {
             position: relative;
             margin-bottom: 5px;
 
+            em {
+                background-color: $highlight-color;
+                font-style: normal;
+            }
+
             &.badge {
                 padding-right: 100px;
 
@@ -204,7 +183,7 @@ section.package-actions {
                 }
             }
 
-            > span {
+            > span + span {
                 position: absolute;
                 top: 6px;
                 right: 0;
@@ -225,6 +204,11 @@ section.package-actions {
 
         .description {
             margin-bottom: 1em;
+
+            em {
+                background-color: $highlight-color;
+                font-style: normal;
+            }
 
             a.more {
                 margin-left: 5px;
@@ -452,6 +436,12 @@ section.package-actions {
             margin-left: 16px;
         }
     }
+}
+
+a.algolia {
+    display: block;
+    margin: 50px 0 0;
+    text-align: center;
 }
 
 @keyframes release-validating {

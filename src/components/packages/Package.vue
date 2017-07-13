@@ -43,21 +43,26 @@
             <figure><img src="../../assets/images/placeholder.png" /></figure>
 
             <div class="about">
-                <h1 class="badge" v-if="incompatible">{{ name }}<span :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span></h1>
-                <h1 class="badge" v-else-if="package.abandoned">{{ name }}<span :title="$t('ui.package.abandonedText')">{{ 'ui.package.abandonedTitle' | translate }}</span></h1>
-                <h1 v-else>{{ name }}</h1>
+                <h1 :class="{ badge: incompatible || package.abandoned }">
+                    <span v-html="package._highlightResult && package._highlightResult.name.value || package.name"></span>
+                    <span v-if="incompatible" :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span>
+                    <span v-else-if="package.abandoned" :title="package.replacement === true && $t('ui.package.abandonedText') || $t('ui.package.replacement', { replacement: package.replacement })">{{ 'ui.package.abandonedTitle' | translate }}</span>
+                </h1>
 
-                <p class="description">{{ package.description }} <a :href="package.url" target="_blank" class="more" v-if="package.url">{{ 'ui.package.homepage' | translate }}</a></p>
+                <p class="description">
+                    <span v-html="package._highlightResult && package._highlightResult.description.value || package.description"></span>
+                    <a :href="package.url || package.homepage" target="_blank" class="more" v-if="package.url || package.homepage">{{ 'ui.package.homepage' | translate }}</a>
+                </p>
                 <p class="additional">
                     <strong class="version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                     <span v-for="item in additional">{{ item }}</span>
                 </p>
             </div>
 
-            <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: this.disableUpdate}">
+            <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: this.disableUpdate || incompatible}">
                 <fieldset>
                     <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!this.constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button @click="editConstraint" :disabled="disableUpdate">{{ 'ui.package.editConstraint' | translate }}</button>
+                    <button @click="editConstraint" :disabled="disableUpdate || incompatible">{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
                 <div class="version" v-if="package.version">
                     <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -70,7 +75,7 @@
                 <!--<button key="disable" class="disable" v-if="changed.get('enabled') === true">Disable</button>-->
 
                 <button key="remove" class="uninstall" v-if="original.get('constraint')" @click="uninstall" :disabled="disableRemove || changed.get('constraint') === null">{{ 'ui.package.removeButton' | translate }}</button>
-                <button key="install" class="install" v-else @click="install" :disabled="changed.get('constraint')">{{ 'ui.package.installButton' | translate }}</button>
+                <button key="install" class="install" v-else @click="install" :disabled="incompatible || changed.get('constraint')">{{ 'ui.package.installButton' | translate }}</button>
             </fieldset>
 
         </div>
@@ -91,6 +96,10 @@
         }),
 
         computed: {
+            headline() {
+
+            },
+
             hint() {
                 if (this.original === this.changed) {
                     return null;
@@ -153,6 +162,10 @@
             incompatible() {
                 if (this.package.type === 'contao-bundle') {
                     return !this.package.extra || !this.package.extra['contao-manager-plugin'];
+                }
+
+                if (!this.original.get('constraint') && (!this.package.managed || !this.package.supported)) {
+                    return true;
                 }
 
                 return false;
