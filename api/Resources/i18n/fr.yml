@@ -18,9 +18,15 @@ fr:
     memory_limit:
       title: 'Limite de mémoire PHP insuffisante'
       detail: 'Votre configuration PHP permet uniquement {limit} de mémoire (en ligne de commande). Ce n''est pas suffisant pour exécuter Composer et il n''a pas été possible d''augmenter automatiquement cette limite. Veuillez contacter votre hébergeur web pour obtenir de l''aide.'
+    systempdir:
+      title: 'Impossible d''écrire sur le répertoire temporaire du système.'
+      detail: 'C''est probablement un problème avec votre configuration d''hébergement. Assurez-vous que open_basedir permet d''accéder au répertoire temporaire ou que sys_temp_dir est correctement configuré.'
     contao_old:
       title: 'Version incompatible de Contao'
       detail: 'La version {version} de Contao n''est pas compatible avec Contao Manager, veuillez mettre à jour manuellement votre installation.'
+    contao_unknown:
+      title: 'Statut d''installation inconnu'
+      detail: "Certains fichiers ont été trouvés sur votre serveur mais aucune version connue de Contao n'a pu être détectée.\nVous devez réparer manuellement votre application ou supprimer les fichiers et dossiers suivants pour installer Contao :\n\n{files}"
   config:
     php_cli:
       not_found: 'Ce chemin ne contient pas de binaire PHP valide.'
