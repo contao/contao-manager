@@ -70,7 +70,6 @@
 
                         content.hits.forEach((pkg) => {
                             vm.packages[pkg.name] = pkg;
-                            console.log(pkg);
                         });
 
                         vm.originals = Immutable.fromJS(vm.packages);
