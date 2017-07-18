@@ -54,7 +54,7 @@
                     <a :href="package.url || package.homepage" target="_blank" class="more" v-if="package.url || package.homepage">{{ 'ui.package.homepage' | translate }}</a>
                 </p>
                 <p class="additional">
-                    <strong class="version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
+                    <strong class="version" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                     <span v-for="item in additional">{{ item }}</span>
                 </p>
             </div>

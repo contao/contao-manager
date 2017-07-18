@@ -31,6 +31,8 @@
     export default {
         components: { Package, Loader },
 
+        props: ['searchField'],
+
         data: () => ({
             packages: null,
             originals: null,
@@ -108,6 +110,12 @@
                 this.changes = this.originals;
                 this.$emit('changed', false);
             },
+        },
+
+        mounted() {
+            if (this.searchField) {
+                this.searchField.focus();
+            }
         },
     };
 </script>

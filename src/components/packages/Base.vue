@@ -8,7 +8,7 @@
             <button class="cancel" @click="stopSearch">X</button>
         </section>
 
-        <router-view ref="component" @changed="setHasChanges"></router-view>
+        <router-view ref="component" @changed="setHasChanges" :searchField="$refs.search"></router-view>
 
         <div id="package-actions" :class="{ active: hasChanges }">
             <div class="inner">
@@ -52,12 +52,6 @@
             },
             startSearch() {
                 this.$router.push(routes.packagesSearch);
-                this.$nextTick(() => {
-                    // run twice to await router rendering
-                    this.$nextTick(() => {
-                        this.$refs.search.focus();
-                    });
-                });
             },
             stopSearch() {
                 this.searchInput = '';
