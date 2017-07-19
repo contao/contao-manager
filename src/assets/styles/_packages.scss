@@ -128,7 +128,8 @@ section.package-actions {
     }
 
     .inside {
-        overflow: hidden;
+        @extend .clearfix;
+
         padding: 10px 20px 20px;
 
         @include screen(1024) {
@@ -210,8 +211,75 @@ section.package-actions {
                 font-style: normal;
             }
 
-            a.more {
-                margin-left: 5px;
+            button.more {
+                position: relative;
+                display: inline;
+                width: auto;
+                height: auto;
+                margin: 0 0 0 5px;
+                padding: 0 0 5px;
+                background: transparent;
+                color: $link-color;
+                font-weight: $font-weight-normal;
+                line-height: inherit;
+
+                ul {
+                    position: absolute;
+                    display: none;
+                    left: 50%;
+                    margin: 5px 0 0 0;
+                    padding: 0;
+                    //text-align: center;
+                    list-style-type: none;
+                    white-space: nowrap;
+                    background: #fff;
+                    border-top: 3px solid $contao-color;
+                    transform: translateX(-50%);
+                    z-index: 100;
+                    box-shadow: $shadow-color 0 1px 2px;
+
+                    &:before {
+                        position: absolute;
+                        left: 50%;
+                        top: -7px;
+                        width: 0;
+                        height: 0;
+                        margin-left: -4px;
+                        border-style: solid;
+                        border-width: 0 3.5px 4px 3.5px;
+                        border-color: transparent transparent $contao-color transparent;
+                        content: "";
+                    }
+                }
+
+                li {
+                    margin: 0;
+                    padding: 0;
+                    display: block;
+                    border-top: 1px solid #e5dfd0;
+
+                    a {
+                        display: block;
+                        margin: 0;
+                        padding: 10px 20px;
+                        color: $text-color;
+
+                        &:hover {
+                            color: #000;
+                            text-decoration: none;
+                        }
+                    }
+
+                    &:first-child {
+                        border-top: none;
+                    }
+                }
+
+                &:hover {
+                    ul {
+                        display: block;
+                    }
+                }
             }
         }
 
