@@ -16,10 +16,10 @@
 
             <div class="about">
                 <h1>Contao Open Source CMS</h1>
-                <p class="description">
-                    <span>Contao is an Open Source PHP Content Management System.</span>
-                    <button class="more">
-                        {{ 'ui.package.more' | translate }}
+                <div class="description">
+                    <p>Contao is an Open Source PHP Content Management System.</p>
+                    <div class="more">
+                        <button>{{ 'ui.package.more' | translate }}</button>
                         <ul>
                             <li><a href="https://www.contao.org" target="_blank">{{ 'ui.package.homepage' | translate }}</a></li>
                             <li><a href="https://docs.contao.org" target="_blank">{{ 'ui.package.support_docs' | translate }}</a></li>
@@ -27,8 +27,8 @@
                             <li><a href="https://github.com/contao/core-bundle/issues" target="_blank">{{ 'ui.package.support_issues' | translate }}</a></li>
                             <li><a href="https://github.com/contao/core-bundle" target="_blank">{{ 'ui.package.support_source' | translate }}</a></li>
                         </ul>
-                    </button>
-                </p>
+                    </div>
+                </div>
                 <p class="additional">
                     <strong class="version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                     <span v-for="item in additional">{{ item }}</span>
@@ -61,10 +61,10 @@
                     <span v-else-if="package.abandoned" :title="package.replacement === true && $t('ui.package.abandonedText') || $t('ui.package.replacement', { replacement: package.replacement })">{{ 'ui.package.abandonedTitle' | translate }}</span>
                 </h1>
 
-                <p class="description">
-                    <span v-html="package._highlightResult && package._highlightResult.description.value || package.description"></span>
-                    <button class="more">
-                        More
+                <div class="description">
+                    <p v-html="package._highlightResult && package._highlightResult.description.value || package.description"></p>
+                    <div class="more">
+                        <button>{{ 'ui.package.more' | translate }}</button>
                         <ul>
                             <li v-if="package.url || package.homepage"><a :href="package.url || package.homepage" target="_blank">{{ 'ui.package.homepage' | translate }}</a></li>
                             <li><a :href="'https://packagist.org/packages/'+package.name" target="_blank">{{ 'ui.package.packagist' | translate }}</a></li>
@@ -77,8 +77,8 @@
                             <li v-if="package.links && package.links.email"><a :href="'mailto:'+package.links.email" target="_blank">{{ 'ui.package.support_email' | translate }}</a></li>
                             <li v-if="package.links && package.links.rss"><a :href="package.links.rss" target="_blank">{{ 'ui.package.support_rss' | translate }}</a></li>
                         </ul>
-                    </button>
-                </p>
+                    </div>
+                </div>
                 <p class="additional">
                     <strong class="version" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                     <span v-for="item in additional">{{ item }}</span>

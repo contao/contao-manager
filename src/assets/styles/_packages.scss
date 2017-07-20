@@ -206,30 +206,37 @@ section.package-actions {
         .description {
             margin-bottom: 1em;
 
+            p {
+                display: inline;
+            }
+
             em {
                 background-color: $highlight-color;
                 font-style: normal;
             }
 
-            button.more {
+            div.more {
                 position: relative;
-                display: inline;
-                width: auto;
-                height: auto;
-                margin: 0 0 0 5px;
-                padding: 0 0 5px;
-                background: transparent;
-                color: $link-color;
-                font-weight: $font-weight-normal;
-                line-height: inherit;
+                display: inline-block;
+                margin-left: 5px;
+
+                button {
+                    width: auto;
+                    height: auto;
+                    padding: 0 0 5px;
+                    background: transparent;
+                    color: $link-color;
+                    font-weight: $font-weight-normal;
+                    line-height: inherit;
+                }
 
                 ul {
                     position: absolute;
                     display: none;
                     left: 50%;
-                    margin: 5px 0 0 0;
+                    margin: 0;
                     padding: 0;
-                    //text-align: center;
+                    text-align: center;
                     list-style-type: none;
                     white-space: nowrap;
                     background: #fff;
@@ -284,6 +291,8 @@ section.package-actions {
         }
 
         .additional {
+            margin-top: -5px;
+
             *:not(:last-child):after {
                 margin: 0 10px;
                 font-weight: $font-weight-normal;
@@ -328,6 +337,7 @@ section.package-actions {
             //noinspection CssInvalidPseudoSelector
             &::placeholder {
                 color: #fff;
+                opacity: 1;
             }
 
             &:disabled {
