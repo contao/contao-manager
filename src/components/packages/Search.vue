@@ -21,7 +21,6 @@
     /* eslint-disable no-param-reassign */
 
     import Immutable from 'immutable';
-    import algolia from 'algoliasearch';
 
     import routes from '../../router/routes';
 
@@ -38,7 +37,7 @@
             originals: null,
             changes: null,
             previousRequest: null,
-            algolia: algolia('60DW2LJW0P', 'e6efbab031852e115032f89065b3ab9f').initIndex('v1'),
+            algolia: null,
         }),
 
         computed: {
@@ -115,6 +114,12 @@
         mounted() {
             if (this.searchField) {
                 this.searchField.focus();
+            }
+
+            if (window.algoliasearch) {
+                this.algolia = window.algoliasearch('60DW2LJW0P', 'e6efbab031852e115032f89065b3ab9f').initIndex('v1');
+            } else {
+                this.packages = false;
             }
         },
     };

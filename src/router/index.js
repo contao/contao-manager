@@ -10,14 +10,14 @@ import Packages from '../components/packages/Base';
 import PackagesList from '../components/packages/List';
 
 const PackagesSearch = () => new Promise(
-    (resolve, reject) => {
+    (resolve) => {
         const script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = 'https://cdn.jsdelivr.net/algoliasearch/3.22.1/algoliasearchLite.min.js';
         script.setAttribute('integrity', 'sha256-af2RXe0fkPuUqhxbsRoVPlEumRNuCaJwDVBnAj2uZcI=');
         script.setAttribute('crossorigin', 'anonymous');
         script.addEventListener('load', () => resolve(script), false);
-        script.addEventListener('error', () => reject(script), false);
+        script.addEventListener('error', () => resolve(script), false);
         document.body.appendChild(script);
     }).then(() => import('../components/packages/Search'));
 

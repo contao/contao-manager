@@ -31,9 +31,6 @@ module.exports = {
             'components': resolve('src/components')
         }
     },
-    externals: {
-        algoliasearch: 'algoliasearch'
-    },
     module: {
         rules: [
             {
