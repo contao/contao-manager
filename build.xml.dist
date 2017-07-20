@@ -1,9 +1,16 @@
 <?xml version="1.0"?>
-<project name="Contao Manager" default="prod" basedir=".">
+<project name="Contao Manager" default="list" basedir=".">
     <exec executable="git" outputProperty="version" checkreturn="true">
         <arg value="describe" />
         <arg value="--always" />
     </exec>
+
+    <target name="list">
+        <echo message="Available commands:" />
+        <echo message="  phing prod  -  Builds production Phar (fresh clone of current Git commit)" />
+        <echo message="  phing dev   -  Builds development Phar (from current source files)" />
+        <echo message="  phing tx    -  Syncs language files with Transifex" />
+    </target>
 
     <target name="prod" depends="clone, composer, cache, npm, build-prod, box-prod, finish">
         <echo message="Contao Manager ${version} build complete" />
