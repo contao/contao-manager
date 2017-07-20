@@ -247,8 +247,13 @@
                 this.constraintEditable = false;
                 this.constraintError = false;
 
+                if (this.original.get('constraint') === undefined && this.constraint === undefined) {
+                    return;
+                }
+
                 if (this.constraint === this.original.get('constraint')
-                    || (this.original.get('constraint') === undefined && this.constraint === '')) {
+                    || (this.original.get('constraint') === undefined && this.constraint === '')
+                ) {
                     this.$emit('change', this.name, this.original.set('constraint', this.constraint));
                     return;
                 }
