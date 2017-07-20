@@ -10,8 +10,25 @@
     </target>
 
     <target name="dev" depends="build-dev, box-dev">
-            <echo message="Contao Manager ${version} build complete" />
-        </target>
+        <echo message="Contao Manager ${version} build complete" />
+    </target>
+
+    <target name="tx">
+        <echo message="Starting Transifex sync" />
+        <exec executable="tx" passthru="true">
+            <arg value="push" />
+            <arg value="-s" />
+        </exec>
+        <echo message="Waiting 10 seconds for sources to be parsed" />
+        <exec executable="sleep">
+            <arg value="10" />
+        </exec>
+        <exec executable="tx" passthru="true">
+            <arg value="pull" />
+            <arg value="--all" />
+            <arg value="--minimum-perc=50" />
+        </exec>
+    </target>
 
     <target name="clone">
         <echo message="Cloning into contao-manager-${version}" />
