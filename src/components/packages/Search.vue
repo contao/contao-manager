@@ -2,6 +2,7 @@
     <div class="packages">
         <div v-if="packages === false" class="offline">
             <p>{{ 'ui.packagesearch.offline' | translate }}</p>
+            <p>{{ 'ui.packagesearch.offlineExplain' | translate }}</p>
         </div>
         <loader v-else-if="packages === null">
             <p v-if="!query">{{ 'ui.packagesearch.start' | translate }}</p>
@@ -139,13 +140,10 @@
         text-align: center;
         font-weight: $font-weight-medium;
         font-size: 20px;
+        line-height: 1.5em;
 
-        a {
-            display: block;
-            margin-top: 20px;
-            font-weight: $font-weight-normal;
-            font-size: 0.8em;
-            cursor: pointer;
+        p + p {
+            font-size: 16px;
         }
     }
 
