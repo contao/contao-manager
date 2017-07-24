@@ -3,9 +3,9 @@
 // Order by language code
 
 export default {
-    cs: 'čeština (Czech)',
-    de: 'Deutsch (German)',
     en: 'English',
+    de: 'Deutsch (German)',
+    cs: 'čeština (Czech)',
     es: 'Español (Spanish)',
     fa: 'فارسی (Persian)',
     fr: 'Français (French)',

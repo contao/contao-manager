@@ -5,7 +5,12 @@
             <li><a :href="$t('ui.footer.helpHref')" target="_blank">{{ 'ui.footer.help' | translate }}</a></li>
             <li><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ 'ui.footer.reportProblem' | translate }}</a></li>
         </ul>
-        <select-menu name="language" label="Language" :value="currentLanguage" :options="languageOptions" @input="updateLanguage"></select-menu>
+        <div class="language">
+            <button>{{ languageOptions[currentLanguage] }}</button>
+            <ul>
+                <li v-for="(label, code) in languageOptions"><a @click="updateLanguage(code)">{{ label }}</a></li>
+            </ul>
+        </div>
     </footer>
 </template>
 
@@ -13,11 +18,7 @@
     import i18n from '../../i18n';
     import locales from '../../i18n/locales';
 
-    import SelectMenu from '../widgets/SelectMenu';
-
     export default {
-        components: { SelectMenu },
-
         data: () => ({
             language: 'en',
         }),

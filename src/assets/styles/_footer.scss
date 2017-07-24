@@ -24,31 +24,6 @@ footer {
         font-weight: $font-weight-normal;
     }
 
-    .widget.select {
-        display: inline-block;
-        margin-top: 10px;
-        line-height: 20px;
-
-        label {
-            position: static !important;
-            float: left;
-            height: 20px;
-            width: 20px;
-            margin-right: 5px;
-            text-indent: -999em;
-            background: url(../assets/images/language.svg) center center no-repeat;
-        }
-
-        select {
-            width: auto;
-            height: auto;
-            margin: 0 !important;
-            padding: 0;
-            border: none;
-            background: none;
-        }
-    }
-
     .links {
         margin: 5px 0 0;
         padding: 0;
@@ -68,29 +43,90 @@ footer {
             color: $footer-link;
         }
     }
-}
 
-/*.manager footer {
-    .links {
-        float: right;
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
+    div.language {
+        position: relative;
+        display: inline-block;
+        margin-left: 5px;
 
-        li {
-            float: left;
+        button {
+            width: auto;
+            height: auto;
+            padding: 0 0 0 25px;
+            margin-top: 10px !important;
+            background: transparent;
+            color: $text-color;
+            font-size: 12px;
+            font-weight: $font-weight-normal;
+            line-height: 20px;
+            background: url(../assets/images/language.svg) left center no-repeat;
+            background-size: 20px 20px;
+        }
 
-            &:not(:first-child):before {
-                content: "|";
-                padding: 0 10px;
+        ul {
+            position: absolute;
+            display: none;
+            width: 350px;
+            left: 50%;
+            bottom: 30px;
+            margin: 0;
+            padding: 0;
+            text-align: left;
+            list-style-type: none;
+            white-space: nowrap;
+            background: #fff;
+            border-bottom: 3px solid $contao-color;
+            transform: translateX(-50%);
+            z-index: 100;
+            box-shadow: $shadow-color 0 -1px 2px;
+
+            &:after {
+                position: absolute;
+                left: 50%;
+                bottom: -7px;
+                width: 0;
+                height: 0;
+                margin-left: -4px;
+                border-style: solid;
+                border-width: 4px 3.5px 0 3.5px;
+                border-color: $contao-color transparent transparent transparent;
+                content: "";
             }
         }
 
-        a {
-            color: $footer-link;
+        li {
+            float: left;
+            width: 50%;
+            margin: 0;
+            padding: 0;
+            border-top: 1px solid #e5dfd0;
+
+            a {
+                display: block;
+                margin: 0;
+                padding: 5px 10px;
+                color: $text-color;
+                cursor: pointer;
+
+                &:hover {
+                    color: #000;
+                    text-decoration: none;
+                }
+            }
+
+            &:first-child,
+            &:nth-child(2) {
+                border-top: none;
+            }
+        }
+
+        &:hover {
+            ul {
+                display: block;
+            }
         }
     }
-}*/
+}
 
 @include screen(960) {
     .table.wide {
