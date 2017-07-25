@@ -6,9 +6,11 @@
             <li><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ 'ui.footer.reportProblem' | translate }}</a></li>
         </ul>
         <div class="language">
-            <button>{{ languageOptions[currentLanguage] }}</button>
-            <ul>
-                <li v-for="(label, code) in languageOptions"><a @click="updateLanguage(code)">{{ label }}</a></li>
+            <button @click="open">{{ languageOptions[currentLanguage] }}</button>
+            <ul v-if="visible">
+                <li v-for="(label, code) in languageOptions">
+                    <a :class="{ active: code === currentLanguage }" @click="updateLanguage(code)" @touchstart="ignore">{{ label }}</a>
+                </li>
             </ul>
         </div>
     </footer>
@@ -21,6 +23,7 @@
     export default {
         data: () => ({
             language: 'en',
+            visible: false,
         }),
 
         computed: {
@@ -37,6 +40,24 @@
             updateLanguage(value) {
                 i18n.load(value);
             },
+
+            open(e) {
+                e.stopPropagation();
+                this.visible = !this.visible;
+            },
+
+            close() {
+                this.visible = false;
+            },
+
+            ignore(e) {
+                e.stopPropagation();
+            },
+        },
+
+        mounted() {
+            window.addEventListener('click', this.close);
+            window.addEventListener('touchstart', this.close);
         },
     };
 </script>

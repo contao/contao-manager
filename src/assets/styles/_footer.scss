@@ -61,11 +61,15 @@ footer {
             line-height: 20px;
             background: url(../assets/images/language.svg) left center no-repeat;
             background-size: 20px 20px;
+
+            &:hover {
+                color: #000;
+            }
         }
 
         ul {
             position: absolute;
-            display: none;
+            display: block;
             width: 350px;
             left: 50%;
             bottom: 30px;
@@ -108,6 +112,10 @@ footer {
                 color: $text-color;
                 cursor: pointer;
 
+                &.active {
+                    font-weight: $font-weight-bold;
+                }
+
                 &:hover {
                     color: #000;
                     text-decoration: none;
@@ -117,12 +125,6 @@ footer {
             &:first-child,
             &:nth-child(2) {
                 border-top: none;
-            }
-        }
-
-        &:hover {
-            ul {
-                display: block;
             }
         }
     }

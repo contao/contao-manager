@@ -228,11 +228,15 @@ section.package-actions {
                     color: $link-color;
                     font-weight: $font-weight-normal;
                     line-height: inherit;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
                 }
 
                 ul {
                     position: absolute;
-                    display: none;
+                    display: block;
                     left: 50%;
                     margin: 0;
                     padding: 0;
@@ -279,12 +283,6 @@ section.package-actions {
 
                     &:first-child {
                         border-top: none;
-                    }
-                }
-
-                &:hover {
-                    ul {
-                        display: block;
                     }
                 }
             }
