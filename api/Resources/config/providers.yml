@@ -58,6 +58,14 @@ kundenserver.de:
         /usr/bin/php{major}.{minor}: []
         /usr/lib/cgi-bin/php{major}.{minor}: []
 
+mittwald.de:
+    name: Mittwald CM Service GmbH & Co. KG
+    website: www.mittwald.de
+    last_update: 2017-09-17
+    issues: []
+    php:
+        /usr/local/bin/php_cli: []
+
 netcup.net:
     name: netcup GmbH
     website: www.netcup.de
