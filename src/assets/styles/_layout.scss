@@ -35,6 +35,11 @@ fieldset {
     padding: 0;
 }
 
+legend {
+    -webkit-padding-start: 0;
+    -webkit-padding-end: 0;
+}
+
 /*
 img, svg, iframe {
     display: block;
