@@ -134,15 +134,6 @@ class StatusController extends Controller
      */
     public function __invoke()
     {
-        if (0 !== $this->userConfig->count() && !$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new JsonResponse(
-                [
-                    'status' => self::STATUS_AUTHENTICATE,
-                ],
-                Response::HTTP_UNAUTHORIZED
-            );
-        }
-
         if (null !== ($response = $this->runIntegrityChecks())) {
             return $response;
         }

@@ -26,7 +26,8 @@
         height: 25px;
         position: relative;
 
-        .manager & {
+        .manager &,
+        #app > .loader > & {
             margin: 0 auto 40px;
             width: 100px;
             height: 100px;
@@ -103,7 +104,8 @@
         }
     }
 
-    .manager .loader {
+    .manager .loader,
+    #app > .loader {
         margin: 100px 0;
         text-align: center;
         font-size: 20px;

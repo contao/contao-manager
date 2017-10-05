@@ -1,6 +1,13 @@
 import Vue from 'vue';
 
 export default {
+    fetchSession() {
+        return Vue.http.get('api/session').then(
+            response => response.status,
+            response => response.status,
+        );
+    },
+
     fetchStatus() {
         return Vue.http.get('api/status').then(
             response => response.body,

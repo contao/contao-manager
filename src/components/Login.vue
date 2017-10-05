@@ -1,8 +1,9 @@
 <template>
     <boxed-layout mainClass="login">
-        <div slot="header">
+        <header slot="header">
+            <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
             <p class="headline"><strong>Contao Manager</strong></p>
-        </div>
+        </header>
         <section slot="section">
             <h1>{{ 'ui.login.headline' | translate }}</h1>
             <p>{{ 'ui.login.description' | translate }}</p>
@@ -21,9 +22,7 @@
 </template>
 
 <script>
-    import store from '../store';
-    import apiStatus from '../api/status';
-    import routes from '../router/routes';
+    import views from '../router/views';
 
     import BoxedLayout from './layouts/Boxed';
     import TextField from './widgets/TextField';
@@ -57,10 +56,9 @@
                 this.$store.dispatch('auth/login', {
                     username: this.username,
                     password: this.password,
-                })
-                .then(() => {
-                    if (this.$store.state.auth.username) {
-                        this.$router.push(routes.install);
+                }).then((success) => {
+                    if (success) {
+                        this.$store.commit('setView', views.BOOT);
                     } else {
                         this.logging_in = false;
                         this.login_failed = true;
@@ -70,16 +68,6 @@
             reset() {
                 this.login_failed = false;
             },
-        },
-
-        beforeRouteEnter(to, from, next) {
-            store.dispatch('fetchStatus').then((result) => {
-                if (result.status === apiStatus.OK) {
-                    next(routes.packages);
-                }
-
-                next();
-            });
         },
 
         mounted() {

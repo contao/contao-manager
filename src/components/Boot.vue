@@ -1,27 +1,15 @@
 <template>
     <boxed-layout wide="1" mainClass="install">
-        <div slot="header">
+        <header slot="header">
+            <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
             <p class="headline">
                 <strong>Contao Manager</strong>
                 {{ 'ui.package.version' | translate({ version: '@package_version@' }) }}
             </p>
             <p v-html="$t('ui.install.intro')"></p>
-        </div>
+        </header>
 
         <section slot="section">
-
-            <fieldset v-if="!authUsername">
-                <legend>{{ 'ui.install.accountHeadline' | translate }}</legend>
-                <p>{{ 'ui.install.accountCreate' | translate }}</p>
-                <text-field ref="username" name="username" :label="$t('ui.install.accountUsername')" class="inline" :disabled="installing" v-model="username" @enter="install"></text-field>
-                <text-field type="password" name="password" :label="$t('ui.install.accountPassword')" :placeholder="$t('ui.install.accountPasswordPlaceholder')" :error="errors.password" :disabled="installing" v-model="password" @input="validatePassword" @enter="install"></text-field>
-                <text-field type="password" name="password_confirm" :label="$t('ui.install.accountPasswordConfirm')" :disabled="installing" :error="errors.password_confirm" v-model="password_confirm" @input="validatePasswordConfirm" @enter="install"></text-field>
-            </fieldset>
-
-            <fieldset v-else>
-                <legend>{{ 'ui.install.accountHeadline' | translate }}</legend>
-                <p v-html="$t('ui.install.accountCreated', { username: authUsername })"></p>
-            </fieldset>
 
             <fieldset v-if="!contaoVersion">
                 <legend>{{ 'ui.install.contaoHeadline' | translate }}</legend>
@@ -57,7 +45,7 @@
 <script>
     import store from '../store';
     import apiStatus from '../api/status';
-    import routes from '../router/routes';
+    import views from '../router/views';
 
     import BoxedLayout from './layouts/Boxed';
     import TextField from './widgets/TextField';
@@ -69,9 +57,6 @@
         components: { BoxedLayout, TextField, SelectMenu, Checkbox, Loader },
 
         data: () => ({
-            username: '',
-            password: '',
-            password_confirm: '',
             version: '',
             versions: { '4.4.*': '4.4 (latest)' },
 
@@ -79,7 +64,6 @@
             github_oauth_token: '',
 
             errors: {
-                password: '',
                 github_oauth_token: '',
                 php_cli: '',
             },
@@ -91,22 +75,7 @@
         computed: {
 
             inputValid() {
-                if (!this.php_cli) {
-                    return false;
-                }
-
-                if (this.authUsername) {
-                    return true;
-                }
-
-                return !(this.username === '' || this.password === '' || this.password_confirm === '' || !this.passwordValid);
-            },
-
-            passwordValid() {
-                return this.password === ''
-                    || this.password_confirm === ''
-                    || (this.password === this.password_confirm
-                        && this.password.length >= 8);
+                return !!this.php_cli;
             },
 
             buttonLabel() {
@@ -114,19 +83,11 @@
                     return this.$t('ui.install.buttonInstall');
                 }
 
-                if (!this.authUsername) {
-                    return this.$t('ui.install.buttonAccount');
-                }
-
                 return this.$t('ui.install.buttonConfigure');
             },
 
             contaoVersion() {
                 return this.$store.state.version;
-            },
-
-            authUsername() {
-                return this.$store.state.auth.username;
             },
         },
 
@@ -180,60 +141,19 @@
 
                 this.installing = true;
 
-                new Promise((resolve) => {
-                    if (this.authUsername) {
-                        resolve();
-                        return;
-                    }
+                const config = {
+                    php_cli: this.php_cli,
+                    php_can_fork: false,
+                    php_force_background: false,
+                };
 
-                    this.$store.dispatch(
-                        'auth/createAccount',
-                        {
-                            username: this.username,
-                            password: this.password,
-                        },
-                    ).then(
-                        () => {
-                            // Refresh status to show the logged in user
-                            this.$store.dispatch('fetchStatus', true).then(() => {
-                                resolve();
-                            });
-                        },
-                    );
-                }).then(() => {
-                    const config = {
-                        php_cli: this.php_cli,
-                        php_can_fork: false,
-                        php_force_background: false,
-                    };
+                if (this.github_oauth_token) {
+                    config.github_oauth_token = this.github_oauth_token;
+                }
 
-                    if (this.github_oauth_token) {
-                        config.github_oauth_token = this.github_oauth_token;
-                    }
-
-                    return this.$store.dispatch('configure', config).then(
-                        () => true,
-                        (error) => {
-                            this.errors[error.key] = error.message;
-                            this.advanced = true;
-                            this.installing = false;
-
-                            this.$nextTick(() => {
-                                if (this.$refs[error.key]) {
-                                    this.$refs[error.key].focus();
-                                }
-                            });
-
-                            return false;
-                        },
-                    );
-                }).then((success) => {
-                    if (!success) {
-                        return false;
-                    }
-
+                this.$store.dispatch('configure', config).then(
                     // Refresh status to run integrity check for the newly set php_cli
-                    return this.$store.dispatch('fetchStatus', true).then(
+                    () => this.$store.dispatch('fetchStatus', true).then(
                         () => {
                             if (this.contaoVersion) {
                                 return true;
@@ -241,8 +161,19 @@
 
                             return this.$store.dispatch('install', this.version).then(() => true);
                         },
-                    );
-                });
+                    ),
+                    (error) => {
+                        this.errors[error.key] = error.message;
+                        this.advanced = true;
+                        this.installing = false;
+
+                        this.$nextTick(() => {
+                            if (this.$refs[error.key]) {
+                                this.$refs[error.key].focus();
+                            }
+                        });
+                    },
+                );
             },
 
             enableAdvanced() {
@@ -254,33 +185,30 @@
             },
         },
 
-        beforeRouteEnter(to, from, next) {
-            store.dispatch('fetchStatus').then((result) => {
-                if (result.status === apiStatus.OK) {
-                    next(routes.packages);
+        mounted() {
+            const load = () => {
+                console.log(this.$store.state.status);
+                if (this.$store.state.status === apiStatus.OK) {
+                    this.$store.commit('setView', views.READY);
                 }
 
+                this.php_cli = this.$store.state.config.php_cli;
+
+                if (!this.php_cli) {
+                    this.advanced = true;
+                }
+            };
+
+            store.dispatch('fetchStatus').then((result) => {
                 if (result.task) {
                     store.dispatch('tasks/reload').then(
-                        () => store.dispatch('fetchStatus', true),
+                        () => store.dispatch('fetchStatus', true).then(load),
                         () => {},
                     );
+                } else {
+                    load();
                 }
-
-                next();
             });
-        },
-
-        mounted() {
-            if (this.$refs.username) {
-                this.$refs.username.focus();
-            }
-
-            this.php_cli = this.$store.state.config.php_cli;
-
-            if (!this.php_cli) {
-                this.advanced = true;
-            }
         },
     };
 </script>

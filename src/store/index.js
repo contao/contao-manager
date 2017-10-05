@@ -5,6 +5,7 @@ import Vuex from 'vuex';
 
 import api from '../api';
 import apiStatus from '../api/status';
+import views from '../router/views';
 
 import auth from './auth';
 import tasks from './tasks';
@@ -15,6 +16,7 @@ const store = new Vuex.Store({
     modules: { auth, tasks },
 
     state: {
+        view: views.INIT,
         status: null,
         config: null,
         error: null,
@@ -22,6 +24,10 @@ const store = new Vuex.Store({
     },
 
     mutations: {
+        setView(state, view) {
+            state.view = view;
+        },
+
         setStatus(state, { status, config, version }) {
             state.status = status;
             state.config = config;

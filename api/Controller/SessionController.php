@@ -53,16 +53,34 @@ class SessionController extends Controller
     }
 
     /**
+     * Returns the login status of the user.
+     *
+     * @return Response
+     */
+    public function status()
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return new JsonResponse(['username' => (string) $this->getUser()], Response::HTTP_OK);
+        }
+
+        if (0 === $this->config->count()) {
+            return new Response('', Response::HTTP_NO_CONTENT);
+        }
+
+        return new JsonResponse(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
      * Logs the user in from request data. If no user exist, the first user is created from this data.
      *
      * @param Request $request
      *
-     * @return JsonResponse|Response
+     * @return Response
      */
     public function login(Request $request)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new Response('User is already logged in', Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => 'User is already logged in'], Response::HTTP_BAD_REQUEST);
         }
 
         $username = $request->request->get('username');
@@ -77,15 +95,10 @@ class SessionController extends Controller
         if (!$this->config->hasUser($username)
             || !$this->passwordEncoder->isPasswordValid($this->config->getUser($username), $password)
         ) {
-            return new Response('', Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $response = new JsonResponse(
-            [
-                'status' => 'OK',
-                'username' => $username,
-            ]
-        );
+        $response = new JsonResponse(['username' => $username]);
 
         $this->jwtManager->addToken($request, $response, $username);
 
@@ -101,11 +114,7 @@ class SessionController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $response = new JsonResponse(
-            [
-                'status' => 'OK',
-            ]
-        );
+        $response = new Response('', Response::HTTP_NO_CONTENT);
 
         $this->jwtManager->removeToken($request, $response);
 

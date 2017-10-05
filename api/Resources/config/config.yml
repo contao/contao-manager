@@ -23,5 +23,5 @@ security:
             anonymous: ~
 
     access_control:
-        - { path: ^/api/(status|session), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/session$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

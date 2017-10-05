@@ -21,7 +21,7 @@ Vue.http.interceptors.push((request, next) => {
     }
 
     next((response) => {
-        if (response.status === 403 || (response.status === 401 && url !== 'api/status')) {
+        if (response.status === 403 || (response.status === 401 && url !== 'api/session')) {
             store.dispatch('fetchStatus', true);
         } else if (response.headers.get('Content-Type') === 'application/problem+json') {
             store.commit('setError', response.data);

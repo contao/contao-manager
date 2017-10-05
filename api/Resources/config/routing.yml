@@ -3,6 +3,11 @@ status:
     defaults: { _controller: contao_manager.controller.status }
     methods: [GET]
 
+session:
+    path: /api/session
+    defaults: { _controller: contao_manager.controller.session:status }
+    methods: [GET]
+
 login:
     path:     /api/session
     defaults: { _controller: contao_manager.controller.session:login }

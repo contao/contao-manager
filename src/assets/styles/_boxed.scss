@@ -50,12 +50,7 @@
     }
 
     header {
-        margin-bottom: 60px;
         text-align: center;
-
-        img {
-            margin-top: 40px;
-        }
 
         .headline {
             margin-top: 15px;
@@ -78,35 +73,36 @@
             max-width: 300px;
             margin-left: auto;
             margin-right: auto;
+            padding: 40px 0;
         }
 
         section {
             position: relative;
             max-width: 250px;
             margin: 0 auto;
-        }
 
-        fieldset {
-            margin-top: 2em;
+            fieldset {
+                margin-top: 2em;
 
-            &.submit {
-                margin-top: 0;
+                &.submit {
+                    margin-top: 0;
+                }
+
+                legend {
+                    font-size: 18px;
+                    font-weight: $font-weight-bold;
+                }
             }
 
-            legend {
-                font-size: 18px;
-                font-weight: $font-weight-bold;
+            input,
+            select {
+                margin: 5px 0 10px;
             }
-        }
 
-        input,
-        select {
-            margin: 5px 0 10px;
-        }
-
-        button,
-        a.button {
-            margin-top: 20px;
+            button,
+            a.button {
+                margin-top: 20px;
+            }
         }
     }
 
@@ -161,7 +157,7 @@
         }
     }
 
-    main.install {
+    main.install section {
         button {
             float: left;
             margin-right: 10px;
@@ -197,12 +193,11 @@
         main.install {
             header {
                 max-width: none;
-                padding: 80px 60px 0;
+                padding: 60px;
 
                 @include screen(960) {
                     float: left;
                     width: 50%;
-                    padding-top: 60px;
                 }
             }
 

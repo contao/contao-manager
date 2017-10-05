@@ -1,26 +1,39 @@
 <template>
     <div id="app">
-        <div class="https-warning" v-if="insecure">
+        <div class="https-warning" v-if="isInsecure">
             <strong>{{ 'ui.app.httpsHeadline' | translate }}</strong>
             <span>{{ 'ui.app.httpsDescription' | translate }}</span>
             <a :href="$t('ui.app.moreHref')" target="_blank">{{ 'ui.app.moreLink' | translate }}</a>
         </div>
-        <router-view :class="taskRunning ? 'blur-in' : 'blur-out'"></router-view>
-        <keep-alive><task-popup v-if="taskRunning"></task-popup></keep-alive>
+
         <error v-if="hasError"></error>
+
+        <loader v-else-if="viewInit" class="init">
+            <p>Initializing …</p>
+        </loader>
+
+        <create-account v-else-if="viewAccount"></create-account>
+        <login v-else-if="viewLogin"></login>
+
+        <boot v-else-if="viewBoot" :class="taskRunning ? 'blur-in' : 'blur-out'"></boot>
+        <router-view v-else :class="taskRunning ? 'blur-in' : 'blur-out'"></router-view>
+
+        <keep-alive><task-popup v-if="taskRunning"></task-popup></keep-alive>
     </div>
 </template>
 
 <script>
-    import apiStatus from '../api/status';
-    import scopes from '../router/scopes';
-    import routes from '../router/routes';
+    import views from '../router/views';
 
     import TaskPopup from './fragments/TaskPopup';
+    import Loader from './fragments/Loader';
     import Error from './Error';
+    import CreateAccount from './CreateAccount';
+    import Login from './Login';
+    import Boot from './Boot';
 
     export default {
-        components: { TaskPopup, Error },
+        components: { Loader, TaskPopup, Error, CreateAccount, Login, Boot },
 
         computed: {
             taskRunning() {
@@ -31,12 +44,24 @@
                 return this.$store.state.error !== null;
             },
 
-            status() {
-                return this.$store.state.status;
+            isInsecure() {
+                return window.location.protocol !== 'https:' && window.location.hostname !== 'localhost';
             },
 
-            insecure() {
-                return window.location.protocol !== 'https:' && window.location.hostname !== 'localhost';
+            viewInit() {
+                return this.$store.state.view === views.INIT;
+            },
+
+            viewAccount() {
+                return this.$store.state.view === views.ACCOUNT;
+            },
+
+            viewLogin() {
+                return this.$store.state.view === views.LOGIN;
+            },
+
+            viewBoot() {
+                return this.$store.state.view === views.BOOT;
             },
         },
 
@@ -44,27 +69,11 @@
             taskRunning(running) {
                 document.body.style.overflow = running ? 'hidden' : 'scroll';
             },
-
-            status(status) {
-                delete this.$router.scope;
-
-                if (status === apiStatus.INSTALL) {
-                    this.$router.scope = scopes.INSTALL;
-                    this.$router.replace(routes.install);
-                } else if (status === apiStatus.AUTHENTICATE) {
-                    this.$router.scope = scopes.LOGIN;
-                    this.$router.replace(routes.login);
-                } else if (status === apiStatus.OK) {
-                    this.$router.scope = scopes.MANAGER;
-                    this.$router.replace(routes.packages);
-                }
-            },
         },
 
-        created() {
+        mounted() {
             document.title = 'Contao Manager @package_version@';
-
-            this.$store.dispatch('fetchStatus');
+            this.$store.dispatch('auth/status');
         },
     };
 </script>
