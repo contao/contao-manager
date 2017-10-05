@@ -76,6 +76,7 @@ class AboutCommand extends ContainerAwareCommand
             ['<info>PHP</info>'],
             new TableSeparator(),
             ['Version', $data['php']['version']],
+            ['Architecture', $data['php']['arch'].' bits'],
             ['Intl locale', $data['php']['locale']],
             ['Timezone', $data['php']['timezone']],
             new TableSeparator(),
@@ -86,8 +87,11 @@ class AboutCommand extends ContainerAwareCommand
             ['Network Owner', $data['server']['org']],
             ['Country', $country],
             ['Operating System', $data['server']['os_name'].$osVersion],
-            ['Architecture', $data['server']['arch'].' bits'],
         ];
+
+        if (!empty($data['server']['arch'])) {
+            $rows[] = ['Architecture', $data['server']['arch']];
+        }
 
         if (!empty($data['provider'])) {
             $rows[] = new TableSeparator();

@@ -148,6 +148,7 @@ class ServerInfo
             'php' => [
                 'version' => PHP_VERSION,
                 'version_id' => PHP_VERSION_ID,
+                'arch' => PHP_INT_SIZE * 8,
                 'sapi' => PHP_SAPI,
                 'locale' => class_exists('Locale', false) && \Locale::getDefault() ? \Locale::getDefault() : '',
                 'timezone' => date_default_timezone_get(),
@@ -155,13 +156,14 @@ class ServerInfo
             'server' => array_merge($ipInfo, [
                 'os_name' => php_uname('s'),
                 'os_version' => php_uname('r'),
-                'arch' => PHP_INT_SIZE * 8,
+                'arch' => php_uname('m'),
             ]),
             'provider' => $provider,
         ];
 
         if ($this->data['server']['os_name'] === $this->data['server']['os_version']) {
             $this->data['server']['os_version'] = '';
+            $this->data['server']['arch'] = '';
         }
     }
 
