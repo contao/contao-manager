@@ -11,6 +11,7 @@
 namespace Contao\ManagerApi\Security;
 
 use Contao\ManagerApi\Config\ManagerConfig;
+use Contao\ManagerApi\Config\UserConfig;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,9 +25,9 @@ class JwtManager
     const COOKIE_XSRF = 'contao_manager_xsrf';
 
     /**
-     * @var ManagerConfig
+     * @var UserConfig
      */
-    private $config;
+    private $users;
 
     /**
      * @var TokenGeneratorInterface
@@ -36,11 +37,11 @@ class JwtManager
     /**
      * Constructor.
      *
-     * @param ManagerConfig $config
+     * @param UserConfig $users
      */
-    public function __construct(ManagerConfig $config)
+    public function __construct(UserConfig $users)
     {
-        $this->config = $config;
+        $this->users = $users;
         $this->tokenGenerator = new UriSafeTokenGenerator();
     }
 
@@ -60,7 +61,7 @@ class JwtManager
         try {
             return JWT::decode(
                 $request->cookies->get(self::COOKIE_AUTH),
-                $this->config->getSecret(),
+                $this->users->getSecret(),
                 ['HS256']
             );
         } catch (\Exception $e) {
@@ -99,7 +100,7 @@ class JwtManager
         $response->headers->setCookie(
             $this->createCookie(
                 self::COOKIE_AUTH,
-                JWT::encode($payload, $this->config->getSecret(), 'HS256'),
+                JWT::encode($payload, $this->users->getSecret(), 'HS256'),
                 $request,
                 true
             )

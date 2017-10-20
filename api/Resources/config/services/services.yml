@@ -58,7 +58,7 @@ services:
     contao_manager.security.jwt_manager:
         class: Contao\ManagerApi\Security\JwtManager
         arguments:
-            - "@contao_manager.config.manager"
+            - "@contao_manager.config.user"
 
     contao_manager.security.jwt_authenticator:
         class: Contao\ManagerApi\Security\JwtAuthenticator

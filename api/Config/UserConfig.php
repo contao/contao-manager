@@ -37,6 +37,38 @@ class UserConfig extends AbstractConfig
         parent::__construct($configFile, $filesystem);
 
         $this->passwordEncoder = $passwordEncoder;
+
+        $this->migrateSecret($kernel);
+    }
+
+    /**
+     * Gets the application secret.
+     *
+     * @return string
+     */
+    public function getSecret()
+    {
+        if (!isset($this->data['secret'])) {
+            $this->setSecret(bin2hex(random_bytes(40)));
+        }
+
+        return $this->data['secret'];
+    }
+
+    /**
+     * Sets the application secret.
+     *
+     * @param string $secret
+     */
+    public function setSecret($secret)
+    {
+        if (empty($secret)) {
+            throw new \InvalidArgumentException('Secret cannot be empty.');
+        }
+
+        $this->data['secret'] = (string) $secret;
+
+        $this->save();
     }
 
     /**
@@ -46,13 +78,13 @@ class UserConfig extends AbstractConfig
      */
     public function getUsers()
     {
-        if (0 === $this->count()) {
+        if (0 === $this->count() || empty($this->data['users'])) {
             return [];
         }
 
         $users = [];
 
-        foreach ($this->data as $user) {
+        foreach ($this->data['users'] as $user) {
             $users[] = new User(
                 $user['username'],
                 $user['password']
@@ -71,7 +103,7 @@ class UserConfig extends AbstractConfig
      */
     public function hasUser($username)
     {
-        return isset($this->data[$username]);
+        return isset($this->data['users'][$username]);
     }
 
     /**
@@ -83,13 +115,13 @@ class UserConfig extends AbstractConfig
      */
     public function getUser($username)
     {
-        if (!isset($this->data[$username])) {
+        if (!isset($this->data['users'][$username])) {
             return null;
         }
 
         return new User(
-            $this->data[$username]['username'],
-            $this->data[$username]['password']
+            $this->data['users'][$username]['username'],
+            $this->data['users'][$username]['password']
         );
     }
 
@@ -120,11 +152,11 @@ class UserConfig extends AbstractConfig
     {
         $username = $user->getUsername();
 
-        if (isset($this->data[$username])) {
+        if (isset($this->data['users'][$username])) {
             throw new \RuntimeException(sprintf('User "%s" already exists.', $username));
         }
 
-        $this->data[$username] = [
+        $this->data['users'][$username] = [
             'username' => $username,
             'password' => $user->getPassword(),
         ];
@@ -139,7 +171,7 @@ class UserConfig extends AbstractConfig
      */
     public function updateUser(UserInterface $user)
     {
-        unset($this->data[$user->getUsername()]);
+        unset($this->data['users'][$user->getUsername()]);
 
         $this->addUser($user);
     }
@@ -151,8 +183,29 @@ class UserConfig extends AbstractConfig
      */
     public function deleteUser($username)
     {
-        unset($this->data[$username]);
+        unset($this->data['users'][$username]);
 
         $this->save();
+    }
+
+    /**
+     * Migrates the secret from manager config to user config.
+     *
+     * @param ApiKernel $kernel
+     */
+    private function migrateSecret(Apikernel $kernel)
+    {
+        if (!empty($this->data) && !isset($this->data['users'])) {
+            $config = $kernel->getContainer()->get('contao_manager.config.manager');
+
+            $this->data = ['users' => $this->data];
+
+            if ($config->has('secret')) {
+                $this->data['secret'] = $config->get('secret');
+                $config->remove('secret');
+            }
+
+            $this->save();
+        }
     }
 }

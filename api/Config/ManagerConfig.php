@@ -50,41 +50,11 @@ class ManagerConfig extends AbstractConfig
     {
         $data = parent::all();
 
-        $data['secret'] = $this->getSecret();
         $data['php_cli'] = $this->getPhpExecutable();
 
         return $data;
     }
 
-    /**
-     * Gets the application secret.
-     *
-     * @return string
-     */
-    public function getSecret()
-    {
-        if (!isset($this->data['secret'])) {
-            $this->setSecret(bin2hex(random_bytes(40)));
-        }
-
-        return $this->data['secret'];
-    }
-
-    /**
-     * Sets the application secret.
-     *
-     * @param string $secret
-     */
-    public function setSecret($secret)
-    {
-        if (empty($secret)) {
-            throw new \InvalidArgumentException('Secret cannot be empty.');
-        }
-
-        $this->data['secret'] = (string) $secret;
-
-        $this->save();
-    }
 
     /**
      * Gets the PHP executable from config or PhpExecutableFinder.
