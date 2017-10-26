@@ -55,10 +55,6 @@
 
         computed: {
             inputValid() {
-                if (this.authUsername) {
-                    return true;
-                }
-
                 return !(this.username === '' || this.password === '' || this.password_confirm === '' || !this.passwordValid);
             },
 

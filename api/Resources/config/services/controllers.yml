@@ -54,16 +54,16 @@ services:
             - [setContainer, ["@service_container"]]
 
     contao_manager.controller.config_users:
-            class: Contao\ManagerApi\Controller\UserController
-            arguments:
-                - "@contao_manager.config.user"
-            calls:
-                - [setContainer, ["@service_container"]]
+        class: Contao\ManagerApi\Controller\UserController
+        arguments:
+            - "@contao_manager.config.user"
+        calls:
+            - [setContainer, ["@service_container"]]
 
     contao_manager.controller.tasks:
-            class: Contao\ManagerApi\Controller\TaskController
-            arguments:
-                - "@contao_manager.process.console_factory"
-                - "@tenside.tasks"
-            calls:
-                - [setContainer, ["@service_container"]]
+        class: Contao\ManagerApi\Controller\TaskController
+        arguments:
+            - "@contao_manager.process.console_factory"
+            - "@tenside.tasks"
+        calls:
+            - [setContainer, ["@service_container"]]
