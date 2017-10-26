@@ -27,7 +27,7 @@ export default {
     load(locale) {
         window.localStorage.setItem('contao_manager_locale', locale);
 
-        if (Vue.i18n.exists(locale)) {
+        if (Vue.i18n.localeExists(locale)) {
             Vue.i18n.set(locale);
             return new Promise(resolve => resolve());
         }
