@@ -8,7 +8,7 @@
 
         <error v-if="hasError"></error>
 
-        <loader v-else-if="viewInit" class="init">
+        <loader v-if="viewInit" class="init">
             <p>Initializing …</p>
         </loader>
 
