@@ -111,6 +111,14 @@ const store = new Vuex.Store({
             ));
         },
 
+        apiError: (statusCode) => {
+            this.$store.commit('setError', {
+                title: this.$t('ui.app.apiError'),
+                type: 'about:blank',
+                status: statusCode || '',
+            });
+        },
+
         install: ({ dispatch }, version) => {
             const task = {
                 type: 'install',

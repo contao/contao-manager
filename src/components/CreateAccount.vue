@@ -32,6 +32,8 @@
 </template>
 
 <script>
+    import views from '../router/views';
+
     import BoxedLayout from './layouts/Boxed';
     import TextField from './widgets/TextField';
     import SelectMenu from './widgets/SelectMenu';
@@ -109,13 +111,19 @@
                 this.installing = true;
 
                 this.$store.dispatch(
-                    'auth/createAccount',
+                    'auth/login',
                     {
                         username: this.username,
                         password: this.password,
                     },
                 ).then(
-                    () => this.$store.dispatch('auth/status'),
+                    (success) => {
+                        if (success) {
+                            this.$store.commit('setView', views.BOOT);
+                        } else {
+                            this.$store.dispatch('apiError');
+                        }
+                    },
                 );
             },
         },

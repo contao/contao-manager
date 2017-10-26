@@ -30,6 +30,7 @@
 
 <script>
     import store from '../../store';
+    import views from '../../router/views';
     import routes from '../../router/routes';
 
     export default {
@@ -60,7 +61,11 @@
             },
 
             logout() {
-                store.dispatch('auth/logout');
+                store.dispatch('auth/logout').then((success) => {
+                    if (success) {
+                        this.$store.commit('setView', views.LOGIN);
+                    }
+                });
             },
         },
     };

@@ -73,7 +73,18 @@
 
         mounted() {
             document.title = 'Contao Manager @package_version@';
-            this.$store.dispatch('auth/status');
+
+            this.$store.dispatch('auth/status').then((statusCode) => {
+                if (statusCode === 200) {
+                    this.$store.commit('setView', views.BOOT);
+                } else if (statusCode === 204) {
+                    this.$store.commit('setView', views.ACCOUNT);
+                } else if (statusCode === 401) {
+                    this.$store.commit('setView', views.LOGIN);
+                } else {
+                    this.$store.dispatch('apiError', statusCode);
+                }
+            });
         },
     };
 </script>

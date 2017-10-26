@@ -1,36 +1,14 @@
 import Vue from 'vue';
 
+import session from './session';
+
 export default {
-    fetchSession() {
-        return Vue.http.get('api/session').then(
-            response => response.status,
-            response => response.status,
-        );
-    },
+    session,
 
     fetchStatus() {
         return Vue.http.get('api/status').then(
             response => response.body,
             response => response.body,
-        );
-    },
-
-    login(username, password) {
-        return Vue.http.post('api/session', { username, password }).then(
-            response => ({
-                success: true,
-                username: response.username,
-            }),
-            () => ({
-                success: false,
-            }),
-        );
-    },
-
-    logout() {
-        return Vue.http.delete('api/session').then(
-            () => true,
-            () => false,
         );
     },
 

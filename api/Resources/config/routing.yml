@@ -5,18 +5,10 @@ status:
 
 session:
     path: /api/session
-    defaults: { _controller: contao_manager.controller.session:status }
-    methods: [GET]
+    defaults: { _controller: Contao\ManagerApi\Controller\SessionController }
+    methods: [GET, POST, DELETE]
 
-login:
-    path:     /api/session
-    defaults: { _controller: contao_manager.controller.session:login }
-    methods:  [POST]
 
-logout:
-    path:     /api/session
-    defaults: { _controller: contao_manager.controller.session:logout }
-    methods:  [DELETE]
 
 
 #############

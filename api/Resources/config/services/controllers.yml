@@ -22,8 +22,7 @@ services:
             - [addIntegrityCheck, ["@contao_manager.integrity.contao"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.windows"]]
 
-    contao_manager.controller.session:
-        class: Contao\ManagerApi\Controller\SessionController
+    Contao\ManagerApi\Controller\SessionController:
         arguments:
             - "@contao_manager.config.user"
             - "@contao_manager.security.jwt_manager"

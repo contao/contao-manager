@@ -53,11 +53,34 @@ class SessionController extends Controller
     }
 
     /**
+     * Handles the controller action.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function __invoke(Request $request)
+    {
+        switch ($request->getMethod()) {
+            case 'GET':
+                return $this->getStatus();
+
+            case 'POST':
+                return $this->handleLogin($request);
+
+            case 'DELETE':
+                return $this->handleLogout($request);
+        }
+
+        return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
+    /**
      * Returns the login status of the user.
      *
      * @return Response
      */
-    public function status()
+    public function getStatus()
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return new JsonResponse(['username' => (string) $this->getUser()], Response::HTTP_OK);
@@ -77,7 +100,7 @@ class SessionController extends Controller
      *
      * @return Response
      */
-    public function login(Request $request)
+    public function handleLogin(Request $request)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return new JsonResponse(['error' => 'User is already logged in'], Response::HTTP_BAD_REQUEST);
@@ -110,7 +133,7 @@ class SessionController extends Controller
      *
      * @return Response
      */
-    public function logout(Request $request)
+    public function handleLogout(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
