@@ -1,0 +1,146 @@
+paths:
+    /Applications/MAMP: mamp
+
+domains:
+    cyon.ch: cyon
+    goserver.host: webgo
+    hosteurope.de: hosteurope
+    inetrobots.com: hostingwerk
+    ispgateway.de: domainfactory
+    kasserver.com: allinkl
+    kundenserver.de: 1und1
+    netcup.net: netcup
+    rzone.de: strato
+    serverdomain.org: webhostone
+    sui-inter.net: metanet
+    tophost.ch: novatrend
+    uberspace.de: uberspace
+    vhost.io: hostingwerk
+    your-server.de: hetzner
+
+configs:
+    1und1:
+        name: 1&1 Internet SE
+        website: www.1und1.de
+        last_update: 2017-06-20
+        issues: [cputime, memory]
+        php:
+            /usr/bin/php{major}.{minor}-cli: ['-d', 'memory_limit=-1']
+            /usr/bin/php{major}.{minor}: []
+            /usr/lib/cgi-bin/php{major}.{minor}: []
+
+    allinkl:
+        name: ALL-INKL.COM - Neue Medien Münnich
+        website: www.all-inkl.com
+        last_update: 2017-06-17
+        issues: []
+        php:
+            /usr/bin/php{major}{minor}: []
+            /usr/bin/php: []
+
+    cyon:
+        name: cyon GmbH
+        website: www.cyon.ch
+        last_update: 2017-05-31
+        issues: []
+        php:
+            /opt/alt/php{major}{minor}/usr/bin/php: []
+
+    domainfactory:
+        name: domainfactory GmbH
+        website: www.df.eu
+        last_update: 2017-06-20
+        issues: [memory]
+        php:
+            /usr/local/bin/php{major}-{major}{minor}LATEST-CLI: []
+
+    hetzner:
+        name: Hetzner Online GmbH
+        website: www.hetzner.de
+        last_update: 2017-06-26
+        issues: []
+        php:
+            /usr/bin/php{major}{minor}: []
+            /usr/bin/php: []
+
+    hosteurope:
+        name: Host Europe GmbH
+        website: www.hosteurope.de
+        last_update: 2017-06-27
+        issues: []
+        php:
+            /usr/bin/php{major}.{minor}: ['-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
+            /usr/bin/php: ['-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
+
+    hostingwerk:
+        name: Hostingwerk (Feyer Media GmbH & Co. KG)
+        website: www.hostingwerk.de
+        last_update: 2017-06-13
+        issues: []
+        php:
+            /usr/bin/php-{major}.{minor}: []
+
+    mamp:
+        name: MAMP
+        website: www.mamp.info
+        last_update: 2017-10-10
+        issues: []
+        php:
+            /Applications/MAMP/bin/php/php{major}.{minor}.{release}/bin/php: []
+
+    metanet:
+        name: Metanet AG
+        website: www.metanet.ch
+        last_update: 2017-05-31
+        issues: []
+        php:
+            /opt/php{major}{minor}/bin/php: []
+            /usr/bin/php: []
+
+    netcup:
+        name: netcup GmbH
+        website: www.netcup.de
+        last_update: 2017-06-27
+        issues: []
+        php:
+            /usr/local/php56/bin/php: ['-d', 'date.timezone=UTC']
+            /usr/local/php{major}{minor}/bin/php: []
+
+    novatrend:
+        name: Novatrend Services GmbH
+        website: www.novatrend.ch
+        last_update: 2017-05-31
+        issues: [cputime]
+        php:
+            /usr/local/bin/php: []
+
+    strato:
+        name: Strato AG
+        website: www.strato.de
+        last_update: 2017-05-31
+        issues: [intl, memory]
+        php:
+            /usr/bin/php{major}.{minor}: []
+
+    uberspace:
+        name: Uberspace
+        website: www.uberspace.de
+        last_update: 2017-07-12
+        issues: []
+
+    webgo:
+        name: webgo GmbH
+        website: www.webgo.de
+        last_update: 2017-06-19
+        issues: []
+        php:
+            /usr/bin/php{major}{minor}: []
+
+    webhostone:
+        name: WebhostOne GmbH
+        website: www.webhostone.de
+        last_update: 2017-06-18
+        issues: []
+        php:
+            /usr/bin/php{major}{minor}: []
+            /usr/bin/php: []

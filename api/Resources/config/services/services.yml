@@ -39,20 +39,13 @@ services:
         class: Contao\ManagerApi\Process\ConsoleProcessFactory
         arguments:
             - "@kernel"
-            - "@contao_manager.config.manager"
-            - "@contao_manager.process.server_info"
+            - "@contao_manager.system.server_info"
             - "@logger"
 
     contao_manager.process.contao_api:
         class: Contao\ManagerApi\Process\ContaoApi
         arguments:
             - "@contao_manager.process.console_factory"
-
-    contao_manager.process.server_info:
-        class: Contao\ManagerApi\Process\ServerInfo
-        arguments:
-            - "@kernel"
-            - "%kernel.root_dir%/Resources/config/providers.yml"
 
     contao_manager.security.jwt_manager:
         class: Contao\ManagerApi\Security\JwtManager
@@ -74,6 +67,16 @@ services:
         class: Contao\ManagerApi\SelfUpdate\Updater
         arguments:
             - "@kernel"
+
+    contao_manager.system.server_info:
+        class: Contao\ManagerApi\System\ServerInfo
+        arguments:
+            - "@contao_manager.system.ip_info"
+            - "@contao_manager.config.manager"
+            - "%kernel.root_dir%/Resources/config/servers.yml"
+
+    contao_manager.system.ip_info:
+        class: Contao\ManagerApi\System\IpInfo
 
     app.taskfactory:
         class:     Contao\ManagerApi\Tenside\TaskFactory

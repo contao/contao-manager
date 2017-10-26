@@ -10,17 +10,15 @@
 
 namespace Contao\ManagerApi\Process;
 
+use Contao\ManagerApi\Exception\ProcessOutputException;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+
 class ContaoApi
 {
     /**
      * @var ConsoleProcessFactory
      */
     private $processFactory;
-
-    /**
-     * @var string
-     */
-    private $contaoVersion = false;
 
     /**
      * Constructor.
@@ -33,27 +31,46 @@ class ContaoApi
     }
 
     /**
-     * Gets the Contao version by trying to run the contao:version command.
+     * Gets the Contao API version.
      *
-     * @return null|string
+     * @return int
+     *
+     * @throws ProcessFailedException
+     * @throws ProcessOutputException
+     */
+    public function getApiVersion()
+    {
+        $process = $this->processFactory->createContaoApiProcess(['version']);
+        $process->mustRun();
+
+        $version = trim($process->getOutput());
+
+        if (!preg_match('/^\d+$/', $version)) {
+            throw new ProcessOutputException('Output is not a valid API version.', $process);
+        }
+
+        return (int) $version;
+    }
+
+    /**
+     * Gets the Contao version.
+     *
+     * @return string
+     *
+     * @throws ProcessFailedException
+     * @throws ProcessOutputException
      */
     public function getContaoVersion()
     {
-        if (false === $this->contaoVersion) {
-            $this->contaoVersion = null;
+        $process = $this->processFactory->createContaoConsoleProcess(['contao:version']);
+        $process->mustRun();
 
-            $process = $this->processFactory->createContaoConsoleProcess(['contao:version']);
-            $process->run();
+        $version = trim($process->getOutput());
 
-            if ($process->isSuccessful()) {
-                $version = trim($process->getOutput());
-
-                if (preg_match('/^\d+\.\d+\.\d+$/', $version)) {
-                    $this->contaoVersion = $version;
-                }
-            }
+        if (!preg_match('/^\d+\.\d+\.\d+$/', $version)) {
+            throw new ProcessOutputException('Console output is not a valid version string.', $process);
         }
 
-        return $this->contaoVersion;
+        return $version;
     }
 }
