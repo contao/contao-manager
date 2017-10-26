@@ -125,9 +125,15 @@ const store = new Vuex.Store({
                 version,
             };
 
-            return dispatch('tasks/execute', task, { root: true }).then(
-                () => dispatch('fetchStatus', true, { root: true }),
-            );
+            return api.config.composer.patch(
+                {
+                    'preferred-install': 'dist',
+                    'store-auths': false,
+                    'optimize-autoloader': true,
+                    'sort-packages': true,
+                    'discard-changes': true,
+                },
+            ).then(() => dispatch('tasks/execute', task, { root: true }));
         },
     },
 });

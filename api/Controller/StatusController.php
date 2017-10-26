@@ -139,7 +139,6 @@ class StatusController extends Controller
         }
 
         $this->createHtaccess();
-        $this->composerConfig->initialize();
 
         $version = $this->contaoApi->getContaoVersion();
         $status = self::STATUS_OK;

@@ -1,8 +1,10 @@
 import Vue from 'vue';
 
+import config from './config/index';
 import session from './session';
 
 export default {
+    config,
     session,
 
     fetchStatus() {

@@ -21,7 +21,6 @@ services:
         class: Contao\ManagerApi\Config\ManagerConfig
         arguments:
             - "@kernel"
-            - "@contao_manager.process.server_info"
             - "@filesystem"
 
     contao_manager.config.user:
