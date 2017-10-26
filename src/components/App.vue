@@ -8,9 +8,12 @@
 
         <error v-if="hasError"></error>
 
-        <loader v-if="viewInit" class="init">
-            <p>Initializing …</p>
-        </loader>
+        <div v-if="viewInit" class="init">
+            <div>
+                <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo">
+                <p>{{ 'ui.app.loading' | translate }}</p>
+            </div>
+        </div>
 
         <create-account v-else-if="viewAccount"></create-account>
         <login v-else-if="viewLogin"></login>

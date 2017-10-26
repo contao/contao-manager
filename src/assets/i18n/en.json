@@ -3,6 +3,7 @@
     "ui.app.httpsDescription": "Without HTTPS your confidential data will be transferred unencrypted.",
     "ui.app.moreLink": "More Info",
     "ui.app.moreHref": "https://https.cio.gov/everything/",
+    "ui.app.loading": "Loading Contao Manager …",
     "ui.app.apiError": "Unexpected API status",
     "ui.widget.mandatory": "This field must not be empty.",
     "ui.error.moreLink": "More Information",
