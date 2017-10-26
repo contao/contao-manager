@@ -3,6 +3,7 @@ import VueResource from 'vue-resource';
 import Cookies from 'js-cookie';
 
 import router from './router';
+import views from './router/views';
 import store from './store';
 import i18n from './i18n';
 
@@ -22,9 +23,12 @@ Vue.http.interceptors.push((request, next) => {
 
     next((response) => {
         if (response.status === 403 || (response.status === 401 && url !== 'api/session')) {
-            store.dispatch('fetchStatus', true);
+            store.commit('setView', views.LOGIN);
         } else if (response.headers.get('Content-Type') === 'application/problem+json') {
-            store.commit('setError', response.data);
+            if (response.status === 500) {
+                store.commit('setError', response.data);
+            }
+
             throw response.data;
         }
     });
