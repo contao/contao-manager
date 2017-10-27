@@ -42,7 +42,7 @@ class IntegrityCheckCommand extends Command
         $this
             ->setName('integrity-check')
             ->setDescription('Performs integrity check for the Contao Manager')
-            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Use "text", "json" or "xml" to output the check results accordingly.', 'text')
+            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Use "text" or "json" to output the check results accordingly.', 'text')
         ;
     }
 
@@ -51,43 +51,61 @@ class IntegrityCheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        foreach ($this->checks as $check) {
-            if (($problem = $check->run()) instanceof ApiProblem) {
-                $this->reportProblem($input, $output, $problem);
+        $problem = null;
+        $format = $input->getOption('format');
 
-                return 1;
+        foreach ($this->checks as $check) {
+            if ($problem = $check->run()) {
+                break;
             }
         }
 
-        $output->writeln('<info>All checks successful.</info>');
+        if ('json' === $format) {
+            return $this->writeJson($output, $problem);
+        }
+
+        if ('text' !== $format) {
+            throw new \InvalidArgumentException(sprintf('Unknown output format "%s"', $format));
+        }
+
+        if ($problem) {
+            $output->writeln('Running PHP '.PHP_VERSION);
+            $output->writeln($problem->getTitle());
+
+            if ($detail = $problem->getDetail()) {
+                $output->writeln('');
+                $output->writeln($detail);
+            }
+
+            return 1;
+        }
+
+        $output->writeln('<info>Running PHP '.PHP_VERSION.', all checks successful.</info>');
 
         return 0;
     }
 
-    private function reportProblem(InputInterface $input, OutputInterface $output, ApiProblem $problem)
+    /**
+     * Writes JSON response to output.
+     *
+     * @param OutputInterface $output
+     * @param ApiProblem|null $problem
+     *
+     * @return int
+     */
+    private function writeJson(OutputInterface $output, ApiProblem $problem = null)
     {
-        $format = $input->getOption('format');
+        $output->write(
+            json_encode(
+                [
+                    'version' => PHP_VERSION,
+                    'version_id' => PHP_VERSION_ID,
+                    'problem' => $problem ? $problem->asArray() : null,
+                ],
+                JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
+            )
+        );
 
-        switch ($format) {
-            case 'text':
-                $output->writeln($problem->getTitle());
-
-                if ($detail = $problem->getDetail()) {
-                    $output->writeln('');
-                    $output->writeln($detail);
-                }
-                break;
-
-            case 'json':
-                $output->write($problem->asJson(true));
-                break;
-
-            case 'xml':
-                $output->write($problem->asXml(true));
-                break;
-
-            default:
-                throw new \InvalidArgumentException(sprintf('Unknown output format "%s"', $format));
-        }
+        return $problem ? 1 : 0;
     }
 }
