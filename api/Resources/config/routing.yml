@@ -8,6 +8,11 @@ session:
     defaults: { _controller: Contao\ManagerApi\Controller\SessionController }
     methods: [GET, POST, DELETE]
 
+files:
+    path:     /api/files/{file}
+    defaults: { _controller: Contao\ManagerApi\Controller\FileController }
+    methods:  [GET, PUT, DELETE]
+
 
 
 
