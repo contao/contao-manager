@@ -10,6 +10,8 @@
 
 namespace Contao\ManagerApi\Security;
 
+use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -40,7 +42,7 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        return new Response('', Response::HTTP_UNAUTHORIZED);
+        return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
     }
 
     /**

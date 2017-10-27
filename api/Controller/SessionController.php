@@ -11,7 +11,9 @@
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Config\UserConfig;
+use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Security\JwtManager;
+use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,17 +82,17 @@ class SessionController extends Controller
      *
      * @return Response
      */
-    public function getStatus()
+    private function getStatus()
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new JsonResponse(['username' => (string) $this->getUser()], Response::HTTP_OK);
+            return new JsonResponse(['username' => (string) $this->getUser()]);
         }
 
         if (0 === $this->config->count()) {
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
-        return new JsonResponse(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
     }
 
     /**
@@ -100,10 +102,12 @@ class SessionController extends Controller
      *
      * @return Response
      */
-    public function handleLogin(Request $request)
+    private function handleLogin(Request $request)
     {
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new JsonResponse(['error' => 'User is already logged in'], Response::HTTP_BAD_REQUEST);
+            return new ApiProblemResponse(
+                (new ApiProblem('User is already logged in'))->setStatus(Response::HTTP_BAD_REQUEST)
+            );
         }
 
         $username = $request->request->get('username');
@@ -118,7 +122,7 @@ class SessionController extends Controller
         if (!$this->config->hasUser($username)
             || !$this->passwordEncoder->isPasswordValid($this->config->getUser($username), $password)
         ) {
-            return new JsonResponse(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+            return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
         }
 
         $response = new JsonResponse(['username' => $username]);
@@ -133,7 +137,7 @@ class SessionController extends Controller
      *
      * @return Response
      */
-    public function handleLogout(Request $request)
+    private function handleLogout(Request $request)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 

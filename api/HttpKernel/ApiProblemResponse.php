@@ -29,6 +29,11 @@ class ApiProblemResponse extends Response
             $problem->setStatus(500);
         }
 
+        if (!$problem->getTitle()) {
+            $code = $problem->getStatus();
+            $problem->setTitle(isset(Response::$statusTexts[$code]) ? Response::$statusTexts[$code] : 'unknown status');
+        }
+
         parent::__construct(
             $problem->asJson(),
             $problem->getStatus(),
