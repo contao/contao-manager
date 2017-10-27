@@ -48,7 +48,6 @@ export default {
     getTask() {
         return Vue.http.get('api/task').then(
             response => response.body,
-            () => null,
         );
     },
 

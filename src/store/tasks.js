@@ -94,17 +94,19 @@ export default {
 
                 api.getTask().then(
                     (task) => {
-                        if (task.status === 'ready') {
-                            api.deleteTask();
-                        } else if (statusMap[task.status] !== undefined) {
-                            store.commit('setStatus', statusMap[task.status]);
-                            store.commit('setProgress', task);
-                        } else {
-                            store.commit('setStatus', 'ready');
-                            store.commit('setProgress', task);
+                        if (task) {
+                            if (task.status === 'ready') {
+                                api.deleteTask();
+                            } else if (task.status === 'finished') {
+                                store.commit('setStatus', statusMap[task.status]);
+                                store.commit('setProgress', task);
+                            } else {
+                                store.commit('setStatus', statusMap[task.status] !== undefined ? statusMap[task.status] : 'ready');
+                                store.commit('setProgress', task);
 
-                            pollTask(store, resolve, reject);
-                            return;
+                                pollTask(store, resolve, reject);
+                                return;
+                            }
                         }
 
                         resolve();
