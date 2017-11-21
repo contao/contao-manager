@@ -35,9 +35,11 @@ if (function_exists('ini_set')) {
         $unit = strtolower(substr($value, -1, 1));
         $value = (int) $value;
         switch($unit) {
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'g':
                 $value *= 1024;
             // no break (cumulative multiplier)
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'm':
                 $value *= 1024;
             // no break (cumulative multiplier)
@@ -62,13 +64,20 @@ putenv('COMPOSER_BINARY='.realpath($_SERVER['argv'][0]));
 $kernel = new ApiKernel('@symfony_env@' === 'prod' ? 'prod' : 'dev');
 $input = new ArgvInput();
 
-if ('composer' === $input->getFirstArgument()) {
-    $application = new \Composer\Console\Application();
-    $argv = $_SERVER['argv'];
-    array_shift($argv);
-    $input = new ArgvInput($argv);
-} else {
-    $application = new ApiApplication($kernel);
+switch ($input->getFirstArgument()) {
+    case 'test':
+        die(json_encode(['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI]));
+        break;
+
+    case 'composer':
+        $application = new \Composer\Console\Application();
+        $argv = $_SERVER['argv'];
+        array_shift($argv);
+        $input = new ArgvInput($argv);
+        break;
+
+    default:
+        $application = new ApiApplication($kernel);
 }
 
 $application->run($input, $output);

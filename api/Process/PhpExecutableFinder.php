@@ -76,8 +76,7 @@ class PhpExecutableFinder
             $arguments[] = dirname(__DIR__).'/console';
         }
 
-        $arguments[] = 'about';
-        $arguments[] = '--json';
+        $arguments[] = 'test';
 
         $commandline = escapeshellcmd($cli).' '.implode(' ', array_map('escapeshellarg', $arguments));
 
@@ -174,18 +173,18 @@ class PhpExecutableFinder
                 continue;
             }
 
-            if ('cli' === $info['php']['sapi'] && version_compare(PHP_VERSION, $info['php']['version'], 'eq')) {
+            if ('cli' === $info['sapi'] && version_compare(PHP_VERSION, $info['version'], 'eq')) {
                 return $path;
             }
 
             $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
-            $vCli = vsprintf('%s.%s', explode('.', $info['php']['version']));
+            $vCli = vsprintf('%s.%s', explode('.', $info['version']));
 
-            if ((null === $fallback || ('cli' !== $sapi && $info['php']['sapi'] === 'cli'))
+            if ((null === $fallback || ('cli' !== $sapi && $info['sapi'] === 'cli'))
                 && version_compare($vWeb, $vCli, 'eq')
             ) {
                 $fallback = $path;
-                $sapi = $info['php']['sapi'];
+                $sapi = $info['sapi'];
             }
         }
 

@@ -171,7 +171,7 @@ class ConfigController extends Controller
         }
 
         $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
-        $vCli = vsprintf('%s.%s', explode('.', $info['php']['version']));
+        $vCli = vsprintf('%s.%s', explode('.', $info['version']));
 
         if (version_compare($vWeb, $vCli, '<>')) {
             $errors [] = [

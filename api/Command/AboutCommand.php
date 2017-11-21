@@ -14,7 +14,6 @@ use Contao\ManagerApi\ApiKernel;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -30,7 +29,6 @@ class AboutCommand extends ContainerAwareCommand
         $this
             ->setName('about')
             ->setDescription('Displays information about Contao Manager and the current server')
-            ->addOption('json', null, InputOption::VALUE_NONE)
         ;
     }
 
@@ -40,12 +38,6 @@ class AboutCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $data = $this->collectData();
-
-        if ($input->getOption('json')) {
-            $output->writeln(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
-
-            return;
-        }
 
         $this->outputTable($input, $output, $data);
     }
