@@ -72,13 +72,27 @@ class UserConfig extends AbstractConfig
     }
 
     /**
-     * Gets all users configured in the auth.json file.
+     * Counts the users.
+     *
+     * @return int
+     */
+    public function countUsers()
+    {
+        if (!isset($this->data['users'])) {
+            return 0;
+        }
+
+        return count($this->data['users']);
+    }
+
+    /**
+     * Gets all users.
      *
      * @return UserInterface[]
      */
     public function getUsers()
     {
-        if (0 === $this->count() || empty($this->data['users'])) {
+        if (0 === $this->countUsers()) {
             return [];
         }
 
@@ -195,7 +209,7 @@ class UserConfig extends AbstractConfig
      */
     private function migrateSecret(Apikernel $kernel)
     {
-        if (!empty($this->data) && !isset($this->data['users'])) {
+        if (!isset($this->data['users'], $this->data['secret'])) {
             $config = $kernel->getContainer()->get('contao_manager.config.manager');
 
             $this->data = ['users' => $this->data];

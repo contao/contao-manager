@@ -88,7 +88,7 @@ class SessionController extends Controller
             return new JsonResponse(['username' => (string) $this->getUser()]);
         }
 
-        if (0 === $this->config->count()) {
+        if (0 === $this->config->countUsers()) {
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
@@ -113,7 +113,7 @@ class SessionController extends Controller
         $username = $request->request->get('username');
         $password = $request->request->get('password');
 
-        if (0 === $this->config->count()) {
+        if (0 === $this->config->countUsers()) {
             $this->config->addUser(
                 $this->config->createUser($username, $password)
             );
