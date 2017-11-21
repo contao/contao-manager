@@ -2,27 +2,14 @@ import Vue from 'vue';
 
 import config from './config/index';
 import files from './files';
+import system from './system';
 import session from './session';
 
 export default {
     config,
     files,
+    system,
     session,
-
-    fetchStatus() {
-        return Vue.http.get('api/status').then(
-            response => response.body,
-            response => response.body,
-        );
-    },
-
-    configure(config) {
-        return Vue.http.patch('api/config/manager', config);
-    },
-
-    setGithubToken(token) {
-        return Vue.http.put('api/config/auth/github-oauth', { token });
-    },
 
     runTask(timeout = 1000) {
         return new Promise((resolve) => {

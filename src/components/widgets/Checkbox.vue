@@ -1,5 +1,5 @@
 <template>
-    <div class="widget checkbox">
+    <div class="widget widget-checkbox">
         <input
             ref="input"
             type="checkbox"

@@ -18,20 +18,13 @@
     </div>
 </template>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style rel="stylesheet/scss" lang="scss">
     @import "../../assets/styles/_defaults.scss";
 
     .sk-circle {
         width: 25px;
         height: 25px;
         position: relative;
-
-        .manager &,
-        #app > .loader > & {
-            margin: 0 auto 40px;
-            width: 100px;
-            height: 100px;
-        }
     }
     .sk-circle .sk-child {
         width: 100%;
@@ -104,14 +97,7 @@
         }
     }
 
-    .manager .loader,
-    #app > .loader {
-        margin: 100px 0;
-        text-align: center;
-        font-size: 20px;
-    }
-
-    button {
+    .widget-button {
         .loader {
             width: 25px;
             margin: 0 auto;

@@ -5,6 +5,10 @@ imports:
     - { resource: integrity.yml }
 
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
     contao_manager.config.auth:
         class: Contao\ManagerApi\Config\AuthConfig
         arguments:

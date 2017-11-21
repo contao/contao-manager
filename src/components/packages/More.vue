@@ -1,5 +1,5 @@
 <template>
-    <div class="more">
+    <div class="link-more">
         <button @click="open">{{ 'ui.package.more' | translate }}</button>
         <ul v-if="visible" v-once>
             <li v-if="homepage"><a :href="homepage" target="_blank">{{ 'ui.package.homepage' | translate }}</a></li>
@@ -18,7 +18,11 @@
 
 <script>
     export default {
-        props: ['name', 'homepage', 'support'],
+        props: {
+            name: String,
+            homepage: String,
+            support: Object,
+        },
 
         data: () => ({
             visible: false,
@@ -45,3 +49,81 @@
         },
     };
 </script>
+
+<style rel="stylesheet/scss" lang="scss">
+    @import "../../assets/styles/defaults";
+
+    .link-more {
+        position: relative;
+        display: inline-block;
+        margin-left: 5px;
+
+        button {
+            width: auto;
+            height: auto;
+            padding: 0 0 5px;
+            background: transparent;
+            color: $link-color;
+            font-weight: $font-weight-normal;
+            line-height: inherit;
+            border: none;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        ul {
+            position: absolute;
+            display: block;
+            left: 50%;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            list-style-type: none;
+            white-space: nowrap;
+            background: #fff;
+            border-top: 3px solid $contao-color;
+            transform: translateX(-50%);
+            z-index: 100;
+            box-shadow: $shadow-color 0 1px 2px;
+
+            &:before {
+                position: absolute;
+                left: 50%;
+                top: -7px;
+                width: 0;
+                height: 0;
+                margin-left: -4px;
+                border-style: solid;
+                border-width: 0 3.5px 4px 3.5px;
+                border-color: transparent transparent $contao-color transparent;
+                content: "";
+            }
+        }
+
+        li {
+            margin: 0;
+            padding: 0;
+            display: block;
+            border-top: 1px solid #e5dfd0;
+
+            a {
+                display: block;
+                margin: 0;
+                padding: 10px 20px;
+                color: $text-color;
+
+                &:hover {
+                    color: #000;
+                    text-decoration: none;
+                }
+            }
+
+            &:first-child {
+                border-top: none;
+            }
+        }
+    }
+</style>

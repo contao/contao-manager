@@ -68,7 +68,6 @@ select, input, textarea {
     }*/
 
     &:disabled {
-        border: 0;
         color: $text-color;
         -webkit-text-fill-color: $text-color;
         cursor: text;

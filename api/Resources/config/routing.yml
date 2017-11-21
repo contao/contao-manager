@@ -1,8 +1,3 @@
-status:
-    path: /api/status
-    defaults: { _controller: contao_manager.controller.status }
-    methods: [GET]
-
 session:
     path: /api/session
     defaults: { _controller: Contao\ManagerApi\Controller\SessionController }
@@ -14,6 +9,39 @@ files:
     methods:  [GET, PUT, DELETE]
 
 
+##############
+#   Server   #
+##############
+
+server_selfupdate:
+    path:     /api/server/self-update
+    defaults: { _controller: Contao\ManagerApi\Controller\System\SelfUpdateController }
+    methods:  [GET]
+
+server_config:
+    path:     /api/server/config
+    defaults: { _controller: Contao\ManagerApi\Controller\System\ConfigController }
+    methods:  [GET, PUT]
+
+server_php_web:
+    path:     /api/server/php-web
+    defaults: { _controller: Contao\ManagerApi\Controller\System\PhpWebController }
+    methods:  [GET]
+
+server_php_cli:
+    path:     /api/server/php-cli
+    defaults: { _controller: Contao\ManagerApi\Controller\System\PhpCliController }
+    methods:  [GET]
+
+server_composer:
+    path:     /api/server/composer
+    defaults: { _controller: Contao\ManagerApi\Controller\System\ComposerController }
+    methods:  [GET]
+
+server_contao:
+    path:     /api/server/contao
+    defaults: { _controller: Contao\ManagerApi\Controller\System\ContaoController }
+    methods:  [GET]
 
 
 #############

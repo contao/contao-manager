@@ -1,7 +1,8 @@
 <template>
-    <div class="widget select">
+    <div :class="'widget widget-select' + (error ? ' widget--error' : '')">
         <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
         <select
+            ref="input"
             :id="label ? 'ctrl_'+name : ''"
             :name="name"
             :disabled="disabled"
@@ -9,6 +10,7 @@
         >
             <option v-for="(v, k) in options" :value="k" :selected="k === value">{{ v }}</option>
         </select>
+        <p class="widget__error" v-if="error">{{ error }}</p>
     </div>
 </template>
 
@@ -28,15 +30,23 @@
             disabled: {
                 type: Boolean,
             },
+            error: {
+                type: String,
+            },
             options: {
                 type: Object,
                 required: true,
             },
         },
+
         methods: {
             input(value) {
                 this.$emit('input', value);
             },
+        },
+
+        mounted() {
+            this.$emit('input', this.$refs.input.value);
         },
     };
 </script>

@@ -1,9 +1,9 @@
 <template>
     <section class="package">
 
-        <transition name="hint">
-            <div class="hint warning" v-if="hint">
-                <a href="#" class="close" @click.prevent="reset">{{ 'ui.package.hintRevert' | translate }}</a>
+        <transition name="package__hint">
+            <div class="package__hint" v-if="hint">
+                <a href="#" class="error" @click.prevent="reset">{{ 'ui.package.hintRevert' | translate }}</a>
                 <p>
                     {{ hint }}
                     <!--<a href="#" v-if="false">Help</a>-->
@@ -11,7 +11,7 @@
             </div>
         </transition>
 
-        <div class="inside" v-if="isContao">
+        <div class="package__inside" v-if="isContao">
             <figure><img src="../../assets/images/logo.svg" /></figure>
 
             <div class="about">
@@ -29,7 +29,7 @@
             <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: this.disableUpdate}">
                 <fieldset>
                     <input ref="constraint" type="text" :placeholder="!original.get('constraint') ? $t('ui.package.latestConstraint') : ''" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button @click="editConstraint" :disabled="disableUpdate">{{ 'ui.package.editConstraint' | translate }}</button>
+                    <button class="widget-button" @click="editConstraint" :disabled="disableUpdate">{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
                 <div class="version" v-if="package.version">
                     <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -38,11 +38,11 @@
             </div>
 
             <fieldset class="actions">
-                <button class="uninstall" disabled>{{ 'ui.package.removeButton' | translate }}</button>
+                <button class="widget-button uninstall" disabled>{{ 'ui.package.removeButton' | translate }}</button>
             </fieldset>
         </div>
 
-        <div class="inside" v-else>
+        <div class="package__inside" v-else>
             <figure><img src="../../assets/images/placeholder.png" /></figure>
 
             <div class="about">
@@ -65,7 +65,7 @@
             <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: this.disableUpdate || incompatible}">
                 <fieldset>
                     <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!this.constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button @click="editConstraint" :disabled="disableUpdate || incompatible">{{ 'ui.package.editConstraint' | translate }}</button>
+                    <button class="widget-button" @click="editConstraint" :disabled="disableUpdate || incompatible">{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
                 <div class="version" v-if="package.version">
                     <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -74,11 +74,11 @@
             </div>
 
             <fieldset class="actions">
-                <!--<button key="enable" class="enable" v-if="changed.get('enabled') === false">Enable</button>-->
-                <!--<button key="disable" class="disable" v-if="changed.get('enabled') === true">Disable</button>-->
+                <!--<button class="widget-button" key="enable" class="enable" v-if="changed.get('enabled') === false">Enable</button>-->
+                <!--<button class="widget-button" key="disable" class="disable" v-if="changed.get('enabled') === true">Disable</button>-->
 
-                <button key="remove" class="uninstall" v-if="original.get('constraint')" @click="uninstall" :disabled="disableRemove || changed.get('constraint') === null">{{ 'ui.package.removeButton' | translate }}</button>
-                <button key="install" class="install" v-else @click="install" :disabled="incompatible || changed.get('constraint')">{{ 'ui.package.installButton' | translate }}</button>
+                <button class="widget-button uninstall" v-if="original.get('constraint')" @click="uninstall" :disabled="disableRemove || changed.get('constraint') === null">{{ 'ui.package.removeButton' | translate }}</button>
+                <button class="widget-button install" v-else @click="install" :disabled="incompatible || changed.get('constraint')">{{ 'ui.package.installButton' | translate }}</button>
             </fieldset>
 
         </div>
@@ -275,16 +275,326 @@
     };
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style rel="stylesheet/scss" lang="scss">
     @import "../../assets/styles/defaults";
 
+    .package {
+        margin-bottom: 14px;
+        background: #fff;
+        border-bottom: 3px solid #ddd3bc;
+        border-radius: 2px;
+
+        &__hint {
+            position: relative;
+            padding: 8px 150px 8px 56px;
+            font-weight: $font-weight-medium;
+            font-size: 12px;
+            line-height: 1.8;
+            border-radius: 2px 2px 0 0;
+            background: #e8c8bc url('../../assets/images/hint.svg') 20px 5px no-repeat;
+            background-size: 28px 28px;
+
+            p a {
+                display: inline-block;
+                padding-right: 10px;
+
+                &:first-child {
+                    margin-left: 10px;
+                }
+
+                &:not(:first-child):before {
+                    padding-right: 10px;
+                    content: "|";
+                }
+            }
+
+            .error {
+                position: absolute;
+                right: 20px;
+                top: 8px;
+                padding-left: 18px;
+                color: #bd2e20;
+                background: url('../../assets/images/close.svg') left center no-repeat;
+                background-size: 14px 14px;
+            }
+        }
+
+        &__inside {
+            &:after {
+                display: table;
+                clear: both;
+                content: "";
+            }
+
+            padding: 10px 20px 20px;
+
+            @include screen(1024) {
+                padding: 25px 20px;
+            }
+        }
+
+        figure {
+            display: none;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+
+            @include screen(1024) {
+                display: block;
+                float: left;
+                width: 90px;
+                height: 90px;
+                margin-right: 20px;
+            }
+        }
+
+        .about {
+            margin-bottom: 20px;
+
+            @include screen(1024) {
+                float: left;
+                width: 390px;
+                margin-bottom: 0;
+            }
+
+            @include screen(1180) {
+                width: 610px;
+            }
+
+            h1 {
+                position: relative;
+                margin-bottom: 5px;
+
+                em {
+                    background-color: $highlight-color;
+                    font-style: normal;
+                }
+
+                &.badge {
+                    padding-right: 100px;
+
+                    @include screen(1024) {
+                        padding-right: 0;
+                    }
+                }
+
+                > span + span {
+                    position: absolute;
+                    top: 6px;
+                    right: 0;
+                    padding: 0 8px;
+                    background: $red-button;
+                    border-radius: 2px;
+                    font-size: 12px;
+                    line-height: 19px;
+                    color: #fff;
+                    cursor: help;
+
+                    @include screen(800) {
+                        right: auto;
+                        margin-left: 10px;
+                    }
+                }
+            }
+
+            .description {
+                margin-bottom: 1em;
+
+                p {
+                    display: inline;
+                }
+
+                em {
+                    background-color: $highlight-color;
+                    font-style: normal;
+                }
+            }
+
+            .additional {
+                margin-top: -5px;
+
+                *:not(:last-child):after {
+                    margin: 0 10px;
+                    font-weight: $font-weight-normal;
+                    content: "|";
+                }
+
+                @include screen(1024) {
+                    .version {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .release {
+            text-align: right;
+            margin-bottom: 10px;
+
+            @include screen(600) {
+                float: left;
+                width: 33%;
+            }
+
+            @include screen(1024) {
+                width: 180px;
+                margin-left: 40px;
+                margin-bottom: 0;
+            }
+
+            input[type=text] {
+                float: left;
+                width: calc(100% - 32px);
+                height: 30px;
+                margin-right: 2px;
+                background: #fff;
+                border: 2px solid $orange-button;
+                color: #000;
+                font-weight: $font-weight-bold;
+                text-align: center;
+                line-height: 30px;
+
+                //noinspection CssInvalidPseudoSelector
+                &::placeholder {
+                    color: #fff;
+                    opacity: 1;
+                }
+
+                &:disabled {
+                    color: #fff;
+                    opacity: 1;
+                    background: $orange-button;
+                    -webkit-text-fill-color: #fff;
+                }
+            }
+
+            button {
+                width: 30px;
+                height: 30px;
+                padding: 6px;
+                line-height: 20px;
+                background: $orange-button url('../../assets/images/settings.svg') center no-repeat;
+                background-size: 20px 20px;
+                text-indent: -999em;
+            }
+
+            /*&.validating button {
+                animation: release-validating 2s linear infinite;
+            }*/
+
+            &.error input {
+                animation: input-error .15s linear 3;
+            }
+
+            &.disabled input[type=text] {
+                background: $border-color;
+                border-color: $border-color;
+
+                &::placeholder {
+                    text-decoration: line-through;
+                }
+            }
+
+            .version {
+                display: none;
+
+                @include screen(1024) {
+                    display: block;
+                    margin-top: 20px;
+                    text-align: center;
+                }
+
+                time {
+                    display: block;
+                }
+            }
+        }
+
+        .actions {
+            @include screen(600) {
+                float: right;
+                width: 66%;
+                max-width: 500px;
+                margin-top: -5px;
+                padding-left: 40px;
+                text-align: right;
+            }
+
+            @include screen(1024) {
+                width: 160px;
+                margin-left: 40px;
+                padding-left: 0;
+            }
+
+            button {
+                width: 100%;
+
+                @include screen(600) {
+                    display: inline-block;
+                    width: 160px;
+                }
+
+                @include screen(1024) {
+                    width: 100%;
+                    margin-bottom: 10px;
+                }
+
+                &.enable,
+                &.disable {
+                    margin-right: 5%;
+
+                    &:before {
+                        position: relative;
+                        display: inline-block;
+                        top: 4px;
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 8px;
+                        background: url('../../assets/images/power.svg') center no-repeat;
+                        background-size: 20px 20px;
+                        content:"";
+                    }
+                }
+
+                &.enable,
+                &.install {
+                    background: $green-button;
+                }
+
+                &.uninstall {
+                    background: $red-button;
+
+                    &:before {
+                        position: relative;
+                        display: inline-block;
+                        top: 6px;
+                        width: 16px;
+                        height: 22px;
+                        margin-right: 8px;
+                        background: url('../../assets/images/delete.svg') center no-repeat;
+                        background-size: 22px 22px;
+                        content:"";
+                    }
+                }
+            }
+        }
+    }
+
+    /*@keyframes release-validating {
+        100% {
+            transform: rotate(360deg);
+        }
+    }*/
+
     @include screen(960) {
-        .hint {
+        .package__hint {
             overflow: hidden;
             height: 37px;
             transition: height .4s ease;
         }
-        .hint-enter, .hint-leave-to {
+        .package__hint-enter, .package__hint-leave-to {
             height: 0;
         }
     }

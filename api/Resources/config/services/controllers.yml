@@ -1,27 +1,4 @@
 services:
-    contao_manager.controller.status:
-        class: Contao\ManagerApi\Controller\StatusController
-        arguments:
-            - "@kernel"
-            - "@contao_manager.config.manager"
-            - "@contao_manager.config.auth"
-            - "@contao_manager.config.user"
-            - "@contao_manager.config.composer"
-            - "@contao_manager.process.console_factory"
-            - "@contao_manager.process.contao_api"
-            - "@tenside.tasks"
-            - "@contao_manager.self_update.updater"
-            - "@filesystem"
-        calls:
-            - [setContainer, ["@service_container"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.web_root"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.allow_url_fopen"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.openssl"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.intl"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.process"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.contao"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.windows"]]
-
     Contao\ManagerApi\Controller\SessionController:
         arguments:
             - "@contao_manager.config.user"
@@ -45,10 +22,9 @@ services:
                 - [setContainer, ["@service_container"]]
 
     contao_manager.controller.config_manager:
-        class: Contao\ManagerApi\Controller\ManagerConfigController
+        class: Contao\ManagerApi\Controller\ConfigController
         arguments:
             - "@contao_manager.config.manager"
-            - "@contao_manager.i18n.translator"
         calls:
             - [setContainer, ["@service_container"]]
 
@@ -71,3 +47,13 @@ services:
         arguments:
             - "@kernel"
             - "@filesystem"
+
+    Contao\ManagerApi\Controller\System\ConfigController:
+        arguments:
+            - "@contao_manager.config.manager"
+            - "@contao_manager.system.server_info"
+            - "@contao_manager.i18n.translator"
+
+    Contao\ManagerApi\Controller\System\ComposerController:
+        arguments:
+            - "@kernel"

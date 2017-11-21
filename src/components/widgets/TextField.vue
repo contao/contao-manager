@@ -1,5 +1,5 @@
 <template>
-    <div :class="'widget text-field' + (error ? ' invalid' : '')">
+    <div :class="'widget widget-text' + (error ? ' widget--error' : '')">
         <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
         <input
             ref="input"
@@ -13,7 +13,7 @@
             @keypress.enter.prevent="enter"
             autocapitalize="none"
         >
-        <p class="error" v-if="error">{{ error }}</p>
+        <p class="widget__error" v-if="error">{{ error }}</p>
     </div>
 </template>
 

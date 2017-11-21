@@ -1,5 +1,5 @@
 <template>
-    <nav role="navigation">
+    <nav role="navigation" class="navigation">
         <a id="nav-toggle" @click.prevent="toggleNavigation"><span></span><span></span><span></span></a>
         <ul>
             <router-link tag="li" :to="routes.packages"><a>{{ 'ui.navigation.packages' | translate }}</a></router-link>
@@ -61,12 +61,218 @@
             },
 
             logout() {
-                store.dispatch('auth/logout').then((success) => {
-                    if (success) {
-                        this.$store.commit('setView', views.LOGIN);
-                    }
-                });
+                store.dispatch('auth/logout');
+                this.$store.commit('setView', views.LOGIN);
             },
         },
     };
 </script>
+
+
+<style rel="stylesheet/scss" lang="scss">
+    @import "../../assets/styles/defaults";
+
+    $nav-offset: 250px;
+
+    #nav-toggle {
+        display: block;
+        float: right;
+        position: relative;
+        transition: transform .4s cubic-bezier(.55, 0, .1, 1);
+        margin: 5px 15px;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        z-index: 20;
+
+        @include screen(1024) {
+            display: none;
+        }
+
+        .nav-active & {
+            transform: rotate(90deg);
+        }
+
+        span {
+            display: block;
+            height: 3px;
+            width: 25px;
+            margin: 5px auto;
+            background: $text-color;
+            pointer-events: none;
+        }
+    }
+
+    nav {
+        float: right;
+
+        ul, li {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            display: block;
+            padding: 12px 10px;
+            font-size: 16px;
+            color: $text-color;
+            white-space: pre;
+            text-transform: uppercase;
+        }
+
+        > ul {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: -$nav-offset;
+            width: $nav-offset;
+            padding: 20px;
+            overflow-y: auto;
+            overflow-scrolling: touch;
+            background: #fff;
+            box-shadow: $shadow-color -1px 0;
+            z-index: 10;
+        }
+
+        li.router-link-active > a,
+        li:hover > a {
+            color: $contao-color;
+            text-decoration: none;
+        }
+
+        li.icon > a {
+            svg {
+                display: none;
+            }
+        }
+
+        li li a {
+            margin-left: 15px;
+            text-transform: none;
+
+            &:hover {
+                color: #000;
+            }
+        }
+
+        @include screen(1024) {
+            > ul {
+                position: inherit;
+                top: auto;
+                bottom: auto;
+                right: auto;
+                width: auto;
+                padding: 0;
+                overflow: visible;
+                background: none;
+                box-shadow: none;
+                transform: none;
+                transition: none;
+            }
+
+            li {
+                position: relative;
+                display: inline-block;
+                padding: 0 8px;
+
+                &.router-link-active > a,
+                &:hover > a {
+                    border-bottom: 3px solid $contao-color;
+                }
+
+                ul {
+                    display: none;
+                }
+
+                &:hover ul {
+                    position: absolute;
+                    left: 50%;
+                    display: block;
+                    min-width: 180px;
+                    margin-top: -3px;
+                    text-align: center;
+                    background: #fff;
+                    border-top: 3px solid $contao-color;
+                    transform: translateX(-50%);
+                    z-index: 100;
+                    box-shadow: $shadow-color 0 1px 2px;
+
+                    &:before {
+                        position: absolute;
+                        left: 50%;
+                        top: -7px;
+                        width: 0;
+                        height: 0;
+                        margin-left: -4px;
+                        border-style: solid;
+                        border-width: 0 3.5px 4px 3.5px;
+                        border-color: transparent transparent $contao-color transparent;
+                        content: "";
+                    }
+
+                    &.right {
+                        left: auto;
+                        right: 7px;
+                        transform: translateX(0);
+
+                        &:before {
+                            left: auto;
+                            right: 22px;
+                        }
+                    }
+                }
+
+                li {
+                    display: block;
+                    border-top: 1px solid #e5dfd0;
+
+                    a {
+                        margin: 0;
+                        border: none !important;
+                    }
+
+                    &:first-child {
+                        border-top: none;
+                    }
+                }
+            }
+
+            li.icon > a {
+                padding-top: 7px;
+
+                svg {
+                    display: inline;
+                    position: relative;
+                    top: 4px;
+                    width: 22px;
+                    height: 22px;
+                    fill: $text-color;
+                }
+
+                &:hover svg {
+                    fill: $contao-color;
+                }
+
+                span {
+                    display: none;
+                }
+            }
+
+            &:hover {
+                li > a {
+                    border: none;
+                }
+
+                li:hover > a {
+                    border-bottom: 3px solid $contao-color;
+
+                    svg {
+                        fill: $contao-color;
+                    }
+                }
+            }
+        }
+    }
+</style>
