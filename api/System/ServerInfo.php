@@ -36,6 +36,11 @@ class ServerInfo
     /**
      * @var array
      */
+    private $networkMap;
+
+    /**
+     * @var array
+     */
     private $configs;
 
     /**
@@ -54,6 +59,7 @@ class ServerInfo
 
         $this->pathMap = $data['paths'];
         $this->domainMap = $data['domains'];
+        $this->networkMap = $data['networks'];
         $this->configs = $data['configs'];
     }
 
@@ -87,7 +93,7 @@ class ServerInfo
 
         $ipInfo = $this->ipInfo->collect();
 
-        return $this->findServer($ipInfo['hostname']);
+        return $this->findServer($ipInfo['hostname'], $ipInfo['org']);
     }
 
     /**
@@ -178,19 +184,28 @@ class ServerInfo
      * Tries to find a server config from hostname.
      *
      * @param string $hostname
+     * @param string $org
      *
      * @return string
      */
-    private function findServer($hostname)
+    private function findServer($hostname, $org)
     {
         $offset = 0;
 
-        while ($dot = strpos($hostname, '.', $offset)) {
-            if (isset($this->domainMap[substr($hostname, $offset)])) {
-                return $this->domainMap[substr($hostname, $offset)];
-            }
+        if ($hostname) {
+            while ($dot = strpos($hostname, '.', $offset)) {
+                if (isset($this->domainMap[substr($hostname, $offset)])) {
+                    return $this->domainMap[substr($hostname, $offset)];
+                }
 
-            $offset = $dot + 1;
+                $offset = $dot + 1;
+            }
+        }
+
+        if ($org && preg_match('^{AS\d+} ', $org, $asn)) {
+            if (isset($this->networkMap[$asn[0]])) {
+                return $this->networkMap[$asn[0]];
+            }
         }
 
         return null;

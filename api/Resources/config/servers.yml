@@ -18,6 +18,9 @@ domains:
     vhost.io: hostingwerk
     your-server.de: hetzner
 
+networks:
+    AS15817: mittwald
+
 configs:
     1und1:
         name: 1&1 Internet SE
@@ -96,6 +99,14 @@ configs:
         php:
             /opt/php{major}{minor}/bin/php: []
             /usr/bin/php: []
+
+    mittwald:
+        name: Mittwald CM Service GmbH & Co. KG
+        website: www.mittwald.de
+        last_update: 2017-11-21
+        issues: []
+        php:
+            /usr/local/bin/php_cli: []
 
     netcup:
         name: netcup GmbH
