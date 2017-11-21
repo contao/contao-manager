@@ -92,12 +92,13 @@ class ConfigController extends Controller
             $server = 'custom';
             $cli = $this->config->get('php_cli');
         } else {
-            $detected = true;
             $server = $this->serverInfo->detect();
 
             if (!$server && $cli) {
                 $server = 'custom';
             }
+
+            $detected = !empty($server);
         }
 
         return new JsonResponse(
