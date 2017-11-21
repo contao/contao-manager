@@ -202,9 +202,9 @@ class ServerInfo
             }
         }
 
-        if ($org && preg_match('^{AS\d+} ', $org, $asn)) {
-            if (isset($this->networkMap[$asn[0]])) {
-                return $this->networkMap[$asn[0]];
+        if ($org && preg_match('/^(AS\d+) /i', $org, $asn)) {
+            if (isset($this->networkMap[$asn[1]])) {
+                return $this->networkMap[$asn[1]];
             }
         }
 
