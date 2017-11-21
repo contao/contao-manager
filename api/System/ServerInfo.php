@@ -7,6 +7,7 @@ use Contao\ManagerApi\Process\PhpExecutableFinder;
 use Symfony\Component\Yaml\Yaml;
 use Terminal42\BackgroundProcess\Forker\DisownForker;
 use Terminal42\BackgroundProcess\Forker\NohupForker;
+use Terminal42\BackgroundProcess\Forker\WindowsStartForker;
 
 class ServerInfo
 {
@@ -165,6 +166,10 @@ class ServerInfo
 
         if ($server && isset($this->configs[$server]['process_forker'])) {
             return (array) $this->configs[$server]['process_forker'];
+        }
+
+        if (self::PLATFORM_WINDOWS === $this->getPlatform()) {
+            return [WindowsStartForker::class];
         }
 
         return [DisownForker::class, NohupForker::class];
