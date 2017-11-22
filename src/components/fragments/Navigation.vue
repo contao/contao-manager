@@ -13,6 +13,7 @@
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ 'ui.navigation.maintenance' | translate }}</a>
                 <ul class="navigation__group navigation__group--sub">
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="rebuildCache">{{ 'ui.navigation.rebuildCache' | translate }}</a></li>
+                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="systemCheck">{{ 'ui.navigation.systemCheck' | translate }}</a></li>
                 </ul>
             </li>
             <li class="navigation__item navigation__item--main navigation__item--icon">
@@ -49,6 +50,11 @@
                 };
 
                 this.$store.dispatch('tasks/execute', task);
+            },
+
+            systemCheck() {
+                window.localStorage.removeItem('contao_manager_booted');
+                this.$store.commit('setView', views.BOOT);
             },
 
             logout() {

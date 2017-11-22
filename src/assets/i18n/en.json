@@ -88,6 +88,7 @@
     "ui.navigation.installTool": "Install Tool",
     "ui.navigation.maintenance": "Maintenance",
     "ui.navigation.rebuildCache": "Rebuild Cache",
+    "ui.navigation.systemCheck": "System Check",
     "ui.navigation.advanced": "Advanced",
     "ui.navigation.logout": "Logout",
     "ui.taskpopup.failedHeadline": "The Contao Manager failed to start a console task!",
