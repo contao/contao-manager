@@ -1,7 +1,9 @@
 paths:
-    /Applications/MAMP: mamp
+    /Applications/MAMP: mamp_mac
+    C:\MAMP: mamp_win
 
 domains:
+    alfahosting.de: alfahosting
     cyon.ch: cyon
     goserver.host: webgo
     hosteurope.de: hosteurope
@@ -31,6 +33,14 @@ configs:
             /usr/bin/php{major}.{minor}-cli: ['-d', 'memory_limit=-1']
             /usr/bin/php{major}.{minor}: []
             /usr/lib/cgi-bin/php{major}.{minor}: []
+
+    alfahosting:
+        name: Alfahosting
+        website: alfahosting.de
+        last_update: 2017-11-17
+        issues: []
+        php:
+            /usr/bin/php{major}.{minor}: ['-d', 'memory_limit=-1']
 
     allinkl:
         name: ALL-INKL.COM - Neue Medien Münnich
@@ -83,13 +93,21 @@ configs:
         php:
             /usr/bin/php-{major}.{minor}: []
 
-    mamp:
-        name: MAMP
+    mamp_mac:
+        name: MAMP (Mac OS X)
         website: www.mamp.info
         last_update: 2017-10-10
         issues: []
         php:
             /Applications/MAMP/bin/php/php{major}.{minor}.{release}/bin/php: []
+
+    mamp_win:
+        name: MAMP (Windows)
+        website: www.mamp.info
+        last_update: 2017-11-12
+        issues: []
+        php:
+            C:\MAMP\bin\php\php{major}.{minor}.{release}\php.exe: []
 
     metanet:
         name: Metanet AG
