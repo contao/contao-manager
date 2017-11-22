@@ -209,17 +209,20 @@ class UserConfig extends AbstractConfig
      */
     private function migrateSecret(Apikernel $kernel)
     {
-        if (!isset($this->data['users'], $this->data['secret'])) {
+        if (!isset($this->data['secret'])) {
             $config = $kernel->getContainer()->get('contao_manager.config.manager');
 
-            $this->data = ['users' => $this->data];
+            if (!isset($this->data['users'])) {
+                $this->data = ['users' => $this->data];
+            }
 
             if ($config->has('secret')) {
                 $this->data['secret'] = $config->get('secret');
                 $config->remove('secret');
+                $this->save();
+            } else {
+                $this->getSecret();
             }
-
-            $this->save();
         }
     }
 }
