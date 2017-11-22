@@ -1,5 +1,5 @@
 <template>
-    <boxed-layout v-if="current" wide="1" slotClass="config-check">
+    <boxed-layout v-if="current" :wide="true" slotClass="config-check">
         <header class="config-check__header">
             <img src="../../assets/images/server-config.svg" width="80" height="80" class="config-check__icon">
             <h1 class="config-check__headline">{{ 'ui.system.config.title' | translate }}</h1>

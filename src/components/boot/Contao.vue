@@ -1,5 +1,5 @@
 <template>
-    <boxed-layout v-if="current" wide="1" slotClass="contao-check">
+    <boxed-layout v-if="current" :wide="true" slotClass="contao-check">
         <header class="contao-check__header">
             <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="contao-check__icon" />
             <h1 class="contao-check__headline">{{ 'ui.system.contao.headline' | translate }}</h1>

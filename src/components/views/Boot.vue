@@ -1,5 +1,5 @@
 <template>
-    <boxed-layout wide="1" slotClass="view-boot" v-if="!currentView">
+    <boxed-layout :wide="true" slotClass="view-boot" v-if="!currentView">
         <header class="view-boot__header">
             <img src="../../assets/images/boot.svg" width="80" height="80" alt="Contao Logo" class="view-boot__icon">
             <h1 class="view-boot__headline">{{ 'ui.boot.headline' | translate }}</h1>

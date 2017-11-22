@@ -1,5 +1,5 @@
 <template>
-    <boxed-layout wide="1" slotClass="view-account">
+    <boxed-layout :wide="true" slotClass="view-account">
         <header class="view-account__header">
             <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
             <p class="view-account__product">
