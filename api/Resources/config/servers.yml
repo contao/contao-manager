@@ -5,6 +5,7 @@ paths:
 domains:
     alfahosting.de: alfahosting
     cyon.ch: cyon
+    cyon.net: cyon
     goserver.host: webgo
     hosteurope.de: hosteurope
     inetrobots.com: hostingwerk
@@ -22,6 +23,7 @@ domains:
 
 networks:
     AS15817: mittwald
+    AS47302: cyon
 
 configs:
     1und1:
