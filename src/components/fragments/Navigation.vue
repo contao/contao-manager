@@ -1,27 +1,27 @@
 <template>
     <nav role="navigation" class="navigation">
-        <a id="nav-toggle" @click.prevent="toggleNavigation"><span></span><span></span><span></span></a>
-        <ul>
-            <router-link tag="li" :to="routes.packages"><a>{{ 'ui.navigation.packages' | translate }}</a></router-link>
-            <li>
+        <a class="navigation__toggle" @click.prevent="toggleNavigation"><span></span><span></span><span></span></a>
+        <ul class="navigation__group navigation__group--main">
+            <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.packages"><a>{{ 'ui.navigation.packages' | translate }}</a></router-link>
+            <li class="navigation__item navigation__item--main">
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ 'ui.navigation.tools' | translate }}</a>
-                <ul>
-                    <li><a href="/contao/install" target="_blank">{{ 'ui.navigation.installTool' | translate }}</a></li>
+                <ul class="navigation__group navigation__group--sub">
+                    <li class="navigation__item navigation__item--sub"><a href="/contao/install" target="_blank">{{ 'ui.navigation.installTool' | translate }}</a></li>
                 </ul>
             </li>
-            <li>
+            <li class="navigation__item navigation__item--main">
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ 'ui.navigation.maintenance' | translate }}</a>
-                <ul>
-                    <li><a href="#" @click.prevent="rebuildCache">{{ 'ui.navigation.rebuildCache' | translate }}</a></li>
+                <ul class="navigation__group navigation__group--sub">
+                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="rebuildCache">{{ 'ui.navigation.rebuildCache' | translate }}</a></li>
                 </ul>
             </li>
-            <li class="icon">
+            <li class="navigation__item navigation__item--main navigation__item--icon">
                 <a tabindex="0" aria-haspopup="true" onclick="">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204.993 204.993"><path d="M113.711 202.935H92.163c-3.242 0-4.373.007-15.421-27.364l-8.532-3.468c-23.248 10.547-26 10.547-26.92 10.547h-1.779l-1.517-1.303-15.275-14.945c-2.323-2.319-3.128-3.124 8.825-30.137l-3.479-8.231C0 117.977 0 116.81 0 113.496V92.37c0-3.31 0-4.355 27.972-15.171l3.479-8.249c-12.644-26.602-11.774-27.428-9.28-29.776l16.427-16.105 2.04-.064c2.48 0 11.681 3.357 27.371 9.981l8.507-3.454C86.758 2.054 88.015 2.058 91.246 2.058h21.548c3.228 0 4.363.004 15.411 27.382l8.546 3.443c23.212-10.533 26-10.533 26.927-10.533h1.768l1.517 1.281 15.275 14.92c2.323 2.344 3.117 3.146-8.836 30.17l3.489 8.278c28.101 10.014 28.101 11.177 28.101 14.498v21.101c0 3.232 0 4.37-28.008 15.192l-3.457 8.256c12.58 26.487 11.749 27.317 9.394 29.69l-16.552 16.205-2.051.057c-2.469 0-11.649-3.361-27.317-9.992l-8.557 3.457c-10.27 27.472-11.437 27.472-14.733 27.472zm-19.308-8.722h16.996c1.95-3.976 6.166-14.516 9.541-23.595l.68-1.807 15.475-6.249 1.664.705c9.223 3.933 20.124 8.292 24.372 9.631l11.943-11.681c-1.517-4.205-6.116-14.494-10.264-23.173l-.837-1.764 6.403-15.285 1.743-.673c9.316-3.586 20.11-8.013 24.143-10.032V93.88c-4.08-1.918-14.831-6.009-24.096-9.294l-1.814-.648-6.445-15.3.769-1.725c3.965-8.947 8.375-19.501 9.788-23.753l-11.975-11.706c-3.865 1.349-14.688 5.987-23.817 10.153l-1.7.78-15.475-6.238-.691-1.721c-3.658-9.13-8.203-19.716-10.253-23.635H93.569c-1.961 3.965-6.163 14.509-9.53 23.585l-.669 1.797-15.432 6.27-1.664-.712c-9.244-3.926-20.167-8.278-24.429-9.616L29.923 43.805c1.496 4.198 6.109 14.48 10.243 23.159l.848 1.768-6.435 15.278-1.732.669c-9.301 3.582-20.077 8.006-24.111 10.017v16.431c4.08 1.925 14.82 6.027 24.079 9.326l1.8.655 6.446 15.249-.769 1.721c-3.965 8.94-8.371 19.48-9.788 23.724l12 11.742c3.854-1.36 14.663-5.998 23.803-10.168l1.711-.784 15.443 6.277.691 1.721c3.669 9.133 8.2 19.701 10.251 23.623zm8.092-56.56c-19.759 0-35.849-15.772-35.849-35.159 0-19.372 16.087-35.134 35.849-35.134 19.748 0 35.799 15.765 35.799 35.134 0 19.387-16.051 35.159-35.799 35.159zm0-61.563c-14.956 0-27.113 11.846-27.113 26.405 0 14.569 12.154 26.426 27.113 26.426 14.931 0 27.078-11.857 27.078-26.426-.004-14.559-12.147-26.405-27.078-26.405z"/></svg>
                     <span>{{ 'ui.navigation.advanced' | translate }}</span>
                 </a>
-                <ul class="right">
-                    <li><a href="#" @click.prevent="logout">{{ 'ui.navigation.logout' | translate }}</a></li>
+                <ul class="navigation__group navigation__group--sub navigation__group--right">
+                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="logout">{{ 'ui.navigation.logout' | translate }}</a></li>
                 </ul>
             </li>
         </ul>
@@ -40,16 +40,7 @@
 
         methods: {
             toggleNavigation() {
-                const classes = document.body.className.split(' ');
-                const pos = classes.indexOf('nav-active');
-
-                if (pos === -1) {
-                    classes.push('nav-active');
-                } else {
-                    delete classes[pos];
-                }
-
-                document.body.className = classes.join(' ');
+                document.body.classList.toggle('nav-active');
             },
 
             rebuildCache() {
@@ -74,55 +65,59 @@
 
     $nav-offset: 250px;
 
-    #nav-toggle {
-        display: block;
-        float: right;
-        position: relative;
-        transition: transform .4s cubic-bezier(.55, 0, .1, 1);
-        margin: 5px 15px;
-        padding: 0;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        z-index: 20;
-
-        @include screen(1024) {
-            display: none;
-        }
+    #app {
+        transition: transform 0.4s cubic-bezier(0.55, 0, 0.1, 1);
 
         .nav-active & {
-            transform: rotate(90deg);
-        }
+            transform: translateX(-$nav-offset);
 
-        span {
-            display: block;
-            height: 3px;
-            width: 25px;
-            margin: 5px auto;
-            background: $text-color;
-            pointer-events: none;
+            @include screen(1024) {
+                transform: none;
+            }
         }
     }
 
-    nav {
+    .navigation {
         float: right;
 
-        ul, li {
+        &__toggle {
+            display: block;
+            float: right;
+            position: relative;
+            transition: transform .4s cubic-bezier(.55, 0, .1, 1);
+            margin: 5px 15px;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            z-index: 20;
+
+            @include screen(1024) {
+                display: none;
+            }
+
+            .nav-active & {
+                transform: rotate(90deg);
+            }
+
+            span {
+                display: block;
+                height: 3px;
+                width: 25px;
+                margin: 5px auto;
+                background: $text-color;
+                pointer-events: none;
+            }
+        }
+
+        &__group,
+        &__item {
             list-style-type: none;
             margin: 0;
             padding: 0;
         }
 
-        a {
-            display: block;
-            padding: 12px 10px;
-            font-size: 16px;
-            color: $text-color;
-            white-space: pre;
-            text-transform: uppercase;
-        }
-
-        > ul {
+        &__group--main {
             position: fixed;
             top: 0;
             bottom: 0;
@@ -136,65 +131,67 @@
             z-index: 10;
         }
 
-        li.router-link-active > a,
-        li:hover > a {
-            color: $contao-color;
-            text-decoration: none;
-        }
+        &__item {
+            a {
+                display: block;
+                padding: 12px 10px;
+                font-size: 16px;
+                color: $text-color;
+                white-space: pre;
 
-        li.icon > a {
-            svg {
-                display: none;
+                &:hover {
+                    text-decoration: none;
+                }
+
+                &[href]:hover {
+                    color: $link-color;
+                }
             }
-        }
 
-        li li a {
-            margin-left: 15px;
-            text-transform: none;
+            &--main {
+                > a {
+                    text-transform: uppercase;
+                }
+            }
 
-            &:hover {
-                color: #000;
+            &--sub {
+                > a {
+                    margin-left: 15px;
+                }
+            }
+
+            &--icon {
+                svg {
+                    display: none;
+                }
             }
         }
 
         @include screen(1024) {
-            > ul {
-                position: inherit;
-                top: auto;
-                bottom: auto;
-                right: auto;
-                width: auto;
-                padding: 0;
-                overflow: visible;
-                background: none;
-                box-shadow: none;
-                transform: none;
-                transition: none;
-            }
-
-            li {
-                position: relative;
-                display: inline-block;
-                padding: 0 8px;
-
-                &.router-link-active > a,
-                &:hover > a {
-                    border-bottom: 3px solid $contao-color;
+            &__group {
+                &--main {
+                    position: inherit;
+                    top: auto;
+                    bottom: auto;
+                    right: auto;
+                    width: auto;
+                    padding: 0;
+                    overflow: visible;
+                    background: none;
+                    box-shadow: none;
+                    transform: none;
+                    transition: none;
                 }
 
-                ul {
+                &--sub {
                     display: none;
-                }
-
-                &:hover ul {
                     position: absolute;
                     left: 50%;
-                    display: block;
                     min-width: 180px;
                     margin-top: -3px;
                     text-align: center;
                     background: #fff;
-                    border-top: 3px solid $contao-color;
+                    border-top: 3px solid $link-color;
                     transform: translateX(-50%);
                     z-index: 100;
                     box-shadow: $shadow-color 0 1px 2px;
@@ -208,55 +205,75 @@
                         margin-left: -4px;
                         border-style: solid;
                         border-width: 0 3.5px 4px 3.5px;
-                        border-color: transparent transparent $contao-color transparent;
+                        border-color: transparent transparent $link-color transparent;
                         content: "";
-                    }
-
-                    &.right {
-                        left: auto;
-                        right: 7px;
-                        transform: translateX(0);
-
-                        &:before {
-                            left: auto;
-                            right: 22px;
-                        }
                     }
                 }
 
-                li {
+                &--right {
+                    left: auto;
+                    right: 7px;
+                    transform: translateX(0);
+
+                    &:before {
+                        left: auto;
+                        right: 22px;
+                    }
+                }
+            }
+
+            &__item {
+                position: relative;
+                display: inline-block;
+                padding: 0 8px;
+
+                &.router-link-active > a,
+                &:hover > a {
+                    color: $link-color !important;
+                    border-bottom: 3px solid $link-color;
+                }
+
+                &:hover > .navigation__group--sub {
+                    display: block;
+                }
+
+                &--sub {
                     display: block;
                     border-top: 1px solid #e5dfd0;
 
                     a {
                         margin: 0;
                         border: none !important;
+
+                        &:hover {
+                            color: #000 !important;
+                        }
                     }
 
                     &:first-child {
                         border-top: none;
                     }
                 }
-            }
 
-            li.icon > a {
-                padding-top: 7px;
+                &--icon > a {
+                    padding-top: 7px;
 
-                svg {
-                    display: inline;
-                    position: relative;
-                    top: 4px;
-                    width: 22px;
-                    height: 22px;
-                    fill: $text-color;
-                }
+                    svg {
+                        display: inline;
+                        position: relative;
+                        top: 4px;
+                        width: 22px;
+                        height: 22px;
+                        fill: $text-color;
+                    }
 
-                &:hover svg {
-                    fill: $contao-color;
-                }
+                    &:hover svg {
+                        fill: $link-color;
+                    }
 
-                span {
-                    display: none;
+                    span {
+                        display: none;
+                    }
                 }
             }
 
@@ -266,10 +283,10 @@
                 }
 
                 li:hover > a {
-                    border-bottom: 3px solid $contao-color;
+                    border-bottom: 3px solid $link-color;
 
                     svg {
-                        fill: $contao-color;
+                        fill: $link-color;
                     }
                 }
             }
