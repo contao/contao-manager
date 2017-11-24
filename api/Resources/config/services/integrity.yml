@@ -9,6 +9,11 @@ services:
         arguments:
             - "@contao_manager.i18n.translator"
 
+    contao_manager.integrity.session:
+        class: Contao\ManagerApi\IntegrityCheck\SessionCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
+
     contao_manager.integrity.openssl:
         class: Contao\ManagerApi\IntegrityCheck\OpenSSLCheck
         arguments:

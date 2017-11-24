@@ -48,6 +48,7 @@ class PhpWebController extends Controller
             'contao_manager.integrity.allow_url_fopen',
             'contao_manager.integrity.intl',
             'contao_manager.integrity.openssl',
+            'contao_manager.integrity.session',
             'contao_manager.integrity.memory_limit',
             'contao_manager.integrity.process',
         ];
