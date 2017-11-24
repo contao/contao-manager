@@ -4,29 +4,20 @@ it:
       title: 'L''impostazione PHP "allow_url_fopen" non è abilitata sul server.'
     openssl:
       title: 'L''estensione PHP OpenSSL non è disponibile.'
-      detail: 'Contao Manager richiede l''estensione OpenSSL per scaricare files attraverso una connessione criptata (https).'
-    process:
-      title: 'La funzione PHP "proc_open" e/o "proc_close" non sono disponibili sul server.'
-      detail: 'Le funzioni "proc_open" e "proc_close" sono necessarie per eseguire attività di riga di comando in background. Controllare con il provider di hosting che il metodo sia disponibile, altrimenti né  Contao Manager né  Contao 4 verranno eseguiti correttamente.'
     intl:
       title: 'L''estensione PHP Intl non è disponibile.'
-      detail: 'Contao 4 richiede l''estensione Intl per la gestione delle informazioni internazionali.'
     web_root:
       title: 'Il file Phar deve trovarsi nella cartella / web.'
     windows:
       title: 'Questa versione di Contao Manager non è attualmente supportata in Windows.'
     memory_limit:
       title: 'Limite della memoria PHP non sufficiente'
-      detail: 'La configurazione PHP ha solo {limit} memoria (sulla riga di comando). Questo non è sufficiente per eseguire Composer e non è stato possibile aumentare automaticamente questo limite. Contattare il fornitore di hosting per ricevere assistenza.'
     systempdir:
       title: 'Impossibile scrivere sulla cartella temporanea di sistema.'
-      detail: 'Questo è probabilmente un problema del webserver. Assicurarsi che open_basedir abbia l''accesso alla directory temporanea o che il sys_temp_dir sia configurato correttamente.'
     contao_old:
       title: 'Versione Contao non compatibile'
-      detail: 'Contao versione {version} non è compatibile con il Contao Manager, aggiornare manualmente l''installazione.'
     contao_unknown:
       title: 'Stato dell''installazione sconosciuto'
-      detail: "Alcuni file sono stati trovati sul tuo server, ma non è stata rilevata nessuna versione Contao conosciuta.\nÈ necessario riparare manualmente l'applicazione o rimuovere i seguenti file e cartelle per installare Contao:\n\n{files}"
   config:
     php_cli:
       not_found: 'Questo percorso non contiene un PHP valido.'
