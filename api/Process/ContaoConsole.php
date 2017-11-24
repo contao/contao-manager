@@ -11,10 +11,9 @@
 namespace Contao\ManagerApi\Process;
 
 use Contao\ManagerApi\Exception\ProcessOutputException;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class ContaoApi
+class ContaoConsole
 {
     /**
      * @var ConsoleProcessFactory
@@ -22,45 +21,34 @@ class ContaoApi
     private $processFactory;
 
     /**
-     * @var null|Filesystem
-     */
-    private $filesystem;
-
-    /**
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
-     * @param Filesystem|null       $filesystem
      */
-    public function __construct(ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
+    public function __construct(ConsoleProcessFactory $processFactory)
     {
         $this->processFactory = $processFactory;
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**
-     * Gets the Contao API version.
+     * Gets the Contao version.
      *
-     * @return int
+     * @return string
      *
      * @throws ProcessFailedException
      * @throws ProcessOutputException
      */
     public function getVersion()
     {
-        if (!$this->filesystem->exists($this->processFactory->getContaoApiPath())) {
-            return 0;
-        }
-
-        $process = $this->processFactory->createContaoApiProcess(['version']);
+        $process = $this->processFactory->createContaoConsoleProcess(['contao:version']);
         $process->mustRun();
 
         $version = trim($process->getOutput());
 
-        if (!preg_match('/^\d+$/', $version)) {
-            throw new ProcessOutputException('Output is not a valid API version.', $process);
+        if (!preg_match('/^\d+\.\d+\.\d+$/', $version)) {
+            throw new ProcessOutputException('Console output is not a valid version string.', $process);
         }
 
-        return (int) $version;
+        return $version;
     }
 }

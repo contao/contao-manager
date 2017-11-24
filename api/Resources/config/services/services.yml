@@ -51,6 +51,11 @@ services:
         arguments:
             - "@contao_manager.process.console_factory"
 
+    contao_manager.process.contao_console:
+        class: Contao\ManagerApi\Process\ContaoConsole
+        arguments:
+            - "@contao_manager.process.console_factory"
+
     contao_manager.security.jwt_manager:
         class: Contao\ManagerApi\Security\JwtManager
         arguments:

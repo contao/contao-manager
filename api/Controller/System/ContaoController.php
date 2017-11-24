@@ -11,7 +11,6 @@
 namespace Contao\ManagerApi\Controller\System;
 
 use Contao\ManagerApi\ApiKernel;
-use Contao\ManagerApi\Exception\ApiProblemException;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -36,42 +35,42 @@ class ContaoController extends Controller
             );
         }
 
-        $problem = $this->get('contao_manager.integrity.contao')->run();
-        if ($problem instanceof ApiProblem) {
-            throw new ApiProblemException($problem);
-        }
-
         if (0 === count($files = $this->getProjectFiles())) {
             return new JsonResponse(
                 [
                     'version' => null,
-                    'api' => null,
+                    'api' => 0,
                 ]
             );
         }
 
-//        try {
-            return new JsonResponse(
-                [
-                    'version' => $this->getContaoVersion(),
-                    'api' => $this->getApiVersion(),
-                ]
+        $translator = $this->get('contao_manager.i18n.translator');
+        $contaoVersion = $this->getContaoVersion();
+
+        if (null === $contaoVersion) {
+            return new ApiProblemResponse(
+                (new ApiProblem(
+                    $translator->trans('contao_unknown.title')
+                ))->setDetail(
+                    $translator->trans('contao_unknown.detail', ['files' => ' - ' . implode("\n - ", $files)])
+                )
             );
-//        } catch (\RuntimeException $e) {
-//            if ($e instanceof ProcessFailedException || $e instanceof ProcessOutputException) {
-//                return new JsonResponse(
-//                    [
-//                        'message' => $e->getMessage(),
-//                        'exitCode' => $e->getProcess()->getExitCode(),
-//                        'output' => $e->getProcess()->getOutput(),
-//                        'errorOutput' => $e->getProcess()->getErrorOutput(),
-//                    ],
-//                    Response::HTTP_INTERNAL_SERVER_ERROR
-//                );
-//            }
-//
-//            throw $e;
-//        }
+        }
+
+        if (version_compare($contaoVersion, '4.3.5', '<')) {
+            return new ApiProblemResponse(
+                (new ApiProblem(
+                    $translator->trans('contao_old.title')
+                ))->setDetail($translator->trans('contao_old.detail', ['version' => $contaoVersion]))
+            );
+        }
+
+        return new JsonResponse(
+            [
+                'version' => $this->getContaoVersion(),
+                'api' => $this->getApiVersion(),
+            ]
+        );
     }
 
     /**
@@ -82,20 +81,37 @@ class ContaoController extends Controller
     private function getProjectFiles()
     {
         $content = scandir($this->get('kernel')->getContaoDir(), SCANDIR_SORT_NONE);
-        $content = array_diff($content, ['.', '..', 'cgi-bin', 'contao-manager', 'web', '.htaccess', '.DS_Store']);
+        $content = array_diff(
+            $content,
+            [
+                '.',
+                '..',
+                'cgi-bin',
+                'contao-manager',
+                'web',
+                '.bash_profile',
+                '.bash_logout',
+                '.bashrc',
+                '.DS_Store',
+                '.htaccess',
+            ]
+        );
 
         return $content;
     }
 
+    /**
+     * Gets the Contao API version.
+     *
+     * @return int|null
+     */
     private function getApiVersion()
     {
-        $filesystem = $this->get('filesystem');
-
-        if (!$filesystem->exists($this->get('contao_manager.process.console_factory')->getContaoApiPath())) {
-            return 0;
+        try {
+            return $this->get('contao_manager.process.contao_api')->getVersion();
+        } catch (\Exception $e) {
+            return null;
         }
-
-        return $this->get('contao_manager.process.contao_api')->getApiVersion();
     }
 
     /**
@@ -108,7 +124,11 @@ class ContaoController extends Controller
         $filesystem = $this->get('filesystem');
 
         if ($filesystem->exists($this->get('contao_manager.process.console_factory')->getContaoConsolePath())) {
-            return $this->get('contao_manager.process.contao_api')->getContaoVersion();
+            try {
+                return $this->get('contao_manager.process.contao_console')->getVersion();
+            } catch (\Exception $e) {
+                return null;
+            }
         }
 
         /** @var ApiKernel $kernel */
@@ -146,6 +166,6 @@ class ContaoController extends Controller
             }
         }
 
-        return 'UNKNOWN';
+        return null;
     }
 }
