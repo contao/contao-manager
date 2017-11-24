@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\Process;
 
+use Composer\Semver\VersionParser;
 use Contao\ManagerApi\Exception\ProcessOutputException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -43,12 +44,13 @@ class ContaoConsole
         $process = $this->processFactory->createContaoConsoleProcess(['contao:version']);
         $process->mustRun();
 
+        $parser = new VersionParser();
         $version = trim($process->getOutput());
 
-        if (!preg_match('/^\d+\.\d+\.\d+$/', $version)) {
+        try {
+            return $parser->normalize($version);
+        } catch (\UnexpectedValueException $e) {
             throw new ProcessOutputException('Console output is not a valid version string.', $process);
         }
-
-        return $version;
     }
 }

@@ -11,11 +11,13 @@
 namespace Contao\ManagerApi\Controller\System;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Exception\ProcessOutputException;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ContaoController extends Controller
 {
@@ -45,7 +47,22 @@ class ContaoController extends Controller
         }
 
         $translator = $this->get('contao_manager.i18n.translator');
-        $contaoVersion = $this->getContaoVersion();
+
+        try {
+            $contaoVersion = $this->getContaoVersion();
+        } catch (\RuntimeException $e) {
+            if ($e instanceof ProcessOutputException || $e instanceof ProcessFailedException) {
+                return new ApiProblemResponse(
+                    (new ApiProblem(
+                        $translator->trans('integrity.contao_version.title')
+                    ))->setDetail(
+                        $translator->trans('integrity.contao_version.detail', ['output' => $e->getProcess()->getOutput()])
+                    )
+                );
+            }
+
+            $contaoVersion = null;
+        }
 
         if (null === $contaoVersion) {
             return new ApiProblemResponse(
@@ -124,11 +141,7 @@ class ContaoController extends Controller
         $filesystem = $this->get('filesystem');
 
         if ($filesystem->exists($this->get('contao_manager.process.console_factory')->getContaoConsolePath())) {
-            try {
-                return $this->get('contao_manager.process.contao_console')->getVersion();
-            } catch (\Exception $e) {
-                return null;
-            }
+            return $this->get('contao_manager.process.contao_console')->getVersion();
         }
 
         /** @var ApiKernel $kernel */
