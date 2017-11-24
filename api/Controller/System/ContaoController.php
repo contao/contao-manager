@@ -50,9 +50,9 @@ class ContaoController extends Controller
         if (null === $contaoVersion) {
             return new ApiProblemResponse(
                 (new ApiProblem(
-                    $translator->trans('contao_unknown.title')
+                    $translator->trans('integrity.contao_unknown.title')
                 ))->setDetail(
-                    $translator->trans('contao_unknown.detail', ['files' => ' - ' . implode("\n - ", $files)])
+                    $translator->trans('integrity.contao_unknown.detail', ['files' => ' - ' . implode("\n - ", $files)])
                 )
             );
         }
@@ -60,8 +60,8 @@ class ContaoController extends Controller
         if (version_compare($contaoVersion, '4.3.5', '<')) {
             return new ApiProblemResponse(
                 (new ApiProblem(
-                    $translator->trans('contao_old.title')
-                ))->setDetail($translator->trans('contao_old.detail', ['version' => $contaoVersion]))
+                    $translator->trans('integrity.contao_old.title')
+                ))->setDetail($translator->trans('integrity.contao_old.detail', ['version' => $contaoVersion]))
             );
         }
 
