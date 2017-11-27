@@ -41,9 +41,9 @@ const store = new Vuex.Store({
     },
 
     actions: {
-        apiError: (statusCode) => {
-            this.$store.commit('setError', {
-                title: this.$t('ui.app.apiError'),
+        apiError: ({ commit }, statusCode) => {
+            commit('setError', {
+                title: Vue.i18n.translate('ui.app.apiError'),
                 type: 'about:blank',
                 status: statusCode || '',
             });
