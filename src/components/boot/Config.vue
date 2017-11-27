@@ -10,14 +10,14 @@
             <fieldset class="config-check__fields">
                 <legend class="config-check__fieldtitle">{{ 'ui.system.config.formTitle' | translate }}</legend>
                 <p class="config-check__fielddesc">{{ 'ui.system.config.formText' | translate }}</p>
-                <p class="config-check__detected" v-if="detected && server !== 'custom'">{{ 'ui.system.config.detected' | translate }}</p>
+                <p class="config-check__detected" v-if="detected && server">{{ 'ui.system.config.detected' | translate }}</p>
                 <select-menu name="server" :label="$t('Configuration')" class="inline" :disabled="processing" :error="errors.server" :options="servers" v-model="server" @input="detected = false"></select-menu>
             </fieldset>
 
             <fieldset v-if="showCustom" class="config-check__fields">
                 <legend class="config-check__fieldtitle">{{ 'ui.system.config.customTitle' | translate }}</legend>
                 <p class="config-check__fielddesc">{{ 'ui.system.config.customText' | translate }}</p>
-                <p class="config-check__detected" v-if="detected">{{ 'ui.system.config.phpDetected' | translate }}</p>
+                <p class="config-check__detected" v-if="detected && php_cli">{{ 'ui.system.config.phpDetected' | translate }}</p>
                 <text-field name="php_cli" :label="$t('ui.system.config.cli')" :disabled="processing" :error="errors.php_cli" v-model="php_cli" @enter="save"></text-field>
             </fieldset>
 
@@ -136,9 +136,12 @@
                 this.php_cli = result.php_cli;
                 this.detected = result.detected;
 
-                if (!result.server || result.detected || (result.server === 'custom' && !result.php_cli)) {
+                if (!result.server || result.detected) {
                     this.bootState = 'error';
                     this.bootDescription = this.$t('ui.system.config.stateError');
+                } else if (!result.php_cli) {
+                    this.bootState = 'error';
+                    this.bootDescription = this.$t('ui.system.config.stateErrorCli');
                 } else if (result.server === 'custom') {
                     this.bootState = 'info';
                     this.bootDescription = this.$t('ui.system.config.stateCustom', result);

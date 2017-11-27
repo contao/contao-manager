@@ -23,11 +23,16 @@ class PhpExecutableFinder
      * the same version as the currently running web process.
      *
      * @param array $paths
+     * @param bool  $discover
      *
      * @return null|string
      */
-    public function find(array $paths = [])
+    public function find(array $paths = [], $discover = true)
     {
+        if (!$discover) {
+            return $this->findBestBinary($paths);
+        }
+
         if ($bin = constant('PHP_BINARY')) {
             if (false !== ($suffix = strrchr(basename($bin), '-'))) {
                 $php = substr($bin, 0, -strlen($suffix));

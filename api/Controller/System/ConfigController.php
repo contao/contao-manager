@@ -84,21 +84,23 @@ class ConfigController extends Controller
     private function getTestResult()
     {
         $detected = false;
-        $cli = $this->serverInfo->getPhpExecutable();
+        $server = '';
 
         if ($this->config->has('server')) {
             $server = $this->config->get('server');
+            $cli = $this->serverInfo->getPhpExecutable();
         } else if ($this->config->has('php_cli')) {
-            $server = 'custom';
+            $detected = true;
             $cli = $this->config->get('php_cli');
         } else {
+            $detected = true;
             $server = $this->serverInfo->detect();
 
-            if (!$server && $cli) {
-                $server = 'custom';
+            if ($server) {
+                $cli = $this->serverInfo->getPhpExecutable();
+            } else {
+                $cli = (new PhpExecutableFinder())->find();
             }
-
-            $detected = !empty($server);
         }
 
         return new JsonResponse(

@@ -45,6 +45,11 @@ class ServerInfo
     private $configs;
 
     /**
+     * @var string|null
+     */
+    private $server = false;
+
+    /**
      * Constructor.
      *
      * @param IpInfo        $ipInfo
@@ -81,43 +86,49 @@ class ServerInfo
      */
     public function detect()
     {
-        // localhost, try path detection
-        if ((!isset($_SERVER['REMOTE_ADDR']) || in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', 'fe80::1', '::1']))
-            && null !== ($binary = constant('PHP_BINARY'))
-        ) {
-            foreach ($this->pathMap as $path => $configName) {
-                if (0 === strpos($binary, $path)) {
-                    return $configName;
+        if (false === $this->server) {
+            // localhost, try path detection
+            if ((!isset($_SERVER['REMOTE_ADDR']) || in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', 'fe80::1', '::1']))
+                && null !== ($binary = constant('PHP_BINARY'))
+            ) {
+                foreach ($this->pathMap as $path => $configName) {
+                    if (0 === strpos($binary, $path)) {
+                        return $configName;
+                    }
                 }
             }
+
+            $ipInfo = $this->ipInfo->collect();
+
+            $this->server = $this->findServer($ipInfo['hostname'], $ipInfo['org']);
         }
 
-        $ipInfo = $this->ipInfo->collect();
-
-        return $this->findServer($ipInfo['hostname'], $ipInfo['org']);
+        return $this->server;
     }
 
     /**
      * Gets PHP executable by detecting known server paths.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPhpExecutable()
     {
         $paths = [];
         $server = $this->managerConfig->get('server');
 
-        if ($server === 'custom' && ($php_cli = $this->managerConfig->get('php_cli'))) {
-            return $php_cli;
+        if (!$server) {
+            $server = $this->detect();
         }
 
-        if ($server && isset($this->configs[$server])) {
+        if ($server === 'custom' && ($php_cli = $this->managerConfig->get('php_cli'))) {
+            $paths[] = $php_cli;
+        } elseif ($server && isset($this->configs[$server])) {
             foreach ($this->configs[$server]['php'] as $path => $arguments) {
                 $paths[] = $this->getPhpVersionPath($path);
             }
         }
 
-        return (new PhpExecutableFinder())->find($paths);
+        return (new PhpExecutableFinder())->find($paths, false);
     }
 
     /**
