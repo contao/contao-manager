@@ -14,7 +14,6 @@
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ 'ui.navigation.maintenance' | translate }}</a>
                 <ul class="navigation__group navigation__group--sub">
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="rebuildCache">{{ 'ui.navigation.rebuildCache' | translate }}</a></li>
-                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="systemCheck">{{ 'ui.navigation.systemCheck' | translate }}</a></li>
                 </ul>
             </li>
             <li class="navigation__item navigation__item--main navigation__item--icon">
@@ -23,6 +22,7 @@
                     <span>{{ 'ui.navigation.advanced' | translate }}</span>
                 </a>
                 <ul class="navigation__group navigation__group--sub navigation__group--right">
+                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="systemCheck">{{ 'ui.navigation.systemCheck' | translate }}</a></li>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="logout">{{ 'ui.navigation.logout' | translate }}</a></li>
                 </ul>
             </li>
