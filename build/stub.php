@@ -80,7 +80,7 @@ if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
     }
 
     Phar::webPhar(
-        'contao-manager.phar',
+        null,
         'index.html',
         null,
         array(

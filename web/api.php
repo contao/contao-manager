@@ -9,13 +9,19 @@
  */
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__.'/../vendor/autoload.php';
 
-$kernel = new ApiKernel('@symfony_env@' === 'prod' ? 'prod' : 'dev');
+try {
+    $kernel = new ApiKernel('@symfony_env@' === 'prod' ? 'prod' : 'dev');
 
-$request = Request::createFromGlobals();
-$response = $kernel->handle($request);
-$response->send();
-$kernel->terminate($request, $response);
+    $request = Request::createFromGlobals();
+    $response = $kernel->handle($request);
+    $response->send();
+    $kernel->terminate($request, $response);
+} catch (\Exception $e) {
+    $response = ApiProblemResponse::createFromException($e, '@symfony_env@' !== 'prod');
+    $response->send();
+}
