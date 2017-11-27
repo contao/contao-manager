@@ -20,7 +20,9 @@
                 <p v-if="hasError" class="view-boot__issue">{{ 'ui.boot.issue2' | translate }}</p>
                 <button v-if="canContinue" @click="finish" class="view-boot__continue widget-button widget-button--primary">{{ 'ui.boot.run' | translate }}</button>
             </div>
-
+        </main>
+        <main v-else class="view-boot__loading">
+            <loader></loader>
         </main>
     </boxed-layout>
 
@@ -32,6 +34,7 @@
     import views from '../../router/views';
 
     import BoxedLayout from '../layouts/Boxed';
+    import Loader from '../fragments/Loader';
     import SelfUpdate from '../boot/SelfUpdate';
     import Config from '../boot/Config';
     import PhpWeb from '../boot/PhpWeb';
@@ -40,7 +43,7 @@
     import Contao from '../boot/Contao';
 
     export default {
-        components: { BoxedLayout, SelfUpdate, Config, PhpWeb, PhpCli, Composer, Contao },
+        components: { BoxedLayout, Loader, SelfUpdate, Config, PhpWeb, PhpCli, Composer, Contao },
 
         data: () => ({
             currentView: null,
@@ -169,6 +172,16 @@
         &__description {
             margin: 0;
             font-weight: $font-weight-bold;
+        }
+
+        &__loading {
+            width: 30px;
+            margin: 0 auto 40px;
+
+            .sk-circle {
+                width: 30px;
+                height: 30px;
+            }
         }
 
         &__checks {
