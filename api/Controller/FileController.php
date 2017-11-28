@@ -68,7 +68,7 @@ class FileController extends Controller
 
         if ($request->isMethod('PUT')) {
             $this->filesystem->dumpFile($file, $request->getContent());
-        } else if (!$this->filesystem->exists($file)) {
+        } elseif (!$this->filesystem->exists($file)) {
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 

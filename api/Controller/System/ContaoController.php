@@ -69,7 +69,7 @@ class ContaoController extends Controller
                 (new ApiProblem(
                     $translator->trans('integrity.contao_unknown.title')
                 ))->setDetail(
-                    $translator->trans('integrity.contao_unknown.detail', ['files' => ' - ' . implode("\n - ", $files)])
+                    $translator->trans('integrity.contao_unknown.detail', ['files' => ' - '.implode("\n - ", $files)])
                 )
             );
         }

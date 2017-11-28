@@ -89,7 +89,7 @@ class ConfigController extends Controller
         if ($this->config->has('server')) {
             $server = $this->config->get('server');
             $cli = $this->serverInfo->getPhpExecutable();
-        } else if ($this->config->has('php_cli')) {
+        } elseif ($this->config->has('php_cli')) {
             $detected = true;
             $cli = $this->config->get('php_cli');
         } else {
@@ -177,7 +177,7 @@ class ConfigController extends Controller
         $vCli = vsprintf('%s.%s', explode('.', $info['version']));
 
         if (version_compare($vWeb, $vCli, '<>')) {
-            $errors [] = [
+            $errors[] = [
                 'source' => 'php_cli',
                 'message' => $this->translator->trans(
                     'config.php_cli.incompatible',

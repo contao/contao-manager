@@ -10,7 +10,6 @@
 
 namespace Contao\ManagerApi\Security;
 
-use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Config\UserConfig;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Cookie;

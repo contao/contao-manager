@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2017 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\System;
 
 use Contao\ManagerApi\Config\ManagerConfig;
@@ -88,7 +96,7 @@ class ServerInfo
     {
         if (false === $this->server) {
             // localhost, try path detection
-            if ((!isset($_SERVER['REMOTE_ADDR']) || in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', 'fe80::1', '::1']))
+            if ((!isset($_SERVER['REMOTE_ADDR']) || in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', 'fe80::1', '::1'], true))
                 && null !== ($binary = constant('PHP_BINARY'))
             ) {
                 foreach ($this->pathMap as $path => $configName) {
