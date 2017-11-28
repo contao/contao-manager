@@ -93,7 +93,6 @@
         <echo message="Installing UI dependencies" />
         <exec executable="npm" dir="contao-manager-${version}" checkreturn="true">
             <arg value="install" />
-            <arg value="--only=prod" />
             <arg value="--no-bin-links" />
             <arg value="--no-optional" />
         </exec>
