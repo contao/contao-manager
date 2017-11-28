@@ -53,6 +53,7 @@
     "ui.system.config.phpDetected": "Your server is unknown but a valid PHP path was automatically detected.",
     "ui.system.config.cli": "PHP Binary",
     "ui.system.config.stateError": "Your hosting provider is not configured.",
+    "ui.system.config.stateErrorCli": "No valid PHP binary was found on the server.",
     "ui.system.config.stateCustom": "Custom configuration, PHP binary at {php_cli}.",
     "ui.system.config.stateSuccess": "Configured as {server}, PHP binary at {php_cli}.",
     "ui.system.php_web.title": "PHP Web Process",

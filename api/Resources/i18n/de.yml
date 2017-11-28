@@ -11,6 +11,8 @@ de:
     intl:
       title: 'Die PHP Intl-Erweiterung ist nicht verfügbar.'
       detail: 'Contao 4 benötigt die Intl-Erweiterung für die Internationalisierung der Anwendung.'
+    session:
+      title: 'Die PHP Session konnte nicht gestartet werden.'
     web_root:
       title: 'Die Phar-Datei muss sich im /web-Ordner befinden.'
     windows:
@@ -27,6 +29,9 @@ de:
     contao_unknown:
       title: 'Unbekannter Installationsstatus'
       detail: "Auf Ihrem Server wurden Dateien gefunden, die keiner bekannten Contao-Version zugeordnet werden konnten.\nUm Contao zu installieren, müssen Sie entweder Ihre Installation manuell reparieren oder folgende Dateien und Ordner entfernen:\n\n{files}"
+    contao_version:
+      title: 'Die Contao-Version wurde nicht erkannt.'
+      detail: "Der Konsolenprozess hat eine ungültige Ausgabe anstelle der Contao Version ausgegeben. Bitte prüfen Sie die Ausgabe für weitere Informationen."
   config:
     php_cli:
       not_found: 'Der Pfad enthält kein gültiges PHP-Binary.'
