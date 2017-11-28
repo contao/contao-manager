@@ -3008,16 +3008,16 @@
     "packages-dev": [
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v2.2.11",
+            "version": "v2.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "11937d6616f02451af7540cfda3e13bffc25f51f"
+                "reference": "362ad63e80d05a238fbe542d75cc1f8e9246797e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/11937d6616f02451af7540cfda3e13bffc25f51f",
-                "reference": "11937d6616f02451af7540cfda3e13bffc25f51f",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/362ad63e80d05a238fbe542d75cc1f8e9246797e",
+                "reference": "362ad63e80d05a238fbe542d75cc1f8e9246797e",
                 "shasum": ""
             },
             "require": {
@@ -3089,7 +3089,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2017-11-19T22:04:08+00:00"
+            "time": "2017-11-26T20:41:43+00:00"
         },
         {
             "name": "gecko-packages/gecko-php-unit",
