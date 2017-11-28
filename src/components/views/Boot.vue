@@ -30,6 +30,7 @@
 </template>
 
 <script>
+    import api from '../../api';
     import routes from '../../router/routes';
     import views from '../../router/views';
 
@@ -73,6 +74,7 @@
         methods: {
             setView(view) {
                 if (view === null) {
+                    api.system.purgeCache();
                     this.status = {
                         SelfUpdate: null,
                         Config: null,
@@ -137,6 +139,7 @@
         },
 
         created() {
+            api.system.purgeCache();
             this.$store.dispatch('tasks/reload').then(() => {
                 this.boot = true;
             });
