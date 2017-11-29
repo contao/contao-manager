@@ -7,10 +7,10 @@
         </header>
         <main v-if="boot" class="view-boot__checks">
 
-            <self-update @error="reportError" @success="reportSuccess" @view="setView"></self-update>
             <config @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Config')"></config>
             <php-web @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('PhpWeb')"></php-web>
             <php-cli @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('PhpCli')"></php-cli>
+            <self-update @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('SelfUpdate')"></self-update>
             <composer @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Composer')"></composer>
             <contao @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Contao')"></contao>
 
@@ -54,10 +54,10 @@
             boot: false,
 
             status: {
-                SelfUpdate: null,
                 Config: null,
                 PhpWeb: null,
                 PhpCli: null,
+                SelfUpdate: null,
                 Composer: null,
                 Contao: null,
             },
@@ -79,10 +79,10 @@
                 if (view === null) {
                     api.system.purgeCache();
                     this.status = {
-                        SelfUpdate: null,
                         Config: null,
                         PhpWeb: null,
                         PhpCli: null,
+                        SelfUpdate: null,
                         Composer: null,
                         Contao: null,
                     };
