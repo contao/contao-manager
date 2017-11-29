@@ -53,7 +53,7 @@
     "ui.system.config.phpDetected": "サーバーは不明ですが、有効なPHPのパスを自動的に検出しました。",
     "ui.system.config.cli": "PHPの実行ファイル",
     "ui.system.config.stateError": "ホスティングプロバイダーを構成していません。",
-    "ui.system.config.stateErrorCli": "No valid PHP binary was found on the server.",
+    "ui.system.config.stateErrorCli": "有効なPHPの実行ファイルをサーバー上に見つけられませんでした。",
     "ui.system.config.stateCustom": "独自の構成、PHPの実行ファイルは {php_cli} です。",
     "ui.system.config.stateSuccess": "{server} として構成、PHPの実行ファイルは {php_cli} です。",
     "ui.system.php_web.title": "PHPのWebプロセス",

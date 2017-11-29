@@ -37,7 +37,7 @@
     "ui.system.selfUpdate.update": "Die neue Version {latest} des Contao Managers ist verfügbar.",
     "ui.system.selfUpdate.latest": "Sie verwenden die aktuelle Version {current}.",
     "ui.system.selfUpdate.dev": "Entwicklungs-Versionen können nicht automatisch aktualisiert werden.",
-    "ui.system.selfUpdate.button": "Manager aktualisieren",
+    "ui.system.selfUpdate.button": "Aktualisieren",
     "ui.system.config.title": "Serverkonfiguration",
     "ui.system.config.setup": "Konfigurieren",
     "ui.system.config.change": "Ändern",

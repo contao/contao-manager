@@ -53,7 +53,7 @@
     "ui.system.config.phpDetected": "Ваш сервер неизвестен, но корректный путь PHP был обнаружен автоматически.",
     "ui.system.config.cli": "Бинарный файл PHP",
     "ui.system.config.stateError": "Ваш хостинг-провайдер не настроен.",
-    "ui.system.config.stateErrorCli": "No valid PHP binary was found on the server.",
+    "ui.system.config.stateErrorCli": "На сервере не найден верный бинарный файл PHP.",
     "ui.system.config.stateCustom": "Пользовательская конфигурация, бинарный файл PHP {php_cli}.",
     "ui.system.config.stateSuccess": "Настроен как {server}, бинарный файл PHP {php_cli}.",
     "ui.system.php_web.title": "Веб-процесс PHP",

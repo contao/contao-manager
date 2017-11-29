@@ -11,6 +11,8 @@ ja:
     intl:
       title: 'PHPのIntl拡張を利用できません。'
       detail: 'Contao 4は国際化の目的でPHPのIntl拡張を必要とします。'
+    session:
+      title: 'PHPのセッションを開始できませんでした。'
     web_root:
       title: 'Pharファイルは/webフォルダーになければなりません。'
     windows:
@@ -27,6 +29,9 @@ ja:
     contao_unknown:
       title: 'インストールの状態が不明'
       detail: "サーバーにファイルがいくつかありますが、Contaoのバージョンを検出できませんでした。\n手作業でアプリケーションを修復するか、Contaoをインストールするために以下のファイルとフォルダーを削除しなければなりません:\n\n{files}"
+    contao_version:
+      title: 'Contaoのバージョンを決定不可能'
+      detail: "Contaoのバージョンを問い合わせた時にコンソールが予期しない内容を返しました。さらに詳しい情報は出力を確認してください。\n\n{output}"
   config:
     php_cli:
       not_found: 'このパスに有効なPHPの実行ファイルがありません。'
