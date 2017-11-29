@@ -100,7 +100,7 @@
             }).then(() => {
                 if (this.bootState === 'success') {
                     this.$emit('success', 'Contao');
-                } else {
+                } else if (this.bootState === 'error') {
                     this.$emit('error', 'Contao');
                 }
             });
