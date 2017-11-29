@@ -259,7 +259,7 @@
         &__toggle {
             margin: 0 15px;
 
-            &--progress {
+            &--nowrap {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
