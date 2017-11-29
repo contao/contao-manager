@@ -15,10 +15,13 @@
             <contao @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Contao')"></contao>
 
             <div class="clearfix"></div>
-            <div class="view-boot__summary">
-                <h1 v-if="hasError" class="view-boot__issue">{{ 'ui.boot.issue1' | translate }}</h1>
-                <p v-if="hasError" class="view-boot__issue">{{ 'ui.boot.issue2' | translate }}</p>
-                <button v-if="canContinue" @click="finish" class="view-boot__continue widget-button widget-button--primary">{{ 'ui.boot.run' | translate }}</button>
+            <div class="view-boot__summary view-boot__summary--error" v-if="hasError">
+                <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                <h1 class="view-boot__issue">{{ 'ui.boot.issue1' | translate }}</h1>
+                <p class="view-boot__issue">{{ 'ui.boot.issue2' | translate }}</p>
+            </div>
+            <div class="view-boot__summary" v-if="canContinue">
+                <button @click="finish" class="view-boot__continue widget-button widget-button--primary">{{ 'ui.boot.run' | translate }}</button>
             </div>
         </main>
         <main v-else class="view-boot__loading">
@@ -188,7 +191,7 @@
         }
 
         &__checks {
-            margin: 0 20px;
+            margin: 0 20px 50px;
 
             .boot-check:nth-child(odd) {
                 background: #f5f9fa;
@@ -196,7 +199,13 @@
         }
 
         &__summary {
-            margin: 50px 0;
+            margin: 50px 0 0;
+
+            &--error svg {
+                width: 100%;
+                height: 40px;
+                fill: $red-button;
+            }
         }
 
         &__issue {
@@ -216,7 +225,7 @@
 
         @include screen(960) {
             &__checks {
-                margin: 0 80px;
+                margin: 0 80px 50px;
             }
         }
     }
