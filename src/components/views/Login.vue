@@ -8,8 +8,8 @@
             <h1 class="view-login__headline">{{ 'ui.login.headline' | translate }}</h1>
             <p class="view-login__description">{{ 'ui.login.description' | translate }}</p>
 
-            <text-field ref="username" name="username" :label="'ui.login.username' | translate" :placeholder="'ui.login.username' | translate" :class="login_failed ? 'invalid' : ''" :disabled="logging_in" v-model="username" @enter="login" @input="reset"></text-field>
-            <text-field type="password" name="password" :label="'ui.login.password' | translate" :placeholder="'ui.login.password' | translate" :class="login_failed ? 'invalid' : ''" :disabled="logging_in" v-model="password" @enter="login" @input="reset"></text-field>
+            <text-field ref="username" name="username" :label="'ui.login.username' | translate" :placeholder="'ui.login.username' | translate" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @enter="login" @input="reset"></text-field>
+            <text-field type="password" name="password" :label="'ui.login.password' | translate" :placeholder="'ui.login.password' | translate" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @enter="login" @input="reset"></text-field>
 
             <a href="https://github.com/contao/contao-manager/issues/14" target="_blank" class="view-login__link">{{ 'ui.login.forgotPassword' | translate }}</a>
 
