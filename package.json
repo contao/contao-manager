@@ -18,7 +18,7 @@
     "vue-resource": "^1.3.4",
     "vue-router": "^2.8.1",
     "vuex": "^2.5.0",
-    "vuex-i18n": "^1.8.0"
+    "vuex-i18n": "^1.7.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
@@ -27,8 +27,7 @@
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-stage-2": "^6.22.0",
+    "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.22.0",
     "chalk": "^1.1.3",
     "connect-history-api-fallback": "^1.5.0",
