@@ -76,8 +76,6 @@
         },
 
         mounted() {
-            document.title = 'Contao Manager @package_version@';
-
             this.$store.dispatch('auth/status').then((statusCode) => {
                 if (statusCode === 200) {
                     this.$store.commit('setView', views.BOOT);
