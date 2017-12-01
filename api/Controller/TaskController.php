@@ -177,7 +177,7 @@ class TaskController extends Controller
                 return $this->processFactory->restoreBackgroundProcess($task->getId());
             } catch (\InvalidArgumentException $e) {
                 // Delete Tenside task without a process controller
-                $this->taskList->remove($task->getId());
+//                $this->taskList->remove($task->getId());
             }
         }
 
