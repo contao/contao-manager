@@ -8,6 +8,7 @@ domains:
     cyon.net: cyon
     goserver.host: webgo
     hosteurope.de: hosteurope
+    hostpoint.ch: hostpoint
     inetrobots.com: hostingwerk
     ispgateway.de: domainfactory
     kasserver.com: allinkl
@@ -23,6 +24,7 @@ domains:
 
 networks:
     AS15817: mittwald
+    AS29097: hostpoint
     AS47302: cyon
 
 configs:
@@ -69,6 +71,22 @@ configs:
         php:
             /usr/local/bin/php{major}-{major}{minor}LATEST-CLI: []
 
+    edis:
+        name: EDIS GmbH
+        website: www.edis.at
+        last_update: 2017-12-01
+        issues: []
+        php:
+            /usr/local/bin/edis-php-cli-{major}{minor}-stable-openssl: []
+
+    exigo:
+        name: exigo ag
+        website: www.exigo.ch
+        last_update: 2017-12-01
+        issues: []
+        php:
+            /usr/bin/php{major}.{minor}: []
+
     hetzner:
         name: Hetzner Online GmbH
         website: www.hetzner.de
@@ -86,6 +104,22 @@ configs:
         php:
             /usr/bin/php{major}.{minor}: ['-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
             /usr/bin/php: ['-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
+
+    hostnet:
+        name: hostNET Medien GmbH
+        website: www.hostnet.de
+        last_update: 2017-12-01
+        issues: []
+        php:
+            /usr/local/bin/php: []
+
+    hostpoint:
+        name: Hostpoint AG
+        website: www.hostpoint.ch
+        last_update: 2017-12-01
+        issues: []
+        php:
+            /usr/local/php{major}{minor}/bin/php: []
 
     hostingwerk:
         name: Hostingwerk (Feyer Media GmbH & Co. KG)
@@ -145,6 +179,22 @@ configs:
         php:
             /usr/local/bin/php: []
 
+    timme:
+        name: Timme Hosting GmbH & Co. KG
+        website: www.timmehosting.de
+        last_update: 2017-12-01
+        issues: []
+        php:
+            /opt/php-{major}.{minor}/bin/php: []
+
+    tobiasbauer:
+        name: Tobias Bauer
+        website: www.tb-itf.de
+        last_update: 2017-12-01
+        issues: []
+        php:
+            /usr/bin/php{major}{minor}: []
+
     strato:
         name: Strato AG
         website: www.strato.de
@@ -158,6 +208,8 @@ configs:
         website: www.uberspace.de
         last_update: 2017-07-12
         issues: []
+        php:
+            /package/host/localhost/php-{major}.{minor}/bin/php: []
 
     webgo:
         name: webgo GmbH
