@@ -111,6 +111,7 @@ configs:
         last_update: 2017-12-01
         issues: []
         php:
+            /usr/iports/php{major}{minor}/bin/php: []
             /usr/local/bin/php: []
 
     hostpoint:
@@ -218,6 +219,7 @@ configs:
         issues: []
         php:
             /usr/bin/php{major}{minor}: []
+            /opt/php-{major}.{minor}/bin/php: []
 
     webhostone:
         name: WebhostOne GmbH
