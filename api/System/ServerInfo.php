@@ -128,7 +128,7 @@ class ServerInfo
             $server = $this->detect();
         }
 
-        if ($server === 'custom' && ($php_cli = $this->managerConfig->get('php_cli'))) {
+        if ('custom' === $server && ($php_cli = $this->managerConfig->get('php_cli'))) {
             $paths[] = $php_cli;
         } elseif ($server && isset($this->configs[$server])) {
             foreach ($this->configs[$server]['php'] as $path => $arguments) {
