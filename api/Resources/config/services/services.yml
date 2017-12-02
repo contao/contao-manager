@@ -76,6 +76,7 @@ services:
         class: Contao\ManagerApi\SelfUpdate\Updater
         arguments:
             - "@kernel"
+            - "@contao_manager.config.manager"
 
     contao_manager.system.server_info:
         class: Contao\ManagerApi\System\ServerInfo

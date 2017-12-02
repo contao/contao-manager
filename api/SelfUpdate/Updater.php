@@ -11,6 +11,7 @@
 namespace Contao\ManagerApi\SelfUpdate;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Config\ManagerConfig;
 
 class Updater
 {
@@ -28,13 +29,20 @@ class Updater
     private $remote;
 
     /**
+     * @var ManagerConfig
+     */
+    private $managerConfig;
+
+    /**
      * Constructor.
      *
-     * @param ApiKernel $kernel
+     * @param ApiKernel     $kernel
+     * @param ManagerConfig $managerConfig
      */
-    public function __construct(ApiKernel $kernel)
+    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig)
     {
         $this->kernel = $kernel;
+        $this->managerConfig = $managerConfig;
     }
 
     /**
@@ -78,7 +86,22 @@ class Updater
      */
     public function getNewVersion()
     {
+        $lastUpdate = $this->managerConfig->get('last_update');
+        $latestVersion = $this->managerConfig->get('latest_version');
+
+        if (null !== $lastUpdate
+            && null !== $latestVersion
+            && false !== ($lastUpdate = new \DateTime($lastUpdate))
+            && $lastUpdate <= time()
+            && $lastUpdate > new \DateTime('-1 hour')
+        ) {
+            return $latestVersion;
+        }
+
         $remote = $this->getRemoteInfo();
+
+        $this->managerConfig->set('last_update', (new \DateTime())->format('c'));
+        $this->managerConfig->set('latest_version', $remote['version']);
 
         return $remote['version'];
     }

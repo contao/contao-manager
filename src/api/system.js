@@ -28,7 +28,10 @@ export default {
             response => response.body,
             (response) => {
                 if (response.status === 501) {
-                    return { has_update: false };
+                    return {
+                        current_version: null,
+                        latest_version: null,
+                    };
                 }
 
                 throw response;

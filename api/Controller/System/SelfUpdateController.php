@@ -26,7 +26,6 @@ class SelfUpdateController extends Controller
     public function __invoke()
     {
         $updater = $this->get('contao_manager.self_update.updater');
-        $managerConfig = $this->get('contao_manager.config.manager');
 
         if (!$updater->canUpdate()) {
             return new ApiProblemResponse(
@@ -35,40 +34,16 @@ class SelfUpdateController extends Controller
             );
         }
 
-        if ($managerConfig->has('last_update')
-            && false !== ($lastUpdate = new \DateTime($managerConfig->get('last_update')))
-            && $lastUpdate <= time()
-            && $lastUpdate > new \DateTime('-1 hour')
-        ) {
-            return $this->createResponse(false);
-        }
-
-        $managerConfig->set('last_update', (new \DateTime())->format('c'));
-
         try {
-            return $this->createResponse($updater->hasUpdate());
+            $latestVersion = $updater->getNewVersion();
         } catch (\Exception $e) {
-            return $this->createResponse(false);
+            $latestVersion = $updater->getOldVersion();
         }
-    }
-
-    /**
-     * Creates a JSON response about the update status.
-     *
-     * @param bool $hasUpdate
-     *
-     * @return JsonResponse
-     */
-    private function createResponse($hasUpdate)
-    {
-        $updater = $this->get('contao_manager.self_update.updater');
 
         return new JsonResponse(
             [
-                'has_update' => $hasUpdate,
-                'last_update' => $this->get('contao_manager.config.manager')->get('last_update'),
                 'current_version' => $updater->getOldVersion(),
-                'latest_version' => $updater->getNewVersion(),
+                'latest_version' => $latestVersion,
             ]
         );
     }

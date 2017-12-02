@@ -37,15 +37,15 @@
             api.system.selfUpdate().then((result) => {
                 const context = { current: result.current_version, latest: result.latest_version };
 
-                if (result.has_update === true) {
-                    this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.system.selfUpdate.update', context);
-                } else if (result.latest_version) {
+                if (result.current_version === result.latest_version) {
                     this.bootState = 'success';
                     this.bootDescription = this.$t('ui.system.selfUpdate.latest', context);
-                } else {
+                } else if (result.latest_version === null) {
                     this.bootState = 'info';
                     this.bootDescription = this.$t('ui.system.selfUpdate.dev');
+                } else {
+                    this.bootState = 'error';
+                    this.bootDescription = this.$t('ui.system.selfUpdate.update', context);
                 }
             }).catch(() => {
                 this.bootState = 'error';
