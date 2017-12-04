@@ -7,7 +7,7 @@
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ 'ui.navigation.tools' | translate }}</a>
                 <ul class="navigation__group navigation__group--sub">
                     <li class="navigation__item navigation__item--sub"><a href="/contao/install" target="_blank">{{ 'ui.navigation.installTool' | translate }}</a></li>
-                    <li class="navigation__item navigation__item--sub"><a href="/contao/" target="_blank">{{ 'ui.navigation.backend' | translate }}</a></li>
+                    <li class="navigation__item navigation__item--sub"><a href="/contao" target="_blank">{{ 'ui.navigation.backend' | translate }}</a></li>
                 </ul>
             </li>
             <li class="navigation__item navigation__item--main">
