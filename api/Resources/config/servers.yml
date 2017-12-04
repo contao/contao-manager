@@ -206,11 +206,12 @@ configs:
 
     uberspace:
         name: Uberspace
-        website: www.uberspace.de
-        last_update: 2017-07-12
+        website: uberspace.de
+        last_update: 2017-12-04
         issues: []
         php:
             /package/host/localhost/php-{major}.{minor}/bin/php: []
+            /usr/bin/php: []
 
     webgo:
         name: webgo GmbH
