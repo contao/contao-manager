@@ -105,6 +105,14 @@ configs:
             /usr/bin/php{major}.{minor}: ['-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
             /usr/bin/php: ['-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
 
+    hostfactory:
+        name: Hostfactory (OptimaNet Schweiz AG)
+        website: www.hostfactory.ch
+        last_update: 2012-12-05
+        issues: []
+        php:
+            /opt/plesk/php/{major}.{minor}/bin/php: []
+
     hostnet:
         name: hostNET Medien GmbH
         website: www.hostnet.de
