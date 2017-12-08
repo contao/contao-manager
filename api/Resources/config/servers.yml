@@ -102,8 +102,8 @@ configs:
         last_update: 2017-06-27
         issues: []
         php:
-            /usr/bin/php{major}.{minor}: ['-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
-            /usr/bin/php: ['-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
+            /usr/bin/php{major}.{minor}: ['-d', 'allow_url_fopen=1', '-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
+            /usr/bin/php: ['-d', 'allow_url_fopen=1', '-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
 
     hostfactory:
         name: Hostfactory (OptimaNet Schweiz AG)
