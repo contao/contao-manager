@@ -39,7 +39,7 @@ configs:
             /usr/lib/cgi-bin/php{major}.{minor}: []
 
     alfahosting:
-        name: Alfahosting
+        name: Alfahosting GmbH
         website: alfahosting.de
         last_update: 2017-11-17
         issues: []
@@ -48,7 +48,7 @@ configs:
 
     allinkl:
         name: ALL-INKL.COM - Neue Medien Münnich
-        website: www.all-inkl.com
+        website: all-inkl.com
         last_update: 2017-06-17
         issues: []
         php:
@@ -80,7 +80,7 @@ configs:
             /usr/local/bin/edis-php-cli-{major}{minor}-stable-openssl: []
 
     exigo:
-        name: exigo ag
+        name: exigo AG
         website: www.exigo.ch
         last_update: 2017-12-01
         issues: []
@@ -132,14 +132,14 @@ configs:
 
     hostingwerk:
         name: Hostingwerk (Feyer Media GmbH & Co. KG)
-        website: www.hostingwerk.de
+        website: hostingwerk.de
         last_update: 2017-06-13
         issues: []
         php:
             /usr/bin/php-{major}.{minor}: []
 
     mamp_mac:
-        name: MAMP (Mac OS X)
+        name: MAMP (macOS)
         website: www.mamp.info
         last_update: 2017-10-10
         issues: []
@@ -155,7 +155,7 @@ configs:
             C:\MAMP\bin\php\php{major}.{minor}.{release}\php.exe: []
 
     metanet:
-        name: Metanet AG
+        name: METANET AG
         website: www.metanet.ch
         last_update: 2017-05-31
         issues: []
@@ -190,7 +190,7 @@ configs:
 
     timme:
         name: Timme Hosting GmbH & Co. KG
-        website: www.timmehosting.de
+        website: timmehosting.de
         last_update: 2017-12-01
         issues: []
         php:
@@ -205,7 +205,7 @@ configs:
             /usr/bin/php{major}{minor}: []
 
     strato:
-        name: Strato AG
+        name: STRATO AG
         website: www.strato.de
         last_update: 2017-05-31
         issues: [intl, memory]
@@ -214,7 +214,7 @@ configs:
 
     uberspace:
         name: Uberspace
-        website: www.uberspace.de
+        website: uberspace.de
         last_update: 2017-07-12
         issues: []
         php:
