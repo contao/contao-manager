@@ -215,10 +215,11 @@ configs:
     uberspace:
         name: Uberspace
         website: uberspace.de
-        last_update: 2017-07-12
+        last_update: 2017-12-11
         issues: []
         php:
             /package/host/localhost/php-{major}.{minor}/bin/php: []
+            /usr/bin/php: []
 
     webgo:
         name: webgo GmbH
