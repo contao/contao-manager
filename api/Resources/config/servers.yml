@@ -21,11 +21,13 @@ domains:
     uberspace.de: uberspace
     vhost.io: hostingwerk
     your-server.de: hetzner
+    etes.de: etes
 
 networks:
     AS15817: mittwald
     AS29097: hostpoint
     AS47302: cyon
+    AS205890: etes
 
 configs:
     1und1:
@@ -78,6 +80,14 @@ configs:
         issues: []
         php:
             /usr/local/bin/edis-php-cli-{major}{minor}-stable-openssl: []
+
+    etes:
+        name: ETES GmbH
+        website: www.etes.de
+        last_update: 2017-12-15
+        issues: []
+        php:
+            /bin/php{major}{minor}: []
 
     exigo:
         name: exigo AG
