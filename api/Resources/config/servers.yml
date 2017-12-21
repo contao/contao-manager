@@ -224,11 +224,12 @@ configs:
     webgo:
         name: webgo GmbH
         website: www.webgo.de
-        last_update: 2017-06-19
+        last_update: 2017-12-21
         issues: []
         php:
             /usr/bin/php{major}{minor}: []
             /opt/php-{major}.{minor}/bin/php: []
+            /usr/bin/php: []
 
     webhostone:
         name: WebhostOne GmbH
