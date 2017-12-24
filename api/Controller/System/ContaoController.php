@@ -103,6 +103,8 @@ class ContaoController extends Controller
             [
                 '.',
                 '..',
+                '.git',
+                '.idea',
                 'cgi-bin',
                 'contao-manager',
                 'web',
