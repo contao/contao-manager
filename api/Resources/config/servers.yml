@@ -27,7 +27,6 @@ networks:
     AS15817: mittwald
     AS29097: hostpoint
     AS47302: cyon
-    AS205890: etes
 
 configs:
     1und1:
