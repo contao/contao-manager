@@ -188,6 +188,7 @@ configs:
         php:
             /usr/local/php56/bin/php: ['-d', 'date.timezone=UTC']
             /usr/local/php{major}{minor}/bin/php: []
+            /opt/plesk/php/{major}.{minor}/bin/php: []
 
     novatrend:
         name: Novatrend Services GmbH
