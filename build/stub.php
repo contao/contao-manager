@@ -67,16 +67,15 @@ if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
             exit;
         }
 
-        if ('/' === $url) {
-            return '/web/index.html';
-        }
-
         if (0 === strpos($url, '/api/')) {
             return '/web/api.php'.$url;
         }
 
-        // rewrite everything to the public folder
-        return '/web'.$url;
+        if (!empty($url) && is_file('phar://'.__FILE__.'/web'.$url)) {
+            return '/web'.$url;
+        }
+
+        return '/web/index.html';
     }
 
     Phar::webPhar(
