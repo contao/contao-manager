@@ -43,6 +43,10 @@ server_contao:
     defaults: { _controller: Contao\ManagerApi\Controller\System\ContaoController }
     methods:  [GET]
 
+server_phpinfo:
+    path:     /api/server/phpinfo
+    defaults: { _controller: Contao\ManagerApi\Controller\System\PhpinfoController }
+    methods:  [GET]
 
 #############
 #   Users   #

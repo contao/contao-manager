@@ -69,6 +69,12 @@ export default {
         );
     },
 
+    phpinfo() {
+        return fetch('api/server/phpinfo').then(
+            response => response.body,
+        );
+    },
+
     composer() {
         return fetch('api/server/composer').then(
             response => response.body,

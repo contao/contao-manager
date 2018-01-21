@@ -88,6 +88,7 @@
     "ui.navigation.tools": "Tools",
     "ui.navigation.installTool": "Install Tool",
     "ui.navigation.backend": "Contao Backend",
+    "ui.navigation.phpinfo": "PHP Information",
     "ui.navigation.maintenance": "Maintenance",
     "ui.navigation.rebuildCache": "Rebuild Cache",
     "ui.navigation.systemCheck": "System Check",

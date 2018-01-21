@@ -8,6 +8,7 @@
                 <ul class="navigation__group navigation__group--sub">
                     <li class="navigation__item navigation__item--sub"><a href="/contao/install" target="_blank">{{ 'ui.navigation.installTool' | translate }}</a></li>
                     <li class="navigation__item navigation__item--sub"><a href="/contao" target="_blank">{{ 'ui.navigation.backend' | translate }}</a></li>
+                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="phpinfo">{{ 'ui.navigation.phpinfo' | translate }}</a></li>
                 </ul>
             </li>
             <li class="navigation__item navigation__item--main">
@@ -32,6 +33,7 @@
 
 <script>
     import store from '../../store';
+    import api from '../../api';
     import views from '../../router/views';
     import routes from '../../router/routes';
 
@@ -51,6 +53,18 @@
                 };
 
                 this.$store.dispatch('tasks/execute', task);
+            },
+
+            phpinfo() {
+                api.system.phpinfo().then((content) => {
+                    const popup = window.open();
+
+                    if (popup) {
+                        popup.document.open();
+                        popup.document.write(content);
+                        popup.document.close();
+                    }
+                });
             },
 
             systemCheck() {
