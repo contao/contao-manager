@@ -46,7 +46,7 @@ class UserController extends Controller
      */
     public function listUsers()
     {
-        return $this->getResponse($this->config->getUsers());
+        return $this->getUserResponse($this->config->getUsers());
     }
 
     /**
@@ -66,7 +66,7 @@ class UserController extends Controller
 
         $this->config->addUser($user);
 
-        return $this->getResponse($user, Response::HTTP_CREATED, true);
+        return $this->getUserResponse($user, Response::HTTP_CREATED, true);
     }
 
     /**
@@ -79,7 +79,7 @@ class UserController extends Controller
     public function retrieveUser($username)
     {
         if ($this->config->hasUser($username)) {
-            return $this->getResponse($this->config->getUser($username));
+            return $this->getUserResponse($this->config->getUser($username));
         }
 
         throw new NotFoundHttpException(sprintf('User "%s" was not found.', $username));
@@ -102,7 +102,7 @@ class UserController extends Controller
 
         $this->config->updateUser($user);
 
-        return $this->getResponse($user, Response::HTTP_OK, true);
+        return $this->getUserResponse($user, Response::HTTP_OK, true);
     }
 
     /**
@@ -122,7 +122,85 @@ class UserController extends Controller
 
         $this->config->deleteUser($username);
 
-        return $this->getResponse($user);
+        return $this->getUserResponse($user);
+    }
+
+    /**
+     * Returns a list of tokens of a user in the configuration file.
+     *
+     * @param string $username
+     *
+     * @return Response
+     */
+    public function listTokens($username)
+    {
+        $tokens = array_filter(
+            $this->config->getTokens(),
+            function ($token) use ($username) {
+                return $token['user'] === $username;
+            }
+        );
+
+        return new JsonResponse($tokens);
+    }
+
+    /**
+     * Adds a new token for a user to the configuration file.
+     *
+     * @param string  $username
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function createToken($username, Request $request)
+    {
+        if ($this->config->hasUser($username)) {
+            throw new BadRequestHttpException(sprintf('User "%s" does not exists.', $username));
+        }
+
+        $token = $this->config->createToken($username, $request->request->all());
+
+        return $this->retrieveToken($username, $token);
+    }
+
+    /**
+     * Returns token data of a user from the configuration file.
+     *
+     * @param string $username
+     * @param string $token
+     *
+     * @return Response
+     */
+    public function retrieveToken($username, $token)
+    {
+        $payload = $this->config->getToken($token);
+
+        if (null === $payload || $payload['username'] !== $username) {
+            throw new NotFoundHttpException(sprintf('Token "%s" was not found.', $token));
+        }
+
+        return new JsonResponse($payload);
+    }
+
+    /**
+     * Deletes a user from the configuration file.
+     *
+     * @param string $username
+     * @param string $token
+     *
+     * @return Response
+     */
+    public function deleteToken($username, $token)
+    {
+        $payload = $this->config->getToken($token);
+
+        if (null === $payload || $payload['username'] !== $username) {
+            throw new NotFoundHttpException(sprintf('Token "%s" was not found.', $token));
+        }
+
+        $this->config->deleteToken($token);
+
+        return new JsonResponse($payload);
     }
 
     /**
@@ -134,7 +212,7 @@ class UserController extends Controller
      *
      * @return Response
      */
-    private function getResponse($user, $status = Response::HTTP_OK, $addLocation = false)
+    private function getUserResponse($user, $status = Response::HTTP_OK, $addLocation = false)
     {
         $response = new JsonResponse(
             $this->convertToJson($user),

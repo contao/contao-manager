@@ -62,13 +62,16 @@ class SecurityListener
     {
         $request = $event->getRequest();
 
-        if (!$event->isMasterRequest() || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if (!$event->isMasterRequest()
+            || !$this->jwtManager->hasRequestToken($request)
+            || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')
+        ) {
             return;
         }
 
         $payload = $this->jwtManager->getPayload($event->getRequest());
 
-        if (($xsrf = $request->headers->get('XSRF-TOKEN', null, true)) === null
+        if (($xsrf = $request->headers->get('XSRF-TOKEN')) === null
             || $payload->xsrf !== $xsrf
         ) {
             $event->setResponse(
@@ -86,7 +89,7 @@ class SecurityListener
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if (!$event->isMasterRequest() || $this->jwtManager->hasToken($event->getResponse())) {
+        if (!$event->isMasterRequest() || $this->jwtManager->hasResponseToken($event->getResponse())) {
             return;
         }
 

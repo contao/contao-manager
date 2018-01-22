@@ -203,6 +203,102 @@ class UserConfig extends AbstractConfig
     }
 
     /**
+     * Gets tokens from the configuration file.
+     *
+     * @return array
+     */
+    public function getTokens()
+    {
+        if (!isset($this->data['tokens'])) {
+            return [];
+        }
+
+        return $this->data['tokens'];
+    }
+
+    /**
+     * Returns whether a token exists.
+     *
+     * @param string $token
+     *
+     * @return bool
+     */
+    public function hasToken($token)
+    {
+        return isset($this->data['tokens'][$token]);
+    }
+
+    /**
+     * @param string $token
+     *
+     * @return array|null
+     */
+    public function getToken($token)
+    {
+        if (!isset($this->data['tokens'][$token])) {
+            return null;
+        }
+
+        return $this->data['tokens'][$token];
+    }
+
+    /**
+     * Creates a token for given username.
+     *
+     * @param string $username
+     * @param array  $payload
+     *
+     * @return string
+     */
+    public function createToken($username, array $payload = [])
+    {
+        $token = bin2hex(random_bytes(16));
+
+        $this->addToken($token, $username, $payload);
+
+        return $token;
+    }
+
+    /**
+     * Adds a token to the configuration file.
+     *
+     * @param string $token
+     * @param string $username
+     * @param array  $payload
+     *
+     * @throws \RuntimeException
+     */
+    public function addToken($token, $username, array $payload = [])
+    {
+        if (!isset($this->data['users'][$username])) {
+            throw new \RuntimeException(sprintf('Username "%s" does not exist.', $username));
+        }
+
+        if (isset($this->data['tokens'][$token])) {
+            throw new \RuntimeException(sprintf('Token "%s" already exist.', $token));
+        }
+
+        $payload['token'] = $token;
+        $payload['username'] = $username;
+
+        $this->data['tokens'][$token] = $payload;
+
+        $this->save();
+    }
+
+    /**
+     * Deletes a token from the configuration file.
+     *
+     * @param string $token
+     */
+    public function deleteToken($token)
+    {
+        unset($this->data['tokens'][$token]);
+
+        $this->save();
+    }
+
+    /**
      * Migrates the secret from manager config to user config.
      *
      * @param ApiKernel $kernel

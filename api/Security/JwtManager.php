@@ -69,13 +69,25 @@ class JwtManager
     }
 
     /**
+     * Checks if the request has a JWT cookie.
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    public function hasRequestToken(Request $request)
+    {
+        return $request->cookies->has(self::COOKIE_AUTH);
+    }
+
+    /**
      * Checks if the response has a JWT cookie.
      *
      * @param Response $response
      *
      * @return bool
      */
-    public function hasToken(Response $response)
+    public function hasResponseToken(Response $response)
     {
         return $this->hasCookie($response, self::COOKIE_AUTH);
     }

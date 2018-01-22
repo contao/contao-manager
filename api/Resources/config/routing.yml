@@ -77,6 +77,25 @@ user_delete:
     defaults: { _controller: contao_manager.controller.users:deleteUser }
     methods:  [DELETE]
 
+tokens_get:
+    path:     /api/users/{username}/tokens
+    defaults: { _controller: contao_manager.controller.users:listTokens }
+    methods:  [GET]
+
+tokens_create:
+    path:     /api/users/{username}/tokens
+    defaults: { _controller: contao_manager.controller.users:createToken }
+    methods:  [POST]
+
+token_get:
+    path:     /api/users/{username}/tokens/{token}
+    defaults: { _controller: contao_manager.controller.users:retrieveToken }
+    methods:  [GET]
+
+token_delete:
+    path:     /api/users/{username}/tokens/{token}
+    defaults: { _controller: contao_manager.controller.users:deleteToken }
+    methods:  [DELETE]
 
 
 #####################
