@@ -23,6 +23,11 @@
     "ui.login.password": "Password",
     "ui.login.forgotPassword": "Forgot your password?",
     "ui.login.button": "Sign In",
+    "ui.oauth.error": "Invalid OAuth attempt. Check the request parameters.",
+    "ui.oauth.headline": "OAuth Authentication",
+    "ui.oauth.description": "The following application or service is requesting remote access to your Contao Manager instance.",
+    "ui.oauth.allow": "Allow Access",
+    "ui.oauth.deny": "Deny Access",
 
     "ui.boot.headline": "System Check",
     "ui.boot.description": "Please wait, we're analyzing your server …",

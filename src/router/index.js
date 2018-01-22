@@ -5,6 +5,7 @@ import routes from './routes';
 
 import Packages from '../components/packages/Base';
 import PackagesList from '../components/packages/List';
+import OAuth from '../components/routes/OAuth';
 
 const PackagesSearch = () => new Promise(
     (resolve) => {
@@ -40,6 +41,12 @@ const router = new Router({
                     props: true,
                 },
             ],
+        },
+        {
+            name: routes.oauth.name,
+            path: '/oauth',
+            component: OAuth,
+            props: true,
         },
     ],
 });

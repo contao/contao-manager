@@ -7,12 +7,12 @@
         </header>
         <main v-if="boot" class="view-boot__checks">
 
-            <config @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Config')"></config>
-            <php-web @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('PhpWeb')"></php-web>
-            <php-cli @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('PhpCli')"></php-cli>
-            <self-update @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('SelfUpdate')"></self-update>
-            <composer @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Composer')"></composer>
-            <contao @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Contao')"></contao>
+            <config @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Config')"/>
+            <php-web @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('PhpWeb')"/>
+            <php-cli @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('PhpCli')"/>
+            <self-update @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('SelfUpdate')"/>
+            <composer @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Composer')"/>
+            <contao @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Contao')"/>
 
             <div class="clearfix"></div>
             <div class="view-boot__summary view-boot__summary--error" v-if="hasError">
@@ -25,16 +25,15 @@
             </div>
         </main>
         <main v-else class="view-boot__loading">
-            <loader></loader>
+            <loader/>
         </main>
     </boxed-layout>
 
-    <component v-else v-bind:is="currentView" :current="true" @view="setView"></component>
+    <component v-else v-bind:is="currentView" :current="true" @view="setView"/>
 </template>
 
 <script>
     import api from '../../api';
-    import routes from '../../router/routes';
     import views from '../../router/views';
 
     import BoxedLayout from '../layouts/Boxed';
@@ -94,7 +93,6 @@
             finish() {
                 window.localStorage.setItem('contao_manager_booted', '1');
                 this.$store.commit('setView', views.READY);
-                this.$router.push(routes.packages);
             },
 
             reportError(name) {
