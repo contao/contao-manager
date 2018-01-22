@@ -54,47 +54,47 @@ server_phpinfo:
 
 users_list:
     path:     /api/users
-    defaults: { _controller: contao_manager.controller.users:listUsers }
+    defaults: { _controller: contao_manager.controller.config_users:listUsers }
     methods:  [GET]
 
 users_create:
     path:     /api/users
-    defaults: { _controller: contao_manager.controller.users:createUser }
+    defaults: { _controller: contao_manager.controller.config_users:createUser }
     methods:  [POST]
 
 user_get:
     path:     /api/users/{username}
-    defaults: { _controller: contao_manager.controller.users:retrieveUser }
+    defaults: { _controller: contao_manager.controller.config_users:retrieveUser }
     methods:  [GET]
 
 user_put:
     path:     /api/users/{username}
-    defaults: { _controller: contao_manager.controller.users:replaceUser }
+    defaults: { _controller: contao_manager.controller.config_users:replaceUser }
     methods:  [PUT]
 
 user_delete:
     path:     /api/users/{username}
-    defaults: { _controller: contao_manager.controller.users:deleteUser }
+    defaults: { _controller: contao_manager.controller.config_users:deleteUser }
     methods:  [DELETE]
 
 tokens_get:
     path:     /api/users/{username}/tokens
-    defaults: { _controller: contao_manager.controller.users:listTokens }
+    defaults: { _controller: contao_manager.controller.config_users:listTokens }
     methods:  [GET]
 
 tokens_create:
     path:     /api/users/{username}/tokens
-    defaults: { _controller: contao_manager.controller.users:createToken }
+    defaults: { _controller: contao_manager.controller.config_users:createToken }
     methods:  [POST]
 
 token_get:
     path:     /api/users/{username}/tokens/{token}
-    defaults: { _controller: contao_manager.controller.users:retrieveToken }
+    defaults: { _controller: contao_manager.controller.config_users:retrieveToken }
     methods:  [GET]
 
 token_delete:
     path:     /api/users/{username}/tokens/{token}
-    defaults: { _controller: contao_manager.controller.users:deleteToken }
+    defaults: { _controller: contao_manager.controller.config_users:deleteToken }
     methods:  [DELETE]
 
 

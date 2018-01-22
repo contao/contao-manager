@@ -167,7 +167,7 @@ class UserConfig extends AbstractConfig
         $username = $user->getUsername();
 
         if (isset($this->data['users'][$username])) {
-            throw new \RuntimeException(sprintf('User "%s" already exists.', $username));
+            throw new \RuntimeException(sprintf('Username "%s" already exists.', $username));
         }
 
         $this->data['users'][$username] = [
@@ -270,11 +270,11 @@ class UserConfig extends AbstractConfig
      */
     public function addToken($token, $username, array $payload = [])
     {
-        if (!isset($this->data['users'][$username])) {
+        if (!$this->hasUser($username)) {
             throw new \RuntimeException(sprintf('Username "%s" does not exist.', $username));
         }
 
-        if (isset($this->data['tokens'][$token])) {
+        if ($this->hasToken($token)) {
             throw new \RuntimeException(sprintf('Token "%s" already exist.', $token));
         }
 

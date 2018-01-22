@@ -97,6 +97,7 @@ class SecurityListener
         $token = $this->tokenStorage->getToken();
 
         if (null !== $token
+            && $token->hasAttribute('authenticator')
             && $token->getAttribute('authenticator') === JwtAuthenticator::class
             && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')
         ) {

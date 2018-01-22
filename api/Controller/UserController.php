@@ -154,7 +154,7 @@ class UserController extends Controller
      */
     public function createToken($username, Request $request)
     {
-        if ($this->config->hasUser($username)) {
+        if (!$this->config->hasUser($username)) {
             throw new BadRequestHttpException(sprintf('User "%s" does not exists.', $username));
         }
 
