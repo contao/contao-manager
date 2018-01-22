@@ -126,6 +126,10 @@ class JwtManager
      */
     public function removeToken(Request $request, Response $response)
     {
+        if (!$request->cookies->has(self::COOKIE_AUTH)) {
+            return;
+        }
+
         $response->headers->clearCookie(
             self::COOKIE_AUTH,
             \Phar::running(false) ? $request->getBaseUrl().'/' : '/',

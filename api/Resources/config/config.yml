@@ -20,6 +20,8 @@ security:
             guard:
                 authenticators:
                     - contao_manager.security.jwt_authenticator
+                    - contao_manager.security.token_authenticator
+                entry_point: contao_manager.security.jwt_authenticator
             anonymous: ~
 
     access_control:

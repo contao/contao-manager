@@ -66,6 +66,11 @@ services:
         arguments:
             - "@contao_manager.security.jwt_manager"
 
+    contao_manager.security.token_authenticator:
+        class: Contao\ManagerApi\Security\TokenAuthenticator
+        arguments:
+            - "@contao_manager.config.user"
+
     contao_manager.security.user_provider:
         class: Symfony\Component\Security\Core\User\InMemoryUserProvider
         factory: [Contao\ManagerApi\Security\UserProviderFactory, createUserProvider]

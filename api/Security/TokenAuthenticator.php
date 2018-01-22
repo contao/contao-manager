@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\Security;
 
+use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,21 +21,21 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
-class JwtAuthenticator extends AbstractGuardAuthenticator
+class TokenAuthenticator extends AbstractGuardAuthenticator
 {
     /**
-     * @var JwtManager
+     * @var UserConfig
      */
-    private $jwtManager;
+    private $config;
 
     /**
      * Constructor.
      *
-     * @param JwtManager $jwtManager
+     * @param UserConfig $config
      */
-    public function __construct(JwtManager $jwtManager)
+    public function __construct(UserConfig $config)
     {
-        $this->jwtManager = $jwtManager;
+        $this->config = $config;
     }
 
     /**
@@ -50,7 +51,13 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        return $this->jwtManager->getPayload($request);
+        $authentication = $this->getAuthenticationHeader($request);
+
+        if (is_string($authentication) && 0 === strpos(strtolower($authentication), 'bearer ')) {
+            return substr($authentication, 7);
+        }
+
+        return null;
     }
 
     /**
@@ -58,7 +65,13 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        return $userProvider->loadUserByUsername($credentials->username);
+        if (!$this->config->hasToken($credentials)) {
+            return null;
+        }
+
+        $token = $this->config->getToken($credentials);
+
+        return $userProvider->loadUserByUsername($token['username']);
     }
 
     /**
@@ -93,5 +106,37 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
     public function supportsRememberMe()
     {
         return false;
+    }
+
+    /**
+     * Gets the authentication header from request or HTTP headers.
+     *
+     * @param Request $request
+     *
+     * @return string|null
+     */
+    private function getAuthenticationHeader(Request $request)
+    {
+        if ($request->server->has('HTTP_AUTHENTICATION')) {
+            return $request->server->get('HTTP_AUTHENTICATION');
+        }
+
+        if ($request->server->has('REDIRECT_HTTP_AUTHORIZATION')) {
+            return $request->server->get('REDIRECT_HTTP_AUTHORIZATION');
+        }
+
+        if ($user = $request->getUserInfo()) {
+            return 'Basic ' . base64_encode($user);
+        }
+
+        if (function_exists('getallheaders')) {
+            $headers = getallheaders();
+
+            if (isset($headers['authentication'])) {
+                return $headers['authentication'];
+            }
+        }
+
+        return null;
     }
 }

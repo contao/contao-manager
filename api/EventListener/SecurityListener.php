@@ -11,6 +11,7 @@
 namespace Contao\ManagerApi\EventListener;
 
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\Security\JwtAuthenticator;
 use Contao\ManagerApi\Security\JwtManager;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,7 +96,10 @@ class SecurityListener
 
         $token = $this->tokenStorage->getToken();
 
-        if (null !== $token && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if (null !== $token
+            && $token->getAttribute('authenticator') === JwtAuthenticator::class
+            && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')
+        ) {
             $this->jwtManager->addToken($event->getRequest(), $event->getResponse(), $token->getUsername());
         } else {
             $this->jwtManager->removeToken($event->getRequest(), $event->getResponse());
