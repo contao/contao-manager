@@ -121,6 +121,7 @@ class ServerInfo
      */
     public function getPhpExecutable()
     {
+        $discover = true;
         $paths = [];
         $server = $this->managerConfig->get('server');
 
@@ -130,13 +131,14 @@ class ServerInfo
 
         if ('custom' === $server && ($php_cli = $this->managerConfig->get('php_cli'))) {
             $paths[] = $php_cli;
+            $discover = false;
         } elseif ($server && isset($this->configs[$server])) {
             foreach ($this->configs[$server]['php'] as $path => $arguments) {
                 $paths[] = $this->getPhpVersionPath($path);
             }
         }
 
-        return (new PhpExecutableFinder())->find($paths, false);
+        return (new PhpExecutableFinder())->find($paths, $discover);
     }
 
     /**
