@@ -29,6 +29,14 @@ networks:
     AS47302: cyon
 
 configs:
+    1blu:
+        name: 1blu AG
+        website: www.1blu.de
+        last_update: 2018-01-23
+        issues: []
+        php:
+            /opt/php{major}/bin/php: []
+
     1und1:
         name: 1&1 Internet SE
         website: www.1und1.de
@@ -64,6 +72,14 @@ configs:
         php:
             /opt/alt/php{major}{minor}/usr/bin/php: []
 
+    dogado:
+        name: dogado GmbH
+        website: www.dogado.de
+        last_update: 2018-01-23
+        issues: []
+        php:
+            /opt/plesk/php/{major}.{minor}/bin/php: []
+
     domainfactory:
         name: domainfactory GmbH
         website: www.df.eu
@@ -96,6 +112,14 @@ configs:
         php:
             /usr/bin/php{major}.{minor}: []
 
+    goneo:
+        name: goneo Internet GmbH
+        website: www.goneo.de
+        last_update: 2018-01-23
+        issues: []
+        php:
+            /usr/local/phpfarm/inst/php-{major}.{minor}/bin/php: []
+
     hetzner:
         name: Hetzner Online GmbH
         website: www.hetzner.de
@@ -113,6 +137,7 @@ configs:
         php:
             /usr/bin/php{major}.{minor}: ['-d', 'allow_url_fopen=1', '-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
             /usr/bin/php: ['-d', 'allow_url_fopen=1', '-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
+            /opt/plesk/php/{major}.{minor}/bin/php: []
 
     hostfactory:
         name: Hostfactory (OptimaNet Schweiz AG)
@@ -146,6 +171,14 @@ configs:
         issues: []
         php:
             /usr/bin/php-{major}.{minor}: []
+
+    infomaniak:
+        name: Infomaniak Network SA
+        website: www.infomaniak.com
+        last_update: 2018-01-23
+        issues: []
+        php:
+            /opt/php{major}.{minor}/bin/php: ['-d', 'memory_limit=1024M']
 
     mamp_mac:
         name: MAMP (macOS)
@@ -189,6 +222,14 @@ configs:
             /usr/local/php56/bin/php: ['-d', 'date.timezone=UTC']
             /usr/local/php{major}{minor}/bin/php: []
             /opt/plesk/php/{major}.{minor}/bin/php: []
+
+    netzone:
+        name: NetZone AG
+        website: www.netzone.ch
+        last_update: 2018-01-23
+        issues: []
+        php:
+            /usr/bin/php{major}.{minor}: []
 
     novatrend:
         name: Novatrend Services GmbH
