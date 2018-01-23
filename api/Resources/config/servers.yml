@@ -36,6 +36,7 @@ configs:
         issues: []
         php:
             /opt/php{major}/bin/php: []
+            /usr/bin/php{major}{minor}/php{major}: []
 
     1und1:
         name: 1&1 Internet SE
