@@ -13,7 +13,7 @@
                 <span v-if="!authenticating">{{ 'ui.oauth.allow' | translate }}</span>
                 <loader v-else/>
             </button>
-            <button class="view-oauth__button widget-button" @click.prevent="denyAccess" :disabled="authenticating">
+            <button class="view-oauth__button widget-button" @click.prevent="denyAccess" :disabled="!valid || authenticating">
                 {{ 'ui.oauth.deny' | translate }}
             </button>
         </main>

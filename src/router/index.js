@@ -24,7 +24,6 @@ Vue.use(Router);
 const router = new Router({
     mode: 'history',
     routes: [
-        { path: '', redirect: '/packages' },
         {
             path: '/packages',
             component: Packages,
@@ -48,6 +47,7 @@ const router = new Router({
             component: OAuth,
             props: true,
         },
+        { path: '*', redirect: '/packages' },
     ],
 });
 
