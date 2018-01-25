@@ -69,6 +69,7 @@ class ComposerController extends Controller
         $result = [
             'json' => ['found' => true, 'valid' => true, 'error' => null],
             'lock' => ['found' => false, 'fresh' => false],
+            'vendor' => ['found' => is_dir($this->kernel->getContaoDir().'/vendor')],
         ];
 
         try {
