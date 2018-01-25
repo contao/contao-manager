@@ -1,6 +1,8 @@
 <template>
     <section class="maintenance">
         <div class="maintenance__inside">
+            <figure class="maintenance__image"><img src="../../../assets/images/composer-logo.png" /></figure>
+
             <div class="maintenance__about">
                 <h1>{{ 'ui.maintenance.dumpAutoload.title' | translate }}</h1>
                 <p>{{ 'ui.maintenance.dumpAutoload.description' | translate }}</p>

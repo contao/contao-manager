@@ -1,6 +1,7 @@
 <template>
     <section class="maintenance">
         <div class="maintenance__inside">
+            <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" /></figure>
             <div class="maintenance__about">
                 <h1>{{ 'ui.maintenance.debugMode.title' | translate }}</h1>
                 <p v-html="$t('ui.maintenance.debugMode.description')"></p>

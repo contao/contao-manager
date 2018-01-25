@@ -42,17 +42,6 @@
         border-bottom: 3px solid #ddd3bc;
         border-radius: 2px;
 
-        &__hint {
-            position: relative;
-            padding: 8px 150px 8px 56px;
-            font-weight: $font-weight-medium;
-            font-size: 12px;
-            line-height: 1.8;
-            border-radius: 2px 2px 0 0;
-            background: #e8c8bc url('../../assets/images/hint.svg') 20px 5px no-repeat;
-            background-size: 28px 28px;
-        }
-
         &__inside {
             &:after {
                 display: table;
@@ -67,17 +56,34 @@
             }
         }
 
+        &__image {
+            display: none;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+
+            @include screen(1024) {
+                display: block;
+                float: left;
+                width: 90px;
+                height: 90px;
+                margin-right: 20px;
+            }
+        }
+
         &__about {
             margin-bottom: 20px;
 
             @include screen(1024) {
                 float: left;
-                width: 390px;
+                width: 340px;
                 margin-bottom: 0;
             }
 
             @include screen(1180) {
-                width: 610px;
+                width: 510px;
             }
 
             h1 {
@@ -101,9 +107,13 @@
             }
 
             @include screen(1024) {
-                width: 280px;
+                width: 230px;
                 margin-left: 40px;
                 margin-bottom: 0;
+            }
+
+            @include screen(1180) {
+                width: 280px;
             }
         }
 

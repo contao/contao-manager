@@ -16,22 +16,13 @@ const store = new Vuex.Store({
 
     state: {
         view: views.INIT,
-        status: null,
-        config: null,
         error: null,
-        version: null,
         debugMode: null,
     },
 
     mutations: {
         setView(state, view) {
             state.view = view;
-        },
-
-        setStatus(state, { status, config, version }) {
-            state.status = status;
-            state.config = config;
-            state.version = version;
         },
 
         setError(state, error) {
@@ -72,8 +63,15 @@ const store = new Vuex.Store({
         },
 
         refreshDebugMode({ commit }) {
-            api.contao.accessKey.get().then((accessKey) => {
-                commit('setDebugMode', accessKey !== '');
+            api.system.contao().then((result) => {
+                if (result.api < 1) {
+                    commit('setDebugMode', false);
+                    return;
+                }
+
+                api.contao.accessKey.get().then((accessKey) => {
+                    commit('setDebugMode', accessKey !== '');
+                });
             });
         },
     },

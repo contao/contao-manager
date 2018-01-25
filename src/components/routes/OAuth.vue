@@ -52,9 +52,13 @@
             allowAccess() {
                 this.authenticating = true;
 
-                api.config.users.createToken(this.$store.state.auth.username).then((token) => {
-                    console.log(token);
-
+                api.config.users.createToken(
+                    this.$store.state.auth.username,
+                    {
+                        scope: this.scope,
+                        client_id: this.clientId,
+                    },
+                ).then((token) => {
                     if (this.returnUrl.includes('?')) {
                         document.location.href = `${this.returnUrl}&token=${token.token}`;
                     } else {
