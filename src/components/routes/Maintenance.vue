@@ -2,7 +2,7 @@
     <main-layout>
 
         <rebuild-cache/>
-        <debug-mode/>
+        <debug-mode v-if="apiVersion >= 1"/>
         <dump-autoload/>
         <composer-install/>
 
@@ -10,6 +10,8 @@
 </template>
 
 <script>
+    import api from '../../api';
+
     import MainLayout from '../layouts/Main';
     import RebuildCache from './maintenance/RebuildCache';
     import DumpAutoload from './maintenance/DumpAutoload';
@@ -18,6 +20,16 @@
 
     export default {
         components: { ComposerInstall, MainLayout, RebuildCache, DumpAutoload, DebugMode },
+
+        data: () => ({
+            apiVersion: 0,
+        }),
+
+        mounted() {
+            api.system.contao().then((result) => {
+                this.apiVersion = result.api;
+            });
+        },
     };
 </script>
 

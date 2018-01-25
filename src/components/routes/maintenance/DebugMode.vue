@@ -1,8 +1,5 @@
 <template>
     <section class="maintenance">
-        <div class="maintenance__hint" v-if="apiVersion < 1">
-            <p>{{ 'ui.maintenance.debugMode.version' | translate }}</p>
-        </div>
         <div class="maintenance__inside">
             <div class="maintenance__about">
                 <h1>{{ 'ui.maintenance.debugMode.title' | translate }}</h1>
@@ -12,7 +9,7 @@
                 <loader class="maintenance__loader"/>
             </fieldset>
             <fieldset class="maintenance__actions" v-else>
-                <button class="widget-button widget-button--primary widget-button--show" v-if="!hasAccessKey" :disabled="apiVersion < 1" @click="setAccessKey">{{ 'ui.maintenance.debugMode.activate' | translate }}</button>
+                <button class="widget-button widget-button--primary widget-button--show" v-if="!hasAccessKey" @click="setAccessKey">{{ 'ui.maintenance.debugMode.activate' | translate }}</button>
                 <button class="widget-button widget-button--alert widget-button--hide" v-if="hasAccessKey" @click="removeAccessKey">{{ 'ui.maintenance.debugMode.deactivate' | translate }}</button>
                 <button class="widget-button widget-button--edit" v-if="hasAccessKey" @click="setAccessKey">{{ 'ui.maintenance.debugMode.credentials' | translate }}</button>
             </fieldset>
@@ -30,7 +27,6 @@
 
         data: () => ({
             loading: true,
-            apiVersion: 0,
         }),
 
         computed: {
@@ -73,14 +69,12 @@
 
         mounted() {
             if (this.$store.state.debugMode === null) {
-                this.$store.dispatch('refreshDebugMode');
-            }
-
-            api.system.contao().then((result) => {
-                this.apiVersion = result.api;
-
+                this.$store.dispatch('refreshDebugMode').then(() => {
+                    this.loading = false;
+                });
+            } else {
                 this.loading = false;
-            });
+            }
         },
     };
 </script>

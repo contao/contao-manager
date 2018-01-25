@@ -142,7 +142,6 @@
     "ui.maintenance.composerInstall.button": "Run Installer",
     "ui.maintenance.debugMode.title": "Debug Mode",
     "ui.maintenance.debugMode.description": "Activate the debug mode by setting a user and password for the <code>app_dev.php</code> entry point.",
-    "ui.maintenance.debugMode.version": "This feature is only available from Contao 4.5.0.",
     "ui.maintenance.debugMode.activate": "Activate",
     "ui.maintenance.debugMode.deactivate": "Deactivate",
     "ui.maintenance.debugMode.credentials": "Credentials",
