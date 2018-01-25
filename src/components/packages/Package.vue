@@ -18,7 +18,7 @@
                 <h1>Contao Open Source CMS</h1>
                 <div class="description">
                     <p>Contao is an Open Source PHP Content Management System.</p>
-                    <more homepage="https://www.contao.org" :support="{ docs: 'https://docs.contao.org', forum: 'https://community.contao.org', issues: 'https://github.com/contao/core-bundle/issues', source: 'https://github.com/contao/core-bundle' }"></more>
+                    <more homepage="https://www.contao.org" :support="{ docs: 'https://docs.contao.org', forum: 'https://community.contao.org', issues: 'https://github.com/contao/core-bundle/issues', source: 'https://github.com/contao/core-bundle' }"/>
                 </div>
                 <p class="additional">
                     <strong class="version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -38,7 +38,7 @@
             </div>
 
             <fieldset class="actions">
-                <button class="widget-button uninstall" disabled>{{ 'ui.package.removeButton' | translate }}</button>
+                <button class="widget-button widget-button--alert widget-button--trash" disabled>{{ 'ui.package.removeButton' | translate }}</button>
             </fieldset>
         </div>
 
@@ -54,7 +54,7 @@
 
                 <div class="description">
                     <p v-html="package._highlightResult && package._highlightResult.description.value || package.description"></p>
-                    <more :name="name" :homepage="package.url || package.homepage" :support="package.support"></more>
+                    <more :name="name" :homepage="package.url || package.homepage" :support="package.support"/>
                 </div>
                 <p class="additional">
                     <strong class="version" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -74,11 +74,11 @@
             </div>
 
             <fieldset class="actions">
-                <!--<button class="widget-button" key="enable" class="enable" v-if="changed.get('enabled') === false">Enable</button>-->
-                <!--<button class="widget-button" key="disable" class="disable" v-if="changed.get('enabled') === true">Disable</button>-->
+                <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="changed.get('enabled') === false">Enable</button>-->
+                <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="changed.get('enabled') === true">Disable</button>-->
 
-                <button class="widget-button uninstall" v-if="original.get('constraint')" @click="uninstall" :disabled="disableRemove || changed.get('constraint') === null">{{ 'ui.package.removeButton' | translate }}</button>
-                <button class="widget-button install" v-else @click="install" :disabled="incompatible || changed.get('constraint')">{{ 'ui.package.installButton' | translate }}</button>
+                <button class="widget-button widget-button--alert widget-button--trash" v-if="original.get('constraint')" @click="uninstall" :disabled="disableRemove || changed.get('constraint') === null">{{ 'ui.package.removeButton' | translate }}</button>
+                <button class="widget-button widget-button--primary" v-else @click="install" :disabled="incompatible || changed.get('constraint')">{{ 'ui.package.installButton' | translate }}</button>
             </fieldset>
 
         </div>
@@ -530,53 +530,21 @@
 
             button {
                 width: 100%;
+                margin-right: 5%;
+
+                &:last-of-type {
+                    margin-right: 0;
+                }
 
                 @include screen(600) {
                     display: inline-block;
                     width: 160px;
+                    margin-right: 0;
                 }
 
                 @include screen(1024) {
                     width: 100%;
                     margin-bottom: 10px;
-                }
-
-                &.enable,
-                &.disable {
-                    margin-right: 5%;
-
-                    &:before {
-                        position: relative;
-                        display: inline-block;
-                        top: 4px;
-                        width: 20px;
-                        height: 20px;
-                        margin-right: 8px;
-                        background: url('../../assets/images/power.svg') center no-repeat;
-                        background-size: 20px 20px;
-                        content:"";
-                    }
-                }
-
-                &.enable,
-                &.install {
-                    background: $green-button;
-                }
-
-                &.uninstall {
-                    background: $red-button;
-
-                    &:before {
-                        position: relative;
-                        display: inline-block;
-                        top: 6px;
-                        width: 16px;
-                        height: 22px;
-                        margin-right: 8px;
-                        background: url('../../assets/images/delete.svg') center no-repeat;
-                        background-size: 22px 22px;
-                        content:"";
-                    }
                 }
             }
         }

@@ -6,6 +6,7 @@ import routes from './routes';
 import Packages from '../components/packages/Base';
 import PackagesList from '../components/packages/List';
 import OAuth from '../components/routes/OAuth';
+import Maintenance from '../components/routes/Maintenance';
 
 const PackagesSearch = () => new Promise(
     (resolve) => {
@@ -46,6 +47,11 @@ const router = new Router({
             path: '/oauth',
             component: OAuth,
             props: true,
+        },
+        {
+            name: routes.maintenance.name,
+            path: '/maintenance',
+            component: Maintenance,
         },
         { path: '*', redirect: '/packages' },
     ],

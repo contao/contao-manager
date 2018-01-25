@@ -3,18 +3,13 @@
         <a class="navigation__toggle" @click.prevent="toggleNavigation"><span></span><span></span><span></span></a>
         <ul class="navigation__group navigation__group--main">
             <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.packages"><a>{{ 'ui.navigation.packages' | translate }}</a></router-link>
+            <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.maintenance"><a>{{ 'ui.navigation.maintenance' | translate }}</a></router-link>
             <li class="navigation__item navigation__item--main">
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ 'ui.navigation.tools' | translate }}</a>
                 <ul class="navigation__group navigation__group--sub">
                     <li class="navigation__item navigation__item--sub"><a href="/contao/install" target="_blank">{{ 'ui.navigation.installTool' | translate }}</a></li>
                     <li class="navigation__item navigation__item--sub"><a href="/contao" target="_blank">{{ 'ui.navigation.backend' | translate }}</a></li>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="phpinfo">{{ 'ui.navigation.phpinfo' | translate }}</a></li>
-                </ul>
-            </li>
-            <li class="navigation__item navigation__item--main">
-                <a tabindex="0" aria-haspopup="true" onclick="">{{ 'ui.navigation.maintenance' | translate }}</a>
-                <ul class="navigation__group navigation__group--sub">
-                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="rebuildCache">{{ 'ui.navigation.rebuildCache' | translate }}</a></li>
                 </ul>
             </li>
             <li class="navigation__item navigation__item--main navigation__item--icon">
@@ -45,14 +40,6 @@
         methods: {
             toggleNavigation() {
                 document.body.classList.toggle('nav-active');
-            },
-
-            rebuildCache() {
-                const task = {
-                    type: 'rebuild-cache',
-                };
-
-                this.$store.dispatch('tasks/execute', task);
             },
 
             phpinfo() {

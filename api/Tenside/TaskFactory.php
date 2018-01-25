@@ -12,6 +12,7 @@ namespace Contao\ManagerApi\Tenside;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
+use Contao\ManagerApi\Tenside\Task\DumpAutoloadTask;
 use Contao\ManagerApi\Tenside\Task\RebuildCacheTask;
 use Contao\ManagerApi\Tenside\Task\SelfUpdateTask;
 use Tenside\Core\Task\TaskFactoryInterface;
@@ -49,7 +50,7 @@ class TaskFactory implements TaskFactoryInterface
      */
     public function isTypeSupported($taskType)
     {
-        return in_array($taskType, ['rebuild-cache', 'self-update'], true);
+        return in_array($taskType, ['rebuild-cache', 'dump-autoload', 'self-update'], true);
     }
 
     /**
@@ -60,6 +61,9 @@ class TaskFactory implements TaskFactoryInterface
         switch ($taskType) {
             case 'rebuild-cache':
                 return new RebuildCacheTask($this->kernel, $this->processFactory, $metaData);
+
+            case 'dump-autoload':
+                return new DumpAutoloadTask($this->kernel, $this->processFactory, $metaData);
 
             case 'self-update':
                 return new SelfUpdateTask($this->processFactory, $metaData);

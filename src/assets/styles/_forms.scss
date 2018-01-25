@@ -75,16 +75,30 @@ select {
     }
 }
 
+.widget-select {
+    &:after {
+        position: absolute;
+        right: 12px;
+        top: 16px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid $border-color;
+        content: "";
+    }
+}
+
 .widget-button {
     display: inline-block;
     width: 100%;
-    height: 40px;
+    height: 38px;
     padding: 0;
     border: none;
     background-color: $text-color;
     color: #fff;
     font-weight: $font-weight-bold;
-    line-height: 40px;
+    line-height: 38px;
     text-decoration: none;
     text-align: center;
     cursor: pointer;
@@ -108,6 +122,104 @@ select {
         background-color: $red-button;
     }
 
+    &--trash {
+        &:before {
+            position: relative;
+            display: inline-block;
+            top: 6px;
+            width: 16px;
+            height: 22px;
+            margin-right: 8px;
+            background: url('../assets/images/delete.svg') center no-repeat;
+            background-size: 22px 22px;
+            content:"";
+        }
+    }
+
+    &--power {
+        &:before {
+            position: relative;
+            display: inline-block;
+            top: 4px;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            background: url('../assets/images/power.svg') center no-repeat;
+            background-size: 20px 20px;
+            content:"";
+        }
+    }
+
+    &--run {
+        &:before {
+            position: relative;
+            display: inline-block;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            background: url("../assets/images/button-run.svg") center no-repeat;
+            background-size: 20px 20px;
+            content:"";
+        }
+    }
+
+    &--update {
+        &:before {
+            position: relative;
+            display: inline-block;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            margin-right: 6px;
+            background: url("../assets/images/button-update.svg") center no-repeat;
+            background-size: 20px 20px;
+            content:"";
+        }
+    }
+
+    &--show {
+        &:before {
+            position: relative;
+            display: inline-block;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            background: url("../assets/images/button-show.svg") center no-repeat;
+            background-size: 20px 20px;
+            content:"";
+        }
+    }
+
+    &--hide {
+        &:before {
+            position: relative;
+            display: inline-block;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            background: url("../assets/images/button-hide.svg") center no-repeat;
+            background-size: 20px 20px;
+            content:"";
+        }
+    }
+
+    &--edit {
+        &:before {
+            position: relative;
+            display: inline-block;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            background: url("../assets/images/button-edit.svg") center no-repeat;
+            background-size: 20px 20px;
+            content:"";
+        }
+    }
+
     &:hover {
         text-decoration: none;
     }
@@ -115,6 +227,7 @@ select {
     &:disabled,
     &.disabled {
         background-color: $border-color !important;
+        cursor: not-allowed;
     }
 }
 

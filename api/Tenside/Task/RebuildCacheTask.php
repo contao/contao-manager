@@ -47,9 +47,11 @@ class RebuildCacheTask extends AbstractCliSpawningTask
      */
     public function doPerform()
     {
-        $this->deleteCacheDirectory('prod');
-        $this->runSymfonyCommand('cache:clear', ['--no-warmup']);
-        $this->runSymfonyCommand('cache:warmup');
+        $environment = $this->file->get('environment') ?: 'prod';
+
+        $this->deleteCacheDirectory($environment);
+        $this->runSymfonyCommand('cache:clear', ['--no-warmup'], $environment);
+        $this->runSymfonyCommand('cache:warmup', [], $environment);
     }
 
     /**
