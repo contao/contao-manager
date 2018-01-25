@@ -8,7 +8,7 @@
                 <h1>{{ 'ui.maintenance.debugMode.title' | translate }}</h1>
                 <p v-html="$t('ui.maintenance.debugMode.description')"></p>
             </div>
-            <fieldset class="maintenance__actions" v-if="loading">
+            <fieldset class="maintenance__actions" v-if="loading || hasAccessKey === null">
                 <loader class="maintenance__loader"/>
             </fieldset>
             <fieldset class="maintenance__actions" v-else>
@@ -41,13 +41,13 @@
 
         methods: {
             setAccessKey() {
-                const user = prompt(this.$t('ui.maintenance.debug-user'));
+                const user = prompt(this.$t('ui.maintenance.debugMode.user'));
 
                 if (!user) {
                     return;
                 }
 
-                const password = prompt(this.$t('ui.maintenance.debug-password'));
+                const password = prompt(this.$t('ui.maintenance.debugMode.password'));
 
                 if (!password) {
                     return;
