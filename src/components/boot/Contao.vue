@@ -5,7 +5,8 @@
             <h1 class="contao-check__headline">{{ 'ui.system.contao.headline' | translate }}</h1>
             <p class="contao-check__description">{{ 'ui.system.contao.description' | translate }}</p>
             <p class="contao-check__version"><strong>{{ 'ui.system.contao.ltsTitle' | translate }}:</strong> {{ 'ui.system.contao.ltsText' | translate }}</p>
-            <p class="contao-check__version"><strong>{{ 'ui.system.contao.latestTitle' | translate }}:</strong> {{ 'ui.system.contao.latestText' | translate }}</p>
+            <p class="contao-check__version" v-if="supportsLatest"><strong>{{ 'ui.system.contao.latestTitle' | translate }}:</strong> {{ 'ui.system.contao.latestText' | translate }}</p>
+            <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ 'ui.system.contao.latestTitle' | translate }}:</strong> {{ 'ui.system.contao.latestText' | translate }}</span> <span class="contao-check__version--warning">{{ 'ui.system.contao.noLatest' | translate }}</span></p>
             <p class="contao-check__version" v-html="$t('ui.system.contao.releaseplan')"></p>
         </header>
 
@@ -14,13 +15,13 @@
             <fieldset class="contao-check__fields">
                 <legend class="contao-check__fieldtitle">{{ 'ui.system.contao.formTitle' | translate }}</legend>
                 <p class="contao-check__fielddesc">{{ 'ui.system.contao.formText' | translate }}</p>
-                <select-menu name="version" :label="$t('ui.system.contao.version')" class="inline" v-model="version" :options="versions" :disabled="processing"></select-menu>
+                <select-menu name="version" :label="$t('ui.system.contao.version')" class="inline" v-model="version" :options="versions" :disabled="processing"/>
             </fieldset>
 
             <fieldset class="contao-check__fields">
                 <button class="widget-button widget-button--primary" @click="install" :disabled="processing">
                     <span v-if="!processing">{{ 'ui.system.contao.install' | translate }}</span>
-                    <loader v-else></loader>
+                    <loader v-else/>
                 </button>
             </fieldset>
 
@@ -53,13 +54,25 @@
             bootState: 'loading',
             bootDescription: '',
 
-
             processing: false,
+            supportsLatest: true,
             version: '',
-            versions: { '4.5.*': 'Contao 4.5 (Latest)', '4.4.*': 'Contao 4.4 (Long Term Support)' },
-
-            result: null,
         }),
+
+        computed: {
+            versions() {
+                if (!this.supportsLatest) {
+                    return {
+                        '4.4.*': 'Contao 4.4 (Long Term Support)',
+                    };
+                }
+
+                return {
+                    '4.5.*': 'Contao 4.5 (Latest)',
+                    '4.4.*': 'Contao 4.4 (Long Term Support)',
+                };
+            },
+        },
 
         methods: {
             show() {
@@ -82,9 +95,17 @@
                 if (!result.version) {
                     this.bootState = 'info';
                     this.bootDescription = this.$t('ui.system.contao.empty');
+
+                    api.system.phpWeb().then((phpWeb) => {
+                        if (phpWeb.version_id < 70100) {
+                            this.supportsLatest = false;
+                        }
+                    });
                 } else {
                     this.bootState = 'success';
                     this.bootDescription = this.$t('ui.system.contao.found', result);
+
+                    this.$store.commit('setVersions', result);
                 }
             }).catch((response) => {
                 if (response.status === 503) {
@@ -135,6 +156,14 @@
         &__version {
             margin: .5em 0;
             text-align: left;
+
+            &--unavailable {
+                text-decoration: line-through;
+            }
+
+            &--warning {
+                color: $red-button;
+            }
         }
 
         &__form {

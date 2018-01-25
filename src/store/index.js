@@ -17,6 +17,8 @@ const store = new Vuex.Store({
     state: {
         view: views.INIT,
         error: null,
+        contaoVersion: null,
+        apiVersion: null,
         debugMode: null,
     },
 
@@ -29,6 +31,11 @@ const store = new Vuex.Store({
             if (state.error === null) {
                 state.error = error;
             }
+        },
+
+        setVersions(state, result) {
+            state.contaoVersion = result.version;
+            state.apiVersion = result.api;
         },
 
         setDebugMode(state, status) {
@@ -62,17 +69,14 @@ const store = new Vuex.Store({
             ).then(() => dispatch('tasks/execute', task, { root: true }));
         },
 
-        refreshDebugMode({ commit }) {
-            api.system.contao().then((result) => {
-                if (result.api < 1) {
-                    commit('setDebugMode', false);
-                    return;
-                }
-
+        refreshDebugMode({ state, commit }) {
+            if (state.apiVersion < 1) {
+                commit('setDebugMode', false);
+            } else {
                 api.contao.accessKey.get().then((accessKey) => {
                     commit('setDebugMode', accessKey !== '');
                 });
-            });
+            }
         },
     },
 });
