@@ -2,8 +2,9 @@
     <main-layout>
 
         <rebuild-cache/>
-        <dump-autoload/>
         <debug-mode/>
+        <dump-autoload/>
+        <composer-install/>
 
     </main-layout>
 </template>
@@ -13,9 +14,10 @@
     import RebuildCache from './maintenance/RebuildCache';
     import DumpAutoload from './maintenance/DumpAutoload';
     import DebugMode from './maintenance/DebugMode';
+    import ComposerInstall from './maintenance/ComposerInstall';
 
     export default {
-        components: { MainLayout, RebuildCache, DumpAutoload, DebugMode },
+        components: { ComposerInstall, MainLayout, RebuildCache, DumpAutoload, DebugMode },
     };
 </script>
 
