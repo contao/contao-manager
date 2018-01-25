@@ -1,20 +1,20 @@
 <template>
     <section class="maintenance">
         <div class="maintenance__hint" v-if="apiVersion < 1">
-            <p>This feature is only available from Contao 4.5.0.</p>
+            <p>{{ 'ui.maintenance.debugMode.version' | translate }}</p>
         </div>
         <div class="maintenance__inside">
             <div class="maintenance__about">
-                <h1>{{ 'ui.maintenance.debug-title' | translate }}</h1>
-                <p v-html="$t('ui.maintenance.debug-description')"></p>
+                <h1>{{ 'ui.maintenance.debugMode.title' | translate }}</h1>
+                <p v-html="$t('ui.maintenance.debugMode.description')"></p>
             </div>
             <fieldset class="maintenance__actions" v-if="loading">
                 <loader class="maintenance__loader"/>
             </fieldset>
             <fieldset class="maintenance__actions" v-else>
-                <button class="widget-button widget-button--primary widget-button--show" v-if="!hasAccessKey" :disabled="apiVersion < 1" @click="setAccessKey">{{ 'ui.maintenance.enable-debug' | translate }}</button>
-                <button class="widget-button widget-button--alert widget-button--hide" v-if="hasAccessKey" @click="removeAccessKey">{{ 'ui.maintenance.disable-debug' | translate }}</button>
-                <button class="widget-button widget-button--edit" v-if="hasAccessKey" @click="setAccessKey">{{ 'ui.maintenance.credentials' | translate }}</button>
+                <button class="widget-button widget-button--primary widget-button--show" v-if="!hasAccessKey" :disabled="apiVersion < 1" @click="setAccessKey">{{ 'ui.maintenance.debugMode.activate' | translate }}</button>
+                <button class="widget-button widget-button--alert widget-button--hide" v-if="hasAccessKey" @click="removeAccessKey">{{ 'ui.maintenance.debugMode.deactivate' | translate }}</button>
+                <button class="widget-button widget-button--edit" v-if="hasAccessKey" @click="setAccessKey">{{ 'ui.maintenance.debugMode.credentials' | translate }}</button>
             </fieldset>
         </div>
     </section>

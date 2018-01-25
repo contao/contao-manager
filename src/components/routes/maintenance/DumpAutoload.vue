@@ -2,12 +2,12 @@
     <section class="maintenance">
         <div class="maintenance__inside">
             <div class="maintenance__about">
-                <h1>Composer Class Loader</h1>
-                <p>The Composer autoloader is responsible for PHP class loading. The autoloader must be dumped it after adding custom namespaces to the root composer.json.</p>
+                <h1>{{ 'ui.maintenance.dumpAutoload.title' | translate }}</h1>
+                <p>{{ 'ui.maintenance.dumpAutoload.description' | translate }}</p>
             </div>
 
             <fieldset class="maintenance__actions">
-                <button class="widget-button widget-button--primary widget-button--update" @click="execute">{{ 'ui.maintenance.dump-autoload' | translate }}</button>
+                <button class="widget-button widget-button--primary widget-button--update" @click="execute">{{ 'ui.maintenance.dumpAutoload.button' | translate }}</button>
             </fieldset>
         </div>
     </section>

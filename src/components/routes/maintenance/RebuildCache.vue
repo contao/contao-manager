@@ -2,16 +2,16 @@
     <section class="maintenance">
         <div class="maintenance__inside">
             <div class="maintenance__about">
-                <h1>Application Cache</h1>
-                <p>Rebuilding the application cache is required after modifying any of the configuration files.</p>
+                <h1>{{ 'ui.maintenance.rebuildCache.title' | translate }}</h1>
+                <p>{{ 'ui.maintenance.rebuildCache.description' | translate }}</p>
             </div>
 
             <fieldset class="maintenance__config">
-                <select-menu name="environment" v-model="env" :options="{ 'prod': 'Production Environment', 'dev': 'Development Environment' }"/>
+                <select-menu name="environment" v-model="env" :options="{ 'prod': $t('ui.maintenance.rebuildCache.prod'), 'dev': $t('ui.maintenance.rebuildCache.dev') }"/>
             </fieldset>
 
             <fieldset class="maintenance__actions">
-                <button class="widget-button widget-button--primary widget-button--update" @click="execute">{{ 'ui.maintenance.rebuild-cache' | translate }}</button>
+                <button class="widget-button widget-button--primary widget-button--update" @click="execute">{{ 'ui.maintenance.rebuildCache.button' | translate }}</button>
             </fieldset>
         </div>
     </section>
