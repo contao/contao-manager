@@ -22,7 +22,7 @@ Vue.http.interceptors.push((request, next) => {
     }
 
     next((response) => {
-        if (response.status === 403 || (response.status === 401 && url !== 'api/session')) {
+        if (response.status === 401 && url !== 'api/session') {
             store.commit('setView', views.LOGIN);
         } else if (response.headers.get('Content-Type') === 'application/problem+json') {
             if (response.status === 500) {
