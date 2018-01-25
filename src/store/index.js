@@ -20,6 +20,7 @@ const store = new Vuex.Store({
         config: null,
         error: null,
         version: null,
+        debugMode: null,
     },
 
     mutations: {
@@ -37,6 +38,10 @@ const store = new Vuex.Store({
             if (state.error === null) {
                 state.error = error;
             }
+        },
+
+        setDebugMode(state, status) {
+            state.debugMode = status;
         },
     },
 
@@ -64,6 +69,12 @@ const store = new Vuex.Store({
                     'discard-changes': true,
                 },
             ).then(() => dispatch('tasks/execute', task, { root: true }));
+        },
+
+        refreshDebugMode({ commit }) {
+            api.contao.accessKey.get().then((accessKey) => {
+                commit('setDebugMode', accessKey !== '');
+            });
         },
     },
 });

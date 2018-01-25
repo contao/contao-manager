@@ -12,9 +12,10 @@
     import MainLayout from '../layouts/Main';
     import RebuildCache from './maintenance/RebuildCache';
     import DumpAutoload from './maintenance/DumpAutoload';
+    import DebugMode from './maintenance/DebugMode';
 
     export default {
-        components: { MainLayout, RebuildCache, DumpAutoload },
+        components: { MainLayout, RebuildCache, DumpAutoload, DebugMode },
     };
 </script>
 
@@ -119,6 +120,16 @@
                     width: 100%;
                     margin-bottom: 10px;
                 }
+            }
+        }
+
+        &__loader {
+            width: 50px;
+            margin: 0 auto;
+
+            .sk-circle {
+                width: 50px;
+                height: 50px;
             }
         }
     }

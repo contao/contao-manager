@@ -63,4 +63,37 @@ class ContaoApi
 
         return (int) $version;
     }
+
+    /**
+     * Gets the debug access key.
+     *
+     * @return string
+     */
+    public function getAccessKey()
+    {
+        $process = $this->processFactory->createContaoApiProcess(['access-key:get']);
+        $process->mustRun();
+
+        return trim($process->getOutput());
+    }
+
+    /**
+     * Sets the debug access key.
+     *
+     * @param string $accessKey
+     */
+    public function setAccessKey($accessKey)
+    {
+        $process = $this->processFactory->createContaoApiProcess(['access-key:set', $accessKey]);
+        $process->mustRun();
+    }
+
+    /**
+     * Removes the debug acccess key
+     */
+    public function removeAccessKey()
+    {
+        $process = $this->processFactory->createContaoApiProcess(['access-key:remove']);
+        $process->mustRun();
+    }
 }

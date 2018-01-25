@@ -1,12 +1,14 @@
 import Vue from 'vue';
 
 import config from './config/index';
+import contao from './contao/index';
 import files from './files';
 import system from './system';
 import session from './session';
 
 export default {
     config,
+    contao,
     files,
     system,
     session,

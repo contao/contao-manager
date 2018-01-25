@@ -57,3 +57,7 @@ services:
     Contao\ManagerApi\Controller\System\ComposerController:
         arguments:
             - "@kernel"
+
+    Contao\ManagerApi\Controller\Contao\AccessKeyController:
+        arguments:
+            - "@contao_manager.process.contao_api"

@@ -153,6 +153,16 @@ config_composer_patch:
     methods:  [PATCH]
 
 
+##################
+#   Contao API   #
+##################
+
+contao_access_key:
+    path:     /api/contao/access-key
+    defaults: { _controller: Contao\ManagerApi\Controller\Contao\AccessKeyController }
+    methods:  [GET, PUT, DELETE]
+
+
 #############
 #   Tasks   #
 #############
