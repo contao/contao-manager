@@ -19,7 +19,7 @@
             </fieldset>
 
             <fieldset class="contao-check__fields">
-                <button class="widget-button widget-button--primary" @click="install" :disabled="processing">
+                <button class="widget-button widget-button--primary widget-button--run" @click="install" :disabled="processing">
                     <span v-if="!processing">{{ 'ui.system.contao.install' | translate }}</span>
                     <loader v-else/>
                 </button>
@@ -30,7 +30,7 @@
     </boxed-layout>
 
     <boot-check v-else :progress="bootState" :title="$t('ui.system.contao.title')" :description="bootDescription">
-        <button v-if="bootState === 'info'" @click="show" class="widget-button widget-button--primary">{{ 'ui.system.contao.start' | translate }}</button>
+        <button v-if="bootState === 'info'" @click="show" class="widget-button widget-button--primary widget-button--run">{{ 'ui.system.contao.setup' | translate }}</button>
     </boot-check>
 </template>
 
@@ -39,12 +39,11 @@
 
     import BootCheck from '../fragments/BootCheck';
     import BoxedLayout from '../layouts/Boxed';
-    import TextField from '../widgets/TextField';
     import SelectMenu from '../widgets/SelectMenu';
     import Loader from '../fragments/Loader';
 
     export default {
-        components: { BootCheck, BoxedLayout, TextField, SelectMenu, Loader },
+        components: { BootCheck, BoxedLayout, SelectMenu, Loader },
 
         props: {
             current: Boolean,
@@ -171,9 +170,14 @@
             max-width: 280px;
             margin: 0 auto 50px;
 
-            input,
-            select {
-                margin: 5px 0 10px;
+            .widget-select {
+                margin-top: 20px;
+
+                label {
+                    display: block;
+                    margin-bottom: 5px;
+                    font-weight: $font-weight-medium;
+                }
             }
         }
 
@@ -209,18 +213,18 @@
                 margin: 60px 50px 0;
                 padding-bottom: 100px;
 
-                .widget-text label,
-                .widget-select label {
-                    display: block;
-                    float: left;
-                    width: 120px;
-                    padding-top: 15px;
-                    font-weight: $font-weight-medium;
-                }
+                .widget-select {
+                    label {
+                        display: block;
+                        float: left;
+                        width: 120px;
+                        padding-top: 10px;
+                        font-weight: $font-weight-medium;
+                    }
 
-                input[type=text],
-                select {
-                    width: 250px;
+                    select {
+                        width: 250px;
+                    }
                 }
 
                 .widget-button {

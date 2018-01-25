@@ -79,7 +79,7 @@ select {
     &:after {
         position: absolute;
         right: 12px;
-        top: 16px;
+        bottom: 16px;
         width: 0;
         height: 0;
         border-left: 6px solid transparent;
@@ -173,6 +173,20 @@ select {
             height: 20px;
             margin-right: 6px;
             background: url("../assets/images/button-update.svg") center no-repeat;
+            background-size: 20px 20px;
+            content:"";
+        }
+    }
+
+    &--save {
+        &:before {
+            position: relative;
+            display: inline-block;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            background: url("../assets/images/button-save.svg") center no-repeat;
             background-size: 20px 20px;
             content:"";
         }

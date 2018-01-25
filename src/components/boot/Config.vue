@@ -11,20 +11,20 @@
                 <legend class="config-check__fieldtitle">{{ 'ui.system.config.formTitle' | translate }}</legend>
                 <p class="config-check__fielddesc">{{ 'ui.system.config.formText' | translate }}</p>
                 <p class="config-check__detected" v-if="detected && server">{{ 'ui.system.config.detected' | translate }}</p>
-                <select-menu name="server" :label="$t('Configuration')" class="inline" :disabled="processing" :error="errors.server" :options="servers" v-model="server" @input="detected = false"></select-menu>
+                <select-menu name="server" :label="$t('Configuration')" class="inline" :disabled="processing" :error="errors.server" :options="servers" v-model="server" @input="detected = false"/>
             </fieldset>
 
             <fieldset v-if="showCustom" class="config-check__fields">
                 <legend class="config-check__fieldtitle">{{ 'ui.system.config.customTitle' | translate }}</legend>
                 <p class="config-check__fielddesc">{{ 'ui.system.config.customText' | translate }}</p>
                 <p class="config-check__detected" v-if="detected && php_cli">{{ 'ui.system.config.phpDetected' | translate }}</p>
-                <text-field name="php_cli" :label="$t('ui.system.config.cli')" :disabled="processing" :error="errors.php_cli" v-model="php_cli" @enter="save"></text-field>
+                <text-field name="php_cli" :label="$t('ui.system.config.cli')" :disabled="processing" :error="errors.php_cli" v-model="php_cli" @enter="save"/>
             </fieldset>
 
             <fieldset class="config-check__fields">
                 <button class="widget-button widget-button--primary" @click="save" :disabled="!inputValid || processing">
-                    <span v-if="!processing">{{ 'ui.system.config.save' | translate }}</span>
-                    <loader v-else></loader>
+                    <span v-if="!processing" class="widget-button--save">{{ 'ui.system.config.save' | translate }}</span>
+                    <loader v-else/>
                 </button>
             </fieldset>
 
@@ -33,7 +33,7 @@
 
     <boot-check v-else :progress="bootState" :title="$t('ui.system.config.title')" :description="bootDescription">
         <button class="widget-button widget-button--alert" v-if="bootState === 'error'" @click="showConfiguration">{{ 'ui.system.config.setup' | translate }}</button>
-        <button class="widget-button" v-else-if="bootState !== 'loading'" @click="showConfiguration">{{ 'ui.system.config.change' | translate }}</button>
+        <button class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" @click="showConfiguration">{{ 'ui.system.config.change' | translate }}</button>
     </boot-check>
 </template>
 

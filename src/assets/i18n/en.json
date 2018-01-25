@@ -69,7 +69,7 @@
     "ui.system.composer.title": "Composer Environment",
     "ui.system.composer.success": "No known issues found.",
     "ui.system.contao.title": "Contao Installation",
-    "ui.system.contao.start": "Start Installation",
+    "ui.system.contao.setup": "Setup",
     "ui.system.contao.empty": "No Contao installation has been found.",
     "ui.system.contao.found": "Found Contao {version} (API version {api}).",
     "ui.system.contao.headline": "Contao Setup",
