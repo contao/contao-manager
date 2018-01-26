@@ -11,6 +11,8 @@ cs:
     intl:
       title: 'Rozšíření PHP Intl není na tomto serveru spuštěno.'
       detail: 'Contao 4 vyžaduje rozšíření PHP Intl pro mezinárodní záležitosti.'
+    session:
+      title: 'Sezení PHP nelze zahájit.'
     web_root:
       title: 'Soubor .phar musí být umístěný ve složce /web.'
     windows:
@@ -27,6 +29,9 @@ cs:
     contao_unknown:
       title: 'Neznámý status instalace'
       detail: "Bylo nalezeno několik souborů, ale nebyla rozpoznaná žádná verze Contaa.\nNejspíš musíte opravit instalaci aplikace manuálně nebo smazat následující soubory a složky, abyste mohli nainstalovat Contao.\n\n{files}"
+    contao_version:
+      title: 'Nelze zjistit verzi Contaa.'
+      detail: "Konzola při dotazu na verzi Contaa odpověděla neočekávaným obsahem. Prosím přečtěte si protokol, abyste se dozvěděli více.\n\n{output}"
   config:
     php_cli:
       not_found: 'Tato cesta neobsahuje platné binární PHP.'

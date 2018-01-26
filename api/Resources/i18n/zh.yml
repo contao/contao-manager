@@ -5,23 +5,33 @@ zh:
     openssl:
       title: 'PHP扩展OpenSSL不可用'
       detail: 'Contao Manager需要使用OpenSSL扩展来通过加密链接(https)下载文件。'
+    process:
+      title: '服务器中PHP函数"proc_open"  "proc_close" 不可用。'
+      detail: '"proc_open" and "proc_close" 函数是在后台运行命令行任务所必须的。请咨询您的主机提供商为什么函数无法运行；否则Contao管理器和Contao 4 都不会正常运行。'
     intl:
       title: 'PHP扩展Intl不可用'
       detail: 'Contao 4 系统需要使用PHP Intl扩展来进行国际化'
+    session:
+      title: 'PHP session无法启动。'
     web_root:
       title: 'Phar文件必须位于/web文件夹下'
     windows:
       title: '目前该版本Contao Manager不支持Windows系统'
     memory_limit:
       title: 'PHP内存限制不足'
+      detail: '当前PHP配置仅允许 {limit} 内存 (在命令行中)。该内存设置无法满足运行Composer，该设置无法自动调整增加限制。请联系主机提供商提供相关支持。'
     systempdir:
       title: '系统临时目录无法写入'
+      detail: '很有可能是主机的配置问题。请确保open_basedir允许访问临时目录，或者sys_temp_dir已正确配置。'
     contao_old:
       title: 'Contao版本不兼容'
       detail: 'Contao版本 {version}不兼容Contao Manager，请手动更新当前安装的系统。'
     contao_unknown:
       title: '安装状态未知'
       detail: "在当前服务器中找到一些文件，但是无法检测到Contao版本。\n您必须手动修复您的应用或者移除以下文件和目录来安装Contao：\n\n{files}"
+    contao_version:
+      title: '无法获知Contao版本'
+      detail: "当请求获取Contao版本时，Console控制台返回错误内容。请检查输出的内容来获取更多信息："
   config:
     php_cli:
       not_found: '该路径没有包含有效的PHP二进制文件'

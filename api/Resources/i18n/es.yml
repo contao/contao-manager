@@ -4,20 +4,34 @@ es:
       title: 'La configuración de PHP "allow_url_fopen" no está habilitada en el servidor.'
     openssl:
       title: 'La extensión PHP OpenSSL no está disponible.'
+      detail: 'El Contao Manager requiere la extensión OpenSSL para descargar archivos a través de una conexión cifrada (https).'
+    process:
+      title: 'La función PHP "proc_open" and/or "proc_close" no está disponible en el servidor.'
+      detail: 'Las funciones "proc_open" y "proc_close" son necesarias para ejecutar tareas de línea de comandos en segundo plano. Consulte con su proveedor de hosting por qué este método no está disponible; ni el Contao Manager ni Contao 4 se ejecutarán correctamente sin él.'
     intl:
       title: 'La extensión PHP Intl no está disponible.'
+      detail: 'Contao 4 requiere la extensión PHP Intl para fines de internacionalización.'
+    session:
+      title: 'La sesión de PHP no se pudo iniciar.'
     web_root:
       title: 'El archivo Phar debe estar ubicado en la carpeta /web.'
     windows:
       title: 'Actualmente, esta versión de Contao Manager no es compatible con Windows.'
     memory_limit:
       title: 'Límite insuficiente de memoria de PHP'
+      detail: 'Su configuración PHP solo permite {limit} memoria (en la línea de comando). Esto no es suficiente para ejecutar Composer y no fue posible aumentar este límite automáticamente. Por favor, póngase en contacto con su proveedor de hosting para obtener asistencia.'
     systempdir:
       title: 'No se puede escribir en el directorio temporal del sistema.'
+      detail: 'Probablemente esto sea un problema con su configuración de alojamiento. Asegúrese de que open_basedir permita el acceso al directorio temporal o que el sys_temp_dir esté configurado correctamente.'
     contao_old:
       title: 'Versión Contao incompatible'
+      detail: 'La versión de Contao {versión} no es compatible con Contao Manager, actualice su instalación manualmente.'
     contao_unknown:
       title: 'Estado de instalación desconocido'
+      detail: "Se encontraron algunos archivos en su servidor, pero no se pudo detectar ninguna versión conocida de Contao.\nDebe reparar manualmente su aplicación o eliminar los siguientes archivos y carpetas para instalar Contao:\n\n{files}"
+    contao_version:
+      title: 'No se pudo determinar la versión de Contao'
+      detail: "La consola devolvió contenido inesperado cuando se le solicitó la versión de Contao. Por favor, revise el resultado para más información:\n\n{output}"
   config:
     php_cli:
       not_found: 'Esta ruta no contiene un binario PHP válido.'

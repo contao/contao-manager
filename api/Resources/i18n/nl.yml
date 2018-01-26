@@ -11,6 +11,8 @@ nl:
     intl:
       title: 'De PHP Intl extensie is niet beschikbaar.'
       detail: 'Contao 4 vereist de Intl extension voor internationalisering.'
+    session:
+      title: 'PHP-sessie kan niet worden gestart.'
     web_root:
       title: 'Het Phar bestand moet zich bevinden in de /web map.'
     windows:
@@ -27,6 +29,9 @@ nl:
     contao_unknown:
       title: 'Installatiestatus onbekend'
       detail: "Er zijn enkele bestanden op uw server gevonden maar geen bekende Contao versie.\nU dient uw applicatie handmatig te repareren of de volgende bestanden en mappen verwijderen om Contao te installeren:\n\n{files}"
+    contao_version:
+      title: 'Welke Contao-versie kon niet worden vastgesteld'
+      detail: "De console heeft onverwachte inhoud geretourneerd wanneer wordt gevraagd naar de Contao-versie. Controleer de output voor meer informatie:\n\n{output}"
   config:
     php_cli:
       not_found: 'Dit pad bevat geen geldige PHP binary.'

@@ -5,6 +5,8 @@ lv:
     intl:
       title: 'PHP Intl paplašinājums nav pieejams.'
       detail: 'Contao 4 ir nepieciešams PHP Intl paplašinājums internacionalizācijas vajadzībām.'
+    session:
+      title: 'Nevarēja uzsākt PHP sesiju.'
     web_root:
       title: 'Phar datnei jāatrod mapē /web.'
     windows:
@@ -18,3 +20,8 @@ lv:
       detail: 'Contao versija {versija} nav savietojama ar Contao pārvaldnieku, lūdzu, manuāli atjauniniet instalāciju.'
     contao_unknown:
       title: 'Nezināms instalācijas statuss'
+    contao_version:
+      title: 'Nevarēja noteikt Contao versiju'
+  config:
+    php_cli:
+      not_found: 'Šis ceļš nesatur derīgu PHP bināru.'

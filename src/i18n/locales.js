@@ -5,6 +5,7 @@
 export default {
     en: 'English',
     de: 'Deutsch (German)',
+    br: 'brezhoneg (Breton)',
     cs: 'čeština (Czech)',
     es: 'Español (Spanish)',
     fa: 'فارسی (Persian)',
@@ -15,4 +16,5 @@ export default {
     pl: 'Polszczyzna (Polish)',
     ru: 'Русский (Russian)',
     sr: 'српски језик (Serbian)',
+    zh: '中文 (Chinese)',
 };
