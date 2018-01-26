@@ -18,7 +18,7 @@
                 <h1>Contao Open Source CMS</h1>
                 <div class="description">
                     <p>Contao is an Open Source PHP Content Management System.</p>
-                    <more homepage="https://www.contao.org" :support="{ docs: 'https://docs.contao.org', forum: 'https://community.contao.org', issues: 'https://github.com/contao/core-bundle/issues', source: 'https://github.com/contao/core-bundle' }"/>
+                    <more homepage="https://contao.org" :support="{ docs: 'https://docs.contao.org', forum: 'https://community.contao.org', issues: 'https://github.com/contao/core-bundle/issues', source: 'https://github.com/contao/core-bundle' }"/>
                 </div>
                 <p class="additional">
                     <strong class="version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>

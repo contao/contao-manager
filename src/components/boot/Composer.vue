@@ -21,22 +21,13 @@
             bootState: 'loading',
             bootDescription: '',
             consoleOutput: null,
-            update: false,
         }),
 
         methods: {
             install() {
-                let task;
-
-                if (this.update) {
-                    task = {
-                        type: 'upgrade',
-                    };
-                } else {
-                    task = {
-                        type: 'composer-install',
-                    };
-                }
+                const task = {
+                    type: 'composer-install',
+                };
 
                 this.$store.dispatch('tasks/execute', task).then(() => {
                     window.location.reload();
@@ -49,14 +40,8 @@
 
             api.system.composer().then((result) => {
                 if (result.json.found && !result.vendor.found) {
-                    if (result.lock.found) {
-                        this.bootState = 'info';
-                        this.bootDescription = this.$t('ui.system.composer.install');
-                    } else {
-                        this.bootState = 'info';
-                        this.bootDescription = this.$t('ui.system.composer.update');
-                        this.update = true;
-                    }
+                    this.bootState = 'info';
+                    this.bootDescription = this.$t('ui.system.composer.install');
                 } else {
                     this.bootState = 'success';
                     this.bootDescription = this.$t('ui.system.composer.success');
