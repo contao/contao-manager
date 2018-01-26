@@ -1,5 +1,5 @@
 <template>
-    <section class="maintenance">
+    <section class="maintenance" v-if="$store.state.apiVersion >= 1">
         <div class="maintenance__inside">
             <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" /></figure>
             <div class="maintenance__about">
