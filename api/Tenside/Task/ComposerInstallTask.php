@@ -50,6 +50,7 @@ class ComposerInstallTask extends AbstractCliSpawningTask
             [
                 'composer',
                 'install',
+                '--optimize-autoloader',
                 '--no-dev',
                 '--no-progress',
                 '--no-interaction',

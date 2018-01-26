@@ -46,7 +46,13 @@ class DumpAutoloadTask extends AbstractCliSpawningTask
      */
     public function doPerform()
     {
-        $process = $this->processFactory->createManagerConsoleProcess(['composer', 'dump-autoload']);
+        $process = $this->processFactory->createManagerConsoleProcess(
+            [
+                'composer',
+                'dump-autoload',
+                '--optimize'
+            ]
+        );
 
         $this->runProcess($process);
     }
