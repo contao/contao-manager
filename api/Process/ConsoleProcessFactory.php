@@ -190,7 +190,7 @@ class ConsoleProcessFactory
             $this->buildCommandLine($console, $arguments),
             $this->kernel->getContaoDir(),
             $this->serverInfo->getPhpEnv()
-        ))->inheritEnvironmentVariables();
+        ))->inheritEnvironmentVariables()->setTimeout(0);
     }
 
     /**

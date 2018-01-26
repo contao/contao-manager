@@ -89,7 +89,7 @@ class ContaoApi
     }
 
     /**
-     * Removes the debug acccess key
+     * Removes the debug access key
      */
     public function removeAccessKey()
     {
