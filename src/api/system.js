@@ -75,6 +75,22 @@ export default {
         );
     },
 
+    getOpcache() {
+        return fetch('api/server/opcache').then(
+            response => response.body,
+        );
+    },
+
+    deleteOpcache() {
+        return Vue.http.delete('api/server/opcache').then(
+            (response) => {
+                cache['api/server/opcache'] = response.body;
+
+                return response.body;
+            },
+        );
+    },
+
     composer() {
         return fetch('api/server/composer').then(
             response => response.body,

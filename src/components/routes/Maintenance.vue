@@ -2,9 +2,10 @@
     <main-layout>
 
         <rebuild-cache/>
-        <debug-mode v-if="$store.state.apiVersion >= 1"/>
+        <debug-mode/>
         <dump-autoload/>
         <composer-install/>
+        <opcode-cache/>
 
     </main-layout>
 </template>
@@ -15,9 +16,10 @@
     import DumpAutoload from './maintenance/DumpAutoload';
     import DebugMode from './maintenance/DebugMode';
     import ComposerInstall from './maintenance/ComposerInstall';
+    import OpcodeCache from './maintenance/OpcodeCache';
 
     export default {
-        components: { ComposerInstall, MainLayout, RebuildCache, DumpAutoload, DebugMode },
+        components: { ComposerInstall, MainLayout, RebuildCache, DumpAutoload, DebugMode, OpcodeCache },
     };
 </script>
 

@@ -48,6 +48,12 @@ server_phpinfo:
     defaults: { _controller: Contao\ManagerApi\Controller\System\PhpinfoController }
     methods:  [GET]
 
+server_opcache:
+    path:     /api/server/opcache
+    defaults: { _controller: Contao\ManagerApi\Controller\System\OpcacheController }
+    methods:  [GET, DELETE]
+
+
 #############
 #   Users   #
 #############

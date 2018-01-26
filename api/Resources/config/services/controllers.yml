@@ -58,6 +58,8 @@ services:
         arguments:
             - "@kernel"
 
+    Contao\ManagerApi\Controller\System\OpcacheController: ~
+
     Contao\ManagerApi\Controller\Contao\AccessKeyController:
         arguments:
             - "@contao_manager.process.contao_api"
