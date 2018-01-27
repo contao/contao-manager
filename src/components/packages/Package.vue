@@ -86,7 +86,7 @@
 </template>
 
 <script>
-    import api from '../../api';
+    import Vue from 'vue';
 
     import More from './More';
 
@@ -238,10 +238,10 @@
                 this.$refs.constraint.blur();
                 this.constraintValidating = true;
 
-                api.validateConstraint(this.constraint).then(
-                    (valid) => {
+                Vue.http.post('api/constraint', { constraint: this.constraint }).then(
+                    (response) => {
                         this.constraintValidating = false;
-                        if (valid) {
+                        if (response.body.status === 'OK') {
                             this.$emit('change', this.name, this.original.set('constraint', this.constraint));
                         } else {
                             this.constraintError = true;

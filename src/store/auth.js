@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import api from '../api';
+import Vue from 'vue';
 
 export default {
     namespaced: true,
@@ -10,51 +10,48 @@ export default {
     },
 
     mutations: {
-        setLogin(state, username) {
+        setUsername(state, username) {
             state.username = username;
-        },
-        setLogout(state) {
-            state.username = null;
         },
     },
 
     actions: {
 
-        status: ({ commit }) => {
-            const handleSession = ({ statusCode, username }) => {
-                if (username) {
-                    commit('setLogin', username);
-                } else {
-                    commit('setLogout');
-                }
+        status({ commit }) {
+            return Vue.http.get('api/session').then(
+                (response) => {
+                    commit('setUsername', (response.body && response.body.username) ? response.body.username : null);
 
-                return statusCode;
-            };
+                    return response.status;
+                },
+                (response) => {
+                    commit('setUsername', null);
 
-            return api.session.get().then(
-                handleSession,
-                handleSession,
+                    return response.status;
+                },
             );
         },
 
         login({ commit }, { username, password }) {
-            return api.session.create(username, password).then((result) => {
-                if (result.success) {
-                    commit('setLogin', result.username);
-                }
+            return Vue.http.post('api/session', { username, password }).then(
+                (response) => {
+                    commit('setUsername', response.username);
 
-                return result.success;
-            });
+                    return true;
+                },
+                () => false,
+            );
         },
 
         logout({ commit }) {
-            return api.session.delete().then((success) => {
-                if (success) {
-                    commit('setLogout');
-                }
+            return Vue.http.delete('api/session').then(
+                () => {
+                    commit('setUsername', null);
 
-                return success;
-            });
+                    return true;
+                },
+                () => false,
+            );
         },
     },
 };

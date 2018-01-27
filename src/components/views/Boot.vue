@@ -75,6 +75,7 @@
         methods: {
             setView(view) {
                 if (view === null) {
+                    this.$store.dispatch('server/purgeCache');
                     this.status = {
                         Config: null,
                         PhpWeb: null,
@@ -138,6 +139,7 @@
         },
 
         created() {
+            this.$store.dispatch('server/purgeCache');
             this.$store.dispatch('tasks/reload').then(() => {
                 this.boot = true;
             });

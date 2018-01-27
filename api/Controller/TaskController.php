@@ -15,6 +15,7 @@ use Contao\ManagerApi\Tenside\Task\SelfUpdateTask;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Process\Process;
@@ -58,7 +59,31 @@ class TaskController extends Controller
         $this->taskList = $taskList;
     }
 
-    public function getTask()
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function __invoke(Request $request)
+    {
+        switch ($request->getMethod()) {
+            case 'GET':
+                return $this->getTask();
+
+            case 'PUT':
+                return $this->putTask($request);
+
+            case 'PATCH':
+                return $this->patchTask($request);
+
+            case 'DELETE':
+                return $this->deleteTask();
+        }
+
+        return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
+    private function getTask()
     {
         $process = $this->getActiveProcess();
 
@@ -69,7 +94,7 @@ class TaskController extends Controller
         return $this->getJsonResponse($process);
     }
 
-    public function putTask(Request $request)
+    private function putTask(Request $request)
     {
         if (null !== $this->getActiveProcess()) {
             throw new BadRequestHttpException('A task is already active');
@@ -102,7 +127,7 @@ class TaskController extends Controller
         return $this->getJsonResponse($process, JsonResponse::HTTP_CREATED);
     }
 
-    public function deleteTask()
+    private function deleteTask()
     {
         if (null === ($process = $this->getActiveProcess())) {
             throw new NotFoundHttpException('No active task');
@@ -130,7 +155,7 @@ class TaskController extends Controller
         return $this->getJsonResponse($process);
     }
 
-    public function putTaskStatus(Request $request)
+    private function patchTask(Request $request)
     {
         if (null === ($process = $this->getActiveProcess())) {
             throw new NotFoundHttpException('No active task');
@@ -160,7 +185,7 @@ class TaskController extends Controller
                 throw new BadRequestHttpException(sprintf('Unsupported task status "%s"', $status));
         }
 
-        return new JsonResponse(['status' => $this->getProcessStatus($process)]);
+        return $this->getJsonResponse($process);
     }
 
     private function getActiveProcess()

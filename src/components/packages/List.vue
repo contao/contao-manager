@@ -4,14 +4,13 @@
             <p>{{ 'ui.packagelist.loading' | translate }}</p>
         </loader>
 
-        <package v-for="(item, name) in packages" :name="name" :package="item" :key="name" :original="originals.get(name)" :changed="changes.get(name)" :disableUpdate="hasRemoves" :disableRemove="hasUpdates" @change="changePackage"></package>
+        <package v-for="(item, name) in packages" :name="name" :package="item" :key="name" :original="originals.get(name)" :changed="changes.get(name)" :disableUpdate="hasRemoves" :disableRemove="hasUpdates" @change="changePackage"/>
     </div>
 </template>
 
 <script>
+    import Vue from 'vue';
     import Immutable from 'immutable';
-
-    import api from '../../api';
 
     import Package from './Package';
     import Loader from '../fragments/Loader';
@@ -58,12 +57,12 @@
                 this.originals = null;
                 this.changes = null;
 
-                api.getPackages().then(
-                    (packages) => {
+                Vue.http.get('api/packages').then(
+                    (response) => {
                         this.packages = Object.assign(
                             {},
-                            { 'contao/manager-bundle': packages['contao/manager-bundle'] },
-                            packages,
+                            { 'contao/manager-bundle': response.body['contao/manager-bundle'] },
+                            response.body,
                         );
 
                         this.originals = Immutable.fromJS(this.packages);

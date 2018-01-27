@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import api from '../../api';
+    import Vue from 'vue';
 
     import BoxedLayout from '../layouts/Boxed';
     import Loader from '../fragments/Loader';
@@ -52,8 +52,8 @@
             allowAccess() {
                 this.authenticating = true;
 
-                api.config.users.createToken(
-                    this.$store.state.auth.username,
+                return Vue.http.post(
+                    `api/users/${this.$store.state.auth.username}/tokens`,
                     {
                         scope: this.scope,
                         client_id: this.clientId,

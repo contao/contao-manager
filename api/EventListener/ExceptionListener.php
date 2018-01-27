@@ -15,8 +15,8 @@ use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
@@ -108,7 +108,7 @@ class ExceptionListener
         switch (true) {
             case $exception instanceof AccessDeniedException:
             case $exception instanceof AuthenticationException:
-                return new AccessDeniedHttpException($exception->getMessage(), $exception);
+                return new UnauthorizedHttpException($exception->getMessage(), $exception);
         }
 
         return $exception;

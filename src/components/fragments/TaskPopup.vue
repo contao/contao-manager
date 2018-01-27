@@ -172,6 +172,10 @@
 
         watch: {
             consoleOutput(output) {
+                if (!output) {
+                    return;
+                }
+
                 this.progressTitle = null;
 
                 const lines = output.split('\n').reverse();

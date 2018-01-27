@@ -15,6 +15,7 @@ use Contao\ManagerApi\Config\AuthConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ConfigController extends Controller
@@ -34,21 +35,22 @@ class ConfigController extends Controller
         $this->config = $config;
     }
 
-    public function getAction()
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function __invoke(Request $request)
     {
-        return new JsonResponse($this->config->all());
-    }
+        switch ($request->getMethod()) {
+            case 'PUT':
+                $this->config->replace($request->request->all());
+                break;
 
-    public function putAction(Request $request)
-    {
-        $this->config->replace($request->request->all());
-
-        return new JsonResponse($this->config->all());
-    }
-
-    public function patchAction(Request $request)
-    {
-        $this->config->add($request->request->all());
+            case 'PATCH':
+                $this->config->add($request->request->all());
+                break;
+        }
 
         return new JsonResponse($this->config->all());
     }

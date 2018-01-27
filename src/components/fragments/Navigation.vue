@@ -39,7 +39,7 @@
 
         computed: {
             showDebugMode() {
-                return this.$store.state.debugMode;
+                return this.$store.state.contao['access-key'].isEnabled;
             },
         },
 
@@ -72,9 +72,7 @@
         },
 
         mounted() {
-            if (this.$store.state.debugMode === null) {
-                this.$store.dispatch('refreshDebugMode');
-            }
+            this.$store.dispatch('contao/access-key/get');
         },
     };
 </script>

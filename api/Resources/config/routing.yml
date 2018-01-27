@@ -60,47 +60,47 @@ server_opcache:
 
 users_list:
     path:     /api/users
-    defaults: { _controller: contao_manager.controller.config_users:listUsers }
+    defaults: { _controller: Contao\ManagerApi\Controller\UserController:listUsers }
     methods:  [GET]
 
 users_create:
     path:     /api/users
-    defaults: { _controller: contao_manager.controller.config_users:createUser }
+    defaults: { _controller: Contao\ManagerApi\Controller\UserController:createUser }
     methods:  [POST]
 
 user_get:
     path:     /api/users/{username}
-    defaults: { _controller: contao_manager.controller.config_users:retrieveUser }
+    defaults: { _controller: Contao\ManagerApi\Controller\UserController:retrieveUser }
     methods:  [GET]
 
 user_put:
     path:     /api/users/{username}
-    defaults: { _controller: contao_manager.controller.config_users:replaceUser }
+    defaults: { _controller: Contao\ManagerApi\Controller\UserController:replaceUser }
     methods:  [PUT]
 
 user_delete:
     path:     /api/users/{username}
-    defaults: { _controller: contao_manager.controller.config_users:deleteUser }
+    defaults: { _controller: Contao\ManagerApi\Controller\UserController:deleteUser }
     methods:  [DELETE]
 
 tokens_get:
     path:     /api/users/{username}/tokens
-    defaults: { _controller: contao_manager.controller.config_users:listTokens }
+    defaults: { _controller: Contao\ManagerApi\Controller\UserController:listTokens }
     methods:  [GET]
 
 tokens_create:
     path:     /api/users/{username}/tokens
-    defaults: { _controller: contao_manager.controller.config_users:createToken }
+    defaults: { _controller: Contao\ManagerApi\Controller\UserController:createToken }
     methods:  [POST]
 
 token_get:
     path:     /api/users/{username}/tokens/{token}
-    defaults: { _controller: contao_manager.controller.config_users:retrieveToken }
+    defaults: { _controller: Contao\ManagerApi\Controller\UserController:retrieveToken }
     methods:  [GET]
 
 token_delete:
     path:     /api/users/{username}/tokens/{token}
-    defaults: { _controller: contao_manager.controller.config_users:deleteToken }
+    defaults: { _controller: Contao\ManagerApi\Controller\UserController:deleteToken }
     methods:  [DELETE]
 
 
@@ -108,55 +108,25 @@ token_delete:
 #   Configuration   #
 #####################
 
-config_manager_get:
+config_manager:
     path:     /api/config/manager
-    defaults: { _controller: contao_manager.controller.config_manager:getAction }
-    methods:  [GET]
+    defaults: { _controller: contao_manager.controller.config_manager }
+    methods:  [GET, PUT, PATCH]
 
-config_manager_put:
-    path:     /api/config/manager
-    defaults: { _controller: contao_manager.controller.config_manager:putAction }
-    methods:  [PUT]
-
-config_manager_patch:
-    path:     /api/config/manager
-    defaults: { _controller: contao_manager.controller.config_manager:patchAction }
-    methods:  [PATCH]
-
-config_auth_get:
+config_auth:
     path:     /api/config/auth
-    defaults: { _controller: contao_manager.controller.config_auth:getAction }
-    methods:  [GET]
-
-config_auth_put:
-    path:     /api/config/auth
-    defaults: { _controller: contao_manager.controller.config_auth:putAction }
-    methods:  [PUT]
-
-config_auth_patch:
-    path:     /api/config/auth
-    defaults: { _controller: contao_manager.controller.config_auth:patchAction }
-    methods:  [PATCH]
+    defaults: { _controller: contao_manager.controller.config_auth }
+    methods:  [GET, PUT, PATCH]
 
 config_auth_github:
     path:     /api/config/auth/github-oauth
     defaults: { _controller: contao_manager.controller.config_auth:putGithubToken }
     methods:  [PUT]
 
-config_composer_get:
+config_composer:
     path:     /api/config/composer
-    defaults: { _controller: contao_manager.controller.config_composer:getAction }
-    methods:  [GET]
-
-config_composer_put:
-    path:     /api/config/composer
-    defaults: { _controller: contao_manager.controller.config_composer:putAction }
-    methods:  [PUT]
-
-config_composer_patch:
-    path:     /api/config/composer
-    defaults: { _controller: contao_manager.controller.config_composer:patchAction }
-    methods:  [PATCH]
+    defaults: { _controller: contao_manager.controller.config_composer }
+    methods:  [GET, PUT, PATCH]
 
 
 ##################
@@ -173,25 +143,11 @@ contao_access_key:
 #   Tasks   #
 #############
 
-task_get:
+task:
     path:     /api/task
-    defaults: { _controller: contao_manager.controller.tasks:getTask }
-    methods:  [GET]
+    defaults: { _controller: Contao\ManagerApi\Controller\TaskController }
+    methods:  [GET, PUT, PATCH, DELETE]
 
-task_put:
-    path:     /api/task
-    defaults: { _controller: contao_manager.controller.tasks:putTask }
-    methods:  [PUT]
-
-task_delete:
-    path:     /api/task
-    defaults: { _controller: contao_manager.controller.tasks:deleteTask }
-    methods:  [DELETE]
-
-task_status:
-    path:     /api/task/status
-    defaults: { _controller: contao_manager.controller.tasks:putTaskStatus }
-    methods:  [PUT]
 
 ###############
 #   Tenside   #

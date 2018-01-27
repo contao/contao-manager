@@ -3,24 +3,23 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import api from '../api';
 import views from '../router/views';
 
 import auth from './auth';
-import tasks from './tasks';
+import contao from './contao';
 import server from './server';
+import tasks from './tasks';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    modules: { auth, tasks, server },
+    modules: { auth, contao, server, tasks },
 
     state: {
         view: views.INIT,
         error: null,
         contaoVersion: null,
         apiVersion: null,
-        debugMode: null,
     },
 
     mutations: {
@@ -37,10 +36,6 @@ const store = new Vuex.Store({
         setVersions(state, result) {
             state.contaoVersion = result.version;
             state.apiVersion = result.api;
-        },
-
-        setDebugMode(state, status) {
-            state.debugMode = status;
         },
     },
 
@@ -59,7 +54,8 @@ const store = new Vuex.Store({
                 version,
             };
 
-            return api.config.composer.patch(
+            return Vue.http.patch(
+                'api/config/composer',
                 {
                     'preferred-install': 'dist',
                     'store-auths': false,
@@ -68,16 +64,6 @@ const store = new Vuex.Store({
                     'discard-changes': true,
                 },
             ).then(() => dispatch('tasks/execute', task, { root: true }));
-        },
-
-        refreshDebugMode({ state, commit }) {
-            if (state.apiVersion < 1) {
-                commit('setDebugMode', false);
-            } else {
-                api.contao.accessKey.get().then((accessKey) => {
-                    commit('setDebugMode', accessKey !== '');
-                });
-            }
         },
     },
 });

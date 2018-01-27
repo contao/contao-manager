@@ -19,8 +19,6 @@
 </template>
 
 <script>
-    import api from '../../../api';
-
     import Loader from '../../fragments/Loader';
 
     export default {
@@ -32,7 +30,7 @@
 
         computed: {
             hasAccessKey() {
-                return this.$store.state.debugMode;
+                return this.$store.state.contao['access-key'].isEnabled;
             },
         },
 
@@ -52,8 +50,7 @@
 
                 this.loading = true;
 
-                api.contao.accessKey.set(user, password).then((accessKey) => {
-                    this.$store.commit('setDebugMode', accessKey !== '');
+                this.$store.dispatch('contao/access-key/set', { user, password }).then(() => {
                     this.loading = false;
                 });
             },
@@ -61,21 +58,20 @@
             removeAccessKey() {
                 this.loading = true;
 
-                api.contao.accessKey.remove().then((accessKey) => {
-                    this.$store.commit('setDebugMode', accessKey !== '');
+                this.$store.dispatch('contao/access-key/delete').then(() => {
                     this.loading = false;
                 });
             },
         },
 
         mounted() {
-            if (this.$store.state.debugMode === null) {
-                this.$store.dispatch('refreshDebugMode').then(() => {
-                    this.loading = false;
-                });
-            } else {
-                this.loading = false;
+            if (this.$store.apiVersion < 1) {
+                return;
             }
+
+            this.$store.dispatch('contao/access-key/get').then(() => {
+                this.loading = false;
+            });
         },
     };
 </script>
