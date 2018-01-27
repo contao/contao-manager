@@ -15,42 +15,42 @@ files:
 
 server_selfupdate:
     path:     /api/server/self-update
-    defaults: { _controller: Contao\ManagerApi\Controller\System\SelfUpdateController }
+    defaults: { _controller: Contao\ManagerApi\Controller\Server\SelfUpdateController }
     methods:  [GET]
 
 server_config:
     path:     /api/server/config
-    defaults: { _controller: Contao\ManagerApi\Controller\System\ConfigController }
+    defaults: { _controller: Contao\ManagerApi\Controller\Server\ConfigController }
     methods:  [GET, PUT]
 
 server_php_web:
     path:     /api/server/php-web
-    defaults: { _controller: Contao\ManagerApi\Controller\System\PhpWebController }
+    defaults: { _controller: Contao\ManagerApi\Controller\Server\PhpWebController }
     methods:  [GET]
 
 server_php_cli:
     path:     /api/server/php-cli
-    defaults: { _controller: Contao\ManagerApi\Controller\System\PhpCliController }
+    defaults: { _controller: Contao\ManagerApi\Controller\Server\PhpCliController }
     methods:  [GET]
 
 server_composer:
     path:     /api/server/composer
-    defaults: { _controller: Contao\ManagerApi\Controller\System\ComposerController }
+    defaults: { _controller: Contao\ManagerApi\Controller\Server\ComposerController }
     methods:  [GET]
 
 server_contao:
     path:     /api/server/contao
-    defaults: { _controller: Contao\ManagerApi\Controller\System\ContaoController }
+    defaults: { _controller: Contao\ManagerApi\Controller\Server\ContaoController }
     methods:  [GET]
 
 server_phpinfo:
     path:     /api/server/phpinfo
-    defaults: { _controller: Contao\ManagerApi\Controller\System\PhpinfoController }
+    defaults: { _controller: Contao\ManagerApi\Controller\Server\PhpinfoController }
     methods:  [GET]
 
 server_opcache:
     path:     /api/server/opcache
-    defaults: { _controller: Contao\ManagerApi\Controller\System\OpcacheController }
+    defaults: { _controller: Contao\ManagerApi\Controller\Server\OpcacheController }
     methods:  [GET, DELETE]
 
 

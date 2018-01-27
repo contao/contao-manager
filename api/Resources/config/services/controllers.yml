@@ -48,17 +48,15 @@ services:
             - "@kernel"
             - "@filesystem"
 
-    Contao\ManagerApi\Controller\System\ConfigController:
+    Contao\ManagerApi\Controller\Server\ConfigController:
         arguments:
             - "@contao_manager.config.manager"
             - "@contao_manager.system.server_info"
             - "@contao_manager.i18n.translator"
 
-    Contao\ManagerApi\Controller\System\ComposerController:
+    Contao\ManagerApi\Controller\Server\ComposerController:
         arguments:
             - "@kernel"
-
-    Contao\ManagerApi\Controller\System\OpcacheController: ~
 
     Contao\ManagerApi\Controller\Contao\AccessKeyController:
         arguments:

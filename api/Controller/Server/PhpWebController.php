@@ -8,7 +8,7 @@
  * @license LGPL-3.0+
  */
 
-namespace Contao\ManagerApi\Controller\System;
+namespace Contao\ManagerApi\Controller\Server;
 
 use Contao\ManagerApi\IntegrityCheck\IntegrityCheckInterface;
 use Crell\ApiProblem\ApiProblem;

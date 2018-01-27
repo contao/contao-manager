@@ -8,11 +8,12 @@ import views from '../router/views';
 
 import auth from './auth';
 import tasks from './tasks';
+import server from './server';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    modules: { auth, tasks },
+    modules: { auth, tasks, server },
 
     state: {
         view: views.INIT,

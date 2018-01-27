@@ -17,8 +17,6 @@
 </template>
 
 <script>
-    import api from '../../../api';
-
     import Loader from '../../fragments/Loader';
 
     export default {
@@ -33,7 +31,7 @@
             execute() {
                 this.loading = true;
 
-                api.system.deleteOpcache().then((status) => {
+                this.$store.dispatch('server/opcache/delete').then((status) => {
                     this.loading = false;
                     this.opcodeEnabled = status.opcache_enabled;
                 });
@@ -41,7 +39,7 @@
         },
 
         mounted() {
-            api.system.getOpcache().then(
+            this.$store.dispatch('server/opcache/get').then(
                 (status) => {
                     this.opcodeEnabled = status.opcache_enabled;
                 },

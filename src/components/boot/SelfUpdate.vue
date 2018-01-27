@@ -1,12 +1,10 @@
 <template>
-    <boot-check :progress="bootState" :title="$t('ui.system.selfUpdate.title')" :description="bootDescription">
-        <button class="widget-button widget-button--alert" v-if="bootState === 'error'" @click="update" :disabled="processing">{{ 'ui.system.selfUpdate.button' | translate }}</button>
+    <boot-check :progress="bootState" :title="$t('ui.server.selfUpdate.title')" :description="bootDescription">
+        <button class="widget-button widget-button--alert" v-if="bootState === 'error'" @click="update" :disabled="processing">{{ 'ui.server.selfUpdate.button' | translate }}</button>
     </boot-check>
 </template>
 
 <script>
-    import api from '../../api';
-
     import BootCheck from '../fragments/BootCheck';
 
     export default {
@@ -32,24 +30,24 @@
         },
 
         created() {
-            this.bootDescription = this.$t('ui.system.running');
+            this.bootDescription = this.$t('ui.server.running');
 
-            api.system.selfUpdate().then((result) => {
+            this.$store.dispatch('server/self-update/get').then((result) => {
                 const context = { current: result.current_version, latest: result.latest_version };
 
                 if (result.current_version === result.latest_version) {
                     this.bootState = 'success';
-                    this.bootDescription = this.$t('ui.system.selfUpdate.latest', context);
+                    this.bootDescription = this.$t('ui.server.selfUpdate.latest', context);
                 } else if (result.latest_version === null) {
                     this.bootState = 'info';
-                    this.bootDescription = this.$t('ui.system.selfUpdate.dev');
+                    this.bootDescription = this.$t('ui.server.selfUpdate.dev');
                 } else {
                     this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.system.selfUpdate.update', context);
+                    this.bootDescription = this.$t('ui.server.selfUpdate.update', context);
                 }
             }).catch(() => {
                 this.bootState = 'error';
-                this.bootDescription = this.$t('ui.system.error');
+                this.bootDescription = this.$t('ui.server.error');
             }).then(() => {
                 if (this.bootState === 'error') {
                     this.$emit('error', 'SelfUpdate');

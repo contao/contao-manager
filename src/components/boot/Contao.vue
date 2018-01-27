@@ -2,25 +2,25 @@
     <boxed-layout v-if="current" :wide="true" slotClass="contao-check">
         <header class="contao-check__header">
             <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="contao-check__icon" />
-            <h1 class="contao-check__headline">{{ 'ui.system.contao.headline' | translate }}</h1>
-            <p class="contao-check__description">{{ 'ui.system.contao.description' | translate }}</p>
-            <p class="contao-check__version"><strong>{{ 'ui.system.contao.ltsTitle' | translate }}:</strong> {{ 'ui.system.contao.ltsText' | translate }}</p>
-            <p class="contao-check__version" v-if="supportsLatest"><strong>{{ 'ui.system.contao.latestTitle' | translate }}:</strong> {{ 'ui.system.contao.latestText' | translate }}</p>
-            <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ 'ui.system.contao.latestTitle' | translate }}:</strong> {{ 'ui.system.contao.latestText' | translate }}</span> <span class="contao-check__version--warning">{{ 'ui.system.contao.noLatest' | translate }}</span></p>
-            <p class="contao-check__version" v-html="$t('ui.system.contao.releaseplan')"></p>
+            <h1 class="contao-check__headline">{{ 'ui.server.contao.headline' | translate }}</h1>
+            <p class="contao-check__description">{{ 'ui.server.contao.description' | translate }}</p>
+            <p class="contao-check__version"><strong>{{ 'ui.server.contao.ltsTitle' | translate }}:</strong> {{ 'ui.server.contao.ltsText' | translate }}</p>
+            <p class="contao-check__version" v-if="supportsLatest"><strong>{{ 'ui.server.contao.latestTitle' | translate }}:</strong> {{ 'ui.server.contao.latestText' | translate }}</p>
+            <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ 'ui.server.contao.latestTitle' | translate }}:</strong> {{ 'ui.server.contao.latestText' | translate }}</span> <span class="contao-check__version--warning">{{ 'ui.server.contao.noLatest' | translate }}</span></p>
+            <p class="contao-check__version" v-html="$t('ui.server.contao.releaseplan')"></p>
         </header>
 
         <section class="contao-check__form">
 
             <fieldset class="contao-check__fields">
-                <legend class="contao-check__fieldtitle">{{ 'ui.system.contao.formTitle' | translate }}</legend>
-                <p class="contao-check__fielddesc">{{ 'ui.system.contao.formText' | translate }}</p>
-                <select-menu name="version" :label="$t('ui.system.contao.version')" class="inline" v-model="version" :options="versions" :disabled="processing"/>
+                <legend class="contao-check__fieldtitle">{{ 'ui.server.contao.formTitle' | translate }}</legend>
+                <p class="contao-check__fielddesc">{{ 'ui.server.contao.formText' | translate }}</p>
+                <select-menu name="version" :label="$t('ui.server.contao.version')" class="inline" v-model="version" :options="versions" :disabled="processing"/>
             </fieldset>
 
             <fieldset class="contao-check__fields">
                 <button class="widget-button widget-button--primary widget-button--run" @click="install" :disabled="processing">
-                    <span v-if="!processing">{{ 'ui.system.contao.install' | translate }}</span>
+                    <span v-if="!processing">{{ 'ui.server.contao.install' | translate }}</span>
                     <loader v-else/>
                 </button>
             </fieldset>
@@ -29,14 +29,12 @@
 
     </boxed-layout>
 
-    <boot-check v-else :progress="bootState" :title="$t('ui.system.contao.title')" :description="bootDescription">
-        <button v-if="bootState === 'info'" @click="show" class="widget-button widget-button--primary widget-button--run">{{ 'ui.system.contao.setup' | translate }}</button>
+    <boot-check v-else :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription">
+        <button v-if="bootState === 'info'" @click="show" class="widget-button widget-button--primary widget-button--run">{{ 'ui.server.contao.setup' | translate }}</button>
     </boot-check>
 </template>
 
 <script>
-    import api from '../../api';
-
     import BootCheck from '../fragments/BootCheck';
     import BoxedLayout from '../layouts/Boxed';
     import SelectMenu from '../widgets/SelectMenu';
@@ -88,34 +86,34 @@
         },
 
         created() {
-            this.bootDescription = this.$t('ui.system.running');
+            this.bootDescription = this.$t('ui.server.running');
 
-            api.system.contao().then((result) => {
+            this.$store.dispatch('server/contao/get').then((result) => {
                 if (!result.version) {
                     this.bootState = 'info';
-                    this.bootDescription = this.$t('ui.system.contao.empty');
+                    this.bootDescription = this.$t('ui.server.contao.empty');
 
-                    api.system.phpWeb().then((phpWeb) => {
+                    this.$store.dispatch('server/php-web/get').then((phpWeb) => {
                         if (phpWeb.version_id < 70100) {
                             this.supportsLatest = false;
                         }
                     });
                 } else {
                     this.bootState = 'success';
-                    this.bootDescription = this.$t('ui.system.contao.found', result);
+                    this.bootDescription = this.$t('ui.server.contao.found', result);
 
                     this.$store.commit('setVersions', result);
                 }
             }).catch((response) => {
                 if (response.status === 503) {
                     this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.system.prerequisite');
+                    this.bootDescription = this.$t('ui.server.prerequisite');
                 } else if (response.status === 500) {
                     this.bootState = 'error';
                     this.bootDescription = response.body.output;
                 } else {
                     this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.system.error');
+                    this.bootDescription = this.$t('ui.server.error');
                 }
             }).then(() => {
                 if (this.bootState === 'success') {

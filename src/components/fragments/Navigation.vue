@@ -29,7 +29,6 @@
 
 <script>
     import store from '../../store';
-    import api from '../../api';
     import views from '../../router/views';
     import routes from '../../router/routes';
 
@@ -50,7 +49,7 @@
             },
 
             phpinfo() {
-                api.system.phpinfo().then((content) => {
+                this.$store.dispatch('server/phpinfo/get').then((content) => {
                     const popup = window.open();
 
                     if (popup) {

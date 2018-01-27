@@ -33,7 +33,6 @@
 </template>
 
 <script>
-    import api from '../../api';
     import views from '../../router/views';
 
     import BoxedLayout from '../layouts/Boxed';
@@ -76,7 +75,6 @@
         methods: {
             setView(view) {
                 if (view === null) {
-                    api.system.purgeCache();
                     this.status = {
                         Config: null,
                         PhpWeb: null,
@@ -140,7 +138,6 @@
         },
 
         created() {
-            api.system.purgeCache();
             this.$store.dispatch('tasks/reload').then(() => {
                 this.boot = true;
             });

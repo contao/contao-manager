@@ -2,28 +2,28 @@
     <boxed-layout v-if="current" :wide="true" slotClass="config-check">
         <header class="config-check__header">
             <img src="../../assets/images/server-config.svg" width="80" height="80" class="config-check__icon">
-            <h1 class="config-check__headline">{{ 'ui.system.config.title' | translate }}</h1>
-            <p class="config-check__description" v-html="$t('ui.system.config.description')"></p>
+            <h1 class="config-check__headline">{{ 'ui.server.config.title' | translate }}</h1>
+            <p class="config-check__description" v-html="$t('ui.server.config.description')"></p>
         </header>
 
         <main class="config-check__form">
             <fieldset class="config-check__fields">
-                <legend class="config-check__fieldtitle">{{ 'ui.system.config.formTitle' | translate }}</legend>
-                <p class="config-check__fielddesc">{{ 'ui.system.config.formText' | translate }}</p>
-                <p class="config-check__detected" v-if="detected && server">{{ 'ui.system.config.detected' | translate }}</p>
+                <legend class="config-check__fieldtitle">{{ 'ui.server.config.formTitle' | translate }}</legend>
+                <p class="config-check__fielddesc">{{ 'ui.server.config.formText' | translate }}</p>
+                <p class="config-check__detected" v-if="detected && server">{{ 'ui.server.config.detected' | translate }}</p>
                 <select-menu name="server" :label="$t('Configuration')" class="inline" :disabled="processing" :error="errors.server" :options="servers" v-model="server" @input="detected = false"/>
             </fieldset>
 
             <fieldset v-if="showCustom" class="config-check__fields">
-                <legend class="config-check__fieldtitle">{{ 'ui.system.config.customTitle' | translate }}</legend>
-                <p class="config-check__fielddesc">{{ 'ui.system.config.customText' | translate }}</p>
-                <p class="config-check__detected" v-if="detected && php_cli">{{ 'ui.system.config.phpDetected' | translate }}</p>
-                <text-field name="php_cli" :label="$t('ui.system.config.cli')" :disabled="processing" :error="errors.php_cli" v-model="php_cli" @enter="save"/>
+                <legend class="config-check__fieldtitle">{{ 'ui.server.config.customTitle' | translate }}</legend>
+                <p class="config-check__fielddesc">{{ 'ui.server.config.customText' | translate }}</p>
+                <p class="config-check__detected" v-if="detected && php_cli">{{ 'ui.server.config.phpDetected' | translate }}</p>
+                <text-field name="php_cli" :label="$t('ui.server.config.cli')" :disabled="processing" :error="errors.php_cli" v-model="php_cli" @enter="save"/>
             </fieldset>
 
             <fieldset class="config-check__fields">
                 <button class="widget-button widget-button--primary" @click="save" :disabled="!inputValid || processing">
-                    <span v-if="!processing" class="widget-button--save">{{ 'ui.system.config.save' | translate }}</span>
+                    <span v-if="!processing" class="widget-button--save">{{ 'ui.server.config.save' | translate }}</span>
                     <loader v-else/>
                 </button>
             </fieldset>
@@ -31,15 +31,13 @@
         </main>
     </boxed-layout>
 
-    <boot-check v-else :progress="bootState" :title="$t('ui.system.config.title')" :description="bootDescription">
-        <button class="widget-button widget-button--alert" v-if="bootState === 'error'" @click="showConfiguration">{{ 'ui.system.config.setup' | translate }}</button>
-        <button class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" @click="showConfiguration">{{ 'ui.system.config.change' | translate }}</button>
+    <boot-check v-else :progress="bootState" :title="$t('ui.server.config.title')" :description="bootDescription">
+        <button class="widget-button widget-button--alert" v-if="bootState === 'error'" @click="showConfiguration">{{ 'ui.server.config.setup' | translate }}</button>
+        <button class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" @click="showConfiguration">{{ 'ui.server.config.change' | translate }}</button>
     </boot-check>
 </template>
 
 <script>
-    import api from '../../api';
-
     import BootCheck from '../fragments/BootCheck';
     import BoxedLayout from '../layouts/Boxed';
     import TextField from '../widgets/TextField';
@@ -76,14 +74,14 @@
                 }
 
                 const servers = {
-                    '': this.$t('ui.system.config.blankOption'),
+                    '': this.$t('ui.server.config.blankOption'),
                 };
 
                 Object.keys(this.bootResult.configs).forEach((key) => {
                     servers[key] = this.bootResult.configs[key].name;
                 });
 
-                servers.custom = this.$t('ui.system.config.customOption');
+                servers.custom = this.$t('ui.server.config.customOption');
 
                 return servers;
             },
@@ -107,7 +105,15 @@
                 this.errors.server = '';
                 this.errors.php_cli = '';
 
-                api.system.setConfig(this.server, this.php_cli).then(() => {
+                const config = {
+                    server: this.server,
+                };
+
+                if (this.server === 'custom') {
+                    config.php_cli = this.php_cli;
+                }
+
+                this.$store.dispatch('server/config/set', config).then(() => {
                     this.$emit('view', null);
                     this.processing = false;
                 }).catch((problem) => {
@@ -127,9 +133,9 @@
         },
 
         created() {
-            this.bootDescription = this.$t('ui.system.running');
+            this.bootDescription = this.$t('ui.server.running');
 
-            api.system.getConfig().then((result) => {
+            this.$store.dispatch('server/config/get').then((result) => {
                 this.bootResult = result;
 
                 this.server = result.server;
@@ -138,13 +144,13 @@
 
                 if (!result.server || result.detected) {
                     this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.system.config.stateError');
+                    this.bootDescription = this.$t('ui.server.config.stateError');
                 } else if (!result.php_cli) {
                     this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.system.config.stateErrorCli');
+                    this.bootDescription = this.$t('ui.server.config.stateErrorCli');
                 } else if (result.server === 'custom') {
                     this.bootState = 'info';
-                    this.bootDescription = this.$t('ui.system.config.stateCustom', result);
+                    this.bootDescription = this.$t('ui.server.config.stateCustom', result);
                 } else {
                     const labels = Object.create({
                         server: result.configs[result.server].name,
@@ -152,11 +158,11 @@
                     });
 
                     this.bootState = 'success';
-                    this.bootDescription = this.$t('ui.system.config.stateSuccess', labels);
+                    this.bootDescription = this.$t('ui.server.config.stateSuccess', labels);
                 }
             }).catch(() => {
                 this.bootState = 'error';
-                this.bootDescription = this.$t('ui.system.error');
+                this.bootDescription = this.$t('ui.server.error');
             }).then(() => {
                 if (this.bootState === 'error') {
                     this.$emit('error', 'Config');
@@ -203,9 +209,15 @@
             max-width: 280px;
             margin: 0 auto 50px;
 
-            input,
-            select {
-                margin: 5px 0 10px;
+            .widget-select,
+            .widget-text {
+                margin-top: 20px;
+
+                label {
+                    display: block;
+                    margin-bottom: 5px;
+                    font-weight: $font-weight-medium;
+                }
             }
         }
 
@@ -246,18 +258,20 @@
                 margin: 20px 50px 0;
                 padding-bottom: 100px;
 
-                .widget-text label,
-                .widget-select label {
-                    display: block;
-                    float: left;
-                    width: 120px;
-                    padding-top: 15px;
-                    font-weight: $font-weight-medium;
-                }
+                .widget-select,
+                .widget-text {
+                    label {
+                        display: block;
+                        float: left;
+                        width: 120px;
+                        padding-top: 10px;
+                        font-weight: $font-weight-medium;
+                    }
 
-                input[type=text],
-                select {
-                    width: 250px;
+                    select,
+                    input[type=text] {
+                        width: 250px;
+                    }
                 }
 
                 .widget-button {
