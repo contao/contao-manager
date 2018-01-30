@@ -20,11 +20,11 @@
     },
     "require": {
         "php": "^5.5.9 || ^7.0",
-        "symfony/framework-bundle": "3.3.*",
-        "symfony/security-bundle": "3.3.*",
-        "symfony/console": "3.3.*",
-        "symfony/process": "3.3.*",
-        "symfony/yaml": "3.3.*",
+        "symfony/framework-bundle": "3.4.*",
+        "symfony/security-bundle": "3.4.*",
+        "symfony/console": "3.4.*",
+        "symfony/process": "3.4.*",
+        "symfony/yaml": "3.4.*",
 
         "symfony/monolog-bundle": "~2.9",
         "ircmaxell/password-compat": "^1.0",
