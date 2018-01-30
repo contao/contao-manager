@@ -39,6 +39,11 @@ class TaskController extends Controller
      */
     private $taskList;
 
+    /**
+     * @var bool
+     */
+    private $debug;
+
     private static $signals = [
         1 => 'SIGHUP',
         2 => 'SIGINT',
@@ -52,11 +57,13 @@ class TaskController extends Controller
      *
      * @param ConsoleProcessFactory $processFactory
      * @param TaskList              $taskList
+     * @param bool                  $debug
      */
-    public function __construct(ConsoleProcessFactory $processFactory, TaskList $taskList)
+    public function __construct(ConsoleProcessFactory $processFactory, TaskList $taskList, $debug = false)
     {
         $this->processFactory = $processFactory;
         $this->taskList = $taskList;
+        $this->debug = $debug;
     }
 
     /**
@@ -105,6 +112,10 @@ class TaskController extends Controller
         }
 
         $metaData = new JsonArray($request->request->all());
+
+        if ($metaData->has('debug')) {
+            $metaData->set('debug', $this->debug);
+        }
 
         if ('install' === $request->request->get('type')) {
             $metaData->set(InstallTask::SETTING_DESTINATION_DIR, $this->get('kernel')->getContaoDir());

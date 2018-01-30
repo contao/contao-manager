@@ -112,6 +112,7 @@ class ContaoController extends Controller
                 '.bash_logout',
                 '.bashrc',
                 '.DS_Store',
+                '.ftpquota',
                 '.htaccess',
             ]
         );

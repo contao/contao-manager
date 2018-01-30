@@ -46,16 +46,22 @@ class ComposerInstallTask extends AbstractCliSpawningTask
      */
     public function doPerform()
     {
-        $process = $this->processFactory->createManagerConsoleProcess(
-            [
-                'composer',
-                'install',
-                '--optimize-autoloader',
-                '--no-dev',
-                '--no-progress',
-                '--no-interaction',
-            ]
-        );
+        $arguments = [
+            'composer',
+            'install',
+            '--prefer-dist',
+            '--no-dev',
+            '--no-progress',
+            '--no-suggest',
+            '--no-interaction',
+            '--optimize-autoloader',
+        ];
+
+        if ($this->file->get('debug')) {
+            $arguments[] = '--profile';
+        }
+
+        $process = $this->processFactory->createManagerConsoleProcess($arguments);
 
         $this->runProcess($process);
     }

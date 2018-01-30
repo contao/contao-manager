@@ -19,8 +19,8 @@
             </fieldset>
 
             <fieldset class="contao-check__fields">
-                <button class="widget-button widget-button--primary widget-button--run" @click="install" :disabled="processing">
-                    <span v-if="!processing">{{ 'ui.server.contao.install' | translate }}</span>
+                <button class="widget-button widget-button--primary" @click="install" :disabled="processing">
+                    <span v-if="!processing" class="widget-button--run">{{ 'ui.server.contao.install' | translate }}</span>
                     <loader v-else/>
                 </button>
             </fieldset>
