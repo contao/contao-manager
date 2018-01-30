@@ -3,7 +3,7 @@
 /*
  * This file is part of Contao Manager.
  *
- * Copyright (c) 2016-2017 Contao Association
+ * Copyright (c) 2016-2018 Contao Association
  *
  * @license LGPL-3.0+
  */
@@ -155,9 +155,9 @@ class ConsoleProcessFactory
      *
      * @param string $id
      *
-     * @return ProcessController
-     *
      * @throws ApiProblemException
+     *
+     * @return ProcessController
      */
     public function restoreBackgroundProcess($id)
     {

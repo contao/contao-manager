@@ -3,7 +3,7 @@
 /*
  * This file is part of Contao Manager.
  *
- * Copyright (c) 2016-2017 Contao Association
+ * Copyright (c) 2016-2018 Contao Association
  *
  * @license LGPL-3.0+
  */
@@ -41,10 +41,10 @@ class ContaoApi
     /**
      * Gets the Contao API version.
      *
-     * @return int
-     *
      * @throws ProcessFailedException
      * @throws ProcessOutputException
+     *
+     * @return int
      */
     public function getVersion()
     {
@@ -89,7 +89,7 @@ class ContaoApi
     }
 
     /**
-     * Removes the debug access key
+     * Removes the debug access key.
      */
     public function removeAccessKey()
     {
