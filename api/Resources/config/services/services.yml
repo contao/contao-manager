@@ -2,6 +2,7 @@ imports:
     - { resource: controllers.yml }
     - { resource: commands.yml }
     - { resource: listener.yml }
+    - { resource: tasks.yml }
     - { resource: integrity.yml }
 
 services:
@@ -92,6 +93,7 @@ services:
 
     contao_manager.system.ip_info:
         class: Contao\ManagerApi\System\IpInfo
+
 
     app.taskfactory:
         class:     Contao\ManagerApi\Tenside\TaskFactory

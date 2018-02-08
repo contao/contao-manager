@@ -34,7 +34,13 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
 
+
     Contao\ManagerApi\Controller\TaskController:
+        arguments:
+            - "@contao_manager.task_manager"
+            - '@Contao\ManagerApi\Controller\LegacyTaskController'
+
+    Contao\ManagerApi\Controller\LegacyTaskController:
         arguments:
             - "@contao_manager.process.console_factory"
             - "@tenside.tasks"

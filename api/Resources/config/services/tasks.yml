@@ -1,0 +1,23 @@
+
+services:
+    contao_manager.task_manager:
+        class: Contao\ManagerApi\Task\TaskManager
+        arguments:
+            - "@kernel"
+            - "@contao_manager.task_locator"
+            - "@filesystem"
+
+    contao_manager.task_locator:
+        class: Symfony\Component\DependencyInjection\ServiceLocator
+        tags: ['container.service_locator']
+        arguments:
+            -
+                "rebuild-cache": "@contao_manager.task.rebuild_cache"
+
+    contao_manager.task.rebuild_cache:
+        class: Contao\ManagerApi\Task\RebuildCacheTask
+        arguments:
+            - "@kernel"
+            - "@contao_manager.process.console_factory"
+            - "@contao_manager.i18n.translator"
+            - "@filesystem"
