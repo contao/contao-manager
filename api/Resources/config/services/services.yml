@@ -94,15 +94,6 @@ services:
     contao_manager.system.ip_info:
         class: Contao\ManagerApi\System\IpInfo
 
-
-    app.taskfactory:
-        class:     Contao\ManagerApi\Tenside\TaskFactory
-        arguments:
-            - "@kernel"
-            - "@contao_manager.process.console_factory"
-        tags:
-            - { name: tenside.taskfactory }
-
     app.command.background_task:
         class: Terminal42\BackgroundProcess\Command\ProcessRunnerCommand
         tags:
