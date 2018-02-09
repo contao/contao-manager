@@ -92,13 +92,17 @@
 
                 if (removed.length) {
                     task = {
-                        type: 'remove-package',
-                        package: removed,
+                        name: 'composer/remove',
+                        config: {
+                            packages: removed,
+                        },
                     };
                 } else {
                     task = {
-                        type: 'require-package',
-                        package: updated,
+                        type: 'composer/require',
+                        config: {
+                            packages: updated,
+                        },
                     };
                 }
 

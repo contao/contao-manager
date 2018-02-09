@@ -50,8 +50,10 @@ const store = new Vuex.Store({
 
         install: ({ dispatch }, version) => {
             const task = {
-                type: 'install',
-                version,
+                name: 'contao/install',
+                config: {
+                    version,
+                },
             };
 
             return Vue.http.patch(

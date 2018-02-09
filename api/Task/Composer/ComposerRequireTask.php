@@ -8,7 +8,7 @@ use Contao\ManagerApi\Task\AbstractProcessTask;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 
-class ComposerInstallTask extends AbstractProcessTask
+class ComposerRequireTask extends AbstractProcessTask
 {
     /**
      * @var ConsoleProcessFactory
@@ -36,26 +36,33 @@ class ComposerInstallTask extends AbstractProcessTask
 
     protected function getInitialStatus(TaskConfig $config)
     {
-        return (new TaskStatus($this->translator->trans('task.composer_install.title')))
+        return (new TaskStatus($this->translator->trans('task.composer_require.title')))
             ->setSummary('Installing Composer dependencies …')
             ->setAudit(true);
     }
 
     protected function getProcess(TaskConfig $config)
     {
+        $packages = $config->getOption('packages');
+
+        if (!is_array($packages)) {
+            throw new \InvalidArgumentException('Missing list of packages.');
+        }
+
         try {
-            return $this->processFactory->restoreBackgroundProcess('composer-install');
+            return $this->processFactory->restoreBackgroundProcess('composer-require');
         } catch (\Exception $e) {
             // do nothing
         }
 
         $arguments = [
             'composer',
-            'install',
+            'require',
+            '--update-with-dependencies',
+            '--update-no-dev',
             '--prefer-dist',
-            '--no-dev',
-            '--no-progress',
             '--no-suggest',
+            '--no-progress',
             '--no-interaction',
             '--optimize-autoloader',
         ];
@@ -64,6 +71,8 @@ class ComposerInstallTask extends AbstractProcessTask
             $arguments[] = '--profile';
         }
 
-        return $this->processFactory->createManagerConsoleBackgroundProcess($arguments, 'composer-install');
+        $arguments = array_merge($arguments, $packages);
+
+        return $this->processFactory->createManagerConsoleBackgroundProcess($arguments, 'composer-require');
     }
 }

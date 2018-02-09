@@ -38,12 +38,7 @@
                     return;
                 }
 
-                this.$store.dispatch(
-                    'tasks/execute',
-                    {
-                        type: 'upgrade',
-                    },
-                ).then(
+                this.$store.dispatch('tasks/execute', { name: 'composer/update' }).then(
                     () => {
                         this.$emit('changed', false);
                         this.listPackages();

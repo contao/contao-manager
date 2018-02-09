@@ -41,6 +41,12 @@ en:
     task:
         composer_install:
             title: 'Installing Composer Dependencies'
+        composer_require:
+            title: 'Installing Packages'
+        composer_remove:
+            title: 'Removing Packages'
+        composer_update:
+            title: 'Updating Packages'
         dump_autoload:
             title: 'Dumping Composer Autoloader'
         rebuild_cache:

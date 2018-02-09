@@ -8,7 +8,7 @@ use Contao\ManagerApi\Task\AbstractProcessTask;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 
-class ComposerInstallTask extends AbstractProcessTask
+class ComposerUpdateTask extends AbstractProcessTask
 {
     /**
      * @var ConsoleProcessFactory
@@ -36,34 +36,37 @@ class ComposerInstallTask extends AbstractProcessTask
 
     protected function getInitialStatus(TaskConfig $config)
     {
-        return (new TaskStatus($this->translator->trans('task.composer_install.title')))
-            ->setSummary('Installing Composer dependencies …')
+        return (new TaskStatus($this->translator->trans('task.composer_update.title')))
+            ->setSummary('Updating Composer dependencies …')
             ->setAudit(true);
     }
 
     protected function getProcess(TaskConfig $config)
     {
         try {
-            return $this->processFactory->restoreBackgroundProcess('composer-install');
+            return $this->processFactory->restoreBackgroundProcess('composer-update');
         } catch (\Exception $e) {
             // do nothing
         }
 
-        $arguments = [
-            'composer',
-            'install',
-            '--prefer-dist',
-            '--no-dev',
-            '--no-progress',
-            '--no-suggest',
-            '--no-interaction',
-            '--optimize-autoloader',
-        ];
+        $arguments = array_merge(
+            [
+                'composer',
+                'update',
+                '--with-dependencies',
+                '--no-dev',
+                '--prefer-dist',
+                '--no-suggest',
+                '--no-progress',
+                '--no-interaction',
+                '--optimize-autoloader',
+            ]
+        );
 
         if ($config->getOption('debug', false)) {
             $arguments[] = '--profile';
         }
 
-        return $this->processFactory->createManagerConsoleBackgroundProcess($arguments, 'composer-install');
+        return $this->processFactory->createManagerConsoleBackgroundProcess($arguments, 'composer-update');
     }
 }

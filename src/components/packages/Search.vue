@@ -97,8 +97,10 @@
                 });
 
                 const task = {
-                    type: 'require-package',
-                    package: require,
+                    name: 'composer/require',
+                    config: {
+                        packages: require,
+                    },
                 };
 
                 this.$store.dispatch('tasks/execute', task).then(

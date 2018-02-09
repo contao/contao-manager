@@ -16,7 +16,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tenside\CoreBundle\Command\RunTaskCommand;
 use Terminal42\BackgroundProcess\Command\ProcessRunnerCommand;
 
 class ApiApplication extends Application
@@ -97,10 +96,6 @@ class ApiApplication extends Application
         $this->kernel->boot();
 
         $container = $this->kernel->getContainer();
-
-        $command = new RunTaskCommand();
-        $command->setContainer($container);
-        $this->add($command);
 
         $this->add((new ProcessRunnerCommand())->setName('run'));
         $this->add($container->get('contao_manager.command.about'));

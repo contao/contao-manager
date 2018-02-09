@@ -8,8 +8,9 @@ use Contao\ManagerApi\Task\AbstractProcessTask;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 
-class ComposerInstallTask extends AbstractProcessTask
+class ComposerRemoveTask extends AbstractProcessTask
 {
+
     /**
      * @var ConsoleProcessFactory
      */
@@ -36,34 +37,43 @@ class ComposerInstallTask extends AbstractProcessTask
 
     protected function getInitialStatus(TaskConfig $config)
     {
-        return (new TaskStatus($this->translator->trans('task.composer_install.title')))
-            ->setSummary('Installing Composer dependencies …')
+        return (new TaskStatus($this->translator->trans('task.composer_remove.title')))
+            ->setSummary('Removing Composer dependencies …')
             ->setAudit(true);
     }
 
     protected function getProcess(TaskConfig $config)
     {
+        $packages = $config->getOption('packages');
+
+        if (!is_array($packages)) {
+            throw new \InvalidArgumentException('Missing list of packages.');
+        }
+
         try {
-            return $this->processFactory->restoreBackgroundProcess('composer-install');
+            return $this->processFactory->restoreBackgroundProcess('composer-remove');
         } catch (\Exception $e) {
             // do nothing
         }
 
-        $arguments = [
-            'composer',
-            'install',
-            '--prefer-dist',
-            '--no-dev',
-            '--no-progress',
-            '--no-suggest',
-            '--no-interaction',
-            '--optimize-autoloader',
-        ];
+        $arguments = array_merge(
+            [
+                'composer',
+                'remove',
+            ],
+            $packages,
+            [
+                '--update-no-dev',
+                '--no-progress',
+                '--no-interaction',
+                '--optimize-autoloader',
+            ]
+        );
 
         if ($config->getOption('debug', false)) {
             $arguments[] = '--profile';
         }
 
-        return $this->processFactory->createManagerConsoleBackgroundProcess($arguments, 'composer-install');
+        return $this->processFactory->createManagerConsoleBackgroundProcess($arguments, 'composer-remove');
     }
 }

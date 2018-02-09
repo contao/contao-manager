@@ -19,11 +19,7 @@
     export default {
         methods: {
             execute() {
-                const task = {
-                    name: 'composer/dump-autoload',
-                };
-
-                this.$store.dispatch('tasks/execute', task);
+                this.$store.dispatch('tasks/execute', { name: 'composer/dump-autoload' });
             },
         },
     };

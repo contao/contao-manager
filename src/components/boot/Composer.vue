@@ -23,11 +23,7 @@
 
         methods: {
             install() {
-                const task = {
-                    type: 'composer-install',
-                };
-
-                this.$store.dispatch('tasks/execute', task).then(() => {
+                this.$store.dispatch('tasks/execute', { name: 'composer/install' }).then(() => {
                     window.location.reload();
                 });
             },

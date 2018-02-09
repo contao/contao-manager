@@ -12,13 +12,38 @@ services:
         tags: ['container.service_locator']
         arguments:
             -
+                "contao/install": "@contao_manager.task.contao_install"
                 "contao/rebuild-cache": "@contao_manager.task.rebuild_cache"
                 "composer/install": "@contao_manager.task.composer_install"
                 "composer/dump-autoload": "@contao_manager.task.dump_autoload"
+                "composer/require": "@contao_manager.task.composer_require"
+                "composer/remove": "@contao_manager.task.composer_remove"
+                "composer/update": "@contao_manager.task.composer_update"
                 "manager/self-update": "@contao_manager.task.self_update"
+
+    contao_manager.task.contao_install:
+        class: Contao\ManagerApi\Task\Contao\ContaoInstallTask
 
     contao_manager.task.composer_install:
         class: Contao\ManagerApi\Task\Composer\ComposerInstallTask
+        arguments:
+            - "@contao_manager.process.console_factory"
+            - "@contao_manager.i18n.translator"
+
+    contao_manager.task.composer_require:
+        class: Contao\ManagerApi\Task\Composer\ComposerRequireTask
+        arguments:
+            - "@contao_manager.process.console_factory"
+            - "@contao_manager.i18n.translator"
+
+    contao_manager.task.composer_remove:
+        class: Contao\ManagerApi\Task\Composer\ComposerRemoveTask
+        arguments:
+            - "@contao_manager.process.console_factory"
+            - "@contao_manager.i18n.translator"
+
+    contao_manager.task.composer_update:
+        class: Contao\ManagerApi\Task\Composer\ComposerUpdateTask
         arguments:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.i18n.translator"

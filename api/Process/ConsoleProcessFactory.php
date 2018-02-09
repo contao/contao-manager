@@ -211,6 +211,8 @@ class ConsoleProcessFactory
             $id
         );
 
+        $process->setTimeout(0);
+
         $this->addForkers($process);
 
         return $process;
