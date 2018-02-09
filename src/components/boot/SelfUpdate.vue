@@ -22,7 +22,7 @@
 
         methods: {
             update() {
-                this.$store.dispatch('tasks/execute', { type: 'self-update' }).then(
+                this.$store.dispatch('tasks/execute', { name: 'manager/self-update' }).then(
                     () => { window.location.reload(true); },
                     () => { window.location.reload(true); },
                 );

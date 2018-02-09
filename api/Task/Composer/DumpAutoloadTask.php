@@ -30,6 +30,8 @@ class DumpAutoloadTask extends AbstractProcessTask
     {
         $this->processFactory = $processFactory;
         $this->translator = $translator;
+
+        parent::__construct($translator);
     }
 
     protected function getInitialStatus(TaskConfig $config)

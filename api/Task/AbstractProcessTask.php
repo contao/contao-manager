@@ -2,11 +2,27 @@
 
 namespace Contao\ManagerApi\Task;
 
+use Contao\ManagerApi\I18n\Translator;
 use Symfony\Component\Process\Process;
 use Terminal42\BackgroundProcess\ProcessController;
 
 abstract class AbstractProcessTask extends AbstractTask
 {
+    /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
+     * Constructor.
+     *
+     * @param Translator $translator
+     */
+    public function __construct(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @param TaskConfig $config
      *
@@ -18,8 +34,11 @@ abstract class AbstractProcessTask extends AbstractTask
 
         $process = $this->getProcess($config);
 
-        $status->setDetail($process->getCommandLine());
-        $status->setConsole($process->getOutput());
+        if (!$status->getDetail()) {
+            $status->setDetail($process->getCommandLine());
+        }
+
+        $status->setConsole($process->getOutput().$process->getErrorOutput());
 
         if ('stopping' === $config->getStatus()) {
 
@@ -34,14 +53,13 @@ abstract class AbstractProcessTask extends AbstractTask
             $process->stop();
 
         } elseif ($process->isTerminated()) {
-
             if ($process->isSuccessful()) {
-                $status->setSummary('Process successfull.');
                 $status->setStatus(TaskStatus::STATUS_COMPLETE);
             } else {
-                $status->setSummary('Process failed.');
                 $status->setStatus(TaskStatus::STATUS_ERROR);
             }
+
+            $this->setStatusLabels($status, $this->translator);
 
         } elseif (!$process->isStarted()) {
             $process->start();

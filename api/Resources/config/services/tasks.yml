@@ -15,6 +15,7 @@ services:
                 "contao/rebuild-cache": "@contao_manager.task.rebuild_cache"
                 "composer/install": "@contao_manager.task.composer_install"
                 "composer/dump-autoload": "@contao_manager.task.dump_autoload"
+                "manager/self-update": "@contao_manager.task.self_update"
 
     contao_manager.task.composer_install:
         class: Contao\ManagerApi\Task\Composer\ComposerInstallTask
@@ -35,3 +36,10 @@ services:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
+
+    contao_manager.task.self_update:
+        class: Contao\ManagerApi\Task\Manager\SelfUpdateTask
+        arguments:
+            - "@contao_manager.process.console_factory"
+            - "@contao_manager.i18n.translator"
+            - "@contao_manager.self_update.updater"

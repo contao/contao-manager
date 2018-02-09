@@ -2,6 +2,7 @@
 
 namespace Contao\ManagerApi\Task;
 
+use Contao\ManagerApi\I18n\Translator;
 use Symfony\Component\Process\Process;
 use Terminal42\BackgroundProcess\ProcessController;
 
@@ -39,6 +40,33 @@ abstract class AbstractTask implements TaskInterface
         }
 
         return $output;
+    }
+
+    /**
+     * @param TaskStatus $status
+     * @param Translator $translator
+     */
+    protected function setStatusLabels(TaskStatus $status, Translator $translator)
+    {
+        switch ($status->getStatus()) {
+            case TaskStatus::STATUS_ACTIVE:
+                break;
+
+            case TaskStatus::STATUS_COMPLETE:
+                $status->setSummary('Console task complete!');
+                $status->setDetail('The background task was completed successfully. Check the console protocol for the details.');
+                break;
+
+            case TaskStatus::STATUS_STOPPED:
+                $status->setSummary('Console task terminated!');
+                $status->setDetail('The background task was cancelled. Please check the console protocol.');
+                break;
+
+            case TaskStatus::STATUS_ERROR:
+                $status->setSummary('Console task terminated!');
+                $status->setDetail('The background task has stopped unexpectedly. Please check the console protocol.');
+                break;
+        }
     }
 
     /**
