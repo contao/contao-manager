@@ -1,16 +1,17 @@
 <template>
     <div class="popup-overlay">
         <div ref="popup" :class="popupClass">
-            <h1 :class="{ 'task-popup__headline': true, 'task-popup__headline--success': (taskStatus === 'complete'), 'task-popup__headline--error': (taskStatus === 'error' || taskStatus === 'failed') }">{{ taskTitle }}</h1>
+            <h1 :class="{ 'task-popup__headline': true, 'task-popup__headline--complete': (taskStatus === 'complete'), 'task-popup__headline--error': (taskStatus === 'error' || taskStatus === 'failed') }">{{ taskTitle }}</h1>
 
-            <div class="task-popup__status task-popup__status--success" v-if="taskStatus === 'complete'"><i class="icono-checkCircle"></i></div>
+            <div class="task-popup__status task-popup__status--complete" v-if="taskStatus === 'complete'"><i class="icono-checkCircle"></i></div>
             <div class="task-popup__status task-popup__status--error" v-else-if="taskStatus === 'error' || taskStatus === 'failed'"><i class="icono-crossCircle"></i></div>
-            <div class="task-popup__status task-popup__status--loading" v-else>
-                <div class="bounce1"></div>
-                <div class="bounce2"></div>
-                <div class="bounce3"></div>
-                <div class="bounce4"></div>
-                <div class="bounce5"></div>
+            <div :class="statusClass" v-else>
+                <div class="task-popup__progress task-popup__progress--20"></div>
+                <div class="task-popup__progress task-popup__progress--40"></div>
+                <div class="task-popup__progress task-popup__progress--60"></div>
+                <div class="task-popup__progress task-popup__progress--80"></div>
+                <div class="task-popup__progress task-popup__progress--100"></div>
+                <p class="task-popup__progress-text" v-if="currentTask && currentTask.progress">{{ currentTask.progress }}%</p>
             </div>
 
 <!--
@@ -49,10 +50,10 @@
             </div>
 -->
             <div class="task-popup__summary">
-                <h2 :class="progressClass">{{ taskSummary }}</h2>
-                <p :class="progressClass">{{ taskDetail }}</p>
+                <h2 :class="textClass">{{ taskSummary }}</h2>
+                <p :class="textClass">{{ taskDetail }}</p>
 
-                <button class="widget-button" @click="cancelTask" v-if="isActive" :disabled="!currentTask">{{ 'ui.taskpopup.buttonCancel' | translate }}</button>
+                <button class="widget-button" @click="cancelTask" v-if="isActive" :disabled="!currentTask || !currentTask.stoppable">{{ 'ui.taskpopup.buttonCancel' | translate }}</button>
                 <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-else-if="requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
                 <button class="widget-button" @click="hidePopup" v-else>{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
             </div>
@@ -90,10 +91,23 @@
                 };
             },
 
-            progressClass() {
+            textClass() {
                 return {
-                    'task-popup__progress': true,
-                    'task-popup__progress--nowrap': this.taskStatus === 'active',
+                    'task-popup__text': true,
+                    'task-popup__text--nowrap': this.taskStatus === 'active',
+                };
+            },
+
+            statusClass() {
+                return {
+                    'task-popup__status': true,
+                    'task-popup__status--active': true,
+                    'task-popup__status--infinite': !this.currentTask || !this.currentTask.progress,
+                    'task-popup__status--20': this.currentTask && this.currentTask.progress >= 20,
+                    'task-popup__status--40': this.currentTask && this.currentTask.progress >= 40,
+                    'task-popup__status--60': this.currentTask && this.currentTask.progress >= 60,
+                    'task-popup__status--80': this.currentTask && this.currentTask.progress >= 80,
+                    'task-popup__status--100': this.currentTask && this.currentTask.progress === 100,
                 };
             },
 
@@ -235,7 +249,7 @@
             line-height: 40px;
             border-radius: 2px 2px 0 0;
 
-            &--success {
+            &--complete {
                 background-color: $green-button;
             }
 
@@ -244,7 +258,7 @@
             }
         }
 
-        &__progress,
+        &__text,
         &__toggle {
             margin: 0 15px;
 
@@ -283,6 +297,104 @@
             background: #181818;
         }
 
+        &__status {
+            &--complete,
+            &--error {
+                margin: 27px auto 20px;
+                transform: scale(1.5);
+            }
+
+            &--complete i {
+                color: $green-button;
+            }
+
+            &--error i {
+                color: $red-button;
+            }
+
+            &--active {
+                overflow: hidden;
+                width: 165px;
+                margin: 45px auto 20px;
+                padding-left: 40px;
+                text-align: center;
+
+                > div {
+                    opacity: .1;
+                }
+            }
+
+            &--infinite {
+                .task-popup__progress {
+                    animation: loading 1.4s infinite ease-in-out both;
+
+                    &--20 {
+                        animation-delay: -0.64s;
+                    }
+
+                    &--40 {
+                        animation-delay: -0.48s;
+                    }
+
+                    &--60 {
+                        animation-delay: -0.32s;
+                    }
+
+                    &--80 {
+                        animation-delay: -0.16s;
+                    }
+                }
+
+                @keyframes loading {
+                    0%, 90%, 100% { opacity: 0; }
+                    20% { opacity: 1; }
+                }
+            }
+
+            &--20 {
+                .task-popup__progress--20 {
+                    opacity: 1;
+                }
+            }
+
+            &--40 {
+                .task-popup__progress--40 {
+                    opacity: 1;
+                }
+            }
+
+            &--60 {
+                .task-popup__progress--60 {
+                    opacity: 1;
+                }
+            }
+
+            &--80 {
+                .task-popup__progress--80 {
+                    opacity: 1;
+                }
+            }
+
+            &--100 {
+                .task-popup__progress--100 {
+                    opacity: 1;
+                }
+            }
+        }
+
+        &__progress {
+            float: left;
+            width: 16px;
+            height: 16px;
+            margin-right: 1px;
+            background-color: $contao-color;
+        }
+
+        &__progress-text {
+            float: left;
+            width: 40px;
+        }
+
         @include screen(960) {
             position: fixed;
             top: 50%;
@@ -296,13 +408,12 @@
             &.fixed {
             }
 
-            &--console/*,
-            &.status-error*/ {
+            &--console {
                 height:630px;
                 margin-top:-325px;
             }
 
-            &__progress,
+            &__text,
             &__toggle {
                 margin: 0 70px;
             }
@@ -346,59 +457,6 @@
             &.status-error code*/ {
                 display: block;
                 height: 300px;
-            }
-        }
-
-        &__status {
-            &--success,
-            &--error {
-                margin: 27px auto 20px;
-                transform: scale(1.5);
-            }
-
-            &--success i {
-                color: $green-button;
-            }
-
-            &--error i {
-                color: $red-button;
-            }
-
-            &--loading {
-                overflow: hidden;
-                width: 85px;
-                margin: 45px auto 20px;
-                text-align: center;
-
-                > div {
-                    float: left;
-                    width: 16px;
-                    height: 16px;
-                    margin-right: 1px;
-                    background-color: $contao-color;
-                    animation: loading 1.4s infinite ease-in-out both;
-                }
-
-                .bounce1 {
-                    animation-delay: -0.64s;
-                }
-
-                .bounce2 {
-                    animation-delay: -0.48s;
-                }
-
-                .bounce3 {
-                    animation-delay: -0.32s;
-                }
-
-                .bounce4 {
-                    animation-delay: -0.16s;
-                }
-
-                @keyframes loading {
-                    0%, 90%, 100% { opacity: 0; }
-                    20% { opacity: 1; }
-                }
             }
         }
     }
