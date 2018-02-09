@@ -65,7 +65,7 @@ class TaskController
         }
 
         $name = $request->request->get('name');
-        $config = $request->request->get('config');
+        $config = $request->request->get('config', []);
 
         if (empty($name) || !is_array($config)) {
             return call_user_func($this->legacy, $request);
@@ -97,13 +97,18 @@ class TaskController
             return new Response(null, Response::HTTP_NO_CONTENT);
         }
 
+        if (!$status->getDetail() && $status->isComplete()) {
+            $status->setDetail('The background task was completed successfully. Check the console protocol for the details.');
+        }
+
         return new JsonResponse(
             [
                 'title' => $status->getTitle(),
                 'summary' => $status->getSummary(),
-                'details' => $status->getDetail(),
+                'detail' => $status->getDetail(),
                 'console' => $status->getConsole(),
                 'stoppable' => $status->isStoppable(),
+                'audit' => $status->hasAudit(),
                 'status' => $status->getStatus(),
             ],
             $code

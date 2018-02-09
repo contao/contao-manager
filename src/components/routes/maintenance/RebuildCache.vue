@@ -32,8 +32,10 @@
         methods: {
             execute() {
                 const task = {
-                    type: 'rebuild-cache',
-                    environment: this.env,
+                    name: 'contao/rebuild-cache',
+                    config: {
+                        environment: this.env,
+                    },
                 };
 
                 this.$store.dispatch('tasks/execute', task);

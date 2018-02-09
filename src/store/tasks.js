@@ -15,11 +15,10 @@ const pollTask = ({ commit }, resolve, reject) => {
         (response) => {
             const task = response.body;
 
-            commit('setProgress', task);
+            commit('setCurrent', task);
 
             switch (task.status) {
                 case 'ready':
-                default:
                     pending += 1;
 
                     if (pending > 5) {
@@ -39,18 +38,19 @@ const pollTask = ({ commit }, resolve, reject) => {
                     });
                     break;
 
-                case 'RUNNING': // @deprecated: BC for self-update with version < 1.0.0-alpha6
-                case 'started':
+                default:
+                case 'active':
                     commit('setStatus', 'running');
                     setTimeout(fetch, 1000);
                     break;
 
-                case 'FINISHED': // @deprecated: BC for self-update with version < 1.0.0-alpha6
-                case 'terminated':
+                case 'terminated': // BC
+                case 'complete':
                     commit('setStatus', 'success');
                     resolve(task);
                     break;
 
+                case 'stopped':
                 case 'error':
                     commit('setStatus', 'error');
                     reject(task);
@@ -59,7 +59,7 @@ const pollTask = ({ commit }, resolve, reject) => {
         },
         () => {
             commit('setStatus', null);
-            commit('setProgress', null);
+            commit('setCurrent', null);
             reject();
         },
     );
@@ -74,11 +74,15 @@ export default {
         status: null,
         type: null,
         consoleOutput: '',
+        current: null,
     },
 
     mutations: {
         setStatus(state, status) {
             state.status = status;
+        },
+        setCurrent(state, task) {
+            state.current = task;
         },
         setProgress(state, progress) {
             if (progress === null) {
@@ -169,8 +173,12 @@ export default {
         },
 
         deleteCurrent(store) {
-            const deleteTask = () => store.commit('setStatus', null);
-            return Vue.http.delete('api/task').then(deleteTask, deleteTask);
+            return Vue.http.delete('api/task').then(
+                () => {
+                    store.commit('setStatus', null);
+                    store.commit('setCurrent', null);
+                },
+            );
         },
     },
 };

@@ -40,6 +40,11 @@ class TaskStatus
     private $stoppable = false;
 
     /**
+     * @var bool
+     */
+    private $audit = false;
+
+    /**
      * @var string
      */
     private $status = self::STATUS_ACTIVE;
@@ -47,11 +52,13 @@ class TaskStatus
     /**
      * Constructor.
      *
-     * @param $title
+     * @param string $title
+     * @param bool   $audit
      */
-    public function __construct($title)
+    public function __construct($title, $audit = false)
     {
         $this->title = $title;
+        $this->audit = $audit;
     }
 
     /**
@@ -170,6 +177,26 @@ class TaskStatus
     public function setStoppable($stoppable)
     {
         $this->stoppable = $stoppable;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAudit()
+    {
+        return $this->audit;
+    }
+
+    /**
+     * @param bool $audit
+     *
+     * @return TaskStatus
+     */
+    public function setAudit($audit)
+    {
+        $this->audit = $audit;
 
         return $this;
     }

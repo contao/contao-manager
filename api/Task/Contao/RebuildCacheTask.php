@@ -1,10 +1,13 @@
 <?php
 
-namespace Contao\ManagerApi\Task;
+namespace Contao\ManagerApi\Task\Contao;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
+use Contao\ManagerApi\Task\AbstractTask;
+use Contao\ManagerApi\Task\TaskConfig;
+use Contao\ManagerApi\Task\TaskStatus;
 use Symfony\Component\Filesystem\Filesystem;
 
 class RebuildCacheTask extends AbstractTask
@@ -72,16 +75,12 @@ class RebuildCacheTask extends AbstractTask
 
             if (!$pClear->isRunning() && !$pWarmup->isRunning()) {
                 $status->setStatus(TaskStatus::STATUS_STOPPED);
+            } else {
+                $status->setSummary('Stopping processes …');
 
-                return $status;
+                $pClear->stop();
+                $pWarmup->stop();
             }
-
-            $status->setSummary('Stopping processes …');
-
-            $pClear->stop();
-            $pWarmup->stop();
-
-            return $status;
 
         } elseif (!$pClear->isTerminated()) {
             $status->setSummary('Clearing application cache …');

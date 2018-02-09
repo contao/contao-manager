@@ -20,7 +20,7 @@
         methods: {
             execute() {
                 const task = {
-                    type: 'composer-install',
+                    name: 'composer/install',
                 };
 
                 this.$store.dispatch('tasks/execute', task);

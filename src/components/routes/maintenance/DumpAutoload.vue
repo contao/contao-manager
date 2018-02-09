@@ -20,7 +20,7 @@
         methods: {
             execute() {
                 const task = {
-                    type: 'dump-autoload',
+                    name: 'composer/dump-autoload',
                 };
 
                 this.$store.dispatch('tasks/execute', task);

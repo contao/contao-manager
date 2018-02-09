@@ -12,10 +12,24 @@ services:
         tags: ['container.service_locator']
         arguments:
             -
-                "rebuild-cache": "@contao_manager.task.rebuild_cache"
+                "contao/rebuild-cache": "@contao_manager.task.rebuild_cache"
+                "composer/install": "@contao_manager.task.composer_install"
+                "composer/dump-autoload": "@contao_manager.task.dump_autoload"
+
+    contao_manager.task.composer_install:
+        class: Contao\ManagerApi\Task\Composer\ComposerInstallTask
+        arguments:
+            - "@contao_manager.process.console_factory"
+            - "@contao_manager.i18n.translator"
+
+    contao_manager.task.dump_autoload:
+        class: Contao\ManagerApi\Task\Composer\DumpAutoloadTask
+        arguments:
+            - "@contao_manager.process.console_factory"
+            - "@contao_manager.i18n.translator"
 
     contao_manager.task.rebuild_cache:
-        class: Contao\ManagerApi\Task\RebuildCacheTask
+        class: Contao\ManagerApi\Task\Contao\RebuildCacheTask
         arguments:
             - "@kernel"
             - "@contao_manager.process.console_factory"

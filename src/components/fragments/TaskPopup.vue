@@ -1,9 +1,9 @@
 <template>
     <div class="popup-overlay">
         <div ref="popup" :class="popupClass">
-            <h1 :class="{ 'task-popup__headline': true, 'task-popup__headline--success': (taskStatus === 'success'), 'task-popup__headline--error': (taskStatus === 'error' || taskStatus === 'failed') }">{{ taskTitle }}</h1>
+            <h1 :class="{ 'task-popup__headline': true, 'task-popup__headline--success': (taskStatus === 'complete'), 'task-popup__headline--error': (taskStatus === 'error' || taskStatus === 'failed') }">{{ taskTitle }}</h1>
 
-            <div class="task-popup__status task-popup__status--success" v-if="taskStatus === 'success'"><i class="icono-checkCircle"></i></div>
+            <div class="task-popup__status task-popup__status--success" v-if="taskStatus === 'complete'"><i class="icono-checkCircle"></i></div>
             <div class="task-popup__status task-popup__status--error" v-else-if="taskStatus === 'error' || taskStatus === 'failed'"><i class="icono-crossCircle"></i></div>
             <div class="task-popup__status task-popup__status--loading" v-else>
                 <div class="bounce1"></div>
@@ -13,6 +13,7 @@
                 <div class="bounce5"></div>
             </div>
 
+<!--
             <div class="task-popup__summary" v-if="taskStatus === 'failed'">
                 <h2 class="task-popup__progress">{{ 'ui.taskpopup.failedHeadline' | translate }}</h2>
                 <p class="task-popup__progress" v-html="$t('ui.taskpopup.failedDescription')"></p>
@@ -26,41 +27,44 @@
 
                 <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonConfirm' | translate }}</span></button>
             </div>
-            <div class="task-popup__summary" v-else-if="taskStatus === 'success' && showInstall && taskType === 'install'">
+            <div class="task-popup__summary" v-else-if="taskStatus === 'complete' && showInstall && taskType === 'install'">
                 <h2 class="task-popup__progress">{{ 'ui.taskpopup.installHeadline' | translate }}</h2>
                 <p class="task-popup__progress">{{ 'ui.taskpopup.installDescription' | translate }}</p>
 
-                <a class="widget-button widget-button--primary" href="/contao/install" @click="hideInstall" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
+                <a class="widget-button widget-button&#45;&#45;primary" href="/contao/install" @click="hideInstall" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
                 <button class="widget-button" @click="hidePopup">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
             </div>
-            <div class="task-popup__summary" v-else-if="taskStatus === 'success' && showInstall && (taskType === 'upgrade' || taskType === 'require-package' || taskType === 'remove-package')">
+            <div class="task-popup__summary" v-else-if="taskStatus === 'complete' && showInstall && (taskType === 'upgrade' || taskType === 'require-package' || taskType === 'remove-package')">
                 <h2 class="task-popup__progress">{{ 'ui.taskpopup.packagesHeadline' | translate }}</h2>
                 <p class="task-popup__progress">{{ 'ui.taskpopup.packagesDescription' | translate }}</p>
 
-                <a class="widget-button widget-button--primary" href="/contao/install" @click="hideInstall" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
+                <a class="widget-button widget-button&#45;&#45;primary" href="/contao/install" @click="hideInstall" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
                 <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonConfirm' | translate }}</span></button>
             </div>
-            <div class="task-popup__summary" v-else-if="taskStatus === 'success'">
-                <h2 class="task-popup__progress">{{ 'ui.taskpopup.successHeadline' | translate }}</h2>
-                <p class="task-popup__progress">{{ 'ui.taskpopup.successDescription' | translate }}</p>
+            <div class="task-popup__summary" v-else-if="taskStatus === 'complete'">
+                <h2 class="task-popup__progress">{{ taskSummary }}</h2>
+                <p class="task-popup__progress">{{ taskDetail }}</p>
 
                 <button class="widget-button" @click="hidePopup">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
             </div>
-            <div class="task-popup__summary" v-else>
-                <h2 class="task-popup__progress task-popup__progress--nowrap">{{ taskLine1 }}</h2>
-                <p class="task-popup__progress task-popup__progress--nowrap">{{ progressText ? progressText : '&nbsp;' }}</p>
+-->
+            <div class="task-popup__summary">
+                <h2 :class="progressClass">{{ taskSummary }}</h2>
+                <p :class="progressClass">{{ taskDetail }}</p>
 
-                <button class="widget-button" @click="cancelTask">{{ 'ui.taskpopup.buttonCancel' | translate }}</button>
+                <button class="widget-button" @click="cancelTask" v-if="isActive" :disabled="!currentTask">{{ 'ui.taskpopup.buttonCancel' | translate }}</button>
+                <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-else-if="requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
+                <button class="widget-button" @click="hidePopup" v-else>{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
             </div>
 
-            <div v-if="taskStatus !== 'failed'">
+            <div v-if="hasConsole">
                 <a @click.prevent="toggleConsole" :class="'task-popup__toggle task-popup__toggle--' + (showConsole ? 'hide' : 'show')">
                     <i class="icono-caretRight"></i>
                     <span v-if="showConsole">{{ 'ui.taskpopup.consoleHide' | translate }}</span>
                     <span v-else>{{ 'ui.taskpopup.consoleShow' | translate }}</span>
                 </a>
 
-                <code ref="console" @scroll="scrolled" :class="'task-popup__output' + (this.showConsole ? ' task-popup__output--visible' : '')">{{ consoleOutput }}</code>
+                <code ref="console" @scroll="scrolled" :class="'task-popup__output' + (this.showConsole ? ' task-popup__output--visible' : '')">{{ taskConsole }}</code>
             </div>
         </div>
     </div>
@@ -74,9 +78,7 @@
             showConsole: false,
             scrollToBottom: true,
             swallowScroll: true,
-            showInstall: false,
-            progressTitle: null,
-            progressText: null,
+            audit: false,
         }),
 
         computed: {
@@ -88,41 +90,68 @@
                 };
             },
 
-            taskTitle() {
-                if (!this.taskType) {
-                    return this.$t('ui.taskpopup.taskLoading');
-                }
-
-                const titles = {
-                    install: this.$t('ui.taskpopup.taskInstall'),
-                    upgrade: this.$t('ui.taskpopup.taskUpdate'),
-                    'require-package': this.$t('ui.taskpopup.taskRequire'),
-                    'remove-package': this.$t('ui.taskpopup.taskRemove'),
-                    'rebuild-cache': this.$t('ui.taskpopup.taskCache'),
-                    'composer-install': this.$t('ui.taskpopup.taskComposerInstall'),
-                    'composer-cache': this.$t('ui.taskpopup.taskComposerCache'),
-                    'dump-autoload': this.$t('ui.taskpopup.taskAutoload'),
-                    'self-update': this.$t('ui.taskpopup.taskSelfUpdate'),
+            progressClass() {
+                return {
+                    'task-popup__progress': true,
+                    'task-popup__progress--nowrap': this.taskStatus === 'active',
                 };
-
-                return titles[this.taskType];
             },
 
-            taskLine1() {
-                if (this.progressTitle) {
-                    return this.progressTitle;
-                }
-
-                if (this.taskStatus !== 'running') {
+            taskTitle() {
+                if (!this.currentTask) {
                     return this.$t('ui.taskpopup.taskLoading');
                 }
 
-                return this.$t('ui.taskpopup.taskRunning');
+                return this.currentTask.title;
+            },
+
+            taskSummary() {
+                if (!this.currentTask) {
+                    return this.$t('ui.taskpopup.taskLoading');
+                }
+
+                return this.currentTask.summary;
+            },
+
+            taskDetail() {
+                if (!this.currentTask) {
+                    return '';
+                }
+
+                return this.currentTask.detail;
+            },
+
+            requiresAudit() {
+                return this.audit && this.currentTask && this.currentTask.audit;
+            },
+
+            hasConsole() {
+                return this.currentTask && this.currentTask.console;
+            },
+
+            taskConsole() {
+                if (!this.currentTask) {
+                    return '';
+                }
+
+                return this.currentTask.console;
+            },
+
+            taskStatus() {
+                if (!this.currentTask) {
+                    return null;
+                }
+
+                return this.currentTask.status;
+            },
+
+            isActive() {
+                return !this.currentTask || this.taskStatus === 'active';
             },
 
             ...mapState({
+                currentTask: state => state.tasks.current,
                 taskType: state => state.tasks.type,
-                taskStatus: state => state.tasks.status,
                 consoleOutput: state => state.tasks.consoleOutput,
             }),
         },
@@ -138,8 +167,8 @@
                 }
             },
 
-            hideInstall() {
-                this.showInstall = false;
+            completeAudit() {
+                this.audit = false;
             },
 
             hidePopup() {
@@ -171,57 +200,10 @@
             },
         },
 
-        watch: {
-            consoleOutput(output) {
-                if (!output) {
-                    return;
-                }
-
-                this.progressTitle = null;
-
-                const lines = output.split('\n').reverse();
-                let textUpdated = false;
-
-                for (let i = 0; i < lines.length; i += 1) {
-                    if (lines[i].replace(/[ -]+/, '') !== '') {
-                        if (!this.progressTitle && [' ', '-', '#', '['].indexOf(lines[i].substr(0, 1)) === -1) {
-                            this.progressTitle = lines[i].replace(/(^[ ->/]+|[ -]$)/, '');
-                            break;
-                        } else if (!textUpdated) {
-                            this.progressText = lines[i].replace(/(^[ ->/]+|[ -]$)/, '');
-                            textUpdated = true;
-                        }
-                    }
-                }
-
-                if (!textUpdated) {
-                    if (this.progressText === null) {
-                        this.progressText = this.progressTitle;
-                        this.progressTitle = output.split('\n')[0];
-
-                        if (this.progressTitle === this.progressText) {
-                            this.progressText = '';
-                        }
-                    } else {
-                        this.progressText = '';
-                    }
-                }
-
-                if (this.scrollToBottom) {
-                    this.$nextTick(
-                        () => {
-                            this.swallowScroll = true;
-                            this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
-                        },
-                    );
-                }
-            },
-        },
-
         activated() {
             this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
             this.scrollToBottom = true;
-            this.showInstall = true;
+            this.audit = true;
         },
 
         deactivated() {
