@@ -91,9 +91,9 @@ class Updater
 
         if (null !== $lastUpdate
             && null !== $latestVersion
-            && false !== ($lastUpdate = new \DateTime($lastUpdate))
+            && false !== ($lastUpdate = strtotime($lastUpdate))
             && $lastUpdate <= time()
-            && $lastUpdate > new \DateTime('-1 hour')
+            && $lastUpdate > strtotime('-1 hour')
         ) {
             return $latestVersion;
         }
