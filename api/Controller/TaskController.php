@@ -17,28 +17,17 @@ class TaskController
     private $taskManager;
 
     /**
-     * @var LegacyTaskController
-     */
-    private $legacy;
-
-    /**
      * Constructor.
      *
      * @param TaskManager          $taskManager
-     * @param LegacyTaskController $legacy
      */
-    public function __construct(TaskManager $taskManager, LegacyTaskController $legacy)
+    public function __construct(TaskManager $taskManager)
     {
         $this->taskManager = $taskManager;
-        $this->legacy = $legacy;
     }
 
     public function __invoke(Request $request)
     {
-        if ($request->getMethod() !== 'PUT' && !$this->taskManager->hasTask()) {
-            return call_user_func($this->legacy, $request);
-        }
-
         switch ($request->getMethod()) {
             case 'GET':
                 return $this->getTask();
@@ -68,9 +57,7 @@ class TaskController
         $config = $request->request->get('config', []);
 
         if (empty($name) || !is_array($config)) {
-            return call_user_func($this->legacy, $request);
-
-            // throw new BadRequestHttpException('Invalid task data');
+            throw new BadRequestHttpException('Invalid task data');
         }
 
         return $this->getResponse($this->taskManager->startTask($name, $config));
@@ -97,8 +84,16 @@ class TaskController
             return new Response(null, Response::HTTP_NO_CONTENT);
         }
 
-        if (!$status->getDetail() && $status->isComplete()) {
-            $status->setDetail('The background task was completed successfully. Check the console protocol for the details.');
+        if (!$status->getDetail()) {
+            switch ($status->getStatus()) {
+                case TaskStatus::STATUS_COMPLETE:
+                    $status->setDetail('The background task was completed successfully. Check the console protocol for the details.');
+                    break;
+
+                case TaskStatus::STATUS_ERROR:
+                    $status->setDetail('The background task has stopped unexpectedly. Please check the console protocol.');
+                    break;
+            }
         }
 
         return new JsonResponse(
@@ -110,6 +105,7 @@ class TaskController
                 'stoppable' => $status->isStoppable(),
                 'audit' => $status->hasAudit(),
                 'status' => $status->getStatus(),
+                'progress' => $status->getProgress(),
             ],
             $code
         );
