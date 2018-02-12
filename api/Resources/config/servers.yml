@@ -35,8 +35,8 @@ configs:
         last_update: 2018-01-23
         issues: []
         php:
-            /opt/php{major}/bin/php: []
             /usr/bin/php{major}{minor}/php{major}: []
+            /opt/php{major}/bin/php: []
 
     1und1:
         name: 1&1 Internet SE
@@ -246,7 +246,7 @@ configs:
         last_update: 2017-12-01
         issues: []
         php:
-            /opt/php-{major}.{minor}/bin/php: []
+            /opt/php-{major}.{minor}.{release}/bin/php: []
 
     tobiasbauer:
         name: Tobias Bauer
@@ -279,6 +279,7 @@ configs:
         last_update: 2017-12-21
         issues: []
         php:
+            /usr/bin/php{major}.{minor}: []
             /usr/bin/php{major}{minor}: []
             /opt/php-{major}.{minor}/bin/php: []
             /usr/bin/php: []
