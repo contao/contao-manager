@@ -4,6 +4,8 @@ fa:
       title: 'تنظیم PHP "allow_url_fopen" در سرور فعال نیست.'
     openssl:
       title: 'افزونه‌ی PHP OpenSSL موجود نیست.'
+    process:
+      title: 'تابع PHP «proc_open» و/یا «proc_close» در سرور وجود ندارد.'
     intl:
       title: 'افزونه PHP Intl موجود نیست.'
     web_root:

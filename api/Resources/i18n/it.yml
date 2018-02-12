@@ -4,6 +4,8 @@ it:
       title: 'L''impostazione PHP "allow_url_fopen" non è abilitata sul server.'
     openssl:
       title: 'L''estensione PHP OpenSSL non è disponibile.'
+    process:
+      title: 'La funzione PHP "proc_open" e/o "proc_close" non sono disponibili sul server.'
     intl:
       title: 'L''estensione PHP Intl non è disponibile.'
     web_root:

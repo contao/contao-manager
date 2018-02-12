@@ -136,7 +136,7 @@
     "ui.maintenance.rebuildCache.description": "Rebuilding the application cache is required after modifying any of the configuration files.",
     "ui.maintenance.rebuildCache.prod": "Regular Environment (prod)",
     "ui.maintenance.rebuildCache.dev": "Debug Environment (dev)",
-    "ui.maintenance.rebuildCache.button": "Rebuild Cache",
+    "ui.maintenance.rebuildCache.button": "Cache opnieuw opbouwen",
     "ui.maintenance.dumpAutoload.title": "Composer Class Loader",
     "ui.maintenance.dumpAutoload.description": "The Composer autoloader is responsible for PHP class loading. The autoloader must be dumped it after adding custom namespaces to the root composer.json.",
     "ui.maintenance.dumpAutoload.button": "Dump Autoloader",

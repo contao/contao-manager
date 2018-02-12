@@ -11,6 +11,8 @@ fr:
     intl:
       title: 'L''extension PHP Intl n''est pas disponible.'
       detail: 'Contao 4 nécessite l''extension PHP Intl à des fins d''internationalisation.'
+    session:
+      title: 'La session PHP n''a pas pu être démarrée.'
     web_root:
       title: 'Le fichier Phar doit être situé dans le dossier /web.'
     windows:
@@ -27,6 +29,9 @@ fr:
     contao_unknown:
       title: 'Statut d''installation inconnu'
       detail: "Certains fichiers ont été trouvés sur votre serveur mais aucune version connue de Contao n'a pu être détectée.\nVous devez réparer manuellement votre application ou supprimer les fichiers et dossiers suivants pour installer Contao :\n\n{files}"
+    contao_version:
+      title: 'La version de Contao n''a pas pu être déterminée'
+      detail: "La console a renvoyé un contenu inattendu lorsqu'on lui a demandé la version de Contao. Veuillez vérifier les données de sortie pour plus d'informations :\n\n{output}"
   config:
     php_cli:
       not_found: 'Ce chemin ne contient pas de binaire PHP valide.'
