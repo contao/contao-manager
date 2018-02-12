@@ -114,6 +114,7 @@ class ContaoController extends Controller
                 '.DS_Store',
                 '.ftpquota',
                 '.htaccess',
+                'user.ini',
             ]
         );
 
