@@ -79,7 +79,7 @@
             install() {
                 this.processing = true;
 
-                this.$store.dispatch('install', this.version).then(() => {
+                this.$store.dispatch('contao/install', this.version).then(() => {
                     window.location.reload();
                 });
             },

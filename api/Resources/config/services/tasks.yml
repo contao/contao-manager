@@ -23,6 +23,11 @@ services:
 
     contao_manager.task.contao_install:
         class: Contao\ManagerApi\Task\Contao\ContaoInstallTask
+        arguments:
+            - "@kernel"
+            - "@contao_manager.process.console_factory"
+            - "@contao_manager.i18n.translator"
+            - "@filesystem"
 
     contao_manager.task.composer_install:
         class: Contao\ManagerApi\Task\Composer\ComposerInstallTask

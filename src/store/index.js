@@ -47,26 +47,6 @@ const store = new Vuex.Store({
                 status: statusCode || '',
             });
         },
-
-        install: ({ dispatch }, version) => {
-            const task = {
-                name: 'contao/install',
-                config: {
-                    version,
-                },
-            };
-
-            return Vue.http.patch(
-                'api/config/composer',
-                {
-                    'preferred-install': 'dist',
-                    'store-auths': false,
-                    'optimize-autoloader': true,
-                    'sort-packages': true,
-                    'discard-changes': true,
-                },
-            ).then(() => dispatch('tasks/execute', task, { root: true }));
-        },
     },
 });
 

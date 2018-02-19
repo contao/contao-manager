@@ -1,10 +1,10 @@
 <template>
     <div class="popup-overlay">
         <div ref="popup" :class="popupClass">
-            <h1 :class="{ 'task-popup__headline': true, 'task-popup__headline--complete': (taskStatus === 'complete'), 'task-popup__headline--error': (taskStatus === 'error' || taskStatus === 'failed') }">{{ taskTitle }}</h1>
+            <h1 :class="{ 'task-popup__headline': true, 'task-popup__headline--complete': (taskStatus === 'complete'), 'task-popup__headline--error': (taskStatus === 'error' || taskStatus === 'stopped') }">{{ taskTitle }}</h1>
 
             <div class="task-popup__status task-popup__status--complete" v-if="taskStatus === 'complete'"><i class="icono-checkCircle"></i></div>
-            <div class="task-popup__status task-popup__status--error" v-else-if="taskStatus === 'error' || taskStatus === 'failed'"><i class="icono-crossCircle"></i></div>
+            <div class="task-popup__status task-popup__status--error" v-else-if="taskStatus === 'error' || taskStatus === 'stopped'"><i class="icono-crossCircle"></i></div>
             <div :class="statusClass" v-else>
                 <div class="task-popup__progress task-popup__progress--20"></div>
                 <div class="task-popup__progress task-popup__progress--40"></div>
@@ -14,41 +14,6 @@
                 <p class="task-popup__progress-text" v-if="currentTask && currentTask.progress">{{ currentTask.progress }}%</p>
             </div>
 
-<!--
-            <div class="task-popup__summary" v-if="taskStatus === 'failed'">
-                <h2 class="task-popup__progress">{{ 'ui.taskpopup.failedHeadline' | translate }}</h2>
-                <p class="task-popup__progress" v-html="$t('ui.taskpopup.failedDescription')"></p>
-                <p class="task-popup__progress"><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ 'ui.taskpopup.reportProblem' | translate }}</a></p>
-
-                <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonClose' | translate }}</span></button>
-            </div>
-            <div class="task-popup__summary" v-else-if="taskStatus === 'error'">
-                <h2 class="task-popup__progress">{{ 'ui.taskpopup.errorHeadline' | translate }}</h2>
-                <p class="task-popup__progress" v-html="$t('ui.taskpopup.errorDescription')"></p>
-
-                <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonConfirm' | translate }}</span></button>
-            </div>
-            <div class="task-popup__summary" v-else-if="taskStatus === 'complete' && showInstall && taskType === 'install'">
-                <h2 class="task-popup__progress">{{ 'ui.taskpopup.installHeadline' | translate }}</h2>
-                <p class="task-popup__progress">{{ 'ui.taskpopup.installDescription' | translate }}</p>
-
-                <a class="widget-button widget-button&#45;&#45;primary" href="/contao/install" @click="hideInstall" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
-                <button class="widget-button" @click="hidePopup">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
-            </div>
-            <div class="task-popup__summary" v-else-if="taskStatus === 'complete' && showInstall && (taskType === 'upgrade' || taskType === 'require-package' || taskType === 'remove-package')">
-                <h2 class="task-popup__progress">{{ 'ui.taskpopup.packagesHeadline' | translate }}</h2>
-                <p class="task-popup__progress">{{ 'ui.taskpopup.packagesDescription' | translate }}</p>
-
-                <a class="widget-button widget-button&#45;&#45;primary" href="/contao/install" @click="hideInstall" target="_blank">{{ 'ui.taskpopup.buttonInstallTool' | translate }}</a>
-                <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonConfirm' | translate }}</span></button>
-            </div>
-            <div class="task-popup__summary" v-else-if="taskStatus === 'complete'">
-                <h2 class="task-popup__progress">{{ taskSummary }}</h2>
-                <p class="task-popup__progress">{{ taskDetail }}</p>
-
-                <button class="widget-button" @click="hidePopup">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
-            </div>
--->
             <div class="task-popup__summary">
                 <h2 :class="textClass">{{ taskSummary }}</h2>
                 <p :class="textClass">{{ taskDetail }}</p>
@@ -136,7 +101,7 @@
             },
 
             requiresAudit() {
-                return this.audit && this.currentTask && this.currentTask.audit;
+                return this.audit && this.currentTask && this.currentTask.status === 'complete' && this.currentTask.audit;
             },
 
             hasConsole() {
