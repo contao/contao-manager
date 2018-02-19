@@ -67,12 +67,6 @@
                 return {
                     'task-popup__status': true,
                     'task-popup__status--active': true,
-                    'task-popup__status--infinite': !this.currentTask || !this.currentTask.progress,
-                    'task-popup__status--20': this.currentTask && this.currentTask.progress >= 20,
-                    'task-popup__status--40': this.currentTask && this.currentTask.progress >= 40,
-                    'task-popup__status--60': this.currentTask && this.currentTask.progress >= 60,
-                    'task-popup__status--80': this.currentTask && this.currentTask.progress >= 80,
-                    'task-popup__status--100': this.currentTask && this.currentTask.progress === 100,
                 };
             },
 
@@ -288,63 +282,6 @@
                     opacity: .1;
                 }
             }
-
-            &--infinite {
-                .task-popup__progress {
-                    animation: loading 1.4s infinite ease-in-out both;
-
-                    &--20 {
-                        animation-delay: -0.64s;
-                    }
-
-                    &--40 {
-                        animation-delay: -0.48s;
-                    }
-
-                    &--60 {
-                        animation-delay: -0.32s;
-                    }
-
-                    &--80 {
-                        animation-delay: -0.16s;
-                    }
-                }
-
-                @keyframes loading {
-                    0%, 90%, 100% { opacity: 0; }
-                    20% { opacity: 1; }
-                }
-            }
-
-            &--20 {
-                .task-popup__progress--20 {
-                    opacity: 1;
-                }
-            }
-
-            &--40 {
-                .task-popup__progress--40 {
-                    opacity: 1;
-                }
-            }
-
-            &--60 {
-                .task-popup__progress--60 {
-                    opacity: 1;
-                }
-            }
-
-            &--80 {
-                .task-popup__progress--80 {
-                    opacity: 1;
-                }
-            }
-
-            &--100 {
-                .task-popup__progress--100 {
-                    opacity: 1;
-                }
-            }
         }
 
         &__progress {
@@ -353,6 +290,28 @@
             height: 16px;
             margin-right: 1px;
             background-color: $contao-color;
+            animation: loading 1.4s infinite ease-in-out both;
+
+            &--20 {
+                animation-delay: -0.64s;
+            }
+
+            &--40 {
+                animation-delay: -0.48s;
+            }
+
+            &--60 {
+                animation-delay: -0.32s;
+            }
+
+            &--80 {
+                animation-delay: -0.16s;
+            }
+
+            @keyframes loading {
+                0%, 90%, 100% { opacity: 0; }
+                20% { opacity: 1; }
+            }
         }
 
         &__progress-text {

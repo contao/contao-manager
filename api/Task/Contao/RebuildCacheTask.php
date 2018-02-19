@@ -67,7 +67,6 @@ class RebuildCacheTask extends AbstractTask
 
             $status->setSummary('Deleting cache directory …');
             $status->setDetail($cacheDir);
-            $status->setProgress(20);
 
             $config->setStatus('running');
 
@@ -86,11 +85,9 @@ class RebuildCacheTask extends AbstractTask
             $status->setSummary('Clearing application cache …');
             $status->setDetail($pClear->getCommandLine());
             $status->setConsole($pClear->getOutput());
-            $status->setProgress(40);
 
             if (!$pClear->isStarted()) {
                 $pClear->start();
-                $status->setProgress(20);
             }
 
         } elseif ($pClear->isSuccessful() && !$pWarmup->isTerminated()) {
@@ -98,11 +95,9 @@ class RebuildCacheTask extends AbstractTask
             $status->setSummary('Warming application cache …');
             $status->setDetail($pWarmup->getCommandLine());
             $status->setConsole($pClear->getOutput() . $pWarmup->getOutput());
-            $status->setProgress(80);
 
             if (!$pWarmup->isStarted()) {
                 $pWarmup->start();
-                $status->setProgress(60);
             }
 
         } elseif (!$pClear->isSuccessful()) {
@@ -122,7 +117,6 @@ class RebuildCacheTask extends AbstractTask
         } else {
             $status->setSummary('Cache cleared successfully');
             $status->setConsole($pClear->getOutput() . $pWarmup->getOutput());
-            $status->setProgress(100);
             $status->setStatus(TaskStatus::STATUS_COMPLETE);
         }
 

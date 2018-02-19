@@ -30,11 +30,6 @@ class TaskStatus
     private $console;
 
     /**
-     * @var int|null
-     */
-    private $progress;
-
-    /**
      * @var bool
      */
     private $stoppable = false;
@@ -137,26 +132,6 @@ class TaskStatus
     public function setConsole($console)
     {
         $this->console = $console;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProgress()
-    {
-        return $this->progress;
-    }
-
-    /**
-     * @param int|null $progress
-     *
-     * @return TaskStatus
-     */
-    public function setProgress($progress)
-    {
-        $this->progress = $progress;
 
         return $this;
     }

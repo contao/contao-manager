@@ -105,7 +105,6 @@ class TaskController
                 'stoppable' => $status->isStoppable(),
                 'audit' => $status->hasAudit(),
                 'status' => $status->getStatus(),
-                'progress' => $status->getProgress(),
             ],
             $code
         );
