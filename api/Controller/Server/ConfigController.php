@@ -76,6 +76,12 @@ class ConfigController extends Controller
             } else {
                 $this->config->set('php_cli', $phpCli);
             }
+
+            if ($request->request->get('cloud', true)) {
+                $this->config->remove('disable_cloud');
+            } else {
+                $this->config->set('disable_cloud', true);
+            }
         }
 
         return $this->getTestResult();
@@ -108,6 +114,7 @@ class ConfigController extends Controller
                 'server' => (string) $server,
                 'php_cli' => (string) $cli,
                 'detected' => $detected,
+                'cloud' => !$this->config->get('disable_cloud', false),
                 'configs' => $this->serverInfo->getConfigs(),
             ]
         );

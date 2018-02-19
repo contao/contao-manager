@@ -7,7 +7,7 @@
             :name="name"
             :disabled="disabled"
             :checked="value"
-            @input="toggle($event.target.checked)"
+            @change="toggle($event.target.checked)"
         >
         <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
     </div>
@@ -32,7 +32,7 @@
         },
         methods: {
             toggle(value) {
-                this.$emit('checked', value);
+                this.$emit('input', value);
             },
         },
     };

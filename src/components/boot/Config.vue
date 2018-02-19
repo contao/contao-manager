@@ -22,6 +22,12 @@
             </fieldset>
 
             <fieldset class="config-check__fields">
+                <legend class="config-check__fieldtitle">{{ 'ui.server.config.cloudTitle' | translate }}</legend>
+                <p class="config-check__fielddesc">{{ 'ui.server.config.cloudText' | translate }}</p>
+                <checkbox name="cloud" :label="$t('ui.server.config.cloud')" :disabled="processing" v-model="cloud"/>
+            </fieldset>
+
+            <fieldset class="config-check__fields">
                 <button class="widget-button widget-button--primary" @click="save" :disabled="!inputValid || processing">
                     <span v-if="!processing" class="widget-button--save">{{ 'ui.server.config.save' | translate }}</span>
                     <loader v-else/>
@@ -42,10 +48,11 @@
     import BoxedLayout from '../layouts/Boxed';
     import TextField from '../widgets/TextField';
     import SelectMenu from '../widgets/SelectMenu';
+    import Checkbox from '../widgets/Checkbox';
     import Loader from '../fragments/Loader';
 
     export default {
-        components: { BootCheck, BoxedLayout, TextField, SelectMenu, Loader },
+        components: { BootCheck, BoxedLayout, TextField, SelectMenu, Checkbox, Loader },
 
         props: {
             current: Boolean,
@@ -65,6 +72,7 @@
 
             server: '',
             php_cli: '',
+            cloud: true,
         }),
 
         computed: {
@@ -107,6 +115,7 @@
 
                 const config = {
                     server: this.server,
+                    cloud: this.cloud,
                 };
 
                 if (this.server === 'custom') {
@@ -141,6 +150,7 @@
                 this.server = result.server;
                 this.php_cli = result.php_cli;
                 this.detected = result.detected;
+                this.cloud = result.cloud;
 
                 if (!result.server || result.detected) {
                     this.bootState = 'error';
