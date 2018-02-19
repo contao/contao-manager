@@ -37,7 +37,7 @@ class ComposerRemoveTask extends AbstractProcessTask
 
     protected function getInitialStatus(TaskConfig $config)
     {
-        return (new TaskStatus($this->translator->trans('task.composer_remove.title')))
+        return (new TaskStatus($this->translator->trans('task.composer_remove.title'), true))
             ->setSummary('Removing Composer dependencies …')
             ->setAudit(true);
     }

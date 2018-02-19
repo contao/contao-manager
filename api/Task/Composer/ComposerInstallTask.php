@@ -36,7 +36,7 @@ class ComposerInstallTask extends AbstractProcessTask
 
     protected function getInitialStatus(TaskConfig $config)
     {
-        return (new TaskStatus($this->translator->trans('task.composer_install.title')))
+        return (new TaskStatus($this->translator->trans('task.composer_install.title'), true))
             ->setSummary('Installing Composer dependencies …')
             ->setAudit(true);
     }
