@@ -28,7 +28,7 @@ const pollTask = ({ commit }, resolve, reject) => {
                         return;
                     }
 
-                    Vue.http.put('api/task/status', { status: 'started' }, {
+                    Vue.http.patch('api/task', { status: 'started' }, {
                         before: (request) => {
                             setTimeout(() => {
                                 request.abort();

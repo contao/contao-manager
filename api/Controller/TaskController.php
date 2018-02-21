@@ -174,11 +174,6 @@ class TaskController extends Controller
 
         $status = $request->request->get('status');
 
-        // @deprecated: BC for self-update with version < 1.0.0-alpha6
-        if ('RUNNING' === $status) {
-            $status = Process::STATUS_STARTED;
-        }
-
         switch ($status) {
             case Process::STATUS_STARTED:
                 if (!$process->isRunning()) {
