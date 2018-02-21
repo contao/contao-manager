@@ -3,7 +3,7 @@
 
         <transition name="package__hint">
             <div class="package__hint" v-if="hint">
-                <a href="#" class="error" @click.prevent="reset">{{ 'ui.package.hintRevert' | translate }}</a>
+                <a href="#" class="error" @click.prevent="restore">{{ 'ui.package.hintRevert' | translate }}</a>
                 <p>
                     {{ hint }}
                     <!--<a href="#" v-if="false">Help</a>-->
@@ -28,8 +28,8 @@
 
             <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: this.disableUpdate}">
                 <fieldset>
-                    <input ref="constraint" type="text" :placeholder="!original.get('constraint') ? $t('ui.package.latestConstraint') : ''" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button class="widget-button" @click="editConstraint" :disabled="disableUpdate">{{ 'ui.package.editConstraint' | translate }}</button>
+                    <input ref="constraint" type="text" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
+                    <button class="widget-button" @click="editConstraint">{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
                 <div class="version" v-if="package.version">
                     <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -46,15 +46,15 @@
             <figure><img src="../../assets/images/placeholder.png" /></figure>
 
             <div class="about">
-                <h1 :class="{ badge: incompatible || package.abandoned }">
+                <h1 :class="{ badge: isIncompatible || package.abandoned }">
                     <span v-html="package._highlightResult && package._highlightResult.name.value || package.name"></span>
-                    <span v-if="incompatible" :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span>
+                    <span v-if="isIncompatible" :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span>
                     <span v-else-if="package.abandoned" :title="package.replacement === true && $t('ui.package.abandonedText') || $t('ui.package.replacement', { replacement: package.replacement })">{{ 'ui.package.abandonedTitle' | translate }}</span>
                 </h1>
 
                 <div class="description">
                     <p v-html="package._highlightResult && package._highlightResult.description.value || package.description"></p>
-                    <more :name="name" :homepage="package.url || package.homepage" :support="package.support"/>
+                    <more :name="package.name" :homepage="package.url || package.homepage" :support="Object.assign({}, package.support)"/>
                 </div>
                 <p class="additional">
                     <strong class="version" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -62,10 +62,10 @@
                 </p>
             </div>
 
-            <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: this.disableUpdate || incompatible}">
+            <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: (willBeRemoved || (!isInstalled && !willBeInstalled)) }">
                 <fieldset>
-                    <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!this.constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button class="widget-button" @click="editConstraint" :disabled="disableUpdate || incompatible">{{ 'ui.package.editConstraint' | translate }}</button>
+                    <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!this.constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
+                    <button class="widget-button" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled)">{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
                 <div class="version" v-if="package.version">
                     <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -77,8 +77,8 @@
                 <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="changed.get('enabled') === false">Enable</button>-->
                 <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="changed.get('enabled') === true">Disable</button>-->
 
-                <button class="widget-button widget-button--alert widget-button--trash" v-if="original.get('constraint')" @click="uninstall" :disabled="disableRemove || changed.get('constraint') === null">{{ 'ui.package.removeButton' | translate }}</button>
-                <button class="widget-button widget-button--primary" v-else @click="install" :disabled="incompatible || changed.get('constraint')">{{ 'ui.package.installButton' | translate }}</button>
+                <button class="widget-button widget-button--alert widget-button--trash" v-if="isInstalled || willBeInstalled" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                <button class="widget-button widget-button--primary" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
             </fieldset>
 
         </div>
@@ -93,42 +93,75 @@
     export default {
         components: { More },
 
-        props: ['name', 'package', 'original', 'changed', 'disableUpdate', 'disableRemove'],
+        props: {
+            package: {
+                type: Object,
+                required: true,
+            },
+        },
 
         data: () => ({
             constraint: '',
             constraintEditable: false,
             constraintValidating: false,
             constraintError: false,
+
+            disableUpdate: false,
+            disableRemove: false,
         }),
 
         computed: {
+            isContao() {
+                return this.package.name === 'contao/manager-bundle';
+            },
+
+            isInstalled() {
+                return Object.keys(this.$store.state.packages.installed).includes(this.package.name);
+            },
+
+            isChanged() {
+                return Object.keys(this.$store.state.packages.change).includes(this.package.name);
+            },
+
+            willBeRemoved() {
+                return this.$store.state.packages.remove.includes(this.package.name);
+            },
+
+            willBeInstalled() {
+                return Object.keys(this.$store.state.packages.add).includes(this.package.name);
+            },
+
+            isIncompatible() {
+                if (this.package.type === 'contao-bundle') {
+                    return !this.package.extra || !this.package.extra['contao-manager-plugin'];
+                }
+
+                if (!this.package.managed || !this.package.supported) {
+                    return true;
+                }
+
+                return false;
+            },
+
             hint() {
-                if (this.original === this.changed) {
-                    return null;
-                }
-
-                const originalConstraint = this.original.get('constraint');
-                const changedConstraint = this.changed.get('constraint');
-
-                if (originalConstraint === undefined && changedConstraint === '') {
-                    return this.$t('ui.package.hintConstraintBest');
-                }
-
-                if (originalConstraint === undefined) {
-                    return this.$t('ui.package.hintConstraint', { constraint: changedConstraint });
-                }
-
-                if (changedConstraint === null) {
+                if (this.willBeRemoved) {
                     return this.$t('ui.package.hintRemoved');
                 }
 
-                if (originalConstraint !== changedConstraint) {
+                if (this.willBeInstalled) {
+                    if (this.constraintAdded) {
+                        return this.$t('ui.package.hintConstraint', { constraint: this.constraintAdded });
+                    }
+
+                    return this.$t('ui.package.hintConstraintBest');
+                }
+
+                if (this.isChanged) {
                     return this.$t(
                         'ui.package.hintConstraintChange',
                         {
-                            from: this.original.get('constraint'),
-                            to: this.changed.get('constraint'),
+                            from: this.constraintInstalled,
+                            to: this.constraintChanged,
                         },
                     );
                 }
@@ -162,46 +195,59 @@
                 return new Date(this.package.time).toLocaleString();
             },
 
-            incompatible() {
-                if (this.package.type === 'contao-bundle') {
-                    return !this.package.extra || !this.package.extra['contao-manager-plugin'];
-                }
-
-                if (!this.original.get('constraint') && (!this.package.managed || !this.package.supported)) {
-                    return true;
-                }
-
-                return false;
-            },
-
-            isContao() {
-                return this.name === 'contao/manager-bundle';
-            },
-
             constraintPlaceholder() {
-                if (!this.original.get('constraint')) {
+                if (!Object.keys(this.$store.state.packages.installed).includes(this.package.name)) {
                     return this.$t('ui.package.latestConstraint');
                 }
 
-                if (this.disableUpdate) {
-                    return this.original.get('constraint');
-                }
+                // if (this.disableUpdate) {
+                //     return this.original.get('constraint');
+                // }
 
                 return '';
+            },
+
+            constraintInstalled() {
+                if (!this.isInstalled) {
+                    return null;
+                }
+
+                return this.$store.state.packages.installed[this.package.name].constraint;
+            },
+
+            constraintAdded() {
+                if (!this.willBeInstalled) {
+                    return null;
+                }
+
+                return this.$store.state.packages.add[this.package.name].constraint;
+            },
+
+            constraintChanged() {
+                if (!this.isChanged) {
+                    return null;
+                }
+
+                return this.$store.state.packages.change[this.package.name];
             },
         },
 
         methods: {
-            reset() {
-                this.$emit('change', this.name, this.original);
+            restore() {
+                this.$store.commit('packages/restore', this.package.name);
+                this.resetConstraint();
             },
 
             install() {
-                this.$emit('change', this.name, this.original.set('constraint', ''));
+                this.$store.commit('packages/add', this.package);
             },
 
             uninstall() {
-                this.$emit('change', this.name, this.original.set('constraint', null));
+                if (this.willBeInstalled) {
+                    this.$store.commit('packages/restore', this.package.name);
+                } else {
+                    this.$store.commit('packages/remove', this.package.name);
+                }
             },
 
             editConstraint() {
@@ -224,14 +270,19 @@
                 this.constraintEditable = false;
                 this.constraintError = false;
 
-                if (this.original.get('constraint') === undefined && this.constraint === undefined) {
+                if (this.isInstalled &&
+                    (!this.constraint || this.constraintInstalled === this.constraint)
+                ) {
+                    this.restore();
                     return;
                 }
 
-                if (this.constraint === this.original.get('constraint')
-                    || (this.original.get('constraint') === undefined && this.constraint === '')
-                ) {
-                    this.$emit('change', this.name, this.original.set('constraint', this.constraint));
+                if (this.willBeInstalled && !this.constraint) {
+                    this.$store.commit(
+                        'packages/add',
+                        Object.assign({}, this.package, { constraint: null }),
+                    );
+                    this.resetConstraint();
                     return;
                 }
 
@@ -242,7 +293,14 @@
                     (response) => {
                         this.constraintValidating = false;
                         if (response.body.status === 'OK') {
-                            this.$emit('change', this.name, this.original.set('constraint', this.constraint));
+                            if (this.isInstalled) {
+                                this.$store.commit('packages/update', { name: this.package.name, version: this.constraint });
+                            } else {
+                                this.$store.commit(
+                                    'packages/add',
+                                    Object.assign({}, this.package, { constraint: this.constraint }),
+                                );
+                            }
                         } else {
                             this.constraintError = true;
                             this.$nextTick(() => this.editConstraint());
@@ -252,6 +310,14 @@
             },
 
             resetConstraint() {
+                if (this.willBeInstalled) {
+                    this.constraint = this.constraintAdded;
+                } else if (this.isChanged) {
+                    this.constraint = this.constraintChanged;
+                } else if (this.isInstalled) {
+                    this.constraint = this.constraintInstalled;
+                }
+
                 if (!this.constraintEditable) {
                     return;
                 }
@@ -259,18 +325,19 @@
                 this.constraintEditable = false;
                 this.constraintError = false;
                 this.constraintValidating = false;
-                this.constraint = this.changed.get('constraint');
             },
         },
 
         watch: {
-            changed(value) {
-                this.constraint = value.get('constraint');
+            constraintAdded(value) {
+                if (this.willBeInstalled) {
+                    this.constraint = value;
+                }
             },
         },
 
         mounted() {
-            this.constraint = this.original.get('constraint');
+            this.resetConstraint();
         },
     };
 </script>

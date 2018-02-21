@@ -14,7 +14,7 @@
             <p class="package-search__title" v-html="$t('ui.packagesearch.empty', { query })"></p>
         </div>
 
-        <package v-for="item in packages" :name="item.name" :package="item" :key="item.name" :original="originals.get(item.name)" :changed="changes.get(item.name)" @change="changePackage"></package>
+        <package v-for="item in packages" :package="item" :key="item.name"/>
 
         <a href="https://www.algolia.com/" target="_blank" class="package-search__algolia"><img src="../../assets/images/search-by-algolia.svg" width="200"></a>
     </div>
@@ -22,10 +22,6 @@
 
 <script>
     /* eslint-disable no-param-reassign */
-
-    import Immutable from 'immutable';
-
-    import routes from '../../router/routes';
 
     import Package from './Package';
     import Loader from '../fragments/Loader';
@@ -37,8 +33,6 @@
 
         data: () => ({
             packages: null,
-            originals: null,
-            changes: null,
             previousRequest: null,
             algolia: null,
         }),
@@ -75,48 +69,14 @@
                         content.hits.forEach((pkg) => {
                             vm.packages[pkg.name] = pkg;
                         });
-
-                        vm.originals = Immutable.fromJS(vm.packages);
-                        vm.changes = vm.originals;
                     }
                 });
-            },
-
-            changePackage(name, changed) {
-                this.changes = this.changes.set(name, changed);
-                this.$emit('changed', !this.originals.equals(this.changes));
-            },
-
-            applyChanges() {
-                const require = [];
-
-                this.changes.forEach((data, name) => {
-                    if (data.get('constraint') !== this.originals.get(name).get('constraint')) {
-                        require.push(`${name} ${data.get('constraint')}`);
-                    }
-                });
-
-                const task = {
-                    name: 'composer/require',
-                    config: {
-                        packages: require,
-                    },
-                };
-
-                this.$store.dispatch('tasks/execute', task).then(
-                    () => {
-                        this.$router.push(routes.packages);
-                    },
-                );
-            },
-
-            resetChanges() {
-                this.changes = this.originals;
-                this.$emit('changed', false);
             },
         },
 
         mounted() {
+            this.$store.dispatch('packages/list');
+
             if (this.searchField) {
                 this.searchField.focus();
             }

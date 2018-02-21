@@ -3,12 +3,12 @@
 
         <section :class="{'package-tools': true, 'package-tools--search': $route.name === 'packages-search'}">
             <button class="package-tools__button package-tools__button--update widget-button" :disabled="hasChanges" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
-            <button class="package-tools__button package-tools__button--search widget-button" :disabled="hasChanges" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
+            <button class="package-tools__button package-tools__button--search widget-button" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
             <input class="package-tools__search" ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
             <button class="package-tools__cancel" @click="stopSearch">X</button>
         </section>
 
-        <router-view ref="component" @changed="setHasChanges" :searchField="$refs.search"></router-view>
+        <router-view ref="component" :searchField="$refs.search"/>
 
         <div id="package-actions" :class="{ active: hasChanges }">
             <div class="inner">
@@ -28,10 +28,19 @@
 
     export default {
         components: { MainLayout },
+
         data: () => ({
-            hasChanges: false,
             searchInput: '',
         }),
+
+        computed: {
+            hasChanges() {
+                return Object.keys(this.$store.state.packages.add).length > 0
+                    || Object.keys(this.$store.state.packages.change).length > 0
+                    || this.$store.state.packages.remove.length > 0;
+            },
+        },
+
         methods: {
             updatePackages() {
                 if (!confirm(this.$t('ui.packages.updateConfirm'))) {
@@ -45,13 +54,16 @@
                     },
                 );
             },
+
             startSearch() {
                 this.$router.push(routes.packagesSearch);
             },
+
             stopSearch() {
                 this.searchInput = '';
                 this.$router.push(routes.packages);
             },
+
             search() {
                 if (this.$route.name === routes.packagesSearch.name) {
                     this.$router.push(
@@ -62,20 +74,18 @@
                     );
                 }
             },
-            setHasChanges(value) {
-                this.hasChanges = value;
-            },
+
             applyChanges() {
-                this.$refs.component.applyChanges();
+                // this.$refs.component.applyChanges();
             },
+
             resetChanges() {
-                this.$refs.component.resetChanges();
+                this.$store.commit('packages/reset');
             },
         },
+
         watch: {
             $route(route) {
-                this.hasChanges = false;
-
                 if (route.name !== routes.packagesSearch.name) {
                     this.searchInput = '';
                 }
