@@ -97,6 +97,11 @@
                         if (phpWeb.version_id < 70100) {
                             this.supportsLatest = false;
                         }
+
+                        if (phpWeb.version_id < 50600) {
+                            this.bootState = 'error';
+                            this.bootDescription = this.$t('ui.server.contao.unsupported', phpWeb);
+                        }
                     });
                 } else {
                     this.bootState = 'success';
