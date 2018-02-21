@@ -73,6 +73,7 @@
     "ui.server.contao.title": "Contaoのインストール",
     "ui.server.contao.setup": "Setup",
     "ui.server.contao.empty": "インストールしたContaoは見つかりませんでした。",
+    "ui.server.contao.unsupported": "Contao cannot be installed on PHP {version}.",
     "ui.server.contao.found": "Contao {version} (APIバージョン {api})を検出しました。",
     "ui.server.contao.headline": "Contaoの配置",
     "ui.server.contao.description": "ようこそ、Contao Open Source CMSの配置処理に。インストールする2つのバージョンを選択できます。",

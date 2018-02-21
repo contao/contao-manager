@@ -73,6 +73,7 @@
     "ui.server.contao.title": "Staliadur Contao",
     "ui.server.contao.setup": "Setup",
     "ui.server.contao.empty": "Staliadur Contao ebet bet kavet",
+    "ui.server.contao.unsupported": "Contao cannot be installed on PHP {version}.",
     "ui.server.contao.found": "Kavet Contao {version} (API stumm {api}).",
     "ui.server.contao.headline": "Kefluniadur Contao",
     "ui.server.contao.description": "Welcome to the setup process of your Contao Open Source CMS. You can choose between two versions to install.",

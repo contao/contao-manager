@@ -73,6 +73,7 @@
     "ui.server.contao.title": "Contao 安装",
     "ui.server.contao.setup": "Setup",
     "ui.server.contao.empty": "没有发现安装Contao。",
+    "ui.server.contao.unsupported": "Contao cannot be installed on PHP {version}.",
     "ui.server.contao.found": "发现Contao {version} (API 版本 {api}).",
     "ui.server.contao.headline": "Contao安装",
     "ui.server.contao.description": "欢迎来到Contao Open Source CMS安装流程。可选择在2个版本间安装。",

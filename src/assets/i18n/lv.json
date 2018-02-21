@@ -73,6 +73,7 @@
     "ui.server.contao.title": "Contao instalācija",
     "ui.server.contao.setup": "Setup",
     "ui.server.contao.empty": "Neviena Contao instalācija nav atrasta.",
+    "ui.server.contao.unsupported": "Contao cannot be installed on PHP {version}.",
     "ui.server.contao.found": "Atrasts Contao {versija} (API versija {api}).",
     "ui.server.contao.headline": "Contao uzstādīšana",
     "ui.server.contao.description": "Welcome to the setup process of your Contao Open Source CMS. You can choose between two versions to install.",
