@@ -48,5 +48,9 @@
         mounted() {
             this.$emit('input', this.$refs.input.value);
         },
+
+        updated() {
+            this.$emit('input', this.$refs.input.value);
+        },
     };
 </script>
