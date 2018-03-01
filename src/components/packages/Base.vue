@@ -1,7 +1,7 @@
 <template>
     <main-layout>
 
-        <section :class="{'package-tools': true, 'package-tools--search': $route.name === 'packages-search'}">
+        <section :class="{ 'package-tools': true, 'package-tools--search': $route.name === 'packages-search' }">
             <button class="package-tools__button package-tools__button--update widget-button" :disabled="hasChanges" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
             <button class="package-tools__button package-tools__button--search widget-button" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
             <input class="package-tools__search" ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
@@ -10,11 +10,16 @@
 
         <router-view ref="component" :searchField="$refs.search"/>
 
-        <div id="package-actions" :class="{ active: hasChanges }">
-            <div class="inner">
-                <p>{{ 'ui.packages.changesMessage' | translate }}</p>
-                <button class="widget-button widget-button--primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
-                <button class="widget-button widget-button--alert" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
+        <div :class="{ 'package-actions': true, 'package-actions--active': hasChanges }">
+            <div class="package-actions__inner" v-if="$route.name === 'packages'">
+                <p class="package-actions__text">{{ 'ui.packages.changesMessage' | translate }}</p>
+                <button class="package-actions__button widget-button" @click="dryrunChanges">{{ 'ui.packages.changesDryrun' | translate }}</button>
+                <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
+                <button class="package-actions__button widget-button widget-button--alert" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
+            </div>
+            <div class="package-actions__inner" v-else>
+                <p class="package-actions__text">{{ 'ui.packages.changesMessage' | translate }}</p>
+                <router-link :to="packageRoute" class="package-actions__button widget-button widget-button--primary">{{ 'ui.packages.changesReview' | translate }}</router-link>
             </div>
         </div>
 
@@ -31,28 +36,21 @@
 
         data: () => ({
             searchInput: '',
+            packageRoute: routes.packages,
         }),
 
         computed: {
             hasChanges() {
                 return Object.keys(this.$store.state.packages.add).length > 0
                     || Object.keys(this.$store.state.packages.change).length > 0
+                    || Object.keys(this.$store.state.packages.update).length > 0
                     || this.$store.state.packages.remove.length > 0;
             },
         },
 
         methods: {
             updatePackages() {
-                if (!confirm(this.$t('ui.packages.updateConfirm'))) {
-                    return;
-                }
-
-                this.$store.dispatch('tasks/execute', { name: 'composer/update' }).then(
-                    () => {
-                        this.$emit('changed', false);
-                        this.listPackages();
-                    },
-                );
+                this.$store.commit('packages/updateAll');
             },
 
             startSearch() {
@@ -75,8 +73,12 @@
                 }
             },
 
+            dryrunChanges() {
+                alert('dry run');
+            },
+
             applyChanges() {
-                // this.$refs.component.applyChanges();
+                alert('update');
             },
 
             resetChanges() {
@@ -90,6 +92,10 @@
                     this.searchInput = '';
                 }
             },
+        },
+
+        mounted() {
+            this.$store.commit('packages/reset');
         },
     };
 </script>
@@ -189,7 +195,7 @@
         }
     }
 
-    #package-actions {
+    .package-actions {
         position: fixed;
         overflow: hidden;
         left: 0;
@@ -202,11 +208,11 @@
         transition: height .4s ease;
         z-index: 100;
 
-        &.active {
+        &--active {
             height: 80px;
         }
 
-        .inner {
+        &__inner {
             margin: 0 20px;
             padding: 20px 0;
             text-align: right;
@@ -221,7 +227,7 @@
             }
         }
 
-        p {
+        &__text {
             display: none;
 
             @include screen(600) {
@@ -230,16 +236,16 @@
             }
         }
 
-        button {
-            width: calc(50% - 10px);
-            padding: 0 15px;
+        &__button {
+            width: calc(50% - 10px) !important;
+            padding: 0 15px !important;
 
             &:last-child {
                 margin-left: 16px;
             }
 
             @include screen(600) {
-                width: auto;
+                width: auto !important;
                 margin-left: 16px;
             }
         }

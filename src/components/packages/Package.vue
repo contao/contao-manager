@@ -3,18 +3,20 @@
 
         <transition name="package__hint">
             <div class="package__hint" v-if="hint">
-                <a href="#" class="error" @click.prevent="restore">{{ 'ui.package.hintRevert' | translate }}</a>
+                <a href="#" class="error" @click.prevent="restore" v-if="isUpdated">{{ 'ui.package.hintNoupdate' | translate }}</a>
+                <a href="#" class="error" @click.prevent="restore" v-else>{{ 'ui.package.hintRevert' | translate }}</a>
                 <p>
                     {{ hint }}
-                    <!--<a href="#" v-if="false">Help</a>-->
+                    <!--<a href="#">Help</a>-->
                 </p>
             </div>
         </transition>
 
-        <div class="package__inside" v-if="isContao">
-            <figure><img src="../../assets/images/logo.svg" /></figure>
+        <div class="package__inside">
+            <figure v-if="isContao"><img src="../../assets/images/logo.svg" /></figure>
+            <figure v-else><img src="../../assets/images/placeholder.png" /></figure>
 
-            <div class="about">
+            <div class="about" v-if="isContao">
                 <h1>Contao Open Source CMS</h1>
                 <div class="description">
                     <p>Contao is an Open Source PHP Content Management System.</p>
@@ -25,27 +27,7 @@
                     <span v-for="item in additional">{{ item }}</span>
                 </p>
             </div>
-
-            <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: this.disableUpdate}">
-                <fieldset>
-                    <input ref="constraint" type="text" v-model="constraint" :disabled="!constraintEditable" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button class="widget-button" @click="editConstraint">{{ 'ui.package.editConstraint' | translate }}</button>
-                </fieldset>
-                <div class="version" v-if="package.version">
-                    <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
-                    <time :dateTime="package.time">({{ released }})</time>
-                </div>
-            </div>
-
-            <fieldset class="actions">
-                <button class="widget-button widget-button--alert widget-button--trash" disabled>{{ 'ui.package.removeButton' | translate }}</button>
-            </fieldset>
-        </div>
-
-        <div class="package__inside" v-else>
-            <figure><img src="../../assets/images/placeholder.png" /></figure>
-
-            <div class="about">
+            <div class="about" v-else>
                 <h1 :class="{ badge: isIncompatible || package.abandoned }">
                     <span v-html="package._highlightResult && package._highlightResult.name.value || package.name"></span>
                     <span v-if="isIncompatible" :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span>
@@ -76,9 +58,10 @@
             <fieldset class="actions">
                 <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="changed.get('enabled') === false">Enable</button>-->
                 <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="changed.get('enabled') === true">Disable</button>-->
-
-                <button class="widget-button widget-button--alert widget-button--trash" v-if="isInstalled || willBeInstalled" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                <button class="widget-button widget-button--alert widget-button--trash" v-if="isInstalled || willBeInstalled" @click="uninstall" :disabled="isContao || willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
                 <button class="widget-button widget-button--primary" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
+
+                <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" v-if="packageUpdates" @click="update">Update</button>
             </fieldset>
 
         </div>
@@ -105,14 +88,22 @@
             constraintEditable: false,
             constraintValidating: false,
             constraintError: false,
-
-            disableUpdate: false,
-            disableRemove: false,
         }),
 
         computed: {
+            packageUpdates() {
+                return Object.keys(this.$store.state.packages.add).length > 0
+                    || Object.keys(this.$store.state.packages.change).length > 0
+                    || this.$store.state.packages.update.length > 0
+                    || this.$store.state.packages.remove.length > 0;
+            },
+
             isContao() {
                 return this.package.name === 'contao/manager-bundle';
+            },
+
+            isModified() {
+                return this.isUpdated || this.isChanged || this.willBeRemoved;
             },
 
             isInstalled() {
@@ -121,6 +112,10 @@
 
             isChanged() {
                 return Object.keys(this.$store.state.packages.change).includes(this.package.name);
+            },
+
+            isUpdated() {
+                return this.$store.state.packages.update.includes(this.package.name);
             },
 
             willBeRemoved() {
@@ -166,6 +161,10 @@
                     );
                 }
 
+                if (this.isUpdated) {
+                    return this.$t('ui.package.hintConstraintUpdate');
+                }
+
                 return null;
             },
 
@@ -199,10 +198,6 @@
                 if (!Object.keys(this.$store.state.packages.installed).includes(this.package.name)) {
                     return this.$t('ui.package.latestConstraint');
                 }
-
-                // if (this.disableUpdate) {
-                //     return this.original.get('constraint');
-                // }
 
                 return '';
             },
@@ -239,7 +234,15 @@
             },
 
             install() {
-                this.$store.commit('packages/add', this.package);
+                /* eslint-disable no-underscore-dangle */
+                const data = Object.assign({}, this.package);
+                delete data._highlightResult;
+
+                this.$store.commit('packages/add', data);
+            },
+
+            update() {
+                this.$store.commit('packages/update', this.package.name);
             },
 
             uninstall() {
@@ -294,7 +297,7 @@
                         this.constraintValidating = false;
                         if (response.body.status === 'OK') {
                             if (this.isInstalled) {
-                                this.$store.commit('packages/update', { name: this.package.name, version: this.constraint });
+                                this.$store.commit('packages/change', { name: this.package.name, version: this.constraint });
                             } else {
                                 this.$store.commit(
                                     'packages/add',
@@ -330,9 +333,11 @@
 
         watch: {
             constraintAdded(value) {
-                if (this.willBeInstalled) {
-                    this.constraint = value;
-                }
+                this.constraint = value;
+            },
+
+            constraintChanged(value) {
+                this.constraint = value || this.constraintInstalled;
             },
         },
 

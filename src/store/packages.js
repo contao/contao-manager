@@ -9,6 +9,7 @@ export default {
         installed: null,
         add: {},
         change: {},
+        update: [],
         remove: [],
     },
 
@@ -21,14 +22,25 @@ export default {
             Vue.set(state.add, pckg.name, pckg);
         },
 
-        update(state, { name, version }) {
+        change(state, { name, version }) {
+            this.commit('packages/restore', name);
             Vue.set(state.change, name, version);
         },
 
+        update(state, name) {
+            this.commit('packages/restore', name);
+            state.update.push(name);
+        },
+
+        updateAll(state) {
+            Object.keys(state.installed).forEach((name) => {
+                state.update.push(name);
+            });
+        },
+
         remove(state, name) {
-            if (!state.remove.includes(name)) {
-                state.remove.push(name);
-            }
+            this.commit('packages/restore', name);
+            state.remove.push(name);
         },
 
         restore(state, name) {
@@ -38,11 +50,16 @@ export default {
             if (state.remove.includes(name)) {
                 state.remove.splice(state.remove.indexOf(name), 1);
             }
+
+            if (state.update.includes(name)) {
+                state.update.splice(state.update.indexOf(name), 1);
+            }
         },
 
         reset(state) {
             state.add = {};
             state.change = {};
+            state.update = [];
             state.remove = [];
         },
     },
