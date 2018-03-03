@@ -75,7 +75,7 @@
         },
 
         mounted() {
-            this.$store.dispatch('packages/list');
+            this.$store.dispatch('packages/load');
 
             if (this.searchField) {
                 this.searchField.focus();

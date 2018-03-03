@@ -65,12 +65,14 @@ export default {
     },
 
     actions: {
-        list({ state, commit }, cache = true) {
-            if (cache && state.installed) {
-                return new Promise(resolve => resolve(state.installed));
+        load({ state, commit }, reload = false) {
+            if (!reload && state.installed) {
+                return;
             }
 
-            return Vue.http.get('api/packages').then(
+            commit('setInstalled', null);
+
+            Vue.http.get('api/packages').then(
                 (response) => {
                     const packages = Object.assign(
                         {},
@@ -79,8 +81,6 @@ export default {
                     );
 
                     commit('setInstalled', packages);
-
-                    return packages;
                 },
             );
         },
