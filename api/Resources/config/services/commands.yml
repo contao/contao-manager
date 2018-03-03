@@ -13,6 +13,18 @@ services:
             - [addIntegrityCheck, ["@contao_manager.integrity.intl"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.process"]]
 
+    contao_manager.command.task_delete:
+        class: Contao\ManagerApi\Command\TaskDeleteCommand
+        arguments: ["@contao_manager.task_manager"]
+
+    contao_manager.command.task_stop:
+        class: Contao\ManagerApi\Command\TaskStopCommand
+        arguments: ["@contao_manager.task_manager"]
+
+    contao_manager.command.task_update:
+        class: Contao\ManagerApi\Command\TaskUpdateCommand
+        arguments: ["@contao_manager.task_manager"]
+
     contao_manager.command.update:
         class: Contao\ManagerApi\Command\UpdateCommand
         calls:
