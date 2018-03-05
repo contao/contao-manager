@@ -241,7 +241,9 @@ class ConsoleProcessFactory
                 $this->logger
             );
 
-            $process->addForker($forker->setTimeout(5000));
+            $forker->setTimeout(5000);
+
+            $process->addForker($forker);
         }
     }
 
@@ -262,6 +264,6 @@ class ConsoleProcessFactory
             $cmd = $console;
         }
 
-        return escapeshellcmd($cmd).' '.implode(' ', array_map('escapeshellarg', $arguments));
+        return escapeshellcmd($cmd).' '.implode(' ', array_map('escapeshellarg', $arguments)) . ' 2>&1';
     }
 }
