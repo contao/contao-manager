@@ -146,7 +146,7 @@
     "ui.maintenance.composerInstall.description": "Composer dependencies are located in the <code>/vendor</code> folder in your application root. Reinstalling the dependencies can be necessary after manipulation or manually uploading the <code>composer.lock</code> file.",
     "ui.maintenance.composerInstall.button": "Run Installer",
     "ui.maintenance.composerCache.title": "Composer Cache",
-    "ui.maintenance.composerCache.description": "Composer caches downloaded packages for improved performace. If you have issues like broken files, try to delete the Composer cache to force a new download.",
+    "ui.maintenance.composerCache.description": "Composer caches downloaded packages for improved performance. If you have issues like broken files, try to delete the Composer cache to force a new download.",
     "ui.maintenance.composerCache.button": "Clear Cache",
     "ui.maintenance.debugMode.title": "Debug Mode",
     "ui.maintenance.debugMode.description": "Activate the debug mode by setting a user and password for the <code>app_dev.php</code> entry point.",

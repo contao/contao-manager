@@ -1,5 +1,7 @@
 lv:
   integrity:
+    allow_url_fopen:
+      title: 'PHP iestatījums "allow_url_fopen" serverī nav iespējots.'
     openssl:
       title: 'PHP OpenSSL paplašinājums nav pieejams.'
     intl:
