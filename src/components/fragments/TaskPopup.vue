@@ -100,6 +100,7 @@
                     'remove-package': this.$t('ui.taskpopup.taskRemove'),
                     'rebuild-cache': this.$t('ui.taskpopup.taskCache'),
                     'composer-install': this.$t('ui.taskpopup.taskComposerInstall'),
+                    'composer-cache': this.$t('ui.taskpopup.taskComposerCache'),
                     'dump-autoload': this.$t('ui.taskpopup.taskAutoload'),
                     'self-update': this.$t('ui.taskpopup.taskSelfUpdate'),
                 };

@@ -95,7 +95,7 @@ class ApiKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return $this->debug ? $this->getManagerDir().'/cache' : __DIR__.'/Resources/cache';
+        return $this->debug ? $this->getManagerDir().'/appcache' : __DIR__.'/Resources/cache';
     }
 
     /**

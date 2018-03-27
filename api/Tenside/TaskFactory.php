@@ -12,6 +12,7 @@ namespace Contao\ManagerApi\Tenside;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
+use Contao\ManagerApi\Tenside\Task\ComposerCacheTask;
 use Contao\ManagerApi\Tenside\Task\ComposerInstallTask;
 use Contao\ManagerApi\Tenside\Task\DumpAutoloadTask;
 use Contao\ManagerApi\Tenside\Task\RebuildCacheTask;
@@ -51,7 +52,7 @@ class TaskFactory implements TaskFactoryInterface
      */
     public function isTypeSupported($taskType)
     {
-        return in_array($taskType, ['rebuild-cache', 'composer-install', 'dump-autoload', 'self-update'], true);
+        return in_array($taskType, ['rebuild-cache', 'composer-cache', 'composer-install', 'dump-autoload', 'self-update'], true);
     }
 
     /**
@@ -62,6 +63,9 @@ class TaskFactory implements TaskFactoryInterface
         switch ($taskType) {
             case 'rebuild-cache':
                 return new RebuildCacheTask($this->kernel, $this->processFactory, $metaData);
+
+            case 'composer-cache':
+                return new ComposerCacheTask($this->kernel, $this->processFactory, $metaData);
 
             case 'composer-install':
                 return new ComposerInstallTask($this->kernel, $this->processFactory, $metaData);

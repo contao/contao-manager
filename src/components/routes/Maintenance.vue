@@ -5,6 +5,7 @@
         <debug-mode/>
         <dump-autoload/>
         <composer-install/>
+        <composer-cache/>
         <opcode-cache/>
 
     </main-layout>
@@ -16,10 +17,19 @@
     import DumpAutoload from './maintenance/DumpAutoload';
     import DebugMode from './maintenance/DebugMode';
     import ComposerInstall from './maintenance/ComposerInstall';
+    import ComposerCache from './maintenance/ComposerCache';
     import OpcodeCache from './maintenance/OpcodeCache';
 
     export default {
-        components: { ComposerInstall, MainLayout, RebuildCache, DumpAutoload, DebugMode, OpcodeCache },
+        components: {
+            ComposerInstall,
+            ComposerCache,
+            MainLayout,
+            RebuildCache,
+            DumpAutoload,
+            DebugMode,
+            OpcodeCache,
+        },
     };
 </script>
 
