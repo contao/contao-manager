@@ -58,11 +58,11 @@
                         scope: this.scope,
                         client_id: this.clientId,
                     },
-                ).then((token) => {
+                ).then((response) => {
                     if (this.returnUrl.includes('?')) {
-                        document.location.href = `${this.returnUrl}&token=${token.token}`;
+                        document.location.href = `${this.returnUrl}&token=${response.body.token}`;
                     } else {
-                        document.location.href = `${this.returnUrl}?token=${token.token}`;
+                        document.location.href = `${this.returnUrl}?token=${response.body.token}`;
                     }
                 });
             },
