@@ -103,7 +103,7 @@ class JwtManager
     {
         $payload = [
             'iat' => time(),
-            'exp' => strtotime('+10 minutes'),
+            'exp' => strtotime('+30 minutes'),
             'username' => $username,
             'xsrf' => $this->getXsrfToken($request, $response),
         ];
