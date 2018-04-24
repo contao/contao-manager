@@ -5,12 +5,11 @@ namespace Contao\ManagerApi\TaskOperation\Filesystem;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
-use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
+use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
-class RemoveCacheOperation implements TaskOperationInterface
+class RemoveCacheOperation extends AbstractInlineOperation
 {
-
     /**
      * @var string
      */
@@ -22,11 +21,6 @@ class RemoveCacheOperation implements TaskOperationInterface
     private $kernel;
 
     /**
-     * @var TaskConfig
-     */
-    private $taskConfig;
-
-    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -35,68 +29,48 @@ class RemoveCacheOperation implements TaskOperationInterface
      * Constructor.
      *
      * @param string     $environment
-     * @param ApiKernel  $kernel
+     * @param ApiKernel  $environment
      * @param TaskConfig $taskConfig
      * @param Filesystem $filesystem
      */
-    public function __construct($environment, ApiKernel $kernel, TaskConfig $taskConfig, Filesystem $filesystem)
+    public function __construct($environment, ApiKernel $environment, TaskConfig $taskConfig, Filesystem $filesystem)
     {
-        $this->taskConfig = $taskConfig;
         $this->filesystem = $filesystem;
         $this->environment = $environment;
-        $this->kernel = $kernel;
+        $this->kernel = $environment;
+
+        parent::__construct($taskConfig);
     }
 
-    public function isCancellable()
+    protected function getName()
     {
-        return true;
+        return 'remove-cache@' . $this->getCacheDir();
     }
 
-    public function isStarted()
+    /**
+     * {@inheritdoc}
+     */
+    public function doRun()
     {
-        return (bool) $this->taskConfig->getState(
-            'remove-cache@' . $this->getCacheDir()
-        );
+        $this->filesystem->remove($this->getCacheDir());
     }
 
-    public function isRunning()
-    {
-        return false;
-    }
-
-    public function isSuccessful()
-    {
-        return (bool) $this->taskConfig->getState(
-            'remove-cache@' . $this->getCacheDir()
-        );
-    }
-
-    public function run()
-    {
-        if (!$this->isStarted()) {
-            $this->filesystem->remove($this->getCacheDir());
-        }
-
-        $this->taskConfig->setState('remove-cache@' . $this->getCacheDir(), true);
-    }
-
-    public function abort()
-    {
-        return true;
-    }
-
-    public function delete()
-    {
-        return true;
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function updateStatus(TaskStatus $status)
     {
         $status->setSummary('Deleting cache directory …');
         $status->setDetail($this->getCacheDir());
+
+        $this->addConsoleStatus($status);
     }
 
-
+    /**
+     * Gets the Contao cache directory for current environment.
+     *
+     * @return string
+     */
     private function getCacheDir()
     {
         return $this->kernel->getContaoDir() . '/var/cache/' . $this->environment;

@@ -10,21 +10,23 @@ class CacheWarmupOperation extends AbstractProcessOperation
 {
     /**
      * Constructor.
+     *
+     * @param ConsoleProcessFactory $processFactory
+     * @param string                $processId
      */
-    public function __construct(ConsoleProcessFactory $processFactory)
+    public function __construct(ConsoleProcessFactory $processFactory, $processId = 'cache-warmup')
     {
         try {
-            parent::__construct($processFactory->restoreBackgroundProcess('cache-warmup'));
+            parent::__construct($processFactory->restoreBackgroundProcess($processId));
         } catch (\Exception $e) {
-            parent::__construct($processFactory->createContaoConsoleBackgroundProcess(['cache:warmup'], 'cache-warmup'));
+            parent::__construct($processFactory->createContaoConsoleBackgroundProcess(['cache:warmup'], $processId));
         }
     }
 
     public function updateStatus(TaskStatus $status)
     {
-        parent::updateStatus($status);
-
         $status->setSummary('Warming application cache …');
-        $status->setDetail($this->process->getCommandLine());
+
+        $this->addConsoleStatus($status);
     }
 }

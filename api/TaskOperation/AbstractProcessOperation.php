@@ -31,26 +31,33 @@ abstract class AbstractProcessOperation implements TaskOperationInterface
         $this->process = $process;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isStarted()
     {
         return $this->process->isStarted();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isRunning()
     {
         return $this->process->isRunning();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isSuccessful()
     {
         return $this->process->isSuccessful();
     }
 
-    public function isCancellable()
-    {
-        return true;
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function run()
     {
         if (!$this->process->isStarted()) {
@@ -58,6 +65,9 @@ abstract class AbstractProcessOperation implements TaskOperationInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function abort()
     {
         $this->process->stop();
@@ -65,16 +75,24 @@ abstract class AbstractProcessOperation implements TaskOperationInterface
         return $this->process->isRunning();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function delete()
     {
         $this->process->delete();
     }
 
-    public function updateStatus(TaskStatus $status)
+    /**
+     * Adds the console log to the status console.
+     *
+     * @param TaskStatus $status
+     */
+    protected function addConsoleStatus(TaskStatus $status)
     {
         $status->addConsole(
             $this->process->getOutput().$this->process->getErrorOutput().$this->getProcessError(),
-            $this->process->getCommandLine()
+            '$ '.$this->process->getCommandLine()
         );
     }
 
@@ -85,10 +103,10 @@ abstract class AbstractProcessOperation implements TaskOperationInterface
     {
         $output = '';
 
-        if ($this->process->isTerminated() && ($exitCode = $this->process->getExitCode()) > 0) {
+        if ($this->process->isTerminated()) {
             $output .= sprintf(
-                "\n\nProcess terminated with exit code %s\nReason: %s",
-                $exitCode,
+                "\n# Process terminated with exit code %s\n# Result: %s\n",
+                $this->process->getExitCode(),
                 $this->process->getExitCodeText()
             );
 

@@ -35,6 +35,14 @@ services:
             - "@security.password_encoder"
             - "@filesystem"
 
+    contao_manager.composer.cloud_resolver:
+        class: Contao\ManagerApi\Composer\CloudResolver
+
+    contao_manager.composer.environment:
+        class: Contao\ManagerApi\Composer\Environment
+        arguments:
+            - "@kernel"
+
     contao_manager.i18n.translator:
         class: Contao\ManagerApi\I18n\Translator
         arguments:

@@ -43,6 +43,10 @@ class CloudResolver
      */
     public function getJob($jobId)
     {
+        if (!$jobId) {
+            return null;
+        }
+
         $response = $this->http->get(self::API_URL.'/jobs/'.$jobId);
 
         return new CloudJob(json_decode((string) $response->getBody(), true));
@@ -50,6 +54,10 @@ class CloudResolver
 
     public function deleteJob($jobId)
     {
+        if (!$jobId) {
+            return;
+        }
+
         $response = $this->http->delete(self::API_URL.'/jobs/'.$jobId);
     }
 

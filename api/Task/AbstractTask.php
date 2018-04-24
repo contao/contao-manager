@@ -4,8 +4,6 @@ namespace Contao\ManagerApi\Task;
 
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
-use Symfony\Component\Process\Process;
-use Terminal42\BackgroundProcess\ProcessController;
 
 abstract class AbstractTask implements TaskInterface
 {
@@ -13,6 +11,11 @@ abstract class AbstractTask implements TaskInterface
      * @var Translator
      */
     protected $translator;
+
+    /**
+     * @var TaskOperationInterface[]
+     */
+    private $operations;
 
     /**
      * Constructor.
@@ -105,6 +108,15 @@ abstract class AbstractTask implements TaskInterface
         return $status;
     }
 
+    protected function getOperations(TaskConfig $config)
+    {
+        if (null === $this->operations) {
+            $this->operations = $this->buildOperations($config);
+        }
+
+        return $this->operations;
+    }
+
     /**
      * @param TaskStatus $status
      */
@@ -148,5 +160,5 @@ abstract class AbstractTask implements TaskInterface
      *
      * @return TaskOperationInterface[]
      */
-    abstract protected function getOperations(TaskConfig $config);
+    abstract protected function buildOperations(TaskConfig $config);
 }

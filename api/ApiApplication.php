@@ -100,8 +100,8 @@ class ApiApplication extends Application
         $this->add((new ProcessRunnerCommand())->setName('run'));
         $this->add($container->get('contao_manager.command.about'));
         $this->add($container->get('contao_manager.command.integrity_check'));
+        $this->add($container->get('contao_manager.command.task_abort'));
         $this->add($container->get('contao_manager.command.task_delete'));
-        $this->add($container->get('contao_manager.command.task_stop'));
         $this->add($container->get('contao_manager.command.task_update'));
         $this->add($container->get('contao_manager.command.update'));
 

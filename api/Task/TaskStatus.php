@@ -151,7 +151,7 @@ class TaskStatus
     public function addConsole($console, $title = null)
     {
         if (null !== $title) {
-            $console = sprintf("### %s ###\n\n%s", $title, $console);
+            $console = sprintf("%s\n\n%s", $title, $console);
         }
 
         if ($this->console) {

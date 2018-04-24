@@ -2,13 +2,10 @@
 
 namespace Contao\ManagerApi\TaskOperation;
 
-use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 
 interface TaskOperationInterface
 {
-    public function isCancellable();
-
     public function isStarted();
 
     public function isRunning();

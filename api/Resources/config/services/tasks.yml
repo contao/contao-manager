@@ -22,29 +22,32 @@ services:
                 "manager/self-update": "@contao_manager.task.self_update"
 
     contao_manager.task.setup_packages:
-        class: Contao\ManagerApi\Task\Composer\SetupPackagesTask
+        class: Contao\ManagerApi\Task\Packages\SetupTask
         arguments:
-            - "@kernel"
-            - "@contao_manager.config.manager"
+            - "@contao_manager.composer.environment"
             - "@contao_manager.process.console_factory"
+            - "@contao_manager.config.manager"
+            - "@contao_manager.composer.cloud_resolver"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
 
     contao_manager.task.update_packages:
-        class: Contao\ManagerApi\Task\Composer\UpdatePackagesTask
+        class: Contao\ManagerApi\Task\Packages\UpdateTask
         arguments:
-            - "@kernel"
-            - "@contao_manager.config.manager"
             - "@contao_manager.process.console_factory"
+            - "@contao_manager.composer.cloud_resolver"
+            - "@contao_manager.composer.environment"
+            - "@contao_manager.config.manager"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
 
     contao_manager.task.install_packages:
-        class: Contao\ManagerApi\Task\Composer\InstallPackagesTask
+        class: Contao\ManagerApi\Task\Packages\InstallTask
         arguments:
-            - "@kernel"
-            - "@contao_manager.config.manager"
             - "@contao_manager.process.console_factory"
+            - "@contao_manager.composer.cloud_resolver"
+            - "@contao_manager.composer.environment"
+            - "@contao_manager.config.manager"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
 
@@ -71,6 +74,5 @@ services:
     contao_manager.task.self_update:
         class: Contao\ManagerApi\Task\Manager\SelfUpdateTask
         arguments:
-            - "@contao_manager.process.console_factory"
-            - "@contao_manager.i18n.translator"
             - "@contao_manager.self_update.updater"
+            - "@contao_manager.i18n.translator"

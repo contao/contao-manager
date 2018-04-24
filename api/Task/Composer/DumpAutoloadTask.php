@@ -4,21 +4,17 @@ namespace Contao\ManagerApi\Task\Composer;
 
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
-use Contao\ManagerApi\Task\AbstractProcessTask;
+use Contao\ManagerApi\Task\AbstractTask;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
+use Contao\ManagerApi\TaskOperation\Composer\DumpAutoloadOperation;
 
-class DumpAutoloadTask extends AbstractProcessTask
+class DumpAutoloadTask extends AbstractTask
 {
     /**
      * @var ConsoleProcessFactory
      */
     private $processFactory;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
 
     /**
      * Constructor.
@@ -29,33 +25,25 @@ class DumpAutoloadTask extends AbstractProcessTask
     public function __construct(ConsoleProcessFactory $processFactory, Translator $translator)
     {
         $this->processFactory = $processFactory;
-        $this->translator = $translator;
 
         parent::__construct($translator);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function createInitialStatus(TaskConfig $config)
     {
-        return (
-            new TaskStatus($this->translator->trans('task.dump_autoload.title'))
-        )->setSummary('Dumping class autoloader …');
+        return new TaskStatus($this->translator->trans('task.dump_autoload.title'));
     }
 
-    protected function getProcess(TaskConfig $config)
+    /**
+     * {@inheritdoc}
+     */
+    protected function buildOperations(TaskConfig $config)
     {
-        try {
-            return $this->processFactory->restoreBackgroundProcess('dump-autoload');
-        } catch (\Exception $e) {
-            // do nothing
-        }
-
-        return $this->processFactory->createManagerConsoleBackgroundProcess(
-            [
-                'composer',
-                'dump-autoload',
-                '--optimize',
-            ],
-            'dump-autoload'
-        );
+        return [
+            new DumpAutoloadOperation($this->processFactory),
+        ];
     }
 }

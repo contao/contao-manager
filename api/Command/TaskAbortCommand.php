@@ -14,7 +14,7 @@ use Contao\ManagerApi\Task\TaskManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TaskStopCommand extends TaskUpdateCommand
+class TaskAbortCommand extends TaskUpdateCommand
 {
     /**
      * @var TaskManager
@@ -41,8 +41,8 @@ class TaskStopCommand extends TaskUpdateCommand
         parent::configure();
 
         $this
-            ->setName('task:stop')
-            ->setDescription('Stops the current task and returns the status information.')
+            ->setName('task:abort')
+            ->setDescription('Aborts the current task and returns the status information.')
         ;
     }
 
@@ -57,7 +57,7 @@ class TaskStopCommand extends TaskUpdateCommand
             return 1;
         }
 
-        $this->taskManager->cancelTask();
+        $this->taskManager->abortTask();
 
         return parent::execute($input, $output);
     }

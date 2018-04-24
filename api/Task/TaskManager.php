@@ -106,7 +106,7 @@ class TaskManager
     /**
      * @return TaskStatus|null
      */
-    public function cancelTask()
+    public function abortTask()
     {
         $config = $this->getTaskConfig();
 

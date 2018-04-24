@@ -11,7 +11,6 @@ use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Contao\CacheClearOperation;
 use Contao\ManagerApi\TaskOperation\Contao\CacheWarmupOperation;
 use Contao\ManagerApi\TaskOperation\Filesystem\RemoveCacheOperation;
-use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class RebuildCacheTask extends AbstractTask
@@ -32,25 +31,20 @@ class RebuildCacheTask extends AbstractTask
     private $filesystem;
 
     /**
-     * @var TaskOperationInterface[]
-     */
-    private $operations;
-
-    /**
      * Constructor.
      *
-     * @param ApiKernel             $kernel
+     * @param ApiKernel             $environment
      * @param ConsoleProcessFactory $processFactory
      * @param Translator            $translator
      * @param Filesystem            $filesystem
      */
     public function __construct(
-        ApiKernel $kernel,
+        ApiKernel $environment,
         ConsoleProcessFactory $processFactory,
         Translator $translator,
         Filesystem $filesystem
     ) {
-        $this->kernel = $kernel;
+        $this->kernel = $environment;
         $this->processFactory = $processFactory;
         $this->filesystem = $filesystem;
 
@@ -68,16 +62,12 @@ class RebuildCacheTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    protected function getOperations(TaskConfig $config)
+    protected function buildOperations(TaskConfig $config)
     {
-        if (null === $this->operations) {
-            $this->operations = [
-                new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, new Filesystem()),
-                new CacheClearOperation($this->processFactory),
-                new CacheWarmupOperation($this->processFactory),
-            ];
-        }
-
-        return $this->operations;
+        return [
+            new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, new Filesystem()),
+            new CacheClearOperation($this->processFactory),
+            new CacheWarmupOperation($this->processFactory),
+        ];
     }
 }

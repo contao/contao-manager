@@ -5,7 +5,6 @@ namespace Contao\ManagerApi\Composer;
 use Composer\Command\RemoveCommand;
 use Composer\Command\RequireCommand;
 use Composer\Config;
-use Composer\Console\Application;
 use Composer\Factory;
 use Composer\Installer\InstallationManager;
 use Composer\IO\NullIO;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\File;
 
 class CloudChanges
 {
@@ -60,29 +58,6 @@ class CloudChanges
     {
         $this->file = $file;
         $this->json = new JsonFile($file);
-
-        if (!$this->json->exists()) {
-            throw new \RuntimeException(sprintf('Json file at "%s" does not exist.', $file));
-        }
-    }
-
-    public function createBackup()
-    {
-        (new Filesystem())->copy($this->file, $this->file.'~', true);
-    }
-
-    public function restoreBackup()
-    {
-        $filesystem = new Filesystem();
-
-        if (!$filesystem->exists($this->file.'~')) {
-            return false;
-        }
-
-        $filesystem->copy($this->file.'~', $this->file, true);
-        $filesystem->remove($this->file.'~');
-
-        return true;
     }
 
     public function requirePackage($packageName, $version = null)
