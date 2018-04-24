@@ -19,11 +19,7 @@
     export default {
         methods: {
             execute() {
-                const task = {
-                    type: 'composer-cache',
-                };
-
-                this.$store.dispatch('tasks/execute', task);
+                this.$store.dispatch('tasks/execute', { name: 'composer/clear-cache' });
             },
         },
     };

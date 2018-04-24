@@ -30,7 +30,7 @@ abstract class AbstractProcessTask extends AbstractTask
      */
     public function update(TaskConfig $config)
     {
-        $status = $this->getInitialStatus($config);
+        $status = $this->createInitialStatus($config);
 
         $process = $this->getProcess($config);
 
@@ -59,7 +59,7 @@ abstract class AbstractProcessTask extends AbstractTask
                 $status->setStatus(TaskStatus::STATUS_ERROR);
             }
 
-            $this->setStatusLabels($status, $this->translator);
+            $this->updateStatus($status, $this->translator);
 
         } elseif (!$process->isStarted()) {
             $process->start();
@@ -73,7 +73,7 @@ abstract class AbstractProcessTask extends AbstractTask
      *
      * @return TaskStatus
      */
-    public function stop(TaskConfig $config)
+    public function abort(TaskConfig $config)
     {
         $config->setStatus('stopping');
 
@@ -87,7 +87,7 @@ abstract class AbstractProcessTask extends AbstractTask
      */
     public function delete(TaskConfig $config)
     {
-        $status = $this->stop($config);
+        $status = $this->abort($config);
 
         if (!$status->isActive()) {
             $this->getProcess($config)->delete();
@@ -99,7 +99,7 @@ abstract class AbstractProcessTask extends AbstractTask
     /**
      * @return TaskStatus
      */
-    abstract protected function getInitialStatus(TaskConfig $config);
+    abstract protected function createInitialStatus(TaskConfig $config);
 
     /**
      * @return Process|ProcessController

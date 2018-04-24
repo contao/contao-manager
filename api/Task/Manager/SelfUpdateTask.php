@@ -49,10 +49,10 @@ class SelfUpdateTask extends AbstractProcessTask
      *
      * @return TaskStatus
      */
-    protected function getInitialStatus(TaskConfig $config)
+    protected function createInitialStatus(TaskConfig $config)
     {
         return (new TaskStatus($this->translator->trans('task.self_update.title')))
-            ->setStoppable(false)
+            ->setCancellable(false)
             ->setSummary('Installing latest Contao Manager …')
             ->setDetail(
                 sprintf('Updating from %s to %s', $this->updater->getOldVersion(), $this->updater->getNewVersion())

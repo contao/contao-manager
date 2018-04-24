@@ -5,6 +5,7 @@ services:
         arguments:
             - "@kernel"
             - "@contao_manager.task_locator"
+            - "@contao_manager.process.console_factory"
             - "@filesystem"
 
     contao_manager.task_locator:
@@ -12,43 +13,43 @@ services:
         tags: ['container.service_locator']
         arguments:
             -
-                "contao/install": "@contao_manager.task.contao_install"
+                "contao/install": "@contao_manager.task.setup_packages"
                 "contao/rebuild-cache": "@contao_manager.task.rebuild_cache"
-                "composer/install": "@contao_manager.task.composer_install"
+                "composer/install": "@contao_manager.task.install_packages"
+                "composer/update": "@contao_manager.task.update_packages"
                 "composer/dump-autoload": "@contao_manager.task.dump_autoload"
-                "composer/require": "@contao_manager.task.composer_require"
-                "composer/remove": "@contao_manager.task.composer_remove"
-                "composer/update": "@contao_manager.task.composer_update"
+                "composer/clear-cache": "@contao_manager.task.clear_cache"
                 "manager/self-update": "@contao_manager.task.self_update"
 
-    contao_manager.task.contao_install:
-        class: Contao\ManagerApi\Task\Contao\ContaoInstallTask
+    contao_manager.task.setup_packages:
+        class: Contao\ManagerApi\Task\Composer\SetupPackagesTask
         arguments:
             - "@kernel"
+            - "@contao_manager.config.manager"
             - "@contao_manager.process.console_factory"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
 
-    contao_manager.task.composer_install:
-        class: Contao\ManagerApi\Task\Composer\ComposerInstallTask
+    contao_manager.task.update_packages:
+        class: Contao\ManagerApi\Task\Composer\UpdatePackagesTask
         arguments:
+            - "@kernel"
+            - "@contao_manager.config.manager"
             - "@contao_manager.process.console_factory"
             - "@contao_manager.i18n.translator"
+            - "@filesystem"
 
-    contao_manager.task.composer_require:
-        class: Contao\ManagerApi\Task\Composer\ComposerRequireTask
+    contao_manager.task.install_packages:
+        class: Contao\ManagerApi\Task\Composer\InstallPackagesTask
         arguments:
+            - "@kernel"
+            - "@contao_manager.config.manager"
             - "@contao_manager.process.console_factory"
             - "@contao_manager.i18n.translator"
+            - "@filesystem"
 
-    contao_manager.task.composer_remove:
-        class: Contao\ManagerApi\Task\Composer\ComposerRemoveTask
-        arguments:
-            - "@contao_manager.process.console_factory"
-            - "@contao_manager.i18n.translator"
-
-    contao_manager.task.composer_update:
-        class: Contao\ManagerApi\Task\Composer\ComposerUpdateTask
+    contao_manager.task.clear_cache:
+        class: Contao\ManagerApi\Task\Composer\ClearCacheTask
         arguments:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.i18n.translator"

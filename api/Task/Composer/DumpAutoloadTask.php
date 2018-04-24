@@ -34,7 +34,7 @@ class DumpAutoloadTask extends AbstractProcessTask
         parent::__construct($translator);
     }
 
-    protected function getInitialStatus(TaskConfig $config)
+    protected function createInitialStatus(TaskConfig $config)
     {
         return (
             new TaskStatus($this->translator->trans('task.dump_autoload.title'))

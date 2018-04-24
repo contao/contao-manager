@@ -7,6 +7,7 @@ class TaskStatus
     const STATUS_ACTIVE = 'active';
     const STATUS_COMPLETE = 'complete';
     const STATUS_ERROR = 'error';
+    const STATUS_ABORTING = 'aborting';
     const STATUS_STOPPED = 'stopped';
 
     /**
@@ -32,7 +33,12 @@ class TaskStatus
     /**
      * @var bool
      */
-    private $stoppable = false;
+    private $cancellable = false;
+
+    /**
+     * @var bool
+     */
+    private $cancelled = false;
 
     /**
      * @var bool
@@ -137,11 +143,30 @@ class TaskStatus
     }
 
     /**
+     * Adds output to the console log.
+     *
+     * @param string      $console
+     * @param string|null $title
+     */
+    public function addConsole($console, $title = null)
+    {
+        if (null !== $title) {
+            $console = sprintf("### %s ###\n\n%s", $title, $console);
+        }
+
+        if ($this->console) {
+            $console = $this->console . "\n\n" . $console;
+        }
+
+        $this->console = $console;
+    }
+
+    /**
      * @return bool
      */
-    public function isStoppable()
+    public function isCancellable()
     {
-        return $this->stoppable;
+        return $this->cancellable;
     }
 
     /**
@@ -149,9 +174,9 @@ class TaskStatus
      *
      * @return TaskStatus
      */
-    public function setStoppable($stoppable)
+    public function setCancellable($stoppable)
     {
-        $this->stoppable = $stoppable;
+        $this->cancellable = $stoppable;
 
         return $this;
     }

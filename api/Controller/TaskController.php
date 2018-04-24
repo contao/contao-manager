@@ -102,7 +102,7 @@ class TaskController
                 'summary' => $status->getSummary(),
                 'detail' => $status->getDetail(),
                 'console' => $status->getConsole(),
-                'stoppable' => $status->isStoppable(),
+                'cancellable' => $status->isCancellable(),
                 'audit' => $status->hasAudit(),
                 'status' => $status->getStatus(),
             ],

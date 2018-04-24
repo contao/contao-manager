@@ -67,6 +67,18 @@ const pollTask = ({ commit }, resolve, reject) => {
     setTimeout(fetch, 1000);
 };
 
+const failTask = (response, store, resolve, reject) => {
+    // Request was cancelled, which is normal when starting a task
+    if (response.status === 0) {
+        pollTask(store, resolve, reject);
+        return;
+    }
+
+    store.commit('setStatus', 'failed');
+    store.commit('setCurrent', null);
+    reject();
+};
+
 export default {
     namespaced: true,
 
@@ -83,15 +95,6 @@ export default {
         },
         setCurrent(state, task) {
             state.current = task;
-        },
-        setProgress(state, progress) {
-            if (progress === null) {
-                state.type = null;
-                state.consoleOutput = '';
-            } else {
-                state.type = progress.type;
-                state.consoleOutput = progress.output;
-            }
         },
     },
 
@@ -111,10 +114,10 @@ export default {
                                 Vue.http.delete('api/task');
                             } else if (task.status === 'finished') {
                                 store.commit('setStatus', statusMap[task.status]);
-                                store.commit('setProgress', task);
+                                store.commit('setCurrent', task);
                             } else {
                                 store.commit('setStatus', statusMap[task.status] !== undefined ? statusMap[task.status] : 'ready');
-                                store.commit('setProgress', task);
+                                store.commit('setCurrent', task);
 
                                 pollTask(store, resolve, reject);
                                 return;
@@ -134,7 +137,7 @@ export default {
                 }
 
                 store.commit('setStatus', 'ready');
-                store.commit('setProgress', null);
+                store.commit('setCurrent', null);
 
                 pollTask(store, resolve, reject);
             });
@@ -147,7 +150,7 @@ export default {
                 }
 
                 store.commit('setStatus', 'ready');
-                store.commit('setProgress', task);
+                store.commit('setCurrent', task);
 
                 Vue.http.put('api/task', task, {
                     before: (request) => {
@@ -157,7 +160,7 @@ export default {
                     },
                 }).then(
                     () => pollTask(store, resolve, reject),
-                    () => pollTask(store, resolve, reject),
+                    response => failTask(response, store, resolve, reject),
                 );
             });
         },
@@ -175,6 +178,14 @@ export default {
         deleteCurrent(store) {
             return Vue.http.delete('api/task').then(
                 () => {
+                    store.commit('setStatus', null);
+                    store.commit('setCurrent', null);
+                },
+                (response) => {
+                    if (response.status !== 400) {
+                        throw response;
+                    }
+
                     store.commit('setStatus', null);
                     store.commit('setCurrent', null);
                 },

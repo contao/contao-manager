@@ -8,7 +8,7 @@ use Contao\ManagerApi\Task\AbstractProcessTask;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 
-class ComposerUpdateTask extends AbstractProcessTask
+class ClearCacheTask extends AbstractProcessTask
 {
     /**
      * @var ConsoleProcessFactory
@@ -34,39 +34,28 @@ class ComposerUpdateTask extends AbstractProcessTask
         parent::__construct($translator);
     }
 
-    protected function getInitialStatus(TaskConfig $config)
+    protected function createInitialStatus(TaskConfig $config)
     {
-        return (new TaskStatus($this->translator->trans('task.composer_update.title')))
-            ->setSummary('Updating Composer dependencies …')
-            ->setAudit(true);
+        return (
+            new TaskStatus($this->translator->trans('task.clear_cache.title'))
+        )->setSummary('Deleting cache files …');
     }
 
     protected function getProcess(TaskConfig $config)
     {
         try {
-            return $this->processFactory->restoreBackgroundProcess('composer-update');
+            return $this->processFactory->restoreBackgroundProcess('clear-cache');
         } catch (\Exception $e) {
             // do nothing
         }
 
-        $arguments = array_merge(
+        return $this->processFactory->createManagerConsoleBackgroundProcess(
             [
                 'composer',
-                'update',
-                '--with-dependencies',
-                '--no-dev',
-                '--prefer-dist',
-                '--no-suggest',
-                '--no-progress',
+                'clear-cache',
                 '--no-interaction',
-                '--optimize-autoloader',
-            ]
+            ],
+            'clear-cache'
         );
-
-        if ($config->getOption('debug', false)) {
-            $arguments[] = '--profile';
-        }
-
-        return $this->processFactory->createManagerConsoleBackgroundProcess($arguments, 'composer-update');
     }
 }

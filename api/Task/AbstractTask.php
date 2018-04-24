@@ -3,50 +3,112 @@
 namespace Contao\ManagerApi\Task;
 
 use Contao\ManagerApi\I18n\Translator;
+use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 use Symfony\Component\Process\Process;
 use Terminal42\BackgroundProcess\ProcessController;
 
 abstract class AbstractTask implements TaskInterface
 {
-    private static $signals = [
-        1 => 'SIGHUP',
-        2 => 'SIGINT',
-        3 => 'SIGQUIT',
-        15 => 'SIGTERM',
-        9 => 'SIGKILL',
-    ];
+    /**
+     * @var Translator
+     */
+    protected $translator;
 
     /**
-     * @param Process|ProcessController $process
+     * Constructor.
      *
-     * @return string
+     * @param Translator $translator
      */
-    protected function getProcessError($process)
+    public function __construct(Translator $translator)
     {
-        $output = '';
+        $this->translator = $translator;
+    }
 
-        if ($process->isTerminated() && ($exitCode = $process->getExitCode()) > 0) {
-            $output .= sprintf(
-                "\n\nProcess terminated with exit code %s\nReason: %s",
-                $exitCode,
-                $process->getExitCodeText()
-            );
+    /**
+     * {@inheritdoc}
+     */
+    public function update(TaskConfig $config)
+    {
+        if ($config->isCancelled()) {
+            return $this->abort($config);
+        }
 
-            if ($process->hasBeenSignaled()) {
-                $output .= $this->getSignalText($process->getTermSignal());
-            } elseif ($process->hasBeenStopped()) {
-                $output .= $this->getSignalText($process->getStopSignal());
+        $status = $this->createInitialStatus($config);
+
+        foreach ($this->getOperations($config) as $operation) {
+            if (!$operation->isStarted() || $operation->isRunning()) {
+                $operation->run();
+
+                $operation->updateStatus($status);
+                $this->updateStatus($status);
+
+                return $status;
+            }
+
+            $operation->updateStatus($status);
+
+            if ($operation->isSuccessful()) {
+                continue;
+            }
+
+            $status->setStatus(TaskStatus::STATUS_ERROR);
+            $this->updateStatus($status);
+
+            return $status;
+        }
+
+        $status->setStatus(TaskStatus::STATUS_COMPLETE);
+
+        $this->updateStatus($status);
+
+        return $status;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function abort(TaskConfig $config)
+    {
+        $config->setCancelled();
+
+        $status = $this->createInitialStatus($config);
+        $status->setStatus(TaskStatus::STATUS_STOPPED);
+
+        foreach ($this->getOperations($config) as $operation) {
+            $operation->abort();
+            $operation->updateStatus($status);
+
+            if ($operation->isRunning()) {
+                $status->setStatus(TaskStatus::STATUS_ABORTING);
+                break;
             }
         }
 
-        return $output;
+        $this->updateStatus($status);
+
+        return $status;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(TaskConfig $config)
+    {
+        $status = $this->abort($config);
+
+        if ($status->isStopped()) {
+            foreach ($this->getOperations($config) as $operation) {
+                $operation->delete();
+            }
+        }
+
+        return $status;
     }
 
     /**
      * @param TaskStatus $status
-     * @param Translator $translator
      */
-    protected function setStatusLabels(TaskStatus $status, Translator $translator)
+    protected function updateStatus(TaskStatus $status)
     {
         switch ($status->getStatus()) {
             case TaskStatus::STATUS_ACTIVE:
@@ -55,6 +117,11 @@ abstract class AbstractTask implements TaskInterface
             case TaskStatus::STATUS_COMPLETE:
                 $status->setSummary('Console task complete!');
                 $status->setDetail('The background task was completed successfully. Check the console protocol for the details.');
+                break;
+
+            case TaskStatus::STATUS_ABORTING:
+                $status->setSummary('Stopping current operation …');
+                $status->setDetail('The background task is being cancelled.');
                 break;
 
             case TaskStatus::STATUS_STOPPED:
@@ -70,16 +137,16 @@ abstract class AbstractTask implements TaskInterface
     }
 
     /**
-     * @param int $signal
+     * @param TaskConfig $config
      *
-     * @return string
+     * @return TaskStatus
      */
-    private function getSignalText($signal)
-    {
-        if (isset(static::$signals[$signal])) {
-            return sprintf(' [%s]', static::$signals[$signal]);
-        }
+    abstract protected function createInitialStatus(TaskConfig $config);
 
-        return sprintf(' [signal %s]', $signal);
-    }
+    /**
+     * @param TaskConfig $config
+     *
+     * @return TaskOperationInterface[]
+     */
+    abstract protected function getOperations(TaskConfig $config);
 }

@@ -27,6 +27,8 @@ class TaskConfig
         $this->data = [
             'name' => $name,
             'options' => $options,
+            'state' => [],
+            'cancelled' => false,
         ];
 
         if (null === $name && null === $options) {
@@ -48,16 +50,45 @@ class TaskConfig
         return $this->data['options'];
     }
 
+    /**
+     * @param string $name
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
     public function getOption($name, $default = null)
     {
         return isset($this->data['options'][$name]) ? $this->data['options'][$name] : $default;
     }
 
+    public function getState($name, $default = null)
+    {
+        return isset($this->data['state'][$name]) ? $this->data['state'][$name] : $default;
+    }
+
+    public function setState($name, $value)
+    {
+        $this->data['state'][$name] = $value;
+
+        $this->save();
+    }
+
+    public function clearState($name)
+    {
+        unset($this->data['state'][$name]);
+    }
+
+    /**
+     * @deprecated
+     */
     public function getStatus()
     {
         return isset($this->data['status']) ? $this->data['status'] : null;
     }
 
+    /**
+     * @deprecated
+     */
     public function setStatus($status)
     {
         if (isset($this->data['status']) && $this->data['status'] === $status) {
@@ -65,6 +96,24 @@ class TaskConfig
         }
 
         $this->data['status'] = $status;
+
+        $this->save();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCancelled()
+    {
+        return $this->data['cancelled'];
+    }
+
+    /**
+     * Mark task as cancelled.
+     */
+    public function setCancelled()
+    {
+        $this->data['cancelled'] = true;
 
         $this->save();
     }

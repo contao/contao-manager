@@ -16,7 +16,7 @@ interface TaskInterface
      *
      * @return TaskStatus
      */
-    public function stop(TaskConfig $config);
+    public function abort(TaskConfig $config);
 
     /**
      * @param TaskConfig $config

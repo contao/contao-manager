@@ -39,16 +39,16 @@ en:
             incompatible: 'This binary is a PHP version {cli} but your web server is version {web}.'
 
     task:
-        composer_install:
+        setup_packages:
+            title: 'Installing Contao Application'
+        install_packages:
             title: 'Installing Composer Dependencies'
-        composer_require:
-            title: 'Installing Packages'
-        composer_remove:
-            title: 'Removing Packages'
-        composer_update:
+        update_packages:
             title: 'Updating Packages'
         dump_autoload:
             title: 'Dumping Composer Autoloader'
+        clear_cache:
+            title: 'Clearing Composer Cache'
         rebuild_cache:
             title: 'Rebuilding Contao Cache'
         self_update:

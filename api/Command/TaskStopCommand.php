@@ -57,7 +57,7 @@ class TaskStopCommand extends TaskUpdateCommand
             return 1;
         }
 
-        $this->taskManager->stopTask();
+        $this->taskManager->cancelTask();
 
         return parent::execute($input, $output);
     }

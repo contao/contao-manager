@@ -3,6 +3,7 @@
 namespace Contao\ManagerApi\Task;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -15,14 +16,14 @@ class TaskManager
     private $filesystem;
 
     /**
-     * @var TaskInterface
-     */
-    private $task = false;
-
-    /**
      * @var ContainerInterface
      */
     private $taskLocator;
+
+    /**
+     * @var ConsoleProcessFactory
+     */
+    private $processFactory;
 
     /**
      * @var string
@@ -32,15 +33,18 @@ class TaskManager
     /**
      * Constructor.
      *
-     * @param ApiKernel          $kernel
-     * @param ContainerInterface $taskLocator
-     * @param Filesystem|null    $filesystem
+     * @param ApiKernel             $kernel
+     * @param ContainerInterface    $taskLocator
+     * @param ConsoleProcessFactory $processFactory
+     * @param Filesystem|null       $filesystem
      */
-    public function __construct(ApiKernel $kernel, ContainerInterface $taskLocator, Filesystem $filesystem = null)
+    public function __construct(ApiKernel $kernel, ContainerInterface $taskLocator, ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
     {
-        $this->configFile = $kernel->getManagerDir().DIRECTORY_SEPARATOR.'task.json';
         $this->filesystem = $filesystem;
         $this->taskLocator = $taskLocator;
+        $this->processFactory = $processFactory;
+
+        $this->configFile = $kernel->getManagerDir().DIRECTORY_SEPARATOR.'task.json';
     }
 
     /**
@@ -78,7 +82,11 @@ class TaskManager
 
         $config->save();
 
-        return $task->update($config);
+        $status = $task->update($config);
+
+        $this->processFactory->createManagerConsoleBackgroundProcess(['task:update', '--poll']);
+
+        return $status;
     }
 
     /**
@@ -98,7 +106,7 @@ class TaskManager
     /**
      * @return TaskStatus|null
      */
-    public function stopTask()
+    public function cancelTask()
     {
         $config = $this->getTaskConfig();
 
@@ -106,7 +114,7 @@ class TaskManager
             return null;
         }
 
-        return $this->loadTask($config)->stop($config);
+        return $this->loadTask($config)->abort($config);
     }
 
     /**
