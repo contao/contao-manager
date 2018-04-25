@@ -53,10 +53,6 @@ class CreateProjectOperation extends AbstractInlineOperation
         if (!in_array($this->version, static::$supportedVersions)) {
             throw new \InvalidArgumentException('Unsupported Contao version');
         }
-
-        if ($this->filesystem->exists($this->environment->getAll())) {
-            throw new \RuntimeException('Cannot install into existing application');
-        }
     }
 
     /**
@@ -72,6 +68,10 @@ class CreateProjectOperation extends AbstractInlineOperation
      */
     protected function doRun()
     {
+        if ($this->filesystem->exists($this->environment->getAll())) {
+            throw new \RuntimeException('Cannot install into existing application');
+        }
+
         $sourceRepo = new CompositeRepository(RepositoryFactory::defaultRepos(new NullIO()));
         $pool = new Pool('stable');
         $pool->addRepository($sourceRepo);
