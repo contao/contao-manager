@@ -33,8 +33,3 @@ services:
         class: Contao\ManagerApi\IntegrityCheck\WebRootCheck
         arguments:
             - "@contao_manager.i18n.translator"
-
-    contao_manager.integrity.windows:
-        class: Contao\ManagerApi\IntegrityCheck\WindowsPlatformCheck
-        arguments:
-            - "@contao_manager.i18n.translator"
