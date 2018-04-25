@@ -87,6 +87,9 @@ abstract class AbstractPackagesTask extends AbstractTask
      */
     protected function useCloud()
     {
+        return false;
+
+        // TODO enable cloud features
         return !$this->managerConfig->get('disable_cloud', false);
     }
 
