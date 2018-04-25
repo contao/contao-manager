@@ -1,7 +1,7 @@
 <template>
     <div class="popup-overlay">
         <div ref="popup" :class="popupClass">
-            <h1 :class="{ 'task-popup__headline': true, 'task-popup__headline--complete': (taskStatus === 'complete'), 'task-popup__headline--error': (taskStatus === 'error' || taskStatus === 'stopped') }">{{ taskTitle }}</h1>
+            <h1 :class="headlineClass">{{ taskTitle }}</h1>
 
             <div class="task-popup__status task-popup__status--complete" v-if="taskStatus === 'complete'"><i class="icono-checkCircle"></i></div>
             <div class="task-popup__status task-popup__status--error" v-else-if="taskStatus === 'error' || taskStatus === 'stopped'"><i class="icono-crossCircle"></i></div>
@@ -14,20 +14,20 @@
                 <p class="task-popup__progress-text" v-if="currentTask && currentTask.progress">{{ currentTask.progress }}%</p>
             </div>
 
-            <!--<div class="task-popup__summary" v-if="taskStatus === 'failed'">
+            <div class="task-popup__summary" v-if="taskStatus === 'failed'">
                 <h2 :class="textClass">{{ 'ui.taskpopup.failedHeadline' | translate }}</h2>
                 <p :class="textClass" v-html="$t('ui.taskpopup.failedDescription')"></p>
                 <p :class="textClass"><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ 'ui.taskpopup.reportProblem' | translate }}</a></p>
 
                 <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonClose' | translate }}</span></button>
-            </div>-->
+            </div>
             <!--<div class="task-popup__summary" v-else-if="taskStatus === 'error'">
                 <h2 :class="textClass">{{ 'ui.taskpopup.errorHeadline' | translate }}</h2>
                 <p :class="textClass" v-html="$t('ui.taskpopup.errorDescription')"></p>
 
                 <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonConfirm' | translate }}</span></button>
             </div>-->
-            <div class="task-popup__summary">
+            <div class="task-popup__summary" v-else>
                 <h2 :class="textClass">{{ taskSummary }}</h2>
                 <p :class="textClass">{{ taskDetail }}</p>
 
@@ -66,6 +66,14 @@
                     'task-popup': true,
                     'task-popup--fixed': !this.$refs.popup || this.$refs.popup.clientHeight < window.innerHeight,
                     'task-popup--console': this.hasConsole && this.showConsole && this.taskStatus !== 'failed',
+                };
+            },
+
+            headlineClass() {
+                return {
+                    'task-popup__headline': true,
+                    'task-popup__headline--complete': (this.taskStatus === 'complete'),
+                    'task-popup__headline--error': (this.taskStatus === 'error' || this.taskStatus === 'stopped' || this.taskStatus === 'failed'),
                 };
             },
 

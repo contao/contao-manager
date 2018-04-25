@@ -2,7 +2,7 @@
     <main-layout>
 
         <section :class="{ 'package-tools': true, 'package-tools--search': $route.name === 'packages-search' }">
-            <button class="package-tools__button package-tools__button--update widget-button" :disabled="hasChanges" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
+            <button class="package-tools__button package-tools__button--update widget-button" :disabled="hasChanges || isSearchMode" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
             <button class="package-tools__button package-tools__button--search widget-button" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
             <input class="package-tools__search" ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
             <button class="package-tools__cancel" @click="stopSearch">X</button>
@@ -45,6 +45,10 @@
                     || Object.keys(this.$store.state.packages.change).length > 0
                     || Object.keys(this.$store.state.packages.update).length > 0
                     || this.$store.state.packages.remove.length > 0;
+            },
+
+            isSearchMode() {
+                return this.$route.name === routes.packagesSearch.name;
             },
         },
 

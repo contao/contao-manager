@@ -58,7 +58,7 @@
             <fieldset class="actions">
                 <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="changed.get('enabled') === false">Enable</button>-->
                 <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="changed.get('enabled') === true">Disable</button>-->
-                <button class="widget-button widget-button--alert widget-button--trash" v-if="isInstalled || willBeInstalled" @click="uninstall" :disabled="isContao || willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                <button class="widget-button widget-button--alert widget-button--trash" v-if="isInstalled" @click="uninstall" :disabled="isContao || willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
                 <button class="widget-button widget-button--primary" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
 
                 <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" v-if="packageUpdates" @click="update">Update</button>
@@ -92,10 +92,12 @@
 
         computed: {
             packageUpdates() {
-                return Object.keys(this.$store.state.packages.add).length > 0
+                return this.isInstalled && (
+                    Object.keys(this.$store.state.packages.add).length > 0
                     || Object.keys(this.$store.state.packages.change).length > 0
                     || this.$store.state.packages.update.length > 0
-                    || this.$store.state.packages.remove.length > 0;
+                    || this.$store.state.packages.remove.length > 0
+                );
             },
 
             isContao() {
@@ -103,7 +105,7 @@
             },
 
             isModified() {
-                return this.isUpdated || this.isChanged || this.willBeRemoved;
+                return this.isUpdated || this.isChanged || this.willBeRemoved || this.willBeInstalled;
             },
 
             isInstalled() {
