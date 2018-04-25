@@ -2,57 +2,56 @@
 
 import Vue from 'vue';
 
-const statusMap = {
-    started: 'running',
-    terminated: 'success',
-    error: 'error',
-};
+// const statusMap = {
+//     started: 'running',
+//     terminated: 'success',
+//     error: 'error',
+// //     const STATUS_ACTIVE = 'active';
+// // const STATUS_COMPLETE = 'complete';
+// // const STATUS_ERROR = 'error';
+// // const STATUS_ABORTING = 'aborting';
+// // const STATUS_STOPPED = 'stopped';
+//
+// };
 
 const pollTask = ({ commit }, resolve, reject) => {
-    let pending = 0;
+    // let pending = 0;
 
     const fetch = () => Vue.http.get('api/task').then(
         (response) => {
             const task = response.body;
 
             commit('setCurrent', task);
+            commit('setStatus', task.status);
 
             switch (task.status) {
-                case 'ready':
-                    pending += 1;
-
-                    if (pending > 5) {
-                        commit('setStatus', 'failed');
-                        reject(task);
-                        return;
-                    }
-
-                    Vue.http.patch('api/task', { status: 'started' }, {
-                        before: (request) => {
-                            setTimeout(() => {
-                                request.abort();
-                            }, pending * 500);
-                        },
-                    }).then(() => {
-                        setTimeout(fetch, pending * 1000);
-                    });
-                    break;
+                // case 'ready':
+                //     pending += 1;
+                //
+                //     if (pending > 5) {
+                //         commit('setStatus', 'failed');
+                //         reject(task);
+                //         return;
+                //     }
+                //
+                //     Vue.http.patch('api/task', { status: 'started' }).then(() => {
+                //         setTimeout(fetch, pending * 1000);
+                //     });
+                //     break;
 
                 default:
                 case 'active':
-                    commit('setStatus', 'running');
+                case 'aborting':
                     setTimeout(fetch, 1000);
                     break;
 
                 case 'terminated': // BC
                 case 'complete':
-                    commit('setStatus', 'success');
                     resolve(task);
                     break;
 
                 case 'stopped':
                 case 'error':
-                    commit('setStatus', 'error');
                     reject(task);
                     break;
             }
@@ -113,10 +112,10 @@ export default {
                             if (task.status === 'ready') {
                                 Vue.http.delete('api/task');
                             } else if (task.status === 'finished') {
-                                store.commit('setStatus', statusMap[task.status]);
+                                store.commit('setStatus', task.status);
                                 store.commit('setCurrent', task);
                             } else {
-                                store.commit('setStatus', statusMap[task.status] !== undefined ? statusMap[task.status] : 'ready');
+                                store.commit('setStatus', task.status);
                                 store.commit('setCurrent', task);
 
                                 pollTask(store, resolve, reject);

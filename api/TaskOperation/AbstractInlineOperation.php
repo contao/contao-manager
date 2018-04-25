@@ -32,7 +32,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface
      */
     public function isStarted()
     {
-        return null !== $this->taskConfig->getState('self-update');
+        return null !== $this->taskConfig->getState($this->getName());
     }
 
     /**
@@ -48,7 +48,12 @@ abstract class AbstractInlineOperation implements TaskOperationInterface
      */
     public function isSuccessful()
     {
-        return (bool) $this->taskConfig->getState('self-update', false);
+        return (bool) $this->taskConfig->getState($this->getName(), false);
+    }
+
+    public function hasError()
+    {
+        return $this->exception instanceof \Exception;
     }
 
     public function run()
@@ -64,7 +69,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface
             $success = false;
         }
 
-        $this->taskConfig->setState('self-update', $success);
+        $this->taskConfig->setState($this->getName(), $success);
     }
 
     /**

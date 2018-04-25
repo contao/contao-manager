@@ -89,6 +89,8 @@ class CreateProjectOperation extends AbstractInlineOperation
             $this->environment->getJsonFile(),
             file_get_contents('https://raw.githubusercontent.com/contao/managed-edition/'.$package->getDistReference().'/composer.json')
         );
+
+        return true;
     }
 
     /**

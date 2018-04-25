@@ -42,6 +42,10 @@ abstract class AbstractTask implements TaskInterface
             if (!$operation->isStarted() || $operation->isRunning()) {
                 $operation->run();
 
+                if ($operation->hasError()) {
+                    $status->setStatus(TaskStatus::STATUS_ERROR);
+                }
+
                 $operation->updateStatus($status);
                 $this->updateStatus($status);
 
@@ -85,6 +89,12 @@ abstract class AbstractTask implements TaskInterface
                 $status->setStatus(TaskStatus::STATUS_ABORTING);
                 break;
             }
+
+            if ($operation->isSuccessful()) {
+                continue;
+            }
+
+            break;
         }
 
         $this->updateStatus($status);

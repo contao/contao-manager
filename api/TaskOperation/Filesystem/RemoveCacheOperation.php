@@ -29,15 +29,15 @@ class RemoveCacheOperation extends AbstractInlineOperation
      * Constructor.
      *
      * @param string     $environment
-     * @param ApiKernel  $environment
+     * @param ApiKernel  $kernel
      * @param TaskConfig $taskConfig
      * @param Filesystem $filesystem
      */
-    public function __construct($environment, ApiKernel $environment, TaskConfig $taskConfig, Filesystem $filesystem)
+    public function __construct($environment, ApiKernel $kernel, TaskConfig $taskConfig, Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
         $this->environment = $environment;
-        $this->kernel = $environment;
+        $this->kernel = $kernel;
 
         parent::__construct($taskConfig);
     }
@@ -53,6 +53,8 @@ class RemoveCacheOperation extends AbstractInlineOperation
     public function doRun()
     {
         $this->filesystem->remove($this->getCacheDir());
+
+        return true;
     }
 
     /**

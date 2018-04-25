@@ -44,6 +44,11 @@ class CloudOperation implements TaskOperationInterface
     private $job;
 
     /**
+     * @var \Exception
+     */
+    private $exception;
+
+    /**
      * Constructor.
      *
      * @param CloudResolver $cloud
@@ -63,62 +68,97 @@ class CloudOperation implements TaskOperationInterface
 
     public function isStarted()
     {
-        return $this->getCurrentJob() instanceof CloudJob;
+        try {
+            return $this->getCurrentJob() instanceof CloudJob;
+        } catch (\Exception $e) {
+            $this->exception = $e;
+            return true;
+        }
     }
 
     public function isRunning()
     {
-        $job = $this->getCurrentJob();
+        try {
+            $job = $this->getCurrentJob();
 
-        return $job instanceof CloudJob
-            && ($job->isQueued()
-                || $job->isProcessing()
-                || ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-completed', false))
-            );
+            return $job instanceof CloudJob
+                && ($job->isQueued()
+                    || $job->isProcessing()
+                    || ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-successful', false))
+                );
+        } catch (\Exception $e) {
+            $this->exception = $e;
+            return false;
+        }
     }
 
     public function isSuccessful()
     {
-        return (bool) $this->taskConfig->getState('cloud-job-completed', false);
+        return (bool) $this->taskConfig->getState('cloud-job-successful', false);
+    }
+
+    public function hasError()
+    {
+        return $this->exception instanceof \Exception;
     }
 
     public function run()
     {
-        $job = $this->getCurrentJob();
+        try {
+            $job = $this->getCurrentJob();
 
-        if (!$job instanceof CloudJob) {
-            $this->job = $this->cloud->createJob($this->changes);
-            $this->taskConfig->setState('cloud-job', $this->job->getId());
-        }
+            if (!$job instanceof CloudJob) {
+                $this->job = $this->cloud->createJob($this->changes);
+                $this->taskConfig->setState('cloud-job', $this->job->getId());
+            }
 
-        if ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-completed', false)) {
-            $this->filesystem->dumpFile(
-                $this->environment->getLockFile(),
-                $this->cloud->getComposerLock($job)
-            );
-            $this->filesystem->dumpFile(
-                $this->environment->getJsonFile(),
-                $this->cloud->getComposerJson($job)
-            );
+            if ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-successful', false)) {
+                $this->filesystem->dumpFile(
+                    $this->environment->getLockFile(),
+                    $this->cloud->getComposerLock($job)
+                );
+                $this->filesystem->dumpFile(
+                    $this->environment->getJsonFile(),
+                    $this->cloud->getComposerJson($job)
+                );
 
-            $this->taskConfig->setState('cloud-job-completed', true);
+                $this->taskConfig->setState('cloud-job-successful', true);
+            }
+        } catch (\Exception $e) {
+            $this->exception = $e;
+            $this->taskConfig->setState('cloud-job-successful', false);
         }
     }
 
     public function abort()
     {
         $this->taskConfig->clearState('cloud-job');
-        $this->taskConfig->clearState('cloud-job-completed');
+        $this->taskConfig->clearState('cloud-job-successful');
     }
 
     public function delete()
     {
-        $this->cloud->deleteJob($this->taskConfig->getState('cloud-job'));
+        try {
+            $this->cloud->deleteJob($this->taskConfig->getState('cloud-job'));
+        } catch (\Exception $e) {
+            $this->exception = $e;
+        }
     }
 
     public function updateStatus(TaskStatus $status)
     {
-        $job = $this->getCurrentJob();
+        if ($this->exception instanceof \Exception) {
+            $status->addConsole($this->exception->getMessage());
+            return;
+        }
+
+        try {
+            $job = $this->getCurrentJob();
+        } catch (\Exception $e) {
+            $this->exception = $e;
+            $status->addConsole($this->exception->getMessage());
+            return;
+        }
 
         if (!$job instanceof CloudJob) {
             return;

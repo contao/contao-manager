@@ -55,6 +55,11 @@ abstract class AbstractProcessOperation implements TaskOperationInterface
         return $this->process->isSuccessful();
     }
 
+    public function hasError()
+    {
+        return $this->process->isTerminated() && $this->process->getExitCode() > 0;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -104,17 +109,20 @@ abstract class AbstractProcessOperation implements TaskOperationInterface
         $output = '';
 
         if ($this->process->isTerminated()) {
-            $output .= sprintf(
-                "\n# Process terminated with exit code %s\n# Result: %s\n",
-                $this->process->getExitCode(),
-                $this->process->getExitCodeText()
-            );
+            $signal = '';
 
             if ($this->process->hasBeenSignaled()) {
-                $output .= $this->getSignalText($this->process->getTermSignal());
+                $signal = $this->getSignalText($this->process->getTermSignal());
             } elseif ($this->process->hasBeenStopped()) {
-                $output .= $this->getSignalText($this->process->getStopSignal());
+                $signal = $this->getSignalText($this->process->getStopSignal());
             }
+
+            $output .= sprintf(
+                "\n# Process terminated with exit code %s\n# Result: %s%s\n",
+                $this->process->getExitCode(),
+                $this->process->getExitCodeText(),
+                $signal
+            );
         }
 
         return $output;

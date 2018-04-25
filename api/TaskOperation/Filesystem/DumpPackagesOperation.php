@@ -42,6 +42,8 @@ class DumpPackagesOperation extends AbstractInlineOperation
     protected function doRun()
     {
         $this->changes->getJsonFile()->write($this->changes->getJson());
+
+        return true;
     }
 
     public function updateStatus(TaskStatus $status)

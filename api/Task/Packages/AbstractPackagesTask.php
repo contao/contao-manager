@@ -51,7 +51,15 @@ abstract class AbstractPackagesTask extends AbstractTask
     {
         if (!$config->getState('backup-created', false) && $this->filesystem->exists($this->environment->getJsonFile())) {
             $this->filesystem->copy($this->environment->getJsonFile(), $this->environment->getJsonFile().'~', true);
-            $this->filesystem->copy($this->environment->getLockFile(), $this->environment->getLockFile().'~', true);
+
+            if ($this->filesystem->exists($this->environment->getLockFile())) {
+                $this->filesystem->copy(
+                    $this->environment->getLockFile(),
+                    $this->environment->getLockFile() . '~',
+                    true
+                );
+            }
+
             $config->setState('backup-created', true);
         }
 

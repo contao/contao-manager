@@ -31,7 +31,7 @@ class CloudResolver
         // TODO add update set from CloudChanges
         $options = [RequestOptions::JSON => $data];
 
-        $response = $this->http->post(self::API_URL . '/jobs', $options);
+        $response = $this->http->request('POST', self::API_URL . '/jobs', $options);
 
         return new CloudJob(JsonFile::parseJson((string) $response->getBody()));
     }
@@ -47,7 +47,7 @@ class CloudResolver
             return null;
         }
 
-        $response = $this->http->get(self::API_URL.'/jobs/'.$jobId);
+        $response = $this->http->request('GET', self::API_URL.'/jobs/'.$jobId);
 
         return new CloudJob(json_decode((string) $response->getBody(), true));
     }
@@ -58,12 +58,12 @@ class CloudResolver
             return;
         }
 
-        $response = $this->http->delete(self::API_URL.'/jobs/'.$jobId);
+        $response = $this->http->request('DELETE', self::API_URL.'/jobs/'.$jobId);
     }
 
     public function getComposerJson(CloudJob $job)
     {
-        $response = $this->http->get(self::API_URL.$job->getLink(CloudJob::LINK_JSON));
+        $response = $this->http->request('GET', self::API_URL.$job->getLink(CloudJob::LINK_JSON));
 
         return (string) $response->getBody();
     }
@@ -74,7 +74,7 @@ class CloudResolver
             return null;
         }
 
-        $response = $this->http->get(self::API_URL.$job->getLink(CloudJob::LINK_LOCK));
+        $response = $this->http->request('GET', self::API_URL.$job->getLink(CloudJob::LINK_LOCK));
 
         return (string) $response->getBody();
     }
@@ -85,7 +85,7 @@ class CloudResolver
             return null;
         }
 
-        $response = $this->http->get(self::API_URL.$job->getLink(CloudJob::LINK_OUTPUT));
+        $response = $this->http->request('GET', self::API_URL.$job->getLink(CloudJob::LINK_OUTPUT));
 
         return (string) $response->getBody();
     }

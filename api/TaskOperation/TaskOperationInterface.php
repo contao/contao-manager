@@ -12,6 +12,8 @@ interface TaskOperationInterface
 
     public function isSuccessful();
 
+    public function hasError();
+
     public function run();
 
     public function abort();
