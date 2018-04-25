@@ -171,7 +171,7 @@ configs:
         last_update: 2017-06-13
         issues: []
         php:
-            /usr/bin/php-{major}.{minor}: []
+            /usr/bin/php{major}.{minor}: []
 
     infomaniak:
         name: Infomaniak Network SA
