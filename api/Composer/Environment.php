@@ -3,6 +3,7 @@
 namespace Contao\ManagerApi\Composer;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Config\ManagerConfig;
 
 class Environment
 {
@@ -12,13 +13,20 @@ class Environment
     private $kernel;
 
     /**
+     * @var ManagerConfig
+     */
+    private $managerConfig;
+
+    /**
      * Constructor.
      *
-     * @param ApiKernel $kernel
+     * @param ApiKernel     $kernel
+     * @param ManagerConfig $managerConfig
      */
-    public function __construct(ApiKernel $kernel)
+    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig)
     {
         $this->kernel = $kernel;
+        $this->managerConfig = $managerConfig;
     }
 
     public function getAll()
@@ -43,5 +51,10 @@ class Environment
     public function getVendorDir()
     {
         return $this->kernel->getContaoDir().'/vendor';
+    }
+
+    public function useCloudResolver()
+    {
+        return !$this->managerConfig->get('disable_cloud', false);
     }
 }

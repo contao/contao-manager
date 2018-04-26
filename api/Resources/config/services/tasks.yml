@@ -26,7 +26,6 @@ services:
         arguments:
             - "@contao_manager.composer.environment"
             - "@contao_manager.process.console_factory"
-            - "@contao_manager.config.manager"
             - "@contao_manager.composer.cloud_resolver"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
@@ -37,7 +36,6 @@ services:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.composer.cloud_resolver"
             - "@contao_manager.composer.environment"
-            - "@contao_manager.config.manager"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
 
@@ -47,7 +45,6 @@ services:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.composer.cloud_resolver"
             - "@contao_manager.composer.environment"
-            - "@contao_manager.config.manager"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
 

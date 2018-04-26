@@ -5,11 +5,9 @@ namespace Contao\ManagerApi\Task\Packages;
 use Contao\ManagerApi\Composer\CloudChanges;
 use Contao\ManagerApi\Composer\CloudResolver;
 use Contao\ManagerApi\Composer\Environment;
-use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Composer\CloudOperation;
 use Contao\ManagerApi\TaskOperation\Composer\CreateProjectOperation;
 use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
@@ -17,11 +15,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class SetupTask extends AbstractPackagesTask
 {
-    /**
-     * @var Environment
-     */
-    private $environment;
-
     /**
      * @var ConsoleProcessFactory
      */
@@ -42,16 +35,14 @@ class SetupTask extends AbstractPackagesTask
      *
      * @param Environment           $environment
      * @param ConsoleProcessFactory $processFactory
-     * @param ManagerConfig         $managerConfig
      * @param CloudResolver         $cloudResolver
      * @param Translator            $translator
      * @param Filesystem            $filesystem
      */
-    public function __construct(Environment $environment, ConsoleProcessFactory $processFactory, ManagerConfig $managerConfig, CloudResolver $cloudResolver, Translator $translator, Filesystem $filesystem)
+    public function __construct(Environment $environment, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Translator $translator, Filesystem $filesystem)
     {
-        parent::__construct($environment, $managerConfig, $filesystem, $translator);
+        parent::__construct($environment, $filesystem, $translator);
 
-        $this->environment = $environment;
         $this->processFactory = $processFactory;
         $this->cloudResolver = $cloudResolver;
         $this->filesystem = $filesystem;
@@ -72,7 +63,7 @@ class SetupTask extends AbstractPackagesTask
     {
         $operations = [new CreateProjectOperation($config, $this->environment, $this->filesystem)];
 
-        if ($this->useCloud()) {
+        if ($this->environment->useCloudResolver()) {
             $operations[] = new CloudOperation(
                 $this->cloudResolver,
                 new CloudChanges($this->environment->getJsonFile()),

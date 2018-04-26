@@ -15,12 +15,7 @@ abstract class AbstractPackagesTask extends AbstractTask
     /**
      * @var Environment
      */
-    private $environment;
-
-    /**
-     * @var ManagerConfig
-     */
-    private $managerConfig;
+    protected $environment;
 
     /**
      * @var Filesystem
@@ -31,14 +26,12 @@ abstract class AbstractPackagesTask extends AbstractTask
      * Constructor.
      *
      * @param Environment   $environment
-     * @param ManagerConfig $managerConfig
      * @param Filesystem    $filesystem
      * @param Translator    $translator
      */
-    public function __construct(Environment $environment, ManagerConfig $managerConfig, Filesystem $filesystem, Translator $translator)
+    public function __construct(Environment $environment, Filesystem $filesystem, Translator $translator)
     {
         $this->environment = $environment;
-        $this->managerConfig = $managerConfig;
         $this->filesystem = $filesystem;
 
         parent::__construct($translator);
@@ -88,17 +81,6 @@ abstract class AbstractPackagesTask extends AbstractTask
         $this->restoreBackup($status, $config);
 
         return $status;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function useCloud()
-    {
-        return false;
-
-        // TODO enable cloud features
-        return !$this->managerConfig->get('disable_cloud', false);
     }
 
     private function restoreBackup(TaskStatus $status, TaskConfig $config)

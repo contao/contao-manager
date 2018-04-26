@@ -42,6 +42,7 @@ services:
         class: Contao\ManagerApi\Composer\Environment
         arguments:
             - "@kernel"
+            - "@contao_manager.config.manager"
 
     contao_manager.i18n.translator:
         class: Contao\ManagerApi\I18n\Translator
