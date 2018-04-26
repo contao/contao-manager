@@ -78,37 +78,11 @@
             },
 
             dryrunChanges() {
-                this.applyChanges(true);
+                this.$store.dispatch('packages/apply', true);
             },
 
-            applyChanges(dryRun = false) {
-                const require = this.$store.state.packages.change;
-                const remove = this.$store.state.packages.remove;
-                const update = this.$store.state.packages.update.concat(
-                    Object.keys(this.$store.state.packages.change),
-                    this.$store.state.packages.remove,
-                );
-
-                Object.keys(this.$store.state.packages.add).forEach((pkg) => {
-                    require[pkg.name] = pkg.constraint;
-                    update.push(pkg.name);
-                });
-
-                const task = {
-                    name: 'composer/update',
-                    config: {
-                        require,
-                        remove,
-                        update,
-                        dry_run: dryRun === true,
-                    },
-                };
-
-                this.$store.dispatch('tasks/execute', task).then(
-                    () => {
-                        this.$store.dispatch('packages/load', true);
-                    },
-                );
+            applyChanges() {
+                this.$store.dispatch('packages/apply');
             },
 
             resetChanges() {

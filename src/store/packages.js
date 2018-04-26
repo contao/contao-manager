@@ -85,5 +85,35 @@ export default {
                 },
             );
         },
+
+        apply({ state, dispatch }, dryRun = false) {
+            const require = state.change;
+            const remove = state.remove;
+            const update = state.update.concat(
+                Object.keys(state.change),
+                state.remove,
+            );
+
+            Object.keys(state.add).forEach((pkg) => {
+                require[state.add[pkg].name] = state.add[pkg].constraint || null;
+                update.push(state.add[pkg].name);
+            });
+
+            const task = {
+                name: 'composer/update',
+                config: {
+                    require,
+                    remove,
+                    update,
+                    dry_run: dryRun === true,
+                },
+            };
+
+            dispatch('tasks/execute', task, { root: true }).then(
+                () => {
+                    dispatch('load', true);
+                },
+            );
+        },
     },
 };
