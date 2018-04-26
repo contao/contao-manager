@@ -57,11 +57,11 @@ class InstallTask extends AbstractPackagesTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
-    protected function createInitialStatus(TaskConfig $config)
+    public function getName()
     {
-        return new TaskStatus($this->translator->trans('task.install_packages.title'), true);
+        return 'install_packages';
     }
 
     /**

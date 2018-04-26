@@ -28,6 +28,15 @@ abstract class AbstractTask implements TaskInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function create(TaskConfig $config)
+    {
+        return (new TaskStatus($this->translator->trans('task.'.$this->getName().'.title')))
+            ->setSummary($this->translator->trans('task.created'));
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function update(TaskConfig $config)
@@ -36,7 +45,8 @@ abstract class AbstractTask implements TaskInterface
             return $this->abort($config);
         }
 
-        $status = $this->createInitialStatus($config);
+        $status = $this->create($config);
+        $status->setStatus(TaskStatus::STATUS_ACTIVE);
 
         foreach ($this->getOperations($config) as $operation) {
             if (!$operation->isStarted() || $operation->isRunning()) {
@@ -78,7 +88,7 @@ abstract class AbstractTask implements TaskInterface
     {
         $config->setCancelled();
 
-        $status = $this->createInitialStatus($config);
+        $status = $this->create($config);
         $status->setStatus(TaskStatus::STATUS_STOPPED);
 
         foreach ($this->getOperations($config) as $operation) {
@@ -157,13 +167,6 @@ abstract class AbstractTask implements TaskInterface
                 break;
         }
     }
-
-    /**
-     * @param TaskConfig $config
-     *
-     * @return TaskStatus
-     */
-    abstract protected function createInitialStatus(TaskConfig $config);
 
     /**
      * @param TaskConfig $config

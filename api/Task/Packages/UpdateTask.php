@@ -59,11 +59,11 @@ class UpdateTask extends AbstractPackagesTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
-    protected function createInitialStatus(TaskConfig $config)
+    public function getName()
     {
-        return new TaskStatus($this->translator->trans('task.update_packages.title'));
+        return 'update_packages';
     }
 
     /**

@@ -49,5 +49,18 @@ class DumpPackagesOperation extends AbstractInlineOperation
     public function updateStatus(TaskStatus $status)
     {
         $status->setSummary('Updating composer.json …');
+
+        $requires = $this->changes->getRequiredPackages();
+        $removes = $this->changes->getRemovedPackages();
+
+        if (!empty($requires)) {
+            $status->addConsole("> Added packages to composer.json\n - ".implode("\n - ", $requires));
+        }
+
+        if (!empty($removes)) {
+            $status->addConsole("> Removed packages from composer.json\n - ".implode("\n - ", $removes));
+        }
+
+        $this->addConsoleStatus($status);
     }
 }

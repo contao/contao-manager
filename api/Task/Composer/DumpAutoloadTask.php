@@ -32,9 +32,9 @@ class DumpAutoloadTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    protected function createInitialStatus(TaskConfig $config)
+    public function getName()
     {
-        return new TaskStatus($this->translator->trans('task.dump_autoload.title'));
+        return 'dump_autoload';
     }
 
     /**

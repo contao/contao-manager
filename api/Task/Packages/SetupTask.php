@@ -57,13 +57,12 @@ class SetupTask extends AbstractPackagesTask
         $this->filesystem = $filesystem;
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
-    protected function createInitialStatus(TaskConfig $config)
+    public function getName()
     {
-        return new TaskStatus($this->translator->trans('task.setup_packages.title'), true);
+        return 'setup_packages';
     }
 
     /**

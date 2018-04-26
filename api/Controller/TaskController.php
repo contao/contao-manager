@@ -60,7 +60,7 @@ class TaskController
             throw new BadRequestHttpException('Invalid task data');
         }
 
-        return $this->getResponse($this->taskManager->startTask($name, $config));
+        return $this->getResponse($this->taskManager->createTask($name, $config));
     }
 
     private function deleteTask()

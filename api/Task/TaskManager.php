@@ -71,22 +71,18 @@ class TaskManager
      *
      * @return TaskStatus
      */
-    public function startTask($name, array $options)
+    public function createTask($name, array $options)
     {
         if ($this->hasTask()) {
             throw new \RuntimeException('A task already exists.');
         }
 
         $config = new TaskConfig($this->configFile, $name, $options);
-        $task = $this->loadTask($config);
-
         $config->save();
-
-        $status = $task->update($config);
 
         $this->processFactory->createManagerConsoleBackgroundProcess(['task:update', '--poll']);
 
-        return $status;
+        return $this->loadTask($config)->create($config);
     }
 
     /**

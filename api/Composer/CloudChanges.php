@@ -69,9 +69,19 @@ class CloudChanges
         }
     }
 
+    public function getRequiredPackages()
+    {
+        return $this->require;
+    }
+
     public function removePackage($packageName)
     {
         $this->remove[] = $packageName;
+    }
+
+    public function getRemovedPackages()
+    {
+        return $this->remove;
     }
 
     public function setUpdates(array $updates)

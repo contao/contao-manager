@@ -36,14 +36,14 @@
                 <button class="widget-button" @click="hidePopup" v-else>{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
             </div>
 
-            <div v-if="hasConsole">
-                <a @click.prevent="toggleConsole" :class="'task-popup__toggle task-popup__toggle--' + (showConsole ? 'hide' : 'show')">
+            <div class="task-popup__console">
+                <button @click="toggleConsole" :class="'task-popup__toggle task-popup__toggle--' + (hasConsole ? (showConsole ? 'hide' : 'show') : 'invisible')">
                     <i class="icono-caretRight"></i>
                     <span v-if="showConsole">{{ 'ui.taskpopup.consoleHide' | translate }}</span>
                     <span v-else>{{ 'ui.taskpopup.consoleShow' | translate }}</span>
-                </a>
+                </button>
 
-                <code ref="console" @scroll="scrolled" :class="'task-popup__output' + (this.showConsole ? ' task-popup__output--visible' : '')">{{ taskConsole }}</code>
+                <code ref="console" @scroll="scrolled" :class="'task-popup__output' + (this.showConsole ? ' task-popup__output--visible' : '')" v-if="hasConsole">{{ taskConsole }}</code>
             </div>
         </div>
     </div>
@@ -203,15 +203,20 @@
 
     .task-popup {
         position: fixed;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
         width: 100%;
         height: 100%;
         text-align: center;
         background: #ffffff;
-        border-bottom: 2px solid #ddd3bc;
-        border-radius: 2px;
         z-index: 10;
         opacity: 1;
-        transition: opacity .5s linear;
+
+        > * {
+            flex-basis: auto;
+            flex-grow: 1;
+        }
 
         &__headline {
             background: $contao-color;
@@ -248,15 +253,21 @@
             line-height: 35px;
         }
 
+        &__console {
+            flex-basis: 100vh;
+            flex-grow: 1;
+            position: relative;
+        }
+
         &__toggle {
             display: none;
         }
 
         &__output {
-            display: block;
-            overflow: scroll;
             position: absolute;
-            top: 50%;
+            display: block;
+            overflow: auto;
+            top: 0;
             left: 0;
             right: 0;
             bottom: 0;
@@ -332,21 +343,17 @@
         }
 
         @include screen(960) {
-            position: fixed;
+            display: block;
             top: 50%;
             left: 50%;
-            width: 100%;
-            max-width: 750px;
-            height: 310px;
+            width: 750px;
             margin-left: -375px;
-            margin-top: -155px;
+            height: auto;
+            transform: translateY(-50%);
+            border-bottom: 2px solid #ddd3bc;
+            border-radius: 2px;
 
             &.fixed {
-            }
-
-            &--console {
-                height:630px;
-                margin-top:-325px;
             }
 
             &__text,
@@ -357,6 +364,10 @@
             &__toggle {
                 display: block;
                 text-align: left;
+                color: $link-color;
+                background: none;
+                border: none;
+                cursor: pointer;
 
                 i {
                     position: relative;
@@ -370,11 +381,19 @@
                 &--hide i {
                     transform: rotate(-90deg) scale(0.5);
                 }
+
+                &--invisible {
+                    visibility: hidden;
+                }
             }
 
             /*&.status-error a {
                 visibility: hidden;
             }*/
+
+            &__console {
+                margin-bottom: 30px;
+            }
 
             &__summary {
                 height: 130px;
@@ -386,7 +405,7 @@
                 top: auto;
                 left: auto;
                 right: auto;
-                margin: 15px 70px;
+                margin: 0 70px;
             }
 
             &--console code/*,

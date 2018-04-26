@@ -32,9 +32,9 @@ class ClearCacheTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    protected function createInitialStatus(TaskConfig $config)
+    public function getName()
     {
-        return new TaskStatus($this->translator->trans('task.clear_cache.title'));
+        return 'clear_cache';
     }
 
     /**

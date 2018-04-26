@@ -38,11 +38,6 @@ class TaskStatus
     /**
      * @var bool
      */
-    private $cancelled = false;
-
-    /**
-     * @var bool
-     */
     private $audit = false;
 
     /**

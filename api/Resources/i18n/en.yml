@@ -37,6 +37,7 @@ en:
             incompatible: 'This binary is a PHP version {cli} but your web server is version {web}.'
 
     task:
+        created: 'Console Task has been created …'
         setup_packages:
             title: 'Installing Contao Application'
         install_packages:

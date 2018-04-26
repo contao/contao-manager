@@ -33,14 +33,11 @@ class SelfUpdateTask extends AbstractTask
     }
 
     /**
-     * @param TaskConfig $config
-     *
-     * @return TaskStatus
+     * {@inheritdoc}
      */
-    protected function createInitialStatus(TaskConfig $config)
+    public function getName()
     {
-        return (new TaskStatus($this->translator->trans('task.self_update.title')))
-            ->setCancellable(false);
+        return 'self_update';
     }
 
     /**
