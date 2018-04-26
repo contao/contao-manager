@@ -71,6 +71,7 @@ export default {
             }
 
             commit('setInstalled', null);
+            commit('reset', null);
 
             Vue.http.get('api/packages').then(
                 (response) => {
