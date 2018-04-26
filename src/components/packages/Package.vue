@@ -133,7 +133,7 @@
                     return !this.package.extra || !this.package.extra['contao-manager-plugin'];
                 }
 
-                if (!this.package.managed || !this.package.supported) {
+                if (!this.isInstalled && (!this.package.managed || !this.package.supported)) {
                     return true;
                 }
 
