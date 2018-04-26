@@ -179,7 +179,7 @@ configs:
         last_update: 2018-01-23
         issues: []
         php:
-            /opt/php{major}.{minor}/bin/php: ['-d', 'memory_limit=-1']
+            /opt/php{major}.{minor}/bin/php: ['-d', 'allow_url_fopen=1', '-d', 'memory_limit=-1']
 
     mamp_mac:
         name: MAMP (macOS)
