@@ -7,8 +7,8 @@
         </header>
         <main v-if="boot" class="view-boot__checks">
 
-            <config @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Config')"/>
             <php-web @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('PhpWeb')"/>
+            <config @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Config')"/>
             <php-cli @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('PhpCli')"/>
             <self-update @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('SelfUpdate')"/>
             <composer @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Composer')"/>
@@ -45,15 +45,15 @@
     import Contao from '../boot/Contao';
 
     export default {
-        components: { BoxedLayout, Loader, SelfUpdate, Config, PhpWeb, PhpCli, Composer, Contao },
+        components: { BoxedLayout, Loader, PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao },
 
         data: () => ({
             currentView: null,
             boot: false,
 
             status: {
-                Config: null,
                 PhpWeb: null,
+                Config: null,
                 PhpCli: null,
                 SelfUpdate: null,
                 Composer: null,
@@ -77,8 +77,8 @@
                 if (view === null) {
                     this.$store.dispatch('server/purgeCache');
                     this.status = {
-                        Config: null,
                         PhpWeb: null,
+                        Config: null,
                         PhpCli: null,
                         SelfUpdate: null,
                         Composer: null,

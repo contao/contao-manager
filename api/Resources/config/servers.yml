@@ -171,7 +171,7 @@ configs:
         last_update: 2017-06-13
         issues: []
         php:
-            /usr/bin/php-{major}.{minor}: []
+            /usr/bin/php{major}.{minor}: []
 
     infomaniak:
         name: Infomaniak Network SA
@@ -179,7 +179,7 @@ configs:
         last_update: 2018-01-23
         issues: []
         php:
-            /opt/php{major}.{minor}/bin/php: ['-d', 'memory_limit=1024M']
+            /opt/php{major}.{minor}/bin/php: ['-d', 'memory_limit=-1']
 
     mamp_mac:
         name: MAMP (macOS)
