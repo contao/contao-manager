@@ -1,7 +1,23 @@
 <template>
     <div class="popup-overlay">
         <div ref="popup" :class="popupClass">
-            <h1 :class="headlineClass">{{ taskTitle }}</h1>
+            <h1 :class="headlineClass">
+                {{ taskTitle }}
+                <span class="task-popup__actions">
+                    <button :class="'task-popup__autoclose task-popup__autoclose--' + (autoClose ? 'active' : '')" v-if="allowAutoClose" @click="toggleAutoClose">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                    </button>
+                    <button :class="'task-popup__toggle task-popup__toggle--' + (showConsole ? 'active' : '')" @click="toggleConsole" v-if="allowConsole">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                        </svg>
+                    </button>
+                </span>
+            </h1>
 
             <div class="task-popup__status task-popup__status--complete" v-if="taskStatus === 'complete'"><i class="icono-checkCircle"></i></div>
             <div class="task-popup__status task-popup__status--error" v-else-if="taskStatus === 'error' || taskStatus === 'stopped'"><i class="icono-crossCircle"></i></div>
@@ -37,13 +53,7 @@
             </div>
 
             <div class="task-popup__console">
-                <button @click="toggleConsole" :class="'task-popup__toggle task-popup__toggle--' + (hasConsole ? (showConsole ? 'hide' : 'show') : 'invisible')">
-                    <i class="icono-caretRight"></i>
-                    <span v-if="showConsole">{{ 'ui.taskpopup.consoleHide' | translate }}</span>
-                    <span v-else>{{ 'ui.taskpopup.consoleShow' | translate }}</span>
-                </button>
-
-                <code ref="console" @scroll="scrolled" :class="'task-popup__output' + (this.showConsole ? ' task-popup__output--visible' : '')" v-if="hasConsole">{{ taskConsole }}</code>
+                <code ref="console" @scroll="scrolled" class="task-popup__output" v-if="hasConsole">{{ taskConsole }}</code>
             </div>
         </div>
     </div>
@@ -55,6 +65,7 @@
     export default {
         data: () => ({
             showConsole: false,
+            autoClose: false,
             scrollToBottom: true,
             swallowScroll: true,
             audit: false,
@@ -115,8 +126,16 @@
                 return this.currentTask.detail;
             },
 
+            allowAutoClose() {
+                return this.currentTask && this.currentTask.status && !this.currentTask.audit;
+            },
+
             requiresAudit() {
                 return this.audit && this.currentTask && this.currentTask.status === 'complete' && this.currentTask.audit;
+            },
+
+            allowConsole() {
+                return this.currentTask && this.currentTask.status;
             },
 
             hasConsole() {
@@ -150,6 +169,11 @@
                     this.scrollToBottom = true;
                     this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
                 }
+            },
+
+            toggleAutoClose() {
+                this.autoClose = !this.autoClose;
+                window.localStorage.setItem('contao_manager_autoclose', this.autoClose ? '1' : '0');
             },
 
             completeAudit() {
@@ -187,6 +211,7 @@
 
         activated() {
             this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
+            this.autoClose = window.localStorage.getItem('contao_manager_autoclose') === '1';
             this.scrollToBottom = true;
             this.audit = true;
         },
@@ -219,6 +244,7 @@
         }
 
         &__headline {
+            position: relative;
             background: $contao-color;
             color: #fff;
             font-weight: $font-weight-normal;
@@ -234,8 +260,49 @@
             }
         }
 
-        &__text,
-        &__toggle {
+        &__actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+
+            svg {
+                display: block;
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        &__toggle,
+        &__autoclose {
+            display: block;
+            float: right;
+            margin: 4px 4px 4px 0;
+            padding: 4px;
+            /*width: 38px;*/
+            /*height: 32px;*/
+            background: none;
+            border: 1px solid transparent;
+            border-radius: 1px;
+            cursor: pointer;
+
+            &--active {
+                background-color: darken($contao-color, 5);
+                border-color: darken($contao-color, 10);
+
+                .task-popup__headline--complete & {
+                    background-color: darken($green-button, 5);
+                    border-color: darken($green-button, 10);
+                }
+
+                .task-popup__headline--error & {
+                    background-color: $red-button;
+                    border-color: darken($red-button, 10);
+                }
+            }
+        }
+
+        &__text {
             margin: 0 15px;
 
             &--nowrap {
@@ -257,10 +324,6 @@
             flex-basis: 100vh;
             flex-grow: 1;
             position: relative;
-        }
-
-        &__toggle {
-            display: none;
         }
 
         &__output {
@@ -356,12 +419,11 @@
             &.fixed {
             }
 
-            &__text,
-            &__toggle {
+            &__text {
                 margin: 0 70px;
             }
 
-            &__toggle {
+            /*&__toggle {
                 display: block;
                 text-align: left;
                 color: $link-color;
@@ -385,15 +447,11 @@
                 &--invisible {
                     visibility: hidden;
                 }
-            }
+            }*/
 
             /*&.status-error a {
                 visibility: hidden;
             }*/
-
-            &__console {
-                margin-bottom: 30px;
-            }
 
             &__summary {
                 height: 130px;
@@ -405,7 +463,7 @@
                 top: auto;
                 left: auto;
                 right: auto;
-                margin: 0 70px;
+                margin: 0 70px 30px;
             }
 
             &--console code/*,

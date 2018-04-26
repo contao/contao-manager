@@ -45,6 +45,14 @@ abstract class AbstractPackagesTask extends AbstractTask
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function create(TaskConfig $config)
+    {
+        return parent::create($config)->setAudit(true);
+    }
+
+    /**
      * @inheritDoc
      */
     public function update(TaskConfig $config)

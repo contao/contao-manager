@@ -43,6 +43,9 @@ handleTask = (response, store, resolve, reject) => {
 
         case 'terminated': // BC
         case 'complete':
+            if (window.localStorage.getItem('contao_manager_autoclose') === '1' && !task.audit) {
+                store.dispatch('deleteCurrent');
+            }
             resolve(task);
             break;
 
@@ -58,7 +61,6 @@ handleTask = (response, store, resolve, reject) => {
 };
 
 failTask = (response, store, resolve, reject) => {
-    console.log('failed', response);
     // Request has timed out
     if (response.status === 0) {
         pending += 1;
