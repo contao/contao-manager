@@ -43,6 +43,11 @@ class CloudJob implements \JsonSerializable
         return $this->result['links'][$name];
     }
 
+    public function getSponsor()
+    {
+        return $this->result['sponsoredBy']['name'];
+    }
+
     /**
      * @return int
      */

@@ -8,7 +8,7 @@ use GuzzleHttp\RequestOptions;
 
 class CloudResolver
 {
-    const API_URL = 'https://resolve.contao.org';
+    const API_URL = 'http://35.198.165.71';
 
     /**
      * @var Client

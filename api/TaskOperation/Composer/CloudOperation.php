@@ -108,8 +108,9 @@ class CloudOperation implements TaskOperationInterface
             $job = $this->getCurrentJob();
 
             if (!$job instanceof CloudJob) {
-                $this->job = $this->cloud->createJob($this->changes);
+                $this->job = $job = $this->cloud->createJob($this->changes);
                 $this->taskConfig->setState('cloud-job', $this->job->getId());
+                $this->taskConfig->setState('cloud-job-queued', time());
             }
 
             if ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-successful', false)) {
@@ -164,9 +165,28 @@ class CloudOperation implements TaskOperationInterface
             return;
         }
 
+        $console = '> Resolving dependencies using Composer Cloud';
+        $console .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
+
+        $requires = $this->changes->getRequiredPackages();
+        $removes = $this->changes->getRemovedPackages();
+
+        if (!empty($requires)) {
+            $console .= "\n Added packages to composer.json\n - ".implode("\n  - ", $requires);
+        }
+
+        if (!empty($removes)) {
+            $console .= "\n Removed packages from composer.json\n - ".implode("\n  - ", $removes);
+        }
+
         switch ($job->getStatus()) {
             case CloudJob::STATUS_QUEUED:
-                $status->setSummary('Job queued in Composer Cloud');
+                $status->setSummary(
+                    sprintf(
+                        'Job queued in Composer Cloud for %s seconds',
+                        time() - $this->taskConfig->getState('cloud-job-queued')
+                    )
+                );
                 $status->setDetail(
                     sprintf(
                         'Starting in approx. %s seconds (currently %s jobs on %s workers)',
@@ -178,8 +198,15 @@ class CloudOperation implements TaskOperationInterface
                 break;
 
             case CloudJob::STATUS_PROCESSING:
+                $details = sprintf(
+                    'Job ID %s is running for %s seconds',
+                    $job->getId(),
+                    time() - $this->taskConfig->getState('cloud-job-processing')
+                );
+
                 $status->setSummary('Resolving dependencies using Composer Cloud');
-                $status->setDetail('Composer Cloud is sponsored by the Contao Association');
+                $status->setDetail($details);
+                $status->addConsole($console."\n\n ".$details);
                 break;
 
             case CloudJob::STATUS_ERROR:
@@ -189,6 +216,15 @@ class CloudOperation implements TaskOperationInterface
                 break;
 
             case CloudJob::STATUS_FINISHED:
+                $details = sprintf(
+                    'Job ID %s completed in %s seconds',
+                    $job->getId(),
+                    $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing')
+                );
+
+                $status->setSummary('Composer Cloud job completed');
+                $status->setDetail($details);
+                $status->addConsole($console."\n\n# ".$details."\n");
                 break;
 
             default:
@@ -203,6 +239,20 @@ class CloudOperation implements TaskOperationInterface
     {
         if (null === $this->job) {
             $this->job = $this->cloud->getJob($this->taskConfig->getState('cloud-job'));
+        }
+
+        if ($this->job instanceof CloudJob
+            && $this->job->isProcessing()
+            && !$this->taskConfig->getState('cloud-job-processing')
+        ) {
+            $this->taskConfig->setState('cloud-job-processing', time());
+        }
+
+        if ($this->job instanceof CloudJob
+            && ($this->job->isSuccessful() || $this->job->isFailed())
+            && !$this->taskConfig->getState('cloud-job-finished')
+        ) {
+            $this->taskConfig->setState('cloud-job-finished', time());
         }
 
         return $this->job;
