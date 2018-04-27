@@ -31,21 +31,15 @@
             </div>
 
             <div class="task-popup__summary" v-if="taskStatus === 'failed'">
-                <h2 :class="textClass">{{ 'ui.taskpopup.failedHeadline' | translate }}</h2>
-                <p :class="textClass" v-html="$t('ui.taskpopup.failedDescription')"></p>
-                <p :class="textClass"><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ 'ui.taskpopup.reportProblem' | translate }}</a></p>
+                <h2 class="task-popup__text">{{ 'ui.taskpopup.failedHeadline' | translate }}</h2>
+                <p class="task-popup__text" v-html="$t('ui.taskpopup.failedDescription')"></p>
+                <p class="task-popup__text"><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ 'ui.taskpopup.reportProblem' | translate }}</a></p>
 
                 <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonClose' | translate }}</span></button>
             </div>
-            <!--<div class="task-popup__summary" v-else-if="taskStatus === 'error'">
-                <h2 :class="textClass">{{ 'ui.taskpopup.errorHeadline' | translate }}</h2>
-                <p :class="textClass" v-html="$t('ui.taskpopup.errorDescription')"></p>
-
-                <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonConfirm' | translate }}</span></button>
-            </div>-->
             <div class="task-popup__summary" v-else>
-                <h2 :class="textClass">{{ taskSummary }}</h2>
-                <p :class="textClass">{{ taskDetail }}</p>
+                <h2 class="task-popup__text">{{ taskSummary }}</h2>
+                <p class="task-popup__text">{{ taskDetail }}</p>
 
                 <button class="widget-button" @click="cancelTask" v-if="isActive" :disabled="!currentTask || !currentTask.cancellable">{{ 'ui.taskpopup.buttonCancel' | translate }}</button>
                 <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
@@ -85,13 +79,6 @@
                     'task-popup__headline': true,
                     'task-popup__headline--complete': (this.taskStatus === 'complete'),
                     'task-popup__headline--error': (this.taskStatus === 'error' || this.taskStatus === 'stopped' || this.taskStatus === 'failed'),
-                };
-            },
-
-            textClass() {
-                return {
-                    'task-popup__text': true,
-                    'task-popup__text--nowrap': this.taskStatus === 'active',
                 };
             },
 
@@ -304,12 +291,6 @@
 
         &__text {
             margin: 0 15px;
-
-            &--nowrap {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
         }
 
         .widget-button {
