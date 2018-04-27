@@ -115,6 +115,8 @@ class ContaoController extends Controller
                 '.ftpquota',
                 '.htaccess',
                 'user.ini',
+                'composer.json~',
+                'composer.lock~',
             ]
         );
 
