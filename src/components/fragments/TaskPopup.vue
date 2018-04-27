@@ -48,8 +48,8 @@
                 <p :class="textClass">{{ taskDetail }}</p>
 
                 <button class="widget-button" @click="cancelTask" v-if="isActive" :disabled="!currentTask || !currentTask.cancellable">{{ 'ui.taskpopup.buttonCancel' | translate }}</button>
-                <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-else-if="requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
-                <button class="widget-button" @click="hidePopup" v-else>{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
+                <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
+                <button class="widget-button" @click="hidePopup" v-if="!isActive">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
             </div>
 
             <div class="task-popup__console">
@@ -452,10 +452,6 @@
             /*&.status-error a {
                 visibility: hidden;
             }*/
-
-            &__summary {
-                height: 130px;
-            }
 
             &__output {
                 display: none;
