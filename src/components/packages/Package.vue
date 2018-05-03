@@ -55,13 +55,16 @@
                 </div>
             </div>
 
-            <fieldset class="actions">
-                <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="changed.get('enabled') === false">Enable</button>-->
-                <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="changed.get('enabled') === true">Disable</button>-->
-                <button class="widget-button widget-button--alert widget-button--trash" v-if="isInstalled" @click="uninstall" :disabled="isContao || willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+            <fieldset class="actions" v-if="isContao">
+                <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
+            </fieldset>
+            <fieldset class="actions" v-else>
+                <button-group :label="$t('ui.package.updateButton')" icon="update" v-if="isInstalled" :disabled="isModified" @click="update">
+                    <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="isModified">Enable</button>-->
+                    <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="!isModified">Disable</button>-->
+                    <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="isContao || willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                </button-group>
                 <button class="widget-button widget-button--primary" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
-
-                <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" v-if="packageUpdates" @click="update">Update</button>
             </fieldset>
 
         </div>
@@ -72,9 +75,10 @@
     import Vue from 'vue';
 
     import More from './More';
+    import ButtonGroup from '../widgets/ButtonGroup';
 
     export default {
-        components: { More },
+        components: { More, ButtonGroup },
 
         props: {
             package: {
@@ -429,12 +433,12 @@
 
             @include screen(1024) {
                 float: left;
-                width: 390px;
+                width: 370px;
                 margin-bottom: 0;
             }
 
-            @include screen(1180) {
-                width: 610px;
+            @include screen(1200) {
+                width: 590px;
             }
 
             h1 {
@@ -509,7 +513,7 @@
 
             @include screen(600) {
                 float: left;
-                width: 33%;
+                width: 50%;
             }
 
             @include screen(1024) {
@@ -589,7 +593,7 @@
         .actions {
             @include screen(600) {
                 float: right;
-                width: 66%;
+                width: 50%;
                 max-width: 500px;
                 margin-top: -5px;
                 padding-left: 40px;
@@ -597,29 +601,9 @@
             }
 
             @include screen(1024) {
-                width: 160px;
+                width: 180px;
                 margin-left: 40px;
                 padding-left: 0;
-            }
-
-            button {
-                width: 100%;
-                margin-right: 5%;
-
-                &:last-of-type {
-                    margin-right: 0;
-                }
-
-                @include screen(600) {
-                    display: inline-block;
-                    width: 160px;
-                    margin-right: 0;
-                }
-
-                @include screen(1024) {
-                    width: 100%;
-                    margin-bottom: 10px;
-                }
             }
         }
     }

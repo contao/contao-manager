@@ -273,6 +273,7 @@
             border-radius: 1px;
             cursor: pointer;
 
+            &:hover,
             &--active {
                 background-color: darken($contao-color, 5);
                 border-color: darken($contao-color, 10);

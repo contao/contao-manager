@@ -190,6 +190,7 @@
     "ui.package.additionalDownloads": "{count} Download ::: {count} Downloads",
     "ui.package.additionalStars": "{count} Star ::: {count} Stars",
     "ui.package.editConstraint": "Edit",
+    "ui.package.updateButton": "Update",
     "ui.package.removeButton": "Remove",
     "ui.package.installButton": "Check & Install",
     "ui.package.latestConstraint": "latest version",
