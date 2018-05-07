@@ -12,14 +12,15 @@ class CacheWarmupOperation extends AbstractProcessOperation
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
+     * @param string                $environment
      * @param string                $processId
      */
-    public function __construct(ConsoleProcessFactory $processFactory, $processId = 'cache-warmup')
+    public function __construct(ConsoleProcessFactory $processFactory, $environment, $processId = 'cache-warmup')
     {
         try {
             parent::__construct($processFactory->restoreBackgroundProcess($processId));
         } catch (\Exception $e) {
-            parent::__construct($processFactory->createContaoConsoleBackgroundProcess(['cache:warmup'], $processId));
+            parent::__construct($processFactory->createContaoConsoleBackgroundProcess(['cache:warmup', '--env='.$environment], $processId));
         }
     }
 

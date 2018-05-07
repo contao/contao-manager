@@ -12,14 +12,15 @@ class CacheClearOperation extends AbstractProcessOperation
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
+     * @param string                $environment
      * @param string                $processId
      */
-    public function __construct(ConsoleProcessFactory $processFactory, $processId = 'cache-clear')
+    public function __construct(ConsoleProcessFactory $processFactory, $environment, $processId = 'cache-clear')
     {
         try {
             parent::__construct($processFactory->restoreBackgroundProcess($processId));
         } catch (\Exception $e) {
-            parent::__construct($processFactory->createContaoConsoleBackgroundProcess(['cache:clear', '--no-warmup'], $processId));
+            parent::__construct($processFactory->createContaoConsoleBackgroundProcess(['cache:clear', '--env='.$environment, '--no-warmup'], $processId));
         }
     }
 

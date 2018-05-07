@@ -58,12 +58,12 @@ class TaskConfig
      */
     public function getOption($name, $default = null)
     {
-        return isset($this->data['options'][$name]) ? $this->data['options'][$name] : $default;
+        return array_key_exists($name, $this->data['options']) ? $this->data['options'][$name] : $default;
     }
 
     public function getState($name, $default = null)
     {
-        return isset($this->data['state'][$name]) ? $this->data['state'][$name] : $default;
+        return array_key_exists($name, $this->data['state']) ? $this->data['state'][$name] : $default;
     }
 
     public function setState($name, $value)
