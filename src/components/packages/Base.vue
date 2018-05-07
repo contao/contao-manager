@@ -118,6 +118,7 @@
     .search-bar {
         margin: 30px 0 40px;
         background: #e5dfcf;
+        border-top: 1px solid #dcd8cc;
         border-bottom: 1px solid #dcd8cc;
 
         &__inside {

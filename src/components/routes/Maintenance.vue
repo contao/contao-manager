@@ -95,30 +95,39 @@
 
         &__actions {
             @include screen(600) {
-                float: right;
-                width: 50%;
-                max-width: 500px;
-                padding-left: 40px;
-                text-align: right;
+                margin: 0 -10px;
             }
 
             @include screen(1024) {
+                float: right;
                 width: 250px;
-                margin-left: 40px;
-                padding-left: 0;
+                margin: 0 0 0 40px;
             }
 
-            > button {
+            > button,
+            > .button-group {
                 width: 100%;
+                margin-bottom: 10px;
 
                 @include screen(600) {
-                    display: inline-block;
-                    /*width: 160px;*/
+                    float: right;
+                    width: calc(50% - 20px);
+                    margin: 0 10px;
                 }
 
                 @include screen(1024) {
                     width: 100%;
-                    margin-bottom: 10px;
+                    margin: 0 0 10px;
+                }
+            }
+
+            .link-menu {
+                left: auto;
+                right: 0;
+
+                &:before {
+                    left: auto;
+                    right: 17px;
                 }
             }
         }
