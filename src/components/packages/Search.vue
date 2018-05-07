@@ -52,8 +52,6 @@
         methods: {
             searchPackages(vm, value) {
                 if (!value) {
-                    vm.originals = null;
-                    vm.changes = null;
                     vm.packages = null;
                     return;
                 }
@@ -75,17 +73,25 @@
         },
 
         mounted() {
-            this.$store.dispatch('packages/load');
+            this.$store.dispatch('packages/load').then(() => {
+                if (this.searchField) {
+                    this.searchField.focus();
 
-            if (this.searchField) {
-                this.searchField.focus();
-            }
+                    if (this.query) {
+                        this.searchField.setAttribute('value', this.query);
+                    }
+                }
 
-            if (window.algoliasearch) {
-                this.algolia = window.algoliasearch('60DW2LJW0P', 'e6efbab031852e115032f89065b3ab9f').initIndex('v1');
-            } else {
-                this.packages = false;
-            }
+                if (window.algoliasearch) {
+                    this.algolia = window.algoliasearch('60DW2LJW0P', 'e6efbab031852e115032f89065b3ab9f').initIndex('v1');
+
+                    if (this.query) {
+                        this.searchPackages(this, this.query);
+                    }
+                } else {
+                    this.packages = false;
+                }
+            });
         },
     };
 </script>

@@ -5,8 +5,10 @@
             <navigation></navigation>
         </header>
 
+        <slot name="subheader"/>
+
         <main class="layout-main__content">
-            <slot></slot>
+            <slot/>
         </main>
 
         <footer-fragment display="main"></footer-fragment>
@@ -52,6 +54,7 @@
 
         &__content,
         footer {
+            position: relative;
             margin: 0 20px;
 
             @include screen(1024) {

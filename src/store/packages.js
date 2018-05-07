@@ -13,6 +13,15 @@ export default {
         remove: [],
     },
 
+    getters: {
+        totalChanges(state) {
+            return Object.keys(state.add).length
+                + Object.keys(state.change).length
+                + state.update.length
+                + state.remove.length;
+        },
+    },
+
     mutations: {
         setInstalled(state, packages) {
             state.installed = packages;
@@ -67,13 +76,13 @@ export default {
     actions: {
         load({ state, commit }, reload = false) {
             if (!reload && state.installed) {
-                return;
+                return new Promise((resolve) => { resolve(); });
             }
 
             commit('setInstalled', null);
             commit('reset', null);
 
-            Vue.http.get('api/packages').then(
+            return Vue.http.get('api/packages').then(
                 (response) => {
                     const packages = Object.assign(
                         {},

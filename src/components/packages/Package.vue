@@ -1,5 +1,5 @@
 <template>
-    <section class="package">
+    <article class="package">
 
         <transition name="package__hint">
             <div class="package__hint" v-if="hint">
@@ -64,11 +64,11 @@
                     <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="!isModified">Disable</button>-->
                     <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="isContao || willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
                 </button-group>
-                <button class="widget-button widget-button--primary" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
+                <button class="widget-button widget-button--primary widget-button--add" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
             </fieldset>
 
         </div>
-    </section>
+    </article>
 </template>
 
 <script>

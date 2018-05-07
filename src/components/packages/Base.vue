@@ -1,24 +1,27 @@
 <template>
     <main-layout>
 
-        <section :class="{ 'package-tools': true, 'package-tools--search': $route.name === 'packages-search' }">
-            <button class="package-tools__button package-tools__button--update widget-button" :disabled="hasChanges || isSearchMode" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
-            <button class="package-tools__button package-tools__button--search widget-button" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
-            <input class="package-tools__search" ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
-            <button class="package-tools__cancel" @click="stopSearch">X</button>
+        <section class="search-bar" slot="subheader">
+            <div class="layout-main__content">
+                <div class="search-bar__inside">
+                    <input class="search-bar__input" ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
+                    <button class="search-bar__button search-bar__button--stop" @click="stopSearch" v-if="isSearchMode">Cancel</button>
+                    <button class="search-bar__button search-bar__button--start" v-else>Search</button>
+                </div>
+            </div>
         </section>
 
         <router-view ref="component" :searchField="$refs.search"/>
 
         <div :class="{ 'package-actions': true, 'package-actions--active': hasChanges }">
             <div class="package-actions__inner" v-if="$route.name === 'packages'">
-                <p class="package-actions__text">{{ 'ui.packages.changesMessage' | translate }}</p>
+                <p class="package-actions__text">{{ 'ui.packages.changesMessage' | translate({ total: totalChanges }, totalChanges) }}</p>
                 <button class="package-actions__button widget-button" @click="dryrunChanges">{{ 'ui.packages.changesDryrun' | translate }}</button>
                 <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
                 <button class="package-actions__button widget-button widget-button--alert" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
             </div>
             <div class="package-actions__inner" v-else>
-                <p class="package-actions__text">{{ 'ui.packages.changesMessage' | translate }}</p>
+                <p class="package-actions__text">{{ 'ui.packages.changesMessage' | translate({ total: totalChanges }, totalChanges) }}</p>
                 <router-link :to="packageRoute" class="package-actions__button widget-button widget-button--primary">{{ 'ui.packages.changesReview' | translate }}</router-link>
             </div>
         </div>
@@ -27,12 +30,14 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import routes from '../../router/routes';
 
     import MainLayout from '../layouts/Main';
+    import ButtonGroup from '../widgets/ButtonGroup';
 
     export default {
-        components: { MainLayout },
+        components: { MainLayout, ButtonGroup },
 
         data: () => ({
             searchInput: '',
@@ -50,6 +55,8 @@
             isSearchMode() {
                 return this.$route.name === routes.packagesSearch.name;
             },
+
+            ...mapGetters('packages', ['totalChanges']),
         },
 
         methods: {
@@ -67,14 +74,14 @@
             },
 
             search() {
-                if (this.$route.name === routes.packagesSearch.name) {
-                    this.$router.push(
-                        Object.assign(
-                            { query: { q: this.searchInput } },
-                            routes.packagesSearch,
-                        ),
-                    );
-                }
+                // if (this.$route.name === routes.packagesSearch.name) {
+                this.$router.push(
+                    Object.assign(
+                        { query: { q: this.searchInput } },
+                        routes.packagesSearch,
+                    ),
+                );
+                // }
             },
 
             dryrunChanges() {
@@ -108,10 +115,57 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "../../assets/styles/defaults";
 
+    .search-bar {
+        margin: 30px 0 40px;
+        background: #e5dfcf;
+        border-bottom: 1px solid #dcd8cc;
+
+        &__inside {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 25px 20px;
+        }
+
+        &__input {
+            display: block;
+            height: 46px !important;
+            padding-right: 50px !important;
+            line-height: 46px;
+            border: none !important;
+
+            &::placeholder {
+                color: $text-color;
+            }
+        }
+
+        &__button {
+            position: absolute;
+            top: 33px;
+            right: 30px;
+            width: 32px;
+            height: 32px;
+            background: none;
+            border: none;
+
+            &--start {
+                background: url("../../assets/images/search.svg") 0 0 no-repeat;
+                background-size: contain;
+                text-indent: -999em;
+            }
+
+            &--stop {
+                background: url("../../assets/images/search-close.svg") 0 0 no-repeat;
+                background-size: contain;
+                text-indent: -999em;
+            }
+        }
+    }
+
     .package-tools {
         position: relative;
-        margin-bottom: 40px;
-        text-align: center;
+        margin: 40px 5px 20px;
+        text-align: right;
 
         &__button {
             &.widget-button {
@@ -130,14 +184,6 @@
                 margin-right: 8px;
                 background-size: 22px 22px;
                 content: "";
-            }
-
-            &--update:before {
-                background: url('../../assets/images/update.svg') center center no-repeat;
-            }
-
-            &--search:before {
-                background: url('../../assets/images/search-invert.svg') center center no-repeat;
             }
         }
 
@@ -186,7 +232,7 @@
 
         @include screen(1024) {
             &__button.widget-button {
-                width: 200px;
+                width: 180px;
                 margin: 0 15px;
             }
 
