@@ -9,6 +9,7 @@ services:
         calls:
             - [addIntegrityCheck, ["@contao_manager.integrity.memory_limit"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.allow_url_fopen"]]
+            - [addIntegrityCheck, ["@contao_manager.integrity.systempdir"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.openssl"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.intl"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.process"]]

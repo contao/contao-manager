@@ -45,6 +45,7 @@ class PhpWebController extends Controller
         /** @var IntegrityCheckInterface[] $checks */
         $checks = [
             'contao_manager.integrity.allow_url_fopen',
+            'contao_manager.integrity.systempdir',
             'contao_manager.integrity.intl',
             'contao_manager.integrity.openssl',
             'contao_manager.integrity.session',

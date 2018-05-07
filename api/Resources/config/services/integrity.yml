@@ -33,3 +33,8 @@ services:
         class: Contao\ManagerApi\IntegrityCheck\WebRootCheck
         arguments:
             - "@contao_manager.i18n.translator"
+
+    contao_manager.integrity.systempdir:
+        class: Contao\ManagerApi\IntegrityCheck\SysTempDirCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
