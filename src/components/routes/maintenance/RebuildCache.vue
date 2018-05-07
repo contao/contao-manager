@@ -8,12 +8,10 @@
                 <p>{{ 'ui.maintenance.rebuildCache.description' | translate }}</p>
             </div>
 
-            <fieldset class="maintenance__config">
-                <select-menu name="environment" v-model="env" :options="{ 'prod': $t('ui.maintenance.rebuildCache.prod'), 'dev': $t('ui.maintenance.rebuildCache.dev') }"/>
-            </fieldset>
-
             <fieldset class="maintenance__actions">
-                <button class="widget-button widget-button--primary widget-button--update" @click="execute">{{ 'ui.maintenance.rebuildCache.button' | translate }}</button>
+                <button-group :label="$t('ui.maintenance.rebuildCache.rebuildProd')" type="primary" icon="update" @click="rebuildProd">
+                    <link-menu :items="advancedActions()" color="primary"/>
+                </button-group>
             </fieldset>
         </div>
     </section>
@@ -21,21 +19,50 @@
 
 <script>
     import SelectMenu from '../../widgets/SelectMenu';
+    import ButtonGroup from '../../widgets/ButtonGroup';
+    import LinkMenu from '../../fragments/LinkMenu';
 
     export default {
-        components: { SelectMenu },
-
-        data: () => ({
-            env: 'prod',
-        }),
+        components: { SelectMenu, ButtonGroup, LinkMenu },
 
         methods: {
-            execute() {
+            advancedActions() {
+                return [
+                    {
+                        label: this.$t('ui.maintenance.rebuildCache.rebuildDev'),
+                        action: this.rebuildDev,
+                    },
+                    {
+                        label: this.$t('ui.maintenance.rebuildCache.clearProd'),
+                        action: this.clearProd,
+                    },
+                    {
+                        label: this.$t('ui.maintenance.rebuildCache.clearDev'),
+                        action: this.clearDev,
+                    },
+                ];
+            },
+
+            rebuildProd() {
+                this.execute('prod', true);
+            },
+
+            rebuildDev() {
+                this.execute('dev', true);
+            },
+
+            clearProd() {
+                this.execute('prod', false);
+            },
+
+            clearDev() {
+                this.execute('dev', false);
+            },
+
+            execute(environment, warmup) {
                 const task = {
                     name: 'contao/rebuild-cache',
-                    config: {
-                        environment: this.env,
-                    },
+                    config: { environment, warmup },
                 };
 
                 this.$store.dispatch('tasks/execute', task);

@@ -73,6 +73,8 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
+    @import "../../assets/styles/defaults";
+
     .button-group {
         position: relative;
 
@@ -109,6 +111,10 @@
             .widget-button {
                 margin-top: 1px;
                 /*border-radius: 0;*/
+            }
+
+            .link-menu {
+                margin-top: 3px;
             }
         }
     }

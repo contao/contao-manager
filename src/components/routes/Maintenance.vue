@@ -78,12 +78,8 @@
 
             @include screen(1024) {
                 float: left;
-                width: 340px;
-                margin-bottom: 0;
-            }
-
-            @include screen(1180) {
                 width: 510px;
+                margin-bottom: 0;
             }
 
             h1 {
@@ -97,47 +93,27 @@
             }
         }
 
-        &__config {
-            text-align: right;
-            margin-bottom: 10px;
-
-            @include screen(600) {
-                float: left;
-                width: 60%;
-            }
-
-            @include screen(1024) {
-                width: 230px;
-                margin-left: 40px;
-                margin-bottom: 0;
-            }
-
-            @include screen(1180) {
-                width: 280px;
-            }
-        }
-
         &__actions {
             @include screen(600) {
                 float: right;
-                width: 40%;
+                width: 50%;
                 max-width: 500px;
                 padding-left: 40px;
                 text-align: right;
             }
 
             @include screen(1024) {
-                width: 160px;
+                width: 250px;
                 margin-left: 40px;
                 padding-left: 0;
             }
 
-            button {
+            > button {
                 width: 100%;
 
                 @include screen(600) {
                     display: inline-block;
-                    width: 160px;
+                    /*width: 160px;*/
                 }
 
                 @include screen(1024) {
