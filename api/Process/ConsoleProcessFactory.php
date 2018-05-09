@@ -75,7 +75,7 @@ class ConsoleProcessFactory
      */
     public function getContaoConsolePath()
     {
-        return $this->kernel->getContaoDir().'/vendor/bin/contao-console';
+        return $this->kernel->getContaoDir().'/vendor/contao/manager-bundle/bin/contao-console';
     }
 
     /**
@@ -85,7 +85,7 @@ class ConsoleProcessFactory
      */
     public function getContaoApiPath()
     {
-        return $this->kernel->getContaoDir().'/vendor/bin/contao-api';
+        return $this->kernel->getContaoDir().'/vendor/contao/manager-bundle/bin/contao-api';
     }
 
     /**
