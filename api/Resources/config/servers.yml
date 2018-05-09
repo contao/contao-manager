@@ -196,6 +196,7 @@ configs:
         issues: []
         php:
             C:\MAMP\bin\php\php{major}.{minor}.{release}\php.exe: []
+            D:\MAMP\bin\php\php{major}.{minor}.{release}\php.exe: []
 
     metanet:
         name: METANET AG
@@ -292,3 +293,12 @@ configs:
         php:
             /usr/bin/php{major}{minor}: []
             /usr/bin/php: []
+
+    xampp:
+        name: XAMPP (Windows)
+        website: www.apachefriends.org
+        last_update: 2018-05-09
+        issues: []
+        php:
+            C:\XAMPP\php\php.exe: []
+            D:\XAMPP\php\php.exe: []
