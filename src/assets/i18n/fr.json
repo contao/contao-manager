@@ -98,7 +98,7 @@
     "ui.navigation.installTool": "Outil d'installation",
     "ui.navigation.backend": "Back office de Contao",
     "ui.navigation.debug": "Mode de débogage de Contao",
-    "ui.navigation.phpinfo": "En savoir plus sur Contao",
+    "ui.navigation.phpinfo": "Informations de PHP",
     "ui.navigation.maintenance": "Maintenance",
     "ui.navigation.rebuildCache": "Reconstruire le cache",
     "ui.navigation.systemCheck": "Vérification du système",
