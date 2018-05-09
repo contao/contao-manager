@@ -66,7 +66,7 @@ failTask = (response, store, resolve, reject) => {
         pending += 1;
 
         if (pending <= 5) {
-            pollTask(store, resolve, reject, 0);
+            pollTask(store, resolve, reject);
             return;
         }
     }
