@@ -58,7 +58,9 @@
             },
 
             close() {
-                this.showGroup = false;
+                setTimeout(() => {
+                    this.showGroup = false;
+                }, 100);
             },
 
             toggle() {
