@@ -44,13 +44,16 @@ class ContaoConsole
         $process = $this->processFactory->createContaoConsoleProcess(['contao:version']);
         $process->mustRun();
 
-        $parser = new VersionParser();
         $version = trim($process->getOutput());
 
         try {
-            return $parser->normalize($version);
+            // Run parser to check whether a valid version was returned
+            $parser = new VersionParser();
+            $parser->normalize($version);
         } catch (\UnexpectedValueException $e) {
             throw new ProcessOutputException('Console output is not a valid version string.', $process);
         }
+
+        return $version;
     }
 }
