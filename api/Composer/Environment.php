@@ -38,6 +38,16 @@ class Environment
         ];
     }
 
+    public function getManagerDir()
+    {
+        return $this->kernel->getManagerDir();
+    }
+
+    public function getContaoDir()
+    {
+        return $this->kernel->getContaoDir();
+    }
+
     public function getJsonFile()
     {
         return $this->kernel->getContaoDir().'/composer.json';

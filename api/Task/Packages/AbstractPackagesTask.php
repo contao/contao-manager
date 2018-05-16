@@ -3,7 +3,6 @@
 namespace Contao\ManagerApi\Task\Packages;
 
 use Contao\ManagerApi\Composer\Environment;
-use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\AbstractTask;
 use Contao\ManagerApi\Task\TaskConfig;
@@ -50,19 +49,7 @@ abstract class AbstractPackagesTask extends AbstractTask
      */
     public function update(TaskConfig $config)
     {
-        if (!$config->getState('backup-created', false) && $this->filesystem->exists($this->environment->getJsonFile())) {
-            $this->filesystem->copy($this->environment->getJsonFile(), $this->environment->getJsonFile().'~', true);
-
-            if ($this->filesystem->exists($this->environment->getLockFile())) {
-                $this->filesystem->copy(
-                    $this->environment->getLockFile(),
-                    $this->environment->getLockFile() . '~',
-                    true
-                );
-            }
-
-            $config->setState('backup-created', true);
-        }
+        $this->createBackup($config);
 
         $status = parent::update($config);
 
@@ -83,28 +70,39 @@ abstract class AbstractPackagesTask extends AbstractTask
         return $status;
     }
 
+    private function createBackup(TaskConfig $config)
+    {
+        if (!$config->getState('backup-created', false) && $this->filesystem->exists($this->environment->getJsonFile())) {
+            foreach ($this->getBackupPaths() as $source => $target) {
+                if ($this->filesystem->exists($source)) {
+                    $this->filesystem->copy($source, $target, true);
+                    $this->filesystem->remove($source);
+                }
+            }
+
+            $config->setState('backup-created', true);
+        }
+    }
+
     private function restoreBackup(TaskStatus $status, TaskConfig $config)
     {
         if (($status->hasError() || $status->isStopped()) && $config->getState('backup-created', false) && !$config->getState('backup-restored', false)) {
-            if ($this->filesystem->exists($this->environment->getJsonFile().'~')) {
-                $this->filesystem->copy(
-                    $this->environment->getJsonFile() . '~',
-                    $this->environment->getJsonFile(),
-                    true
-                );
-                $this->filesystem->remove($this->environment->getJsonFile() . '~');
-            }
-
-            if ($this->filesystem->exists($this->environment->getLockFile().'~')) {
-                $this->filesystem->copy(
-                    $this->environment->getLockFile() . '~',
-                    $this->environment->getLockFile(),
-                    true
-                );
-                $this->filesystem->remove($this->environment->getLockFile() . '~');
+            foreach (array_flip($this->getBackupPaths()) as $source => $target) {
+                if ($this->filesystem->exists($source)) {
+                    $this->filesystem->copy($source, $target, true);
+                    $this->filesystem->remove($source);
+                }
             }
 
             $config->setState('backup-restored', true);
         }
+    }
+
+    private function getBackupPaths()
+    {
+        return [
+            $this->environment->getJsonFile() => sprintf('%s/%s~', $this->environment->getManagerDir(), basename($this->environment->getJsonFile())),
+            $this->environment->getLockFile() => sprintf('%s/%s~', $this->environment->getManagerDir(), basename($this->environment->getLockFile())),
+        ];
     }
 }
