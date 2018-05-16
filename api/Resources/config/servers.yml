@@ -165,6 +165,14 @@ configs:
         php:
             /usr/local/php{major}{minor}/bin/php: []
 
+    hostingde:
+        name: hosting.de GmbH
+        website: www.hosting.de
+        last_update: 2018-05-17
+        issues: []
+        php:
+            /opt/php-{major}.{minor}/bin/php: []
+
     hostingwerk:
         name: Hostingwerk (Feyer Media GmbH & Co. KG)
         website: hostingwerk.de
@@ -256,12 +264,21 @@ configs:
         php:
             /usr/bin/php{major}{minor}: []
 
+    serverprofis:
+        name: Serverprofis GmbH
+        website: www.serverprofis.de
+        last_update: 2018-05-17
+        issues: []
+        php:
+            /opt/alt/php{major}{minor}/usr/bin/php: []
+
     strato:
         name: STRATO AG
         website: www.strato.de
         last_update: 2017-05-31
         issues: [intl, memory]
         php:
+            /opt/RZphp{major}{minor}/bin/php-cli: []
             /usr/bin/php{major}.{minor}: []
 
     uberspace:
