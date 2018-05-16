@@ -246,15 +246,16 @@ class UserConfig extends AbstractConfig
      * Creates a token for given username.
      *
      * @param string $username
-     * @param array  $payload
+     * @param string $clientId
+     * @param string $scope
      *
      * @return string
      */
-    public function createToken($username, array $payload = [])
+    public function createToken($username, $clientId, $scope = 'admin')
     {
         $token = bin2hex(random_bytes(16));
 
-        $this->addToken($token, $username, $payload);
+        $this->addToken($token, $username, $clientId, $scope);
 
         return $token;
     }
@@ -264,11 +265,10 @@ class UserConfig extends AbstractConfig
      *
      * @param string $token
      * @param string $username
-     * @param array  $payload
-     *
-     * @throws \RuntimeException
+     * @param string $clientId
+     * @param string $scope
      */
-    public function addToken($token, $username, array $payload = [])
+    public function addToken($token, $username, $clientId, $scope = 'admin')
     {
         if (!$this->hasUser($username)) {
             throw new \RuntimeException(sprintf('Username "%s" does not exist.', $username));
@@ -281,7 +281,12 @@ class UserConfig extends AbstractConfig
         $payload['token'] = $token;
         $payload['username'] = $username;
 
-        $this->data['tokens'][$token] = $payload;
+        $this->data['tokens'][$token] = [
+            'token' => $token,
+            'username' => $username,
+            'client_id' => $clientId,
+            'scope' => $scope,
+        ];
 
         $this->save();
     }

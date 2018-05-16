@@ -55,8 +55,8 @@
                 return Vue.http.post(
                     `api/users/${this.$store.state.auth.username}/tokens`,
                     {
-                        scope: this.scope,
                         client_id: this.clientId,
+                        scope: this.scope,
                     },
                 ).then((response) => {
                     if (this.returnUrl.includes('?')) {
