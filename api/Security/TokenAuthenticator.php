@@ -117,8 +117,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     private function getAuthenticationHeader(Request $request)
     {
-        if ($request->server->has('HTTP_AUTHENTICATION')) {
-            return $request->server->get('HTTP_AUTHENTICATION');
+        if ($request->server->has('HTTP_AUTHORIZATION')) {
+            return $request->server->get('HTTP_AUTHORIZATION');
         }
 
         if ($request->server->has('REDIRECT_HTTP_AUTHORIZATION')) {
@@ -132,8 +132,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         if (function_exists('getallheaders')) {
             $headers = getallheaders();
 
-            if (isset($headers['authentication'])) {
-                return $headers['authentication'];
+            if (isset($headers['authorization'])) {
+                return $headers['authorization'];
             }
         }
 
