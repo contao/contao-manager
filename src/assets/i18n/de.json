@@ -69,7 +69,7 @@
     "ui.server.composer.title": "Composer-Umgebung",
     "ui.server.composer.success": "Keine bekannten Probleme gefunden.",
     "ui.server.composer.install": "Composer-Abhängigkeiten sind nicht installiert.",
-    "ui.server.composer.button": "Composer ausführen",
+    "ui.server.composer.button": "Installieren",
     "ui.server.contao.title": "Contao-Installation",
     "ui.server.contao.setup": "Einrichtung",
     "ui.server.contao.empty": "Es wurde keine Contao-Installation gefunden.",
