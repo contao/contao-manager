@@ -11,6 +11,7 @@
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
 use Contao\ManagerApi\Composer\CloudChanges;
+use Contao\ManagerApi\Composer\CloudException;
 use Contao\ManagerApi\Composer\CloudJob;
 use Contao\ManagerApi\Composer\CloudResolver;
 use Contao\ManagerApi\Composer\Environment;
@@ -158,6 +159,18 @@ class CloudOperation implements TaskOperationInterface
 
     public function updateStatus(TaskStatus $status)
     {
+        if ($this->exception instanceof CloudException) {
+            $status->addConsole(
+                sprintf(
+                    "> The Composer Cloud failed with status code %s\n\n  %s",
+                    $this->exception->getStatusCode(),
+                    $this->exception->getErrorMessage()
+                )
+            );
+
+            return;
+        }
+
         if ($this->exception instanceof \Exception) {
             $status->addConsole($this->exception->getMessage());
 
