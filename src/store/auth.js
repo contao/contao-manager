@@ -35,7 +35,7 @@ export default {
         login({ commit }, { username, password }) {
             return Vue.http.post('api/session', { username, password }).then(
                 (response) => {
-                    commit('setUsername', response.username);
+                    commit('setUsername', response.body.username);
 
                     return true;
                 },

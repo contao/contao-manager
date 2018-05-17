@@ -158,9 +158,22 @@ class UserController extends Controller
             throw new BadRequestHttpException(sprintf('User "%s" does not exists.', $username));
         }
 
-        $token = $this->config->createToken($username, $request->request->all());
+        $clientId = $request->request->get('client_id');
+        $scope = $request->request->get('scope');
 
-        return $this->retrieveToken($username, $token);
+        if (!$clientId || $scope !== 'admin') {
+            throw new BadRequestHttpException('Invalid payload for OAuth token.');
+        }
+
+        foreach ($this->config->getTokens() as $payload) {
+            if ($payload['username'] === $username && $payload['client_id'] === $clientId) {
+                return $this->retrieveToken($username, $payload['token']);
+            }
+        }
+
+        $token = $this->config->createToken($username, $clientId, $scope);
+
+        return $this->retrieveToken($username, $token, 201);
     }
 
     /**
@@ -168,10 +181,11 @@ class UserController extends Controller
      *
      * @param string $username
      * @param string $token
+     * @param int    $status
      *
      * @return Response
      */
-    public function retrieveToken($username, $token)
+    public function retrieveToken($username, $token, $status = 200)
     {
         $payload = $this->config->getToken($token);
 
@@ -179,7 +193,7 @@ class UserController extends Controller
             throw new NotFoundHttpException(sprintf('Token "%s" was not found.', $token));
         }
 
-        return new JsonResponse($payload);
+        return new JsonResponse($payload, $status);
     }
 
     /**
