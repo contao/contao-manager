@@ -103,6 +103,9 @@
                             this.bootDescription = this.$t('ui.server.contao.unsupported', phpWeb);
                         }
                     });
+                } else if (!result.supported) {
+                    this.bootState = 'error';
+                    this.bootDescription = this.$t('ui.server.contao.old', result);
                 } else {
                     this.bootState = 'success';
                     this.bootDescription = this.$t('ui.server.contao.found', result);
@@ -113,9 +116,6 @@
                 if (response.status === 503) {
                     this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.prerequisite');
-                } else if (response.status === 500) {
-                    this.bootState = 'error';
-                    this.bootDescription = response.body.output;
                 } else {
                     this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.error');

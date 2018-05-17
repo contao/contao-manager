@@ -74,18 +74,11 @@ class ContaoController extends Controller
             );
         }
 
-        if (version_compare($contaoVersion, '4.3.5', '<')) {
-            return new ApiProblemResponse(
-                (new ApiProblem(
-                    $translator->trans('integrity.contao_old.title')
-                ))->setDetail($translator->trans('integrity.contao_old.detail', ['version' => $contaoVersion]))
-            );
-        }
-
         return new JsonResponse(
             [
-                'version' => $this->getContaoVersion(),
+                'version' => $contaoVersion,
                 'api' => $this->getApiVersion(),
+                'supported' => version_compare($contaoVersion, '4.3.5', '>=')
             ]
         );
     }
@@ -115,8 +108,6 @@ class ContaoController extends Controller
                 '.ftpquota',
                 '.htaccess',
                 'user.ini',
-                'composer.json~',
-                'composer.lock~',
             ]
         );
 

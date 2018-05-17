@@ -21,9 +21,6 @@ en:
         systempdir:
             title: 'Unable to write to the temporary system directory.'
             detail: 'This is most likely a problem with your hosting configuration. Make sure that either open_basedir does allow access to the temporary directory or that the sys_temp_dir is correctly configured.'
-        contao_old:
-            title: 'Incompatible Contao version'
-            detail: 'Contao version {version} is not compatible with the Contao Manager, please update your installation manually.'
         contao_unknown:
             title: 'Unknown installation status'
             detail: "Some files were found on your server but no known Contao version could be detected.\nYou must either manually repair your application or remove the following files and folders to install Contao:\n\n{files}"
