@@ -118,11 +118,7 @@ export default {
                 },
             };
 
-            dispatch('tasks/execute', task, { root: true }).then(
-                () => {
-                    dispatch('load', true);
-                },
-            );
+            return dispatch('tasks/execute', task, { root: true });
         },
     },
 };

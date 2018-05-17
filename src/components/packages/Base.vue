@@ -89,7 +89,7 @@
             },
 
             applyChanges() {
-                this.$store.dispatch('packages/apply');
+                this.$store.dispatch('packages/apply').then(() => this.$store.dispatch('load', true));
             },
 
             resetChanges() {
