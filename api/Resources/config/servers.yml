@@ -32,8 +32,6 @@ configs:
     1blu:
         name: 1blu AG
         website: www.1blu.de
-        last_update: 2018-01-23
-        issues: []
         php:
             /usr/bin/php{major}{minor}/php{major}: []
             /opt/php{major}/bin/php: []
@@ -41,8 +39,6 @@ configs:
     1und1:
         name: 1&1 Internet SE
         website: www.1und1.de
-        last_update: 2017-06-20
-        issues: [cputime, memory]
         php:
             /usr/bin/php{major}.{minor}-cli: ['-d', 'memory_limit=-1']
             /usr/bin/php{major}.{minor}: []
@@ -51,16 +47,12 @@ configs:
     alfahosting:
         name: Alfahosting GmbH
         website: alfahosting.de
-        last_update: 2017-11-17
-        issues: []
         php:
             /usr/bin/php{major}.{minor}: ['-d', 'memory_limit=-1']
 
     allinkl:
         name: ALL-INKL.COM - Neue Medien Münnich
         website: all-inkl.com
-        last_update: 2017-06-17
-        issues: []
         php:
             /usr/bin/php{major}{minor}: []
             /usr/bin/php: []
@@ -68,64 +60,48 @@ configs:
     cyon:
         name: cyon GmbH
         website: www.cyon.ch
-        last_update: 2017-05-31
-        issues: []
         php:
             /opt/alt/php{major}{minor}/usr/bin/php: []
 
     dogado:
         name: dogado GmbH
         website: www.dogado.de
-        last_update: 2018-01-23
-        issues: []
         php:
             /opt/plesk/php/{major}.{minor}/bin/php: []
 
     domainfactory:
         name: domainfactory GmbH
         website: www.df.eu
-        last_update: 2017-06-20
-        issues: [memory]
         php:
             /usr/local/bin/php{major}-{major}{minor}LATEST-CLI: []
 
     edis:
         name: EDIS GmbH
         website: www.edis.at
-        last_update: 2017-12-01
-        issues: []
         php:
             /usr/local/bin/edis-php-cli-{major}{minor}-stable-openssl: []
 
     etes:
         name: ETES GmbH
         website: www.etes.de
-        last_update: 2017-12-15
-        issues: []
         php:
             /bin/php{major}{minor}: []
 
     exigo:
         name: exigo AG
         website: www.exigo.ch
-        last_update: 2017-12-01
-        issues: []
         php:
             /usr/bin/php{major}.{minor}: []
 
     goneo:
         name: goneo Internet GmbH
         website: www.goneo.de
-        last_update: 2018-01-23
-        issues: []
         php:
             /usr/local/phpfarm/inst/php-{major}.{minor}/bin/php: []
 
     hetzner:
         name: Hetzner Online GmbH
         website: www.hetzner.de
-        last_update: 2017-06-26
-        issues: []
         php:
             /usr/bin/php{major}{minor}: []
             /usr/bin/php: []
@@ -133,8 +109,6 @@ configs:
     hosteurope:
         name: Host Europe GmbH
         website: www.hosteurope.de
-        last_update: 2017-06-27
-        issues: []
         php:
             /usr/bin/php{major}.{minor}: ['-d', 'allow_url_fopen=1', '-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
             /usr/bin/php: ['-d', 'allow_url_fopen=1', '-d', 'memory_limit=2048M', '-d', 'suhosin.executor.include.whitelist="phar://,http://,https://"']
@@ -143,16 +117,12 @@ configs:
     hostfactory:
         name: Hostfactory (OptimaNet Schweiz AG)
         website: www.hostfactory.ch
-        last_update: 2012-12-05
-        issues: []
         php:
             /opt/plesk/php/{major}.{minor}/bin/php: []
 
     hostnet:
         name: hostNET Medien GmbH
         website: www.hostnet.de
-        last_update: 2017-12-01
-        issues: []
         php:
             /usr/iports/php{major}{minor}/bin/php: []
             /usr/local/bin/php: []
@@ -160,48 +130,36 @@ configs:
     hostpoint:
         name: Hostpoint AG
         website: www.hostpoint.ch
-        last_update: 2017-12-01
-        issues: []
         php:
             /usr/local/php{major}{minor}/bin/php: []
 
     hostingde:
         name: hosting.de GmbH
         website: www.hosting.de
-        last_update: 2018-05-17
-        issues: []
         php:
             /opt/php-{major}.{minor}/bin/php: []
 
     hostingwerk:
         name: Hostingwerk (Feyer Media GmbH & Co. KG)
         website: hostingwerk.de
-        last_update: 2017-06-13
-        issues: []
         php:
             /usr/bin/php{major}.{minor}: []
 
     infomaniak:
         name: Infomaniak Network SA
         website: www.infomaniak.com
-        last_update: 2018-01-23
-        issues: []
         php:
             /opt/php{major}.{minor}/bin/php: ['-d', 'allow_url_fopen=1', '-d', 'memory_limit=-1']
 
     mamp_mac:
         name: MAMP (macOS)
         website: www.mamp.info
-        last_update: 2017-10-10
-        issues: []
         php:
             /Applications/MAMP/bin/php/php{major}.{minor}.{release}/bin/php: []
 
     mamp_win:
         name: MAMP (Windows)
         website: www.mamp.info
-        last_update: 2017-11-12
-        issues: []
         php:
             C:\MAMP\bin\php\php{major}.{minor}.{release}\php.exe: []
             D:\MAMP\bin\php\php{major}.{minor}.{release}\php.exe: []
@@ -209,8 +167,6 @@ configs:
     metanet:
         name: METANET AG
         website: www.metanet.ch
-        last_update: 2017-05-31
-        issues: []
         php:
             /opt/php{major}{minor}/bin/php: []
             /usr/bin/php: []
@@ -218,16 +174,12 @@ configs:
     mittwald:
         name: Mittwald CM Service GmbH & Co. KG
         website: www.mittwald.de
-        last_update: 2017-11-21
-        issues: []
         php:
             /usr/local/bin/php_cli: []
 
     netcup:
         name: netcup GmbH
         website: www.netcup.de
-        last_update: 2017-06-27
-        issues: []
         php:
             /usr/local/php56/bin/php: ['-d', 'date.timezone=UTC']
             /usr/local/php{major}{minor}/bin/php: []
@@ -236,48 +188,36 @@ configs:
     netzone:
         name: NetZone AG
         website: www.netzone.ch
-        last_update: 2018-01-23
-        issues: []
         php:
             /usr/bin/php{major}.{minor}: []
 
     novatrend:
         name: Novatrend Services GmbH
         website: www.novatrend.ch
-        last_update: 2017-05-31
-        issues: [cputime]
         php:
             /usr/local/bin/php: []
 
     timme:
         name: Timme Hosting GmbH & Co. KG
         website: timmehosting.de
-        last_update: 2017-12-01
-        issues: []
         php:
             /opt/php-{major}.{minor}.{release}/bin/php: []
 
     tobiasbauer:
         name: Tobias Bauer
         website: www.tb-itf.de
-        last_update: 2017-12-01
-        issues: []
         php:
             /usr/bin/php{major}{minor}: []
 
     serverprofis:
         name: Serverprofis GmbH
         website: www.serverprofis.de
-        last_update: 2018-05-17
-        issues: []
         php:
             /opt/alt/php{major}{minor}/usr/bin/php: []
 
     strato:
         name: STRATO AG
         website: www.strato.de
-        last_update: 2017-05-31
-        issues: [intl, memory]
         php:
             /opt/RZphp{major}{minor}/bin/php-cli: []
             /usr/bin/php{major}.{minor}: []
@@ -285,8 +225,6 @@ configs:
     uberspace:
         name: Uberspace
         website: uberspace.de
-        last_update: 2017-12-11
-        issues: []
         php:
             /package/host/localhost/php-{major}.{minor}/bin/php: []
             /usr/bin/php: []
@@ -294,8 +232,6 @@ configs:
     webgo:
         name: webgo GmbH
         website: www.webgo.de
-        last_update: 2017-12-21
-        issues: []
         php:
             /usr/bin/php{major}.{minor}: []
             /usr/bin/php{major}{minor}: []
@@ -305,8 +241,6 @@ configs:
     webhostone:
         name: WebhostOne GmbH
         website: www.webhostone.de
-        last_update: 2017-06-18
-        issues: []
         php:
             /usr/bin/php{major}{minor}: []
             /usr/bin/php: []
@@ -314,8 +248,6 @@ configs:
     xampp:
         name: XAMPP (Windows)
         website: www.apachefriends.org
-        last_update: 2018-05-09
-        issues: []
         php:
             C:\XAMPP\php\php.exe: []
             D:\XAMPP\php\php.exe: []
