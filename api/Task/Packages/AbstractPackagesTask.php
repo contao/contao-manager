@@ -76,7 +76,6 @@ abstract class AbstractPackagesTask extends AbstractTask
             foreach ($this->getBackupPaths() as $source => $target) {
                 if ($this->filesystem->exists($source)) {
                     $this->filesystem->copy($source, $target, true);
-                    $this->filesystem->remove($source);
                 }
             }
 
