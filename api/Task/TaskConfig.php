@@ -87,30 +87,6 @@ class TaskConfig
     }
 
     /**
-     * @deprecated
-     */
-    public function getStatus()
-    {
-        return isset($this->data['status']) ? $this->data['status'] : null;
-    }
-
-    /**
-     * @deprecated
-     *
-     * @param string $status
-     */
-    public function setStatus($status)
-    {
-        if (isset($this->data['status']) && $this->data['status'] === $status) {
-            return;
-        }
-
-        $this->data['status'] = $status;
-
-        $this->save();
-    }
-
-    /**
      * @return bool
      */
     public function isCancelled()
