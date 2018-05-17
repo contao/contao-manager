@@ -74,7 +74,6 @@ class TaskUpdateCommand extends Command
         if (!$input->getOption('poll')) {
             $style->text($status->getSummary());
         } else {
-
             $progress = new ProgressIndicator($output);
             $progress->start($status->getSummary());
 

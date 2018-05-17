@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\Task;
 
 class TaskStatus
@@ -150,7 +158,7 @@ class TaskStatus
         }
 
         if ($this->console) {
-            $console = $this->console . "\n\n" . $console;
+            $console = $this->console."\n\n".$console;
         }
 
         $this->console = $console;

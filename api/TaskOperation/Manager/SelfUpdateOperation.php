@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\TaskOperation\Manager;
 
 use Contao\ManagerApi\SelfUpdate\Updater;
@@ -30,14 +38,6 @@ class SelfUpdateOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    protected function getName()
-    {
-        return 'self-update';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function doRun()
     {
         return $this->updater->update();
@@ -56,5 +56,13 @@ class SelfUpdateOperation extends AbstractInlineOperation
         ;
 
         $this->addConsoleStatus($status);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getName()
+    {
+        return 'self-update';
     }
 }

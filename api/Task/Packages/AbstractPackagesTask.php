@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\Task\Packages;
 
 use Contao\ManagerApi\Composer\Environment;
@@ -24,9 +32,9 @@ abstract class AbstractPackagesTask extends AbstractTask
     /**
      * Constructor.
      *
-     * @param Environment   $environment
-     * @param Filesystem    $filesystem
-     * @param Translator    $translator
+     * @param Environment $environment
+     * @param Filesystem  $filesystem
+     * @param Translator  $translator
      */
     public function __construct(Environment $environment, Filesystem $filesystem, Translator $translator)
     {
@@ -45,7 +53,7 @@ abstract class AbstractPackagesTask extends AbstractTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function update(TaskConfig $config)
     {
@@ -59,7 +67,7 @@ abstract class AbstractPackagesTask extends AbstractTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function abort(TaskConfig $config)
     {

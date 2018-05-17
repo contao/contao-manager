@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\TaskOperation\Filesystem;
 
 use Contao\ManagerApi\ApiKernel;
@@ -42,11 +50,6 @@ class RemoveCacheOperation extends AbstractInlineOperation
         parent::__construct($taskConfig);
     }
 
-    protected function getName()
-    {
-        return 'remove-cache@' . $this->getCacheDir();
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -68,6 +71,11 @@ class RemoveCacheOperation extends AbstractInlineOperation
         $this->addConsoleStatus($status);
     }
 
+    protected function getName()
+    {
+        return 'remove-cache@'.$this->getCacheDir();
+    }
+
     /**
      * Gets the Contao cache directory for current environment.
      *
@@ -75,6 +83,6 @@ class RemoveCacheOperation extends AbstractInlineOperation
      */
     private function getCacheDir()
     {
-        return $this->kernel->getContaoDir() . '/var/cache/' . $this->environment;
+        return $this->kernel->getContaoDir().'/var/cache/'.$this->environment;
     }
 }

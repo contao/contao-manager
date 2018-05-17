@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
 use Composer\DependencyResolver\Pool;
@@ -50,9 +58,18 @@ class CreateProjectOperation extends AbstractInlineOperation
         $this->filesystem = $filesystem;
         $this->version = $taskConfig->getOption('version');
 
-        if (!in_array($this->version, static::$supportedVersions)) {
+        if (!in_array($this->version, static::$supportedVersions, true)) {
             throw new \InvalidArgumentException('Unsupported Contao version');
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateStatus(TaskStatus $status)
+    {
+        $status->setSummary('Downloading application template …');
+        $status->setDetail('contao/managed-edition '.$this->version);
     }
 
     /**
@@ -91,14 +108,5 @@ class CreateProjectOperation extends AbstractInlineOperation
         );
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateStatus(TaskStatus $status)
-    {
-        $status->setSummary('Downloading application template …');
-        $status->setDetail('contao/managed-edition ' . $this->version);
     }
 }

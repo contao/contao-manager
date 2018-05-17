@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\Composer;
 
 use Composer\Command\RemoveCommand;
@@ -63,7 +71,7 @@ class CloudChanges
     public function requirePackage($packageName, $version = null)
     {
         if ($version) {
-            $this->require[] = $packageName . ' ' . $version;
+            $this->require[] = $packageName.' '.$version;
         } else {
             $this->require[] = $packageName;
         }
@@ -119,7 +127,7 @@ class CloudChanges
         }
 
         $filesystem = new Filesystem();
-        $tempdir = sys_get_temp_dir() . '/' . uniqid('composer-', false);
+        $tempdir = sys_get_temp_dir().'/'.uniqid('composer-', false);
         $tempfile = $tempdir.'/'.basename($this->json->getPath());
 
         putenv('COMPOSER='.$tempfile);

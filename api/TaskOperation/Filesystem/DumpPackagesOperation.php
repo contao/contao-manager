@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\TaskOperation\Filesystem;
 
 use Contao\ManagerApi\Composer\CloudChanges;
@@ -34,18 +42,6 @@ class DumpPackagesOperation extends AbstractInlineOperation
         parent::__construct($taskConfig);
     }
 
-    protected function getName()
-    {
-        return 'dump-packages';
-    }
-
-    protected function doRun()
-    {
-        $this->changes->getJsonFile()->write($this->changes->getJson());
-
-        return true;
-    }
-
     public function updateStatus(TaskStatus $status)
     {
         $status->setSummary('Updating composer.json …');
@@ -62,5 +58,17 @@ class DumpPackagesOperation extends AbstractInlineOperation
         }
 
         $this->addConsoleStatus($status);
+    }
+
+    protected function getName()
+    {
+        return 'dump-packages';
+    }
+
+    protected function doRun()
+    {
+        $this->changes->getJsonFile()->write($this->changes->getJson());
+
+        return true;
     }
 }

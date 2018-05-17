@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\TaskOperation;
 
 use Contao\ManagerApi\Task\TaskConfig;
@@ -110,9 +118,9 @@ abstract class AbstractInlineOperation implements TaskOperationInterface
     /**
      * Executes the operation and returns whether it was successful.
      *
-     * @return bool
-     *
      * @throws \Exception
+     *
+     * @return bool
      */
     abstract protected function doRun();
 }

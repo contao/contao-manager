@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Task\TaskManager;
@@ -19,7 +27,7 @@ class TaskController
     /**
      * Constructor.
      *
-     * @param TaskManager          $taskManager
+     * @param TaskManager $taskManager
      */
     public function __construct(TaskManager $taskManager)
     {

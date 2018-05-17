@@ -264,6 +264,6 @@ class ConsoleProcessFactory
             $cmd = $console;
         }
 
-        return escapeshellcmd($cmd).' '.implode(' ', array_map('escapeshellarg', $arguments)) . ' 2>&1';
+        return escapeshellcmd($cmd).' '.implode(' ', array_map('escapeshellarg', $arguments)).' 2>&1';
     }
 }

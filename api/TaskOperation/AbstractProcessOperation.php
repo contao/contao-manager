@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\TaskOperation;
 
 use Contao\ManagerApi\Task\TaskStatus;
@@ -8,6 +16,14 @@ use Terminal42\BackgroundProcess\ProcessController;
 
 abstract class AbstractProcessOperation implements TaskOperationInterface
 {
+    /**
+     * @var Process|ProcessController
+     */
+    protected $process;
+
+    /**
+     * @var array
+     */
     private static $signals = [
         1 => 'SIGHUP',
         2 => 'SIGINT',
@@ -15,11 +31,6 @@ abstract class AbstractProcessOperation implements TaskOperationInterface
         15 => 'SIGTERM',
         9 => 'SIGKILL',
     ];
-
-    /**
-     * @var Process|ProcessController
-     */
-    protected $process;
 
     /**
      * Constructor.

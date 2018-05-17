@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\Composer;
 
 use Composer\Json\JsonFile;
@@ -25,13 +33,13 @@ class CloudResolver
         $data = [
             'composerJson' => $definition->getJson(),
             'composerLock' => $definition->getLock(),
-            'platform' => $definition->getPlatform()
+            'platform' => $definition->getPlatform(),
         ];
 
         // TODO add update set from CloudChanges
         $options = [RequestOptions::JSON => $data];
 
-        $response = $this->http->request('POST', self::API_URL . '/jobs', $options);
+        $response = $this->http->request('POST', self::API_URL.'/jobs', $options);
 
         return new CloudJob(JsonFile::parseJson((string) $response->getBody()));
     }

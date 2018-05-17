@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\Task\Contao;
 
 use Contao\ManagerApi\ApiKernel;
@@ -7,7 +15,6 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\AbstractTask;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Contao\CacheClearOperation;
 use Contao\ManagerApi\TaskOperation\Contao\CacheWarmupOperation;
 use Contao\ManagerApi\TaskOperation\Filesystem\RemoveCacheOperation;

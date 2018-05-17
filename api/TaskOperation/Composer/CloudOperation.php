@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * Copyright (c) 2016-2018 Contao Association
+ *
+ * @license LGPL-3.0+
+ */
+
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
 use Contao\ManagerApi\Composer\CloudChanges;
@@ -72,6 +80,7 @@ class CloudOperation implements TaskOperationInterface
             return $this->getCurrentJob() instanceof CloudJob;
         } catch (\Exception $e) {
             $this->exception = $e;
+
             return true;
         }
     }
@@ -88,6 +97,7 @@ class CloudOperation implements TaskOperationInterface
                 );
         } catch (\Exception $e) {
             $this->exception = $e;
+
             return false;
         }
     }
@@ -150,6 +160,7 @@ class CloudOperation implements TaskOperationInterface
     {
         if ($this->exception instanceof \Exception) {
             $status->addConsole($this->exception->getMessage());
+
             return;
         }
 
@@ -158,6 +169,7 @@ class CloudOperation implements TaskOperationInterface
         } catch (\Exception $e) {
             $this->exception = $e;
             $status->addConsole($this->exception->getMessage());
+
             return;
         }
 
