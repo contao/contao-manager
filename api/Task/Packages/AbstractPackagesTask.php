@@ -49,7 +49,7 @@ abstract class AbstractPackagesTask extends AbstractTask
      */
     public function create(TaskConfig $config)
     {
-        return parent::create($config)->setAudit(true);
+        return parent::create($config)->setAudit(!$config->getOption('dry_run', false));
     }
 
     /**
