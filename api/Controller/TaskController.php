@@ -43,6 +43,9 @@ class TaskController
             case 'PUT':
                 return $this->putTask($request);
 
+            case 'PATCH':
+                return $this->patchTask($request);
+
             case 'DELETE':
                 return $this->deleteTask();
         }
@@ -69,6 +72,19 @@ class TaskController
         }
 
         return $this->getResponse($this->taskManager->createTask($name, $config));
+    }
+
+    private function patchTask(Request $request)
+    {
+        if (!$this->taskManager->hasTask()) {
+            throw new BadRequestHttpException('No active task found.');
+        }
+
+        if (TaskStatus::STATUS_ABORTING !== $request->request->get('status')) {
+            throw new BadRequestHttpException('Unsupported task status');
+        }
+
+        return $this->getResponse($this->taskManager->abortTask());
     }
 
     private function deleteTask()
@@ -115,6 +131,7 @@ class TaskController
                 'detail' => $status->getDetail(),
                 'console' => $status->getConsole(),
                 'cancellable' => $status->isCancellable(),
+                'autoclose' => $status->canAutoClose(),
                 'audit' => $status->hasAudit(),
                 'status' => $status->getStatus(),
             ],

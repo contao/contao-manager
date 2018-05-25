@@ -123,15 +123,14 @@ export default {
             });
         },
 
-        stop(store) {
+        abort(store) {
             if (store.state.status === null) {
                 return new Promise((resolve, reject) => {
                     reject();
                 });
             }
 
-            // TODO implement task stopping
-            return Vue.http.patch('api/task', { status: 'terminated' });
+            return Vue.http.patch('api/task', { status: 'aborting' });
         },
 
         deleteCurrent(store) {

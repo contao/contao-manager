@@ -185,7 +185,7 @@
 
             cancelTask() {
                 if (confirm(this.$t('ui.taskpopup.confirmCancel'))) {
-                    this.$store.dispatch('tasks/stop');
+                    this.$store.dispatch('tasks/abort');
                 }
             },
 
