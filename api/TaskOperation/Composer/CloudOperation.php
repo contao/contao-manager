@@ -78,7 +78,7 @@ class CloudOperation implements TaskOperationInterface
     public function isStarted()
     {
         try {
-            return $this->getCurrentJob() instanceof CloudJob;
+            return (bool) $this->taskConfig->getState('cloud-job-queued');
         } catch (\Exception $e) {
             $this->exception = $e;
 
@@ -119,9 +119,9 @@ class CloudOperation implements TaskOperationInterface
             $job = $this->getCurrentJob();
 
             if (!$job instanceof CloudJob) {
+                $this->taskConfig->setState('cloud-job-queued', time());
                 $this->job = $job = $this->cloud->createJob($this->changes);
                 $this->taskConfig->setState('cloud-job', $this->job->getId());
-                $this->taskConfig->setState('cloud-job-queued', time());
             }
 
             if ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-successful', false)) {
