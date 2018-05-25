@@ -15,9 +15,13 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
-class CloudResolver
+class CloudResolver implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     const API_URL = 'https://resolve.contao.org';
 
     /**
@@ -46,8 +50,16 @@ class CloudResolver
             'platform' => $definition->getPlatform(),
         ];
 
-        // TODO add update set from CloudChanges
-        $options = [RequestOptions::JSON => $data];
+        $options = [
+            RequestOptions::JSON => $data,
+            RequestOptions::HEADERS => [
+                'Composer-Resolver-Command' => implode(' ', $definition->getUpdates()),
+            ],
+        ];
+
+        if (null !== $this->logger) {
+            $this->logger->info('Creating Composer Cloud job', $options);
+        }
 
         $response = $this->request('/jobs', 'POST', $options);
 

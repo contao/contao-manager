@@ -37,6 +37,10 @@ services:
 
     contao_manager.composer.cloud_resolver:
         class: Contao\ManagerApi\Composer\CloudResolver
+        calls:
+            - [setLogger, ["@logger"]]
+        tags:
+            - { name: monolog.logger, channel: tasks }
 
     contao_manager.composer.environment:
         class: Contao\ManagerApi\Composer\Environment
