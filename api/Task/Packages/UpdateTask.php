@@ -68,6 +68,20 @@ class UpdateTask extends AbstractPackagesTask
     }
 
     /**
+     * @inheritDoc
+     */
+    public function update(TaskConfig $config)
+    {
+        $status = parent::update($config);
+
+        if ($status->isComplete() && $config->getOption('dry_run', false) && !$this->environment->useCloudResolver()) {
+            $this->restoreBackup($config);
+        }
+
+        return $status;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function buildOperations(TaskConfig $config)
