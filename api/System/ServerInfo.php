@@ -197,6 +197,23 @@ class ServerInfo
     }
 
     /**
+     * Returns configuration for the configured server.
+     *
+     * @return array
+     */
+    public function getServerConfig()
+    {
+        $executable = $this->getPhpExecutable();
+        $server = $this->managerConfig->get('server');
+
+        if ($executable && $server && isset($this->configs[$server])) {
+            return (array) $this->configs[$server];
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the server platform (Windows or UNIX).
      *
      * @return string

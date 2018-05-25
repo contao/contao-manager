@@ -12,9 +12,9 @@ namespace Contao\ManagerApi\Task\Packages;
 
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
+use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\AbstractTask;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractPackagesTask extends AbstractTask
@@ -28,17 +28,23 @@ abstract class AbstractPackagesTask extends AbstractTask
      * @var Filesystem
      */
     private $filesystem;
+    /**
+     * @var ServerInfo
+     */
+    private $serverInfo;
 
     /**
      * Constructor.
      *
      * @param Environment $environment
+     * @param ServerInfo  $serverInfo
      * @param Filesystem  $filesystem
      * @param Translator  $translator
      */
-    public function __construct(Environment $environment, Filesystem $filesystem, Translator $translator)
+    public function __construct(Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
     {
         $this->environment = $environment;
+        $this->serverInfo = $serverInfo;
         $this->filesystem = $filesystem;
 
         parent::__construct($translator);
@@ -49,7 +55,7 @@ abstract class AbstractPackagesTask extends AbstractTask
      */
     public function create(TaskConfig $config)
     {
-        return parent::create($config)->setAudit(!$config->getOption('dry_run', false));
+        return parent::create($config)->setAudit(!$config->getOption('dry_run', false))->setCancellable($config->getOption('dry_run', false));
     }
 
     /**
@@ -61,7 +67,9 @@ abstract class AbstractPackagesTask extends AbstractTask
 
         $status = parent::update($config);
 
-        $this->restoreBackup($status, $config);
+        if ($status->hasError() || $status->isStopped()) {
+            $this->restoreBackup($config);
+        }
 
         return $status;
     }
@@ -73,31 +81,92 @@ abstract class AbstractPackagesTask extends AbstractTask
     {
         $status = parent::abort($config);
 
-        $this->restoreBackup($status, $config);
+        if ($status->hasError() || $status->isStopped()) {
+            $this->restoreBackup($config);
+        }
 
         return $status;
     }
 
-    private function createBackup(TaskConfig $config)
+    /**
+     * @return int|null
+     */
+    protected function getInstallTimeout()
     {
-        if (!$config->getState('backup-created', false) && $this->filesystem->exists($this->environment->getJsonFile())) {
-            foreach ($this->getBackupPaths() as $source => $target) {
-                if ($this->filesystem->exists($source)) {
-                    $this->filesystem->copy($source, $target, true);
-                }
-            }
+        $timeout = null;
+        $serverConfig = $this->serverInfo->getServerConfig();
 
-            $config->setState('backup-created', true);
+        if (isset($serverConfig['timeout']) && $serverConfig['timeout'] > 0) {
+            $timeout = (int) $serverConfig['timeout'];
+
+            if (null !== $this->logger) {
+                $this->logger->notice(sprintf('Configured install timeout of %s seconds for server "%s".', $timeout, $serverConfig['name']));
+            }
         }
+
+        return $timeout;
     }
 
-    private function restoreBackup(TaskStatus $status, TaskConfig $config)
+    /**
+     * Creates a backup of the composer.json and composer.lock file.
+     *
+     * @param TaskConfig $config
+     */
+    protected function createBackup(TaskConfig $config)
     {
-        if (($status->hasError() || $status->isStopped()) && $config->getState('backup-created', false) && !$config->getState('backup-restored', false)) {
+        if ($config->getState('backup-created', false)) {
+            return;
+        }
+
+        if (!$this->filesystem->exists($this->environment->getJsonFile())) {
+            if (null !== $this->logger) {
+                $this->logger->notice('Cannot create composer file backup, source JSON does not exist', ['file' => $this->environment->getJsonFile()]);
+            }
+
+            return;
+        }
+
+        if (null !== $this->logger) {
+            $this->logger->notice('Creating backup of composer files');
+        }
+
+        foreach ($this->getBackupPaths() as $source => $target) {
+            if ($this->filesystem->exists($source)) {
+                $this->filesystem->copy($source, $target, true);
+
+                if (null !== $this->logger) {
+                    $this->logger->notice(sprintf('Copied "%s" to "%s"', $source, $target));
+                }
+            } elseif (null !== $this->logger) {
+                $this->logger->notice(sprintf('File "%s" does not exist', $source));
+            }
+        }
+
+        $config->setState('backup-created', true);
+    }
+
+    /**
+     * Restores the backup files if a backup was created within this task.
+     *
+     * @param TaskConfig $config
+     */
+    protected function restoreBackup(TaskConfig $config)
+    {
+        if ($config->getState('backup-created', false) && !$config->getState('backup-restored', false)) {
+            if (null !== $this->logger) {
+                $this->logger->notice('Restoring backup of composer files');
+            }
+
             foreach (array_flip($this->getBackupPaths()) as $source => $target) {
                 if ($this->filesystem->exists($source)) {
                     $this->filesystem->copy($source, $target, true);
                     $this->filesystem->remove($source);
+
+                    if (null !== $this->logger) {
+                        $this->logger->notice(sprintf('Copied "%s" to "%s"', $source, $target));
+                    }
+                } elseif (null !== $this->logger) {
+                    $this->logger->notice(sprintf('File "%s" does not exist', $source));
                 }
             }
 
@@ -105,6 +174,11 @@ abstract class AbstractPackagesTask extends AbstractTask
         }
     }
 
+    /**
+     * Gets source and backup paths for composer.json and composer.lock
+     *
+     * @return array
+     */
     private function getBackupPaths()
     {
         return [

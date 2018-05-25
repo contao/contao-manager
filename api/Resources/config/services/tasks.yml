@@ -29,8 +29,10 @@ services:
         arguments:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.composer.cloud_resolver"
-            - "@contao_manager.i18n.translator"
+            - "@contao_manager.composer.environment"
+            - "@contao_manager.system.server_info"
             - "@filesystem"
+            - "@contao_manager.i18n.translator"
         calls:
             - [setLogger, ["@logger"]]
         tags:
@@ -41,8 +43,9 @@ services:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.composer.cloud_resolver"
             - "@contao_manager.composer.environment"
-            - "@contao_manager.i18n.translator"
+            - "@contao_manager.system.server_info"
             - "@filesystem"
+            - "@contao_manager.i18n.translator"
         calls:
             - [setLogger, ["@logger"]]
         tags:
@@ -53,8 +56,9 @@ services:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.composer.cloud_resolver"
             - "@contao_manager.composer.environment"
-            - "@contao_manager.i18n.translator"
+            - "@contao_manager.system.server_info"
             - "@filesystem"
+            - "@contao_manager.i18n.translator"
         calls:
             - [setLogger, ["@logger"]]
         tags:

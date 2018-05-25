@@ -218,6 +218,7 @@ configs:
     strato:
         name: STRATO AG
         website: www.strato.de
+        timeout: 30
         php:
             /opt/RZphp{major}{minor}/bin/php-cli: []
             /usr/bin/php{major}.{minor}: []
