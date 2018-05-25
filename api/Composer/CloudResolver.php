@@ -39,8 +39,9 @@ class CloudResolver implements LoggerAwareInterface
      *
      * @param CloudChanges $definition
      *
-     * @return CloudJob
      * @throws GuzzleException
+     *
+     * @return CloudJob
      */
     public function createJob(CloudChanges $definition)
     {
@@ -71,8 +72,9 @@ class CloudResolver implements LoggerAwareInterface
      *
      * @param string $jobId
      *
-     * @return CloudJob|null
      * @throws GuzzleException
+     *
+     * @return CloudJob|null
      */
     public function getJob($jobId)
     {
@@ -99,7 +101,7 @@ class CloudResolver implements LoggerAwareInterface
         }
 
         try {
-            $response = $this->request('/jobs/' . $jobId, 'DELETE');
+            $response = $this->request('/jobs/'.$jobId, 'DELETE');
 
             return $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
         } catch (GuzzleException $e) {
@@ -112,8 +114,9 @@ class CloudResolver implements LoggerAwareInterface
      *
      * @param CloudJob $job
      *
-     * @return string
      * @throws GuzzleException
+     *
+     * @return string
      */
     public function getComposerJson(CloudJob $job)
     {
@@ -127,8 +130,9 @@ class CloudResolver implements LoggerAwareInterface
      *
      * @param CloudJob $job
      *
-     * @return null|string
      * @throws GuzzleException
+     *
+     * @return null|string
      */
     public function getComposerLock(CloudJob $job)
     {
@@ -146,8 +150,9 @@ class CloudResolver implements LoggerAwareInterface
      *
      * @param CloudJob $job
      *
-     * @return null|string
      * @throws GuzzleException
+     *
+     * @return null|string
      */
     public function getOutput(CloudJob $job)
     {
@@ -167,9 +172,10 @@ class CloudResolver implements LoggerAwareInterface
      * @param string $method
      * @param array  $options
      *
-     * @return mixed|\Psr\Http\Message\ResponseInterface
      * @throws CloudException
      * @throws GuzzleException
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface
      */
     private function request($path, $method = 'GET', array $options = [])
     {
@@ -179,7 +185,7 @@ class CloudResolver implements LoggerAwareInterface
         );
 
         try {
-            return $this->http->request($method, self::API_URL . $path, $options);
+            return $this->http->request($method, self::API_URL.$path, $options);
         } catch (RequestException $e) {
             throw new CloudException($e);
         }

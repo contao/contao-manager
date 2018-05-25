@@ -191,7 +191,7 @@ class CloudOperation implements TaskOperationInterface
         }
 
         $console = '> Resolving dependencies using Composer Cloud';
-        $console .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
+//        $console .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
 
         $requires = $this->changes->getRequiredPackages();
         $removes = $this->changes->getRemovedPackages();

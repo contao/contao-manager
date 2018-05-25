@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "15b85ca12a6e78b852a18dd31a52c7fe",
@@ -3103,12 +3103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/terminal42/background-process.git",
-                "reference": "1cb6351ac876e09660ff5a870b2ae05b07092bf5"
+                "reference": "b5b34354d69d16ed61d634d5b63765dc861753cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/terminal42/background-process/zipball/1cb6351ac876e09660ff5a870b2ae05b07092bf5",
-                "reference": "1cb6351ac876e09660ff5a870b2ae05b07092bf5",
+                "url": "https://api.github.com/repos/terminal42/background-process/zipball/b5b34354d69d16ed61d634d5b63765dc861753cf",
+                "reference": "b5b34354d69d16ed61d634d5b63765dc861753cf",
                 "shasum": ""
             },
             "require": {
@@ -3133,7 +3133,7 @@
                 "source": "https://github.com/terminal42/background-process/tree/master",
                 "issues": "https://github.com/terminal42/background-process/issues"
             },
-            "time": "2018-05-09T14:57:58+00:00"
+            "time": "2018-05-17T12:35:25+00:00"
         }
     ],
     "packages-dev": [

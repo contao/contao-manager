@@ -175,7 +175,7 @@ abstract class AbstractPackagesTask extends AbstractTask
     }
 
     /**
-     * Gets source and backup paths for composer.json and composer.lock
+     * Gets source and backup paths for composer.json and composer.lock.
      *
      * @return array
      */

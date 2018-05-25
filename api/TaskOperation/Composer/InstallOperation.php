@@ -14,7 +14,6 @@ use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
-use Symfony\Component\Process\Exception\ProcessTimedOutException;
 
 class InstallOperation extends AbstractProcessOperation
 {
@@ -84,7 +83,7 @@ class InstallOperation extends AbstractProcessOperation
     public function updateStatus(TaskStatus $status)
     {
         if (null !== $this->timeout && ($attempt = $this->taskConfig->getState('install-timeout', 0)) > 0) {
-            $status->setSummary(sprintf('Installing Composer dependencies (retrying %s/5)…', $attempt+1));
+            $status->setSummary(sprintf('Installing Composer dependencies (retrying %s/5)…', $attempt + 1));
         } else {
             $status->setSummary('Installing Composer dependencies …');
         }

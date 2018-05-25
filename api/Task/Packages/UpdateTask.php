@@ -68,7 +68,7 @@ class UpdateTask extends AbstractPackagesTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function update(TaskConfig $config)
     {
