@@ -59,8 +59,6 @@
 
 
         data: () => ({
-            bootResult: null,
-
             processing: false,
             detected: false,
             errors: {
@@ -68,30 +66,13 @@
                 php_cli: '',
             },
 
+            servers: {},
             server: '',
             php_cli: '',
             cloud: true,
         }),
 
         computed: {
-            servers() {
-                if (!this.bootResult) {
-                    return {};
-                }
-
-                const servers = {
-                    '': this.$t('ui.server.config.blankOption'),
-                };
-
-                Object.keys(this.bootResult.configs).forEach((key) => {
-                    servers[key] = this.bootResult.configs[key].name;
-                });
-
-                servers.custom = this.$t('ui.server.config.customOption');
-
-                return servers;
-            },
-
             showCustom() {
                 return this.server === 'custom';
             },
@@ -106,13 +87,6 @@
                 this.bootDescription = this.$t('ui.server.running');
 
                 this.$store.dispatch('server/config/get').then((result) => {
-                    this.bootResult = result;
-
-                    this.server = result.server;
-                    this.php_cli = result.php_cli;
-                    this.detected = result.detected;
-                    this.cloud = result.cloud;
-
                     if (!result.server || result.detected) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.config.stateError');
@@ -178,6 +152,28 @@
                     this.processing = false;
                 });
             },
+        },
+
+        mounted() {
+            if (this.current) {
+                this.$store.dispatch('server/config/get').then((result) => {
+                    const servers = {
+                        '': this.$t('ui.server.config.blankOption'),
+                    };
+
+                    Object.keys(result.configs).forEach((key) => {
+                        servers[key] = result.configs[key].name;
+                    });
+
+                    servers.custom = this.$t('ui.server.config.customOption');
+
+                    this.servers = servers;
+                    this.server = result.server;
+                    this.php_cli = result.php_cli;
+                    this.detected = result.detected;
+                    this.cloud = result.cloud;
+                });
+            }
         },
     };
 </script>

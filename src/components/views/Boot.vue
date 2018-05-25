@@ -7,12 +7,7 @@
         </header>
         <main v-if="boot" class="view-boot__checks">
 
-            <php-web @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('PhpWeb')"/>
-            <config @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('Config')"/>
-            <php-cli @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('PhpCli')"/>
-            <self-update @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('SelfUpdate')"/>
-            <composer @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('Composer')"/>
-            <contao @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('Contao')"/>
+            <component v-for="(component, name) in views" :is="component" :current="false" :ready="canShow(name)" @error="reportError" @success="reportSuccess" @view="setView"/>
 
             <div class="clearfix"></div>
             <div class="view-boot__summary view-boot__summary--error" v-if="hasError">
@@ -29,7 +24,7 @@
         </main>
     </boxed-layout>
 
-    <component v-else v-bind:is="currentView" :current="true" @view="setView"/>
+    <component v-else :is="currentView ? views[currentView] : null" :current="true" @view="setView"/>
 </template>
 
 <script>
@@ -45,11 +40,13 @@
     import Contao from '../boot/Contao';
 
     export default {
-        components: { BoxedLayout, Loader, PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao },
+        components: { BoxedLayout, Loader },
 
         data: () => ({
             currentView: null,
             boot: false,
+
+            views: { PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao },
 
             status: {
                 PhpWeb: null,
