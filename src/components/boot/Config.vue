@@ -44,6 +44,8 @@
 </template>
 
 <script>
+    import boot from '../../mixins/boot';
+
     import BootCheck from '../fragments/BootCheck';
     import BoxedLayout from '../layouts/Boxed';
     import TextField from '../widgets/TextField';
@@ -52,15 +54,11 @@
     import Loader from '../fragments/Loader';
 
     export default {
+        mixins: [boot],
         components: { BootCheck, BoxedLayout, TextField, SelectMenu, Checkbox, Loader },
 
-        props: {
-            current: Boolean,
-        },
 
         data: () => ({
-            bootState: 'loading',
-            bootDescription: '',
             bootResult: null,
 
             processing: false,
@@ -104,6 +102,47 @@
         },
 
         methods: {
+            boot() {
+                this.bootDescription = this.$t('ui.server.running');
+
+                this.$store.dispatch('server/config/get').then((result) => {
+                    this.bootResult = result;
+
+                    this.server = result.server;
+                    this.php_cli = result.php_cli;
+                    this.detected = result.detected;
+                    this.cloud = result.cloud;
+
+                    if (!result.server || result.detected) {
+                        this.bootState = 'error';
+                        this.bootDescription = this.$t('ui.server.config.stateError');
+                    } else if (!result.php_cli) {
+                        this.bootState = 'error';
+                        this.bootDescription = this.$t('ui.server.config.stateErrorCli');
+                    } else if (result.server === 'custom') {
+                        this.bootState = 'info';
+                        this.bootDescription = this.$t('ui.server.config.stateCustom', result);
+                    } else {
+                        const labels = Object.create({
+                            server: result.configs[result.server].name,
+                            php_cli: result.php_cli,
+                        });
+
+                        this.bootState = 'success';
+                        this.bootDescription = this.$t('ui.server.config.stateSuccess', labels);
+                    }
+                }).catch(() => {
+                    this.bootState = 'error';
+                    this.bootDescription = this.$t('ui.server.error');
+                }).then(() => {
+                    if (this.bootState === 'error') {
+                        this.$emit('error', 'Config');
+                    } else {
+                        this.$emit('success', 'Config');
+                    }
+                });
+            },
+
             showConfiguration() {
                 this.$emit('view', 'Config');
             },
@@ -139,47 +178,6 @@
                     this.processing = false;
                 });
             },
-        },
-
-        created() {
-            this.bootDescription = this.$t('ui.server.running');
-
-            this.$store.dispatch('server/config/get').then((result) => {
-                this.bootResult = result;
-
-                this.server = result.server;
-                this.php_cli = result.php_cli;
-                this.detected = result.detected;
-                this.cloud = result.cloud;
-
-                if (!result.server || result.detected) {
-                    this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.server.config.stateError');
-                } else if (!result.php_cli) {
-                    this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.server.config.stateErrorCli');
-                } else if (result.server === 'custom') {
-                    this.bootState = 'info';
-                    this.bootDescription = this.$t('ui.server.config.stateCustom', result);
-                } else {
-                    const labels = Object.create({
-                        server: result.configs[result.server].name,
-                        php_cli: result.php_cli,
-                    });
-
-                    this.bootState = 'success';
-                    this.bootDescription = this.$t('ui.server.config.stateSuccess', labels);
-                }
-            }).catch(() => {
-                this.bootState = 'error';
-                this.bootDescription = this.$t('ui.server.error');
-            }).then(() => {
-                if (this.bootState === 'error') {
-                    this.$emit('error', 'Config');
-                } else {
-                    this.$emit('success', 'Config');
-                }
-            });
         },
     };
 </script>

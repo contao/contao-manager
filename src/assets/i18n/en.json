@@ -34,6 +34,7 @@
     "ui.boot.issue1": "Installation Issues Detected",
     "ui.boot.issue2": "Your installation has issues that must be fixed before Contao Manager can be used.",
     "ui.boot.run": "Launch Contao Manager",
+    "ui.server.pending": "Waiting …",
     "ui.server.running": "Analyzing …",
     "ui.server.error": "Check failed due to unexpected response from the server.",
     "ui.server.details": "Details",

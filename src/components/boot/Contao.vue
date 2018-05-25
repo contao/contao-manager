@@ -35,22 +35,18 @@
 </template>
 
 <script>
+    import boot from '../../mixins/boot';
+
     import BootCheck from '../fragments/BootCheck';
     import BoxedLayout from '../layouts/Boxed';
     import SelectMenu from '../widgets/SelectMenu';
     import Loader from '../fragments/Loader';
 
     export default {
+        mixins: [boot],
         components: { BootCheck, BoxedLayout, SelectMenu, Loader },
 
-        props: {
-            current: Boolean,
-        },
-
         data: () => ({
-            bootState: 'loading',
-            bootDescription: '',
-
             processing: false,
             supportsLatest: true,
             version: '',
@@ -72,6 +68,50 @@
         },
 
         methods: {
+            boot() {
+                this.bootDescription = this.$t('ui.server.running');
+
+                this.$store.dispatch('server/contao/get').then((result) => {
+                    if (!result.version) {
+                        this.bootState = 'info';
+                        this.bootDescription = this.$t('ui.server.contao.empty');
+
+                        this.$store.dispatch('server/php-web/get').then((phpWeb) => {
+                            if (phpWeb.version_id < 70100) {
+                                this.supportsLatest = false;
+                            }
+
+                            if (phpWeb.version_id < 50600) {
+                                this.bootState = 'error';
+                                this.bootDescription = this.$t('ui.server.contao.unsupported', phpWeb);
+                            }
+                        });
+                    } else if (!result.supported) {
+                        this.bootState = 'error';
+                        this.bootDescription = this.$t('ui.server.contao.old', result);
+                    } else {
+                        this.bootState = 'success';
+                        this.bootDescription = this.$t('ui.server.contao.found', result);
+
+                        this.$store.commit('setVersions', result);
+                    }
+                }).catch((response) => {
+                    if (response.status === 503) {
+                        this.bootState = 'error';
+                        this.bootDescription = this.$t('ui.server.prerequisite');
+                    } else {
+                        this.bootState = 'error';
+                        this.bootDescription = this.$t('ui.server.error');
+                    }
+                }).then(() => {
+                    if (this.bootState === 'success') {
+                        this.$emit('success', 'Contao');
+                    } else if (this.bootState === 'error') {
+                        this.$emit('error', 'Contao');
+                    }
+                });
+            },
+
             show() {
                 this.$emit('view', 'Contao');
             },
@@ -83,50 +123,6 @@
                     window.location.reload();
                 });
             },
-        },
-
-        created() {
-            this.bootDescription = this.$t('ui.server.running');
-
-            this.$store.dispatch('server/contao/get').then((result) => {
-                if (!result.version) {
-                    this.bootState = 'info';
-                    this.bootDescription = this.$t('ui.server.contao.empty');
-
-                    this.$store.dispatch('server/php-web/get').then((phpWeb) => {
-                        if (phpWeb.version_id < 70100) {
-                            this.supportsLatest = false;
-                        }
-
-                        if (phpWeb.version_id < 50600) {
-                            this.bootState = 'error';
-                            this.bootDescription = this.$t('ui.server.contao.unsupported', phpWeb);
-                        }
-                    });
-                } else if (!result.supported) {
-                    this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.server.contao.old', result);
-                } else {
-                    this.bootState = 'success';
-                    this.bootDescription = this.$t('ui.server.contao.found', result);
-
-                    this.$store.commit('setVersions', result);
-                }
-            }).catch((response) => {
-                if (response.status === 503) {
-                    this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.server.prerequisite');
-                } else {
-                    this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.server.error');
-                }
-            }).then(() => {
-                if (this.bootState === 'success') {
-                    this.$emit('success', 'Contao');
-                } else if (this.bootState === 'error') {
-                    this.$emit('error', 'Contao');
-                }
-            });
         },
     };
 </script>

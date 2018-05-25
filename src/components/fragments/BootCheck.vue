@@ -28,7 +28,7 @@
             progress: {
                 type: String,
                 required: true,
-                validator: value => (['loading', 'success', 'info', 'error'].indexOf(value) !== -1),
+                validator: value => (['ready', 'loading', 'success', 'info', 'error'].indexOf(value) !== -1),
             },
         },
     };
@@ -56,6 +56,7 @@
             }
 
             svg {
+                display: block;
                 width: 40px;
                 height: 40px;
             }

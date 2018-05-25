@@ -7,12 +7,12 @@
         </header>
         <main v-if="boot" class="view-boot__checks">
 
-            <php-web @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('PhpWeb')"/>
-            <config @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Config')"/>
-            <php-cli @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('PhpCli')"/>
-            <self-update @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('SelfUpdate')"/>
-            <composer @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Composer')"/>
-            <contao @error="reportError" @success="reportSuccess" @view="setView" v-if="canShow('Contao')"/>
+            <php-web @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('PhpWeb')"/>
+            <config @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('Config')"/>
+            <php-cli @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('PhpCli')"/>
+            <self-update @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('SelfUpdate')"/>
+            <composer @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('Composer')"/>
+            <contao @error="reportError" @success="reportSuccess" @view="setView" :ready="canShow('Contao')"/>
 
             <div class="clearfix"></div>
             <div class="view-boot__summary view-boot__summary--error" v-if="hasError">
