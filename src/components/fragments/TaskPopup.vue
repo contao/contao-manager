@@ -118,7 +118,7 @@
             },
 
             allowAutoClose() {
-                return this.currentTask && this.currentTask.status && !this.currentTask.audit;
+                return this.currentTask && this.currentTask.status && this.currentTask.autoclose;
             },
 
             requiresAudit() {

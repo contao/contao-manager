@@ -69,6 +69,14 @@ class RebuildCacheTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
+    public function create(TaskConfig $config)
+    {
+        return parent::create($config)->setAutoClose(true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function buildOperations(TaskConfig $config)
     {
         $operations = [

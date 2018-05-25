@@ -43,6 +43,9 @@ class TaskStatus
      */
     private $cancellable = false;
 
+    /** @var bool */
+    private $autoClose = false;
+
     /**
      * @var bool
      */
@@ -180,6 +183,26 @@ class TaskStatus
     public function setCancellable($stoppable)
     {
         $this->cancellable = $stoppable;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canAutoClose()
+    {
+        return $this->autoClose;
+    }
+
+    /**
+     * @param bool $autoClose
+     *
+     * @return TaskStatus
+     */
+    public function setAutoClose($autoClose)
+    {
+        $this->autoClose = $autoClose;
 
         return $this;
     }
