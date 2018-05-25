@@ -41,7 +41,7 @@ interface TaskInterface
     /**
      * @param TaskConfig $config
      *
-     * @return TaskStatus
+     * @return bool
      */
     public function delete(TaskConfig $config);
 }

@@ -77,7 +77,11 @@ class TaskController
             throw new BadRequestHttpException('No active task found.');
         }
 
-        return $this->getResponse($this->taskManager->deleteTask());
+        try {
+            return $this->getResponse($this->taskManager->deleteTask());
+        } catch (\RuntimeException $e) {
+            return new Response($e->getMessage(), Response::HTTP_FORBIDDEN);
+        }
     }
 
     /**

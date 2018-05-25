@@ -10,12 +10,19 @@
 
 namespace Contao\ManagerApi\Task;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 class TaskConfig
 {
     /**
      * @var string
      */
     private $file;
+
+    /**
+     * @var null|Filesystem
+     */
+    private $filesystem;
 
     /**
      * @var array
@@ -25,13 +32,16 @@ class TaskConfig
     /**
      * Constructor.
      *
-     * @param string     $file
-     * @param null       $name
-     * @param array|null $options
+     * @param string          $file
+     * @param null            $name
+     * @param array|null      $options
+     * @param Filesystem|null $filesystem
      */
-    public function __construct($file, $name = null, array $options = null)
+    public function __construct($file, $name = null, array $options = null, Filesystem $filesystem = null)
     {
         $this->file = $file;
+        $this->filesystem = $filesystem ?: new Filesystem();
+
         $this->data = [
             'name' => $name,
             'options' => $options,
@@ -111,5 +121,10 @@ class TaskConfig
             json_encode($this->data),
             LOCK_EX
         );
+    }
+
+    public function delete()
+    {
+        $this->filesystem->remove($this->file);
     }
 }

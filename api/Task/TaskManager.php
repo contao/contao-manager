@@ -89,7 +89,7 @@ class TaskManager implements LoggerAwareInterface
             throw new \RuntimeException('A task already exists.');
         }
 
-        $config = new TaskConfig($this->configFile, $name, $options);
+        $config = new TaskConfig($this->configFile, $name, $options, $this->filesystem);
         $config->save();
 
         $task = $this->loadTask($config);
@@ -160,10 +160,16 @@ class TaskManager implements LoggerAwareInterface
             return null;
         }
 
-        $status = $this->loadTask($config)->delete($config);
+        $task = $this->loadTask($config);
 
-        if (!$status->isActive()) {
-            $this->filesystem->remove($this->configFile);
+        if (null !== $this->logger) {
+            $this->logger->notice('Deleting task', ['name' => $task->getName(), 'class' => get_class($task)]);
+        }
+
+        $status = $task->update($config);
+
+        if ($status->isActive() || !$task->delete($config)) {
+            throw new \RuntimeException('Active task cannot be deleted');
         }
 
         return $status;
@@ -200,7 +206,7 @@ class TaskManager implements LoggerAwareInterface
     {
         if ($this->filesystem->exists($this->configFile)) {
             try {
-                return new TaskConfig($this->configFile);
+                return new TaskConfig($this->configFile, null, null, $this->filesystem);
             } catch (\Exception $e) {
                 $this->filesystem->remove($this->configFile);
             }

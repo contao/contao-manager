@@ -151,15 +151,29 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
      */
     public function delete(TaskConfig $config)
     {
-        $status = $this->abort($config);
+        $operations = $this->getOperations($config);
 
-        if ($status->isStopped()) {
-            foreach ($this->getOperations($config) as $operation) {
-                $operation->delete();
+        foreach ($operations as $operation) {
+            if ($operation->isRunning()) {
+                if (null !== $this->logger) {
+                    $this->logger->notice('Cannot delete active operation', ['class' => get_class($operation)]);
+                }
+
+                return false;
             }
         }
 
-        return $status;
+        foreach ($operations as $operation) {
+            $operation->delete();
+
+            if (null !== $this->logger) {
+                $this->logger->notice('Deleting operation', ['class' => get_class($operation)]);
+            }
+        }
+
+        $config->delete();
+
+        return true;
     }
 
     protected function getOperations(TaskConfig $config)
