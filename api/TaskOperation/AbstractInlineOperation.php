@@ -12,9 +12,13 @@ namespace Contao\ManagerApi\TaskOperation;
 
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
-abstract class AbstractInlineOperation implements TaskOperationInterface
+abstract class AbstractInlineOperation implements TaskOperationInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * @var TaskConfig
      */

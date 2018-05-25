@@ -7,69 +7,92 @@ services:
             - "@contao_manager.task_locator"
             - "@contao_manager.process.console_factory"
             - "@filesystem"
+        calls:
+            - [setLogger, ["@logger"]]
+        tags:
+            - { name: monolog.logger, channel: tasks }
 
     contao_manager.task_locator:
         class: Symfony\Component\DependencyInjection\ServiceLocator
         tags: ['container.service_locator']
         arguments:
             -
-                "contao/install": "@contao_manager.task.setup_packages"
-                "contao/rebuild-cache": "@contao_manager.task.rebuild_cache"
-                "composer/install": "@contao_manager.task.install_packages"
-                "composer/update": "@contao_manager.task.update_packages"
-                "composer/dump-autoload": "@contao_manager.task.dump_autoload"
-                "composer/clear-cache": "@contao_manager.task.clear_cache"
-                "manager/self-update": "@contao_manager.task.self_update"
+                "contao/install": "@Contao\\ManagerApi\\Task\\Packages\\SetupTask"
+                "contao/rebuild-cache": "@Contao\\ManagerApi\\Task\\Contao\\RebuildCacheTask"
+                "composer/install": "@Contao\\ManagerApi\\Task\\Packages\\InstallTask"
+                "composer/update": "@Contao\\ManagerApi\\Task\\Packages\\UpdateTask"
+                "composer/dump-autoload": "@Contao\\ManagerApi\\Task\\Composer\\DumpAutoloadTask"
+                "composer/clear-cache": "@Contao\\ManagerApi\\Task\\Composer\\ClearCacheTask"
+                "manager/self-update": "@Contao\\ManagerApi\\Task\\Manager\\SelfUpdateTask"
 
-    contao_manager.task.setup_packages:
-        class: Contao\ManagerApi\Task\Packages\SetupTask
+    Contao\ManagerApi\Task\Packages\SetupTask:
         arguments:
-            - "@contao_manager.composer.environment"
             - "@contao_manager.process.console_factory"
             - "@contao_manager.composer.cloud_resolver"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
+        calls:
+            - [setLogger, ["@logger"]]
+        tags:
+            - { name: monolog.logger, channel: tasks }
 
-    contao_manager.task.update_packages:
-        class: Contao\ManagerApi\Task\Packages\UpdateTask
-        arguments:
-            - "@contao_manager.process.console_factory"
-            - "@contao_manager.composer.cloud_resolver"
-            - "@contao_manager.composer.environment"
-            - "@contao_manager.i18n.translator"
-            - "@filesystem"
-
-    contao_manager.task.install_packages:
-        class: Contao\ManagerApi\Task\Packages\InstallTask
+    Contao\ManagerApi\Task\Packages\UpdateTask:
         arguments:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.composer.cloud_resolver"
             - "@contao_manager.composer.environment"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
+        calls:
+            - [setLogger, ["@logger"]]
+        tags:
+            - { name: monolog.logger, channel: tasks }
 
-    contao_manager.task.clear_cache:
-        class: Contao\ManagerApi\Task\Composer\ClearCacheTask
+    Contao\ManagerApi\Task\Packages\InstallTask:
+        arguments:
+            - "@contao_manager.process.console_factory"
+            - "@contao_manager.composer.cloud_resolver"
+            - "@contao_manager.composer.environment"
+            - "@contao_manager.i18n.translator"
+            - "@filesystem"
+        calls:
+            - [setLogger, ["@logger"]]
+        tags:
+            - { name: monolog.logger, channel: tasks }
+
+    Contao\ManagerApi\Task\Composer\ClearCacheTask:
         arguments:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.i18n.translator"
+        calls:
+            - [setLogger, ["@logger"]]
+        tags:
+            - { name: monolog.logger, channel: tasks }
 
-    contao_manager.task.dump_autoload:
-        class: Contao\ManagerApi\Task\Composer\DumpAutoloadTask
+    Contao\ManagerApi\Task\Composer\DumpAutoloadTask:
         arguments:
             - "@contao_manager.process.console_factory"
             - "@contao_manager.i18n.translator"
+            - "@logger"
+        tags:
+            - { name: monolog.logger, channel: tasks }
 
-    contao_manager.task.rebuild_cache:
-        class: Contao\ManagerApi\Task\Contao\RebuildCacheTask
+    Contao\ManagerApi\Task\Contao\RebuildCacheTask:
         arguments:
             - "@kernel"
             - "@contao_manager.process.console_factory"
             - "@contao_manager.i18n.translator"
             - "@filesystem"
+        calls:
+            - [setLogger, ["@logger"]]
+        tags:
+            - { name: monolog.logger, channel: tasks }
 
-    contao_manager.task.self_update:
-        class: Contao\ManagerApi\Task\Manager\SelfUpdateTask
+    Contao\ManagerApi\Task\Manager\SelfUpdateTask:
         arguments:
             - "@contao_manager.self_update.updater"
             - "@contao_manager.i18n.translator"
+        calls:
+            - [setLogger, ["@logger"]]
+        tags:
+            - { name: monolog.logger, channel: tasks }

@@ -14,10 +14,14 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Filesystem\Filesystem;
 
-class TaskManager
+class TaskManager implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * @var Filesystem|null
      */
@@ -88,9 +92,15 @@ class TaskManager
         $config = new TaskConfig($this->configFile, $name, $options);
         $config->save();
 
+        $task = $this->loadTask($config);
+
+        if (null !== $this->logger) {
+            $this->logger->notice('Created new task', ['name' => $name, 'options' => $options, 'class' => get_class($task)]);
+        }
+
         $this->processFactory->createManagerConsoleBackgroundProcess(['task:update', '--poll']);
 
-        return $this->loadTask($config)->create($config);
+        return $task->create($config);
     }
 
     /**
@@ -104,7 +114,19 @@ class TaskManager
             return null;
         }
 
-        return $this->loadTask($config)->update($config);
+        $task = $this->loadTask($config);
+
+        if (null !== $this->logger) {
+            $this->logger->notice('Updating task status', ['name' => $task->getName(), 'class' => get_class($task)]);
+        }
+
+        $status = $task->update($config);
+
+        if ($status->isComplete() && null !== $this->logger) {
+            $this->logger->notice('Task has been completed', ['name' => $task->getName(), 'class' => get_class($task)]);
+        }
+
+        return $status;
     }
 
     /**
@@ -118,7 +140,13 @@ class TaskManager
             return null;
         }
 
-        return $this->loadTask($config)->abort($config);
+        $task = $this->loadTask($config);
+
+        if (null !== $this->logger) {
+            $this->logger->notice('Aborting task', ['name' => $task->getName(), 'class' => get_class($task)]);
+        }
+
+        return $task->abort($config);
     }
 
     /**
