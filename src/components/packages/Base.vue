@@ -1,14 +1,13 @@
 <template>
     <main-layout>
 
-        <section class="search-bar" slot="subheader">
-            <div class="layout-main__content">
-                <div class="search-bar__inside">
-                    <input class="search-bar__input" ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
-                    <button class="search-bar__button search-bar__button--stop" @click="stopSearch" v-if="isSearchMode">Cancel</button>
-                    <button class="search-bar__button search-bar__button--start" v-else>Search</button>
-                </div>
-            </div>
+        <section :class="{ 'package-tools': true, 'package-tools--search': $route.name === 'packages-search' }">
+            <button class="package-tools__button package-tools__button--update widget-button" :disabled="hasChanges || isSearchMode" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
+            <button class="package-tools__button package-tools__button--search widget-button" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
+            <input class="package-tools__search" ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
+            <button class="package-tools__cancel" @click="stopSearch">
+                <svg height="24" viewBox="0 0 24 24" width="24" fill="#737373" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+            </button>
         </section>
 
         <router-view ref="component" :searchField="$refs.search"/>
@@ -74,14 +73,14 @@
             },
 
             search() {
-                // if (this.$route.name === routes.packagesSearch.name) {
-                this.$router.push(
-                    Object.assign(
-                        { query: { q: this.searchInput } },
-                        routes.packagesSearch,
-                    ),
-                );
-                // }
+                if (this.$route.name === routes.packagesSearch.name) {
+                    this.$router.push(
+                        Object.assign(
+                            { query: { q: this.searchInput } },
+                            routes.packagesSearch,
+                        ),
+                    );
+                }
             },
 
             dryrunChanges() {
@@ -115,58 +114,10 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "../../assets/styles/defaults";
 
-    .search-bar {
-        margin: 30px 0 40px;
-        background: #e5dfcf;
-        border-top: 1px solid #dcd8cc;
-        border-bottom: 1px solid #dcd8cc;
-
-        &__inside {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 25px 20px;
-        }
-
-        &__input {
-            display: block;
-            height: 46px !important;
-            padding-right: 50px !important;
-            line-height: 46px;
-            border: none !important;
-
-            &::placeholder {
-                color: $text-color;
-            }
-        }
-
-        &__button {
-            position: absolute;
-            top: 33px;
-            right: 30px;
-            width: 32px;
-            height: 32px;
-            background: none;
-            border: none;
-
-            &--start {
-                background: url("../../assets/images/search.svg") 0 0 no-repeat;
-                background-size: contain;
-                text-indent: -999em;
-            }
-
-            &--stop {
-                background: url("../../assets/images/search-close.svg") 0 0 no-repeat;
-                background-size: contain;
-                text-indent: -999em;
-            }
-        }
-    }
-
     .package-tools {
         position: relative;
-        margin: 40px 5px 20px;
-        text-align: right;
+        margin-bottom: 40px;
+        text-align: center;
 
         &__button {
             &.widget-button {
@@ -186,16 +137,25 @@
                 background-size: 22px 22px;
                 content: "";
             }
+
+            &--update:before {
+                background: url('../../assets/images/button-update.svg') center center no-repeat;
+            }
+
+            &--search:before {
+                background: url('../../assets/images/button-search.svg') center center no-repeat;
+            }
         }
 
         &__cancel {
             display: none;
             position: absolute;
             top: 48px;
-            right: 10px;
+            right: 0;
             width: 38px;
             height: 38px;
             margin: 0;
+            padding: 7px;
             color: $text-color;
             border: none;
             background: none;

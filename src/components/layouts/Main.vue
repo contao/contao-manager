@@ -5,8 +5,6 @@
             <navigation></navigation>
         </header>
 
-        <slot name="subheader"/>
-
         <main class="layout-main__content">
             <slot/>
         </main>
