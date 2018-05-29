@@ -29,6 +29,7 @@
 
 <script>
     import views from '../../router/views';
+    import routes from '../../router/routes';
 
     import BoxedLayout from '../layouts/Boxed';
     import Loader from '../fragments/Loader';
@@ -45,20 +46,18 @@
         data: () => ({
             currentView: null,
             boot: false,
-
-            views: { PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao },
-
-            status: {
-                PhpWeb: null,
-                Config: null,
-                PhpCli: null,
-                SelfUpdate: null,
-                Composer: null,
-                Contao: null,
-            },
+            status: {},
         }),
 
         computed: {
+            views() {
+                if (this.$route.name === routes.oauth.name) {
+                    return { PhpWeb, Config, PhpCli, SelfUpdate };
+                }
+
+                return { PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao };
+            },
+
             hasError() {
                 return Object.values(this.status).indexOf('error') !== -1;
             },
@@ -81,14 +80,7 @@
             setView(view) {
                 if (view === null) {
                     this.$store.dispatch('server/purgeCache');
-                    this.status = {
-                        PhpWeb: null,
-                        Config: null,
-                        PhpCli: null,
-                        SelfUpdate: null,
-                        Composer: null,
-                        Contao: null,
-                    };
+                    this.setStatus(this.views);
                 }
 
                 this.currentView = view;
@@ -128,11 +120,26 @@
 
                 return false;
             },
+
+            setStatus(components) {
+                this.status = Object
+                    .keys(components)
+                    .reduce((status, key) => Object.assign(status, { [key]: null }), {})
+                ;
+                console.log(this.status);
+            },
         },
 
         watch: {
+            views(value) {
+                this.setStatus(value);
+            },
+
             shouldContinue(value) {
-                if (value && window.localStorage.getItem('contao_manager_booted') === '1') {
+                if (value && (
+                    window.localStorage.getItem('contao_manager_booted') === '1'
+                    || this.$route.name === routes.oauth.name
+                )) {
                     this.finish();
                 }
             },
@@ -143,6 +150,7 @@
             this.$store.dispatch('tasks/reload').then(() => {
                 this.boot = true;
             });
+            this.setStatus(this.views);
         },
     };
 </script>
