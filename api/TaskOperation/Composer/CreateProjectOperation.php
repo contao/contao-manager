@@ -94,7 +94,7 @@ class CreateProjectOperation extends AbstractInlineOperation
         $pool->addRepository($sourceRepo);
         $selector = new VersionSelector($pool);
 
-        $package = $selector->findBestCandidate('contao/managed-edition', $this->version);
+        $package = $selector->findBestCandidate('contao/managed-edition', $this->version, PHP_VERSION);
 
         if (!$package) {
             throw new \RuntimeException('No valid package to install');
