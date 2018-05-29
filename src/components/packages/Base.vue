@@ -212,29 +212,36 @@
         left: 0;
         right: 0;
         bottom: 0;
-        height: 0;
+        max-height: 0;
         background: #000;
         background: rgba(0,0,0, 0.8);
         color: #fff;
-        transition: height .4s ease;
+        transition: max-height .4s ease;
         z-index: 100;
 
         &--active {
-            height: 80px;
+            max-height: 200px;
         }
 
         &__inner {
-            margin: 0 20px;
-            padding: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            align-items: baseline;
+
+            margin: 0;
+            padding: 12px;
             text-align: right;
 
             @include screen(1024) {
-                max-width: 960px;
+                max-width: 976px;
                 margin: 0 auto;
+                padding-left: 0;
+                padding-right: 0;
             }
 
             @include screen(1200) {
-                max-width: 1180px;
+                max-width: 1196px;
             }
         }
 
@@ -243,21 +250,18 @@
 
             @include screen(600) {
                 display: inline;
+                margin: 0 8px;
                 font-weight: $font-weight-bold;
             }
         }
 
         &__button {
-            width: calc(50% - 10px) !important;
+            display: block;
             padding: 0 15px !important;
-
-            &:last-child {
-                margin-left: 16px;
-            }
+            margin: 8px;
 
             @include screen(600) {
                 width: auto !important;
-                margin-left: 16px;
             }
         }
     }
