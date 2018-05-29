@@ -10,20 +10,13 @@
 
 namespace Contao\ManagerApi\Composer;
 
-use Composer\Command\RemoveCommand;
-use Composer\Command\RequireCommand;
 use Composer\Config;
-use Composer\Factory;
 use Composer\Installer\InstallationManager;
 use Composer\IO\NullIO;
 use Composer\Json\JsonFile;
 use Composer\Package\Locker;
 use Composer\Repository\PlatformRepository;
 use Composer\Repository\RepositoryManager;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\Filesystem\Filesystem;
 
 class CloudChanges
 {
