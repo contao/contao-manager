@@ -29,10 +29,11 @@
                 </p>
             </div>
             <div class="package__about" v-else>
-                <h1 :class="{ package__headline: ture, 'package__headline--badge': isIncompatible || package.abandoned }">
-                    <span v-html="package._highlightResult && package._highlightResult.name.value || package.name"></span>
-                    <span v-if="isIncompatible" :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span>
-                    <span v-else-if="package.abandoned" :title="package.replacement === true && $t('ui.package.abandonedText') || $t('ui.package.replacement', { replacement: package.replacement })">{{ 'ui.package.abandonedTitle' | translate }}</span>
+                <h1 :class="{ package__headline: true, 'package__headline--badge': isIncompatible || package.abandoned }">
+                    <span class="package__title" v-html="package._highlightResult && package._highlightResult.title.value || package.title || package.name"></span>
+                    <span class="package__name" v-if="package.title && package.title !== package.name">{{ package.name }}</span>
+                    <span class="package__badge" v-if="isIncompatible" :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span>
+                    <span class="package__badge" v-else-if="package.abandoned" :title="package.replacement === true && $t('ui.package.abandonedText') || $t('ui.package.replacement', { replacement: package.replacement })">{{ 'ui.package.abandonedTitle' | translate }}</span>
                 </h1>
 
                 <div class="package__description">
@@ -459,23 +460,47 @@
                     padding-right: 0;
                 }
             }
+        }
 
-            > span + span {
-                position: absolute;
-                top: 6px;
-                right: 0;
-                padding: 0 8px;
-                background: $red-button;
-                border-radius: 2px;
-                font-size: 12px;
-                line-height: 19px;
-                color: #fff;
-                cursor: help;
+        &__title {
+            padding-right: 10px;
+        }
 
-                @include screen(800) {
-                    right: auto;
-                    margin-left: 10px;
-                }
+        &__name {
+            position: relative;
+            display: inline-block;
+            top: -3px;
+            padding: 0 8px;
+            background: $border-color;
+            border-radius: 2px;
+            font-size: 12px;
+            line-height: 19px;
+            white-space: nowrap;
+            color: #fff;
+
+            em {
+                background-color: $highlight-color;
+                font-style: normal;
+            }
+        }
+
+        &__badge {
+            position: absolute;
+            top: 6px;
+            right: 0;
+            padding: 0 8px;
+            background: $red-button;
+            border-radius: 2px;
+            font-size: 12px;
+            line-height: 19px;
+            color: #fff;
+            cursor: help;
+
+            @include screen(800) {
+                position: relative;
+                display: inline-block;
+                top: -3px;
+                right: auto;
             }
         }
 
@@ -562,12 +587,15 @@
                 animation: input-error .15s linear 3;
             }
 
-            &--disabled input[type=text] {
-                background: $border-color;
-                border-color: $border-color;
+            &--disabled {
+                input[type=text],
+                input[type=text]:disabled {
+                    background: $border-color;
+                    border-color: $border-color;
 
-                &::placeholder {
-                    text-decoration: line-through;
+                    &::placeholder {
+                        text-decoration: line-through;
+                    }
                 }
             }
         }

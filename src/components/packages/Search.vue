@@ -83,7 +83,10 @@
                 }
 
                 if (window.algoliasearch) {
-                    this.algolia = window.algoliasearch('60DW2LJW0P', 'e6efbab031852e115032f89065b3ab9f').initIndex('v1');
+                    this.algolia = window
+                        .algoliasearch('60DW2LJW0P', 'e6efbab031852e115032f89065b3ab9f')
+                        .initIndex(`v2_${this.$i18n.locale()}`)
+                    ;
 
                     if (this.query) {
                         this.searchPackages(this, this.query);

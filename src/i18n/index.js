@@ -37,7 +37,7 @@ export default {
                 return this.load(locale.slice(0, 2));
             }
 
-            return new Promise(resolve => resolve());
+            return new Promise((resolve, reject) => reject());
         }
 
         return Vue.http.get(`assets/i18n/${locale}.json`).then(
