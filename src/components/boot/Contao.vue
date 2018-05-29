@@ -30,7 +30,7 @@
     </boxed-layout>
 
     <boot-check v-else :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription">
-        <button v-if="bootState === 'info'" @click="show" class="widget-button widget-button--primary widget-button--run">{{ 'ui.server.contao.setup' | translate }}</button>
+        <button v-if="bootState === 'action'" @click="show" class="widget-button widget-button--primary widget-button--run">{{ 'ui.server.contao.setup' | translate }}</button>
     </boot-check>
 </template>
 
