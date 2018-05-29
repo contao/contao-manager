@@ -43,7 +43,7 @@ handleTask = (response, store, resolve, reject) => {
 
         case 'terminated': // BC
         case 'complete':
-            if (window.localStorage.getItem('contao_manager_autoclose') === '1' && !task.audit) {
+            if (window.localStorage.getItem('contao_manager_autoclose') === '1' && task.autoclose) {
                 store.dispatch('deleteCurrent');
             }
             resolve(task);
