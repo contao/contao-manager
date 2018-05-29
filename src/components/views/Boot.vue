@@ -7,7 +7,7 @@
         </header>
         <main v-if="boot" class="view-boot__checks">
 
-            <component v-for="(component, name) in views" :is="component" :current="false" :ready="canShow(name)" @error="reportError" @success="reportSuccess" @view="setView"/>
+            <component v-for="(component, name) in views" :is="component" :current="false" :ready="canShow(name)" @result="result" @view="setView"/>
 
             <div class="clearfix"></div>
             <div class="view-boot__summary view-boot__summary--error" v-if="hasError">
@@ -60,12 +60,18 @@
 
         computed: {
             hasError() {
-                return Object.values(this.status).indexOf(false) !== -1;
+                return Object.values(this.status).indexOf('error') !== -1;
             },
 
             canContinue() {
                 return Object.values(this.status).indexOf(null) === -1
-                    && Object.values(this.status).indexOf(false) === -1;
+                    && Object.values(this.status).indexOf('error') === -1;
+            },
+
+            shouldContinue() {
+                return Object.values(this.status).indexOf(null) === -1
+                    && Object.values(this.status).indexOf('error') === -1
+                    && Object.values(this.status).indexOf('warning') === -1;
             },
         },
 
@@ -91,13 +97,8 @@
                 this.$store.commit('setView', views.READY);
             },
 
-            reportError(name) {
-                this.$set(this.status, name, false);
-                this.update();
-            },
-
-            reportSuccess(name) {
-                this.$set(this.status, name, true);
+            result(name, state) {
+                this.$set(this.status, name, state);
                 this.update();
             },
 
@@ -118,7 +119,7 @@
                         return true;
                     }
 
-                    if (this.status[keys[k]] !== true) {
+                    if (this.status[keys[k]] === null || this.status[keys[k]] === 'error') {
                         return false;
                     }
                 }
@@ -128,7 +129,7 @@
         },
 
         watch: {
-            canContinue(value) {
+            shouldContinue(value) {
                 if (value && window.localStorage.getItem('contao_manager_booted') === '1') {
                     this.finish();
                 }

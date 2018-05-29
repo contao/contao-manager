@@ -35,8 +35,8 @@
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.error');
                     }
-
-                    this.$emit('error', 'Composer');
+                }).then(() => {
+                    this.$emit('result', 'Composer', this.bootState);
                 });
             },
 

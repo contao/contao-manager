@@ -1,6 +1,6 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.selfUpdate.title')" :description="bootDescription">
-        <button class="widget-button widget-button--alert" v-if="bootState === 'error'" @click="update" :disabled="processing">{{ 'ui.server.selfUpdate.button' | translate }}</button>
+        <button class="widget-button widget-button--alert" v-if="hasUpdate" @click="update" :disabled="processing">{{ 'ui.server.selfUpdate.button' | translate }}</button>
     </boot-check>
 </template>
 
@@ -15,6 +15,7 @@
 
         data: () => ({
             processing: false,
+            hasUpdate: false,
         }),
 
         methods: {
@@ -24,25 +25,26 @@
                 this.$store.dispatch('server/self-update/get').then((result) => {
                     const context = { current: result.current_version, latest: result.latest_version };
 
-                    if (result.current_version === result.latest_version) {
-                        this.bootState = 'success';
-                        this.bootDescription = this.$t('ui.server.selfUpdate.latest', context);
-                    } else if (result.latest_version === null) {
+                    if (result.latest_version === null) {
                         this.bootState = 'info';
                         this.bootDescription = this.$t('ui.server.selfUpdate.dev');
+                    } else if (result.current_version === result.latest_version) {
+                        this.bootState = 'success';
+                        this.bootDescription = this.$t('ui.server.selfUpdate.latest', context);
+                    } else if (result.channel === 'dev') {
+                        this.bootState = 'warning';
+                        this.bootDescription = this.$t('ui.server.selfUpdate.update', context);
+                        this.hasUpdate = true;
                     } else {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.selfUpdate.update', context);
+                        this.hasUpdate = true;
                     }
                 }).catch(() => {
                     this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.error');
                 }).then(() => {
-                    if (this.bootState === 'error') {
-                        this.$emit('error', 'SelfUpdate');
-                    } else {
-                        this.$emit('success', 'SelfUpdate');
-                    }
+                    this.$emit('result', 'SelfUpdate', this.bootState);
                 });
             },
 

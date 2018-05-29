@@ -37,11 +37,7 @@
                     this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.error');
                 }).then(() => {
-                    if (this.bootState === 'error') {
-                        this.$emit('error', 'PhpWeb');
-                    } else {
-                        this.$emit('success', 'PhpWeb');
-                    }
+                    this.$emit('result', 'PhpWeb', this.bootState);
                 });
             },
         },

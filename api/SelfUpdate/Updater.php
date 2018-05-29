@@ -15,8 +15,8 @@ use Contao\ManagerApi\Config\ManagerConfig;
 
 class Updater
 {
-    const DOWNLOAD_URL = 'https://download.contao.org/contao-manager.phar';
-    const VERSION_URL = 'https://download.contao.org/contao-manager.version';
+    const DOWNLOAD_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.phar';
+    const VERSION_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.version';
 
     /**
      * @var ApiKernel
@@ -52,11 +52,30 @@ class Updater
      */
     public function canUpdate()
     {
-        return '' !== \Phar::running(false)
-            && $this->kernel->getVersion() !== '@'.'package_version'.'@'
-            && $this->kernel->getEnvironment() === 'prod'
-            && !$this->kernel->isDebug()
+        return '' !== \Phar::running(false);
+    }
+
+    /**
+     * Returns whether this is a development build.
+     *
+     * @return bool
+     */
+    public function isDev()
+    {
+        return $this->kernel->getVersion() === '@'.'package_version'.'@'
+            || $this->kernel->getEnvironment() !== 'prod'
+            || $this->kernel->isDebug()
         ;
+    }
+
+    /**
+     * Gets the release channel for the current version.
+     *
+     * @return string
+     */
+    public function getChannel()
+    {
+        return $this->isDev() ? 'dev' : 'stable';
     }
 
     /**
@@ -89,7 +108,8 @@ class Updater
         $lastUpdate = $this->managerConfig->get('last_update');
         $latestVersion = $this->managerConfig->get('latest_version');
 
-        if (null !== $lastUpdate
+        if (!$this->isDev()
+            && null !== $lastUpdate
             && null !== $latestVersion
             && false !== ($lastUpdate = strtotime($lastUpdate))
             && $lastUpdate <= time()
@@ -148,7 +168,8 @@ class Updater
     private function getRemoteInfo()
     {
         if (null === $this->remote) {
-            $content = trim(file_get_contents(self::VERSION_URL));
+            $url = sprintf(self::VERSION_URL, $this->getChannel());
+            $content = trim(file_get_contents($url));
             $data = json_decode($content, true);
 
             if (!isset($data['version'], $data['sha1'])
@@ -186,10 +207,12 @@ class Updater
      */
     private function download($target)
     {
-        $result = file_get_contents(self::DOWNLOAD_URL);
+        $url = sprintf(self::DOWNLOAD_URL, $this->getChannel());
+
+        $result = file_get_contents($url);
 
         if (false === $result) {
-            throw new \RuntimeException(sprintf('Request to URL failed: %s', self::DOWNLOAD_URL));
+            throw new \RuntimeException(sprintf('Request to URL failed: %s', $url));
         }
 
         file_put_contents($target, $result);

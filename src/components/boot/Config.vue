@@ -109,11 +109,7 @@
                     this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.error');
                 }).then(() => {
-                    if (this.bootState === 'error') {
-                        this.$emit('error', 'Config');
-                    } else {
-                        this.$emit('success', 'Config');
-                    }
+                    this.$emit('result', 'Config', this.bootState);
                 });
             },
 
