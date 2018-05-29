@@ -174,13 +174,13 @@ class CloudChanges
     {
         $locker = new Locker(
             new NullIO(),
-            new JsonFile(basename($this->json->getPath()).'/composer.lock'),
+            new JsonFile(dirname($this->json->getPath()).'/composer.lock'),
             new RepositoryManager(new NullIO(), new Config()),
             new InstallationManager(),
             file_get_contents($this->json->getPath())
         );
 
-        if (!$locker->isLocked() || !$locker->isFresh()) {
+        if (!$locker->isLocked()) {
             return [];
         }
 
