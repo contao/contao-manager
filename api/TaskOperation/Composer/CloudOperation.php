@@ -190,7 +190,7 @@ class CloudOperation implements TaskOperationInterface
             return;
         }
 
-        $console = '> Resolving dependencies using Composer Cloud';
+        $console = '> Resolving dependencies using Composer Cloud '.$job->getVersion();
 //        $console .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
 
         switch ($job->getStatus()) {

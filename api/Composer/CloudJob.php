@@ -80,6 +80,14 @@ class CloudJob implements \JsonSerializable
         return (int) $this->result['stats']['numberOfWorkers'];
     }
 
+    /**
+     * @return string
+     */
+    public function getVersion()
+    {
+        return isset($this->result['stats']['appVersion']) ? 'v'.$this->result['stats']['appVersion'] : '';
+    }
+
     public function isQueued()
     {
         return $this->getStatus() === self::STATUS_QUEUED;
