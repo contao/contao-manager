@@ -126,7 +126,6 @@
                     .keys(components)
                     .reduce((status, key) => Object.assign(status, { [key]: null }), {})
                 ;
-                console.log(this.status);
             },
         },
 
