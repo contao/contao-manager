@@ -14,7 +14,8 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Exception\ApiProblemException;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Process\Process;
 use Terminal42\BackgroundProcess\Exception\InvalidJsonException;
 use Terminal42\BackgroundProcess\Forker\ForkerInterface;
@@ -23,8 +24,10 @@ use Terminal42\BackgroundProcess\ProcessController;
 /**
  * Creates foreground and background processes for the Contao or Manager console.
  */
-class ConsoleProcessFactory
+class ConsoleProcessFactory implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * @var ApiKernel
      */
@@ -36,22 +39,15 @@ class ConsoleProcessFactory
     private $serverInfo;
 
     /**
-     * @var null|LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Constructor.
      *
-     * @param ApiKernel            $kernel
-     * @param ServerInfo           $serverInfo
-     * @param LoggerInterface|null $logger
+     * @param ApiKernel  $kernel
+     * @param ServerInfo $serverInfo
      */
-    public function __construct(ApiKernel $kernel, ServerInfo $serverInfo, LoggerInterface $logger = null)
+    public function __construct(ApiKernel $kernel, ServerInfo $serverInfo)
     {
         $this->kernel = $kernel;
         $this->serverInfo = $serverInfo;
-        $this->logger = $logger;
     }
 
     /**

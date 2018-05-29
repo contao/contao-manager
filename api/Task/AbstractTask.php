@@ -65,7 +65,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         foreach ($this->getOperations($config) as $operation) {
             if (!$operation->isStarted() || $operation->isRunning()) {
                 if (null !== $this->logger) {
-                    $this->logger->notice('Current operation: '.get_class($operation));
+                    $this->logger->info('Current operation: '.get_class($operation));
                 }
 
                 $operation->run();
@@ -74,7 +74,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
                     $status->setStatus(TaskStatus::STATUS_ERROR);
 
                     if (null !== $this->logger) {
-                        $this->logger->notice('Failed operation: '.get_class($operation));
+                        $this->logger->info('Failed operation: '.get_class($operation));
                     }
                 }
 
@@ -88,7 +88,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
 
             if ($operation->isSuccessful()) {
                 if (null !== $this->logger) {
-                    $this->logger->notice('Completed operation: '.get_class($operation));
+                    $this->logger->info('Completed operation: '.get_class($operation));
                 }
 
                 continue;
@@ -125,14 +125,14 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
                 $status->setStatus(TaskStatus::STATUS_ABORTING);
 
                 if (null !== $this->logger) {
-                    $this->logger->notice('Task operation is active, aborting', ['class' => get_class($operation)]);
+                    $this->logger->info('Task operation is active, aborting', ['class' => get_class($operation)]);
                 }
                 break;
             }
 
             if ($operation->isSuccessful()) {
                 if (null !== $this->logger) {
-                    $this->logger->notice('Task operation is completed, continuing', ['class' => get_class($operation)]);
+                    $this->logger->info('Task operation is completed, continuing', ['class' => get_class($operation)]);
                 }
 
                 continue;
@@ -156,7 +156,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         foreach ($operations as $operation) {
             if ($operation->isRunning()) {
                 if (null !== $this->logger) {
-                    $this->logger->notice('Cannot delete active operation', ['class' => get_class($operation)]);
+                    $this->logger->info('Cannot delete active operation', ['class' => get_class($operation)]);
                 }
 
                 return false;
@@ -167,7 +167,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
             $operation->delete();
 
             if (null !== $this->logger) {
-                $this->logger->notice('Deleting operation', ['class' => get_class($operation)]);
+                $this->logger->info('Deleting operation', ['class' => get_class($operation)]);
             }
         }
 

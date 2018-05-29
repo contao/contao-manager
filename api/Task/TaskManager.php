@@ -95,7 +95,7 @@ class TaskManager implements LoggerAwareInterface
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->notice('Created new task', ['name' => $name, 'options' => $options, 'class' => get_class($task)]);
+            $this->logger->info('Created new task', ['name' => $name, 'options' => $options, 'class' => get_class($task)]);
         }
 
         $this->processFactory->createManagerConsoleBackgroundProcess(['task:update', '--poll']);
@@ -117,13 +117,13 @@ class TaskManager implements LoggerAwareInterface
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->notice('Updating task status', ['name' => $task->getName(), 'class' => get_class($task)]);
+            $this->logger->info('Updating task status', ['name' => $task->getName(), 'class' => get_class($task)]);
         }
 
         $status = $task->update($config);
 
         if ($status->isComplete() && null !== $this->logger) {
-            $this->logger->notice('Task has been completed', ['name' => $task->getName(), 'class' => get_class($task)]);
+            $this->logger->info('Task has been completed', ['name' => $task->getName(), 'class' => get_class($task)]);
         }
 
         return $status;
@@ -143,7 +143,7 @@ class TaskManager implements LoggerAwareInterface
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->notice('Aborting task', ['name' => $task->getName(), 'class' => get_class($task)]);
+            $this->logger->info('Aborting task', ['name' => $task->getName(), 'class' => get_class($task)]);
         }
 
         return $task->abort($config);
@@ -163,7 +163,7 @@ class TaskManager implements LoggerAwareInterface
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->notice('Deleting task', ['name' => $task->getName(), 'class' => get_class($task)]);
+            $this->logger->info('Deleting task', ['name' => $task->getName(), 'class' => get_class($task)]);
         }
 
         $status = $task->update($config);

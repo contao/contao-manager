@@ -58,7 +58,10 @@ services:
         arguments:
             - "@kernel"
             - "@contao_manager.system.server_info"
-            - "@logger"
+        calls:
+            - [setLogger, ["@logger"]]
+        tags:
+            - { name: monolog.logger, channel: tasks }
 
     contao_manager.process.contao_api:
         class: Contao\ManagerApi\Process\ContaoApi

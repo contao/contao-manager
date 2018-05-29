@@ -100,7 +100,7 @@ abstract class AbstractPackagesTask extends AbstractTask
             $timeout = (int) $serverConfig['timeout'];
 
             if (null !== $this->logger) {
-                $this->logger->notice(sprintf('Configured install timeout of %s seconds for server "%s".', $timeout, $serverConfig['name']));
+                $this->logger->info(sprintf('Configured install timeout of %s seconds for server "%s".', $timeout, $serverConfig['name']));
             }
         }
 
@@ -120,14 +120,14 @@ abstract class AbstractPackagesTask extends AbstractTask
 
         if (!$this->filesystem->exists($this->environment->getJsonFile())) {
             if (null !== $this->logger) {
-                $this->logger->notice('Cannot create composer file backup, source JSON does not exist', ['file' => $this->environment->getJsonFile()]);
+                $this->logger->info('Cannot create composer file backup, source JSON does not exist', ['file' => $this->environment->getJsonFile()]);
             }
 
             return;
         }
 
         if (null !== $this->logger) {
-            $this->logger->notice('Creating backup of composer files');
+            $this->logger->info('Creating backup of composer files');
         }
 
         foreach ($this->getBackupPaths() as $source => $target) {
@@ -135,10 +135,10 @@ abstract class AbstractPackagesTask extends AbstractTask
                 $this->filesystem->copy($source, $target, true);
 
                 if (null !== $this->logger) {
-                    $this->logger->notice(sprintf('Copied "%s" to "%s"', $source, $target));
+                    $this->logger->info(sprintf('Copied "%s" to "%s"', $source, $target));
                 }
             } elseif (null !== $this->logger) {
-                $this->logger->notice(sprintf('File "%s" does not exist', $source));
+                $this->logger->info(sprintf('File "%s" does not exist', $source));
             }
         }
 
@@ -154,7 +154,7 @@ abstract class AbstractPackagesTask extends AbstractTask
     {
         if ($config->getState('backup-created', false) && !$config->getState('backup-restored', false)) {
             if (null !== $this->logger) {
-                $this->logger->notice('Restoring backup of composer files');
+                $this->logger->info('Restoring backup of composer files');
             }
 
             foreach (array_flip($this->getBackupPaths()) as $source => $target) {
@@ -163,10 +163,10 @@ abstract class AbstractPackagesTask extends AbstractTask
                     $this->filesystem->remove($source);
 
                     if (null !== $this->logger) {
-                        $this->logger->notice(sprintf('Copied "%s" to "%s"', $source, $target));
+                        $this->logger->info(sprintf('Copied "%s" to "%s"', $source, $target));
                     }
                 } elseif (null !== $this->logger) {
-                    $this->logger->notice(sprintf('File "%s" does not exist', $source));
+                    $this->logger->info(sprintf('File "%s" does not exist', $source));
                 }
             }
 
