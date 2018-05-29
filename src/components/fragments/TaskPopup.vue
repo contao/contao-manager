@@ -4,13 +4,13 @@
             <h1 :class="headlineClass">
                 {{ taskTitle }}
                 <span class="task-popup__actions">
-                    <button :class="'task-popup__autoclose task-popup__autoclose--' + (autoClose ? 'active' : '')" v-if="allowAutoClose" @click="toggleAutoClose">
+                    <button :class="'task-popup__autoclose task-popup__autoclose--' + (autoClose ? 'active' : '')" :title="$t('ui.taskpopup.autoclose')" v-if="allowAutoClose" @click="toggleAutoClose">
                         <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0h24v24H0z" fill="none"/>
                             <path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
                         </svg>
                     </button>
-                    <button :class="'task-popup__toggle task-popup__toggle--' + (showConsole ? 'active' : '')" @click="toggleConsole" v-if="allowConsole">
+                    <button :class="'task-popup__toggle task-popup__toggle--' + (showConsole ? 'active' : '')" :title="$t('ui.taskpopup.console')" @click="toggleConsole" v-if="allowConsole">
                         <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
                             <path d="M0 0h24v24H0z" fill="none"/>
