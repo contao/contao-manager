@@ -13,52 +13,53 @@
         </transition>
 
         <div class="package__inside">
-            <figure v-if="isContao"><img src="../../assets/images/logo.svg" /></figure>
-            <figure v-else><img src="../../assets/images/placeholder.png" /></figure>
+            <figure class="package__icon" v-if="isContao"><img src="../../assets/images/logo.svg" /></figure>
+            <figure class="package__icon" v-else-if="package.logo"><img :src="package.logo" /></figure>
+            <figure class="package__icon" v-else><img src="../../assets/images/placeholder.png" /></figure>
 
-            <div class="about" v-if="isContao">
-                <h1>Contao Open Source CMS</h1>
-                <div class="description">
+            <div class="package__about" v-if="isContao">
+                <h1 class="package__headline">Contao Open Source CMS</h1>
+                <div class="package__description">
                     <p>Contao is an Open Source PHP Content Management System.</p>
                     <more homepage="https://contao.org" :support="{ docs: 'https://docs.contao.org', forum: 'https://community.contao.org', issues: 'https://github.com/contao/core-bundle/issues', source: 'https://github.com/contao/core-bundle' }"/>
                 </div>
-                <p class="additional">
-                    <strong class="version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
+                <p class="package__additional">
+                    <strong class="package__version package__version--additional">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                     <span v-for="item in additional">{{ item }}</span>
                 </p>
             </div>
-            <div class="about" v-else>
-                <h1 :class="{ badge: isIncompatible || package.abandoned }">
+            <div class="package__about" v-else>
+                <h1 :class="{ package__headline: ture, 'package__headline--badge': isIncompatible || package.abandoned }">
                     <span v-html="package._highlightResult && package._highlightResult.name.value || package.name"></span>
                     <span v-if="isIncompatible" :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span>
                     <span v-else-if="package.abandoned" :title="package.replacement === true && $t('ui.package.abandonedText') || $t('ui.package.replacement', { replacement: package.replacement })">{{ 'ui.package.abandonedTitle' | translate }}</span>
                 </h1>
 
-                <div class="description">
+                <div class="package__description">
                     <p v-html="package._highlightResult && package._highlightResult.description.value || package.description"></p>
                     <more :name="package.name" :homepage="package.url || package.homepage" :support="Object.assign({}, package.support)"/>
                 </div>
-                <p class="additional">
-                    <strong class="version" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
+                <p class="package__additional">
+                    <strong class="package__version package__version--additional" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                     <span v-for="item in additional">{{ item }}</span>
                 </p>
             </div>
 
-            <div :class="{release: true, validating: this.constraintValidating, error: this.constraintError, disabled: (willBeRemoved || (!isInstalled && !willBeInstalled)) }">
+            <div :class="{package__release: true, 'package__release--validating': this.constraintValidating, 'package__release--error': this.constraintError, 'package__release--disabled': (willBeRemoved || (!isInstalled && !willBeInstalled)) }">
                 <fieldset>
                     <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!this.constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
                     <button class="widget-button" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled)">{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
-                <div class="version" v-if="package.version">
+                <div class="package__version package__version--release" v-if="package.version">
                     <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                     <time :dateTime="package.time">({{ released }})</time>
                 </div>
             </div>
 
-            <fieldset class="actions" v-if="isContao">
+            <fieldset class="package__actions" v-if="isContao">
                 <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
             </fieldset>
-            <fieldset class="actions" v-else>
+            <fieldset class="package__actions" v-else>
                 <button-group :label="$t('ui.package.updateButton')" icon="update" v-if="isInstalled" :disabled="isModified" @click="update">
                     <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="isModified">Enable</button>-->
                     <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="!isModified">Disable</button>-->
@@ -411,7 +412,7 @@
             }
         }
 
-        figure {
+        &__icon {
             display: none;
 
             img {
@@ -428,7 +429,7 @@
             }
         }
 
-        .about {
+        &__about {
             margin-bottom: 20px;
 
             @include screen(1024) {
@@ -440,74 +441,69 @@
             @include screen(1200) {
                 width: 590px;
             }
+        }
 
-            h1 {
-                position: relative;
-                margin-bottom: 5px;
+        &__headline {
+            position: relative;
+            margin-bottom: 5px;
 
-                em {
-                    background-color: $highlight-color;
-                    font-style: normal;
-                }
-
-                &.badge {
-                    padding-right: 100px;
-
-                    @include screen(1024) {
-                        padding-right: 0;
-                    }
-                }
-
-                > span + span {
-                    position: absolute;
-                    top: 6px;
-                    right: 0;
-                    padding: 0 8px;
-                    background: $red-button;
-                    border-radius: 2px;
-                    font-size: 12px;
-                    line-height: 19px;
-                    color: #fff;
-                    cursor: help;
-
-                    @include screen(800) {
-                        right: auto;
-                        margin-left: 10px;
-                    }
-                }
+            em {
+                background-color: $highlight-color;
+                font-style: normal;
             }
 
-            .description {
-                margin-bottom: 1em;
-
-                p {
-                    display: inline;
-                }
-
-                em {
-                    background-color: $highlight-color;
-                    font-style: normal;
-                }
-            }
-
-            .additional {
-                margin-top: -5px;
-
-                *:not(:last-child):after {
-                    margin: 0 10px;
-                    font-weight: $font-weight-normal;
-                    content: "|";
-                }
+            &--badge {
+                padding-right: 100px;
 
                 @include screen(1024) {
-                    .version {
-                        display: none;
-                    }
+                    padding-right: 0;
+                }
+            }
+
+            > span + span {
+                position: absolute;
+                top: 6px;
+                right: 0;
+                padding: 0 8px;
+                background: $red-button;
+                border-radius: 2px;
+                font-size: 12px;
+                line-height: 19px;
+                color: #fff;
+                cursor: help;
+
+                @include screen(800) {
+                    right: auto;
+                    margin-left: 10px;
                 }
             }
         }
 
-        .release {
+        &__description {
+            margin-bottom: 1em;
+
+            p {
+                display: inline;
+            }
+
+            em {
+                background-color: $highlight-color;
+                font-style: normal;
+            }
+        }
+
+        &__additional {
+            margin-top: -5px;
+
+            *:not(:last-child):after {
+                margin: 0 10px;
+                font-weight: $font-weight-normal;
+                content: "|";
+            }
+        }
+
+        // Fixes CSS override with basic input styling
+        .package__release {
             text-align: right;
             margin-bottom: 10px;
 
@@ -562,11 +558,11 @@
                 animation: release-validating 2s linear infinite;
             }*/
 
-            &.error input {
+            &--error input {
                 animation: input-error .15s linear 3;
             }
 
-            &.disabled input[type=text] {
+            &--disabled input[type=text] {
                 background: $border-color;
                 border-color: $border-color;
 
@@ -574,8 +570,16 @@
                     text-decoration: line-through;
                 }
             }
+        }
 
-            .version {
+        &__version {
+            &--additional {
+                @include screen(1024) {
+                    display: none;
+                }
+            }
+
+            &--release {
                 display: none;
 
                 @include screen(1024) {
@@ -590,7 +594,7 @@
             }
         }
 
-        .actions {
+        &__actions {
             @include screen(600) {
                 float: right;
                 width: 50%;
