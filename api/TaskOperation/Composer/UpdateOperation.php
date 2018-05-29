@@ -39,6 +39,7 @@ class UpdateOperation extends AbstractProcessOperation
                     '--no-dev',
                     '--no-progress',
                     '--no-suggest',
+                    '--no-ansi',
                     '--no-interaction',
                     '--optimize-autoloader',
                 ]
