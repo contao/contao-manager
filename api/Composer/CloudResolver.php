@@ -54,7 +54,7 @@ class CloudResolver implements LoggerAwareInterface
         $options = [
             RequestOptions::JSON => $data,
             RequestOptions::HEADERS => [
-                'Composer-Resolver-Command' => implode(' ', $definition->getUpdates()),
+                'Composer-Resolver-Command' => implode(' ', $definition->getUpdates()) . ' --with-dependencies',
             ],
         ];
 
