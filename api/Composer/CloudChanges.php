@@ -71,7 +71,7 @@ class CloudChanges
     public function requirePackage($packageName, $version = null)
     {
         if ($version) {
-            $this->require[] = $packageName.' '.$version;
+            $this->require[] = $packageName.'='.$version;
         } else {
             $this->require[] = $packageName;
         }
@@ -122,52 +122,7 @@ class CloudChanges
 
     public function getJson()
     {
-        if (empty($this->require) && empty($this->remove)) {
-            return $this->json->read();
-        }
-
-        $filesystem = new Filesystem();
-        $tempdir = sys_get_temp_dir().'/'.uniqid('composer-', false);
-        $tempfile = $tempdir.'/'.basename($this->json->getPath());
-
-        putenv('COMPOSER='.$tempfile);
-        $filesystem->copy($this->json->getPath(), $tempfile);
-        $composer = Factory::create(new NullIO());
-
-        if (!empty($this->require)) {
-            $command = new RequireCommand();
-            $command->setComposer($composer);
-            $command->getDefinition()->addOption(new InputOption('--no-plugins', null, InputOption::VALUE_NONE, 'Whether to disable plugins.'));
-            $input = new ArrayInput(
-                [
-                    'packages' => $this->require,
-                    '--no-update' => true,
-                ],
-                $command->getDefinition()
-            );
-
-            $command->run($input, new NullOutput());
-        }
-
-        if (!empty($this->remove)) {
-            $command = new RemoveCommand();
-            $command->setComposer($composer);
-            $command->getDefinition()->addOption(new InputOption('--no-plugins', null, InputOption::VALUE_NONE, 'Whether to disable plugins.'));
-            $input = new ArrayInput(
-                [
-                    'packages' => $this->remove,
-                    '--no-update' => true,
-                ],
-                $command->getDefinition()
-            );
-
-            $command->run($input, new NullOutput());
-        }
-
-        $json = (new JsonFile($tempfile))->read();
-        $filesystem->remove($tempdir);
-
-        return $json;
+        return $this->json->read();
     }
 
     public function getLock()

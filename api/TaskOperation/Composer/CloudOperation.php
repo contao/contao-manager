@@ -193,17 +193,6 @@ class CloudOperation implements TaskOperationInterface
         $console = '> Resolving dependencies using Composer Cloud';
 //        $console .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
 
-        $requires = $this->changes->getRequiredPackages();
-        $removes = $this->changes->getRemovedPackages();
-
-        if (!empty($requires)) {
-            $console .= "\n Added packages to composer.json\n - ".implode("\n  - ", $requires);
-        }
-
-        if (!empty($removes)) {
-            $console .= "\n Removed packages from composer.json\n - ".implode("\n  - ", $removes);
-        }
-
         switch ($job->getStatus()) {
             case CloudJob::STATUS_QUEUED:
                 $status->setSummary(

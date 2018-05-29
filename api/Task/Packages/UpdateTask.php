@@ -19,8 +19,9 @@ use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\Composer\CloudOperation;
 use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
+use Contao\ManagerApi\TaskOperation\Composer\RemoveOperation;
+use Contao\ManagerApi\TaskOperation\Composer\RequireOperation;
 use Contao\ManagerApi\TaskOperation\Composer\UpdateOperation;
-use Contao\ManagerApi\TaskOperation\Filesystem\DumpPackagesOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
 class UpdateTask extends AbstractPackagesTask
@@ -74,7 +75,7 @@ class UpdateTask extends AbstractPackagesTask
     {
         $status = parent::update($config);
 
-        if ($status->isComplete() && $config->getOption('dry_run', false) && !$this->environment->useCloudResolver()) {
+        if ($status->isComplete() && $config->getOption('dry_run', false)) {
             $this->restoreBackup($config);
         }
 
@@ -88,17 +89,24 @@ class UpdateTask extends AbstractPackagesTask
     {
         $changes = $this->getComposerDefinition($config);
 
-        if ($this->environment->useCloudResolver()) {
-            return [
-                new CloudOperation($this->cloudResolver, $changes, $config, $this->environment, $this->filesystem),
-                new InstallOperation($this->processFactory, $config, $changes->getDryRun(), $this->getInstallTimeout()),
-            ];
+        $operations = [];
+
+        if (($required = $changes->getRequiredPackages()) && !empty($required)) {
+            $operations[] = new RequireOperation($this->processFactory, $config, $required);
         }
 
-        return [
-            new DumpPackagesOperation($changes, $this->filesystem, $config),
-            new UpdateOperation($this->processFactory, $changes->getUpdates(), $changes->getDryRun()),
-        ];
+        if (($removed = $changes->getRemovedPackages()) && !empty($removed)) {
+            $operations[] = new RemoveOperation($this->processFactory, $config, $removed);
+        }
+
+        if ($this->environment->useCloudResolver()) {
+            $operations[] = new CloudOperation($this->cloudResolver, $changes, $config, $this->environment, $this->filesystem);
+            $operations[] = new InstallOperation($this->processFactory, $config, $changes->getDryRun(), $this->getInstallTimeout());
+        } else {
+            $operations[] = new UpdateOperation($this->processFactory, $changes->getUpdates(), $changes->getDryRun());
+        }
+
+        return $operations;
     }
 
     protected function getComposerDefinition(TaskConfig $config)
