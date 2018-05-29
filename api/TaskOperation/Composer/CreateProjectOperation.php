@@ -70,6 +70,8 @@ class CreateProjectOperation extends AbstractInlineOperation
     {
         $status->setSummary('Downloading application template …');
         $status->setDetail('contao/managed-edition '.$this->version);
+
+        $this->addConsoleStatus($status);
     }
 
     /**
