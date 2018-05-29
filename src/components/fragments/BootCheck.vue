@@ -2,7 +2,7 @@
     <div class="boot-check">
         <loader v-if="progress === 'loading'" class="boot-check__icon"></loader>
         <div v-else-if="progress === 'success'" class="boot-check__icon boot-check__icon--success"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
-        <div v-else-if="progress === 'info'" class="boot-check__icon boot-check__icon--info"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
+        <div v-else-if="progress === 'info' || progress === 'action'" class="boot-check__icon boot-check__icon--info"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
         <div v-else-if="progress === 'warning'" class="boot-check__icon boot-check__icon--warning"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
         <div v-else class="boot-check__icon boot-check__icon--error"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
 
@@ -29,7 +29,7 @@
             progress: {
                 type: String,
                 required: true,
-                validator: value => (['ready', 'loading', 'success', 'info', 'warning', 'error'].indexOf(value) !== -1),
+                validator: value => (['ready', 'loading', 'success', 'info', 'warning', 'error', 'action'].indexOf(value) !== -1),
             },
         },
     };

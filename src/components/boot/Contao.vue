@@ -73,7 +73,7 @@
 
                 this.$store.dispatch('server/contao/get').then((result) => {
                     if (!result.version) {
-                        this.bootState = 'info';
+                        this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.contao.empty');
 
                         this.$store.dispatch('server/php-web/get').then((phpWeb) => {

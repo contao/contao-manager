@@ -38,7 +38,7 @@
     </boxed-layout>
 
     <boot-check v-else :progress="bootState" :title="$t('ui.server.config.title')" :description="bootDescription">
-        <button class="widget-button widget-button--alert" v-if="bootState === 'error'" @click="showConfiguration">{{ 'ui.server.config.setup' | translate }}</button>
+        <button class="widget-button widget-button--alert" v-if="bootState === 'error' || bootState === 'action'" @click="showConfiguration">{{ 'ui.server.config.setup' | translate }}</button>
         <button class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" @click="showConfiguration">{{ 'ui.server.config.change' | translate }}</button>
     </boot-check>
 </template>
@@ -88,7 +88,7 @@
 
                 this.$store.dispatch('server/config/get').then((result) => {
                     if (!result.server || result.detected) {
-                        this.bootState = 'error';
+                        this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.config.stateError');
                     } else if (!result.php_cli) {
                         this.bootState = 'error';

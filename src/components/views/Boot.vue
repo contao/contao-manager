@@ -65,12 +65,14 @@
 
             canContinue() {
                 return Object.values(this.status).indexOf(null) === -1
-                    && Object.values(this.status).indexOf('error') === -1;
+                    && Object.values(this.status).indexOf('error') === -1
+                    && Object.values(this.status).indexOf('action') === -1;
             },
 
             shouldContinue() {
                 return Object.values(this.status).indexOf(null) === -1
                     && Object.values(this.status).indexOf('error') === -1
+                    && Object.values(this.status).indexOf('action') === -1
                     && Object.values(this.status).indexOf('warning') === -1;
             },
         },
@@ -119,7 +121,7 @@
                         return true;
                     }
 
-                    if (this.status[keys[k]] === null || this.status[keys[k]] === 'error') {
+                    if (this.status[keys[k]] === null || this.status[keys[k]] === 'error' || this.status[keys[k]] === 'action') {
                         return false;
                     }
                 }

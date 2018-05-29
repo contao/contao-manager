@@ -1,6 +1,6 @@
 <template>
     <boot-check v-else :progress="bootState" :title="$t('ui.server.composer.title')" :description="bootDescription">
-        <button v-if="bootState === 'info'" @click="install" class="widget-button widget-button--primary widget-button--run">{{ 'ui.server.composer.button' | translate }}</button>
+        <button v-if="bootState === 'action'" @click="install" class="widget-button widget-button--primary widget-button--run">{{ 'ui.server.composer.button' | translate }}</button>
     </boot-check>
 </template>
 
@@ -20,12 +20,11 @@
 
                 this.$store.dispatch('server/composer/get').then((result) => {
                     if (result.json.found && !result.vendor.found) {
-                        this.bootState = 'info';
+                        this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.composer.install');
                     } else {
                         this.bootState = 'success';
                         this.bootDescription = this.$t('ui.server.composer.success');
-                        this.$emit('success', 'Composer');
                     }
                 }).catch((response) => {
                     if (response.status === 503) {
