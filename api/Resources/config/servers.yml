@@ -218,10 +218,9 @@ configs:
     strato:
         name: STRATO AG
         website: www.strato.de
-        timeout: 30
         php:
-            /opt/RZphp{major}{minor}/bin/php-cli: []
-            /usr/bin/php{major}.{minor}: []
+            /opt/RZphp{major}{minor}/bin/php-cli: ['-d', 'max_execution_time=300']
+            /usr/bin/php{major}.{minor}: ['-d', 'max_execution_time=300']
 
     uberspace:
         name: Uberspace

@@ -49,12 +49,12 @@ class InstallOperation extends AbstractProcessOperation
 
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-install');
-            $retries = $taskConfig->getState('install-timeout', 0);
+            $retries = $taskConfig->getState('install-retry', 0);
 
-            if (null !== $timeout && $process->isTimedOut() && $retries < 4) {
-                $taskConfig->setState('install-timeout', ++$retries);
+            if ($process->isTerminated() && !$process->isSuccessful() && $retries < 4) {
+                $taskConfig->setState('install-retry', ++$retries);
 
-                throw new \RuntimeException('Process timed out, restarting');
+                throw new \RuntimeException('Install process failed, restarting');
             }
 
             parent::__construct($process);
@@ -90,7 +90,7 @@ class InstallOperation extends AbstractProcessOperation
 
     public function updateStatus(TaskStatus $status)
     {
-        if (null !== $this->timeout && ($attempt = $this->taskConfig->getState('install-timeout', 0)) > 0) {
+        if (($attempt = $this->taskConfig->getState('install-retry', 0)) > 0) {
             $status->setSummary(
                 $this->translator->trans(
                     'taskoperation.composer-install.summaryRetry',
