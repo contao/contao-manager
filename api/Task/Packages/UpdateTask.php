@@ -92,18 +92,18 @@ class UpdateTask extends AbstractPackagesTask
         $operations = [];
 
         if (($required = $changes->getRequiredPackages()) && !empty($required)) {
-            $operations[] = new RequireOperation($this->processFactory, $config, $required);
+            $operations[] = new RequireOperation($this->processFactory, $config, $this->translator, $required);
         }
 
         if (($removed = $changes->getRemovedPackages()) && !empty($removed)) {
-            $operations[] = new RemoveOperation($this->processFactory, $config, $removed);
+            $operations[] = new RemoveOperation($this->processFactory, $config, $this->translator, $removed);
         }
 
         if ($this->environment->useCloudResolver()) {
-            $operations[] = new CloudOperation($this->cloudResolver, $changes, $config, $this->environment, $this->filesystem);
-            $operations[] = new InstallOperation($this->processFactory, $config, $changes->getDryRun(), $this->getInstallTimeout());
+            $operations[] = new CloudOperation($this->cloudResolver, $changes, $config, $this->environment, $this->translator, $this->filesystem);
+            $operations[] = new InstallOperation($this->processFactory, $config, $this->translator, $changes->getDryRun(), $this->getInstallTimeout());
         } else {
-            $operations[] = new UpdateOperation($this->processFactory, $changes->getUpdates(), $changes->getDryRun());
+            $operations[] = new UpdateOperation($this->processFactory, $this->translator, $changes->getUpdates(), $changes->getDryRun());
         }
 
         return $operations;

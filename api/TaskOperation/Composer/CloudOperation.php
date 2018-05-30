@@ -15,6 +15,7 @@ use Contao\ManagerApi\Composer\CloudException;
 use Contao\ManagerApi\Composer\CloudJob;
 use Contao\ManagerApi\Composer\CloudResolver;
 use Contao\ManagerApi\Composer\Environment;
+use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
@@ -43,6 +44,11 @@ class CloudOperation implements TaskOperationInterface
     private $environment;
 
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -64,14 +70,16 @@ class CloudOperation implements TaskOperationInterface
      * @param CloudChanges  $changes
      * @param TaskConfig    $taskConfig
      * @param Environment   $environment
+     * @param Translator    $translator
      * @param Filesystem    $filesystem
      */
-    public function __construct(CloudResolver $cloud, CloudChanges $changes, TaskConfig $taskConfig, Environment $environment, Filesystem $filesystem)
+    public function __construct(CloudResolver $cloud, CloudChanges $changes, TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem)
     {
         $this->cloud = $cloud;
         $this->changes = $changes;
         $this->taskConfig = $taskConfig;
         $this->environment = $environment;
+        $this->translator = $translator;
         $this->filesystem = $filesystem;
     }
 
@@ -196,49 +204,55 @@ class CloudOperation implements TaskOperationInterface
         switch ($job->getStatus()) {
             case CloudJob::STATUS_QUEUED:
                 $status->setSummary(
-                    sprintf(
-                        'Job queued in Composer Cloud for %s seconds',
-                        time() - $this->taskConfig->getState('cloud-job-queued')
+                    $this->translator->trans(
+                        'taskoperation.cloud.queuedSummary',
+                        ['seconds' => time() - $this->taskConfig->getState('cloud-job-queued')]
                     )
                 );
                 $status->setDetail(
-                    sprintf(
-                        'Starting in approx. %s seconds (currently %s jobs on %s workers)',
-                        $job->getWaitingTime(),
-                        $job->getJobsInQueue(),
-                        $job->getWorkers()
+                    $this->translator->trans(
+                        'taskoperation.cloud.queuedDetail',
+                        [
+                            'seconds' => $job->getWaitingTime(),
+                            'jobs' => $job->getJobsInQueue(),
+                            'workers' => $job->getWorkers(),
+                        ]
                     )
                 );
                 break;
 
             case CloudJob::STATUS_PROCESSING:
-                $details = sprintf(
-                    'Job ID %s is running for %s seconds',
-                    $job->getId(),
-                    time() - $this->taskConfig->getState('cloud-job-processing')
+                $detail = $this->translator->trans(
+                    'taskoperation.cloud.processingDetail',
+                    [
+                        'job' => $job->getId(),
+                        'seconds' => time() - $this->taskConfig->getState('cloud-job-processing'),
+                    ]
                 );
 
-                $status->setSummary('Resolving dependencies using Composer Cloud');
-                $status->setDetail($details);
-                $status->addConsole($console."\n\n ".$details);
+                $status->setSummary($this->translator->trans('taskoperation.cloud.processingSummary'));
+                $status->setDetail($detail);
+                $status->addConsole($console."\n\n ".$detail);
                 break;
 
             case CloudJob::STATUS_ERROR:
-                $status->setSummary('Failed resolving dependencies …');
+                $status->setSummary($this->translator->trans('taskoperation.cloud.errorSummary'));
                 $status->setConsole($this->cloud->getOutput($job));
                 $status->setStatus(TaskStatus::STATUS_ERROR);
                 break;
 
             case CloudJob::STATUS_FINISHED:
-                $details = sprintf(
-                    'Job ID %s completed in %s seconds',
-                    $job->getId(),
-                    $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing')
+                $detail = $this->translator->trans(
+                    'taskoperation.cloud.finishedDetail',
+                    [
+                        'job' => $job->getId(),
+                        'seconds' => $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing'),
+                    ]
                 );
 
-                $status->setSummary('Composer Cloud job completed');
-                $status->setDetail($details);
-                $status->addConsole($console."\n\n# ".$details."\n");
+                $status->setSummary($this->translator->trans('taskoperation.cloud.finishedSummary'));
+                $status->setDetail($detail);
+                $status->addConsole($console."\n\n# ".$detail."\n");
                 break;
 
             default:

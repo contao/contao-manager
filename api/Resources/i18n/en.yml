@@ -33,8 +33,22 @@ en:
             not_found: 'This path does not contain a valid PHP binary.'
             incompatible: 'This binary is a PHP version {cli} but your web server is version {web}.'
 
-    task:
+    taskstatus:
         created: 'Console Task has been created …'
+        complete:
+            summary: 'Console task complete!'
+            detail: 'The background task was completed successfully. Check the console protocol for the details.'
+        aborting:
+            summary: 'Stopping current operation …'
+            detail: 'The background task is being cancelled.'
+        stopped:
+            summary: 'Console task terminated!'
+            detail: 'The background task was cancelled. Please check the console protocol.'
+        error:
+            summary: 'Console task terminated!'
+            detail: 'The background task has stopped unexpectedly. Please check the console protocol.'
+
+    task:
         setup_packages:
             title: 'Installing Contao Application'
         install_packages:
@@ -49,3 +63,37 @@ en:
             title: 'Rebuilding Contao Cache'
         self_update:
             title: 'Updating Contao Manager'
+
+    taskoperation:
+        self-update:
+            summary: 'Installing latest Contao Manager …'
+            detail: 'Updating from {old} to {new}'
+        remove-cache:
+            summary: 'Deleting cache directory …'
+        cache-warmup:
+            summary: 'Warming application cache …'
+        cache-clear:
+            summary: 'Clearing application cache …'
+        composer-update:
+            summary: 'Updating Composer dependencies …'
+        composer-require:
+            summary: 'Adding Composer packages …'
+        composer-remove:
+            summary: 'Removing Composer packages …'
+        composer-install:
+            summary: 'Installing Composer dependencies …'
+            summaryRetry: 'Installing Composer dependencies (retrying {current}/{max}) …'
+        dump-autoload:
+            summary: 'Dumping class autoloader …'
+        create-project:
+            summary: 'Downloading application template …'
+        cloud:
+            queuedSummary: 'Job queued in Composer Cloud for {seconds} seconds'
+            queuedDetail: 'Starting in approx. {seconds} seconds (currently {jobs} jobs on {workers} workers)'
+            processingSummary: 'Resolving dependencies using Composer Cloud'
+            processingDetail: 'Job ID {job} is running for {seconds} seconds'
+            errorSummary: 'Failed resolving dependencies …'
+            finishedSummary: 'Composer Cloud job completed'
+            finishedDetail: 'Job ID {job} completed in {seconds} seconds'
+        clear-cache:
+            summary: 'Deleting cache files …'

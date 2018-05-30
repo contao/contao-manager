@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\TaskOperation\Manager;
 
+use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\SelfUpdate\Updater;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
@@ -23,14 +24,21 @@ class SelfUpdateOperation extends AbstractInlineOperation
     private $updater;
 
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
      * Constructor.
      *
      * @param Updater    $updater
      * @param TaskConfig $taskConfig
+     * @param Translator $translator
      */
-    public function __construct(Updater $updater, TaskConfig $taskConfig)
+    public function __construct(Updater $updater, TaskConfig $taskConfig, Translator $translator)
     {
         $this->updater = $updater;
+        $this->translator = $translator;
 
         parent::__construct($taskConfig);
     }
@@ -49,9 +57,12 @@ class SelfUpdateOperation extends AbstractInlineOperation
     public function updateStatus(TaskStatus $status)
     {
         $status
-            ->setSummary('Installing latest Contao Manager …')
+            ->setSummary($this->translator->trans('taskoperation.self-update.summary'))
             ->setDetail(
-                sprintf('Updating from %s to %s', $this->updater->getOldVersion(), $this->updater->getNewVersion())
+                $this->translator->trans(
+                    'taskoperation.self-update.detail',
+                    ['old' => $this->updater->getOldVersion(), 'new' => $this->updater->getNewVersion()]
+                )
             )
         ;
 

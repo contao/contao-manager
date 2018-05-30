@@ -55,7 +55,7 @@ class SelfUpdateTask extends AbstractTask
     protected function buildOperations(TaskConfig $config)
     {
         return [
-            new SelfUpdateOperation($this->updater, $config),
+            new SelfUpdateOperation($this->updater, $config, $this->translator),
         ];
     }
 }

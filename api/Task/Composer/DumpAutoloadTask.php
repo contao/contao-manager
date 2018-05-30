@@ -58,7 +58,7 @@ class DumpAutoloadTask extends AbstractTask
     protected function buildOperations(TaskConfig $config)
     {
         return [
-            new DumpAutoloadOperation($this->processFactory),
+            new DumpAutoloadOperation($this->processFactory, $this->translator),
         ];
     }
 }

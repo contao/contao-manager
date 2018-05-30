@@ -11,6 +11,7 @@
 namespace Contao\ManagerApi\TaskOperation\Filesystem;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
@@ -29,6 +30,11 @@ class RemoveCacheOperation extends AbstractInlineOperation
     private $kernel;
 
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -39,13 +45,15 @@ class RemoveCacheOperation extends AbstractInlineOperation
      * @param string     $environment
      * @param ApiKernel  $kernel
      * @param TaskConfig $taskConfig
+     * @param Translator $translator
      * @param Filesystem $filesystem
      */
-    public function __construct($environment, ApiKernel $kernel, TaskConfig $taskConfig, Filesystem $filesystem)
+    public function __construct($environment, ApiKernel $kernel, TaskConfig $taskConfig, Translator $translator, Filesystem $filesystem)
     {
-        $this->filesystem = $filesystem;
         $this->environment = $environment;
         $this->kernel = $kernel;
+        $this->translator = $translator;
+        $this->filesystem = $filesystem;
 
         parent::__construct($taskConfig);
     }
@@ -65,7 +73,7 @@ class RemoveCacheOperation extends AbstractInlineOperation
      */
     public function updateStatus(TaskStatus $status)
     {
-        $status->setSummary('Deleting cache directory …');
+        $status->setSummary($this->translator->trans('taskoperation.remove-cache.summary'));
         $status->setDetail($this->getCacheDir());
 
         $this->addConsoleStatus($status);

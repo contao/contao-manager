@@ -16,6 +16,7 @@ use Composer\Package\Version\VersionSelector;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\RepositoryFactory;
 use Contao\ManagerApi\Composer\Environment;
+use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
@@ -34,6 +35,11 @@ class CreateProjectOperation extends AbstractInlineOperation
     private $environment;
 
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -48,13 +54,15 @@ class CreateProjectOperation extends AbstractInlineOperation
      *
      * @param TaskConfig  $taskConfig
      * @param Environment $environment
+     * @param Translator  $translator
      * @param Filesystem  $filesystem
      */
-    public function __construct(TaskConfig $taskConfig, Environment $environment, Filesystem $filesystem)
+    public function __construct(TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem)
     {
         parent::__construct($taskConfig);
 
         $this->environment = $environment;
+        $this->translator = $translator;
         $this->filesystem = $filesystem;
         $this->version = $taskConfig->getOption('version');
 
@@ -68,7 +76,7 @@ class CreateProjectOperation extends AbstractInlineOperation
      */
     public function updateStatus(TaskStatus $status)
     {
-        $status->setSummary('Downloading application template …');
+        $status->setSummary($this->translator->trans('taskoperation.create-project.summary'));
         $status->setDetail('contao/managed-edition '.$this->version);
 
         $this->addConsoleStatus($status);

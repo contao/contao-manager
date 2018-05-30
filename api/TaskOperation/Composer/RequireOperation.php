@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
+use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
@@ -23,15 +24,22 @@ class RequireOperation extends AbstractProcessOperation
     private $taskConfig;
 
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
      * @param TaskConfig            $taskConfig
+     * @param Translator            $translator
      * @param array                 $required
      */
-    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, array $required)
+    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Translator $translator, array $required)
     {
         $this->taskConfig = $taskConfig;
+        $this->translator = $translator;
 
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-require');
@@ -67,7 +75,7 @@ class RequireOperation extends AbstractProcessOperation
 
     public function updateStatus(TaskStatus $status)
     {
-        $status->setSummary('Adding Composer packages …');
+        $status->setSummary($this->translator->trans('taskoperation.composer-require.summary'));
 
         $status->setDetail($this->process->getCommandLine());
 

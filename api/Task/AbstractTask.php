@@ -47,7 +47,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
     public function create(TaskConfig $config)
     {
         return (new TaskStatus($this->translator->trans('task.'.$this->getName().'.title')))
-            ->setSummary($this->translator->trans('task.created'));
+            ->setSummary($this->translator->trans('taskstatus.created'));
     }
 
     /**
@@ -196,30 +196,14 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
      */
     protected function updateStatus(TaskStatus $status)
     {
-        switch ($status->getStatus()) {
-            case TaskStatus::STATUS_ACTIVE:
-                break;
+        $result = $status->getStatus();
 
-            case TaskStatus::STATUS_COMPLETE:
-                $status->setSummary('Console task complete!');
-                $status->setDetail('The background task was completed successfully. Check the console protocol for the details.');
-                break;
-
-            case TaskStatus::STATUS_ABORTING:
-                $status->setSummary('Stopping current operation …');
-                $status->setDetail('The background task is being cancelled.');
-                break;
-
-            case TaskStatus::STATUS_STOPPED:
-                $status->setSummary('Console task terminated!');
-                $status->setDetail('The background task was cancelled. Please check the console protocol.');
-                break;
-
-            case TaskStatus::STATUS_ERROR:
-                $status->setSummary('Console task terminated!');
-                $status->setDetail('The background task has stopped unexpectedly. Please check the console protocol.');
-                break;
+        if ($result === TaskStatus::STATUS_ACTIVE) {
+            return;
         }
+
+        $status->setSummary($this->translator->trans(sprintf('taskstatus.%s.summary', $result)));
+        $status->setDetail($this->translator->trans(sprintf('taskstatus.%s.detail', $result)));
     }
 
     /**

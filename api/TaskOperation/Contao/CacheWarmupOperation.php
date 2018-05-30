@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\TaskOperation\Contao;
 
+use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
@@ -17,14 +18,22 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 class CacheWarmupOperation extends AbstractProcessOperation
 {
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
+     * @param Translator            $translator
      * @param string                $environment
      * @param string                $processId
      */
-    public function __construct(ConsoleProcessFactory $processFactory, $environment, $processId = 'cache-warmup')
+    public function __construct(ConsoleProcessFactory $processFactory, Translator $translator, $environment, $processId = 'cache-warmup')
     {
+        $this->translator = $translator;
+
         try {
             parent::__construct($processFactory->restoreBackgroundProcess($processId));
         } catch (\Exception $e) {
@@ -34,7 +43,7 @@ class CacheWarmupOperation extends AbstractProcessOperation
 
     public function updateStatus(TaskStatus $status)
     {
-        $status->setSummary('Warming application cache …');
+        $status->setSummary($this->translator->trans('taskoperation.cache-warmup.summary'));
 
         $this->addConsoleStatus($status);
     }

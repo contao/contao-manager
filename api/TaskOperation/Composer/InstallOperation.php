@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
+use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
@@ -26,18 +27,24 @@ class InstallOperation extends AbstractProcessOperation
      * @var null
      */
     private $timeout;
+    /**
+     * @var Translator
+     */
+    private $translator;
 
     /**
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
      * @param TaskConfig            $taskConfig
+     * @param Translator            $translator
      * @param bool                  $dryRun
      * @param null                  $timeout
      */
-    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, $dryRun = false, $timeout = null)
+    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Translator $translator, $dryRun = false, $timeout = null)
     {
         $this->taskConfig = $taskConfig;
+        $this->translator = $translator;
         $this->timeout = $timeout;
 
         try {
@@ -84,9 +91,13 @@ class InstallOperation extends AbstractProcessOperation
     public function updateStatus(TaskStatus $status)
     {
         if (null !== $this->timeout && ($attempt = $this->taskConfig->getState('install-timeout', 0)) > 0) {
-            $status->setSummary(sprintf('Installing Composer dependencies (retrying %s/5)…', $attempt + 1));
+            $status->setSummary(
+                $this->translator->trans(
+                    'taskoperation.composer-install.summaryRetry',
+                    ['current' => $attempt + 1, 'max' => 5])
+            );
         } else {
-            $status->setSummary('Installing Composer dependencies …');
+            $status->setSummary($this->translator->trans('taskoperation.composer-install.summary'));
         }
 
         $status->setDetail($this->process->getCommandLine());

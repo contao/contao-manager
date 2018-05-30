@@ -71,7 +71,7 @@ class SetupTask extends AbstractPackagesTask
      */
     protected function buildOperations(TaskConfig $config)
     {
-        $operations = [new CreateProjectOperation($config, $this->environment, $this->filesystem)];
+        $operations = [new CreateProjectOperation($config, $this->environment, $this->translator, $this->filesystem)];
 
         if ($this->environment->useCloudResolver()) {
             $operations[] = new CloudOperation(
@@ -79,11 +79,12 @@ class SetupTask extends AbstractPackagesTask
                 new CloudChanges($this->environment->getJsonFile()),
                 $config,
                 $this->environment,
+                $this->translator,
                 $this->filesystem
             );
         }
 
-        $operations[] = new InstallOperation($this->processFactory, $config, false, $this->getInstallTimeout());
+        $operations[] = new InstallOperation($this->processFactory, $config, $this->translator, false, $this->getInstallTimeout());
 
         return $operations;
     }
