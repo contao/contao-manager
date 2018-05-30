@@ -15,6 +15,7 @@ use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\SelfUpdate\Updater;
 use Contao\ManagerApi\Task\AbstractTask;
 use Contao\ManagerApi\Task\TaskConfig;
+use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Manager\SelfUpdateOperation;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 
@@ -57,5 +58,29 @@ class SelfUpdateTask extends AbstractTask
         return [
             new SelfUpdateOperation($this->updater, $config, $this->translator),
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function updateStatus(TaskStatus $status)
+    {
+        if ($status->getStatus() === TaskStatus::STATUS_COMPLETE) {
+            $status->setSummary($this->translator->trans('task.self_update.completeSummary'));
+            $status->setDetail(
+                $this->translator->trans(
+                    'task.self_update.completeDetail',
+                    [
+                        'old' => $this->updater->getOldVersion(),
+                        'new' => $this->updater->getNewVersion(),
+                    ]
+                )
+            );
+            $status->setConsole(null);
+
+            return;
+        }
+
+        parent::updateStatus($status);
     }
 }

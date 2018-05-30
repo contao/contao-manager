@@ -63,6 +63,8 @@ en:
             title: 'Rebuilding Contao Cache'
         self_update:
             title: 'Updating Contao Manager'
+            completeSummary: 'Contao Manager was successfully updated'
+            completeDetail: 'Updated from {old} to {new}'
 
     taskoperation:
         self-update:
