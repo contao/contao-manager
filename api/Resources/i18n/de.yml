@@ -15,17 +15,12 @@ de:
       title: 'Die PHP Session konnte nicht gestartet werden.'
     web_root:
       title: 'Die Phar-Datei muss sich im /web-Ordner befinden.'
-    windows:
-      title: 'Diese Version des Contao Managers kann auf Windows nicht betrieben werden.'
     memory_limit:
       title: 'Ungenügendes PHP Memory-Limit'
       detail: 'Ihre PHP-Konfiguration erlaubt nur {limit} RAM (auf der Kommandozeile). Das ist nicht genug, um Composer auszuführen, und das Limit konnte auch nicht automatisch erhöht werden. Bitte kontaktieren Sie Ihren Hosting-Anbieter.'
     systempdir:
       title: 'Konnte nicht in den temporären Systemordner schreiben.'
       detail: 'Dies ist höchstwahrscheinlich ein Problem mit Ihrer Serverkonfiguration. Stellen Sie sicher, dass entweder open_basedir den Zugriff auf den temporären Ordner erlaubt oder dass sys_temp_dir korrekt gesetzt ist.'
-    contao_old:
-      title: 'Inkompatible Contao-Version'
-      detail: 'Contao {version} ist nicht kompatibel mit dem Contao Manager; bitte aktualisieren Sie Ihre Installation manuell.'
     contao_unknown:
       title: 'Unbekannter Installationsstatus'
       detail: "Auf Ihrem Server wurden Dateien gefunden, die keiner bekannten Contao-Version zugeordnet werden konnten.\nUm Contao zu installieren, müssen Sie entweder Ihre Installation manuell reparieren oder folgende Dateien und Ordner entfernen:\n\n{files}"
@@ -36,3 +31,29 @@ de:
     php_cli:
       not_found: 'Der Pfad enthält kein gültiges PHP-Binary.'
       incompatible: 'Dieses Binary beinhaltet PHP {cli}, der Webprozess verwendet jedoch PHP {web}.'
+  taskstatus:
+    complete:
+      summary: 'Konsolentask abgeschlossen!'
+      detail: 'Der Hintergrundprozess wurde erfolgreich beendet. Prüfen Sie das Konsolenprotokoll für weitere Details.'
+    stopped:
+      summary: 'Konsolentask beendet!'
+    error:
+      summary: 'Konsolentask beendet!'
+  task:
+    setup_packages:
+      completeSummary: 'Installation abgeschlossen!'
+      completeDetail: 'Um das Setup abzuschließen, öffnen Sie bitte das Installtool und geben Sie Ihre Datenbank-Zugangsdaten ein.'
+    install_packages:
+      title: 'Installieren von Composer-Abhängigkeiten'
+    update_packages:
+      title: 'Pakete werden aktualisiert'
+      completeSummary: 'Contao-Pakete aktualisiert!'
+      completeDetail: 'Bitte öffnen Sie das Installtool und führen Sie eventuell notwendige Datenbank-Änderungen durch.'
+    dump_autoload:
+      title: 'Composer Autloader leeren'
+    clear_cache:
+      title: 'Leere den Composer-Cache'
+    rebuild_cache:
+      title: 'Contao-Cache neu erstellen'
+    self_update:
+      title: 'Der Contao Manager wird aktualisiert'

@@ -15,17 +15,12 @@ zh:
       title: 'PHP session无法启动。'
     web_root:
       title: 'Phar文件必须位于/web文件夹下'
-    windows:
-      title: '目前该版本Contao Manager不支持Windows系统'
     memory_limit:
       title: 'PHP内存限制不足'
       detail: '当前PHP配置仅允许 {limit} 内存 (在命令行中)。该内存设置无法满足运行Composer，该设置无法自动调整增加限制。请联系主机提供商提供相关支持。'
     systempdir:
       title: '系统临时目录无法写入'
       detail: '很有可能是主机的配置问题。请确保open_basedir允许访问临时目录，或者sys_temp_dir已正确配置。'
-    contao_old:
-      title: 'Contao版本不兼容'
-      detail: 'Contao版本 {version}不兼容Contao Manager，请手动更新当前安装的系统。'
     contao_unknown:
       title: '安装状态未知'
       detail: "在当前服务器中找到一些文件，但是无法检测到Contao版本。\n您必须手动修复您的应用或者移除以下文件和目录来安装Contao：\n\n{files}"
@@ -36,3 +31,29 @@ zh:
     php_cli:
       not_found: '该路径没有包含有效的PHP二进制文件'
       incompatible: 'PHP二进制文件版本 {cli} 但是当前服务器版本为 {web}'
+  taskstatus:
+    complete:
+      summary: '完成控制台任务!'
+      detail: '后台任务成功完成。通过控制台协议查看详情。'
+    stopped:
+      summary: '终止控制台任务!'
+    error:
+      summary: '终止控制台任务!'
+  task:
+    setup_packages:
+      completeSummary: '完成安装!'
+      completeDetail: '为了完成安装流程，请打开安装工具并输入正确的数据库认证配置。'
+    install_packages:
+      title: '正在安装Composer依赖'
+    update_packages:
+      title: '包更新中'
+      completeSummary: 'Contao 包已更新!'
+      completeDetail: '请打开安装工具来应用任何必要的数据库变更。'
+    dump_autoload:
+      title: '打印Composer Autoloader'
+    clear_cache:
+      title: '正在清理Composer缓存'
+    rebuild_cache:
+      title: 'Contao 缓存重建中'
+    self_update:
+      title: 'Contao 管理器更新中'

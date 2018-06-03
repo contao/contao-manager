@@ -15,17 +15,12 @@ nl:
       title: 'PHP-sessie kan niet worden gestart.'
     web_root:
       title: 'Het Phar bestand moet zich bevinden in de /web map.'
-    windows:
-      title: 'Deze versie van Contao Manager wordt momenteel niet ondersteund door Windows.'
     memory_limit:
       title: 'Limiet PHP-geheugen onvoldoende'
       detail: 'Uw PHP-configuratie staat alleen {limit} geheugen toe (op de opdrachtregel). Dit is niet genoeg om Composer uit te voeren, het was niet mogelijk om deze limiet automatisch te verhogen. Neem contact op met uw hostingprovider voor ondersteuning.'
     systempdir:
       title: 'Tijdelijke systeem directory niet beschrijfbaar.'
       detail: 'Er is waarschijnlijk een probleem met uw hostingconfiguratie. Zorg ervoor dat open_basedir toegang geeft tot de tijdelijke directory, of dat sys_temp_dir correct is geconfigureerd.'
-    contao_old:
-      title: 'Incompatibele Contao versie'
-      detail: 'Contao versie {version} is niet compatibel met de Contao Manager, installatie handmatig updaten.'
     contao_unknown:
       title: 'Installatiestatus onbekend'
       detail: "Er zijn enkele bestanden op uw server gevonden maar geen bekende Contao versie.\nU dient uw applicatie handmatig te repareren of de volgende bestanden en mappen verwijderen om Contao te installeren:\n\n{files}"
@@ -36,3 +31,29 @@ nl:
     php_cli:
       not_found: 'Dit pad bevat geen geldige PHP binary.'
       incompatible: 'Dit binary is een PHP versie {cli} maar uw webserver is versie {web}.'
+  taskstatus:
+    complete:
+      summary: 'Console taak afgerond!'
+      detail: 'De taak op de achtergrond is met succes afgerond. Controleer het console protocol voor details.'
+    stopped:
+      summary: 'Console taak beëindigd!'
+    error:
+      summary: 'Console taak beëindigd!'
+  task:
+    setup_packages:
+      completeSummary: 'Installatie afgerond!'
+      completeDetail: 'Om het installatieproces te voltooien, dient u het installatieprogramma te openen en de gegevens van uw database in te vullen.'
+    install_packages:
+      title: 'Composer Afhankelijkheden Installeren'
+    update_packages:
+      title: 'Pakketten bijwerken'
+      completeSummary: 'Contao pakketten bijgewerkt!'
+      completeDetail: 'Open het Installatie Tool om database wijzigingen aan te brengen.'
+    dump_autoload:
+      title: 'Dump Composer Autoloader'
+    clear_cache:
+      title: 'Composer Cache Wissen'
+    rebuild_cache:
+      title: 'Contao Cache opnieuw opbouwen'
+    self_update:
+      title: 'Contao Manager updaten'

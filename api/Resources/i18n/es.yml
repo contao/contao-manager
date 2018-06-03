@@ -15,17 +15,12 @@ es:
       title: 'La sesión de PHP no se pudo iniciar.'
     web_root:
       title: 'El archivo Phar debe estar ubicado en la carpeta /web.'
-    windows:
-      title: 'Actualmente, esta versión de Contao Manager no es compatible con Windows.'
     memory_limit:
       title: 'Límite insuficiente de memoria de PHP'
       detail: 'Su configuración PHP solo permite {limit} memoria (en la línea de comando). Esto no es suficiente para ejecutar Composer y no fue posible aumentar este límite automáticamente. Por favor, póngase en contacto con su proveedor de hosting para obtener asistencia.'
     systempdir:
       title: 'No se puede escribir en el directorio temporal del sistema.'
       detail: 'Probablemente esto sea un problema con su configuración de alojamiento. Asegúrese de que open_basedir permita el acceso al directorio temporal o que el sys_temp_dir esté configurado correctamente.'
-    contao_old:
-      title: 'Versión Contao incompatible'
-      detail: 'La versión de Contao {versión} no es compatible con Contao Manager, actualice su instalación manualmente.'
     contao_unknown:
       title: 'Estado de instalación desconocido'
       detail: "Se encontraron algunos archivos en su servidor, pero no se pudo detectar ninguna versión conocida de Contao.\nDebe reparar manualmente su aplicación o eliminar los siguientes archivos y carpetas para instalar Contao:\n\n{files}"
@@ -36,3 +31,29 @@ es:
     php_cli:
       not_found: 'Esta ruta no contiene un binario PHP válido.'
       incompatible: 'Este binario es una versión de PHP {cli}, pero su servidor web es la versión {web}.'
+  taskstatus:
+    complete:
+      summary: '¡Tarea de consola completa!'
+      detail: 'La tarea de fondo se completó con éxito. Verifique el protocolo de la consola para los detalles.'
+    stopped:
+      summary: 'Se terminó la tarea de la consola!'
+    error:
+      summary: 'Se terminó la tarea de la consola!'
+  task:
+    setup_packages:
+      completeSummary: '¡Instalación completa!'
+      completeDetail: 'Para completar el proceso de configuración, abra la herramienta de instalación e ingrese sus credenciales de base de datos.'
+    install_packages:
+      title: 'Instalando dependencias del Composer'
+    update_packages:
+      title: 'Actualizando paquetes'
+      completeSummary: 'Paquetes de Contao actualizados!'
+      completeDetail: 'Abra la herramienta de instalación para aplicar los cambios necesarios en la base de datos.'
+    dump_autoload:
+      title: 'Dumping Composer Autoloader'
+    clear_cache:
+      title: 'Limpiar el caché del Composer'
+    rebuild_cache:
+      title: 'Reconstruyendo de caché de Contao'
+    self_update:
+      title: 'Actualizando de Contao Manager'

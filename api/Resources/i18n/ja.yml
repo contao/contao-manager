@@ -15,17 +15,12 @@ ja:
       title: 'PHPのセッションを開始できませんでした。'
     web_root:
       title: 'Pharファイルは/webフォルダーになければなりません。'
-    windows:
-      title: 'このバージョンのContao Managerでは現在Windowsをサポートしていません。'
     memory_limit:
       title: 'PHPのメモリの制限が不足しています。'
       detail: 'PHPの設定は(コマンド行では){limit}のメモリだけを許可しています。こではComposerを動作させるのに十分ではなく、制限を自動的に増やすこともできませんでした。ホスティングの提供者に連絡してサポートを求めてください。'
     systempdir:
       title: 'システムの一時ディレクトリに書き込みできませんでした。'
       detail: 'ホスティングの設定に問題の可能性がもっとも高いです。open_basedirが一時ディクトリへのアクセスを許可しているか、sys_temp_dirが正しく設定されているか確認してください。'
-    contao_old:
-      title: '互換性がないContaoのバージョン'
-      detail: 'Contaoのバージョン{version}はContao Managerと互換性がありません。インストールしているContaoを手作業で更新してください。'
     contao_unknown:
       title: 'インストールの状態が不明'
       detail: "サーバーにファイルがいくつかありますが、Contaoのバージョンを検出できませんでした。\n手作業でアプリケーションを修復するか、Contaoをインストールするために以下のファイルとフォルダーを削除しなければなりません:\n\n{files}"
@@ -36,3 +31,29 @@ ja:
     php_cli:
       not_found: 'このパスに有効なPHPの実行ファイルがありません。'
       incompatible: 'この実行ファイルはPHPのバージョンは{cli}ですが、ウェブサーバーでのバージョンは{web}です。'
+  taskstatus:
+    complete:
+      summary: 'コンソールのタスクが完了しました!'
+      detail: 'バックエンドのタスクは正常に完了しました。詳細はコンソールのログを調べてください。'
+    stopped:
+      summary: 'コンソールのタスクが中断しました!'
+    error:
+      summary: 'コンソールのタスクが中断しました!'
+  task:
+    setup_packages:
+      completeSummary: 'インストールを完了!'
+      completeDetail: '設定の処理を完了するには、インストールツールを開いてデータベースの認証情報を入力してください。'
+    install_packages:
+      title: 'Composerの依存関係をインストール中'
+    update_packages:
+      title: 'パッケージを更新'
+      completeSummary: 'Contaoのパッケージを更新しました!'
+      completeDetail: 'インストールツールを開いて必要な変更をデータベースに適用してください。'
+    dump_autoload:
+      title: 'Composerのオートローダーを書き出し中'
+    clear_cache:
+      title: 'Composerのキャッシュを消去中'
+    rebuild_cache:
+      title: 'Contaoのキャッシュを再作成'
+    self_update:
+      title: 'Contao Managerを更新'

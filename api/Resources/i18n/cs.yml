@@ -15,17 +15,12 @@ cs:
       title: 'Sezení PHP nelze zahájit.'
     web_root:
       title: 'Soubor .phar musí být umístěný ve složce /web.'
-    windows:
-      title: 'Tato verze Správce Contaa není momentálně podporovaná na Windows.'
     memory_limit:
       title: 'Nedostatečné množství paměti pro PHP'
       detail: 'Vaše nastavení PHP dovoluje (na příkazovém řádku) jen omezené akce kvůli omezení paměti {limit}. Ta není dostatečná pro chod Composeru a nešlo automaticky zvýšit paměť. Kontaktujte prosím Vaše poskytovatele služeb.'
     systempdir:
       title: 'Nelze zapisovat do dočasné složky systému.'
       detail: 'Nejspíš jde o problém s Vaším nastavením služeb. Ujistěte se, že open_basedir dovoluje přístup k dočasné složce nebo zda je sys_temp_dir správně nastavená.'
-    contao_old:
-      title: 'Nekompatibilní verze Contaa'
-      detail: 'Verze Contaa {version} není kompatabilní se Správcem Contaa. Zaktualizujte prosím Vaši instalaci manuálně.'
     contao_unknown:
       title: 'Neznámý status instalace'
       detail: "Bylo nalezeno několik souborů, ale nebyla rozpoznaná žádná verze Contaa.\nNejspíš musíte opravit instalaci aplikace manuálně nebo smazat následující soubory a složky, abyste mohli nainstalovat Contao.\n\n{files}"
@@ -36,3 +31,27 @@ cs:
     php_cli:
       not_found: 'Tato cesta neobsahuje platné binární PHP.'
       incompatible: 'Tato verze je verze PHP {cli}, ale Váš server je ve verzi {web}.'
+  taskstatus:
+    complete:
+      summary: 'Příkaz konzoly byl dokončen!'
+      detail: 'Příkaz na pozadí byl úspěšně proveden. Podívejte se na podrobnosti v zápisu konzoly.'
+    stopped:
+      summary: 'Úloha konzoly nebyla dokončená!'
+    error:
+      summary: 'Úloha konzoly nebyla dokončená!'
+  task:
+    setup_packages:
+      completeSummary: 'Instalace je kompletní!'
+      completeDetail: 'Pro dokončení instalace, spusťte prosím instalační nástroj a zadejte přístupové údaje k databance.'
+    install_packages:
+      title: 'Nainstalovat věci závislé na Composerovi'
+    update_packages:
+      title: 'Aktualizují se balíčky'
+      completeSummary: 'Balíčky Contaa byly zaktualizovány!'
+      completeDetail: 'Otevřete prosím instalační nástroj, abyste mohli provést potřebné změny v databázi.'
+    dump_autoload:
+      title: 'Spustit Autoloadera Composeru'
+    rebuild_cache:
+      title: 'Přetváří se meziúložiště Contaa.'
+    self_update:
+      title: 'Aktualizuje se Správce Contaa'

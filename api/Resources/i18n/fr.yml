@@ -15,17 +15,12 @@ fr:
       title: 'La session PHP n''a pas pu être démarrée.'
     web_root:
       title: 'Le fichier Phar doit être situé dans le dossier /web.'
-    windows:
-      title: 'Cette version de Contao Manager n''est actuellement pas prise en charge par Windows.'
     memory_limit:
       title: 'Limite de mémoire PHP insuffisante'
       detail: 'Votre configuration PHP permet uniquement {limit} de mémoire (en ligne de commande). Ce n''est pas suffisant pour exécuter Composer et il n''a pas été possible d''augmenter automatiquement cette limite. Veuillez contacter votre hébergeur web pour obtenir de l''aide.'
     systempdir:
       title: 'Impossible d''écrire sur le répertoire temporaire du système.'
       detail: 'C''est probablement un problème avec votre configuration d''hébergement. Assurez-vous que open_basedir permet d''accéder au répertoire temporaire ou que sys_temp_dir est correctement configuré.'
-    contao_old:
-      title: 'Version incompatible de Contao'
-      detail: 'La version {version} de Contao n''est pas compatible avec Contao Manager, veuillez mettre à jour manuellement votre installation.'
     contao_unknown:
       title: 'Statut d''installation inconnu'
       detail: "Certains fichiers ont été trouvés sur votre serveur mais aucune version connue de Contao n'a pu être détectée.\nVous devez réparer manuellement votre application ou supprimer les fichiers et dossiers suivants pour installer Contao :\n\n{files}"
@@ -36,3 +31,29 @@ fr:
     php_cli:
       not_found: 'Ce chemin ne contient pas de binaire PHP valide.'
       incompatible: 'Ce binaire est une version PHP {cli} mais votre serveur web est en version {web}.'
+  taskstatus:
+    complete:
+      summary: 'Tâche en arrière-plan terminée avec succès !'
+      detail: 'La tâche en arrière-plan s''est terminée avec succès ! Merci de vérifier les détails du protocole sur la console.'
+    stopped:
+      summary: 'Tâche en arrière-plan terminée avec un erreur !'
+    error:
+      summary: 'Tâche en arrière-plan terminée avec un erreur !'
+  task:
+    setup_packages:
+      completeSummary: 'Installation complète !'
+      completeDetail: 'Pour compléter le processus d''installation, ouvrez l''outil d''installation et saisissez les informations d''identification de votre base de données.'
+    install_packages:
+      title: 'Installation des dépendances de Composer'
+    update_packages:
+      title: 'Mise à jour des paquets'
+      completeSummary: 'Les paquets de Contao ont été mis à jour !'
+      completeDetail: 'Veuillez ouvrir l''outil d''installation pour appliquer les modifications nécessaires à la mise à jour de la base de données.'
+    dump_autoload:
+      title: 'Dumping de l''Autoloader de Composer'
+    clear_cache:
+      title: 'Effacer le cache de Composer'
+    rebuild_cache:
+      title: 'Reconstruction du cache de Contao'
+    self_update:
+      title: 'Mise à jour de Contao Manager'
