@@ -61,7 +61,7 @@ class SelfUpdateTask extends AbstractTask
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function updateStatus(TaskStatus $status)
     {

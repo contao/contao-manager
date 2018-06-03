@@ -51,10 +51,14 @@ en:
     task:
         setup_packages:
             title: 'Installing Contao Application'
+            completeSummary: 'Installation complete!'
+            completeDetail: 'To complete the setup process, please open the install tool and enter your database credentials.'
         install_packages:
             title: 'Installing Composer Dependencies'
         update_packages:
             title: 'Updating Packages'
+            completeSummary: 'Contao packages updated!'
+            completeDetail: 'Please open the install tool to apply any necessary database changes.'
         dump_autoload:
             title: 'Dumping Composer Autoloader'
         clear_cache:

@@ -17,6 +17,7 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\TaskConfig;
+use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Composer\CloudOperation;
 use Contao\ManagerApi\TaskOperation\Composer\CreateProjectOperation;
 use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
@@ -87,5 +88,18 @@ class SetupTask extends AbstractPackagesTask
         $operations[] = new InstallOperation($this->processFactory, $config, $this->translator, false, $this->getInstallTimeout());
 
         return $operations;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function updateStatus(TaskStatus $status)
+    {
+        if (TaskStatus::STATUS_COMPLETE === $status->getStatus()) {
+            $status->setSummary($this->translator->trans('task.setup_packages.completeSummary'));
+            $status->setDetail($this->translator->trans('task.setup_packages.completeDetail'));
+        }
+
+        return parent::updateStatus($status);
     }
 }

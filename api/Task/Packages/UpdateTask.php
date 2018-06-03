@@ -17,6 +17,7 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\TaskConfig;
+use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Composer\CloudOperation;
 use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
 use Contao\ManagerApi\TaskOperation\Composer\RemoveOperation;
@@ -125,5 +126,18 @@ class UpdateTask extends AbstractPackagesTask
         $definition->setDryRun($config->getOption('dry_run', false));
 
         return $definition;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function updateStatus(TaskStatus $status)
+    {
+        if (TaskStatus::STATUS_COMPLETE === $status->getStatus()) {
+            $status->setSummary($this->translator->trans('task.update_packages.completeSummary'));
+            $status->setDetail($this->translator->trans('task.update_packages.completeDetail'));
+        }
+
+        return parent::updateStatus($status);
     }
 }
