@@ -14,4 +14,5 @@
 # Local
 /box.json
 /build.xml
+/.php_cs
 /.php_cs.cache

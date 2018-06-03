@@ -3,9 +3,9 @@
 /*
  * This file is part of Contao Manager.
  *
- * Copyright (c) 2016-2018 Contao Association
+ * (c) Contao Association
  *
- * @license LGPL-3.0+
+ * @license LGPL-3.0-or-later
  */
 
 namespace Contao\ManagerApi\System;
