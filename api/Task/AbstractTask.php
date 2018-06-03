@@ -182,7 +182,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
             $this->operations = $this->buildOperations($config);
 
             foreach ($this->operations as $operation) {
-                if ($operation instanceof LoggerAwareInterface) {
+                if (null !== $this->logger && $operation instanceof LoggerAwareInterface) {
                     $operation->setLogger($this->logger);
                 }
             }
