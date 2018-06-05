@@ -14,6 +14,7 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Exception\ProcessOutputException;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,15 +38,6 @@ class ContaoController extends Controller
             );
         }
 
-        if (0 === count($files = $this->getProjectFiles())) {
-            return new JsonResponse(
-                [
-                    'version' => null,
-                    'api' => 0,
-                ]
-            );
-        }
-
         $translator = $this->get('contao_manager.i18n.translator');
 
         try {
@@ -65,6 +57,15 @@ class ContaoController extends Controller
         }
 
         if (null === $contaoVersion) {
+            if (0 === count($files = $this->getProjectFiles())) {
+                return new JsonResponse(
+                    [
+                        'version' => null,
+                        'api' => 0,
+                    ]
+                );
+            }
+
             return new ApiProblemResponse(
                 (new ApiProblem(
                     $translator->trans('integrity.contao_unknown.title')
@@ -148,14 +149,19 @@ class ContaoController extends Controller
         define('TL_ROOT', $kernel->getContaoDir());
 
         $files = [
-            $kernel->getContaoDir().'/system/constants.php',
-            $kernel->getContaoDir().'/system/config/constants.php',
+            $kernel->getContaoDir() . '/system/constants.php',
+            $kernel->getContaoDir() . '/system/config/constants.php',
         ];
 
         // Test if the Phar was placed in the Contao 2/3 root
-        if ('' !== ($phar = \Phar::running())) {
-            $files[] = dirname(substr($phar, 7)).'/system/constants.php';
-            $files[] = dirname(substr($phar, 7)).'/system/config/constants.php';
+        if ('' !== ($phar = \Phar::running(false))) {
+            $files[] = dirname($phar) . '/system/constants.php';
+            $files[] = dirname($phar) . '/system/config/constants.php';
+        }
+
+        $logger = $this->get('logger');
+        if ($logger instanceof LoggerInterface) {
+            $logger->info('Searching for Contao 2/3', ['files' => $files]);
         }
 
         foreach ($files as $file) {
