@@ -32,15 +32,22 @@ ru:
       not_found: 'Путь не содержит верный бинарный файл PHP.'
       incompatible: 'Двоичный файл PHP версии {cli}, а веб-сервер версии {web}.'
   taskstatus:
+    created: 'Консольная задача создана...'
     complete:
       summary: 'Консольная задача завершена!'
       detail: 'Фоновая задача была успешно завершена. Проверьте протокол консоли.'
+    aborting:
+      summary: 'Остановка текущей операции...'
+      detail: 'Фоновая задача отменяется.'
     stopped:
       summary: 'Консольная задача завершена!'
+      detail: 'Фоновая задача была отменена. Проверьте протокол консоли.'
     error:
       summary: 'Консольная задача завершена!'
+      detail: 'Фоновая задача неожиданно прекращена. Проверьте протокол консоли.'
   task:
     setup_packages:
+      title: 'Установка приложения Contao'
       completeSummary: 'Установка завершена!'
       completeDetail: 'Для завершения процесса установки, откройте мастер установки и введите учетные данные своей базы данных.'
     install_packages:
@@ -57,3 +64,15 @@ ru:
       title: 'Перестроение кеша Contao'
     self_update:
       title: 'Обновление Contao Manager'
+      completeSummary: 'Contao Manager был успешно обновлен'
+      completeDetail: 'Обновлено с {old} до {new}'
+  taskoperation:
+    self-update:
+      summary: 'Установка последнего Contao Manager...'
+      detail: 'Обновление с {old} до {new}'
+    remove-cache:
+      summary: 'Удаление каталога кеша...'
+    create-project:
+      summary: 'Загрузка шаблона приложения...'
+    clear-cache:
+      summary: 'Удаление файлов кеша...'

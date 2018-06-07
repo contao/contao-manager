@@ -32,15 +32,22 @@ de:
       not_found: 'Der Pfad enthält kein gültiges PHP-Binary.'
       incompatible: 'Dieses Binary beinhaltet PHP {cli}, der Webprozess verwendet jedoch PHP {web}.'
   taskstatus:
+    created: 'Konsolen-Task wurde angelegt …'
     complete:
       summary: 'Konsolentask abgeschlossen!'
       detail: 'Der Hintergrundprozess wurde erfolgreich beendet. Prüfen Sie das Konsolenprotokoll für weitere Details.'
+    aborting:
+      summary: 'Aktuelle Aktion wird gestoppt …'
+      detail: 'Der Hintergrund-Prozess wird abgebrochen.'
     stopped:
       summary: 'Konsolentask beendet!'
+      detail: 'Der Hintergrund-Prozess wurde abgebrochen. Bitte prüfen Sie das Konsolen-Protokoll.'
     error:
       summary: 'Konsolentask beendet!'
+      detail: 'Der Hintergrund-Prozess wurde unerwartet beendet. Bitte prüfen Sie das Konsolen-Protokoll.'
   task:
     setup_packages:
+      title: 'Contao wird installiert'
       completeSummary: 'Installation abgeschlossen!'
       completeDetail: 'Um das Setup abzuschließen, öffnen Sie bitte das Installtool und geben Sie Ihre Datenbank-Zugangsdaten ein.'
     install_packages:
@@ -57,3 +64,38 @@ de:
       title: 'Contao-Cache neu erstellen'
     self_update:
       title: 'Der Contao Manager wird aktualisiert'
+      completeSummary: 'Contao Manager wurde erfolgreich aktualisiert'
+      completeDetail: 'Aktualisiert von {old} nach {new}'
+  taskoperation:
+    self-update:
+      summary: 'Neuster Contao Manager wird installiert …'
+      detail: 'Aktualisiere von {old} nach {new}'
+    remove-cache:
+      summary: 'Cache-Verzeichnis wird gelöscht …'
+    cache-warmup:
+      summary: 'Cache wird neu aufgebaut …'
+    cache-clear:
+      summary: 'Cache wird gelöscht …'
+    composer-update:
+      summary: 'Composer-Abhängkeiten werden aktualisiert …'
+    composer-require:
+      summary: 'Composer Pakete werden hinzugefügt …'
+    composer-remove:
+      summary: 'Composer Pakete werden entfernt …'
+    composer-install:
+      summary: 'Installiere Composer-Abhängigkeiten …'
+      summaryRetry: 'Installiere Composer-Abhängigkeiten (Versuch {current}/{max}) …'
+    dump-autoload:
+      summary: 'Klassen-Autoloader wird geschrieben …'
+    create-project:
+      summary: 'Lade Applikations-Vorlage …'
+    cloud:
+      queuedSummary: 'Aufgabe in der Warteschlange der Composer Cloud seit {seconds} Sekunden'
+      queuedDetail: 'Beginnt in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'
+      processingSummary: 'Abhängigkeiten werden mit Hilfe der Composer Cloud aufgelöst'
+      processingDetail: 'Aufgabe ID {job} aktiv seit {seconds} Sekunden'
+      errorSummary: 'Fehler beim auflösen der Abhängigkeiten'
+      finishedSummary: 'Composer Cloud Aufgabe fertiggestellt'
+      finishedDetail: 'Aufgabe ID {job} abgearbeitet in {seconds} Sekunden'
+    clear-cache:
+      summary: 'Lösche Cache-Dateien …'
