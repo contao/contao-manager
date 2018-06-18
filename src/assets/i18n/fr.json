@@ -118,6 +118,7 @@
     "ui.taskpopup.buttonConfirm": "Confirmer et fermer",
     "ui.taskpopup.buttonCancel": "Annuler",
     "ui.taskpopup.console": "Show/Hide Console Output",
+    "ui.taskpopup.noconsole": "Waiting for console output …",
     "ui.taskpopup.autoclose": "Close the task when successful",
     "ui.taskpopup.confirmCancel": "Êtes-vous sûr de vouloir annuler cette tâche ? Cela pourrait laisser votre installation dans un état inconnu, ce qui pourrait empêcher Contao Manager de fonctionner correctement !",
 

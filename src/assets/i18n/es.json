@@ -118,6 +118,7 @@
     "ui.taskpopup.buttonConfirm": "Confirmar y cerrar",
     "ui.taskpopup.buttonCancel": "Cancelar",
     "ui.taskpopup.console": "Show/Hide Console Output",
+    "ui.taskpopup.noconsole": "Waiting for console output …",
     "ui.taskpopup.autoclose": "Close the task when successful",
     "ui.taskpopup.confirmCancel": "¿Está seguro de cancelar esta tarea? Esto podría dejar su instalación en un estado desconocido, lo que podría impedir que el Administrador de Contao funcione correctamente.",
 

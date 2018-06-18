@@ -118,6 +118,7 @@
     "ui.taskpopup.buttonConfirm": "Bevestig & Sluit",
     "ui.taskpopup.buttonCancel": "Annuleer",
     "ui.taskpopup.console": "Show/Hide Console Output",
+    "ui.taskpopup.noconsole": "Waiting for console output …",
     "ui.taskpopup.autoclose": "Close the task when successful",
     "ui.taskpopup.confirmCancel": "Weet u zeker dat u deze taak wilt annuleren? Dit kan uw installatie in onbekende staat achterlaten, waardoor de Contao Manager mogelijk niet goed werkt!",
 

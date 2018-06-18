@@ -72,7 +72,30 @@ ru:
       detail: 'Обновление с {old} до {new}'
     remove-cache:
       summary: 'Удаление каталога кеша...'
+    cache-warmup:
+      summary: '"Подогреть" кэш приложений...'
+    cache-clear:
+      summary: 'Очистка кэша приложений...'
+    composer-update:
+      summary: 'Обновление зависимостей Composer...'
+    composer-require:
+      summary: 'Добавление пакетов Composer...'
+    composer-remove:
+      summary: 'Удаление пакетов Composer...'
+    composer-install:
+      summary: 'Установка зависимостей Composer...'
+      summaryRetry: 'Установка зависимостей Composer (повтор: {current}/{max}) …'
+    dump-autoload:
+      summary: 'Дамп автозагрузчика классов...'
     create-project:
       summary: 'Загрузка шаблона приложения...'
+    cloud:
+      queuedSummary: 'Работа очереди в Composer Cloud за {seconds} сек.'
+      queuedDetail: 'Начиная с прибл. {seconds} сек. (в данный момент {jobs} рабочих {workers} задач)'
+      processingSummary: 'Разрешение зависимостей с помощью Composer Cloud'
+      processingDetail: 'Задание ID {job} работает {seconds} сек.'
+      errorSummary: 'Ошибка разрешения зависимостей...'
+      finishedSummary: 'Задание Composer Cloud завершено'
+      finishedDetail: 'Задание ID {job} завершено за {seconds} сек.'
     clear-cache:
       summary: 'Удаление файлов кеша...'

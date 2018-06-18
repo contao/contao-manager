@@ -32,15 +32,22 @@ cs:
       not_found: 'Tato cesta neobsahuje platné binární PHP.'
       incompatible: 'Tato verze je verze PHP {cli}, ale Váš server je ve verzi {web}.'
   taskstatus:
+    created: 'Byl spuštěn příkaz…'
     complete:
       summary: 'Příkaz konzoly byl dokončen!'
       detail: 'Příkaz na pozadí byl úspěšně proveden. Podívejte se na podrobnosti v zápisu konzoly.'
+    aborting:
+      summary: 'Zastavování probíhající operace…'
+      detail: 'Proces na pozadí byl zastaven.'
     stopped:
       summary: 'Úloha konzoly nebyla dokončená!'
+      detail: 'Příkaz na pozadí byl zastaven. Zkontrolujte prosím protokol konzoly.'
     error:
       summary: 'Úloha konzoly nebyla dokončená!'
+      detail: 'Příkaz na pozadí byl znenadání zastaven. Zkontrolujte prosím protokol konzoly.'
   task:
     setup_packages:
+      title: 'Instalování aplikací Contaa'
       completeSummary: 'Instalace je kompletní!'
       completeDetail: 'Pro dokončení instalace, spusťte prosím instalační nástroj a zadejte přístupové údaje k databance.'
     install_packages:
@@ -51,7 +58,44 @@ cs:
       completeDetail: 'Otevřete prosím instalační nástroj, abyste mohli provést potřebné změny v databázi.'
     dump_autoload:
       title: 'Spustit Autoloadera Composeru'
+    clear_cache:
+      title: 'Vyprazdňování meziúložiště Composeru'
     rebuild_cache:
       title: 'Přetváří se meziúložiště Contaa.'
     self_update:
       title: 'Aktualizuje se Správce Contaa'
+      completeSummary: 'Správce Contaa byl úspěšně zaktualizovaný'
+      completeDetail: 'Zaktualizovat {old} na {new}'
+  taskoperation:
+    self-update:
+      summary: 'Instalování poslední verze Správce Contaa'
+      detail: 'Aktualizování {old} na {new}'
+    remove-cache:
+      summary: 'Mazání složky meziúložiště'
+    cache-warmup:
+      summary: 'Vytváření meziúložiště aplikace…'
+    cache-clear:
+      summary: 'Mazání meziúložiště aplikace… '
+    composer-update:
+      summary: 'Aktualizování na Composeru závislých věcí…'
+    composer-require:
+      summary: 'Přidávání balíčků Composeru…'
+    composer-remove:
+      summary: 'Odstraňování balíčků Composeru…'
+    composer-install:
+      summary: 'Instalování na Composeru závislých věcí…'
+      summaryRetry: 'Instalování na Composeru závislých věc (opětovný pokus {current}/{max}) …'
+    dump-autoload:
+      summary: 'Spustit autloadera class'
+    create-project:
+      summary: 'Stahování předlohy aplikace…'
+    cloud:
+      queuedSummary: 'Příkaz je prováděný v Cloudu Composeru: {seconds} s'
+      queuedDetail: 'Proces začne za {seconds} s. (současný {jobs} proces - počet uživatelů: {workers})'
+      processingSummary: 'Řešení závislostí použitím Cloudu Composera'
+      processingDetail: 'Úkol {job} běží  {seconds} s.'
+      errorSummary: 'Vyřešení závislostí nevyšlo…'
+      finishedSummary: 'Úkol Cloudu Composera byl dokončen'
+      finishedDetail: 'Úkol {job} bude ukončený za  {seconds} s.'
+    clear-cache:
+      summary: 'Mazání meziúložiště souborů…'

@@ -118,6 +118,7 @@
     "ui.taskpopup.buttonConfirm": "确认 & 关闭",
     "ui.taskpopup.buttonCancel": "取消",
     "ui.taskpopup.console": "Show/Hide Console Output",
+    "ui.taskpopup.noconsole": "Waiting for console output …",
     "ui.taskpopup.autoclose": "Close the task when successful",
     "ui.taskpopup.confirmCancel": "确认取消这个任务？该操作会将安装处于未知状态，可能会阻止Contao管理器正常工作！",
 
