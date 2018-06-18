@@ -57,6 +57,12 @@ configs:
             /usr/bin/php{major}{minor}: []
             /usr/bin/php: []
 
+    biohost:
+        name: BIOHOST
+        website: www.biohost.de
+        php:
+            /opt/php{major}.{minor}/bin/php: []
+
     cyon:
         name: cyon GmbH
         website: www.cyon.ch
@@ -150,6 +156,12 @@ configs:
         website: www.infomaniak.com
         php:
             /opt/php{major}.{minor}/bin/php: ['-d', 'allow_url_fopen=1', '-d', 'memory_limit=-1']
+
+    iway:
+        name: IWAY AG
+        website: www.iway.ch
+        php:
+            /usr/bin/php{major}.{minor}: []
 
     mamp_mac:
         name: MAMP (macOS)
