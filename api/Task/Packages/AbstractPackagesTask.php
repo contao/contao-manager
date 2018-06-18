@@ -55,7 +55,7 @@ abstract class AbstractPackagesTask extends AbstractTask
      */
     public function create(TaskConfig $config)
     {
-        return parent::create($config)->setAudit(!$config->getOption('dry_run', false))->setCancellable($config->getOption('dry_run', false));
+        return parent::create($config)->setAudit(!$config->getOption('dry_run', false))->setCancellable(true);
     }
 
     /**
