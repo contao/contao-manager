@@ -50,7 +50,7 @@
             </div>
 
             <div class="task-popup__console">
-                <code ref="console" @scroll="scrolled" class="task-popup__output" v-if="hasConsole">{{ taskConsole }}</code>
+                <code ref="console" @scroll="scrolled" class="task-popup__output" v-show="showConsole"><i v-if="!taskConsole">{{ 'ui.taskpopup.noconsole' | translate }}</i>{{ taskConsole }}</code>
             </div>
         </div>
     </div>
@@ -269,8 +269,6 @@
             float: right;
             margin: 4px 4px 4px 0;
             padding: 4px;
-            /*width: 38px;*/
-            /*height: 32px;*/
             background: none;
             border: 1px solid transparent;
             border-radius: 1px;
@@ -412,49 +410,13 @@
                 margin: 0 70px;
             }
 
-            /*&__toggle {
-                display: block;
-                text-align: left;
-                color: $link-color;
-                background: none;
-                border: none;
-                cursor: pointer;
-
-                i {
-                    position: relative;
-                    top: -1px;
-                    margin-right: 2px;
-                    margin-left: 0;
-                    color: $link-color;
-                    transform: rotate(90deg) scale(0.5);
-                }
-
-                &--hide i {
-                    transform: rotate(-90deg) scale(0.5);
-                }
-
-                &--invisible {
-                    visibility: hidden;
-                }
-            }*/
-
-            /*&.status-error a {
-                visibility: hidden;
-            }*/
-
             &__output {
-                display: none;
                 position: relative;
                 top: auto;
                 left: auto;
                 right: auto;
-                margin: 0 70px 30px;
-            }
-
-            &--console code/*,
-            &.status-error code*/ {
-                display: block;
                 height: 300px;
+                margin: 0 70px 30px;
             }
         }
     }
