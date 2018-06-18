@@ -86,6 +86,7 @@ select {
         border-right: 6px solid transparent;
         border-top: 6px solid $border-color;
         content: "";
+        pointer-events: none;
     }
 }
 
