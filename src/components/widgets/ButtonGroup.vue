@@ -60,7 +60,7 @@
             close() {
                 setTimeout(() => {
                     this.showGroup = false;
-                }, 100);
+                }, 300);
             },
 
             toggle() {
