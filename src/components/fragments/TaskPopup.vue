@@ -199,6 +199,19 @@
             },
         },
 
+        watch: {
+            taskConsole() {
+                if (this.scrollToBottom) {
+                    this.$nextTick(
+                        () => {
+                            this.swallowScroll = true;
+                            this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
+                        },
+                    );
+                }
+            },
+        },
+
         activated() {
             this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
             this.autoClose = window.localStorage.getItem('contao_manager_autoclose') === '1';
