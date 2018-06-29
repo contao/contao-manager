@@ -47,6 +47,7 @@ services:
         arguments:
             - "@contao_manager.config.manager"
             - "@contao_manager.system.server_info"
+            - "@contao_manager.composer.environment"
             - "@contao_manager.i18n.translator"
 
     Contao\ManagerApi\Controller\Server\ComposerController:

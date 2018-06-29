@@ -10,6 +10,8 @@
 
 namespace Contao\ManagerApi\Controller\Server;
 
+use Composer\Json\JsonFile;
+use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\I18n\Translator;
@@ -34,6 +36,11 @@ class ConfigController extends Controller
     private $serverInfo;
 
     /**
+     * @var Environment
+     */
+    private $environment;
+
+    /**
      * @var Translator
      */
     private $translator;
@@ -43,12 +50,14 @@ class ConfigController extends Controller
      *
      * @param ManagerConfig $config
      * @param ServerInfo    $serverInfo
+     * @param Environment   $environment
      * @param Translator    $translator
      */
-    public function __construct(ManagerConfig $config, ServerInfo $serverInfo, Translator $translator)
+    public function __construct(ManagerConfig $config, ServerInfo $serverInfo, Environment $environment, Translator $translator)
     {
         $this->config = $config;
         $this->serverInfo = $serverInfo;
+        $this->environment = $environment;
         $this->translator = $translator;
     }
 
@@ -114,7 +123,7 @@ class ConfigController extends Controller
                 'server' => (string) $server,
                 'php_cli' => (string) $cli,
                 'detected' => $detected,
-                'cloud' => !$this->config->get('disable_cloud', false),
+                'cloud' => $this->getCloudConfig(),
                 'configs' => $this->serverInfo->getConfigs(),
             ]
         );
@@ -192,5 +201,61 @@ class ConfigController extends Controller
                 ),
             ];
         }
+    }
+
+    private function getCloudConfig()
+    {
+        $issues = $this->checkCloudIssues();
+
+        return [
+            'enabled' => !$this->config->get('disable_cloud', false),
+            'supported' => empty($issues),
+            'issues' => $issues,
+        ];
+    }
+
+    private function checkCloudIssues()
+    {
+        $json = new JsonFile($this->environment->getJsonFile());
+
+        if (!$json->exists()) {
+            return [];
+        }
+
+        try {
+            $data = $json->read();
+        } catch (\RuntimeException $e) {
+            return [$e->getMessage()];
+        }
+
+        $issues = [];
+
+        if (isset($data['repositories']) && is_array($data['repositories'])) {
+            foreach ($data['repositories'] as $repository) {
+                if (isset($repository['type']) && 'path' === $repository['type']) {
+                    $issues[] = $this->translator->trans('config.cloud.path');
+                }
+
+                if (isset($repository['type']) && 'artifact' === $repository['type']) {
+                    $issues[] = $this->translator->trans('config.cloud.artifact');
+                }
+            }
+        }
+
+        if (isset($data['config']['platform'])) {
+            $issues[] = $this->translator->trans('config.cloud.platform');
+        }
+
+        if (isset($data['config']['cache-dir'])
+            || isset($data['config']['cache-files-dir'])
+            || isset($data['config']['cache-repo-dir'])
+            || isset($data['config']['cache-vcs-dir'])
+            || isset($data['config']['cache-files-ttl'])
+            || isset($data['config']['cache-files-maxsize'])
+        ) {
+            $issues[] = $this->translator->trans('config.cloud.cache');
+        }
+
+        return array_unique($issues);
     }
 }

@@ -24,6 +24,14 @@
             <fieldset class="config-check__fields">
                 <legend class="config-check__fieldtitle">{{ 'ui.server.config.cloudTitle' | translate }}</legend>
                 <p class="config-check__fielddesc">{{ 'ui.server.config.cloudText' | translate }}</p>
+
+                <div class="config-check__issues">
+                    <p>{{ 'ui.server.config.stateErrorCloud' | translate }}</p>
+                    <ul>
+                        <li v-for="issue in cloudIssues">{{ issue }}</li>
+                    </ul>
+                </div>
+
                 <checkbox name="cloud" :label="$t('ui.server.config.cloud')" :disabled="processing" v-model="cloud"/>
             </fieldset>
 
@@ -70,6 +78,8 @@
             server: '',
             php_cli: '',
             cloud: true,
+            cloudSupported: true,
+            cloudIssues: [],
         }),
 
         computed: {
@@ -93,6 +103,9 @@
                     } else if (!result.php_cli) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.config.stateErrorCli');
+                    } else if (result.cloud.enabled && !result.cloud.supported) {
+                        this.bootState = 'error';
+                        this.bootDescription = this.$t('ui.server.config.stateErrorCloud');
                     } else if (result.server === 'custom') {
                         this.bootState = 'info';
                         this.bootDescription = this.$t('ui.server.config.stateCustom', result);
@@ -167,7 +180,9 @@
                     this.server = result.server;
                     this.php_cli = result.php_cli;
                     this.detected = result.detected;
-                    this.cloud = result.cloud;
+                    this.cloud = result.cloud.enabled;
+                    this.cloudSupported = result.cloud.supported;
+                    this.cloudIssues = result.cloud.issues;
                 });
             }
         },
@@ -239,6 +254,25 @@
 
         &__fielddesc {
             margin-bottom: 1em;
+        }
+
+        &__issues {
+            margin-bottom: 1em;
+            color: $red-button;
+
+            p {
+                font-weight: $font-weight-bold;
+            }
+
+            ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            li {
+                margin: .5em 0 0 25px;
+                padding: 0;
+            }
         }
 
         @include screen(960) {
