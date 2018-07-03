@@ -39,13 +39,10 @@ class AccessKeyController extends Controller
      * @param Request $request
      *
      * @return Response
+     * @throws \Seld\JsonLint\ParsingException
      */
     public function __invoke(Request $request)
     {
-        if ($this->api->getVersion() < 1) {
-            return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
-        }
-
         switch ($request->getMethod()) {
             case 'GET':
                 return $this->getAccessKey();
@@ -61,20 +58,30 @@ class AccessKeyController extends Controller
     }
 
     /**
-     * @return JsonResponse
+     * @return Response
+     * @throws \Seld\JsonLint\ParsingException
      */
     private function getAccessKey()
     {
-        return new JsonResponse(['access-key' => $this->api->getAccessKey()]);
+        if (!$this->isSupported('get')) {
+            return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+        }
+
+        return new JsonResponse(['access-key' => $this->api->runCommand($this->getAccessKeyArguments('get'))]);
     }
 
     /**
      * @param Request $request
      *
-     * @return JsonResponse|Response
+     * @return Response
+     * @throws \Seld\JsonLint\ParsingException
      */
     private function setAccessKey(Request $request)
     {
+        if (!$this->isSupported('set')) {
+            return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+        }
+
         if (!$request->request->has('user') || !$request->request->has('password')) {
             return new Response(null, Response::HTTP_BAD_REQUEST);
         }
@@ -87,18 +94,52 @@ class AccessKeyController extends Controller
             PASSWORD_DEFAULT
         );
 
-        $this->api->setAccessKey($accessKey);
+        $this->api->runCommand(array_merge($this->getAccessKeyArguments('set'), [$accessKey]));
 
         return new JsonResponse(['access-key' => $accessKey]);
     }
 
     /**
-     * @return JsonResponse
+     * @return Response
+     * @throws \Seld\JsonLint\ParsingException
      */
     private function removeAccessKey()
     {
-        $this->api->removeAccessKey();
+        if (!$this->isSupported('remove')) {
+            return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+        }
+
+        $this->api->runCommand($this->getAccessKeyArguments('remove'));
 
         return new JsonResponse(['access-key' => '']);
+    }
+
+    /**
+     * @param string $action
+     *
+     * @return array
+     */
+    private function getAccessKeyArguments($action)
+    {
+        if ($this->api->getVersion() === 1) {
+            return ['access-key:'.$action];
+        }
+
+        return ['dot-env:'.$action, 'APP_DEV_ACCESSKEY'];
+    }
+
+    /**
+     * Returns whether access key command is supported.
+     *
+     * @param string $action
+     *
+     * @return bool
+     */
+    private function isSupported($action)
+    {
+        return $this->api->getVersion() === 1
+            || ($this->api->hasCommand('dot-env:'.$action)
+                && in_array('APP_DEV_ACCESSKEY', $this->api->getFeatures()['contao/manager-bundle']['dot-env'], true)
+            );
     }
 }

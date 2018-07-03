@@ -10,7 +10,8 @@
 
 namespace Contao\ManagerApi\Process;
 
-use Contao\ManagerApi\Exception\ProcessOutputException;
+use Seld\JsonLint\JsonParser;
+use Seld\JsonLint\ParsingException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -27,6 +28,11 @@ class ContaoApi
     private $filesystem;
 
     /**
+     * @var array
+     */
+    private $apiInfo;
+
+    /**
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
@@ -41,15 +47,90 @@ class ContaoApi
     /**
      * Gets the Contao API version.
      *
-     * @throws ProcessFailedException
-     * @throws ProcessOutputException
-     *
      * @return int
      */
     public function getVersion()
     {
-        if (!$this->filesystem->exists($this->processFactory->getContaoApiPath())) {
-            return 0;
+        return $this->getApiInfo()['version'];
+    }
+
+    /**
+     * Returns list of available API commands.
+     *
+     * @return array
+     */
+    public function getCommands()
+    {
+        return $this->getApiInfo()['commands'];
+    }
+
+    /**
+     * Returns whether the given API command is available.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasCommand($name)
+    {
+        return in_array($name, $this->getApiInfo()['commands'], true);
+    }
+
+    /**
+     * Returns list of available API features.
+     *
+     * @return array
+     */
+    public function getFeatures()
+    {
+        return $this->getApiInfo()['features'];
+    }
+
+    /**
+     * @param string|array $arguments
+     * @param bool         $parseJson
+     *
+     * @return string
+     * @throws ParsingException
+     * @throws ProcessFailedException
+     */
+    public function runCommand($arguments, $parseJson = false)
+    {
+        $process = $this->processFactory->createContaoApiProcess((array) $arguments);
+        $process->mustRun();
+
+        return $parseJson ? $this->parseJson($process->getOutput()) : $process->getOutput();
+    }
+
+    /**
+     * Checks whether the Contao API binary exists.
+     *
+     * @return bool
+     */
+    private function hasBinary()
+    {
+        return $this->filesystem->exists($this->processFactory->getContaoApiPath());
+    }
+
+    /**
+     * Returns version, commands and features of the Contao API.
+     *
+     * @return array
+     */
+    private function getApiInfo()
+    {
+        if (null !== $this->apiInfo) {
+            return $this->apiInfo;
+        }
+
+        $default = [
+            'version' => 0,
+            'commands' => [],
+            'features' => [],
+        ];
+
+        if (!$this->hasBinary()) {
+            return $this->apiInfo = $default;
         }
 
         $process = $this->processFactory->createContaoApiProcess(['version']);
@@ -57,43 +138,40 @@ class ContaoApi
 
         $version = trim($process->getOutput());
 
-        if (!preg_match('/^\d+$/', $version)) {
-            throw new ProcessOutputException('Output is not a valid API version.', $process);
+        if (preg_match('/^\d+$/', $version)) {
+            $default['version'] = (int) $version;
+
+            return $this->apiInfo = $default;
         }
 
-        return (int) $version;
+        try {
+            return $this->apiInfo = $this->parseJson($version);
+        } catch (ParsingException $e) {
+            $default['error'] = $e->getMessage();
+
+            return $this->apiInfo = $default;
+        }
     }
 
     /**
-     * Gets the debug access key.
+     * @param string $output
      *
-     * @return string
+     * @return mixed
+     * @throws ParsingException
      */
-    public function getAccessKey()
+    private function parseJson($output)
     {
-        $process = $this->processFactory->createContaoApiProcess(['access-key:get']);
-        $process->mustRun();
+        $data = json_decode($output, true);
 
-        return trim($process->getOutput());
-    }
+        if (null === $data && JSON_ERROR_NONE !== json_last_error()) {
+            $parser = new JsonParser();
+            $result = $parser->lint($output);
 
-    /**
-     * Sets the debug access key.
-     *
-     * @param string $accessKey
-     */
-    public function setAccessKey($accessKey)
-    {
-        $process = $this->processFactory->createContaoApiProcess(['access-key:set', $accessKey]);
-        $process->mustRun();
-    }
+            if (null !== $result) {
+                throw $result;
+            }
+        }
 
-    /**
-     * Removes the debug access key.
-     */
-    public function removeAccessKey()
-    {
-        $process = $this->processFactory->createContaoApiProcess(['access-key:remove']);
-        $process->mustRun();
+        return $data;
     }
 }
