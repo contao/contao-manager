@@ -69,11 +69,11 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        if (!$this->config->hasToken($credentials)) {
+        $token = $this->config->findToken($credentials);
+
+        if (null === $token) {
             return null;
         }
-
-        $token = $this->config->getToken($credentials);
 
         return $userProvider->loadUserByUsername($token['username']);
     }

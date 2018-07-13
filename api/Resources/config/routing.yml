@@ -94,12 +94,12 @@ tokens_create:
     methods:  [POST]
 
 token_get:
-    path:     /api/users/{username}/tokens/{token}
+    path:     /api/users/{username}/tokens/{id}
     defaults: { _controller: Contao\ManagerApi\Controller\UserController:retrieveToken }
     methods:  [GET]
 
 token_delete:
-    path:     /api/users/{username}/tokens/{token}
+    path:     /api/users/{username}/tokens/{id}
     defaults: { _controller: Contao\ManagerApi\Controller\UserController:deleteToken }
     methods:  [DELETE]
 

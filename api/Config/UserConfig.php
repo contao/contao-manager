@@ -38,7 +38,12 @@ class UserConfig extends AbstractConfig
 
         $this->passwordEncoder = $passwordEncoder;
 
-        $this->migrateSecret($kernel);
+        if (!isset($this->data['version']) || $this->data['version'] < 2) {
+            $this->migrateSecret($kernel);
+            $this->hashTokens();
+            $this->data['version'] = 2;
+            $this->save();
+        }
     }
 
     /**
@@ -209,37 +214,51 @@ class UserConfig extends AbstractConfig
      */
     public function getTokens()
     {
-        if (!isset($this->data['tokens'])) {
+        if (!isset($this->data['tokens']) || !\is_array($this->data['tokens'])) {
             return [];
         }
 
-        return $this->data['tokens'];
+        $data = [];
+
+        foreach ($this->data['tokens'] as $id => $payload) {
+            $data[] = array_merge(
+                ['id' => $id],
+                $payload
+            );
+        }
+
+        return $data;
     }
 
     /**
-     * Returns whether a token exists.
+     * Gets token payload by ID (hashed token value).
      *
-     * @param string $token
+     * @param string $id
      *
-     * @return bool
+     * @return array|null
      */
-    public function hasToken($token)
+    public function getToken($id)
     {
-        return isset($this->data['tokens'][$token]);
+        if (!isset($this->data['tokens'][$id])) {
+            return null;
+        }
+
+        return array_merge(
+            ['id' => $id],
+            $this->data['tokens'][$id]
+        );
     }
 
     /**
+     * Finds token payload by unhashed token value.
+     *
      * @param string $token
      *
      * @return array|null
      */
-    public function getToken($token)
+    public function findToken($token)
     {
-        if (!isset($this->data['tokens'][$token])) {
-            return null;
-        }
-
-        return $this->data['tokens'][$token];
+        return $this->getToken(hash('sha256', $token));
     }
 
     /**
@@ -253,52 +272,42 @@ class UserConfig extends AbstractConfig
      */
     public function createToken($username, $clientId, $scope = 'admin')
     {
-        $token = bin2hex(random_bytes(16));
-
-        $this->addToken($token, $username, $clientId, $scope);
-
-        return $token;
-    }
-
-    /**
-     * Adds a token to the configuration file.
-     *
-     * @param string $token
-     * @param string $username
-     * @param string $clientId
-     * @param string $scope
-     */
-    public function addToken($token, $username, $clientId, $scope = 'admin')
-    {
         if (!$this->hasUser($username)) {
             throw new \RuntimeException(sprintf('Username "%s" does not exist.', $username));
         }
 
-        if ($this->hasToken($token)) {
-            throw new \RuntimeException(sprintf('Token "%s" already exist.', $token));
+        $token = bin2hex(random_bytes(16));
+        $id = hash('sha256', $token);
+
+        if (isset($this->data['tokens'][$id])) {
+            throw new \RuntimeException(sprintf('Token with ID "%s" already exist.', $id));
         }
 
-        $payload['token'] = $token;
-        $payload['username'] = $username;
-
-        $this->data['tokens'][$token] = [
-            'token' => $token,
+        $this->data['tokens'][$id] = [
             'username' => $username,
             'client_id' => $clientId,
             'scope' => $scope,
         ];
 
         $this->save();
+
+        return array_merge(
+            [
+                'id' => $id,
+                'token' => $token
+            ],
+            $this->data['tokens'][$id]
+        );
     }
 
     /**
      * Deletes a token from the configuration file.
      *
-     * @param string $token
+     * @param string $id
      */
-    public function deleteToken($token)
+    public function deleteToken($id)
     {
-        unset($this->data['tokens'][$token]);
+        unset($this->data['tokens'][$id]);
 
         $this->save();
     }
@@ -320,9 +329,24 @@ class UserConfig extends AbstractConfig
             if ($config->has('secret')) {
                 $this->data['secret'] = $config->get('secret');
                 $config->remove('secret');
-                $this->save();
             } else {
                 $this->getSecret();
+            }
+        }
+    }
+
+    private function hashTokens()
+    {
+        if (!isset($this->data['tokens']) || !\is_array($this->data['tokens'])) {
+            return;
+        }
+
+        foreach ($this->data['tokens'] as $k => $payload) {
+            if (!isset($payload['id']) && isset($payload['token'])) {
+                $id = hash('sha256', $payload['token']);
+                unset($this->data['tokens'][$k], $payload['token']);
+
+                $this->data['tokens'][$id] = $payload;
             }
         }
     }

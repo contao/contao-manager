@@ -167,54 +167,51 @@ class UserController extends Controller
 
         foreach ($this->config->getTokens() as $payload) {
             if ($payload['username'] === $username && $payload['client_id'] === $clientId) {
-                return $this->retrieveToken($username, $payload['token']);
+                $this->config->deleteToken($payload['id']);
             }
         }
 
-        $token = $this->config->createToken($username, $clientId, $scope);
-
-        return $this->retrieveToken($username, $token, 201);
+        return new JsonResponse($this->config->createToken($username, $clientId, $scope), Response::HTTP_CREATED);
     }
 
     /**
      * Returns token data of a user from the configuration file.
      *
      * @param string $username
-     * @param string $token
-     * @param int    $status
+     * @param string $id
      *
      * @return Response
      */
-    public function retrieveToken($username, $token, $status = 200)
+    public function retrieveToken($username, $id)
     {
-        $payload = $this->config->getToken($token);
+        $payload = $this->config->getToken($id);
 
         if (null === $payload || $payload['username'] !== $username) {
-            throw new NotFoundHttpException(sprintf('Token "%s" was not found.', $token));
+            throw new NotFoundHttpException(sprintf('Token with ID "%s" was not found.', $id));
         }
 
-        return new JsonResponse($payload, $status);
+        return new JsonResponse($payload);
     }
 
     /**
      * Deletes a user from the configuration file.
      *
      * @param string $username
-     * @param string $token
+     * @param string $id
      *
      * @return Response
      */
-    public function deleteToken($username, $token)
+    public function deleteToken($username, $id)
     {
-        $payload = $this->config->getToken($token);
+        $payload = $this->config->getToken($id);
 
         if (null === $payload || $payload['username'] !== $username) {
-            throw new NotFoundHttpException(sprintf('Token "%s" was not found.', $token));
+            throw new NotFoundHttpException(sprintf('Token "%s" was not found.', $id));
         }
 
-        $this->config->deleteToken($token);
+        $this->config->deleteToken($id);
 
-        return new JsonResponse($payload);
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 
     /**
