@@ -51,6 +51,10 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
+        if ($request->headers->has('Contao-Manager-Auth')) {
+            return $request->headers->get('Contao-Manager-Auth');
+        }
+
         $authentication = $this->getAuthenticationHeader($request);
 
         if (is_string($authentication) && 0 === strpos(strtolower($authentication), 'bearer ')) {
