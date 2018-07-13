@@ -51,14 +51,10 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        $authorization = $this->getAuthorizationHeader($request);
+        $authentication = $this->getAuthenticationHeader($request);
 
-        if (is_string($authorization) && 0 === strpos(strtolower($authorization), 'bearer ')) {
-            return substr($authorization, 7);
-        }
-
-        if (is_string($authorization) && 0 === strpos(strtolower($authorization), 'basic ')) {
-            return base64_decode(substr($authorization, 6));
+        if (is_string($authentication) && 0 === strpos(strtolower($authentication), 'bearer ')) {
+            return substr($authentication, 7);
         }
 
         return null;
@@ -119,12 +115,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      *
      * @return string|null
      */
-    private function getAuthorizationHeader(Request $request)
+    private function getAuthenticationHeader(Request $request)
     {
-        if ($user = $request->getUserInfo()) {
-            return 'Basic '.base64_encode($user);
-        }
-
         if ($request->server->has('HTTP_AUTHORIZATION')) {
             return $request->server->get('HTTP_AUTHORIZATION');
         }
