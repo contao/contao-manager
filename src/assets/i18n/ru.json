@@ -63,6 +63,7 @@
     "ui.server.config.cli": "Бинарный файл PHP",
     "ui.server.config.stateError": "Ваш хостинг-провайдер не настроен.",
     "ui.server.config.stateErrorCli": "На сервере не найден верный бинарный файл PHP.",
+    "ui.server.config.stateErrorCloud": "The Composer Cloud Resolver is not supported.",
     "ui.server.config.stateCustom": "Пользовательская конфигурация, бинарный файл PHP {php_cli}.",
     "ui.server.config.stateSuccess": "Настроен как {server}, бинарный файл PHP {php_cli}.",
     "ui.server.php_web.title": "Веб-процесс PHP",
@@ -118,7 +119,7 @@
     "ui.taskpopup.buttonConfirm": "Подтвердить и закрыть",
     "ui.taskpopup.buttonCancel": "Отмена",
     "ui.taskpopup.console": "Показать/Скрыть вывод консоли",
-    "ui.taskpopup.noconsole": "Waiting for console output …",
+    "ui.taskpopup.noconsole": "Ожидание вывода консоли...",
     "ui.taskpopup.autoclose": "Закрыть задачу при успешном завершении",
     "ui.taskpopup.confirmCancel": "Вы уверены, что хотите отменить эту задачу? Это может оставить вашу установку в неизвестном состоянии, что может в дальнейшем помешать работе Contao Manager работать правильно!",
 

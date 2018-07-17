@@ -63,6 +63,7 @@
     "ui.server.config.cli": "PHP daouel",
     "ui.server.config.stateError": "N'eo ket kefluniet hoc'h herbrec'hier.",
     "ui.server.config.stateErrorCli": "No valid PHP binary was found on the server.",
+    "ui.server.config.stateErrorCloud": "The Composer Cloud Resolver is not supported.",
     "ui.server.config.stateCustom": "Custom configuration, PHP binary at {php_cli}.",
     "ui.server.config.stateSuccess": "Configured as {server}, PHP binary at {php_cli}.",
     "ui.server.php_web.title": "PHP Web Process",

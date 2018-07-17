@@ -63,6 +63,7 @@
     "ui.server.config.cli": "PHPの実行ファイル",
     "ui.server.config.stateError": "ホスティングプロバイダーを構成していません。",
     "ui.server.config.stateErrorCli": "有効なPHPの実行ファイルをサーバー上に見つけられませんでした。",
+    "ui.server.config.stateErrorCloud": "The Composer Cloud Resolver is not supported.",
     "ui.server.config.stateCustom": "独自の構成、PHPの実行ファイルは {php_cli} です。",
     "ui.server.config.stateSuccess": "{server} として構成、PHPの実行ファイルは {php_cli} です。",
     "ui.server.php_web.title": "PHPのWebプロセス",
@@ -118,7 +119,7 @@
     "ui.taskpopup.buttonConfirm": "確認して閉じる",
     "ui.taskpopup.buttonCancel": "取り止め",
     "ui.taskpopup.console": "コンソールの出力を表示・非表示",
-    "ui.taskpopup.noconsole": "Waiting for console output …",
+    "ui.taskpopup.noconsole": "コンソールの出力を待機中...",
     "ui.taskpopup.autoclose": "成功したらタスクを閉じる",
     "ui.taskpopup.confirmCancel": "このタスクを本当に取り止めますか? 中断するとインストールが不明な状態になり、Contao Managerが正しく動作しなくなる可能性があります。",
 

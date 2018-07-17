@@ -63,6 +63,7 @@
     "ui.server.config.cli": "PHP-Binary",
     "ui.server.config.stateError": "Ihr Hosting-Anbieter ist nicht konfiguriert.",
     "ui.server.config.stateErrorCli": "Es wurde kein valides PHP Programm auf dem Server gefunden.",
+    "ui.server.config.stateErrorCloud": "Der Composer Cloud Resolver wird nicht unterstützt.",
     "ui.server.config.stateCustom": "Individuelle Konfiguration, PHP-Binary in {php_cli}.",
     "ui.server.config.stateSuccess": "Konfiguriert als {server}, PHP-Binary in {php_cli}.",
     "ui.server.php_web.title": "PHP-Webprozess",

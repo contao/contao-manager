@@ -63,6 +63,7 @@
     "ui.server.config.cli": "Binární PHP",
     "ui.server.config.stateError": "Váš poskytovatel služeb není nastavený.",
     "ui.server.config.stateErrorCli": "Na Vašem serveru nebyla nalezena žádná platná binární PHP.",
+    "ui.server.config.stateErrorCloud": "The Composer Cloud Resolver is not supported.",
     "ui.server.config.stateCustom": "Vlastní nastavení, binární PHP na {php_cli}.",
     "ui.server.config.stateSuccess": "Nastavený jako {server}, binární PHP na {php_cli}.",
     "ui.server.php_web.title": "Webový proces PHP",

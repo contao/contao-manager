@@ -63,6 +63,7 @@
     "ui.server.config.cli": "PHP二进制",
     "ui.server.config.stateError": "没有配置主机提供商。",
     "ui.server.config.stateErrorCli": "服务器中没有发现有效的PHP二进制文件。",
+    "ui.server.config.stateErrorCloud": "The Composer Cloud Resolver is not supported.",
     "ui.server.config.stateCustom": "自定义配置, PHP 二进制文件位于 {php_cli}.",
     "ui.server.config.stateSuccess": "配置为 {server}, PHP 二进制文件位于 {php_cli}.",
     "ui.server.php_web.title": "PHP Web 进程",

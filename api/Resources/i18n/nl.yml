@@ -32,15 +32,22 @@ nl:
       not_found: 'Dit pad bevat geen geldige PHP binary.'
       incompatible: 'Dit binary is een PHP versie {cli} maar uw webserver is versie {web}.'
   taskstatus:
+    created: 'Console taak is aangemaakt ...'
     complete:
       summary: 'Console taak afgerond!'
       detail: 'De taak op de achtergrond is met succes afgerond. Controleer het console protocol voor details.'
+    aborting:
+      summary: 'De huidige bewerking stoppen ...'
+      detail: 'De achtergrond taak wordt geannuleerd.'
     stopped:
       summary: 'Console taak beëindigd!'
+      detail: 'De achtergrond taak is geannuleerd. Controleer het console-protocol.'
     error:
       summary: 'Console taak beëindigd!'
+      detail: 'De achtergrond taak is onverwacht gestopt. Controleer het console protocol.'
   task:
     setup_packages:
+      title: 'Contao-applicatie installeren'
       completeSummary: 'Installatie afgerond!'
       completeDetail: 'Om het installatieproces te voltooien, dient u het installatieprogramma te openen en de gegevens van uw database in te vullen.'
     install_packages:
@@ -57,3 +64,38 @@ nl:
       title: 'Contao Cache opnieuw opbouwen'
     self_update:
       title: 'Contao Manager updaten'
+      completeSummary: 'Contao Manager is bijgewerkt'
+      completeDetail: 'Bijgewerkt van {old} naar {new}'
+  taskoperation:
+    self-update:
+      summary: 'De nieuwste Contao Manager installeren ...'
+      detail: 'Bijwerken van {old} naar {new}'
+    remove-cache:
+      summary: 'Verwijderen cache directory …'
+    cache-warmup:
+      summary: 'Warming applicatie cache …'
+    cache-clear:
+      summary: 'Legen applicatie cache …'
+    composer-update:
+      summary: 'Bijwerken Composer afhankelijkheden'
+    composer-require:
+      summary: 'Toevoegen Composer pakketten ...'
+    composer-remove:
+      summary: 'Verwijderen Composer pakketten ...'
+    composer-install:
+      summary: 'Installeren Composer afhankelijkheden ...'
+      summaryRetry: 'Installeren Composer afhankelijkheden (opnieuw {current}/{max}) …'
+    dump-autoload:
+      summary: 'Dump class autoloader ...'
+    create-project:
+      summary: 'Applicatie template downloaden …'
+    cloud:
+      queuedSummary: 'Opdracht in Composer Cloud wachtrij geplaatst gedurende {seconds} seconden'
+      queuedDetail: 'Begint in ca. {seconds} seconden (actuele {jobs} taken op {workers} servers)'
+      processingSummary: 'Afhankelijkheden met Composer Cloud oplossen'
+      processingDetail: 'Job ID {job} wordt uitgevoerd voor {seconds} seconden'
+      errorSummary: 'Oplossen van afhankelijkheden mislukt ...'
+      finishedSummary: 'Composer Cloud-taak voltooid'
+      finishedDetail: 'Job ID {job} voltooid in {seconds} seconden'
+    clear-cache:
+      summary: 'Verwijderen van cache bestanden …'
