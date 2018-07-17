@@ -241,6 +241,12 @@ configs:
             /package/host/localhost/php-{major}.{minor}/bin/php: []
             /usr/bin/php: []
 
+    w4w:
+        name: w4w Internetservices
+        website: www.w4w.net
+        php:
+            /usr/local/php{major}{minor}/bin/php: []
+
     webgo:
         name: webgo GmbH
         website: www.webgo.de
