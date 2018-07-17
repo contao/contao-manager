@@ -1,5 +1,5 @@
 <template>
-    <section class="maintenance" v-if="$store.state.apiVersion >= 1">
+    <section class="maintenance" v-if="supported">
         <div class="maintenance__inside">
             <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" /></figure>
             <div class="maintenance__about">
@@ -25,6 +25,7 @@
         components: { Loader },
 
         data: () => ({
+            supported: false,
             loading: true,
         }),
 
@@ -69,9 +70,15 @@
                 return;
             }
 
-            this.$store.dispatch('contao/access-key/get').then(() => {
-                this.loading = false;
-            });
+            this.$store.dispatch('contao/access-key/get').then(
+                () => {
+                    this.supported = true;
+                    this.loading = false;
+                },
+                () => {
+                    this.supported = false;
+                },
+            );
         },
     };
 </script>

@@ -25,7 +25,7 @@
                 <legend class="config-check__fieldtitle">{{ 'ui.server.config.cloudTitle' | translate }}</legend>
                 <p class="config-check__fielddesc">{{ 'ui.server.config.cloudText' | translate }}</p>
 
-                <div class="config-check__issues">
+                <div class="config-check__issues" v-if="cloudIssues && cloudIssues.length">
                     <p>{{ 'ui.server.config.stateErrorCloud' | translate }}</p>
                     <ul>
                         <li v-for="issue in cloudIssues">{{ issue }}</li>
@@ -78,7 +78,6 @@
             server: '',
             php_cli: '',
             cloud: true,
-            cloudSupported: true,
             cloudIssues: [],
         }),
 
@@ -181,7 +180,6 @@
                     this.php_cli = result.php_cli;
                     this.detected = result.detected;
                     this.cloud = result.cloud.enabled;
-                    this.cloudSupported = result.cloud.supported;
                     this.cloudIssues = result.cloud.issues;
                 });
             }

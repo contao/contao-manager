@@ -209,7 +209,6 @@ class ConfigController extends Controller
 
         return [
             'enabled' => !$this->config->get('disable_cloud', false),
-            'supported' => empty($issues),
             'issues' => $issues,
         ];
     }
