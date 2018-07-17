@@ -102,7 +102,7 @@
                     } else if (!result.php_cli) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.config.stateErrorCli');
-                    } else if (result.cloud.enabled && !result.cloud.supported) {
+                    } else if (result.cloud.enabled && result.cloud.issues.length > 0) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.config.stateErrorCloud');
                     } else if (result.server === 'custom') {
