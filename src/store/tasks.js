@@ -12,10 +12,10 @@ let handleTask;
 let failTask;
 let pending = 0;
 
-const pollTask = (store, resolve, reject, delay = 1000) => {
+const pollTask = (store, resolve, reject, delay = 1000, attempt = 1) => {
     setTimeout(() => {
         Vue.http.get('api/task', {
-            timeout: 5000,
+            timeout: 5000 * attempt,
         }).then(
             response => handleTask(response, store, resolve, reject),
             response => failTask(response, store, resolve, reject),
@@ -66,7 +66,7 @@ failTask = (response, store, resolve, reject) => {
         pending += 1;
 
         if (pending <= 5) {
-            pollTask(store, resolve, reject);
+            pollTask(store, resolve, reject, 1000, pending + 1);
             return;
         }
     }
