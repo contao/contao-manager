@@ -163,6 +163,12 @@ configs:
         php:
             /usr/bin/php{major}.{minor}: []
 
+    iwelt:
+        name: iWelt AG
+        website: www.iwelt.de
+        php:
+            /opt/phpfarm/inst/php-{major}.{minor}/bin/php-cgi: []
+
     mamp_mac:
         name: MAMP (macOS)
         website: www.mamp.info
@@ -262,6 +268,13 @@ configs:
         php:
             /usr/bin/php{major}{minor}: []
             /usr/bin/php: []
+
+    world4you:
+        name: World4You Internet Services GmbH
+        website: www.world4you.com
+        php:
+            /usr/bin/php{major}{minor}: []
+            /usr/bin/php{major}: []
 
     xampp:
         name: XAMPP (Windows)
