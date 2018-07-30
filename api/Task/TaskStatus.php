@@ -34,7 +34,7 @@ class TaskStatus
     private $detail = '';
 
     /**
-     * @var string|null
+     * @var string|null|false
      */
     private $console;
 
@@ -137,7 +137,7 @@ class TaskStatus
     }
 
     /**
-     * @param string|null $console
+     * @param string|null|false $console
      *
      * @return TaskStatus
      */

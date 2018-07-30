@@ -50,7 +50,7 @@
             </div>
 
             <div class="task-popup__console">
-                <code ref="console" @scroll="scrolled" class="task-popup__output" v-show="showConsole"><i v-if="!taskConsole">{{ 'ui.taskpopup.noconsole' | translate }}</i>{{ taskConsole }}</code>
+                <code ref="console" @scroll="scrolled" class="task-popup__output" v-show="showConsole && allowConsole"><i v-if="!taskConsole">{{ 'ui.taskpopup.noconsole' | translate }}</i>{{ taskConsole }}</code>
             </div>
         </div>
     </div>
@@ -121,11 +121,16 @@
             },
 
             requiresAudit() {
-                return this.audit && this.currentTask && this.currentTask.status === 'complete' && this.currentTask.audit;
+                return this.audit
+                    && this.currentTask
+                    && this.currentTask.status === 'complete'
+                    && this.currentTask.audit;
             },
 
             allowConsole() {
-                return this.currentTask && this.currentTask.status;
+                return this.currentTask
+                    && this.currentTask.status
+                    && this.currentTask.console !== false;
             },
 
             hasConsole() {

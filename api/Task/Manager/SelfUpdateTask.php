@@ -49,6 +49,14 @@ class SelfUpdateTask extends AbstractTask
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function create(TaskConfig $config)
+    {
+        return parent::create($config)->setConsole(false);
+    }
+
+    /**
      * @param TaskConfig $config
      *
      * @return TaskOperationInterface[]
