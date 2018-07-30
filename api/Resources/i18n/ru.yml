@@ -31,6 +31,11 @@ ru:
     php_cli:
       not_found: 'Путь не содержит верный бинарный файл PHP.'
       incompatible: 'Двоичный файл PHP версии {cli}, а веб-сервер версии {web}.'
+    cloud:
+      path: 'Репозитории путей не поддерживаются.'
+      artifact: 'Репозитории артефактов не поддерживаются.'
+      platform: 'Платформа не должна быть настроена в composer.json.'
+      cache: 'Свойства кэша не должны быть настроены в composer.json.'
   taskstatus:
     created: 'Консольная задача создана...'
     complete:
@@ -65,7 +70,6 @@ ru:
     self_update:
       title: 'Обновление Contao Manager'
       completeSummary: 'Contao Manager был успешно обновлен'
-      completeDetail: 'Обновлено с {old} до {new}'
   taskoperation:
     self-update:
       summary: 'Установка последнего Contao Manager...'

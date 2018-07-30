@@ -65,7 +65,6 @@ cs:
     self_update:
       title: 'Aktualizuje se Správce Contaa'
       completeSummary: 'Správce Contaa byl úspěšně zaktualizovaný'
-      completeDetail: 'Zaktualizovat {old} na {new}'
   taskoperation:
     self-update:
       summary: 'Instalování poslední verze Správce Contaa'

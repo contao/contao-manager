@@ -63,7 +63,7 @@
     "ui.server.config.cli": "PHP Binary",
     "ui.server.config.stateError": "Hostingprovider is niet geconfigureerd.",
     "ui.server.config.stateErrorCli": "Ongeldige PHP binary gevonden op de server.",
-    "ui.server.config.stateErrorCloud": "The Composer Cloud Resolver is not supported.",
+    "ui.server.config.stateErrorCloud": "De Composer Cloud Resolver wordt niet ondersteund.",
     "ui.server.config.stateCustom": "Aangepaste configuratie, PHP-binair bestand op {php_cli}.",
     "ui.server.config.stateSuccess": "Geconfigureerd als {server}, PHP binary op {php_cli}.",
     "ui.server.php_web.title": "PHP Web Proces",

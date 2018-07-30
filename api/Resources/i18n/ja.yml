@@ -65,7 +65,6 @@ ja:
     self_update:
       title: 'Contao Managerを更新'
       completeSummary: 'Contao Managerを更新しました'
-      completeDetail: '{old}から{new}に更新しました'
   taskoperation:
     self-update:
       summary: '最新のContao Managerをインストール中...'

@@ -63,7 +63,7 @@
     "ui.server.config.cli": "Бинарный файл PHP",
     "ui.server.config.stateError": "Ваш хостинг-провайдер не настроен.",
     "ui.server.config.stateErrorCli": "На сервере не найден верный бинарный файл PHP.",
-    "ui.server.config.stateErrorCloud": "The Composer Cloud Resolver is not supported.",
+    "ui.server.config.stateErrorCloud": "Composer Cloud Resolver не поддерживается.",
     "ui.server.config.stateCustom": "Пользовательская конфигурация, бинарный файл PHP {php_cli}.",
     "ui.server.config.stateSuccess": "Настроен как {server}, бинарный файл PHP {php_cli}.",
     "ui.server.php_web.title": "Веб-процесс PHP",

@@ -31,6 +31,11 @@ nl:
     php_cli:
       not_found: 'Dit pad bevat geen geldige PHP binary.'
       incompatible: 'Dit binary is een PHP versie {cli} maar uw webserver is versie {web}.'
+    cloud:
+      path: 'Pad-Repositories worden niet ondersteund.'
+      artifact: 'Artifact-Repositories worden niet ondersteund.'
+      platform: 'Platform mag niet geconfigureerd zijn in composer.json.'
+      cache: 'Cache instellingen mogen niet geconfigureerd zijn in composer.json.'
   taskstatus:
     created: 'Console taak is aangemaakt ...'
     complete:
@@ -65,7 +70,6 @@ nl:
     self_update:
       title: 'Contao Manager updaten'
       completeSummary: 'Contao Manager is bijgewerkt'
-      completeDetail: 'Bijgewerkt van {old} naar {new}'
   taskoperation:
     self-update:
       summary: 'De nieuwste Contao Manager installeren ...'
