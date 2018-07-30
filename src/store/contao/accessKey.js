@@ -2,14 +2,20 @@
 
 import Vue from 'vue';
 
-const handle = (request, { commit }) => request.then(
-    response => response.body['access-key'],
-    () => '',
-).then((result) => {
-    commit('setCache', result);
-    commit('setIsEnabled', result !== '');
+const handle = (request, { commit }) => new Promise((resolve, reject) => {
+    request.then(
+        (response) => {
+            commit('setCache', response.body['access-key']);
+            commit('setIsEnabled', response.body['access-key'] !== '');
 
-    return result;
+            resolve(response.body['access-key']);
+        },
+        () => {
+            commit('setIsEnabled', false);
+
+            reject();
+        },
+    );
 });
 
 export default {
@@ -17,7 +23,7 @@ export default {
 
     state: {
         cache: null,
-        isEnabled: false,
+        isEnabled: null,
     },
 
     mutations: {
