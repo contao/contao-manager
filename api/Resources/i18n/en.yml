@@ -73,7 +73,7 @@ en:
         self_update:
             title: 'Updating Contao Manager'
             completeSummary: 'Contao Manager was successfully updated'
-            completeDetail: 'Updated from {old} to {new}'
+            completeDetail: 'Updated to version {current}'
 
     taskoperation:
         self-update:

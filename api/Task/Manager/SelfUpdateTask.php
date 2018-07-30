@@ -71,8 +71,7 @@ class SelfUpdateTask extends AbstractTask
                 $this->translator->trans(
                     'task.self_update.completeDetail',
                     [
-                        'old' => $this->updater->getOldVersion(),
-                        'new' => $this->updater->getNewVersion(),
+                        'current' => $this->updater->getOldVersion(),
                     ]
                 )
             );
