@@ -25,11 +25,6 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
     protected $taskConfig;
 
     /**
-     * @var \Exception
-     */
-    private $exception;
-
-    /**
      * Constructor.
      *
      * @param TaskConfig $taskConfig
@@ -52,7 +47,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
      */
     public function isRunning()
     {
-        return false;
+        return TaskStatus::STATUS_ACTIVE === $this->taskConfig->getState($this->getName());
     }
 
     /**
@@ -60,12 +55,12 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
      */
     public function isSuccessful()
     {
-        return (bool) $this->taskConfig->getState($this->getName(), false);
+        return TaskStatus::STATUS_COMPLETE === $this->taskConfig->getState($this->getName());
     }
 
     public function hasError()
     {
-        return $this->exception instanceof \Exception;
+        return TaskStatus::STATUS_ERROR === $this->taskConfig->getState($this->getName());
     }
 
     public function run()
@@ -74,14 +69,20 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
             return;
         }
 
+        $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ACTIVE);
+
         try {
             $success = (bool) $this->doRun();
         } catch (\Exception $e) {
-            $this->exception = $e;
+            $this->taskConfig->setState($this->getName().'.error', $e->getMessage());
             $success = false;
         }
 
-        $this->taskConfig->setState($this->getName(), $success);
+        if ($success) {
+            $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_COMPLETE);
+        } else {
+            $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ERROR);
+        }
     }
 
     /**
@@ -107,8 +108,8 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
      */
     protected function addConsoleStatus(TaskStatus $status)
     {
-        if ($this->exception instanceof \Exception) {
-            $status->addConsole($this->exception->getMessage());
+        if ($error = $this->taskConfig->getState($this->getName().'.error')) {
+            $status->addConsole($error);
         }
     }
 
