@@ -58,6 +58,7 @@
             },
 
             close() {
+                this.$refs.group.blur();
                 setTimeout(() => {
                     this.showGroup = false;
                 }, 300);

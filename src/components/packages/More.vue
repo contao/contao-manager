@@ -1,7 +1,9 @@
 <template>
     <div class="link-more">
-        <button @click="open">{{ 'ui.package.more' | translate }}</button>
-        <link-menu :items="linkItems" color="contao" v-show="visible"/>
+        <button @click="toggle">{{ 'ui.package.more' | translate }}</button>
+        <div class="link-more__menu" ref="menu" v-show="visible" tabindex="-1" @blur="close" @click="close">
+            <link-menu :items="linkItems" color="contao"/>
+        </div>
     </div>
 </template>
 
@@ -43,23 +45,25 @@
         },
 
         methods: {
-            open(e) {
-                e.stopPropagation();
-                this.visible = !this.visible;
+            open() {
+                this.visible = true;
+                this.$nextTick(() => this.$refs.menu.focus());
             },
 
             close() {
-                this.visible = false;
+                this.$refs.menu.blur();
+                setTimeout(() => {
+                    this.visible = false;
+                }, 300);
             },
 
-            ignore(e) {
-                e.stopPropagation();
+            toggle() {
+                if (this.visible) {
+                    this.close();
+                } else {
+                    this.open();
+                }
             },
-        },
-
-        mounted() {
-            window.addEventListener('click', this.close);
-            window.addEventListener('touchstart', this.close);
         },
     };
 </script>
@@ -86,6 +90,10 @@
             &:hover {
                 text-decoration: underline;
             }
+        }
+
+        &__menu {
+            outline: none;
         }
 
         ul {

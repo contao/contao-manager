@@ -6,10 +6,10 @@
             <li><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ 'ui.footer.reportProblem' | translate }}</a></li>
         </ul>
         <div class="fragment-footer__language">
-            <button @click="open">{{ languageOptions[currentLanguage] }}</button>
-            <ul v-if="visible">
+            <button @click="toggle">{{ languageOptions[currentLanguage] }}</button>
+            <ul class="link-more__menu" ref="menu" v-show="visible" tabindex="-1" @blur="close" @click="close">
                 <li v-for="(label, code) in languageOptions">
-                    <a :class="{ active: code === currentLanguage }" @click="updateLanguage(code)" @touchstart="ignore">{{ label }}</a>
+                    <a :class="{ active: code === currentLanguage }" @click="updateLanguage(code)" @touchstart.stop="">{{ label }}</a>
                 </li>
             </ul>
         </div>
@@ -45,23 +45,25 @@
                 i18n.load(value);
             },
 
-            open(e) {
-                e.stopPropagation();
-                this.visible = !this.visible;
+            open() {
+                this.visible = true;
+                this.$nextTick(() => this.$refs.menu.focus());
             },
 
             close() {
-                this.visible = false;
+                this.$refs.menu.blur();
+                setTimeout(() => {
+                    this.visible = false;
+                }, 300);
             },
 
-            ignore(e) {
-                e.stopPropagation();
+            toggle() {
+                if (this.visible) {
+                    this.close();
+                } else {
+                    this.open();
+                }
             },
-        },
-
-        mounted() {
-            window.addEventListener('click', this.close);
-            window.addEventListener('touchstart', this.close);
         },
     };
 </script>
