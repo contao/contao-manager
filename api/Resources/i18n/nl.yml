@@ -70,6 +70,7 @@ nl:
     self_update:
       title: 'Contao Manager updaten'
       completeSummary: 'Contao Manager is bijgewerkt'
+      completeDetail: 'Bijgewerkt naar versie {current}'
   taskoperation:
     self-update:
       summary: 'De nieuwste Contao Manager installeren ...'

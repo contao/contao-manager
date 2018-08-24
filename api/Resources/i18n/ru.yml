@@ -70,6 +70,7 @@ ru:
     self_update:
       title: 'Обновление Contao Manager'
       completeSummary: 'Contao Manager был успешно обновлен'
+      completeDetail: 'Обновлено до версии {current}'
   taskoperation:
     self-update:
       summary: 'Установка последнего Contao Manager...'
