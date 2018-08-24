@@ -61,7 +61,7 @@
                 }
 
                 return {
-                    '4.5.*': 'Contao 4.5 (Latest)',
+                    '4.6.*': 'Contao 4.6 (Latest)',
                     '4.4.*': 'Contao 4.4 (Long Term Support)',
                 };
             },
