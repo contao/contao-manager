@@ -14,7 +14,6 @@ services:
             - "@security.token_storage"
             - "@security.authorization_checker"
         tags:
-            - { name: kernel.event_listener, event: kernel.request }
             - { name: kernel.event_listener, event: kernel.response }
 
     contao_manager.listener.json_request:

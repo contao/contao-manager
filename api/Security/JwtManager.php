@@ -15,23 +15,15 @@ use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
-use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 
 class JwtManager
 {
     const COOKIE_AUTH = 'contao_manager_auth';
-    const COOKIE_XSRF = 'contao_manager_xsrf';
 
     /**
      * @var UserConfig
      */
     private $users;
-
-    /**
-     * @var TokenGeneratorInterface
-     */
-    private $tokenGenerator;
 
     /**
      * Constructor.
@@ -41,7 +33,6 @@ class JwtManager
     public function __construct(UserConfig $users)
     {
         $this->users = $users;
-        $this->tokenGenerator = new UriSafeTokenGenerator();
     }
 
     /**
@@ -93,7 +84,7 @@ class JwtManager
     }
 
     /**
-     * Adds JWT auth and XSRF cookies to the given response.
+     * Adds JWT auth cookies to the given response.
      *
      * @param Request  $request
      * @param Response $response
@@ -105,7 +96,6 @@ class JwtManager
             'iat' => time(),
             'exp' => strtotime('+30 minutes'),
             'username' => $username,
-            'xsrf' => $this->getXsrfToken($request, $response),
         ];
 
         $response->headers->setCookie(
@@ -137,29 +127,6 @@ class JwtManager
             $request->isSecure(),
             true
         );
-    }
-
-    /**
-     * Retrieves the XSRF token from the request or creates one and adds it to the response.
-     *
-     * @param Request  $request
-     * @param Response $response
-     *
-     * @return string
-     */
-    private function getXsrfToken(Request $request, Response $response)
-    {
-        if ($request->cookies->has(self::COOKIE_XSRF)) {
-            return $request->cookies->get(self::COOKIE_XSRF);
-        }
-
-        $token = $this->tokenGenerator->generateToken();
-
-        $response->headers->setCookie(
-            $this->createCookie(self::COOKIE_XSRF, $token, $request, false)
-        );
-
-        return $token;
     }
 
     /**

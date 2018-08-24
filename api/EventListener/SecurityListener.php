@@ -10,13 +10,9 @@
 
 namespace Contao\ManagerApi\EventListener;
 
-use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Security\JwtAuthenticator;
 use Contao\ManagerApi\Security\JwtManager;
-use Crell\ApiProblem\ApiProblem;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -55,36 +51,7 @@ class SecurityListener
     }
 
     /**
-     * Checks the XSRF token on kernel.request event.
-     *
-     * @param GetResponseEvent $event
-     */
-    public function onKernelRequest(GetResponseEvent $event)
-    {
-        $request = $event->getRequest();
-
-        if (!$event->isMasterRequest()
-            || !$this->jwtManager->hasRequestToken($request)
-            || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')
-        ) {
-            return;
-        }
-
-        $payload = $this->jwtManager->getPayload($event->getRequest());
-
-        if (($xsrf = $request->headers->get('XSRF-TOKEN')) === null
-            || $payload->xsrf !== $xsrf
-        ) {
-            $event->setResponse(
-                new ApiProblemResponse(
-                    (new ApiProblem('XSRF token does not match'))->setStatus(Response::HTTP_BAD_REQUEST)
-                )
-            );
-        }
-    }
-
-    /**
-     * Adds and/or renews the JWT and XSRF token on kernel.response event.
+     * Adds and/or renews the JWT token on kernel.response event.
      *
      * @param FilterResponseEvent $event
      */
