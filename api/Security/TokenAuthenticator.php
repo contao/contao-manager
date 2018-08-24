@@ -57,7 +57,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
         $authentication = $this->getAuthenticationHeader($request);
 
-        if (is_string($authentication) && 0 === strpos(strtolower($authentication), 'bearer ')) {
+        if (is_string($authentication) && 0 === stripos($authentication, 'bearer ')) {
             return substr($authentication, 7);
         }
 
@@ -130,6 +130,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }
 
         if (function_exists('getallheaders')) {
+            /** @noinspection PhpComposerExtensionStubsInspection */
             $headers = getallheaders();
 
             if (isset($headers['authorization'])) {

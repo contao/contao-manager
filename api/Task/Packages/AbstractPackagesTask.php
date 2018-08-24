@@ -27,7 +27,8 @@ abstract class AbstractPackagesTask extends AbstractTask
     /**
      * @var Filesystem
      */
-    private $filesystem;
+    protected $filesystem;
+
     /**
      * @var ServerInfo
      */

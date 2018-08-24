@@ -46,6 +46,7 @@ class OpcacheController extends Controller
      */
     private function getOpcache()
     {
+        /** @noinspection PhpComposerExtensionStubsInspection */
         $status = opcache_get_status(false);
 
         if (false === $status) {
@@ -72,6 +73,7 @@ class OpcacheController extends Controller
             return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
         }
 
+        /** @noinspection PhpComposerExtensionStubsInspection */
         opcache_reset();
 
         return $this->getOpcache();

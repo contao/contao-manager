@@ -56,6 +56,7 @@ class AboutCommand extends ContainerAwareCommand
         $country = $data['server']['country'];
 
         if (class_exists('Locale')) {
+            /** @noinspection PhpComposerExtensionStubsInspection */
             $country = \Locale::getDisplayRegion('-'.$country, 'en');
         }
 
@@ -116,6 +117,7 @@ class AboutCommand extends ContainerAwareCommand
             $provider = $serverInfo->getConfigs()[$configName];
         }
 
+        /** @noinspection PhpComposerExtensionStubsInspection */
         $data = [
             'app' => [
                 'version' => $version,

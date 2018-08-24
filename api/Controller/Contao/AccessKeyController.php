@@ -38,8 +38,9 @@ class AccessKeyController extends Controller
      *
      * @param Request $request
      *
-     * @return Response
      * @throws \Seld\JsonLint\ParsingException
+     *
+     * @return Response
      */
     public function __invoke(Request $request)
     {
@@ -58,8 +59,9 @@ class AccessKeyController extends Controller
     }
 
     /**
-     * @return Response
      * @throws \Seld\JsonLint\ParsingException
+     *
+     * @return Response
      */
     private function getAccessKey()
     {
@@ -73,8 +75,9 @@ class AccessKeyController extends Controller
     /**
      * @param Request $request
      *
-     * @return Response
      * @throws \Seld\JsonLint\ParsingException
+     *
+     * @return Response
      */
     private function setAccessKey(Request $request)
     {
@@ -100,8 +103,9 @@ class AccessKeyController extends Controller
     }
 
     /**
-     * @return Response
      * @throws \Seld\JsonLint\ParsingException
+     *
+     * @return Response
      */
     private function removeAccessKey()
     {

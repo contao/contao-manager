@@ -149,14 +149,14 @@ class ContaoController extends Controller
         define('TL_ROOT', $kernel->getContaoDir());
 
         $files = [
-            $kernel->getContaoDir() . '/system/constants.php',
-            $kernel->getContaoDir() . '/system/config/constants.php',
+            $kernel->getContaoDir().'/system/constants.php',
+            $kernel->getContaoDir().'/system/config/constants.php',
         ];
 
         // Test if the Phar was placed in the Contao 2/3 root
         if ('' !== ($phar = \Phar::running(false))) {
-            $files[] = dirname($phar) . '/system/constants.php';
-            $files[] = dirname($phar) . '/system/config/constants.php';
+            $files[] = dirname($phar).'/system/constants.php';
+            $files[] = dirname($phar).'/system/config/constants.php';
         }
 
         $logger = $this->get('logger');

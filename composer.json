@@ -20,6 +20,7 @@
     },
     "require": {
         "php": "^5.5.9 || ^7.0",
+        "ext-json": "*",
         "symfony/framework-bundle": "3.4.*",
         "symfony/security-bundle": "3.4.*",
         "symfony/console": "3.4.*",

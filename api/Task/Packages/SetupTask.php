@@ -36,11 +36,6 @@ class SetupTask extends AbstractPackagesTask
     private $cloudResolver;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
@@ -56,7 +51,6 @@ class SetupTask extends AbstractPackagesTask
 
         $this->processFactory = $processFactory;
         $this->cloudResolver = $cloudResolver;
-        $this->filesystem = $filesystem;
     }
 
     /**

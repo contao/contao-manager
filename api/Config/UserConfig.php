@@ -294,7 +294,7 @@ class UserConfig extends AbstractConfig
         return array_merge(
             [
                 'id' => $id,
-                'token' => $token
+                'token' => $token,
             ],
             $this->data['tokens'][$id]
         );
