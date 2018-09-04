@@ -15,6 +15,7 @@ use Composer\IO\NullIO;
 use Composer\Package\Version\VersionSelector;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\RepositoryFactory;
+use Composer\Util\RemoteFilesystem;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
@@ -111,11 +112,11 @@ class CreateProjectOperation extends AbstractInlineOperation
             throw new \RuntimeException('No valid package to install');
         }
 
-        // TODO use composer remote filesystem
+        $remoteFilesystem = new RemoteFilesystem(new NullIO());
 
         $this->filesystem->dumpFile(
             $this->environment->getJsonFile(),
-            file_get_contents('https://raw.githubusercontent.com/contao/managed-edition/'.$package->getDistReference().'/composer.json')
+            $remoteFilesystem->getContents('raw.githubusercontent.com', 'https://raw.githubusercontent.com/contao/managed-edition/'.$package->getDistReference().'/composer.json')
         );
 
         return true;
