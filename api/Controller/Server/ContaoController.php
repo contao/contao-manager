@@ -97,18 +97,19 @@ class ContaoController extends Controller
             [
                 '.',
                 '..',
-                '.git',
-                '.idea',
-                'cgi-bin',
-                'contao-manager',
-                'web',
-                '.bash_profile',
                 '.bash_logout',
+                '.bash_profile',
                 '.bashrc',
                 '.DS_Store',
                 '.ftpquota',
+                '.git',
                 '.htaccess',
+                '.idea',
+                '.protect',
+                'cgi-bin',
+                'contao-manager',
                 'user.ini',
+                'web',
             ]
         );
 
