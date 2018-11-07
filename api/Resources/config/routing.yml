@@ -154,8 +154,9 @@ task:
 ###############
 
 packages_get:
-    path:     /api/packages
-    defaults: { _controller: TensideCoreBundle:Package:packageList }
+    path:     /api/packages/{name}
+    requirements: { name: .* }
+    defaults: { _controller: Contao\ManagerApi\Controller\PackagesController }
     methods:  [GET]
 
 constraint_check:
