@@ -150,7 +150,7 @@ task:
 
 
 ###############
-#   Tenside   #
+#   Packages  #
 ###############
 
 packages_get:
@@ -160,5 +160,5 @@ packages_get:
 
 constraint_check:
     path:     /api/constraint
-    defaults: { _controller: TensideCoreBundle:VersionConstraint:checkVersionConstraint }
+    defaults: { _controller: Contao\ManagerApi\Controller\ConstraintController }
     methods:  [POST]
