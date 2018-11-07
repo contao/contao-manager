@@ -119,25 +119,3 @@ services:
         class: Terminal42\BackgroundProcess\Command\ProcessRunnerCommand
         tags:
             - { name: console.command }
-
-###
-# Override Tenside services to adjust for Contao Manager
-###
-
-    tenside.home:
-        class:  Contao\ManagerApi\Tenside\HomePathDeterminator
-        arguments:
-            - "@kernel"
-
-    tenside.config:
-        class:          Tenside\Core\Config\TensideJsonConfig
-        factory:        [Contao\ManagerApi\Tenside\JsonConfigFactory, create]
-        arguments:      ["@tenside.home"]
-        public:         true
-
-    tenside.status:
-        class:     Contao\ManagerApi\Tenside\InstallationStatusDeterminator
-        arguments:
-            - "@contao_manager.config.user"
-            - "@tenside.home"
-        public: true

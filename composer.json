@@ -30,12 +30,11 @@
         "symfony/monolog-bundle": "~2.9",
         "ircmaxell/password-compat": "^1.0",
         "firebase/php-jwt": "^4.0",
-        "tenside/core-bundle": "dev-contao-manager as 1.0",
-        "tenside/core": "dev-contao-manager as 1.0",
 
         "terminal42/background-process": "dev-master@dev",
         "crell/api-problem": "^2.0",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "composer/composer": "^1.7"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.1"

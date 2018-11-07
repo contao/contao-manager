@@ -21,7 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
-use Tenside\CoreBundle\TensideCoreBundle;
 
 /**
  * @property ContainerInterface $container
@@ -68,7 +67,6 @@ class ApiKernel extends Kernel
             new SecurityBundle(),
 
             new MonologBundle(),
-            new TensideCoreBundle(),
         ];
 
         return $bundles;
