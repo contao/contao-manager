@@ -34,6 +34,7 @@
                 </div>
                 <p class="package__additional">
                     <strong class="package__version package__version--additional" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
+                    <strong class="package__version package__version--additional" v-else-if="package.version === false"><span class="package__version--missing">{{ $t('ui.package.versionMissing') }}</span></strong>
                     <span v-for="item in additional">{{ item }}</span>
                 </p>
             </div>
@@ -47,6 +48,7 @@
                     <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                     <time :dateTime="package.time">({{ released }})</time>
                 </div>
+                <div class="package__version package__version--release package__version--missing" v-else-if="package.version === false">{{ $t('ui.package.versionMissing') }}</div>
             </div>
 
             <fieldset class="package__actions" v-if="updateOnly">
@@ -615,6 +617,14 @@
                 time {
                     display: block;
                 }
+            }
+
+            &--missing {
+                padding: 4px 8px;
+                background: $red-button;
+                border-radius: 2px;
+                color: #fff;
+                font-weight: bold;
             }
         }
 

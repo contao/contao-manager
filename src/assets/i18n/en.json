@@ -185,6 +185,7 @@
     "ui.package.support_email": "Support E-Mail",
     "ui.package.support_rss": "RSS Feed",
     "ui.package.version": "Version {version}",
+    "ui.package.versionMissing": "Not Installed",
     "ui.package.additionalDownloads": "{count} Download ::: {count} Downloads",
     "ui.package.additionalStars": "{count} Star ::: {count} Stars",
     "ui.package.editConstraint": "Edit",

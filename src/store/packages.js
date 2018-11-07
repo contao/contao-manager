@@ -120,6 +120,7 @@ export default {
 
                 data[require] = {
                     name: require,
+                    version: false,
                     constraint: root.require[require],
                 };
 
