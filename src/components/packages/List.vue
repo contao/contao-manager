@@ -8,16 +8,17 @@
         <package v-for="item in $store.state.packages.add" :package="item" :key="item.name"/>
 
         <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.installed' | translate }}</h2>
-        <package v-for="item in packages" :package="item" :key="item.name"/>
+        <local-package v-for="item in packages" :package="item" :key="item.name"/>
     </div>
 </template>
 
 <script>
-    import Package from './Package';
     import Loader from '../fragments/Loader';
+    import Package from './Package';
+    import LocalPackage from './LocalPackage';
 
     export default {
-        components: { Package, Loader },
+        components: { LocalPackage, Package, Loader },
 
         computed: {
             hasAdded() {
