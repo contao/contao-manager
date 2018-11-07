@@ -9,17 +9,39 @@
             </div>
 
             <fieldset class="maintenance__actions">
-                <button class="widget-button widget-button--primary widget-button--run" @click="execute">{{ 'ui.maintenance.composerInstall.button' | translate }}</button>
+                <button-group :label="$t('ui.maintenance.composerInstall.button')" type="primary" icon="run" @click="composerInstall">
+                    <link-menu :items="advancedActions" color="primary"/>
+                </button-group>
             </fieldset>
         </div>
     </section>
 </template>
 
 <script>
+    import ButtonGroup from '../../widgets/ButtonGroup';
+    import LinkMenu from '../../fragments/LinkMenu';
+
     export default {
+        components: { ButtonGroup, LinkMenu },
+
+        computed: {
+            advancedActions() {
+                return [
+                    {
+                        label: this.$t('ui.maintenance.composerInstall.update'),
+                        action: this.composerUpdate,
+                    },
+                ];
+            },
+        },
+
         methods: {
-            execute() {
+            composerInstall() {
                 this.$store.dispatch('tasks/execute', { name: 'composer/install' });
+            },
+
+            composerUpdate() {
+                this.$store.dispatch('tasks/execute', { name: 'composer/update' });
             },
         },
     };
