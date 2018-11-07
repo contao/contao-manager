@@ -19,6 +19,7 @@ export default {
 
     state: {
         algolia: null,
+        packages: null,
         installed: null,
         add: {},
         change: {},
@@ -33,9 +34,18 @@ export default {
                 + state.update.length
                 + state.remove.length;
         },
+
+        isInstalled(state, packageName) {
+            return state.installed !== null
+                && state.installed.find(pckg => pckg.name === packageName) !== undefined;
+        },
     },
 
     mutations: {
+        setPackages(state, packages) {
+            state.packages = packages;
+        },
+
         setInstalled(state, packages) {
             state.installed = packages;
         },
@@ -91,25 +101,37 @@ export default {
     },
 
     actions: {
-        load({ state, commit }, reload = false) {
+        async load({ state, commit }, reload = false) {
             if (!reload && state.installed) {
-                return new Promise((resolve) => { resolve(); });
+                return state.installed;
             }
 
             commit('setInstalled', null);
-            commit('reset', null);
+            commit('reset');
 
-            return Vue.http.get('api/packages').then(
-                (response) => {
-                    const packages = Object.assign(
-                        {},
-                        { 'contao/manager-bundle': response.body['contao/manager-bundle'] },
-                        response.body,
-                    );
+            const data = {};
+            const packages = (await Vue.http.get('api/packages/')).body;
+            const root = packages.root;
 
-                    commit('setInstalled', packages);
-                },
-            );
+            Object.keys(root.require).forEach((require) => {
+                if (!require.includes('/')) {
+                    return;
+                }
+
+                data[require] = {
+                    name: require,
+                    constraint: root.require[require],
+                };
+
+                if (packages[require]) {
+                    data[require] = Object.assign(data[require], packages[require]);
+                }
+            });
+
+            commit('setPackages', packages);
+            commit('setInstalled', data);
+
+            return data;
         },
 
         fetch(store, name) {
