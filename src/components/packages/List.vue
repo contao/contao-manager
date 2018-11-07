@@ -8,7 +8,8 @@
         <package v-for="item in $store.state.packages.add" :package="item" :key="item.name"/>
 
         <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.installed' | translate }}</h2>
-        <local-package v-for="item in packages" :package="item" :key="item.name"/>
+        <root-package :package="packages['contao/manager-bundle']" v-if="packages"/>
+        <local-package v-for="item in packages" :package="item" :key="item.name" v-if="item.name !== 'contao/manager-bundle'"/>
     </div>
 </template>
 
@@ -16,9 +17,10 @@
     import Loader from '../fragments/Loader';
     import Package from './Package';
     import LocalPackage from './LocalPackage';
+    import RootPackage from './RootPackage';
 
     export default {
-        components: { LocalPackage, Package, Loader },
+        components: { RootPackage, LocalPackage, Package, Loader },
 
         computed: {
             hasAdded() {

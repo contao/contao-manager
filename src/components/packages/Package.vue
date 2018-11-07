@@ -13,22 +13,14 @@
         </transition>
 
         <div class="package__inside">
-            <figure class="package__icon" v-if="isContao"><img src="../../assets/images/logo.svg" /></figure>
-            <figure class="package__icon" v-else-if="package.logo"><img :src="package.logo" /></figure>
-            <figure class="package__icon" v-else><img src="../../assets/images/placeholder.png" /></figure>
+            <figure class="package__icon" >
+                <slot name="logo">
+                    <img :src="package.logo" v-if="package.logo">
+                    <img src="../../assets/images/placeholder.png" v-else>
+                </slot>
+            </figure>
 
-            <div class="package__about" v-if="isContao">
-                <h1 class="package__headline">Contao Open Source CMS</h1>
-                <div class="package__description">
-                    <p>Contao is an Open Source PHP Content Management System.</p>
-                    <more homepage="https://contao.org" :support="{ docs: 'https://docs.contao.org', forum: 'https://community.contao.org', issues: 'https://github.com/contao/core-bundle/issues', source: 'https://github.com/contao/core-bundle' }"/>
-                </div>
-                <p class="package__additional">
-                    <strong class="package__version package__version--additional">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
-                    <span v-for="item in additional">{{ item }}</span>
-                </p>
-            </div>
-            <div class="package__about" v-else>
+            <div class="package__about">
                 <h1 :class="{ package__headline: true, 'package__headline--badge': isIncompatible || package.abandoned }">
                     <span class="package__title" v-html="package._highlightResult && package._highlightResult.title.value || package.title || package.name"></span>
                     <span class="package__name" v-if="package.title && package.title !== package.name">{{ package.name }}</span>
@@ -57,14 +49,14 @@
                 </div>
             </div>
 
-            <fieldset class="package__actions" v-if="isContao">
+            <fieldset class="package__actions" v-if="updateOnly">
                 <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
             </fieldset>
             <fieldset class="package__actions" v-else>
                 <button-group :label="$t('ui.package.updateButton')" icon="update" v-if="isInstalled" :disabled="isModified" @click="update">
                     <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="isModified">Enable</button>-->
                     <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="!isModified">Disable</button>-->
-                    <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="isContao || willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                    <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
                 </button-group>
                 <button class="widget-button widget-button--primary widget-button--add" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
             </fieldset>
@@ -87,6 +79,10 @@
                 type: Object,
                 required: true,
             },
+            updateOnly: {
+                type: Boolean,
+                default: false,
+            },
         },
 
         data: () => ({
@@ -104,10 +100,6 @@
                     || this.$store.state.packages.update.length > 0
                     || this.$store.state.packages.remove.length > 0
                 );
-            },
-
-            isContao() {
-                return this.package.name === 'contao/manager-bundle';
             },
 
             isModified() {
@@ -135,6 +127,10 @@
             },
 
             isIncompatible() {
+                if (this.updateOnly) {
+                    return false;
+                }
+
                 if (this.package.type === 'contao-bundle') {
                     return !this.package.extra || !this.package.extra['contao-manager-plugin'];
                 }

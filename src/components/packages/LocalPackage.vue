@@ -25,7 +25,7 @@
 
                 this.$store.dispatch('packages/fetch', this.package.name).then(
                     (data) => {
-                        this.data = Object.assign(this.package, data);
+                        this.data = Object.assign({}, this.package, data);
                     },
                     () => {
                         // Ignore if package is not found in index
