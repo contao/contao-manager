@@ -160,6 +160,10 @@ class TaskStatus
             $console = sprintf("%s\n\n%s", $title, $console);
         }
 
+        if (!$console) {
+            return;
+        }
+
         if ($this->console) {
             $console = $this->console."\n\n".$console;
         }

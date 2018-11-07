@@ -11,7 +11,7 @@
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
 use Composer\DependencyResolver\Pool;
-use Composer\IO\NullIO;
+use Composer\IO\BufferIO;
 use Composer\Package\Version\VersionSelector;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\RepositoryFactory;
@@ -86,6 +86,18 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
+    protected function addConsoleStatus(TaskStatus $status)
+    {
+        if ($console = $this->taskConfig->getState($this->getName().'.console')) {
+            $status->addConsole($console);
+        }
+
+        parent::addConsoleStatus($status);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getName()
     {
         return 'create-project';
@@ -100,7 +112,8 @@ class CreateProjectOperation extends AbstractInlineOperation
             throw new \RuntimeException('Cannot install into existing application');
         }
 
-        $sourceRepo = new CompositeRepository(RepositoryFactory::defaultRepos(new NullIO()));
+        $io = new BufferIO();
+        $sourceRepo = new CompositeRepository(RepositoryFactory::defaultRepos($io));
         $pool = new Pool('stable');
         $pool->addRepository($sourceRepo);
         $selector = new VersionSelector($pool);
@@ -112,13 +125,17 @@ class CreateProjectOperation extends AbstractInlineOperation
             throw new \RuntimeException('No valid package to install');
         }
 
-        $remoteFilesystem = new RemoteFilesystem(new NullIO());
+        $remoteFilesystem = new RemoteFilesystem($io);
 
-        $this->filesystem->dumpFile(
+        $result = $remoteFilesystem->copy(
+            'raw.githubusercontent.com',
+            'https://raw.githubusercontent.com/contao/managed-edition/'.$package->getDistReference().'/composer.json',
             $this->environment->getJsonFile(),
-            $remoteFilesystem->getContents('raw.githubusercontent.com', 'https://raw.githubusercontent.com/contao/managed-edition/'.$package->getDistReference().'/composer.json')
+            false
         );
 
-        return true;
+        $this->taskConfig->setState($this->getName().'.console', $io->getOutput());
+
+        return $result;
     }
 }
