@@ -303,7 +303,7 @@
                 Vue.http.post('api/constraint', { constraint: this.constraint }).then(
                     (response) => {
                         this.constraintValidating = false;
-                        if (response.body.status === 'OK') {
+                        if (response.body.valid) {
                             if (this.isInstalled) {
                                 this.$store.commit('packages/change', { name: this.package.name, version: this.constraint });
                             } else {
