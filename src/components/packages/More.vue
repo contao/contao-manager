@@ -76,6 +76,10 @@
         display: inline-block;
         margin-left: 5px;
 
+        p:empty + & {
+            margin-left: 0;
+        }
+
         button {
             width: auto;
             height: auto;
