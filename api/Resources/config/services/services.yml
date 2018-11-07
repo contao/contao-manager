@@ -10,6 +10,10 @@ services:
         autowire: true
         autoconfigure: true
 
+    Contao\ManagerApi\Process\PhpExecutableFinder:
+        arguments:
+            - '@logger'
+
     contao_manager.config.auth:
         class: Contao\ManagerApi\Config\AuthConfig
         arguments:
@@ -104,6 +108,7 @@ services:
         class: Contao\ManagerApi\System\ServerInfo
         arguments:
             - "@contao_manager.system.ip_info"
+            - '@Contao\ManagerApi\Process\PhpExecutableFinder'
             - "@contao_manager.config.manager"
             - "%kernel.root_dir%/Resources/config/servers.yml"
 

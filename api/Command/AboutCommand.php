@@ -11,7 +11,6 @@
 namespace Contao\ManagerApi\Command;
 
 use Contao\ManagerApi\ApiKernel;
-use Contao\ManagerApi\Process\PhpExecutableFinder;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
@@ -135,7 +134,7 @@ class AboutCommand extends ContainerAwareCommand
                 'sapi' => PHP_SAPI,
                 'locale' => class_exists('Locale', false) && \Locale::getDefault() ? \Locale::getDefault() : '',
                 'timezone' => date_default_timezone_get(),
-                'binary' => (new PhpExecutableFinder())->find(),
+                'binary' => $serverInfo->getPhpExecutableFinder()->find(),
             ],
             'server' => array_merge($ipInfo, [
                 'os_name' => php_uname('s'),

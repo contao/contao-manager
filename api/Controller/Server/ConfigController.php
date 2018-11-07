@@ -15,7 +15,6 @@ use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\I18n\Translator;
-use Contao\ManagerApi\Process\PhpExecutableFinder;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -114,7 +113,7 @@ class ConfigController extends Controller
             if ($server) {
                 $cli = $this->serverInfo->getPhpExecutable();
             } else {
-                $cli = (new PhpExecutableFinder())->find();
+                $cli = $this->serverInfo->getPhpExecutableFinder()->find();
             }
         }
 
@@ -178,7 +177,7 @@ class ConfigController extends Controller
 
     private function validatePhpCli($phpCli, array &$errors)
     {
-        $info = (new PhpExecutableFinder())->getServerInfo($phpCli);
+        $info = $this->serverInfo->getPhpExecutableFinder()->getServerInfo($phpCli);
 
         if (null === $info) {
             $errors[] = [

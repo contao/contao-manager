@@ -33,6 +33,11 @@ class ServerInfo
     private $managerConfig;
 
     /**
+     * @var PhpExecutableFinder
+     */
+    private $phpExecutableFinder;
+
+    /**
      * @var array
      */
     private $pathMap;
@@ -51,22 +56,15 @@ class ServerInfo
      * @var array
      */
     private $configs;
-
     /**
      * @var string|null
      */
     private $server = false;
 
-    /**
-     * Constructor.
-     *
-     * @param IpInfo        $ipInfo
-     * @param ManagerConfig $managerConfig
-     * @param string        $configFile
-     */
-    public function __construct(IpInfo $ipInfo, ManagerConfig $managerConfig, $configFile)
+    public function __construct(IpInfo $ipInfo, PhpExecutableFinder $phpExecutableFinder, ManagerConfig $managerConfig, $configFile)
     {
         $this->ipInfo = $ipInfo;
+        $this->phpExecutableFinder = $phpExecutableFinder;
         $this->managerConfig = $managerConfig;
 
         $data = Yaml::parse(file_get_contents($configFile));
@@ -85,6 +83,14 @@ class ServerInfo
     public function getConfigs()
     {
         return $this->configs;
+    }
+
+    /**
+     * @return PhpExecutableFinder
+     */
+    public function getPhpExecutableFinder()
+    {
+        return $this->phpExecutableFinder;
     }
 
     /**
@@ -138,7 +144,7 @@ class ServerInfo
             }
         }
 
-        return (new PhpExecutableFinder())->find($paths, $discover);
+        return $this->phpExecutableFinder->find($paths, $discover);
     }
 
     /**

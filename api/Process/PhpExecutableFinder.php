@@ -10,12 +10,23 @@
 
 namespace Contao\ManagerApi\Process;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 
 class PhpExecutableFinder
 {
     private $names = ['php-cli', 'php'];
+
+    /**
+     * @var LoggerInterface|null
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger = null)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * Finds the best matching PHP executable on the system.
@@ -90,6 +101,10 @@ class PhpExecutableFinder
 
             return json_decode(trim($process->getOutput()), true);
         } catch (RuntimeException $e) {
+            if (null !== $this->logger) {
+                $this->logger->error($e->getMessage());
+            }
+
             return null;
         }
     }
