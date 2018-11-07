@@ -1,11 +1,13 @@
 /* eslint-disable no-param-reassign */
 
 import Vue from 'vue';
+import algoliasearch from 'algoliasearch';
 
 export default {
     namespaced: true,
 
     state: {
+        algolia: null,
         installed: null,
         add: {},
         change: {},
@@ -71,6 +73,10 @@ export default {
             state.update = [];
             state.remove = [];
         },
+
+        setAlgolia(state, client) {
+            state.algolia = client;
+        },
     },
 
     actions: {
@@ -93,6 +99,38 @@ export default {
                     commit('setInstalled', packages);
                 },
             );
+        },
+
+        search({ state, commit }, value) {
+            let index = state.algolia;
+
+            if (!state.algolia) {
+                index = algoliasearch('60DW2LJW0P', 'e6efbab031852e115032f89065b3ab9f').initIndex(`v2_${Vue.i18n.locale()}`);
+                commit('setAlgolia', index);
+            }
+
+            return new Promise((resolve, reject) => {
+                console.log(index);
+                index.search(value, (err, content) => {
+                    if (err) {
+                        reject(false);
+                        return;
+                    }
+
+                    if (content.nbHits === 0) {
+                        resolve({});
+                        return;
+                    }
+
+                    const packages = {};
+
+                    content.hits.forEach((pkg) => {
+                        packages[pkg.name] = pkg;
+                    });
+
+                    resolve(packages);
+                });
+            });
         },
 
         apply({ state, dispatch }, dryRun = false) {
