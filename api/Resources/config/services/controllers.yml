@@ -52,7 +52,7 @@ services:
 
     Contao\ManagerApi\Controller\Server\ComposerController:
         arguments:
-            - "@kernel"
+            - "@contao_manager.composer.environment"
 
     Contao\ManagerApi\Controller\Contao\AccessKeyController:
         arguments:

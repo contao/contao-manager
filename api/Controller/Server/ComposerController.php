@@ -12,7 +12,7 @@ namespace Contao\ManagerApi\Controller\Server;
 
 use Composer\Factory;
 use Composer\IO\NullIO;
-use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
 use Seld\JsonLint\ParsingException;
@@ -24,30 +24,18 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class ComposerController extends Controller
 {
     /**
-     * @var ApiKernel
+     * @var Environment
      */
-    private $kernel;
-
-    /**
-     * @va string
-     */
-    private $jsonFile;
-
-    /**
-     * @var string
-     */
-    private $lockFile;
+    private $environment;
 
     /**
      * Constructor.
      *
      * @param KernelInterface $kernel
      */
-    public function __construct(KernelInterface $kernel)
+    public function __construct(Environment $environment)
     {
-        $this->kernel = $kernel;
-        $this->jsonFile = $this->kernel->getContaoDir().'/composer.json';
-        $this->lockFile = $this->kernel->getContaoDir().'/composer.lock';
+        $this->environment = $environment;
     }
 
     /**
@@ -69,11 +57,11 @@ class ComposerController extends Controller
         $result = [
             'json' => ['found' => true, 'valid' => true, 'error' => null],
             'lock' => ['found' => false, 'fresh' => false],
-            'vendor' => ['found' => is_dir($this->kernel->getContaoDir().'/vendor')],
+            'vendor' => ['found' => is_dir($this->environment->getVendorDir())],
         ];
 
         try {
-            $composer = Factory::create(new NullIO(), $this->kernel->getContaoDir().'/composer.json', true);
+            $composer = Factory::create(new NullIO(), $this->environment->getJsonFile(), true);
             $locker = $composer->getLocker();
 
             if ($locker->isLocked()) {
