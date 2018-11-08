@@ -31,19 +31,24 @@ ja:
     php_cli:
       not_found: 'このパスに有効なPHPの実行ファイルがありません。'
       incompatible: 'この実行ファイルはPHPのバージョンは{cli}ですが、ウェブサーバーでのバージョンは{web}です。'
+    cloud:
+      path: 'Pathレポジトリをサポートしていません。'
+      artifact: 'Artifactレポジトリをサポートしていません。'
+      platform: 'プラットフォームはcomposer.jsonに構成してはなりません。'
+      cache: 'キャッシュの属性をcomposer.jsonに構成してはなりません。'
   taskstatus:
-    created: 'コンソールのタスクを作成しました...'
+    created: 'コンソールタスクを作成しました...'
     complete:
-      summary: 'コンソールのタスクが完了しました!'
+      summary: 'コンソールタスクが完了しました!'
       detail: 'バックグランドのタスクは正常に完了しました。詳細はコンソールのログを調べてください。'
     aborting:
       summary: '現在の操作を停止中...'
       detail: 'バックグラウンドのタスクを取り止め中です。'
     stopped:
-      summary: 'コンソールのタスクが中断しました!'
+      summary: 'コンソールタスクが終了しました!'
       detail: 'バックグラウンドのタスクを取り止めました。コンソールのプロトコルを確認してください。'
     error:
-      summary: 'コンソールのタスクが中断しました!'
+      summary: 'コンソールタスクが終了しました!'
       detail: 'バックグラウンドのタスクが予想外の停止をしました。コンソールのプロトコルを確認してください。'
   task:
     setup_packages:
@@ -65,6 +70,7 @@ ja:
     self_update:
       title: 'Contao Managerを更新'
       completeSummary: 'Contao Managerを更新しました'
+      completeDetail: 'バージョン{current}に更新しました'
   taskoperation:
     self-update:
       summary: '最新のContao Managerをインストール中...'
@@ -92,7 +98,7 @@ ja:
       queuedSummary: 'ジョブはComposerクラウドのキューに{seconds}秒間待機中'
       queuedDetail: '約{seconds}秒で開始 (現在{workers}のワーカーに{jobs}のジョブ)'
       processingSummary: 'Composerクラウドを使用して依存関係を解決中'
-      processingDetail: 'ジョブID {job}は {seconds}秒間動作中'
+      processingDetail: 'ジョブID {job}は{seconds}秒間動作中'
       errorSummary: '依存関係の解決に失敗...'
       finishedSummary: 'Composerクラウドのジョブを完了'
       finishedDetail: 'ジョブID {job}は{seconds}秒で完了'
