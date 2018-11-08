@@ -24,7 +24,7 @@
                     {},
                     this.package,
                     {
-                        name: 'Contao Open Source CMS',
+                        title: 'Contao Open Source CMS',
                         description: 'Contao is an Open Source PHP Content Management System.',
                         homepage: 'https://contao.org',
                         support: {

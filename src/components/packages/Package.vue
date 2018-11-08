@@ -23,7 +23,7 @@
             <div class="package__about">
                 <h1 :class="{ package__headline: true, 'package__headline--badge': isIncompatible || package.abandoned }">
                     <span class="package__title" v-html="package._highlightResult && package._highlightResult.title.value || package.title || package.name"></span>
-                    <span class="package__name" v-if="package.title && package.title !== package.name">{{ package.name }}</span>
+                    <span class="package__name" v-if="!updateOnly && package.title && package.title !== package.name">{{ package.name }}</span>
                     <span class="package__badge" v-if="isIncompatible" :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span>
                     <span class="package__badge" v-else-if="package.abandoned" :title="package.replacement === true && $t('ui.package.abandonedText') || $t('ui.package.replacement', { replacement: package.replacement })">{{ 'ui.package.abandonedTitle' | translate }}</span>
                 </h1>
