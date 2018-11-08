@@ -4,8 +4,8 @@ services:
         arguments:
             - "@contao_manager.i18n.translator"
 
-    contao_manager.integrity.intl:
-        class: Contao\ManagerApi\IntegrityCheck\IntlCheck
+    contao_manager.integrity.graphics_lib:
+        class: Contao\ManagerApi\IntegrityCheck\GraphicsLibCheck
         arguments:
             - "@contao_manager.i18n.translator"
 
@@ -14,18 +14,23 @@ services:
         arguments:
             - "@contao_manager.i18n.translator"
 
-    contao_manager.integrity.openssl:
-        class: Contao\ManagerApi\IntegrityCheck\OpenSSLCheck
-        arguments:
-            - "@contao_manager.i18n.translator"
-
     contao_manager.integrity.memory_limit:
         class: Contao\ManagerApi\IntegrityCheck\MemoryLimitCheck
         arguments:
             - "@contao_manager.i18n.translator"
 
+    contao_manager.integrity.php_extension:
+        class: Contao\ManagerApi\IntegrityCheck\PhpExtensionsCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
+
     contao_manager.integrity.process:
         class: Contao\ManagerApi\IntegrityCheck\ProcessCheck
+        arguments:
+            - "@contao_manager.i18n.translator"
+
+    contao_manager.integrity.symlink:
+        class: Contao\ManagerApi\IntegrityCheck\SymlinkCheck
         arguments:
             - "@contao_manager.i18n.translator"
 

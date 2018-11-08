@@ -2,15 +2,26 @@ en:
     integrity:
         allow_url_fopen:
             title: 'The PHP setting "allow_url_fopen" is not enabled on the server.'
-        openssl:
-            title: 'The PHP OpenSSL extension is not available.'
-            detail: 'The Contao Manager requires the OpenSSL extension to download files over an encrypted connection (https).'
         process:
             title: 'The PHP function "proc_open" and/or "proc_close" is not available on the server.'
             detail: 'The "proc_open" and "proc_close" functions are necessary to run command line tasks in the background. Check with your hosting provider why this method is not available; neither the Contao Manager nor Contao 4 will run correctly without it.'
         intl:
             title: 'The PHP Intl extension is not available.'
             detail: 'Contao 4 requires the PHP Intl extension for internationalization purposes.'
+        openssl:
+            title: 'The PHP OpenSSL extension is not available.'
+            detail: 'The Contao Manager requires the OpenSSL extension to download files over an encrypted connection (https).'
+        dom:
+            title: 'The PHP DOM extension is not available.'
+            detail: 'Contao 4 requires the PHP DOM extension to parse XML documents.'
+        xmlreader:
+            title: 'The PHP XMLReader extension is not available.'
+            detail: 'Contao 4 requires the PHP DOM extension to parse XML documents.'
+        graphics_lib:
+            title: 'No PHP image processing library is available.'
+            detail: 'Contao 4 requires either the GD, Imagick or Gmagick extension to process images.'
+        symlink:
+            title: 'The PHP symlink method is unavailable or does not work correctly.'
         session:
             title: 'The PHP session could not be started.'
         web_root:

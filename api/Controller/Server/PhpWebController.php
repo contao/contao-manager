@@ -46,8 +46,9 @@ class PhpWebController extends Controller
         $checks = [
             'contao_manager.integrity.allow_url_fopen',
             'contao_manager.integrity.systempdir',
-            'contao_manager.integrity.intl',
-            'contao_manager.integrity.openssl',
+            'contao_manager.integrity.php_extensions',
+            'contao_manager.integrity.graphics_lib',
+            'contao_manager.integrity.symlink',
             'contao_manager.integrity.session',
             'contao_manager.integrity.memory_limit',
             'contao_manager.integrity.process',
