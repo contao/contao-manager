@@ -60,6 +60,10 @@ services:
 
     Contao\ManagerApi\Controller\ConstraintController: ~
 
-    Contao\ManagerApi\Controller\PackagesController:
+    Contao\ManagerApi\Controller\Packages\RootPackageController:
         arguments:
             - '@contao_manager.composer.environment'
+
+    Contao\ManagerApi\Controller\Packages\LocalPackagesController:
+        arguments:
+        - '@contao_manager.composer.environment'

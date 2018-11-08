@@ -1,6 +1,6 @@
 <?php
 
-namespace Contao\ManagerApi\Controller;
+namespace Contao\ManagerApi\Controller\Packages;
 
 use Composer\Composer;
 use Composer\Factory;
@@ -10,7 +10,7 @@ use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class PackagesController
+class LocalPackagesController
 {
     /**
      * @var Environment
@@ -22,40 +22,20 @@ class PackagesController
         $this->environment = $environment;
     }
 
-    public function __invoke($name)
+    public function __invoke($name = null)
     {
         $composer = Factory::create(new NullIO(), $this->environment->getJsonFile(), true);
+        $packages = $this->getLocalPackages($composer);
 
         if (empty($name)) {
-            $data = $this->getLocalPackages($composer);
-            $data['root'] = $this->getRootPackage($composer);
-
-            return new JsonResponse($data);
+            return new JsonResponse($packages);
         }
-
-        if ('root' === $name) {
-            return new JsonResponse($this->getRootPackage($composer));
-        }
-
-        $packages = $this->getLocalPackages($composer);
 
         if (!isset($packages[$name])) {
             throw new NotFoundHttpException('Package "'.$name.'" does not exist');
         }
 
         return new JsonResponse($packages[$name]);
-    }
-
-    /**
-     * @param Composer $composer
-     *
-     * @return array
-     */
-    private function getRootPackage(Composer $composer)
-    {
-        $dumper = new ArrayDumper();
-
-        return $dumper->dump($composer->getPackage());
     }
 
     /**

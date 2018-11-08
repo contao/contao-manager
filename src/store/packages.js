@@ -110,8 +110,12 @@ export default {
             commit('reset');
 
             const data = {};
-            const packages = (await Vue.http.get('api/packages/')).body;
-            const root = packages.root;
+            const load = [
+                Vue.http.get('api/packages/root'),
+                Vue.http.get('api/packages/local/'),
+            ];
+            const root = (await load[0]).body;
+            const packages = (await load[1]).body;
 
             Object.keys(root.require).forEach((require) => {
                 if (!require.includes('/')) {

@@ -153,10 +153,15 @@ task:
 #   Packages  #
 ###############
 
-packages_get:
-    path:     /api/packages/{name}
+packages_root:
+    path:     /api/packages/root
+    defaults: { _controller: Contao\ManagerApi\Controller\Packages\RootPackageController }
+    methods:  [GET]
+
+packages_local:
+    path:     /api/packages/local/{name}
     requirements: { name: .* }
-    defaults: { _controller: Contao\ManagerApi\Controller\PackagesController }
+    defaults: { _controller: Contao\ManagerApi\Controller\Packages\LocalPackagesController }
     methods:  [GET]
 
 constraint_check:
