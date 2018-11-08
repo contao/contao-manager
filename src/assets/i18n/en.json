@@ -184,6 +184,8 @@
     "ui.package.support_irc": "IRC / Chat",
     "ui.package.support_email": "Support E-Mail",
     "ui.package.support_rss": "RSS Feed",
+    "ui.package.proprietaryTitle": "Proprietary Package!",
+    "ui.package.proprietaryText": "Please visit the website for more information.",
     "ui.package.version": "Version {version}",
     "ui.package.versionMissing": "Not Installed",
     "ui.package.additionalDownloads": "{count} Download ::: {count} Downloads",

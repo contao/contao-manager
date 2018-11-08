@@ -30,7 +30,7 @@
 
                 <div class="package__description">
                     <p v-html="package._highlightResult && package._highlightResult.description.value || package.description"></p>
-                    <more :name="package.name" :homepage="package.url || package.homepage" :support="Object.assign({}, package.support)"/>
+                    <more :name="package.name" :homepage="package.homepage" :support="Object.assign({}, package.support)"/>
                 </div>
                 <p class="package__additional">
                     <strong class="package__version package__version--additional" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
@@ -39,7 +39,14 @@
                 </p>
             </div>
 
-            <div :class="{package__release: true, 'package__release--validating': this.constraintValidating, 'package__release--error': this.constraintError, 'package__release--disabled': (willBeRemoved || (!isInstalled && !willBeInstalled)) }">
+            <div class="package__release" v-if="isPrivate">
+                <p class="package__proprietary">
+                    <img src="../../assets/images/buy.svg" width="24" height="24"/>
+                    <strong>{{ $t('ui.package.proprietaryTitle') }}</strong><br>
+                    {{ $t('ui.package.proprietaryText') }}
+                </p>
+            </div>
+            <div :class="{package__release: true, 'package__release--validating': this.constraintValidating, 'package__release--error': this.constraintError, 'package__release--disabled': (willBeRemoved || (!isInstalled && !willBeInstalled)) }" v-else>
                 <fieldset>
                     <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!this.constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
                     <button class="widget-button" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled)">{{ 'ui.package.editConstraint' | translate }}</button>
@@ -51,7 +58,10 @@
                 <div class="package__version package__version--release package__version--missing" v-else-if="package.version === false">{{ $t('ui.package.versionMissing') }}</div>
             </div>
 
-            <fieldset class="package__actions" v-if="updateOnly">
+            <fieldset class="package__actions" v-if="isPrivate">
+                <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="package.homepage">{{ 'ui.package.homepage' | translate }}</a>
+            </fieldset>
+            <fieldset class="package__actions" v-else-if="updateOnly">
                 <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
             </fieldset>
             <fieldset class="package__actions" v-else>
@@ -102,6 +112,13 @@
                     || this.$store.state.packages.update.length > 0
                     || this.$store.state.packages.remove.length > 0
                 );
+            },
+
+            isPrivate() {
+                return !this.package.version
+                    && this.package.version !== false
+                    && this.package.license
+                    && this.package.license.includes('proprietary');
             },
 
             isModified() {
@@ -642,6 +659,21 @@
                 width: 180px;
                 margin-left: 40px;
                 padding-left: 0;
+            }
+        }
+
+        &__proprietary {
+            text-align: center;
+
+            img {
+                top: 6px;
+                position: relative;
+
+                @include screen(1024) {
+                    display: block;
+                    top: 0;
+                    margin: 0 auto;
+                }
             }
         }
     }
