@@ -61,13 +61,13 @@ class ServerInfo
      */
     private $server = false;
 
-    public function __construct(IpInfo $ipInfo, PhpExecutableFinder $phpExecutableFinder, ManagerConfig $managerConfig, $configFile)
+    public function __construct(IpInfo $ipInfo, PhpExecutableFinder $phpExecutableFinder, ManagerConfig $managerConfig, $serverConfigFile)
     {
         $this->ipInfo = $ipInfo;
         $this->phpExecutableFinder = $phpExecutableFinder;
         $this->managerConfig = $managerConfig;
 
-        $data = Yaml::parse(file_get_contents($configFile));
+        $data = Yaml::parse(file_get_contents($serverConfigFile));
 
         $this->pathMap = $data['paths'];
         $this->domainMap = $data['domains'];

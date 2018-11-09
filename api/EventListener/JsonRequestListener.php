@@ -10,11 +10,12 @@
 
 namespace Contao\ManagerApi\EventListener;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
-class JsonRequestListener
+class JsonRequestListener implements EventSubscriberInterface
 {
     /**
      * Disallow everything except JSON and convert data to request content.
@@ -43,5 +44,13 @@ class JsonRequestListener
         }
 
         $request->request->replace($data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return ['kernel.request' => ['onKernelRequest', 100]];
     }
 }

@@ -12,7 +12,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class AllowUrlFopenCheck extends AbstractIntegrityCheck
+class AllowUrlFopenCheck extends AbstractIntegrityCheck implements CliIntegrityCheckInterface
 {
     public function run()
     {

@@ -25,13 +25,13 @@ class IntegrityCheckCommand extends Command
     private $checks = [];
 
     /**
-     * Adds an integrity check.
-     *
-     * @param IntegrityCheckInterface $check
+     * @param iterable $cliIntegrityChecks
      */
-    public function addIntegrityCheck(IntegrityCheckInterface $check)
+    public function __construct($cliIntegrityChecks)
     {
-        $this->checks[] = $check;
+        parent::__construct();
+
+        $this->checks = $cliIntegrityChecks;
     }
 
     /**

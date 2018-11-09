@@ -11,6 +11,9 @@
 namespace Contao\ManagerApi;
 
 use Composer\Util\ErrorHandler;
+use Contao\ManagerApi\IntegrityCheck\CliIntegrityCheckInterface;
+use Contao\ManagerApi\IntegrityCheck\WebIntegrityCheckInterface;
+use Contao\ManagerApi\Task\TaskInterface;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\MonologBundle\MonologBundle;
@@ -160,6 +163,19 @@ class ApiKernel extends Kernel
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
     {
         $loader->load(__DIR__.'/Resources/config/config_'.$c->getParameter('kernel.environment').'.yml');
+
+        $c->registerForAutoconfiguration(WebIntegrityCheckInterface::class)
+            ->addTag('app.integrity.web')
+        ;
+
+        $c->registerForAutoconfiguration(CliIntegrityCheckInterface::class)
+          ->addTag('app.integrity.cli')
+        ;
+
+        $c->registerForAutoconfiguration(TaskInterface::class)
+            ->addTag('monolog.logger', ['channel' => 'tasks'])
+            ->addTag('app.task')
+        ;
     }
 
     /**

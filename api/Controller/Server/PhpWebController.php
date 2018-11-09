@@ -11,6 +11,7 @@
 namespace Contao\ManagerApi\Controller\Server;
 
 use Contao\ManagerApi\IntegrityCheck\IntegrityCheckInterface;
+use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,17 +20,30 @@ use Symfony\Component\HttpFoundation\Response;
 class PhpWebController extends Controller
 {
     /**
+     * @var IntegrityCheckInterface[] $checks
+     */
+    private $checks;
+
+    /**
+     * @param iterable $webIntegrityChecks
+     */
+    public function __construct($webIntegrityChecks)
+    {
+        $this->checks = $webIntegrityChecks;
+    }
+
+    /**
      * Gets response about PHP web process version and issues.
      *
      * @return Response
      */
-    public function __invoke()
+    public function __invoke(ServerInfo $serverInfo)
     {
         return new JsonResponse(
             [
                 'version' => PHP_VERSION,
                 'version_id' => PHP_VERSION_ID,
-                'platform' => $this->get('contao_manager.system.server_info')->getPlatform(),
+                'platform' => $serverInfo->getPlatform(),
                 'problem' => $this->runIntegrityChecks(),
             ]
         );
@@ -42,19 +56,7 @@ class PhpWebController extends Controller
      */
     private function runIntegrityChecks()
     {
-        /** @var IntegrityCheckInterface[] $checks */
-        $checks = [
-            'contao_manager.integrity.allow_url_fopen',
-            'contao_manager.integrity.systempdir',
-            'contao_manager.integrity.php_extensions',
-            'contao_manager.integrity.graphics_lib',
-            'contao_manager.integrity.symlink',
-            'contao_manager.integrity.session',
-            'contao_manager.integrity.memory_limit',
-            'contao_manager.integrity.process',
-        ];
-
-        foreach ($checks as $check) {
+        foreach ($this->checks as $check) {
             $response = $this->get($check)->run();
 
             if ($response instanceof ApiProblem) {

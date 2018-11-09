@@ -12,7 +12,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class SymlinkCheck extends AbstractIntegrityCheck
+class SymlinkCheck extends AbstractIntegrityCheck implements CliIntegrityCheckInterface
 {
     public function run()
     {

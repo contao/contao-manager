@@ -12,11 +12,12 @@ namespace Contao\ManagerApi\EventListener;
 
 use Contao\ManagerApi\Security\JwtAuthenticator;
 use Contao\ManagerApi\Security\JwtManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class SecurityListener
+class SecurityListener implements EventSubscriberInterface
 {
     /**
      * @var JwtManager
@@ -72,5 +73,13 @@ class SecurityListener
         } else {
             $this->jwtManager->removeToken($event->getRequest(), $event->getResponse());
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return ['kernel.response' => 'onKernelResponse'];
     }
 }

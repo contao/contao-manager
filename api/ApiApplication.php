@@ -10,6 +10,12 @@
 
 namespace Contao\ManagerApi;
 
+use Contao\ManagerApi\Command\AboutCommand;
+use Contao\ManagerApi\Command\IntegrityCheckCommand;
+use Contao\ManagerApi\Command\TaskAbortCommand;
+use Contao\ManagerApi\Command\TaskDeleteCommand;
+use Contao\ManagerApi\Command\TaskUpdateCommand;
+use Contao\ManagerApi\Command\UpdateCommand;
 use Symfony\Bundle\FrameworkBundle\Command\CacheWarmupCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -98,12 +104,12 @@ class ApiApplication extends Application
         $container = $this->kernel->getContainer();
 
         $this->add((new ProcessRunnerCommand())->setName('run'));
-        $this->add($container->get('contao_manager.command.about'));
-        $this->add($container->get('contao_manager.command.integrity_check'));
-        $this->add($container->get('contao_manager.command.task_abort'));
-        $this->add($container->get('contao_manager.command.task_delete'));
-        $this->add($container->get('contao_manager.command.task_update'));
-        $this->add($container->get('contao_manager.command.update'));
+        $this->add($container->get(AboutCommand::class));
+        $this->add($container->get(IntegrityCheckCommand::class));
+        $this->add($container->get(TaskAbortCommand::class));
+        $this->add($container->get(TaskDeleteCommand::class));
+        $this->add($container->get(TaskUpdateCommand::class));
+        $this->add($container->get(UpdateCommand::class));
 
         if (!\Phar::running(false)) {
             $command = new CacheWarmupCommand();

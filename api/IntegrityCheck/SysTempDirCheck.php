@@ -12,7 +12,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class SysTempDirCheck extends AbstractIntegrityCheck
+class SysTempDirCheck extends AbstractIntegrityCheck implements CliIntegrityCheckInterface
 {
     public function run()
     {

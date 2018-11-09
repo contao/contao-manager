@@ -11,8 +11,14 @@
 namespace Contao\ManagerApi\Controller\Server;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Exception\ProcessOutputException;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\I18n\Translator;
+use Contao\ManagerApi\Process\ConsoleProcessFactory;
+use Contao\ManagerApi\Process\ContaoApi;
+use Contao\ManagerApi\Process\ContaoConsole;
+use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,22 +29,40 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 class ContaoController extends Controller
 {
     /**
+     * @var ContaoApi
+     */
+    private $contaoApi;
+
+    /**
+     * @var ContaoConsole
+     */
+    private $contaoConsole;
+
+    /**
+     * @var ConsoleProcessFactory
+     */
+    private $processFactory;
+
+    public function __construct(ContaoApi $contaoApi, ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory)
+    {
+        $this->contaoApi = $contaoApi;
+        $this->contaoConsole = $contaoConsole;
+        $this->processFactory = $processFactory;
+    }
+
+    /**
      * Gets response about Composer configuration and file validation.
      *
      * @return Response
      */
-    public function __invoke()
+    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo, Translator $translator)
     {
-        if (!$this->get('contao_manager.config.manager')->has('server')
-            || !$this->get('contao_manager.system.server_info')->getPhpExecutable()
-        ) {
+        if (!$managerConfig->has('server') || !$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
                     ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE)
             );
         }
-
-        $translator = $this->get('contao_manager.i18n.translator');
 
         try {
             $contaoVersion = $this->getContaoVersion();
@@ -123,7 +147,7 @@ class ContaoController extends Controller
     private function getApiVersion()
     {
         try {
-            return $this->get('contao_manager.process.contao_api')->getVersion();
+            return $this->contaoApi->getVersion();
         } catch (\Exception $e) {
             return null;
         }
@@ -138,8 +162,8 @@ class ContaoController extends Controller
     {
         $filesystem = $this->get('filesystem');
 
-        if ($filesystem->exists($this->get('contao_manager.process.console_factory')->getContaoConsolePath())) {
-            return $this->get('contao_manager.process.contao_console')->getVersion();
+        if ($filesystem->exists($this->processFactory->getContaoConsolePath())) {
+            return $this->contaoConsole->getVersion();
         }
 
         /** @var ApiKernel $kernel */

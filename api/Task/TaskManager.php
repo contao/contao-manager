@@ -12,8 +12,6 @@ namespace Contao\ManagerApi\Task;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Filesystem\Filesystem;
@@ -28,11 +26,6 @@ class TaskManager implements LoggerAwareInterface
     private $filesystem;
 
     /**
-     * @var ContainerInterface
-     */
-    private $taskLocator;
-
-    /**
      * @var ConsoleProcessFactory
      */
     private $processFactory;
@@ -43,20 +36,27 @@ class TaskManager implements LoggerAwareInterface
     private $configFile;
 
     /**
+     * @var TaskInterface[]
+     */
+    private $tasks = [];
+
+    /**
      * Constructor.
      *
+     * @param TaskInterface[]       $tasks
      * @param ApiKernel             $kernel
-     * @param ContainerInterface    $taskLocator
      * @param ConsoleProcessFactory $processFactory
      * @param Filesystem|null       $filesystem
      */
-    public function __construct(ApiKernel $kernel, ContainerInterface $taskLocator, ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
+    public function __construct($tasks, ApiKernel $kernel, ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
     {
         $this->filesystem = $filesystem;
-        $this->taskLocator = $taskLocator;
         $this->processFactory = $processFactory;
-
         $this->configFile = $kernel->getManagerDir().DIRECTORY_SEPARATOR.'task.json';
+
+        foreach ($tasks as $task) {
+            $this->tasks[$task->getName()] = $task;
+        }
     }
 
     /**
@@ -66,7 +66,7 @@ class TaskManager implements LoggerAwareInterface
      */
     public function supportsTask($name)
     {
-        return $this->taskLocator->has($name);
+        return isset($this->tasks[$name]);
     }
 
     /**
@@ -184,11 +184,11 @@ class TaskManager implements LoggerAwareInterface
     {
         $name = $config->getName();
 
-        try {
-            $task = $this->taskLocator->get($name);
-        } catch (ContainerExceptionInterface $e) {
+        if (!isset($this->tasks[$name])) {
             throw new \InvalidArgumentException(sprintf('Unable to get task "%s".', $name));
         }
+
+        $task = $this->tasks[$name];
 
         if (!$task instanceof TaskInterface) {
             throw new \RuntimeException(

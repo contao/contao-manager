@@ -1,5 +1,5 @@
 imports:
-    - { resource: services/services.yml }
+    - { resource: services.yml }
 
 # The secret is only required to sign fragment URLs which is not used
 framework:
@@ -19,9 +19,9 @@ security:
             stateless: true
             guard:
                 authenticators:
-                    - contao_manager.security.jwt_authenticator
-                    - contao_manager.security.token_authenticator
-                entry_point: contao_manager.security.jwt_authenticator
+                    - Contao\ManagerApi\Security\JwtAuthenticator
+                    - Contao\ManagerApi\Security\TokenAuthenticator
+                entry_point: Contao\ManagerApi\Security\JwtAuthenticator
             anonymous: ~
 
     access_control:

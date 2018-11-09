@@ -11,7 +11,7 @@
 namespace Contao\ManagerApi\TaskOperation\Manager;
 
 use Contao\ManagerApi\I18n\Translator;
-use Contao\ManagerApi\SelfUpdate\Updater;
+use Contao\ManagerApi\System\SelfUpdate;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
@@ -19,7 +19,7 @@ use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 class SelfUpdateOperation extends AbstractInlineOperation
 {
     /**
-     * @var Updater
+     * @var SelfUpdate
      */
     private $updater;
 
@@ -31,11 +31,11 @@ class SelfUpdateOperation extends AbstractInlineOperation
     /**
      * Constructor.
      *
-     * @param Updater    $updater
+     * @param SelfUpdate $updater
      * @param TaskConfig $taskConfig
      * @param Translator $translator
      */
-    public function __construct(Updater $updater, TaskConfig $taskConfig, Translator $translator)
+    public function __construct(SelfUpdate $updater, TaskConfig $taskConfig, Translator $translator)
     {
         $this->updater = $updater;
         $this->translator = $translator;

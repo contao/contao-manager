@@ -11,6 +11,7 @@
 namespace Contao\ManagerApi\Controller\Server;
 
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\System\SelfUpdate;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,10 +24,8 @@ class SelfUpdateController extends Controller
      *
      * @return Response
      */
-    public function __invoke()
+    public function __invoke(SelfUpdate $updater)
     {
-        $updater = $this->get('contao_manager.self_update.updater');
-
         if (!$updater->canUpdate()) {
             return new ApiProblemResponse(
                 (new ApiProblem('This version cannot be updated.'))

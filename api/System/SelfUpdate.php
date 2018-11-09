@@ -8,12 +8,12 @@
  * @license LGPL-3.0-or-later
  */
 
-namespace Contao\ManagerApi\SelfUpdate;
+namespace Contao\ManagerApi\System;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
 
-class Updater
+class SelfUpdate
 {
     const DOWNLOAD_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.phar';
     const VERSION_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.version';

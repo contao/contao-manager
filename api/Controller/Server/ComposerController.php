@@ -13,7 +13,9 @@ namespace Contao\ManagerApi\Controller\Server;
 use Composer\Factory;
 use Composer\IO\NullIO;
 use Contao\ManagerApi\Composer\Environment;
+use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Seld\JsonLint\ParsingException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -43,11 +45,9 @@ class ComposerController extends Controller
      *
      * @return Response
      */
-    public function __invoke()
+    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo)
     {
-        if (!$this->get('contao_manager.config.manager')->has('server')
-            || !$this->get('contao_manager.system.server_info')->getPhpExecutable()
-        ) {
+        if (!$managerConfig->has('server') || !$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
                     ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE)

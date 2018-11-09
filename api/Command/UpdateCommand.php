@@ -10,17 +10,25 @@
 
 namespace Contao\ManagerApi\Command;
 
-use Contao\ManagerApi\ApiApplication;
-use Contao\ManagerApi\SelfUpdate\Updater;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Contao\ManagerApi\System\SelfUpdate;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @method ApiApplication getApplication()
- */
-class UpdateCommand extends ContainerAwareCommand
+class UpdateCommand extends Command
 {
+    /**
+     * @var SelfUpdate
+     */
+    private $updater;
+
+    public function __construct(SelfUpdate $selfUpdate)
+    {
+        parent::__construct();
+
+        $this->updater = $selfUpdate;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,13 +42,11 @@ class UpdateCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $updater = $this->getContainer()->get('contao_manager.self_update.updater');
-
-        if (!$updater->canUpdate()) {
+        if (!$this->updater->canUpdate()) {
             throw new \RuntimeException('This development build of Contao Manager cannot be automatically updated.');
         }
 
-        return $this->update($updater, $output);
+        return $this->update($output);
     }
 
     /**
@@ -61,9 +67,9 @@ class UpdateCommand extends ContainerAwareCommand
      *
      * @return int
      */
-    private function update(Updater $updater, OutputInterface $output)
+    private function update(OutputInterface $output)
     {
-        $result = $updater->update();
+        $result = $this->updater->update();
 
         if (false === $result) {
             $output->writeln('<info>Already up-to-date.</info>');
@@ -71,8 +77,8 @@ class UpdateCommand extends ContainerAwareCommand
             $output->writeln(
                 sprintf(
                     'Updated from version %s to version %s.',
-                    $updater->getOldVersion(),
-                    $updater->getNewVersion()
+                    $this->updater->getOldVersion(),
+                    $this->updater->getNewVersion()
                 )
             );
         }

@@ -10,7 +10,10 @@
 
 namespace Contao\ManagerApi\Controller\Server;
 
+use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\Process\ConsoleProcessFactory;
+use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,23 +26,21 @@ class PhpCliController extends Controller
      *
      * @return Response
      */
-    public function __invoke()
+    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo, ConsoleProcessFactory $processFactory)
     {
-        if (!$this->get('contao_manager.config.manager')->has('server')
-            || !$this->get('contao_manager.system.server_info')->getPhpExecutable()
-        ) {
+        if (!$managerConfig->has('server') || !$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
                     ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE)
             );
         }
 
-        return new JsonResponse($this->runIntegrityChecks());
+        return new JsonResponse($this->runIntegrityChecks($processFactory));
     }
 
-    private function runIntegrityChecks()
+    private function runIntegrityChecks(ConsoleProcessFactory $processFactory)
     {
-        $process = $this->get('contao_manager.process.console_factory')->createManagerConsoleProcess(
+        $process = $processFactory->createManagerConsoleProcess(
             [
                 'integrity-check',
                 '--format=json',
