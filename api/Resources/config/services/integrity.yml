@@ -19,7 +19,7 @@ services:
         arguments:
             - "@contao_manager.i18n.translator"
 
-    contao_manager.integrity.php_extension:
+    contao_manager.integrity.php_extensions:
         class: Contao\ManagerApi\IntegrityCheck\PhpExtensionsCheck
         arguments:
             - "@contao_manager.i18n.translator"

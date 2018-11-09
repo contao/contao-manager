@@ -10,7 +10,7 @@ services:
             - [addIntegrityCheck, ["@contao_manager.integrity.memory_limit"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.allow_url_fopen"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.systempdir"]]
-            - [addIntegrityCheck, ["@contao_manager.integrity.php_extension"]]
+            - [addIntegrityCheck, ["@contao_manager.integrity.php_extensions"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.symlink"]]
             - [addIntegrityCheck, ["@contao_manager.integrity.process"]]
 
