@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -43,6 +44,8 @@ class UserController extends Controller
      * Returns a list of users in the configuration file.
      *
      * @return Response
+     *
+     * @Route("/users", methods={"GET"})
      */
     public function listUsers()
     {
@@ -55,6 +58,8 @@ class UserController extends Controller
      * @param Request $request
      *
      * @return Response
+     *
+     * @Route("/users", methods={"POST"})
      */
     public function createUser(Request $request)
     {
@@ -75,6 +80,8 @@ class UserController extends Controller
      * @param string $username
      *
      * @return Response
+     *
+     * @Route("/users/{username}", name="user_get", methods={"GET"})
      */
     public function retrieveUser($username)
     {
@@ -91,6 +98,8 @@ class UserController extends Controller
      * @param Request $request
      *
      * @return Response
+     *
+     * @Route("/users/{username}", methods={"PUT"})
      */
     public function replaceUser(Request $request)
     {
@@ -111,6 +120,8 @@ class UserController extends Controller
      * @param string $username
      *
      * @return Response
+     *
+     * @Route("/users/{username}", methods={"DELETE"})
      */
     public function deleteUser($username)
     {
@@ -131,6 +142,8 @@ class UserController extends Controller
      * @param string $username
      *
      * @return Response
+     *
+     * @Route("/users/{username}/tokens", methods={"GET"})
      */
     public function listTokens($username)
     {
@@ -151,6 +164,8 @@ class UserController extends Controller
      * @param Request $request
      *
      * @return Response
+     *
+     * @Route("/users/{username}/tokens", methods={"POST"})
      */
     public function createToken($username, Request $request)
     {
@@ -181,6 +196,8 @@ class UserController extends Controller
      * @param string $id
      *
      * @return Response
+     *
+     * @Route("/users/{username}/tokens/{id}", methods={"GET"})
      */
     public function retrieveToken($username, $id)
     {
@@ -200,6 +217,8 @@ class UserController extends Controller
      * @param string $id
      *
      * @return Response
+     *
+     * @Route("/users/{username}/tokens/{id}", methods={"DELETE"})
      */
     public function deleteToken($username, $id)
     {

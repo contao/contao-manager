@@ -18,7 +18,11 @@ use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/server/php-cli", methods={"GET"})
+ */
 class PhpCliController extends Controller
 {
     /**

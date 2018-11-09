@@ -9,7 +9,11 @@ use Composer\Package\Dumper\ArrayDumper;
 use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/packages/local/{name}", methods={"GET"}, requirements={"name"=".*"})
+ */
 class LocalPackagesController
 {
     /**

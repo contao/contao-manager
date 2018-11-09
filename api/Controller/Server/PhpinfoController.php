@@ -12,7 +12,11 @@ namespace Contao\ManagerApi\Controller\Server;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/server/phpinfo", methods={"GET"})
+ */
 class PhpinfoController extends Controller
 {
     /**

@@ -18,7 +18,11 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/files/{file}", methods={"GET", "PUT"})
+ */
 class FileController extends Controller
 {
     /**

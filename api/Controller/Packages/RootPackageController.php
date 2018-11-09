@@ -7,7 +7,11 @@ use Composer\IO\NullIO;
 use Composer\Package\Dumper\ArrayDumper;
 use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/packages/root", methods={"GET"})
+ */
 class RootPackageController
 {
     /**
