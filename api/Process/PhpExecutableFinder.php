@@ -98,11 +98,16 @@ class PhpExecutableFinder
 
         try {
             $process = (new Process($commandline))->mustRun(null, array_map(function () { return false; }, $_ENV));
+            $output = json_decode(trim($process->getOutput()), true);
 
-            return json_decode(trim($process->getOutput()), true);
+            if (null === $output) {
+                throw new RuntimeException('Received unexpected output from console: ' . $process->getOutput());
+            }
+
+            return $output;
         } catch (RuntimeException $e) {
             if (null !== $this->logger) {
-                $this->logger->error($e->getMessage());
+                $this->logger->error($e->getMessage(), ['exception' => $e]);
             }
 
             return null;
