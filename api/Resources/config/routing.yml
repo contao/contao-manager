@@ -110,22 +110,22 @@ token_delete:
 
 config_manager:
     path:     /api/config/manager
-    defaults: { _controller: contao_manager.controller.config_manager }
+    defaults: { _controller: Contao\ManagerApi\Controller\Config\ManagerController }
     methods:  [GET, PUT, PATCH]
 
 config_auth:
     path:     /api/config/auth
-    defaults: { _controller: contao_manager.controller.config_auth }
+    defaults: { _controller: Contao\ManagerApi\Controller\Config\AuthController }
     methods:  [GET, PUT, PATCH]
 
 config_auth_github:
     path:     /api/config/auth/github-oauth
-    defaults: { _controller: contao_manager.controller.config_auth:putGithubToken }
+    defaults: { _controller: Contao\ManagerApi\Controller\Config\AuthController:putGithubToken }
     methods:  [PUT]
 
 config_composer:
     path:     /api/config/composer
-    defaults: { _controller: contao_manager.controller.config_composer }
+    defaults: { _controller: Contao\ManagerApi\Controller\Config\ComposerController }
     methods:  [GET, PUT, PATCH]
 
 

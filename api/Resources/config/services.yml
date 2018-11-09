@@ -11,27 +11,11 @@ services:
 
     Contao\ManagerApi\:
         resource: ../../{Command,Config,Controller,EventListener,IntegrityCheck,Process,Security,System,Task/*/}
-        exclude: ../../Controller/ConfigController.php
 
 
     ####################
     #  Named services  #
     ####################
-
-    contao_manager.controller.config_auth:
-        class: Contao\ManagerApi\Controller\ConfigController
-        arguments:
-            - '@Contao\ManagerApi\Config\AuthConfig'
-
-    contao_manager.controller.config_composer:
-        class: Contao\ManagerApi\Controller\ConfigController
-        arguments:
-            - '@Contao\ManagerApi\Config\ComposerConfig'
-
-    contao_manager.controller.config_manager:
-        class: Contao\ManagerApi\Controller\ConfigController
-        arguments:
-            - 'Contao\ManagerApi\Config\ManagerConfig'
 
     contao_manager.security.user_provider:
         class: Symfony\Component\Security\Core\User\InMemoryUserProvider

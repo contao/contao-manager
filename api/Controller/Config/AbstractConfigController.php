@@ -8,22 +8,20 @@
  * @license LGPL-3.0-or-later
  */
 
-namespace Contao\ManagerApi\Controller;
+namespace Contao\ManagerApi\Controller\Config;
 
 use Contao\ManagerApi\Config\AbstractConfig;
-use Contao\ManagerApi\Config\AuthConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class ConfigController extends Controller
+abstract class AbstractConfigController extends Controller
 {
     /**
      * @var AbstractConfig
      */
-    private $config;
+    protected $config;
 
     /**
      * Constructor.
@@ -53,16 +51,5 @@ class ConfigController extends Controller
         }
 
         return new JsonResponse($this->config->all());
-    }
-
-    public function putGithubToken(Request $request)
-    {
-        if (!$this->config instanceof AuthConfig || !$request->request->has('token')) {
-            throw new BadRequestHttpException('GitHub token could not be stored.');
-        }
-
-        $this->config->setGithubToken($request->request->get('token'));
-
-        return new JsonResponse($this->config->get('github-oauth'));
     }
 }
