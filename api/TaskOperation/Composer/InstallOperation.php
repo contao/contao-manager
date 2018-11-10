@@ -24,10 +24,6 @@ class InstallOperation extends AbstractProcessOperation
     private $taskConfig;
 
     /**
-     * @var null
-     */
-    private $timeout;
-    /**
      * @var Translator
      */
     private $translator;
@@ -45,7 +41,6 @@ class InstallOperation extends AbstractProcessOperation
     {
         $this->taskConfig = $taskConfig;
         $this->translator = $translator;
-        $this->timeout = $timeout;
 
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-install');

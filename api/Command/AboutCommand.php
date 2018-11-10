@@ -11,16 +11,44 @@
 namespace Contao\ManagerApi\Command;
 
 use Contao\ManagerApi\ApiKernel;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Contao\ManagerApi\System\IpInfo;
+use Contao\ManagerApi\System\ServerInfo;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class AboutCommand extends ContainerAwareCommand
+class AboutCommand extends Command implements ServiceSubscriberInterface
 {
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct();
+
+        $this->container = $container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices()
+    {
+        return [
+            ApiKernel::class,
+            IpInfo::class,
+            ServerInfo::class,
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -104,10 +132,9 @@ class AboutCommand extends ContainerAwareCommand
 
     private function collectData()
     {
-        /** @var ApiKernel $kernel */
-        $kernel = $this->getContainer()->get('kernel');
-        $ipInfo = $this->getContainer()->get('contao_manager.system.ip_info')->collect();
-        $serverInfo = $this->getContainer()->get('contao_manager.system.server_info');
+        $kernel = $this->container->get(ApiKernel::class);
+        $ipInfo = $this->container->get(IpInfo::class)->collect();
+        $serverInfo = $this->container->get(ServerInfo::class);
 
         $provider = [];
         $version = $this->getManagerVersion($kernel);

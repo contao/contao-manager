@@ -63,11 +63,6 @@ class UpdateTask extends AbstractPackagesTask
         return 'composer/update';
     }
 
-    protected function getTitle()
-    {
-        return $this->translator->trans('task.update_packages.title');
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -82,6 +77,11 @@ class UpdateTask extends AbstractPackagesTask
         return $status;
     }
 
+    protected function getTitle()
+    {
+        return $this->translator->trans('task.update_packages.title');
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -92,11 +92,11 @@ class UpdateTask extends AbstractPackagesTask
         $operations = [];
 
         if (($required = $changes->getRequiredPackages()) && !empty($required)) {
-            $operations[] = new RequireOperation($this->processFactory, $config, $this->translator, $required);
+            $operations[] = new RequireOperation($this->processFactory, $this->translator, $required);
         }
 
         if (($removed = $changes->getRemovedPackages()) && !empty($removed)) {
-            $operations[] = new RemoveOperation($this->processFactory, $config, $this->translator, $removed);
+            $operations[] = new RemoveOperation($this->processFactory, $this->translator, $removed);
         }
 
         if ($this->environment->useCloudResolver()) {

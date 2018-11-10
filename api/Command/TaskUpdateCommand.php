@@ -24,7 +24,7 @@ class TaskUpdateCommand extends Command
     /**
      * @var TaskManager
      */
-    private $taskManager;
+    protected $taskManager;
 
     /**
      * Constructor.

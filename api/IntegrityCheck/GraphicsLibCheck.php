@@ -28,7 +28,7 @@ class GraphicsLibCheck extends AbstractIntegrityCheck
 
     private function hasGraphicsLib()
     {
-        if (function_exists('gd_info')&& version_compare(\constant('GD_VERSION'), '2.0.1', '>')) {
+        if (function_exists('gd_info') && version_compare(\constant('GD_VERSION'), '2.0.1', '>')) {
             return true;
         }
 

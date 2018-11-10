@@ -21,7 +21,6 @@ use Seld\JsonLint\ParsingException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -30,26 +29,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ComposerController extends Controller
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * Constructor.
-     *
-     * @param KernelInterface $kernel
-     */
-    public function __construct(Environment $environment)
-    {
-        $this->environment = $environment;
-    }
-
-    /**
      * Gets response about Composer configuration and file validation.
      *
      * @return Response
      */
-    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo)
+    public function __invoke(Environment $environment, ManagerConfig $managerConfig, ServerInfo $serverInfo)
     {
         if (!$managerConfig->has('server') || !$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
@@ -61,11 +45,11 @@ class ComposerController extends Controller
         $result = [
             'json' => ['found' => true, 'valid' => true, 'error' => null],
             'lock' => ['found' => false, 'fresh' => false],
-            'vendor' => ['found' => is_dir($this->environment->getVendorDir())],
+            'vendor' => ['found' => is_dir($environment->getVendorDir())],
         ];
 
         try {
-            $composer = Factory::create(new NullIO(), $this->environment->getJsonFile(), true);
+            $composer = Factory::create(new NullIO(), $environment->getJsonFile(), true);
             $locker = $composer->getLocker();
 
             if ($locker->isLocked()) {

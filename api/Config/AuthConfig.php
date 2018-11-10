@@ -35,7 +35,7 @@ class AuthConfig extends AbstractConfig
      */
     public function getGithubToken()
     {
-        if (!isset($this->data['github-oauth'], $this->data['github-oauth']['github.com'])) {
+        if (!isset($this->data['github-oauth']['github.com'])) {
             return null;
         }
 

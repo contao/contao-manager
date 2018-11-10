@@ -10,36 +10,37 @@
 
 namespace Contao\ManagerApi\Config;
 
-use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Composer\Environment;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserConfig extends AbstractConfig
+class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 {
     /**
-     * @var UserPasswordEncoderInterface
+     * @var ContainerInterface
      */
-    private $passwordEncoder;
+    private $container;
 
     /**
      * Constructor.
      *
-     * @param ApiKernel                    $kernel
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param Filesystem                   $filesystem
+     * @param ContainerInterface $container
+     * @param Filesystem         $filesystem
      */
-    public function __construct(ApiKernel $kernel, UserPasswordEncoderInterface $passwordEncoder, Filesystem $filesystem = null)
+    public function __construct(ContainerInterface $container, Filesystem $filesystem = null)
     {
-        $configFile = $kernel->getManagerDir().DIRECTORY_SEPARATOR.'users.json';
+        $configFile = $container->get(Environment::class)->getManagerDir().DIRECTORY_SEPARATOR.'users.json';
 
         parent::__construct($configFile, $filesystem);
 
-        $this->passwordEncoder = $passwordEncoder;
+        $this->container = $container;
 
         if (!isset($this->data['version']) || $this->data['version'] < 2) {
-            $this->migrateSecret($kernel);
+            $this->migrateSecret();
             $this->hashTokens();
             $this->data['version'] = 2;
             $this->save();
@@ -154,7 +155,7 @@ class UserConfig extends AbstractConfig
      */
     public function createUser($username, $password)
     {
-        $password = $this->passwordEncoder->encodePassword(
+        $password = $this->container->get(UserPasswordEncoderInterface::class)->encodePassword(
             new User($username, null),
             $password
         );
@@ -313,14 +314,24 @@ class UserConfig extends AbstractConfig
     }
 
     /**
-     * Migrates the secret from manager config to user config.
-     *
-     * @param ApiKernel $kernel
+     * {@inheritdoc}
      */
-    private function migrateSecret(Apikernel $kernel)
+    public static function getSubscribedServices()
+    {
+        return [
+            Environment::class,
+            UserPasswordEncoderInterface::class,
+            ManagerConfig::class,
+        ];
+    }
+
+    /**
+     * Migrates the secret from manager config to user config.
+     */
+    private function migrateSecret()
     {
         if (!isset($this->data['secret'])) {
-            $config = $kernel->getContainer()->get('contao_manager.config.manager');
+            $config = $this->container->get(ManagerConfig::class);
 
             if (!isset($this->data['users'])) {
                 $this->data = ['users' => $this->data];

@@ -49,7 +49,7 @@ class TaskStatus
     /**
      * @var bool
      */
-    private $audit = false;
+    private $audit;
 
     /**
      * @var string

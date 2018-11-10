@@ -3,7 +3,6 @@ services:
         autoconfigure: true
         autowire: true
         bind:
-            Contao\ManagerApi\ApiKernel: '@kernel'
             $debug: '%kernel.debug%'
             $cliIntegrityChecks: !tagged app.integrity.cli
             $webIntegrityChecks: !tagged app.integrity.web
@@ -25,6 +24,11 @@ services:
     ##############################
     #  Additional configuration  #
     ##############################
+
+    kernel:
+        class: Contao\ManagerApi\ApiKernel
+        synthetic: true
+        autowire: false
 
     Contao\ManagerApi\Composer\CloudResolver:
         tags:

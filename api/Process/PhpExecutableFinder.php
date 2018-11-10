@@ -101,7 +101,7 @@ class PhpExecutableFinder
             $output = json_decode(trim($process->getOutput()), true);
 
             if (null === $output) {
-                throw new RuntimeException('Received unexpected output from console: ' . $process->getOutput());
+                throw new RuntimeException('Received unexpected output from console: '.$process->getOutput());
             }
 
             return $output;
@@ -131,10 +131,8 @@ class PhpExecutableFinder
                 // Silencing against https://bugs.php.net/69240
                 if (@is_dir($path)) {
                     $dirs[] = $path;
-                } else {
-                    if (in_array(basename($path), $this->names, true) && @is_executable($path)) {
-                        $results[] = $path;
-                    }
+                } elseif (in_array(basename($path), $this->names, true) && @is_executable($path)) {
+                    $results[] = $path;
                 }
             }
         } else {

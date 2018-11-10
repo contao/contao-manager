@@ -21,11 +21,6 @@ use Composer\Repository\RepositoryManager;
 class CloudChanges
 {
     /**
-     * @var string
-     */
-    private $file;
-
-    /**
      * @var JsonFile
      */
     private $json;
@@ -57,7 +52,6 @@ class CloudChanges
      */
     public function __construct($file)
     {
-        $this->file = $file;
         $this->json = new JsonFile($file);
     }
 

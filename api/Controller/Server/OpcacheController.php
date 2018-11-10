@@ -77,7 +77,7 @@ class OpcacheController extends Controller
             return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
         }
 
-        /** @noinspection PhpComposerExtensionStubsInspection */
+        /* @noinspection PhpComposerExtensionStubsInspection */
         opcache_reset();
 
         return $this->getOpcache();

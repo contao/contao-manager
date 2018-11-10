@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Contao\ManagerApi\Controller;
 
 use Composer\Semver\VersionParser;
@@ -23,7 +31,7 @@ class ConstraintController
             $versionParser = new VersionParser();
             $versionParser->parseConstraints($request->request->get('constraint'));
         } catch (\Exception $exception) {
-            return new JsonResponse(['valid' => false, 'error'  => $exception->getMessage()]);
+            return new JsonResponse(['valid' => false, 'error' => $exception->getMessage()]);
         }
 
         return new JsonResponse(['valid' => true, 'error' => null]);

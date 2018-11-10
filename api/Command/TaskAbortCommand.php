@@ -17,11 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class TaskAbortCommand extends TaskUpdateCommand
 {
     /**
-     * @var TaskManager
-     */
-    private $taskManager;
-
-    /**
      * Constructor.
      *
      * @param TaskManager $taskManager
@@ -29,8 +24,6 @@ class TaskAbortCommand extends TaskUpdateCommand
     public function __construct(TaskManager $taskManager)
     {
         parent::__construct($taskManager);
-
-        $this->taskManager = $taskManager;
     }
 
     /**

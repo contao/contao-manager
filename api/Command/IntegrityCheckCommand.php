@@ -22,7 +22,7 @@ class IntegrityCheckCommand extends Command
     /**
      * @var IntegrityCheckInterface[]
      */
-    private $checks = [];
+    private $checks;
 
     /**
      * @param iterable $cliIntegrityChecks

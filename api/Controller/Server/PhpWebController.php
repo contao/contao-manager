@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PhpWebController extends Controller
 {
     /**
-     * @var IntegrityCheckInterface[] $checks
+     * @var IntegrityCheckInterface[]
      */
     private $checks;
 

@@ -12,7 +12,7 @@
 $loader = require __DIR__.'/../vendor/autoload.php';
 
 use Composer\Factory;
-use Composer\XdebugHandler;
+use Composer\XdebugHandler\XdebugHandler;
 use Contao\ManagerApi\ApiApplication;
 use Contao\ManagerApi\ApiKernel;
 use Symfony\Component\Console\Input\ArgvInput;

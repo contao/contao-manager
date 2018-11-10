@@ -85,7 +85,7 @@ class RebuildCacheTask extends AbstractTask
     protected function buildOperations(TaskConfig $config)
     {
         $operations = [
-            new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, $this->translator, new Filesystem()),
+            new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, $this->translator, $this->filesystem),
             new CacheClearOperation($this->processFactory, $this->translator, $config->getOption('environment', 'prod')),
         ];
 

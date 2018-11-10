@@ -72,6 +72,14 @@ class ExceptionListener implements EventSubscriberInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return ['kernel.exception' => ['onKernelException', 10]];
+    }
+
+    /**
      * Logs the exception if a logger is available.
      *
      * @param \Exception $exception
@@ -113,13 +121,5 @@ class ExceptionListener implements EventSubscriberInterface
         }
 
         return $exception;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return ['kernel.exception' => ['onKernelException', 10]];
     }
 }
