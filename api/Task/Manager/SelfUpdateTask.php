@@ -45,7 +45,7 @@ class SelfUpdateTask extends AbstractTask
      */
     public function getName()
     {
-        return 'self_update';
+        return 'manager/self-update';
     }
 
     /**
@@ -54,6 +54,11 @@ class SelfUpdateTask extends AbstractTask
     public function create(TaskConfig $config)
     {
         return parent::create($config)->setConsole(false);
+    }
+
+    protected function getTitle()
+    {
+        return $this->translator->trans('task.self_update.title');
     }
 
     /**

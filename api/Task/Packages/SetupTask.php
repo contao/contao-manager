@@ -58,7 +58,12 @@ class SetupTask extends AbstractPackagesTask
      */
     public function getName()
     {
-        return 'setup_packages';
+        return 'contao/install';
+    }
+
+    protected function getTitle()
+    {
+        return $this->translator->trans('task.setup_packages.title');
     }
 
     /**

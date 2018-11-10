@@ -46,7 +46,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
      */
     public function create(TaskConfig $config)
     {
-        return (new TaskStatus($this->translator->trans('task.'.$this->getName().'.title')))
+        return (new TaskStatus($this->getTitle()))
             ->setSummary($this->translator->trans('taskstatus.created'));
     }
 
@@ -205,6 +205,11 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         $status->setSummary($this->translator->trans(sprintf('taskstatus.%s.summary', $result)));
         $status->setDetail($this->translator->trans(sprintf('taskstatus.%s.detail', $result)));
     }
+
+    /**
+     * @return string
+     */
+    abstract protected function getTitle();
 
     /**
      * @param TaskConfig $config

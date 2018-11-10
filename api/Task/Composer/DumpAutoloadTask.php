@@ -41,7 +41,7 @@ class DumpAutoloadTask extends AbstractTask
      */
     public function getName()
     {
-        return 'dump_autoload';
+        return 'composer/dump-autoload';
     }
 
     /**
@@ -50,6 +50,11 @@ class DumpAutoloadTask extends AbstractTask
     public function create(TaskConfig $config)
     {
         return parent::create($config)->setAutoClose(true);
+    }
+
+    protected function getTitle()
+    {
+        return $this->translator->trans('task.dump_autoload.title');
     }
 
     /**

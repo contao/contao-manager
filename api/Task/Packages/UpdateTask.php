@@ -60,7 +60,12 @@ class UpdateTask extends AbstractPackagesTask
      */
     public function getName()
     {
-        return 'update_packages';
+        return 'composer/update';
+    }
+
+    protected function getTitle()
+    {
+        return $this->translator->trans('task.update_packages.title');
     }
 
     /**

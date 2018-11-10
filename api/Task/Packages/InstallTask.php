@@ -56,7 +56,12 @@ class InstallTask extends AbstractPackagesTask
      */
     public function getName()
     {
-        return 'install_packages';
+        return 'composer/install';
+    }
+
+    protected function getTitle()
+    {
+        return $this->translator->trans('task.install_packages.title');
     }
 
     /**

@@ -63,7 +63,7 @@ class RebuildCacheTask extends AbstractTask
      */
     public function getName()
     {
-        return 'rebuild_cache';
+        return 'contao/rebuild-cache';
     }
 
     /**
@@ -72,6 +72,11 @@ class RebuildCacheTask extends AbstractTask
     public function create(TaskConfig $config)
     {
         return parent::create($config)->setAutoClose(true);
+    }
+
+    protected function getTitle()
+    {
+        return $this->translator->trans('task.rebuild_cache.title');
     }
 
     /**
