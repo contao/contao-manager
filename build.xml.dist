@@ -116,17 +116,17 @@
 
     <target name="box-prod">
         <echo message="Creating the .phar file" />
-        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://box-project.github.io/box2/installer.php | php" />
+        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://github.com/humbug/box/releases/download/3.3.1/box.phar > box.phar" />
         <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
             <arg value="box.phar" />
-            <arg value="build" />
+            <arg value="compile" />
         </exec>
     </target>
 
     <target name="box-dev">
         <echo message="Creating the .phar file" />
         <exec executable="box" checkreturn="true" passthru="true">
-            <arg value="build" />
+        <arg value="compile" />
         </exec>
         <exec executable="php" checkreturn="true">
             <arg value="-r" />

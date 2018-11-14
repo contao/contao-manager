@@ -1,4 +1,6 @@
 {
+    "stub": "build/stub.php",
+    "main": false,
     "directories": ["api", "web"],
     "files": [
         "LICENSE"
@@ -14,6 +16,5 @@
         }
     ],
     "git-version": "package_version",
-    "stub": "build/stub.php",
     "output": "contao-manager.phar"
 }
