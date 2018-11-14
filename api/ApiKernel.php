@@ -177,6 +177,7 @@ class ApiKernel extends Kernel
 
         putenv('COMPOSER='.$root.DIRECTORY_SEPARATOR.'composer.json');
         putenv('COMPOSER_HOME='.$this->getConfigDir());
+        putenv('COMPOSER_HTACCESS_PROTECT=0');
 
         chdir($root);
     }
