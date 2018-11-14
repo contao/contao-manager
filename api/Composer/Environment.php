@@ -48,27 +48,27 @@ class Environment
 
     public function getManagerDir()
     {
-        return $this->kernel->getManagerDir();
+        return $this->kernel->getConfigDir();
     }
 
     public function getContaoDir()
     {
-        return $this->kernel->getContaoDir();
+        return $this->kernel->getProjectDir();
     }
 
     public function getJsonFile()
     {
-        return $this->kernel->getContaoDir().'/composer.json';
+        return $this->kernel->getProjectDir().'/composer.json';
     }
 
     public function getLockFile()
     {
-        return $this->kernel->getContaoDir().'/composer.lock';
+        return $this->kernel->getProjectDir().'/composer.lock';
     }
 
     public function getVendorDir()
     {
-        return $this->kernel->getContaoDir().'/vendor';
+        return $this->kernel->getProjectDir().'/vendor';
     }
 
     public function useCloudResolver()

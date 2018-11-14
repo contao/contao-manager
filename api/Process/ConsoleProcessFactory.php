@@ -71,7 +71,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
      */
     public function getContaoConsolePath()
     {
-        return $this->kernel->getContaoDir().'/vendor/contao/manager-bundle/bin/contao-console';
+        return $this->kernel->getProjectDir().'/vendor/contao/manager-bundle/bin/contao-console';
     }
 
     /**
@@ -81,7 +81,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
      */
     public function getContaoApiPath()
     {
-        return $this->kernel->getContaoDir().'/vendor/contao/manager-bundle/bin/contao-api';
+        return $this->kernel->getProjectDir().'/vendor/contao/manager-bundle/bin/contao-api';
     }
 
     /**
@@ -158,7 +158,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
     public function restoreBackgroundProcess($id)
     {
         try {
-            $process = ProcessController::restore($this->kernel->getManagerDir(), $id);
+            $process = ProcessController::restore($this->kernel->getConfigDir(), $id);
         } catch (InvalidJsonException $e) {
             $problem = (new ApiProblem($e->getMessage()))
                 ->setDetail($e->getJsonErrorMessage()."\n\n".$e->getContent())
@@ -184,7 +184,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
     {
         return (new Process(
             $this->buildCommandLine($console, $arguments),
-            $this->kernel->getContaoDir(),
+            $this->kernel->getProjectDir(),
             $this->serverInfo->getPhpEnv()
         ))->inheritEnvironmentVariables()->setTimeout(0);
     }
@@ -201,9 +201,9 @@ class ConsoleProcessFactory implements LoggerAwareInterface
     private function createBackgroundProcess($console, array $arguments, $id = null)
     {
         $process = ProcessController::create(
-            $this->kernel->getManagerDir(),
+            $this->kernel->getConfigDir(),
             $this->buildCommandLine($console, $arguments),
-            $this->kernel->getContaoDir(),
+            $this->kernel->getProjectDir(),
             $id
         );
 

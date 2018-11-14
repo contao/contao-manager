@@ -88,7 +88,19 @@ class ApiKernel extends Kernel
      */
     public function getProjectDir()
     {
-        return dirname(__DIR__);
+        // @see https://getcomposer.org/doc/03-cli.md#composer
+        if (false !== ($composer = getenv('COMPOSER'))) {
+            return dirname($composer);
+        }
+
+        if ('' !== ($phar = \Phar::running(false))) {
+            return dirname(dirname($phar));
+        }
+
+        $testDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'test-dir';
+        (new Filesystem())->mkdir($testDir);
+
+        return $testDir;
     }
 
     /**
@@ -96,7 +108,7 @@ class ApiKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return $this->debug ? $this->getManagerDir().'/appcache' : __DIR__.'/Resources/cache';
+        return $this->debug ? $this->getConfigDir().'/appcache' : __DIR__.'/Resources/cache';
     }
 
     /**
@@ -104,29 +116,7 @@ class ApiKernel extends Kernel
      */
     public function getLogDir()
     {
-        return $this->getManagerDir().'/logs';
-    }
-
-    /**
-     * Gets the directory where Contao is installed.
-     *
-     * @return string
-     */
-    public function getContaoDir()
-    {
-        if (null === $this->contaoDir) {
-            if (false !== ($composer = getenv('COMPOSER'))) {
-                // @see https://getcomposer.org/doc/03-cli.md#composer
-                $this->contaoDir = dirname($composer);
-            } elseif ('' !== ($phar = \Phar::running(false))) {
-                $this->contaoDir = dirname(dirname($phar));
-            } else {
-                $this->contaoDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'test-dir';
-                (new Filesystem())->mkdir($this->contaoDir);
-            }
-        }
-
-        return $this->contaoDir;
+        return $this->getConfigDir().'/logs';
     }
 
     /**
@@ -134,9 +124,9 @@ class ApiKernel extends Kernel
      *
      * @return string
      */
-    public function getManagerDir()
+    public function getConfigDir()
     {
-        return $this->getContaoDir().DIRECTORY_SEPARATOR.'contao-manager';
+        return $this->getProjectDir().DIRECTORY_SEPARATOR.'contao-manager';
     }
 
     /**
@@ -183,10 +173,10 @@ class ApiKernel extends Kernel
      */
     private function configureComposerEnvironment()
     {
-        $root = $this->getContaoDir();
+        $root = $this->getProjectDir();
 
         putenv('COMPOSER='.$root.DIRECTORY_SEPARATOR.'composer.json');
-        putenv('COMPOSER_HOME='.$this->getManagerDir());
+        putenv('COMPOSER_HOME='.$this->getConfigDir());
 
         chdir($root);
     }

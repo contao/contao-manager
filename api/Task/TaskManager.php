@@ -52,7 +52,7 @@ class TaskManager implements LoggerAwareInterface
     {
         $this->filesystem = $filesystem;
         $this->processFactory = $processFactory;
-        $this->configFile = $kernel->getManagerDir().DIRECTORY_SEPARATOR.'task.json';
+        $this->configFile = $kernel->getConfigDir().DIRECTORY_SEPARATOR.'task.json';
 
         foreach ($tasks as $task) {
             $this->tasks[$task->getName()] = $task;

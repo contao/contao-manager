@@ -10,7 +10,7 @@
 
 namespace Contao\ManagerApi\Controller\Server;
 
-use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Exception\ProcessOutputException;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
@@ -22,6 +22,7 @@ use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -32,6 +33,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ContaoController extends Controller
 {
+    /**
+     * @var Environment
+     */
+    private $environment;
+
     /**
      * @var ContaoApi
      */
@@ -47,11 +53,30 @@ class ContaoController extends Controller
      */
     private $processFactory;
 
-    public function __construct(ContaoApi $contaoApi, ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory)
-    {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    public function __construct(
+        Environment $environment,
+        ContaoApi $contaoApi,
+        ContaoConsole $contaoConsole,
+        ConsoleProcessFactory $processFactory,
+        LoggerInterface $logger = null,
+        Filesystem $filesystem = null
+    ) {
+        $this->environment = $environment;
         $this->contaoApi = $contaoApi;
         $this->contaoConsole = $contaoConsole;
         $this->processFactory = $processFactory;
+        $this->logger = $logger;
+        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**
@@ -119,7 +144,7 @@ class ContaoController extends Controller
      */
     private function getProjectFiles()
     {
-        $content = scandir($this->get('kernel')->getContaoDir(), SCANDIR_SORT_NONE);
+        $content = scandir($this->environment->getContaoDir(), SCANDIR_SORT_NONE);
         $content = array_diff(
             $content,
             [
@@ -164,21 +189,16 @@ class ContaoController extends Controller
      */
     private function getContaoVersion()
     {
-        $filesystem = $this->get('filesystem');
-
-        if ($filesystem->exists($this->processFactory->getContaoConsolePath())) {
+        if ($this->filesystem->exists($this->processFactory->getContaoConsolePath())) {
             return $this->contaoConsole->getVersion();
         }
 
-        /** @var ApiKernel $kernel */
-        $kernel = $this->get('kernel');
-
         // Required for Contao 2.11
-        define('TL_ROOT', $kernel->getContaoDir());
+        define('TL_ROOT', $this->environment->getContaoDir());
 
         $files = [
-            $kernel->getContaoDir().'/system/constants.php',
-            $kernel->getContaoDir().'/system/config/constants.php',
+            $this->environment->getContaoDir().'/system/constants.php',
+            $this->environment->getContaoDir().'/system/config/constants.php',
         ];
 
         // Test if the Phar was placed in the Contao 2/3 root
@@ -187,13 +207,12 @@ class ContaoController extends Controller
             $files[] = dirname($phar).'/system/config/constants.php';
         }
 
-        $logger = $this->get('logger');
-        if ($logger instanceof LoggerInterface) {
-            $logger->info('Searching for Contao 2/3', ['files' => $files]);
+        if ($this->logger instanceof LoggerInterface) {
+            $this->logger->info('Searching for Contao 2/3', ['files' => $files]);
         }
 
         foreach ($files as $file) {
-            if ($filesystem->exists($file)) {
+            if ($this->filesystem->exists($file)) {
                 try {
                     @include $file;
                 } catch (\Error $e) {

@@ -143,7 +143,7 @@ class SelfUpdate
 
         $phar = \Phar::running(false);
         list($filename, $extension) = $this->splitFilename($phar);
-        $backupFile = $this->kernel->getManagerDir().'/'.$filename.'-old'.$extension;
+        $backupFile = $this->kernel->getConfigDir().'/'.$filename.'-old'.$extension;
         $tempFile = dirname($phar).'/'.$filename.'.temp';
 
         $this->backup($phar, $backupFile);

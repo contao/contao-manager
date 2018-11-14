@@ -68,7 +68,7 @@ class FileController extends Controller
             return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_FORBIDDEN));
         }
 
-        $file = $this->kernel->getContaoDir().'/'.$request->attributes->get('file');
+        $file = $this->kernel->getProjectDir().'/'.$request->attributes->get('file');
 
         if ($request->isMethod('PUT')) {
             $this->filesystem->dumpFile($file, $request->getContent());

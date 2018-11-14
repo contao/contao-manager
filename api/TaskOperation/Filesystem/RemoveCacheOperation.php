@@ -91,6 +91,6 @@ class RemoveCacheOperation extends AbstractInlineOperation
      */
     private function getCacheDir()
     {
-        return $this->kernel->getContaoDir().'/var/cache/'.$this->environment;
+        return $this->kernel->getProjectDir().'/var/cache/'.$this->environment;
     }
 }
