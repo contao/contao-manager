@@ -144,7 +144,7 @@ class ApiKernel extends Kernel
      */
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
-        $routes->import(__DIR__.'/Resources/config/routing.yml');
+        $routes->import(__DIR__.'/Controller', '/api', 'annotation');
     }
 
     /**
