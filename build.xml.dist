@@ -63,7 +63,7 @@
             <arg value="-i" />
             <arg value="--" />
             <arg value="s/@symfony_env@/prod/g" />
-            <arg value="web/api.php" />
+            <arg value="dist/api.php" />
         </exec>
     </target>
 

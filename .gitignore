@@ -4,15 +4,13 @@
 
 # Generated
 /api/Resources/cache
-/test-dir
-/web/*
-!/web/api.php
 /contao-manager.phar
 /contao-manager.phar.php
 /contao-manager.version
+/dist
+/test-dir
 
 # Local
 /box.json
 /build.xml
 /.php_cs
-/.php_cs.cache

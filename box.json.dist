@@ -1,7 +1,7 @@
 {
-    "stub": "build/stub.php",
+    "stub": "stub.php",
     "main": false,
-    "directories": ["api", "web"],
+    "directories": ["api", "dist"],
     "files": [
         "LICENSE"
     ],

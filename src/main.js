@@ -37,7 +37,6 @@ i18n.init().then(() => {
     new Vue({
         router,
         store,
-        el: '#app',
         render: h => h(App),
-    });
+    }).$mount('#app');
 });

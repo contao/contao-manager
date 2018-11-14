@@ -5,7 +5,7 @@ import vuexI18n from 'vuex-i18n';
 import store from '../store';
 import locales from './locales';
 
-import fallback from '../assets/i18n/en.json';
+import fallback from '../../public/i18n/en.json';
 
 Vue.use(vuexI18n.plugin, store);
 
@@ -40,7 +40,7 @@ export default {
             return new Promise((resolve, reject) => reject());
         }
 
-        return Vue.http.get(`assets/i18n/${locale}.json`).then(
+        return Vue.http.get(`i18n/${locale}.json`).then(
             response => response.json().then((json) => {
                 Vue.i18n.add(locale, json);
                 Vue.i18n.set(locale);

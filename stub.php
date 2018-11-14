@@ -68,14 +68,14 @@ if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
         }
 
         if (0 === strpos($url, '/api/')) {
-            return '/web/api.php'.$url;
+            return '/dist/api.php'.$url;
         }
 
-        if (!empty($url) && is_file('phar://'.__FILE__.'/web'.$url)) {
-            return '/web'.$url;
+        if (!empty($url) && is_file('phar://'.__FILE__.'/dist'.$url)) {
+            return '/dist'.$url;
         }
 
-        return '/web/index.html';
+        return '/dist/index.html';
     }
 
     Phar::webPhar(
@@ -94,6 +94,7 @@ if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
             'jpeg' => 'image/jpeg',
             'js' => 'application/x-javascript',
             'png' => 'image/png',
+            'svg' => 'image/svg+xml',
             'json' => 'application/json'
         ),
         'rewrites'

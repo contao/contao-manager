@@ -12,7 +12,7 @@ PHP offers an internal web server for development purposes, which we
 can use to run the backend API.
 
 ```
-$ php -S 127.0.0.1:8000 --docroot=web/
+$ php -S 127.0.0.1:8000 --docroot=public/
 ```
 
 By default, the API places all Contao files in a `test-dir` folder inside
@@ -29,7 +29,7 @@ The frontend is a SPA (Single Page Application) build using Vue.js.
 To start the frontend server run the following command:
 
 ```
-$ npm run dev
+$ npm run serve
 ```
 
 This will automatically open your default browser with the frontend.
