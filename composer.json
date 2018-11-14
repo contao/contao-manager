@@ -26,6 +26,7 @@
         "symfony/console": "3.4.*",
         "symfony/process": "3.4.*",
         "symfony/yaml": "3.4.*",
+        "doctrine/annotations": "~1.0",
 
         "symfony/monolog-bundle": "~2.9",
         "ircmaxell/password-compat": "^1.0",
