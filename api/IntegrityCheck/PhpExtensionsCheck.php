@@ -34,7 +34,7 @@ class PhpExtensionsCheck extends AbstractIntegrityCheck implements CliIntegrityC
 
     private function checkExtension($extension)
     {
-        if (extension_loaded('intl')) {
+        if (extension_loaded($extension)) {
             return null;
         }
 
