@@ -94,7 +94,13 @@ class ApiKernel extends Kernel
         }
 
         if ('' !== ($phar = \Phar::running(false))) {
-            return dirname(dirname($phar));
+            $current = dirname($phar);
+
+            if ('web' === basename($current)) {
+                return dirname($current);
+            }
+
+            return $current;
         }
 
         $testDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'test-dir';
