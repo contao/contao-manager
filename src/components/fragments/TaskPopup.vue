@@ -45,8 +45,9 @@
                 <p class="task-popup__text">{{ taskDetail }}</p>
 
                 <button class="widget-button" @click="cancelTask" v-if="isActive" :disabled="!currentTask || !currentTask.cancellable">{{ 'ui.taskpopup.buttonCancel' | translate }}</button>
+                <button class="widget-button" v-if="isAborting" disabled>{{ 'ui.taskpopup.buttonAborting' | translate }}</button>
                 <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
-                <button class="widget-button" @click="hidePopup" v-if="!isActive">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
+                <button class="widget-button" @click="hidePopup" v-if="!isActive && !isAborting">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
             </div>
 
             <div class="task-popup__console">
@@ -147,6 +148,10 @@
 
             isActive() {
                 return !this.currentTask || !this.currentTask.status || this.taskStatus === 'active';
+            },
+
+            isAborting() {
+                return this.taskStatus === 'aborting';
             },
 
             ...mapState({

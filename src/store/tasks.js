@@ -130,6 +130,8 @@ export default {
                 });
             }
 
+            store.commit('setStatus', 'aborting');
+
             return Vue.http.patch('api/task', { status: 'aborting' });
         },
 
