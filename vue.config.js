@@ -2,10 +2,9 @@ module.exports = {
     productionSourceMap: false,
     baseUrl: '',
 
-    pluginOptions: {
+    devServer: {
         proxy: {
-            context: '/api',
-            options: {
+            '/api': {
                 target: 'http://localhost:8000/',
                 pathRewrite: { '^/api/': '/api.php/api/' },
             },

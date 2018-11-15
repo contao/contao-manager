@@ -18,7 +18,6 @@
     "vuex-i18n": "^1.10.5"
   },
   "devDependencies": {
-    "@cnamts/vue-cli-plugin-proxy": "^2.1.6",
     "@vue/cli-plugin-babel": "^3.1.1",
     "@vue/cli-plugin-eslint": "^3.1.5",
     "@vue/cli-service": "^3.1.4",
