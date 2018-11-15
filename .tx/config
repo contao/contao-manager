@@ -2,9 +2,9 @@
 host = https://www.transifex.com
 
 [contao-manager.ui]
-source_file = src/assets/i18n/en.json
+source_file = src/i18n/en.json
 source_lang = en
-file_filter = src/assets/i18n/<lang>.json
+file_filter = src/i18n/<lang>.json
 type = KEYVALUEJSON
 
 [contao-manager.api]

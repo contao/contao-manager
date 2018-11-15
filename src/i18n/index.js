@@ -3,17 +3,25 @@ import Vue from 'vue';
 import vuexI18n from 'vuex-i18n';
 
 import store from '../store';
-import locales from './locales';
 
-import fallback from '../../public/i18n/en.json';
+const locales = {
+    en: () => import('./en.json'),
+    de: () => import('./de.json'),
+    br: () => import('./br.json'),
+    cs: () => import('./cs.json'),
+    es: () => import('./es.json'),
+    fa: () => import('./fa.json'),
+    fr: () => import('./fr.json'),
+    ja: () => import('./ja.json'),
+    lv: () => import('./lv.json'),
+    nl: () => import('./nl.json'),
+    pl: () => import('./pl.json'),
+    ru: () => import('./ru.json'),
+    sr: () => import('./sr.json'),
+    zh: () => import('./zh.json'),
+};
 
-Vue.use(vuexI18n.plugin, store);
-
-Vue.i18n.add('en', fallback);
-Vue.i18n.set('en');
-Vue.i18n.fallback('en');
-
-export default {
+const i18n = {
     init() {
         let userLang = window.localStorage.getItem('contao_manager_locale');
 
@@ -24,12 +32,12 @@ export default {
         return this.load(userLang);
     },
 
-    load(locale) {
+    async load(locale) {
         window.localStorage.setItem('contao_manager_locale', locale);
 
         if (Vue.i18n.localeExists(locale)) {
             Vue.i18n.set(locale);
-            return new Promise(resolve => resolve());
+            return;
         }
 
         if (!locales[locale]) {
@@ -37,15 +45,17 @@ export default {
                 return this.load(locale.slice(0, 2));
             }
 
-            return new Promise((resolve, reject) => reject());
+            throw `Locale ${locale} does not exist.`;
         }
 
-        return Vue.http.get(`i18n/${locale}.json`).then(
-            response => response.json().then((json) => {
-                Vue.i18n.add(locale, json);
-                Vue.i18n.set(locale);
-            }),
-            () => {},
-        );
+        Vue.i18n.add(locale, Object.assign({}, await locales[locale]()));
+        Vue.i18n.set(locale);
     },
 };
+
+
+Vue.use(vuexI18n.plugin, store);
+Vue.i18n.fallback('en');
+i18n.load('en');
+
+export default i18n;
