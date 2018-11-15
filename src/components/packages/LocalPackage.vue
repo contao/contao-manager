@@ -1,12 +1,12 @@
 <template>
-    <package :package="data" v-else/>
+    <composer-package :package="data" v-else/>
 </template>
 
 <script>
-    import Package from './Package';
+    import ComposerPackage from './ComposerPackage';
 
     export default {
-        components: { Package },
+        components: { ComposerPackage },
 
         props: {
             package: {

@@ -3,8 +3,7 @@
 
         <transition name="package__hint">
             <div class="package__hint" v-if="hint">
-                <a href="#" class="error" @click.prevent="restore" v-if="isUpdated">{{ 'ui.package.hintNoupdate' | translate }}</a>
-                <a href="#" class="error" @click.prevent="restore" v-else>{{ 'ui.package.hintRevert' | translate }}</a>
+                <a href="#" class="error" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
                 <p>
                     {{ hint }}
                     <!--<a href="#">Help</a>-->
@@ -15,62 +14,33 @@
         <div class="package__inside">
             <figure class="package__icon" >
                 <slot name="logo">
-                    <img :src="package.logo" v-if="package.logo">
+                    <img :src="logo" v-if="logo">
                     <img src="../../assets/images/placeholder.png" v-else>
                 </slot>
             </figure>
 
             <div class="package__about">
-                <h1 :class="{ package__headline: true, 'package__headline--badge': isIncompatible || package.abandoned }">
-                    <span class="package__title" v-html="package._highlightResult && package._highlightResult.title.value || package.title || package.name"></span>
-                    <span class="package__name" v-if="!updateOnly && package.title && package.title !== package.name">{{ package.name }}</span>
-                    <span class="package__badge" v-if="isIncompatible" :title="$t('ui.package.incompatibleText')">{{ 'ui.package.incompatibleTitle' | translate }}</span>
-                    <span class="package__badge" v-else-if="package.abandoned" :title="package.replacement === true && $t('ui.package.abandonedText') || $t('ui.package.replacement', { replacement: package.replacement })">{{ 'ui.package.abandonedTitle' | translate }}</span>
+                <h1 :class="{ package__headline: true, 'package__headline--badge': badge }">
+                    <span class="package__title" v-html="title || name"></span>
+                    <span class="package__name" v-if="title && title !== name">{{ name }}</span>
+                    <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
                 </h1>
 
                 <div class="package__description">
-                    <p v-html="package._highlightResult && package._highlightResult.description.value || package.description"></p>
-                    <more :name="package.name" :homepage="package.homepage" :support="Object.assign({}, package.support)"/>
+                    <p v-html="description"></p>
+                    <slot name="more"/>
                 </div>
-                <p class="package__additional">
-                    <strong class="package__version package__version--additional" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
-                    <strong class="package__version package__version--additional" v-else-if="package.version === false"><span class="package__version--missing">{{ $t('ui.package.versionMissing') }}</span></strong>
-                    <span v-for="item in additional">{{ item }}</span>
+                <p class="package__additional" v-if="!!$slots.additional">
+                    <slot name="additional"/>
                 </p>
             </div>
 
-            <div class="package__release" v-if="isPrivate">
-                <p class="package__proprietary">
-                    <img src="../../assets/images/buy.svg" width="24" height="24"/>
-                    <strong>{{ $t('ui.package.proprietaryTitle') }}</strong><br>
-                    {{ $t('ui.package.proprietaryText') }}
-                </p>
-            </div>
-            <div :class="{package__release: true, 'package__release--validating': this.constraintValidating, 'package__release--error': this.constraintError, 'package__release--disabled': (willBeRemoved || (!isInstalled && !willBeInstalled)) }" v-else>
-                <fieldset>
-                    <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!this.constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button class="widget-button" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled)">{{ 'ui.package.editConstraint' | translate }}</button>
-                </fieldset>
-                <div class="package__version package__version--release" v-if="package.version">
-                    <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
-                    <time :dateTime="package.time">({{ released }})</time>
-                </div>
-                <div class="package__version package__version--release package__version--missing" v-else-if="package.version === false">{{ $t('ui.package.versionMissing') }}</div>
+            <div :class="{package__release: true, 'package__release--validating': releaseValidating, 'package__release--error': releaseError, 'package__release--disabled': releaseDisabled }">
+                <slot name="release"/>
             </div>
 
-            <fieldset class="package__actions" v-if="isPrivate">
-                <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="package.homepage">{{ 'ui.package.homepage' | translate }}</a>
-            </fieldset>
-            <fieldset class="package__actions" v-else-if="updateOnly">
-                <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
-            </fieldset>
-            <fieldset class="package__actions" v-else>
-                <button-group :label="$t('ui.package.updateButton')" icon="update" v-if="isInstalled" :disabled="isModified" @click="update">
-                    <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="isModified">Enable</button>-->
-                    <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="!isModified">Disable</button>-->
-                    <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
-                </button-group>
-                <button class="widget-button widget-button--primary widget-button--add" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
+            <fieldset class="package__actions">
+                <slot name="actions"/>
             </fieldset>
 
         </div>
@@ -87,285 +57,20 @@
         components: { More, ButtonGroup },
 
         props: {
-            package: {
-                type: Object,
+            name: {
+                type: String,
                 required: true,
             },
-            updateOnly: {
-                type: Boolean,
-                default: false,
-            },
-        },
+            title: String,
+            logo: String,
+            badge: Object,
+            description: String,
+            hint: String,
+            hintClose: String,
 
-        data: () => ({
-            constraint: '',
-            constraintEditable: false,
-            constraintValidating: false,
-            constraintError: false,
-        }),
-
-        computed: {
-            packageUpdates() {
-                return this.isInstalled && (
-                    Object.keys(this.$store.state.packages.add).length > 0
-                    || Object.keys(this.$store.state.packages.change).length > 0
-                    || this.$store.state.packages.update.length > 0
-                    || this.$store.state.packages.remove.length > 0
-                );
-            },
-
-            isPrivate() {
-                return !this.package.version
-                    && this.package.version !== false
-                    && this.package.license
-                    && this.package.license.includes('proprietary');
-            },
-
-            isModified() {
-                return this.isUpdated || this.isChanged || this.willBeRemoved || this.willBeInstalled;
-            },
-
-            isInstalled() {
-                return Object.keys(this.$store.state.packages.installed).includes(this.package.name);
-            },
-
-            isChanged() {
-                return Object.keys(this.$store.state.packages.change).includes(this.package.name);
-            },
-
-            isUpdated() {
-                return this.$store.state.packages.update.includes(this.package.name);
-            },
-
-            willBeRemoved() {
-                return this.$store.state.packages.remove.includes(this.package.name);
-            },
-
-            willBeInstalled() {
-                return Object.keys(this.$store.state.packages.add).includes(this.package.name);
-            },
-
-            isIncompatible() {
-                if (this.updateOnly) {
-                    return false;
-                }
-
-                if (this.package.type === 'contao-bundle') {
-                    return !this.package.extra || !this.package.extra['contao-manager-plugin'];
-                }
-
-                if (!this.isInstalled && (!this.package.managed || !this.package.supported)) {
-                    return true;
-                }
-
-                return false;
-            },
-
-            hint() {
-                if (this.willBeRemoved) {
-                    return this.$t('ui.package.hintRemoved');
-                }
-
-                if (this.willBeInstalled) {
-                    if (this.constraintAdded) {
-                        return this.$t('ui.package.hintConstraint', { constraint: this.constraintAdded });
-                    }
-
-                    return this.$t('ui.package.hintConstraintBest');
-                }
-
-                if (this.isChanged) {
-                    return this.$t(
-                        'ui.package.hintConstraintChange',
-                        {
-                            from: this.constraintInstalled,
-                            to: this.constraintChanged,
-                        },
-                    );
-                }
-
-                if (this.isUpdated) {
-                    return this.$t('ui.package.hintConstraintUpdate');
-                }
-
-                return null;
-            },
-
-            additional() {
-                const additionals = [];
-
-                if (this.package.license) {
-                    additionals.push(this.package.license.join('/'));
-                }
-
-                if (this.package.downloads) {
-                    additionals.push(this.$t('ui.package.additionalDownloads', { count: this.package.downloads }, this.package.downloads));
-                }
-
-                if (this.package.favers) {
-                    additionals.push(this.$t('ui.package.additionalStars', { count: this.package.favers }, this.package.favers));
-                }
-
-                return additionals;
-            },
-
-            released() {
-                if (this.package.time === undefined) {
-                    return '';
-                }
-
-                return new Date(this.package.time).toLocaleString();
-            },
-
-            constraintPlaceholder() {
-                if (!Object.keys(this.$store.state.packages.installed).includes(this.package.name)) {
-                    return this.$t('ui.package.latestConstraint');
-                }
-
-                return '';
-            },
-
-            constraintInstalled() {
-                if (!this.isInstalled) {
-                    return null;
-                }
-
-                return this.$store.state.packages.installed[this.package.name].constraint;
-            },
-
-            constraintAdded() {
-                if (!this.willBeInstalled) {
-                    return null;
-                }
-
-                return this.$store.state.packages.add[this.package.name].constraint;
-            },
-
-            constraintChanged() {
-                if (!this.isChanged) {
-                    return null;
-                }
-
-                return this.$store.state.packages.change[this.package.name];
-            },
-        },
-
-        methods: {
-            restore() {
-                this.$store.commit('packages/restore', this.package.name);
-                this.resetConstraint();
-            },
-
-            install() {
-                /* eslint-disable no-underscore-dangle */
-                const data = Object.assign({}, this.package);
-                delete data._highlightResult;
-
-                this.$store.commit('packages/add', data);
-            },
-
-            update() {
-                this.$store.commit('packages/update', this.package.name);
-            },
-
-            uninstall() {
-                if (this.willBeInstalled) {
-                    this.$store.commit('packages/restore', this.package.name);
-                } else {
-                    this.$store.commit('packages/remove', this.package.name);
-                }
-            },
-
-            editConstraint() {
-                if (this.constraintValidating) {
-                    return;
-                }
-
-                this.constraintEditable = true;
-
-                this.$nextTick(() => {
-                    this.$refs.constraint.focus();
-                });
-            },
-
-            saveConstraint() {
-                if (!this.constraintEditable) {
-                    return;
-                }
-
-                this.constraintEditable = false;
-                this.constraintError = false;
-
-                if (this.isInstalled &&
-                    (!this.constraint || this.constraintInstalled === this.constraint)
-                ) {
-                    this.restore();
-                    return;
-                }
-
-                if (this.willBeInstalled && !this.constraint) {
-                    this.$store.commit(
-                        'packages/add',
-                        Object.assign({}, this.package, { constraint: null }),
-                    );
-                    this.resetConstraint();
-                    return;
-                }
-
-                this.$refs.constraint.blur();
-                this.constraintValidating = true;
-
-                Vue.http.post('api/constraint', { constraint: this.constraint }).then(
-                    (response) => {
-                        this.constraintValidating = false;
-                        if (response.body.valid) {
-                            if (this.isInstalled) {
-                                this.$store.commit('packages/change', { name: this.package.name, version: this.constraint });
-                            } else {
-                                this.$store.commit(
-                                    'packages/add',
-                                    Object.assign({}, this.package, { constraint: this.constraint }),
-                                );
-                            }
-                        } else {
-                            this.constraintError = true;
-                            this.$nextTick(() => this.editConstraint());
-                        }
-                    },
-                );
-            },
-
-            resetConstraint() {
-                if (this.willBeInstalled) {
-                    this.constraint = this.constraintAdded;
-                } else if (this.isChanged) {
-                    this.constraint = this.constraintChanged;
-                } else if (this.isInstalled) {
-                    this.constraint = this.constraintInstalled;
-                }
-
-                if (!this.constraintEditable) {
-                    return;
-                }
-
-                this.constraintEditable = false;
-                this.constraintError = false;
-                this.constraintValidating = false;
-            },
-        },
-
-        watch: {
-            constraintAdded(value) {
-                this.constraint = value;
-            },
-
-            constraintChanged(value) {
-                this.constraint = value || this.constraintInstalled;
-            },
-        },
-
-        mounted() {
-            this.resetConstraint();
+            releaseValidating: Boolean,
+            releaseError: Boolean,
+            releaseDisabled: Boolean,
         },
     };
 </script>

@@ -1,15 +1,15 @@
 <template>
-    <package :package="data" update-only>
+    <composer-package :package="data" update-only>
         <img src="../../assets/images/logo.svg" slot="logo">
 
-    </package>
+    </composer-package>
 </template>
 
 <script>
-    import Package from './Package';
+    import ComposerPackage from './ComposerPackage';
 
     export default {
-        components: { Package },
+        components: { ComposerPackage },
 
         props: {
             package: {
