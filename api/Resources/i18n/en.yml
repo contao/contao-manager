@@ -54,15 +54,19 @@ en:
         complete:
             summary: 'Console task complete!'
             detail: 'The background task was completed successfully. Check the console protocol for the details.'
+            console: '### Task completed successfully ###'
         aborting:
             summary: 'Stopping current operation …'
             detail: 'The background task is being cancelled.'
+            console: '### The background task is being cancelled ###'
         stopped:
             summary: 'Console task terminated!'
             detail: 'The background task was cancelled. Please check the console protocol.'
+            console: '### The background task was cancelled. ###'
         error:
             summary: 'Console task terminated!'
             detail: 'The background task has stopped unexpectedly. Please check the console protocol.'
+            console: '### The background task has stopped unexpectedly. ###'
 
     task:
         setup_packages:

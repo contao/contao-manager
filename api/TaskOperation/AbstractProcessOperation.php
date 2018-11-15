@@ -110,6 +110,10 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
      */
     protected function addConsoleStatus(TaskStatus $status)
     {
+        if (!$this->process->isStarted()) {
+            return;
+        }
+
         $status->addConsole(
             $this->process->getOutput().$this->process->getErrorOutput().$this->getProcessError(),
             '$ '.$this->process->getCommandLine()

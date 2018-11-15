@@ -85,6 +85,10 @@ class InstallOperation extends AbstractProcessOperation
 
     public function updateStatus(TaskStatus $status)
     {
+        if (!$this->process->isStarted()) {
+            return;
+        }
+
         if (($attempt = $this->taskConfig->getState('install-retry', 0)) > 0) {
             $status->setSummary(
                 $this->translator->trans(

@@ -129,16 +129,6 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
                 }
                 break;
             }
-
-            if ($operation->isSuccessful()) {
-                if (null !== $this->logger) {
-                    $this->logger->info('Task operation is completed, continuing', ['class' => get_class($operation)]);
-                }
-
-                continue;
-            }
-
-            break;
         }
 
         $this->updateStatus($status);
@@ -204,6 +194,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
 
         $status->setSummary($this->translator->trans(sprintf('taskstatus.%s.summary', $result)));
         $status->setDetail($this->translator->trans(sprintf('taskstatus.%s.detail', $result)));
+        $status->addConsole($this->translator->trans(sprintf('taskstatus.%s.console', $result)), '---');
     }
 
     /**
