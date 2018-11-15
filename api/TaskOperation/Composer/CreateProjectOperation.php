@@ -88,6 +88,8 @@ class CreateProjectOperation extends AbstractInlineOperation
      */
     protected function addConsoleStatus(TaskStatus $status)
     {
+        $status->addConsole('> Downloading contao/managed-edition '.$this->version);
+
         if ($console = $this->taskConfig->getState($this->getName().'.console')) {
             $status->addConsole($console);
         }
@@ -108,6 +110,10 @@ class CreateProjectOperation extends AbstractInlineOperation
      */
     protected function doRun()
     {
+        if (function_exists('ini_set')) {
+            @ini_set('memory_limit', '1536M');
+        }
+
         if ($this->filesystem->exists($this->environment->getAll())) {
             throw new \RuntimeException('Cannot install into existing application');
         }
@@ -131,7 +137,7 @@ class CreateProjectOperation extends AbstractInlineOperation
             'raw.githubusercontent.com',
             'https://raw.githubusercontent.com/contao/managed-edition/'.$package->getDistReference().'/composer.json',
             $this->environment->getJsonFile(),
-            false
+            true
         );
 
         $this->taskConfig->setState($this->getName().'.console', $io->getOutput());
