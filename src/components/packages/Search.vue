@@ -14,20 +14,18 @@
             <p class="package-search__title" v-html="$t('ui.packagesearch.empty', { query })"></p>
         </div>
 
-        <composer-package v-for="item in packages" :package="item" :key="item.name"/>
+        <search-package v-for="item in packages" :package="item" :key="item.name"/>
 
         <a href="https://www.algolia.com/" target="_blank" class="package-search__algolia"><img src="../../assets/images/search-by-algolia.svg" width="200"></a>
     </div>
 </template>
 
 <script>
-    /* eslint-disable no-param-reassign */
-
-    import ComposerPackage from './ComposerPackage';
+    import SearchPackage from './SearchPackage';
     import Loader from '../fragments/Loader';
 
     export default {
-        components: { ComposerPackage, Loader },
+        components: { SearchPackage, Loader },
 
         props: ['searchField'],
 

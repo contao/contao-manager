@@ -21,8 +21,8 @@
 
             <div class="package__about">
                 <h1 :class="{ package__headline: true, 'package__headline--badge': badge }">
-                    <span class="package__title" v-html="title || name"></span>
-                    <span class="package__name" v-if="title && title !== name">{{ name }}</span>
+                    <span class="package__title" v-html="title"></span>
+                    <span class="package__name" v-if="name">{{ name }}</span>
                     <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
                 </h1>
 
@@ -36,11 +36,15 @@
             </div>
 
             <div :class="{package__release: true, 'package__release--validating': releaseValidating, 'package__release--error': releaseError, 'package__release--disabled': releaseDisabled }">
-                <slot name="release"/>
+                <slot name="release">
+                    <div></div>
+                </slot>
             </div>
 
             <fieldset class="package__actions">
-                <slot name="actions"/>
+                <slot name="actions">
+                    <div></div>
+                </slot>
             </fieldset>
 
         </div>
@@ -57,11 +61,8 @@
         components: { More, ButtonGroup },
 
         props: {
-            name: {
-                type: String,
-                required: true,
-            },
             title: String,
+            name: String,
             logo: String,
             badge: Object,
             description: String,
@@ -275,7 +276,6 @@
                 text-align: center;
                 line-height: 30px;
 
-                //noinspection CssInvalidPseudoSelector
                 &::placeholder {
                     color: #fff;
                     opacity: 1;
