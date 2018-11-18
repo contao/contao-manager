@@ -4,10 +4,7 @@
         <section :class="{ 'package-tools': true, 'package-tools--search': showSearch }">
             <button class="package-tools__button package-tools__button--update widget-button" :disabled="totalChanges > 0" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
             <button class="package-tools__button package-tools__button--search widget-button" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
-            <input class="package-tools__search" ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
-            <button class="package-tools__cancel" @click="stopSearch">
-                <svg height="24" viewBox="0 0 24 24" width="24" fill="#737373" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
-            </button>
+            <slot name="search"/>
         </section>
 
         <slot/>
@@ -33,10 +30,6 @@
             showSearch: Boolean,
         },
 
-        data: () => ({
-            searchInput: '',
-        }),
-
         computed: {
             ...mapGetters('packages', ['totalChanges']),
         },
@@ -49,30 +42,6 @@
             startSearch() {
                 this.$router.push(routes.packagesSearch);
             },
-
-            stopSearch() {
-                this.searchInput = '';
-                this.$router.push(routes.packages);
-            },
-
-            search() {
-                if (this.$route.name === routes.packagesSearch.name) {
-                    this.$router.push(
-                        Object.assign(
-                            { query: { q: this.searchInput } },
-                            routes.packagesSearch,
-                        ),
-                    );
-                }
-            },
-        },
-
-        mounted() {
-            if (this.showSearch) {
-                this.$nextTick(() => {
-                    this.$refs.search.focus();
-                });
-            }
         },
     };
 </script>

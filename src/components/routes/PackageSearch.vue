@@ -1,5 +1,21 @@
 <template>
     <package-base show-search>
+        <template slot="search">
+            <input
+                class="package-tools__search"
+                ref="search"
+                slot="search"
+                type="text"
+                :placeholder="$t('ui.packages.searchPlaceholder')"
+                autocomplete="off"
+                v-model="searchInput"
+                @keypress.esc.prevent="stopSearch"
+            >
+            <button class="package-tools__cancel" @click="stopSearch">
+                <svg height="24" viewBox="0 0 24 24" width="24" fill="#737373" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+            </button>
+        </template>
+
         <div class="package-search">
             <div v-if="results === false" class="package-search__status package-search__status--offline">
                 <p class="package-search__title">{{ 'ui.packagesearch.offline' | translate }}</p>
@@ -28,7 +44,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
     import routes from '../../router/routes';
 
     import PackageBase from './Packages/Base';
@@ -38,17 +54,16 @@
     export default {
         components: { PackageBase, SearchPackage, Loader },
 
-        props: ['searchField'],
-
         data: () => ({
             results: null,
             previousRequest: null,
-            algolia: null,
+            searchInput: '',
 
             packageRoute: routes.packages,
         }),
 
         computed: {
+            ...mapState('packages', ['installed']),
             ...mapGetters('packages', ['totalChanges']),
 
             query() {
@@ -57,6 +72,15 @@
         },
 
         watch: {
+            searchInput() {
+                this.$router.push(
+                    Object.assign(
+                        { query: { q: this.searchInput } },
+                        routes.packagesSearch,
+                    ),
+                );
+            },
+
             query(value) {
                 this.searchPackages(value);
             },
@@ -64,6 +88,8 @@
 
         methods: {
             async searchPackages(value) {
+                this.searchInput = value;
+
                 if (!value) {
                     this.results = null;
                     return;
@@ -75,21 +101,24 @@
                     this.results = false;
                 }
             },
+
+            stopSearch() {
+                this.searchInput = '';
+                this.$router.push(routes.packages);
+            },
         },
 
-        mounted() {
-            this.$store.dispatch('packages/load').then(() => {
-                if (this.searchField) {
-                    this.searchField.focus();
+        async mounted() {
+            if (null === this.installed) {
+                await this.$store.dispatch('packages/load')
+            }
 
-                    if (this.query) {
-                        this.searchField.setAttribute('value', this.query);
-                    }
-                }
+            if (this.query) {
+                this.searchPackages(this.query);
+            }
 
-                if (this.query) {
-                    this.searchPackages(this.query);
-                }
+            this.$nextTick(() => {
+                this.$refs.search.focus();
             });
         },
     };
