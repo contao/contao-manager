@@ -20,7 +20,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/packages/local/{name}", methods={"GET"}, requirements={"name"=".*"})
+ * @Route("/packages/local", methods={"GET"})
+ * @Route("/packages/local/{name}", methods={"GET"}, requirements={"name"=".+"})
  */
 class LocalPackagesController
 {

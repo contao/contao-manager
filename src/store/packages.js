@@ -112,7 +112,7 @@ export default {
             const data = {};
             const load = [
                 Vue.http.get('api/packages/root'),
-                Vue.http.get('api/packages/local/'),
+                Vue.http.get('api/packages/local'),
             ];
             const root = (await load[0]).body;
             const packages = (await load[1]).body;
