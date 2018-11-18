@@ -1,5 +1,5 @@
 <template>
-    <div class="link-more">
+    <div class="link-more" v-if="linkItems.length">
         <button @click="toggle">{{ 'ui.package.more' | translate }}</button>
         <div class="link-more__menu" ref="menu" v-show="visible" tabindex="-1" @blur="close" @click="close">
             <link-menu :items="linkItems" color="contao"/>
@@ -16,6 +16,7 @@
             name: String,
             homepage: String,
             support: Object,
+            private: Boolean,
         },
 
         data: () => ({
@@ -30,7 +31,7 @@
                     items.push({ label: this.$t('ui.package.homepage'), href: this.homepage, target: '_blank' });
                 }
 
-                if (this.name) {
+                if (this.name && !this.private) {
                     items.push({ label: this.$t('ui.package.packagist'), href: `https://packagist.org/packages/${this.name}`, target: '_blank' });
                 }
 

@@ -14,7 +14,7 @@
 
         @close-hint="restore"
     >
-        <more :name="package.name" :homepage="package.homepage" :support="Object.assign({}, package.support)" slot="more"/>
+        <more :name="package.name" :homepage="package.homepage" :support="Object.assign({}, package.support)" :private="isPrivate" slot="more"/>
 
         <template slot="additional">
             <strong class="package__version package__version--additional" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
