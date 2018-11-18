@@ -29,11 +29,11 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import routes from '../../router/routes';
+    import { mapState, mapGetters } from 'vuex';
+    import routes from '../../../router/routes';
 
-    import MainLayout from '../layouts/Main';
-    import ButtonGroup from '../widgets/ButtonGroup';
+    import MainLayout from '../../layouts/Main';
+    import ButtonGroup from '../../widgets/ButtonGroup';
 
     export default {
         components: { MainLayout, ButtonGroup },
@@ -112,7 +112,7 @@
 
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "../../../assets/styles/defaults";
 
     .package-tools {
         position: relative;
@@ -139,11 +139,11 @@
             }
 
             &--update:before {
-                background: url('../../assets/images/button-update.svg') center center no-repeat;
+                background-image: url('../../../assets/images/button-update.svg');
             }
 
             &--search:before {
-                background: url('../../assets/images/button-search.svg') center center no-repeat;
+                background-image: url('../../../assets/images/button-search.svg');
             }
         }
 

@@ -1,5 +1,5 @@
 <template>
-    <composer-package :package="data" v-else/>
+    <composer-package :package="data"/>
 </template>
 
 <script>

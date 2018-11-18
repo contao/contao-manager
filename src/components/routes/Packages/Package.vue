@@ -12,10 +12,10 @@
         </transition>
 
         <div class="package__inside">
-            <figure class="package__icon" >
+            <figure class="package__icon">
                 <slot name="logo">
                     <img :src="logo" v-if="logo">
-                    <img src="../../assets/images/placeholder.png" v-else>
+                    <img src="../../../assets/images/placeholder.png" v-else>
                 </slot>
             </figure>
 
@@ -55,7 +55,7 @@
     import Vue from 'vue';
 
     import More from './More';
-    import ButtonGroup from '../widgets/ButtonGroup';
+    import ButtonGroup from '../../widgets/ButtonGroup';
 
     export default {
         components: { More, ButtonGroup },
@@ -77,7 +77,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "../../../assets/styles/defaults";
 
     .package {
         margin-bottom: 14px;
@@ -92,7 +92,7 @@
             font-size: 12px;
             line-height: 1.8;
             border-radius: 2px 2px 0 0;
-            background: #e8c8bc url('../../assets/images/hint.svg') 20px 5px no-repeat;
+            background: #e8c8bc url('../../../assets/images/hint.svg') 20px 5px no-repeat;
             background-size: 28px 28px;
 
             p a {
@@ -115,7 +115,7 @@
                 top: 8px;
                 padding-left: 18px;
                 color: #bd2e20;
-                background: url('../../assets/images/close.svg') left center no-repeat;
+                background: url('../../../assets/images/close.svg') left center no-repeat;
                 background-size: 14px 14px;
             }
         }
@@ -294,7 +294,7 @@
                 height: 30px;
                 padding: 6px;
                 line-height: 20px;
-                background: $orange-button url('../../assets/images/settings.svg') center no-repeat;
+                background: $orange-button url('../../../assets/images/settings.svg') center no-repeat;
                 background-size: 20px 20px;
                 text-indent: -999em;
             }

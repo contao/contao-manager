@@ -15,9 +15,9 @@
 
 <script>
     import Loader from '../fragments/Loader';
-    import Package from './Package';
-    import LocalPackage from './LocalPackage';
-    import RootPackage from './RootPackage';
+    import Package from './Packages/Package';
+    import LocalPackage from './Packages/LocalPackage';
+    import RootPackage from './Packages/RootPackage';
 
     export default {
         components: { RootPackage, LocalPackage, Package, Loader },

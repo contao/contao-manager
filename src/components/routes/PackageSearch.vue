@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import SearchPackage from './SearchPackage';
+    import SearchPackage from './Packages/SearchPackage';
     import Loader from '../fragments/Loader';
 
     export default {

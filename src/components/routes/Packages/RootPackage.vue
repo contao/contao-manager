@@ -1,7 +1,6 @@
 <template>
     <composer-package :package="data" update-only>
-        <img src="../../assets/images/logo.svg" slot="logo">
-
+        <img src="../../../assets/images/logo.svg" slot="logo">
     </composer-package>
 </template>
 

@@ -24,7 +24,7 @@
 
         <template slot="release" v-if="isPrivate">
             <p class="package__proprietary">
-                <img src="../../assets/images/buy.svg" width="24" height="24"/>
+                <img src="../../../assets/images/buy.svg" width="24" height="24"/>
                 <strong>{{ $t('ui.package.proprietaryTitle') }}</strong><br>
                 {{ $t('ui.package.proprietaryText') }}
             </p>
@@ -64,7 +64,7 @@
 
     import Package from './Package';
     import More from './More';
-    import ButtonGroup from '../widgets/ButtonGroup';
+    import ButtonGroup from '../../widgets/ButtonGroup';
 
     export default {
         components: { Package, More, ButtonGroup },

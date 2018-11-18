@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import LinkMenu from '../fragments/LinkMenu';
+    import LinkMenu from '../../fragments/LinkMenu';
 
     export default {
         components: { LinkMenu },
@@ -69,7 +69,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "../../../assets/styles/defaults";
 
     .link-more {
         position: relative;

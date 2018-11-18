@@ -3,9 +3,9 @@ import Router from 'vue-router';
 
 import routes from './routes';
 
-import Packages from '../components/packages/Base';
-import PackagesList from '../components/packages/List';
-import PackagesSearch from '../components/packages/Search';
+import Packages from '../components/routes/Packages/Base';
+import PackagesList from '../components/routes/PackageList';
+import PackagesSearch from '../components/routes/PackageSearch';
 import OAuth from '../components/routes/OAuth';
 import Maintenance from '../components/routes/Maintenance';
 
