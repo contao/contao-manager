@@ -222,7 +222,7 @@
                 input[type=text],
                 input[type=password],
                 select {
-                    width: 250px;
+                    width: 250px !important;
                 }
 
                 .widget-button {
