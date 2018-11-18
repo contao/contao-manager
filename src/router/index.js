@@ -3,7 +3,6 @@ import Router from 'vue-router';
 
 import routes from './routes';
 
-import Packages from '../components/routes/Packages/Base';
 import PackagesList from '../components/routes/PackageList';
 import PackagesSearch from '../components/routes/PackageSearch';
 import OAuth from '../components/routes/OAuth';
@@ -14,21 +13,15 @@ Vue.use(Router);
 const router = new Router({
     routes: [
         {
+            name: routes.packages.name,
             path: '/packages',
-            component: Packages,
-            children: [
-                {
-                    name: routes.packages.name,
-                    path: '',
-                    component: PackagesList,
-                },
-                {
-                    name: routes.packagesSearch.name,
-                    path: 'search',
-                    component: PackagesSearch,
-                    props: true,
-                },
-            ],
+            component: PackagesList,
+        },
+        {
+            name: routes.packagesSearch.name,
+            path: '/packages/search',
+            component: PackagesSearch,
+            props: true,
         },
         {
             name: routes.oauth.name,

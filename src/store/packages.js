@@ -28,12 +28,18 @@ export default {
     },
 
     getters: {
-        totalChanges(state) {
-            return Object.keys(state.add).length
-                + Object.keys(state.change).length
-                + state.update.length
-                + state.remove.length;
-        },
+        hasAdded: state => Object.keys(state.add).length > 0 || Object.keys(state.required).length > 0,
+
+        packageInstalled: state => name => Object.keys(state.installed).includes(name),
+        packageAdded: state => name => Object.keys(state.add).includes(name),
+        packageChanged: state => name => Object.keys(state.change).includes(name),
+        packageUpdated: state => name => state.update.includes(name),
+        packageRemoved: state => name => state.remove.includes(name),
+
+        totalChanges: state => Object.keys(state.add).length
+            + Object.keys(state.change).length
+            + state.update.length
+            + state.remove.length,
 
         isInstalled(state, packageName) {
             return state.installed !== null
@@ -101,11 +107,7 @@ export default {
     },
 
     actions: {
-        async load({ state, commit }, reload = false) {
-            if (!reload && state.installed) {
-                return state.installed;
-            }
-
+        async load({ state, commit }) {
             commit('setInstalled', null);
             commit('reset');
 

@@ -1,8 +1,8 @@
 <template>
     <main-layout>
 
-        <section :class="{ 'package-tools': true, 'package-tools--search': $route.name === 'packages-search' }">
-            <button class="package-tools__button package-tools__button--update widget-button" :disabled="hasChanges || isSearchMode" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
+        <section :class="{ 'package-tools': true, 'package-tools--search': showSearch }">
+            <button class="package-tools__button package-tools__button--update widget-button" :disabled="totalChanges > 0" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
             <button class="package-tools__button package-tools__button--search widget-button" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
             <input class="package-tools__search" ref="search" id="search" type="text" :placeholder="$t('ui.packages.searchPlaceholder')" autocomplete="off" v-model="searchInput" @keypress.esc.prevent="stopSearch" @keyup="search">
             <button class="package-tools__cancel" @click="stopSearch">
@@ -10,26 +10,17 @@
             </button>
         </section>
 
-        <router-view ref="component" :searchField="$refs.search"/>
+        <slot/>
 
-        <div :class="{ 'package-actions': true, 'package-actions--active': hasChanges }">
-            <div class="package-actions__inner" v-if="$route.name === 'packages'">
-                <p class="package-actions__text">{{ 'ui.packages.changesMessage' | translate({ total: totalChanges }, totalChanges) }}</p>
-                <button class="package-actions__button widget-button" @click="dryrunChanges">{{ 'ui.packages.changesDryrun' | translate }}</button>
-                <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
-                <button class="package-actions__button widget-button widget-button--alert" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
-            </div>
-            <div class="package-actions__inner" v-else>
-                <p class="package-actions__text">{{ 'ui.packages.changesMessage' | translate({ total: totalChanges }, totalChanges) }}</p>
-                <router-link :to="packageRoute" class="package-actions__button widget-button widget-button--primary">{{ 'ui.packages.changesReview' | translate }}</router-link>
-            </div>
+        <div :class="{ 'package-actions': true, 'package-actions--active': !!$slots.actions }">
+            <slot name="actions"/>
         </div>
 
     </main-layout>
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
     import routes from '../../../router/routes';
 
     import MainLayout from '../../layouts/Main';
@@ -38,23 +29,15 @@
     export default {
         components: { MainLayout, ButtonGroup },
 
+        props: {
+            showSearch: Boolean,
+        },
+
         data: () => ({
             searchInput: '',
-            packageRoute: routes.packages,
         }),
 
         computed: {
-            hasChanges() {
-                return Object.keys(this.$store.state.packages.add).length > 0
-                    || Object.keys(this.$store.state.packages.change).length > 0
-                    || Object.keys(this.$store.state.packages.update).length > 0
-                    || this.$store.state.packages.remove.length > 0;
-            },
-
-            isSearchMode() {
-                return this.$route.name === routes.packagesSearch.name;
-            },
-
             ...mapGetters('packages', ['totalChanges']),
         },
 
@@ -82,30 +65,14 @@
                     );
                 }
             },
-
-            dryrunChanges() {
-                this.$store.dispatch('packages/apply', true);
-            },
-
-            applyChanges() {
-                this.$store.dispatch('packages/apply').then(() => this.$store.dispatch('packages/load', true));
-            },
-
-            resetChanges() {
-                this.$store.commit('packages/reset');
-            },
-        },
-
-        watch: {
-            $route(route) {
-                if (route.name !== routes.packagesSearch.name) {
-                    this.searchInput = '';
-                }
-            },
         },
 
         mounted() {
-            this.$store.commit('packages/reset');
+            if (this.showSearch) {
+                this.$nextTick(() => {
+                    this.$refs.search.focus();
+                });
+            }
         },
     };
 </script>

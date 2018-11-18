@@ -1,39 +1,67 @@
 <template>
-    <div class="package-list">
-        <loader v-if="packages === null" class="package-list__status">
-            <p>{{ 'ui.packagelist.loading' | translate }}</p>
-        </loader>
+    <package-base>
+        <div class="package-list">
+            <loader v-if="packages === null" class="package-list__status">
+                <p>{{ 'ui.packagelist.loading' | translate }}</p>
+            </loader>
 
-        <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.added' | translate }}</h2>
-        <package v-for="item in $store.state.packages.add" :package="item" :key="item.name"/>
+            <template v-else>
+                <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.added' | translate }}</h2>
+                <local-package v-for="item in addedPackages" :package="item" :key="item.name"/>
 
-        <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.installed' | translate }}</h2>
-        <root-package :package="packages['contao/manager-bundle']" v-if="packages"/>
-        <local-package v-for="item in packages" :package="item" :key="item.name" v-if="item.name !== 'contao/manager-bundle'"/>
-    </div>
+                <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.installed' | translate }}</h2>
+                <root-package :package="packages['contao/manager-bundle']" v-if="packages"/>
+                <local-package v-for="item in packages" :package="item" :key="item.name" v-if="item.name !== 'contao/manager-bundle'"
+                />
+            </template>
+        </div>
+
+        <div class="package-actions__inner" slot="actions" v-if="totalChanges">
+            <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
+            <button class="package-actions__button widget-button" @click="dryrunChanges">{{ 'ui.packages.changesDryrun' | translate }}</button>
+            <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
+            <button class="package-actions__button widget-button widget-button--alert" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
+        </div>
+    </package-base>
 </template>
 
 <script>
+    import { mapState, mapGetters } from 'vuex';
+
+    import PackageBase from './Packages/Base';
     import Loader from '../fragments/Loader';
-    import Package from './Packages/Package';
     import LocalPackage from './Packages/LocalPackage';
     import RootPackage from './Packages/RootPackage';
 
     export default {
-        components: { RootPackage, LocalPackage, Package, Loader },
+        components: { PackageBase, Loader, RootPackage, LocalPackage },
 
         computed: {
-            hasAdded() {
-                return Object.keys(this.$store.state.packages.add).length;
+            ...mapState('packages', {
+                'packages': 'installed',
+                'addedPackages': 'add',
+            }),
+            ...mapGetters('packages', ['totalChanges', 'hasAdded', 'packageAdded']),
+        },
+
+        methods: {
+            dryrunChanges() {
+                this.$store.dispatch('packages/apply', true);
             },
 
-            packages() {
-                return this.$store.state.packages.installed;
+            applyChanges() {
+                this.$store.dispatch('packages/apply').then(() => this.$store.dispatch('packages/load', true));
+            },
+
+            resetChanges() {
+                this.$store.commit('packages/reset');
             },
         },
 
         mounted() {
-            this.$store.dispatch('packages/load');
+            if (null === this.packages) {
+                this.$store.dispatch('packages/load');
+            }
         },
     };
 </script>
