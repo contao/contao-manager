@@ -19,8 +19,8 @@ export default {
 
     state: {
         algolia: null,
-        packages: null,
         installed: null,
+        required: {},
         add: {},
         change: {},
         update: [],
@@ -31,29 +31,48 @@ export default {
         hasAdded: state => Object.keys(state.add).length > 0 || Object.keys(state.required).length > 0,
 
         packageInstalled: state => name => Object.keys(state.installed).includes(name),
+        packageRequired: state => name => Object.keys(state.required).includes(name),
         packageAdded: state => name => Object.keys(state.add).includes(name),
         packageChanged: state => name => Object.keys(state.change).includes(name),
         packageUpdated: state => name => state.update.includes(name),
         packageRemoved: state => name => state.remove.includes(name),
 
         totalChanges: state => Object.keys(state.add).length
+            + Object.keys(state.required).length
             + Object.keys(state.change).length
             + state.update.length
-            + state.remove.length,
+            + state.remove.length
+            - Object.values(state.change).filter(p => Object.keys(state.required).includes(p.name)).length
+            - state.remove.filter(p => Object.keys(state.required).includes(p)).length,
 
-        isInstalled(state, packageName) {
-            return state.installed !== null
-                && state.installed.find(pckg => pckg.name === packageName) !== undefined;
-        },
+        totalRequired: state => Object.keys(state.required).length
+            - Object.values(state.change).filter(pkg => Object.keys(state.required).includes(pkg.name)).length
+            - state.remove.filter(pkg => Object.keys(state.required).includes(pkg)).length,
+
+        canResetChanges: (s, get) => get.totalChanges > get.totalRequired,
     },
 
     mutations: {
-        setPackages(state, packages) {
-            state.packages = packages;
-        },
-
         setInstalled(state, packages) {
-            state.installed = packages;
+            if (packages === null) {
+                state.installed = null;
+                state.required = {};
+                return;
+            }
+
+            const installed = {};
+            const required = {};
+
+            Object.keys(packages).forEach((name) => {
+                if (packages[name].version === false) {
+                    required[name] = packages[name];
+                } else {
+                    installed[name] = packages[name];
+                }
+            });
+
+            state.installed = installed;
+            state.required = required;
         },
 
         add(state, pckg) {
@@ -111,34 +130,33 @@ export default {
             commit('setInstalled', null);
             commit('reset');
 
-            const data = {};
+            const packages = {};
             const load = [
                 Vue.http.get('api/packages/root'),
                 Vue.http.get('api/packages/local'),
             ];
             const root = (await load[0]).body;
-            const packages = (await load[1]).body;
+            const local = (await load[1]).body;
 
             Object.keys(root.require).forEach((require) => {
                 if (!require.includes('/')) {
                     return;
                 }
 
-                data[require] = {
+                packages[require] = {
                     name: require,
                     version: false,
                     constraint: root.require[require],
                 };
 
-                if (packages[require]) {
-                    data[require] = Object.assign(data[require], packages[require]);
+                if (local[require]) {
+                    packages[require] = Object.assign(packages[require], local[require]);
                 }
             });
 
-            commit('setPackages', packages);
-            commit('setInstalled', data);
+            commit('setInstalled', packages);
 
-            return data;
+            return packages;
         },
 
         fetch(store, name) {
@@ -182,8 +200,9 @@ export default {
             const require = state.change;
             const remove = state.remove;
             const update = state.update.concat(
-                Object.keys(state.change),
-                state.remove,
+                Object.keys(state.required),
+                Object.keys(state.change).filter(pkg => !Object.keys(state.required).includes(pkg)),
+                state.remove.filter(pkg => !Object.keys(state.required).includes(pkg)),
             );
 
             Object.keys(state.add).forEach((pkg) => {

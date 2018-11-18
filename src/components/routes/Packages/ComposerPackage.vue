@@ -6,11 +6,11 @@
         :badge="badge"
         :description="package.description"
         :hint="hint"
-        :hint-close="$t(isUpdated ? 'ui.package.hintNoupdate' : 'ui.package.hintRevert')"
+        :hint-close="hintClose"
 
         :release-validating="!isPrivate && constraintValidating"
         :release-error="!isPrivate && constraintError"
-        :release-disabled="!isPrivate && (willBeRemoved || (!isInstalled && !willBeInstalled))"
+        :release-disabled="!isPrivate && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired))"
 
         @close-hint="restore"
     >
@@ -18,7 +18,6 @@
 
         <template slot="additional">
             <strong class="package__version package__version--additional" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
-            <strong class="package__version package__version--additional" v-else-if="package.version === false"><span class="package__version--missing">{{ $t('ui.package.versionMissing') }}</span></strong>
             <span v-for="item in additional">{{ item }}</span>
         </template>
 
@@ -31,14 +30,13 @@
         </template>
         <template slot="release" v-else>
             <fieldset>
-                <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!this.constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                <button class="widget-button" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled)">{{ 'ui.package.editConstraint' | translate }}</button>
+                <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
+                <button class="widget-button" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)">{{ 'ui.package.editConstraint' | translate }}</button>
             </fieldset>
             <div class="package__version package__version--release" v-if="package.version">
                 <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
                 <time :dateTime="package.time">({{ released }})</time>
             </div>
-            <div class="package__version package__version--release package__version--missing" v-else-if="package.version === false">{{ $t('ui.package.versionMissing') }}</div>
         </template>
 
         <template slot="actions" v-if="isPrivate">
@@ -48,7 +46,8 @@
             <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
         </template>
         <template slot="actions" v-else>
-            <button-group :label="$t('ui.package.updateButton')" icon="update" v-if="isInstalled" :disabled="isModified" @click="update">
+            <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+            <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isInstalled" :disabled="isModified" @click="update">
                 <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="isModified">Enable</button>-->
                 <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="!isModified">Disable</button>-->
                 <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
@@ -61,6 +60,7 @@
 
 <script>
     import Vue from 'vue';
+    import { mapGetters } from 'vuex';
 
     import Package from './Package';
     import More from './More';
@@ -88,6 +88,23 @@
         }),
 
         computed: {
+            ...mapGetters('packages', [
+                'packageInstalled',
+                'packageRequired',
+                'packageAdded',
+                'packageUpdated',
+                'packageChanged',
+                'packageRemoved'
+            ]),
+
+            isInstalled: vm => vm.packageInstalled(vm.package.name),
+            isRequired: vm => vm.packageRequired(vm.package.name),
+            isChanged: vm => vm.packageChanged(vm.package.name),
+            isUpdated: vm => vm.packageUpdated(vm.package.name),
+            willBeRemoved: vm => vm.packageRemoved(vm.package.name),
+            willBeInstalled: vm => vm.packageAdded(vm.package.name),
+            isModified: vm => vm.isUpdated || vm.isChanged || vm.willBeRemoved || vm.willBeInstalled,
+
             packageUpdates() {
                 return this.isInstalled && (
                     Object.keys(this.$store.state.packages.add).length > 0
@@ -111,32 +128,8 @@
                 return String(license) === 'proprietary';
             },
 
-            isModified() {
-                return this.isUpdated || this.isChanged || this.willBeRemoved || this.willBeInstalled;
-            },
-
-            isInstalled() {
-                return Object.keys(this.$store.state.packages.installed).includes(this.package.name);
-            },
-
-            isChanged() {
-                return Object.keys(this.$store.state.packages.change).includes(this.package.name);
-            },
-
-            isUpdated() {
-                return this.$store.state.packages.update.includes(this.package.name);
-            },
-
-            willBeRemoved() {
-                return this.$store.state.packages.remove.includes(this.package.name);
-            },
-
-            willBeInstalled() {
-                return Object.keys(this.$store.state.packages.add).includes(this.package.name);
-            },
-
             isIncompatible() {
-                if (this.updateOnly) {
+                if (this.updateOnly || this.isRequired) {
                     return false;
                 }
 
@@ -152,6 +145,13 @@
             },
 
             badge() {
+                if (this.isRequired) {
+                    return {
+                        title: this.$t('ui.package.requiredText'),
+                        text: this.$t('ui.package.requiredTitle'),
+                    };
+                }
+
                 if (this.isIncompatible) {
                     return {
                         title: this.$t('ui.package.incompatibleText'),
@@ -170,6 +170,10 @@
             hint() {
                 if (this.willBeRemoved) {
                     return this.$t('ui.package.hintRemoved');
+                }
+
+                if (this.isRequired) {
+                    return this.$t('ui.package.hintConstraint', { constraint: this.constraintRequired });
                 }
 
                 if (this.willBeInstalled) {
@@ -195,6 +199,18 @@
                 }
 
                 return null;
+            },
+
+            hintClose() {
+                if (this.isRequired && !this.willBeRemoved && !this.isChanged) {
+                    return null;
+                }
+
+                if (this.isUpdated) {
+                    return this.$t('ui.package.hintNoupdate');
+                }
+
+                return this.$t('ui.package.hintRevert');
             },
 
             additional() {
@@ -243,6 +259,18 @@
                 return this.$store.state.packages.installed[this.package.name].constraint;
             },
 
+            constraintRequired() {
+                if (!this.isRequired) {
+                    return null;
+                }
+
+                if (this.isChanged) {
+                    return this.constraintChanged;
+                }
+
+                return this.$store.state.packages.required[this.package.name].constraint;
+            },
+
             constraintAdded() {
                 if (!this.willBeInstalled) {
                     return null;
@@ -279,9 +307,10 @@
             },
 
             uninstall() {
-                if (this.willBeInstalled) {
+                if (this.willBeInstalled && !this.isInstalled) {
                     this.$store.commit('packages/restore', this.package.name);
                 } else {
+                    this.$store.commit('packages/restore', this.package.name);
                     this.$store.commit('packages/remove', this.package.name);
                 }
             },
@@ -306,14 +335,14 @@
                 this.constraintEditable = false;
                 this.constraintError = false;
 
-                if (this.isInstalled &&
-                    (!this.constraint || this.constraintInstalled === this.constraint)
+                if ((this.isInstalled && (!this.constraint || this.constraintInstalled === this.constraint))
+                    || (this.isRequired && (!this.constraint || this.constraintRequired === this.constraint))
                 ) {
                     this.restore();
                     return;
                 }
 
-                if (this.willBeInstalled && !this.constraint) {
+                if (!this.isRequired && this.willBeInstalled && !this.constraint) {
                     this.$store.commit(
                         'packages/add',
                         Object.assign({}, this.package, { constraint: null }),
@@ -329,7 +358,7 @@
                     (response) => {
                         this.constraintValidating = false;
                         if (response.body.valid) {
-                            if (this.isInstalled) {
+                            if (this.isInstalled || this.isRequired) {
                                 this.$store.commit('packages/change', { name: this.package.name, version: this.constraint });
                             } else {
                                 this.$store.commit(
@@ -352,6 +381,8 @@
                     this.constraint = this.constraintChanged;
                 } else if (this.isInstalled) {
                     this.constraint = this.constraintInstalled;
+                } else if (this.isRequired) {
+                    this.constraint = this.constraintRequired;
                 }
 
                 if (!this.constraintEditable) {
@@ -370,7 +401,7 @@
             },
 
             constraintChanged(value) {
-                this.constraint = value || this.constraintInstalled;
+                this.constraint = value || this.constraintInstalled || this.constraintRequired;
             },
         },
 

@@ -3,7 +3,7 @@
 
         <transition name="package__hint">
             <div class="package__hint" v-if="hint">
-                <a href="#" class="error" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
+                <a href="#" class="package__hint-close" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
                 <p>
                     {{ hint }}
                     <!--<a href="#">Help</a>-->
@@ -21,8 +21,8 @@
 
             <div class="package__about">
                 <h1 :class="{ package__headline: true, 'package__headline--badge': badge }">
-                    <span class="package__title" v-html="title"></span>
-                    <span class="package__name" v-if="name">{{ name }}</span>
+                    <span class="package__title" v-html="title || name"></span>
+                    <span class="package__name" v-if="title && name && title !== name">{{ name }}</span>
                     <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
                 </h1>
 
@@ -52,8 +52,6 @@
 </template>
 
 <script>
-    import Vue from 'vue';
-
     import More from './More';
     import ButtonGroup from '../../widgets/ButtonGroup';
 
@@ -87,13 +85,18 @@
 
         &__hint {
             position: relative;
-            padding: 8px 150px 8px 56px;
+            padding: 8px 20px 8px 20px;
+            background: #e8c8bc;
             font-weight: $font-weight-medium;
             font-size: 12px;
             line-height: 1.8;
             border-radius: 2px 2px 0 0;
-            background: #e8c8bc url('../../../assets/images/hint.svg') 20px 5px no-repeat;
-            background-size: 28px 28px;
+
+            @include screen(800) {
+                padding-left: 56px;
+                background: #e8c8bc url('../../../assets/images/hint.svg') 20px 5px no-repeat;
+                background-size: 28px 28px;
+            }
 
             p a {
                 display: inline-block;
@@ -108,16 +111,14 @@
                     content: "|";
                 }
             }
+        }
 
-            .error {
-                position: absolute;
-                right: 20px;
-                top: 8px;
-                padding-left: 18px;
-                color: #bd2e20;
-                background: url('../../../assets/images/close.svg') left center no-repeat;
-                background-size: 14px 14px;
-            }
+        &__hint-close {
+            float: right;
+            padding-left: 18px;
+            color: #bd2e20;
+            background: url('../../../assets/images/close.svg') left center no-repeat;
+            background-size: 14px 14px;
         }
 
         &__inside {
@@ -183,8 +184,9 @@
             }
         }
 
-        &__title {
-            padding-right: 10px;
+        &__title,
+        &__name {
+            margin-right: 10px;
         }
 
         &__name {

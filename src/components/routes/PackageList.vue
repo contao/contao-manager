@@ -8,6 +8,7 @@
             <template v-else>
                 <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.added' | translate }}</h2>
                 <local-package v-for="item in addedPackages" :package="item" :key="item.name"/>
+                <local-package v-for="item in requiredPackages" :package="item" :key="item.name"/>
 
                 <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.installed' | translate }}</h2>
                 <root-package :package="packages['contao/manager-bundle']" v-if="packages"/>
@@ -20,7 +21,7 @@
             <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
             <button class="package-actions__button widget-button" @click="dryrunChanges">{{ 'ui.packages.changesDryrun' | translate }}</button>
             <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
-            <button class="package-actions__button widget-button widget-button--alert" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
+            <button class="package-actions__button widget-button widget-button--alert" :disabled="!canResetChanges" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
         </div>
     </package-base>
 </template>
@@ -40,8 +41,9 @@
             ...mapState('packages', {
                 'packages': 'installed',
                 'addedPackages': 'add',
+                'requiredPackages': 'required',
             }),
-            ...mapGetters('packages', ['totalChanges', 'hasAdded', 'packageAdded']),
+            ...mapGetters('packages', ['totalChanges', 'hasAdded', 'packageAdded', 'canResetChanges']),
         },
 
         methods: {
