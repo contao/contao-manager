@@ -9,6 +9,7 @@
         <echo message="Available commands:" />
         <echo message="  phing prod  -  Builds production Phar (fresh clone of current Git commit)" />
         <echo message="  phing dev   -  Builds development Phar (from current source files)" />
+        <echo message="  phing debug -  Builds debug Phar (from current source files)" />
         <echo message="  phing tx    -  Syncs language files with Transifex" />
     </target>
 
@@ -17,6 +18,12 @@
     </target>
 
     <target name="dev" depends="build-dev, box-dev">
+        <echo message="Contao Manager ${version} build complete" />
+    </target>
+
+    <target name="debug" depends="build-dev, box-dev">
+        <move file="contao-manager.phar" tofile="contao-manager.phar.php" overwrite="true"/>
+        <delete file="contao-manager.version" />
         <echo message="Contao Manager ${version} build complete" />
     </target>
 
