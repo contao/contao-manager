@@ -1,24 +1,17 @@
 /* eslint-disable no-param-reassign */
 
 import Vue from 'vue';
-import algoliasearch from 'algoliasearch';
 
-const algolia = ({ state, commit }) => {
-    let index = state.algolia;
-
-    if (!index) {
-        index = algoliasearch('60DW2LJW0P', 'e6efbab031852e115032f89065b3ab9f').initIndex(`v2_${Vue.i18n.locale()}`);
-        commit('setAlgolia', index);
-    }
-
-    return index;
-};
+import search from './packages/search';
 
 export default {
     namespaced: true,
 
+    modules: {
+        search,
+    },
+
     state: {
-        algolia: null,
         installed: null,
         required: {},
         add: {},
@@ -119,10 +112,6 @@ export default {
             state.update = [];
             state.remove = [];
         },
-
-        setAlgolia(state, client) {
-            state.algolia = client;
-        },
     },
 
     actions: {
@@ -157,43 +146,6 @@ export default {
             commit('setInstalled', packages);
 
             return packages;
-        },
-
-        fetch(store, name) {
-            return new Promise((resolve, reject) => {
-                algolia(store).getObject(name, (err, content) => {
-                    if (err) {
-                        reject(err);
-                        return;
-                    }
-
-                    resolve(content);
-                });
-            });
-        },
-
-        search(store, value) {
-            return new Promise((resolve, reject) => {
-                algolia(store).search(value, (err, content) => {
-                    if (err) {
-                        reject(false);
-                        return;
-                    }
-
-                    if (content.nbHits === 0) {
-                        resolve({});
-                        return;
-                    }
-
-                    const packages = {};
-
-                    content.hits.forEach((pkg) => {
-                        packages[pkg.name] = pkg;
-                    });
-
-                    resolve(packages);
-                });
-            });
         },
 
         apply({ state, dispatch }, dryRun = false) {

@@ -1,21 +1,21 @@
 <template>
     <package-base show-search>
         <div class="package-search">
-            <div v-if="packages === false" class="package-search__status package-search__status--offline">
+            <div v-if="results === false" class="package-search__status package-search__status--offline">
                 <p class="package-search__title">{{ 'ui.packagesearch.offline' | translate }}</p>
                 <p class="package-search__explain">{{ 'ui.packagesearch.offlineExplain' | translate }}</p>
             </div>
-            <div v-else-if="packages === null && !query" class="package-search__status package-search__status--start">
+            <div v-else-if="results === null && !query" class="package-search__status package-search__status--start">
                 <p class="package-search__title">{{ 'ui.packagesearch.start' | translate }}</p>
             </div>
-            <loader v-else-if="packages === null" class="package-search__status package-search__status--loader">
+            <loader v-else-if="results === null" class="package-search__status package-search__status--loader">
                 <p class="package-search__title" v-html="$t('ui.packagesearch.searching', { query })"></p>
             </loader>
-            <div v-else-if="!Object.keys(packages).length" class="package-search__status package-search__status--empty">
+            <div v-else-if="!Object.keys(results).length" class="package-search__status package-search__status--empty">
                 <p class="package-search__title" v-html="$t('ui.packagesearch.empty', { query })"></p>
             </div>
 
-            <search-package v-for="item in packages" :package="item" :key="item.name"/>
+            <search-package v-for="item in results" :package="item" :key="item.name"/>
 
             <a href="https://www.algolia.com/" target="_blank" class="package-search__algolia"><img src="../../assets/images/search-by-algolia.svg" width="200"></a>
         </div>
@@ -41,7 +41,7 @@
         props: ['searchField'],
 
         data: () => ({
-            packages: null,
+            results: null,
             previousRequest: null,
             algolia: null,
 
@@ -63,20 +63,17 @@
         },
 
         methods: {
-            searchPackages(value) {
+            async searchPackages(value) {
                 if (!value) {
-                    this.packages = null;
+                    this.results = null;
                     return;
                 }
 
-                this.$store.dispatch('packages/search', value).then(
-                    (packages) => {
-                        this.packages = packages;
-                    },
-                    () => {
-                        this.packages = false;
-                    },
-                );
+                try {
+                    this.results = await this.$store.dispatch('packages/search/find', value);
+                } catch (err) {
+                    this.results = false;
+                }
             },
         },
 

@@ -20,17 +20,14 @@
         }),
 
         methods: {
-            load() {
+            async load() {
                 this.data = this.package;
 
-                this.$store.dispatch('packages/fetch', this.package.name).then(
-                    (data) => {
-                        this.data = Object.assign({}, this.package, data);
-                    },
-                    () => {
-                        // Ignore if package is not found in index
-                    },
-                );
+                const metadata = await this.$store.dispatch('packages/search/get', this.package.name);
+
+                if (null !== metadata) {
+                    this.data = Object.assign({}, this.package, metadata);
+                }
             },
         },
 
