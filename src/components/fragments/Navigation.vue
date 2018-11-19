@@ -2,7 +2,9 @@
     <nav role="navigation" class="navigation">
         <a class="navigation__toggle" @click.prevent="toggleNavigation"><span></span><span></span><span></span></a>
         <ul class="navigation__group navigation__group--main">
-            <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.packages"><a>{{ 'ui.navigation.packages' | translate }}</a></router-link>
+            <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.packages">
+                <a>{{ 'ui.navigation.packages' | translate }}<span class="navigation__item-badge" v-if="packageChanges > 0">{{ packageChanges }}</span></a>
+            </router-link>
             <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.maintenance"><a>{{ 'ui.navigation.maintenance' | translate }}</a></router-link>
             <li class="navigation__item navigation__item--main">
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ 'ui.navigation.tools' | translate }}</a>
@@ -28,9 +30,8 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
 
-    import store from '../../store';
     import views from '../../router/views';
     import routes from '../../router/routes';
 
@@ -42,6 +43,10 @@
         computed: {
             ...mapState(['safeMode']),
             ...mapState('contao/access-key', { showDebugMode: 'isEnabled' }),
+            ...mapGetters('packages', ['totalChanges']),
+            ...mapGetters('packages/uploads', ['totalUploads']),
+
+            packageChanges: vm => vm.totalChanges + vm.totalUploads,
         },
 
         methods: {
@@ -67,7 +72,7 @@
             },
 
             logout() {
-                store.dispatch('auth/logout');
+                this.$store.dispatch('auth/logout');
                 this.$store.commit('setView', views.LOGIN);
             },
         },
@@ -184,6 +189,18 @@
                     display: none;
                 }
             }
+        }
+
+        &__item-badge {
+            position: relative;
+            top: -2px;
+            margin-left: 8px;
+            padding: 2px 5px;
+            font-size: 10px;
+            color: #fff;
+            font-weight: $font-weight-bold;
+            background: $contao-color;
+            border-radius: 5px;
         }
 
         @include screen(1024) {
