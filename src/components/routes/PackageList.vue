@@ -18,12 +18,12 @@
             </template>
         </div>
 
-        <div class="package-actions__inner" slot="actions" v-if="hasUploads">
+        <div class="package-actions__inner" slot="actions" v-if="hasUploads && !uploading">
             <p class="package-actions__text">{{ $t('ui.packages.uploadMessage', { total: totalUploads }, totalUploads) }}</p>
             <button class="package-actions__button widget-button widget-button--primary" :disabled="!canConfirmUploads" @click="confirmUploads">{{ $t('ui.packages.uploadApply') }}</button>
             <button class="package-actions__button widget-button widget-button--alert" @click="removeUploads">{{ $t('ui.packages.uploadReset') }}</button>
         </div>
-        <div class="package-actions__inner" slot="actions" v-else-if="totalChanges">
+        <div class="package-actions__inner" slot="actions" v-else-if="totalChanges && !uploading">
             <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
             <button class="package-actions__button widget-button" @click="dryrunChanges">{{ 'ui.packages.changesDryrun' | translate }}</button>
             <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
@@ -50,7 +50,7 @@
                 'addedPackages': 'add',
                 'requiredPackages': 'required',
             }),
-            ...mapState('packages/uploads', ['uploads', 'files']),
+            ...mapState('packages/uploads', ['uploads', 'uploading', 'files']),
             ...mapGetters('packages', ['totalChanges', 'hasAdded', 'packageAdded', 'packageInstalled', 'canResetChanges']),
             ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
 
@@ -70,7 +70,7 @@
             },
 
             confirmUploads() {
-                // TODO allow to confirm all uploads
+                this.$store.commit('packages/uploads/confirmAll');
             },
 
             removeUploads() {
@@ -89,6 +89,7 @@
 
             resetChanges() {
                 this.$store.commit('packages/reset');
+                this.$store.commit('packages/uploads/unconfirmAll');
             },
         },
 

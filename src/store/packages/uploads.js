@@ -7,14 +7,18 @@ export default {
         uploads: null,
         uploading: false,
         files: [],
+        confirmed: [],
     },
 
     getters: {
-        hasUploads: (state, getter) => getter.totalUploads > 0,
-        totalUploads: state => state.uploads && Object.keys(state.uploads).length || 0,
+        hasUploads: (state, get) => get.totalUploads > 0,
+        totalUploads: (state, get) => state.uploads ? get.unconfirmedUploads.length : 0,
+
         canConfirmUploads: state => state.uploads && Object.values(state.uploads).find(
             item => !item.success || item.error
         ) === undefined || false,
+
+        unconfirmedUploads: state => Object.values(state.uploads).filter(item => !state.confirmed.includes(item.id)),
     },
 
     mutations: {
@@ -28,6 +32,41 @@ export default {
 
         setFiles(state, value) {
             state.files = value;
+        },
+
+        confirm(state, id) {
+            const pkg = state.uploads[id].package;
+
+            if (!pkg) {
+                return;
+            }
+
+            if (this.getters['packages/packageInstalled'](pkg.name)) {
+                this.commit('packages/update', pkg.name);
+            } else {
+                this.commit('packages/add', pkg);
+            }
+
+            state.confirmed.push(id);
+        },
+
+        unconfirm(state, name) {
+            Object.keys(state.uploads).forEach((id) => {
+                if (state.uploads[id].package
+                    && state.uploads[id].package.name === name
+                    && state.confirmed.includes(id)
+                ) {
+                    state.confirmed.splice(state.confirmed.indexOf(name), 1);
+                }
+            });
+        },
+
+        confirmAll(state) {
+            Object.keys(state.uploads).forEach(id => this.commit('packages/uploads/confirm', id));
+        },
+
+        unconfirmAll(state) {
+            state.confirmed = [];
         },
     },
 

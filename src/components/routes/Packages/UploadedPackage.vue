@@ -66,10 +66,6 @@
         components: { Loader, ProgressBar, Package, More, ButtonGroup },
 
         props: {
-            id: {
-                type: String,
-                required: true,
-            },
             data: {
                 type: Object,
                 required: true,
@@ -151,12 +147,12 @@
 
         methods: {
             addPackage() {
-                // TODO add package
+                this.$store.commit('packages/uploads/confirm', this.data.id);
             },
 
             removeUpload() {
                 this.removing = true;
-                this.$store.dispatch('packages/uploads/remove', this.id);
+                this.$store.dispatch('packages/uploads/remove', this.data.id);
             },
         },
     };

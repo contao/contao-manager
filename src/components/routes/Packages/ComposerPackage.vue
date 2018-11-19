@@ -31,7 +31,7 @@
                 </fieldset>
                 <div class="package__version package__version--release" v-if="data.version">
                     <strong>{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
-                    <time :dateTime="data.time">({{ released }})</time>
+                    <time :dateTime="data.time" v-if="data.time">({{ released }})</time>
                 </div>
             </slot>
         </template>
@@ -248,6 +248,7 @@
         methods: {
             restore() {
                 this.$store.commit('packages/restore', this.data.name);
+                this.$store.commit('packages/uploads/unconfirm', this.data.name);
                 this.resetConstraint();
             },
 

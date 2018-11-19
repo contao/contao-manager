@@ -24,7 +24,7 @@
         <template v-if="$refs.uploader">
             <h2 class="package-list__headline" v-if="hasUploads || files.length">{{ 'ui.packagelist.uploads' | translate }}</h2>
             <uploading-package v-for="file in files" :file="file" :uploader="$refs.uploader" :key="file.id"/>
-            <uploaded-package v-for="(item, id) in uploads" :data="item" :uploader="$refs.uploader" :id="id" :key="id"/>
+            <uploaded-package v-for="item in unconfirmedUploads" :data="item" :uploader="$refs.uploader" :key="item.id"/>
         </template>
     </div>
 </template>
@@ -41,7 +41,7 @@
 
         computed: {
             ...mapState('packages/uploads', ['uploads', 'files']),
-            ...mapGetters('packages/uploads', ['hasUploads']),
+            ...mapGetters('packages/uploads', ['hasUploads', 'unconfirmedUploads']),
 
             uploadUrl: vm => `api/packages/uploads?_locale=${vm.$i18n.locale()}`,
         },

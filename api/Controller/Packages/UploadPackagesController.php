@@ -155,6 +155,7 @@ class UploadPackagesController
         $this->filesystem->touch($this->uploadPath($id));
 
         $this->config->set($id, [
+            'id' => $id,
             'name' => $name,
             'size' => $size,
             'success' => false,

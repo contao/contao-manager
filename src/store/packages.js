@@ -77,8 +77,8 @@ export default {
             state.required = required;
         },
 
-        add(state, pckg) {
-            Vue.set(state.add, pckg.name, pckg);
+        add(state, pkg) {
+            Vue.set(state.add, pkg.name, pkg);
         },
 
         change(state, { name, version }) {
