@@ -35,10 +35,9 @@
 
     import UploadingPackage from './UploadingPackage';
     import UploadedPackage from './UploadedPackage';
-    import ComposerPackage from './ComposerPackage';
 
     export default {
-        components: { ComposerPackage, FileUpload, UploadingPackage, UploadedPackage },
+        components: { FileUpload, UploadingPackage, UploadedPackage },
 
         computed: {
             ...mapState('packages/uploads', ['uploads', 'files']),

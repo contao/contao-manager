@@ -20,22 +20,22 @@
     </package>
 
     <package
-        :title="package.title"
-        :name="package.name"
-        :description="package.description"
+        :title="pkg.title"
+        :name="pkg.name"
+        :description="pkg.description"
         v-else
     >
-        <more private :name="package.name" :homepage="package.homepage" :support="Object.assign({}, package.support)" slot="more"/>
+        <more private :name="pkg.name" :homepage="pkg.homepage" :support="Object.assign({}, pkg.support)" slot="more"/>
 
         <template slot="additional">
-            <strong class="package__version package__version--additional">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
-            <span v-for="item in additional">{{ item }}</span>
+            <strong class="package__version package__version--additional">{{ 'ui.package.version' | translate({ version: pkg.version }) }}</strong>
+            <span v-for="(item,k) in additional" :key="k">{{ item }}</span>
         </template>
 
         <template slot="release">
             <input type="text" :placeholder="$t('ui.package.latestConstraint')" disabled>
             <div class="package__version package__version--release">
-                <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
+                <strong>{{ 'ui.package.version' | translate({ version: pkg.version }) }}</strong>
             </div>
         </template>
 
@@ -88,7 +88,7 @@
                 'widget-button--trash': !vm.removing
             }),
 
-            package() {
+            pkg() {
                 return Object.assign(
                     {
                         name: this.data.name,
@@ -125,20 +125,20 @@
             additional() {
                 const additionals = [];
 
-                if (this.package.license) {
-                    if (this.package.license instanceof Array) {
-                        additionals.push(this.package.license.join('/'));
+                if (this.pkg.license) {
+                    if (this.pkg.license instanceof Array) {
+                        additionals.push(this.pkg.license.join('/'));
                     } else {
-                        additionals.push(this.package.license);
+                        additionals.push(this.pkg.license);
                     }
                 }
 
-                if (this.package.downloads) {
-                    additionals.push(this.$t('ui.package.additionalDownloads', { count: this.package.downloads }, this.package.downloads));
+                if (this.pkg.downloads) {
+                    additionals.push(this.$t('ui.package.additionalDownloads', { count: this.pkg.downloads }, this.pkg.downloads));
                 }
 
-                if (this.package.favers) {
-                    additionals.push(this.$t('ui.package.additionalStars', { count: this.package.favers }, this.package.favers));
+                if (this.pkg.favers) {
+                    additionals.push(this.$t('ui.package.additionalStars', { count: this.pkg.favers }, this.pkg.favers));
                 }
 
                 return additionals;

@@ -14,10 +14,9 @@
 <script>
     import Package from './Package';
     import ProgressBar from '../../fragments/ProgressBar';
-    import ButtonGroup from '../../widgets/ButtonGroup';
 
     export default {
-        components: { ProgressBar, Package, ButtonGroup },
+        components: { ProgressBar, Package },
 
         props: {
             file: {
