@@ -23,6 +23,7 @@
         :title="pkg.title"
         :name="pkg.name"
         :description="pkg.description"
+        release-disabled
         v-else
     >
         <more private :name="pkg.name" :homepage="pkg.homepage" :support="Object.assign({}, pkg.support)" slot="more"/>
@@ -33,7 +34,10 @@
         </template>
 
         <template slot="release">
-            <input type="text" :placeholder="$t('ui.package.latestConstraint')" disabled>
+            <fieldset>
+                <input type="text" :placeholder="$t('ui.package.latestConstraint')" disabled>
+                <button class="widget-button" disabled>{{ 'ui.package.editConstraint' | translate }}</button>
+            </fieldset>
             <div class="package__version package__version--release">
                 <strong>{{ 'ui.package.version' | translate({ version: pkg.version }) }}</strong>
             </div>
