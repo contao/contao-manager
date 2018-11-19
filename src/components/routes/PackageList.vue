@@ -12,8 +12,8 @@
                 <local-package v-for="item in addedPackages" :package="item" :key="item.name"/>
                 <local-package v-for="item in notRootRequired" :package="item" :key="item.name"/>
 
-                <h2 class="package-list__headline" v-if="showHeadlines || hasUploads || uploading">{{ 'ui.packagelist.installed' | translate }}</h2>
-                <root-package :package="packages['contao/manager-bundle'] || requiredPackages['contao/manager-bundle']"/>
+                <h2 class="package-list__headline" v-if="showHeadlines || hasUploads || files.length">{{ 'ui.packagelist.installed' | translate }}</h2>
+                <root-package :package="packages['contao/manager-bundle'] || requiredPackages['contao/manager-bundle']" v-if="packages"/>
                 <local-package v-for="item in notRootInstalled" :package="item" :key="item.name"/>
             </template>
         </div>
@@ -50,7 +50,7 @@
                 'addedPackages': 'add',
                 'requiredPackages': 'required',
             }),
-            ...mapState('packages/uploads', ['uploads', 'uploading', 'files']),
+            ...mapState('packages/uploads', ['uploads', 'files']),
             ...mapGetters('packages', ['totalChanges', 'hasAdded', 'packageAdded', 'packageInstalled', 'canResetChanges']),
             ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
 

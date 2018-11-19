@@ -82,7 +82,7 @@
                 }
 
                 if (newFile.error && newFile.xhr && newFile.xhr.getResponseHeader('Content-Type') === 'application/problem+json') {
-                    this.$store.commit('setError', newFile.response);
+                    this.$store.commit('setError', JSON.parse(newFile.response));
                 }
 
                 if (Boolean(newFile) !== Boolean(oldFile) || oldFile.error !== newFile.error) {
