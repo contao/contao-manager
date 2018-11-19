@@ -28,10 +28,15 @@ class JsonRequestListener implements EventSubscriberInterface
     public function onKernelRequest(KernelEvent $event)
     {
         $request = $event->getRequest();
+        $content = $content = $request->getContent();
+
+        if ($content === '' && $request->attributes->get('form-data')) {
+            return;
+        }
 
         $data = [];
 
-        if (($content = $request->getContent()) !== '') {
+        if ($content !== '') {
             if ('json' !== $request->getContentType()) {
                 throw new UnsupportedMediaTypeHttpException('Only JSON requests are supported.');
             }
@@ -51,6 +56,7 @@ class JsonRequestListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return ['kernel.request' => ['onKernelRequest', 100]];
+        // Priority must be lower than the router (defaults to 32)
+        return ['kernel.request' => ['onKernelRequest', 20]];
     }
 }
