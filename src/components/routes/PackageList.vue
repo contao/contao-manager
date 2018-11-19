@@ -1,23 +1,29 @@
 <template>
-    <package-base>
+    <package-base @start-upload="openFileSelector()">
         <div class="package-list">
-            <loader v-if="packages === null" class="package-list__status">
+            <loader v-if="packages === null || uploads === null" class="package-list__status">
                 <p>{{ 'ui.packagelist.loading' | translate }}</p>
             </loader>
 
             <template v-else>
-                <h2 class="package-list__headline" v-if="showHeadlines">{{ 'ui.packagelist.added' | translate }}</h2>
-                <root-package :package="requiredPackages['contao/manager-bundle']" v-if="requiredPackages['contao/manager-bundle']"/>
-                <local-package v-for="item in visibleRequired" :package="item" :key="item.name"/>
-                <local-package v-for="item in addedPackages" :package="item" :key="item.name"/>
+                <package-uploads ref="uploader"/>
 
-                <h2 class="package-list__headline" v-if="showHeadlines">{{ 'ui.packagelist.installed' | translate }}</h2>
-                <root-package :package="packages['contao/manager-bundle']" v-if="packages['contao/manager-bundle']"/>
-                <local-package v-for="item in visibleInstalled" :package="item" :key="item.name"/>
+                <h2 class="package-list__headline" v-if="showHeadlines">{{ 'ui.packagelist.added' | translate }}</h2>
+                <local-package v-for="item in addedPackages" :package="item" :key="item.name"/>
+                <local-package v-for="item in notRootRequired" :package="item" :key="item.name"/>
+
+                <h2 class="package-list__headline" v-if="showHeadlines || hasUploads || uploading">{{ 'ui.packagelist.installed' | translate }}</h2>
+                <root-package :package="packages['contao/manager-bundle'] || requiredPackages['contao/manager-bundle']"/>
+                <local-package v-for="item in notRootInstalled" :package="item" :key="item.name"/>
             </template>
         </div>
 
-        <div class="package-actions__inner" slot="actions" v-if="totalChanges">
+        <div class="package-actions__inner" slot="actions" v-if="hasUploads">
+            <p class="package-actions__text">{{ $t('ui.packages.uploadMessage', { total: totalUploads }, totalUploads) }}</p>
+            <button class="package-actions__button widget-button widget-button--primary" :disabled="!canConfirmUploads" @click="confirmUploads">{{ $t('ui.packages.uploadApply') }}</button>
+            <button class="package-actions__button widget-button widget-button--alert" @click="removeUploads">{{ $t('ui.packages.uploadReset') }}</button>
+        </div>
+        <div class="package-actions__inner" slot="actions" v-else-if="totalChanges">
             <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
             <button class="package-actions__button widget-button" @click="dryrunChanges">{{ 'ui.packages.changesDryrun' | translate }}</button>
             <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
@@ -29,13 +35,14 @@
 <script>
     import { mapState, mapGetters } from 'vuex';
 
-    import PackageBase from './Packages/Base';
     import Loader from '../fragments/Loader';
+    import PackageBase from './Packages/Base';
+    import PackageUploads from './Packages/Uploads';
     import LocalPackage from './Packages/LocalPackage';
     import RootPackage from './Packages/RootPackage';
 
     export default {
-        components: { PackageBase, Loader, RootPackage, LocalPackage },
+        components: { Loader, PackageBase, PackageUploads, RootPackage, LocalPackage },
 
         computed: {
             ...mapState('packages', {
@@ -43,20 +50,35 @@
                 'addedPackages': 'add',
                 'requiredPackages': 'required',
             }),
-            ...mapGetters('packages', [
-                'totalChanges',
-                'hasAdded',
-                'packageAdded',
-                'packageInstalled',
-                'canResetChanges',
-                'visibleRequired',
-                'visibleInstalled'
-            ]),
+            ...mapState('packages/uploads', ['uploads', 'uploading', 'files']),
+            ...mapGetters('packages', ['totalChanges', 'hasAdded', 'packageAdded', 'packageInstalled', 'canResetChanges']),
+            ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
+
+            notRootInstalled: vm => Object.values(vm.packages).filter(pkg => pkg.name !== 'contao/manager-bundle'),
+            notRootRequired: vm => Object.values(vm.requiredPackages).filter(pkg => pkg.name !== 'contao/manager-bundle'),
 
             showHeadlines: vm => vm.hasAdded && vm.packages.length,
         },
 
         methods: {
+            openFileSelector() {
+                if (!this.$refs.uploader) {
+                    return;
+                }
+
+                this.$refs.uploader.openFileSelector();
+            },
+
+            confirmUploads() {
+                // TODO allow to confirm all uploads
+            },
+
+            removeUploads() {
+                Object.keys(this.uploads).forEach((id) => {
+                    this.$store.dispatch('packages/uploads/remove', id);
+                });
+            },
+
             dryrunChanges() {
                 this.$store.dispatch('packages/apply', true);
             },
@@ -73,6 +95,10 @@
         mounted() {
             if (null === this.packages) {
                 this.$store.dispatch('packages/load');
+            }
+
+            if (null === this.packages) {
+                this.$store.dispatch('packages/uploads/load');
             }
         },
     };

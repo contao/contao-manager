@@ -262,8 +262,6 @@
             }
 
             input[type=text] {
-                float: left;
-                width: calc(100% - 32px);
                 height: 30px;
                 margin-right: 2px;
                 background: #fff;
@@ -284,6 +282,11 @@
                     background: $orange-button;
                     -webkit-text-fill-color: #fff;
                 }
+            }
+
+            fieldset > input[type=text] {
+                float: left;
+                width: calc(100% - 32px);
             }
 
             button {

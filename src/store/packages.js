@@ -3,6 +3,7 @@
 import Vue from 'vue';
 
 import search from './packages/search';
+import uploads from './packages/uploads';
 
 const filterInvisiblePackages = (pkg) => {
     return pkg.name !== 'contao/manager-bundle' && pkg.name !== 'contao/conflicts';
@@ -13,6 +14,7 @@ export default {
 
     modules: {
         search,
+        uploads,
     },
 
     state: {
