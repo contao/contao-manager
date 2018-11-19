@@ -9,7 +9,7 @@ services:
             $serverConfigFile: '%kernel.root_dir%/Resources/config/servers.yml'
 
     Contao\ManagerApi\:
-        resource: ../../{Command,Config,Controller,EventListener,IntegrityCheck,Process,Security,System,Task/*/}
+        resource: ../../{Command,Config,Controller,EventListener,IntegrityCheck,Process,Security,System,Task/Composer/,Task/Contao,Task/Manager,Task/Packages}
 
 
     ####################
