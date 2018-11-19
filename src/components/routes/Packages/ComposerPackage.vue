@@ -8,53 +8,47 @@
         :hint="hint"
         :hint-close="hintClose"
 
-        :release-validating="!isPrivate && constraintValidating"
-        :release-error="!isPrivate && constraintError"
-        :release-disabled="!isPrivate && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired))"
+        :release-validating="constraintValidating"
+        :release-error="constraintError"
+        :release-disabled="(willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired))"
 
         @close-hint="restore"
     >
         <template slot="logo"><slot name="logo"/></template>
 
-        <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :private="isPrivate" slot="more"/>
+        <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :private="private" slot="more"/>
 
         <template slot="additional">
             <strong class="package__version package__version--additional" v-if="data.version">{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
             <span v-for="(item,k) in additional" :key="k">{{ item }}</span>
         </template>
 
-        <template slot="release" v-if="isPrivate">
-            <p class="package__proprietary">
-                <img src="../../../assets/images/buy.svg" width="24" height="24"/>
-                <strong>{{ $t('ui.package.proprietaryTitle') }}</strong><br>
-                {{ $t('ui.package.proprietaryText') }}
-            </p>
-        </template>
-        <template slot="release" v-else>
-            <fieldset>
-                <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                <button class="widget-button" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)">{{ 'ui.package.editConstraint' | translate }}</button>
-            </fieldset>
-            <div class="package__version package__version--release" v-if="data.version">
-                <strong>{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
-                <time :dateTime="data.time">({{ released }})</time>
-            </div>
+        <template slot="release">
+            <slot name="release">
+                <fieldset>
+                    <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
+                    <button class="widget-button" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)">{{ 'ui.package.editConstraint' | translate }}</button>
+                </fieldset>
+                <div class="package__version package__version--release" v-if="data.version">
+                    <strong>{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
+                    <time :dateTime="data.time">({{ released }})</time>
+                </div>
+            </slot>
         </template>
 
-        <template slot="actions" v-if="isPrivate">
-            <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="data.homepage">{{ 'ui.package.homepage' | translate }}</a>
-        </template>
-        <template slot="actions" v-else-if="updateOnly">
+        <template slot="actions" v-if="updateOnly">
             <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
         </template>
         <template slot="actions" v-else>
-            <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
-            <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isInstalled" :disabled="isModified" @click="update">
-                <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="isModified">Enable</button>-->
-                <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="!isModified">Disable</button>-->
-                <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
-            </button-group>
-            <button class="widget-button widget-button--primary widget-button--add" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
+            <slot name="actions">
+                <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isInstalled" :disabled="isModified" @click="update">
+                    <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="isModified">Enable</button>-->
+                    <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="!isModified">Disable</button>-->
+                    <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                </button-group>
+                <button class="widget-button widget-button--primary widget-button--add" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
+            </slot>
         </template>
 
     </package>
@@ -80,6 +74,7 @@
                 type: Boolean,
                 default: false,
             },
+            private: Boolean,
         },
 
         data: () => ({
@@ -114,20 +109,6 @@
                     || this.$store.state.packages.update.length > 0
                     || this.$store.state.packages.remove.length > 0
                 );
-            },
-
-            isPrivate() {
-                if (this.data.version || this.data.version !== false) {
-                    return false;
-                }
-
-                const license = this.data.license;
-
-                if (license instanceof Array) {
-                    return this.data.license.includes('proprietary');
-                }
-
-                return String(license) === 'proprietary';
             },
 
             isIncompatible() {
