@@ -24,6 +24,7 @@
         "symfony/framework-bundle": "3.4.*",
         "symfony/security-bundle": "3.4.*",
         "symfony/console": "3.4.*",
+        "symfony/finder": "3.4.*",
         "symfony/process": "3.4.*",
         "symfony/yaml": "3.4.*",
         "doctrine/annotations": "~1.0",

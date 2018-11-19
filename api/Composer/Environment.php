@@ -16,6 +16,7 @@ use Composer\IO\NullIO;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 class Environment
 {
@@ -93,6 +94,31 @@ class Environment
         $this->filesystem->mkdir($dir);
 
         return $dir;
+    }
+
+    public function getArtifactsDir()
+    {
+        $dir = $this->kernel->getConfigDir().'/packages';
+
+        $this->filesystem->mkdir($dir);
+
+        return $dir;
+    }
+
+    public function getArtifacts()
+    {
+        $files = [];
+        $finder = (new Finder())
+            ->files()
+            ->depth(0)
+            ->in($this->getArtifactsDir())
+        ;
+
+        foreach ($finder->getIterator() as $file) {
+            $files[] = $file->getFilename();
+        }
+
+        return $files;
     }
 
     public function getComposer()

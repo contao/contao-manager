@@ -71,7 +71,7 @@ class UpdateTask extends AbstractPackagesTask
         $status = parent::update($config);
 
         if ($status->isComplete() && $config->getOption('dry_run', false)) {
-            $this->restoreBackup($config);
+            $this->restoreState($config);
         }
 
         return $status;

@@ -69,7 +69,7 @@ abstract class AbstractPackagesTask extends AbstractTask
         $status = parent::update($config);
 
         if (!$this->environment->useCloudResolver() && ($status->hasError() || $status->isStopped())) {
-            $this->restoreBackup($config);
+            $this->restoreState($config);
         }
 
         return $status;
@@ -83,7 +83,7 @@ abstract class AbstractPackagesTask extends AbstractTask
         $status = parent::abort($config);
 
         if ($status->hasError() || $status->isStopped()) {
-            $this->restoreBackup($config);
+            $this->restoreState($config);
         }
 
         return $status;
@@ -109,7 +109,7 @@ abstract class AbstractPackagesTask extends AbstractTask
     }
 
     /**
-     * Creates a backup of the composer.json and composer.lock file.
+     * Creates a backup of the composer.json and composer.lock file and stores the currently installed artifacts.
      *
      * @param TaskConfig $config
      */
@@ -143,6 +143,7 @@ abstract class AbstractPackagesTask extends AbstractTask
             }
         }
 
+        $config->setState('backup-artifacts', $this->environment->getArtifacts());
         $config->setState('backup-created', true);
     }
 
@@ -151,7 +152,7 @@ abstract class AbstractPackagesTask extends AbstractTask
      *
      * @param TaskConfig $config
      */
-    protected function restoreBackup(TaskConfig $config)
+    protected function restoreState(TaskConfig $config)
     {
         if ($config->getState('backup-created', false) && !$config->getState('backup-restored', false)) {
             if (null !== $this->logger) {
@@ -168,6 +169,12 @@ abstract class AbstractPackagesTask extends AbstractTask
                     }
                 } elseif (null !== $this->logger) {
                     $this->logger->info(sprintf('File "%s" does not exist', $source));
+                }
+            }
+
+            if ($previous = $config->getState('backup-artifacts')) {
+                foreach (array_diff($this->environment->getArtifacts(), $previous) as $delete) {
+                    $this->filesystem->remove($this->environment->getArtifactsDir().'/'.$delete);
                 }
             }
 
