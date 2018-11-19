@@ -3,7 +3,7 @@
         <div v-show="$refs.uploader && $refs.uploader.dropActive" class="package-uploads__overlay">
             <div>
                 <img src="../../../assets/images/upload.svg" width="128" height="128">
-                <p>Drop & drop files to upload</p>
+                <p>{{ $t('ui.packages.uploadOverlay') }}</p>
             </div>
         </div>
 

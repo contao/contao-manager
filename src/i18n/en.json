@@ -178,6 +178,7 @@
     "ui.packages.updateButton": "Update Packages",
     "ui.packages.searchButton": "Search Packages",
     "ui.packages.searchPlaceholder": "Search Packages …",
+    "ui.packages.uploadOverlay": "Drag & drop files to upload",
     "ui.packages.uploadButton": "Upload Packages",
     "ui.packages.uploadMessage": "You have {total} unconfirmed upload. ::: You have {total} unconfirmed uploads.",
     "ui.packages.uploadApply": "Confirm Uploads",
