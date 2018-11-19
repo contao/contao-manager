@@ -21,10 +21,9 @@
     import routes from '../../../router/routes';
 
     import MainLayout from '../../layouts/Main';
-    import ButtonGroup from '../../widgets/ButtonGroup';
 
     export default {
-        components: { MainLayout, ButtonGroup },
+        components: { MainLayout },
 
         props: {
             showSearch: Boolean,

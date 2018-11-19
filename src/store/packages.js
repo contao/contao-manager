@@ -115,7 +115,7 @@ export default {
     },
 
     actions: {
-        async load({ state, commit }) {
+        async load({ commit }) {
             commit('setInstalled', null);
             commit('reset');
 

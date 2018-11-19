@@ -1,7 +1,5 @@
 <template>
-    <composer-package
-        :package="data"
-    />
+    <composer-package :data="data"/>
 </template>
 
 <script>

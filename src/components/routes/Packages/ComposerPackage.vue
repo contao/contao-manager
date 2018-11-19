@@ -1,10 +1,10 @@
 <template>
     <package
-        :title="package.title"
-        :name="package.hideName ? '' : package.name"
-        :logo="package.logo"
+        :title="data.title"
+        :name="data.hideName ? '' : data.name"
+        :logo="data.logo"
         :badge="badge"
-        :description="package.description"
+        :description="data.description"
         :hint="hint"
         :hint-close="hintClose"
 
@@ -14,11 +14,11 @@
 
         @close-hint="restore"
     >
-        <more :name="package.name" :homepage="package.homepage" :support="Object.assign({}, package.support)" :private="isPrivate" slot="more"/>
+        <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :private="isPrivate" slot="more"/>
 
         <template slot="additional">
-            <strong class="package__version package__version--additional" v-if="package.version">{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
-            <span v-for="item in additional">{{ item }}</span>
+            <strong class="package__version package__version--additional" v-if="data.version">{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
+            <span v-for="(item,k) in additional" :key="k">{{ item }}</span>
         </template>
 
         <template slot="release" v-if="isPrivate">
@@ -33,14 +33,14 @@
                 <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
                 <button class="widget-button" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)">{{ 'ui.package.editConstraint' | translate }}</button>
             </fieldset>
-            <div class="package__version package__version--release" v-if="package.version">
-                <strong>{{ 'ui.package.version' | translate({ version: package.version }) }}</strong>
-                <time :dateTime="package.time">({{ released }})</time>
+            <div class="package__version package__version--release" v-if="data.version">
+                <strong>{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
+                <time :dateTime="data.time">({{ released }})</time>
             </div>
         </template>
 
         <template slot="actions" v-if="isPrivate">
-            <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="package.homepage">{{ 'ui.package.homepage' | translate }}</a>
+            <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="data.homepage">{{ 'ui.package.homepage' | translate }}</a>
         </template>
         <template slot="actions" v-else-if="updateOnly">
             <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
@@ -70,7 +70,7 @@
         components: { Package, More, ButtonGroup },
 
         props: {
-            package: {
+            data: {
                 type: Object,
                 required: true,
             },
@@ -97,12 +97,12 @@
                 'packageRemoved'
             ]),
 
-            isInstalled: vm => vm.packageInstalled(vm.package.name),
-            isRequired: vm => vm.packageRequired(vm.package.name),
-            isChanged: vm => vm.packageChanged(vm.package.name),
-            isUpdated: vm => vm.packageUpdated(vm.package.name),
-            willBeRemoved: vm => vm.packageRemoved(vm.package.name),
-            willBeInstalled: vm => vm.packageAdded(vm.package.name),
+            isInstalled: vm => vm.packageInstalled(vm.data.name),
+            isRequired: vm => vm.packageRequired(vm.data.name),
+            isChanged: vm => vm.packageChanged(vm.data.name),
+            isUpdated: vm => vm.packageUpdated(vm.data.name),
+            willBeRemoved: vm => vm.packageRemoved(vm.data.name),
+            willBeInstalled: vm => vm.packageAdded(vm.data.name),
             isModified: vm => vm.isUpdated || vm.isChanged || vm.willBeRemoved || vm.willBeInstalled,
 
             packageUpdates() {
@@ -115,14 +115,14 @@
             },
 
             isPrivate() {
-                if (this.package.version || this.package.version !== false) {
+                if (this.data.version || this.data.version !== false) {
                     return false;
                 }
 
-                const license = this.package.license;
+                const license = this.data.license;
 
                 if (license instanceof Array) {
-                    return this.package.license.includes('proprietary');
+                    return this.data.license.includes('proprietary');
                 }
 
                 return String(license) === 'proprietary';
@@ -133,11 +133,11 @@
                     return false;
                 }
 
-                if (this.package.type === 'contao-bundle') {
-                    return !this.package.extra || !this.package.extra['contao-manager-plugin'];
+                if (this.data.type === 'contao-bundle') {
+                    return !this.data.extra || !this.data.extra['contao-manager-plugin'];
                 }
 
-                if (!this.isInstalled && (!this.package.managed || !this.package.supported)) {
+                if (!this.isInstalled && (!this.data.managed || !this.data.supported)) {
                     return true;
                 }
 
@@ -159,9 +159,9 @@
                     };
                 }
 
-                if (this.package.abandoned) {
+                if (this.data.abandoned) {
                     return {
-                        title: this.package.replacement === true && this.$t('ui.package.abandonedText') || this.$t('ui.package.replacement', { replacement: this.package.replacement }),
+                        title: this.data.replacement === true && this.$t('ui.package.abandonedText') || this.$t('ui.package.replacement', { replacement: this.data.replacement }),
                         text: this.$t('ui.package.abandonedTitle'),
                     };
                 }
@@ -216,35 +216,35 @@
             additional() {
                 const additionals = [];
 
-                if (this.package.license) {
-                    if (this.package.license instanceof Array) {
-                        additionals.push(this.package.license.join('/'));
+                if (this.data.license) {
+                    if (this.data.license instanceof Array) {
+                        additionals.push(this.data.license.join('/'));
                     } else {
-                        additionals.push(this.package.license);
+                        additionals.push(this.data.license);
                     }
                 }
 
-                if (this.package.downloads) {
-                    additionals.push(this.$t('ui.package.additionalDownloads', { count: this.package.downloads }, this.package.downloads));
+                if (this.data.downloads) {
+                    additionals.push(this.$t('ui.package.additionalDownloads', { count: this.data.downloads }, this.data.downloads));
                 }
 
-                if (this.package.favers) {
-                    additionals.push(this.$t('ui.package.additionalStars', { count: this.package.favers }, this.package.favers));
+                if (this.data.favers) {
+                    additionals.push(this.$t('ui.package.additionalStars', { count: this.data.favers }, this.data.favers));
                 }
 
                 return additionals;
             },
 
             released() {
-                if (this.package.time === undefined) {
+                if (this.data.time === undefined) {
                     return '';
                 }
 
-                return new Date(this.package.time).toLocaleString();
+                return new Date(this.data.time).toLocaleString();
             },
 
             constraintPlaceholder() {
-                if (!Object.keys(this.$store.state.packages.installed).includes(this.package.name)) {
+                if (!Object.keys(this.$store.state.packages.installed).includes(this.data.name)) {
                     return this.$t('ui.package.latestConstraint');
                 }
 
@@ -256,7 +256,7 @@
                     return null;
                 }
 
-                return this.$store.state.packages.installed[this.package.name].constraint;
+                return this.$store.state.packages.installed[this.data.name].constraint;
             },
 
             constraintRequired() {
@@ -268,7 +268,7 @@
                     return this.constraintChanged;
                 }
 
-                return this.$store.state.packages.required[this.package.name].constraint;
+                return this.$store.state.packages.required[this.data.name].constraint;
             },
 
             constraintAdded() {
@@ -276,7 +276,7 @@
                     return null;
                 }
 
-                return this.$store.state.packages.add[this.package.name].constraint;
+                return this.$store.state.packages.add[this.data.name].constraint;
             },
 
             constraintChanged() {
@@ -284,34 +284,34 @@
                     return null;
                 }
 
-                return this.$store.state.packages.change[this.package.name];
+                return this.$store.state.packages.change[this.data.name];
             },
         },
 
         methods: {
             restore() {
-                this.$store.commit('packages/restore', this.package.name);
+                this.$store.commit('packages/restore', this.data.name);
                 this.resetConstraint();
             },
 
             install() {
                 /* eslint-disable no-underscore-dangle */
-                const data = Object.assign({}, this.package);
+                const data = Object.assign({}, this.data);
                 delete data._highlightResult;
 
                 this.$store.commit('packages/add', data);
             },
 
             update() {
-                this.$store.commit('packages/update', this.package.name);
+                this.$store.commit('packages/update', this.data.name);
             },
 
             uninstall() {
                 if (this.willBeInstalled && !this.isInstalled) {
-                    this.$store.commit('packages/restore', this.package.name);
+                    this.$store.commit('packages/restore', this.data.name);
                 } else {
-                    this.$store.commit('packages/restore', this.package.name);
-                    this.$store.commit('packages/remove', this.package.name);
+                    this.$store.commit('packages/restore', this.data.name);
+                    this.$store.commit('packages/remove', this.data.name);
                 }
             },
 
@@ -345,7 +345,7 @@
                 if (!this.isRequired && this.willBeInstalled && !this.constraint) {
                     this.$store.commit(
                         'packages/add',
-                        Object.assign({}, this.package, { constraint: null }),
+                        Object.assign({}, this.data, { constraint: null }),
                     );
                     this.resetConstraint();
                     return;
@@ -359,11 +359,11 @@
                         this.constraintValidating = false;
                         if (response.body.valid) {
                             if (this.isInstalled || this.isRequired) {
-                                this.$store.commit('packages/change', { name: this.package.name, version: this.constraint });
+                                this.$store.commit('packages/change', { name: this.data.name, version: this.constraint });
                             } else {
                                 this.$store.commit(
                                     'packages/add',
-                                    Object.assign({}, this.package, { constraint: this.constraint }),
+                                    Object.assign({}, this.data, { constraint: this.constraint }),
                                 );
                             }
                         } else {

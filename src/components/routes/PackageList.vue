@@ -12,8 +12,7 @@
 
                 <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.installed' | translate }}</h2>
                 <root-package :package="packages['contao/manager-bundle']" v-if="packages"/>
-                <local-package v-for="item in packages" :package="item" :key="item.name" v-if="item.name !== 'contao/manager-bundle'"
-                />
+                <local-package v-for="item in notRootPackages" :package="item" :key="item.name"/>
             </template>
         </div>
 
@@ -44,6 +43,8 @@
                 'requiredPackages': 'required',
             }),
             ...mapGetters('packages', ['totalChanges', 'hasAdded', 'packageAdded', 'canResetChanges']),
+
+            notRootPackages: vm => Object.values(vm.packages).filter(pkg => pkg.name !== 'contao/manager-bundle'),
         },
 
         methods: {

@@ -52,12 +52,7 @@
 </template>
 
 <script>
-    import More from './More';
-    import ButtonGroup from '../../widgets/ButtonGroup';
-
     export default {
-        components: { More, ButtonGroup },
-
         props: {
             title: String,
             name: String,
