@@ -20,8 +20,8 @@
     </package>
 
     <package
-        :title="pkg.title"
-        :name="pkg.name"
+        :title="pkg.title || pkg.name"
+        :name="data.name"
         :description="pkg.description"
         :hint="hintDuplicate"
         release-disabled
