@@ -8,19 +8,14 @@
         </div>
 
         <file-upload
+            name="package"
             ref="uploader"
             :post-action="uploadUrl"
             :multiple="true"
             :drop="true"
             :drop-directory="false"
             :chunk-enabled="true"
-            :chunk="{
-                    action: uploadUrl,
-                    minSize: 1,
-                    maxActive: 3,
-                    maxRetries: 5,
-                }"
-
+            :chunk="{ action: uploadUrl }"
             @input="setFiles"
             @input-file="updateFile"
             @input-filter="filterFile"

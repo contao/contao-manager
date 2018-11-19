@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UploadPackagesController
 {
-    const CHUNK_SIZE = 524288; // 500 KB
+    const CHUNK_SIZE = 1048576; // 1MB
 
     /**
      * @var UploadsConfig
@@ -74,7 +74,7 @@ class UploadPackagesController
             }
         }
 
-        return new JsonResponse($uploads);
+        return new JsonResponse(array_reverse($uploads));
     }
 
     /**
@@ -83,17 +83,31 @@ class UploadPackagesController
     public function upload(Request $request)
     {
         // Must be a HTML5 upload
-        if ($request->files->count() > 0 && !$request->files->has('chunk')) {
-            // TODO: handle HTML5 upload
-            throw new \RuntimeException('HTML5 upload is not yet supported');
+        if ($request->files->has('package')) {
+            /** @var UploadedFile $file */
+            $file = $request->files->get('package');
+
+            $id = $this->createUpload(
+                $file->getClientOriginalName(),
+                $file->getSize()
+            );
+
+            $file->move($this->environment->getUploadDir(), $id);
+
+            return $this->finishUpload($id);
         }
 
         switch ($request->request->get('phase')) {
             case 'start':
+                $id = $this->createUpload(
+                    $request->request->get('name'),
+                    $request->request->getInt('size')
+                );
+
                 return new JsonResponse([
                     'status' => 'success',
                     'data' => [
-                        'session_id' => $this->createChunk($request),
+                        'session_id' => $id,
                         'end_offset' => self::CHUNK_SIZE,
                     ]
                 ], Response::HTTP_CREATED);
@@ -108,8 +122,7 @@ class UploadPackagesController
 
             case 'finish':
                 $id = $request->request->get('session_id');
-                $this->finishUpload($id);
-                return new JsonResponse(['status' => 'success', 'session_id' => $id]);
+                return $this->finishUpload($id);
         }
 
         throw new \RuntimeException(sprintf('Invalid chunk phase "%s"', $request->request->get('phase')));
@@ -135,15 +148,15 @@ class UploadPackagesController
         return new JsonResponse(['status' => 'success']);
     }
 
-    private function createChunk(Request $request)
+    private function createUpload($name, $size)
     {
         $id = bin2hex(random_bytes(8));
 
         $this->filesystem->touch($this->uploadPath($id));
 
         $this->config->set($id, [
-            'name' => $request->request->get('name'),
-            'size' => (int) $request->request->get('size'),
+            'name' => $name,
+            'size' => $size,
             'success' => false,
             'error' => null,
             'package' => null,
@@ -216,7 +229,12 @@ class UploadPackagesController
 
         $this->config->set($id, $config);
 
-        return $config;
+        return new JsonResponse(
+            [
+                'status' => 'success',
+                'data' => $this->config->get($id),
+            ]
+        );
     }
 
     private function uploadPath($id)
@@ -237,6 +255,6 @@ class UploadPackagesController
 
         $this->config->set($id, $config);
 
-        return $config;
+        return new JsonResponse($config);
     }
 }
