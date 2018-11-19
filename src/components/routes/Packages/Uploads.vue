@@ -67,10 +67,9 @@
 
                 // New file has been added
                 if (newFile && !oldFile) {
-                    // // Filter non-image file
-                    // if (!/\.(jpeg|jpe|jpg|gif|png|webp)$/i.test(newFile.name)) {
-                    //     return prevent()
-                    // }
+                    if (!/\.zip$/i.test(newFile.name)) {
+                        return prevent()
+                    }
                 }
             },
 
