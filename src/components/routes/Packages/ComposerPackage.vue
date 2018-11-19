@@ -3,7 +3,7 @@
         :title="data.title"
         :name="data.hideName ? '' : data.name"
         :logo="data.logo"
-        :badge="badge"
+        :badge="badge || composerBadge"
         :description="data.description"
         :hint="hint"
         :hint-close="hintClose"
@@ -47,7 +47,7 @@
                     <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="!isModified">Disable</button>-->
                     <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
                 </button-group>
-                <button class="widget-button widget-button--primary widget-button--add" v-else @click="install" :disabled="isIncompatible || isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
+                <button class="widget-button widget-button--primary widget-button--add" v-else @click="install" :disabled="isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
             </slot>
         </template>
 
@@ -70,11 +70,9 @@
                 type: Object,
                 required: true,
             },
-            updateOnly: {
-                type: Boolean,
-                default: false,
-            },
+            updateOnly: Boolean,
             private: Boolean,
+            badge: Object,
         },
 
         data: () => ({
@@ -111,34 +109,11 @@
                 );
             },
 
-            isIncompatible() {
-                if (this.updateOnly || this.isRequired) {
-                    return false;
-                }
-
-                if (this.data.type === 'contao-bundle') {
-                    return !this.data.extra || !this.data.extra['contao-manager-plugin'];
-                }
-
-                if (!this.isInstalled && (!this.data.managed || !this.data.supported)) {
-                    return true;
-                }
-
-                return false;
-            },
-
-            badge() {
+            composerBadge() {
                 if (this.isRequired) {
                     return {
                         title: this.$t('ui.package.requiredText'),
                         text: this.$t('ui.package.requiredTitle'),
-                    };
-                }
-
-                if (this.isIncompatible) {
-                    return {
-                        title: this.$t('ui.package.incompatibleText'),
-                        text: this.$t('ui.package.incompatibleTitle'),
                     };
                 }
 

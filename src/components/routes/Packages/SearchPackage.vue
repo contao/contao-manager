@@ -1,5 +1,5 @@
 <template>
-    <composer-package :data="data" :private="isPrivate">
+    <composer-package :data="data" :private="isPrivate" :badge="badge">
         <template slot="release" v-if="isPrivate">
             <p class="package__proprietary">
                 <img src="../../../assets/images/buy.svg" width="24" height="24"/>
@@ -10,6 +10,9 @@
 
         <template slot="actions" v-if="isPrivate">
             <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="data.homepage">{{ 'ui.package.homepage' | translate }}</a>
+        </template>
+        <template slot="actions" v-if="isIncompatible">
+            <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
         </template>
     </composer-package>
 </template>
@@ -40,6 +43,15 @@
                 );
             },
 
+            badge() {
+                if (this.isIncompatible) {
+                    return {
+                        title: this.$t('ui.package.incompatibleText'),
+                        text: this.$t('ui.package.incompatibleTitle'),
+                    };
+                }
+            },
+
             isPrivate() {
                 const license = this.data.license;
 
@@ -48,6 +60,14 @@
                 }
 
                 return String(license) === 'proprietary';
+            },
+
+            isIncompatible() {
+                if (this.data.type === 'contao-bundle') {
+                    return !this.data.extra || !this.data.extra['contao-manager-plugin'];
+                }
+
+                return !this.data.managed || !this.data.supported;
             },
         },
     };
