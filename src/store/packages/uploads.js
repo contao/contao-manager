@@ -88,7 +88,15 @@ export default {
 
     actions: {
         async load({ commit }) {
-            commit('setUploads', (await Vue.http.get('api/packages/uploads')).body);
+            try {
+                commit('setUploads', (await Vue.http.get('api/packages/uploads')).body);
+            } catch (err) {
+                if (err.status !== 501) {
+                    throw err;
+                }
+
+                commit('setUploads', false);
+            }
         },
 
         async remove({ dispatch }, id) {

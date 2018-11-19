@@ -11,9 +11,13 @@
 namespace Contao\ManagerApi\Controller\Packages;
 
 use Composer\Json\JsonFile;
+use Composer\Semver\Constraint\Constraint;
+use Composer\Semver\Constraint\MultiConstraint;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Config\UploadsConfig;
+use Contao\ManagerApi\Exception\ApiProblemException;
 use Contao\ManagerApi\I18n\Translator;
+use Crell\ApiProblem\ApiProblem;
 use PhpZip\Exception\ZipException;
 use PhpZip\ZipFile;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -62,6 +66,8 @@ class UploadPackagesController
      */
     public function __invoke()
     {
+        $this->validateUploadSupport();
+
         $uploads = $this->config->all();
 
         foreach ($uploads as $id => &$upload) {
@@ -82,6 +88,8 @@ class UploadPackagesController
      */
     public function upload(Request $request)
     {
+        $this->validateUploadSupport();
+
         // Must be a HTML5 upload
         if ($request->files->has('package')) {
             /** @var UploadedFile $file */
@@ -133,6 +141,8 @@ class UploadPackagesController
      */
     public function delete($id)
     {
+        $this->validateUploadSupport();
+
         if (!$this->config->has($id)) {
             throw new NotFoundHttpException(sprintf('Unknown file ID "%s"', $id));
         }
@@ -256,5 +266,33 @@ class UploadPackagesController
         $this->config->set($id, $config);
 
         return new JsonResponse($config);
+    }
+
+    private function validateUploadSupport()
+    {
+        $packages = $this->environment
+            ->getComposer()
+            ->getRepositoryManager()
+            ->getLocalRepository()
+            ->getPackages()
+        ;
+
+        foreach ($packages as $package) {
+            if ($package->getName() === 'contao/manager-plugin') {
+                $require = new MultiConstraint([
+                    new Constraint('>=', '2.7'),
+                    new Constraint('=', 'dev-master'),
+                ], false);
+
+                if ($require->matches(new Constraint('=', $package->getVersion()))) {
+                    return;
+                }
+            }
+        }
+
+        throw new ApiProblemException(
+            (new ApiProblem('Must install contao/manager-plugin 2.7 or later to support artifacts.'))
+                ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+        );
     }
 }

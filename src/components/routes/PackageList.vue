@@ -6,7 +6,7 @@
             </loader>
 
             <template v-else>
-                <package-uploads ref="uploader"/>
+                <package-uploads ref="uploader" v-if="uploads !== false"/>
 
                 <h2 class="package-list__headline" v-if="showHeadlines">{{ 'ui.packagelist.added' | translate }}</h2>
                 <local-package v-for="item in addedPackages" :package="item" :key="item.name"/>

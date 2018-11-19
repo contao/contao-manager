@@ -5,7 +5,7 @@
             <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
             <button class="package-tools__button widget-button widget-button--search" :disabled="uploading" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
             <slot name="search"/>
-            <button class="package-tools__button package-tools__button--upload widget-button" :disabled="uploading" @click.prevent="$emit('start-upload')">{{ 'ui.packages.uploadButton' | translate }}</button>
+            <button class="package-tools__button package-tools__button--upload widget-button" :disabled="!uploads || uploading" :title="uploadError" @click.prevent="$emit('start-upload')">{{ 'ui.packages.uploadButton' | translate }}</button>
         </section>
 
         <slot/>
@@ -32,7 +32,9 @@
 
         computed: {
             ...mapGetters('packages', ['totalChanges']),
-            ...mapState('packages/uploads', ['uploading']),
+            ...mapState('packages/uploads', ['uploads', 'uploading']),
+
+            uploadError: vm => vm.uploads === false ? vm.$t('ui.packages.uploadUnsupported') : '',
         },
 
         methods: {
