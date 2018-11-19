@@ -14,6 +14,8 @@
 
         @close-hint="restore"
     >
+        <template slot="logo"><slot name="logo"/></template>
+
         <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :private="isPrivate" slot="more"/>
 
         <template slot="additional">
