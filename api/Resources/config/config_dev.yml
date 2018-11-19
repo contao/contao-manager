@@ -7,5 +7,5 @@ monolog:
             type: rotating_file
             path: "%kernel.logs_dir%/api.log"
             level: INFO
-            channels: [!event]
+            channels: ['!event']
             max_files: 10
