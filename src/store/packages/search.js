@@ -25,9 +25,9 @@ export default {
             state.algolia = client;
         },
 
-        cache(state, pkg) {
-            state.metadata[pkg.name] = pkg;
-        }
+        cache(state, { name, data }) {
+            state.metadata[name] = data;
+        },
     },
 
     actions: {
@@ -36,12 +36,15 @@ export default {
                 return store.state.metadata[name];
             }
 
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 algolia(store).getObject(name, (err, content) => {
-                    const data = err ? null : content;
+                    const data = {
+                        name,
+                        data: err ? null : content
+                    };
 
                     store.commit('cache', data);
-                    resolve(data);
+                    resolve(content);
                 });
             });
         },
