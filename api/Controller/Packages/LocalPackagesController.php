@@ -37,8 +37,7 @@ class LocalPackagesController
 
     public function __invoke($name = null)
     {
-        $composer = Factory::create(new NullIO(), $this->environment->getJsonFile(), true);
-        $packages = $this->getLocalPackages($composer);
+        $packages = $this->getLocalPackages();
 
         if (empty($name)) {
             return new JsonResponse($packages);
@@ -51,17 +50,17 @@ class LocalPackagesController
         return new JsonResponse($packages[$name]);
     }
 
-    /**
-     * @param Composer $composer
-     *
-     * @return array
-     */
-    private function getLocalPackages(Composer $composer)
+    private function getLocalPackages()
     {
         $packages = [];
         $dumper = new ArrayDumper();
+        $repository = $this->environment
+            ->getComposer()
+            ->getRepositoryManager()
+            ->getLocalRepository()
+        ;
 
-        foreach ($composer->getRepositoryManager()->getLocalRepository()->getPackages() as $package) {
+        foreach ($repository->getPackages() as $package) {
             $packages[$package->getName()] = $dumper->dump($package);
         }
 

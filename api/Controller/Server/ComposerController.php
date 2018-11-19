@@ -49,8 +49,7 @@ class ComposerController extends Controller
         ];
 
         try {
-            $composer = Factory::create(new NullIO(), $environment->getJsonFile(), true);
-            $locker = $composer->getLocker();
+            $locker = $environment->getComposer()->getLocker();
 
             if ($locker->isLocked()) {
                 $result['lock']['found'] = true;

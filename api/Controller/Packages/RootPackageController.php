@@ -34,9 +34,8 @@ class RootPackageController
 
     public function __invoke()
     {
-        $composer = Factory::create(new NullIO(), $this->environment->getJsonFile(), true);
         $dumper = new ArrayDumper();
 
-        return new JsonResponse($dumper->dump($composer->getPackage()));
+        return new JsonResponse($dumper->dump($this->environment->getComposer()->getPackage()));
     }
 }

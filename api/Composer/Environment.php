@@ -10,6 +10,9 @@
 
 namespace Contao\ManagerApi\Composer;
 
+use Composer\Composer;
+use Composer\Factory;
+use Composer\IO\NullIO;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
 
@@ -24,6 +27,11 @@ class Environment
      * @var ManagerConfig
      */
     private $managerConfig;
+
+    /**
+     * @var Composer
+     */
+    private $composer;
 
     /**
      * Constructor.
@@ -69,6 +77,15 @@ class Environment
     public function getVendorDir()
     {
         return $this->kernel->getProjectDir().'/vendor';
+    }
+
+    public function getComposer()
+    {
+        if (null === $this->composer) {
+            $this->composer = Factory::create(new NullIO(), $this->getJsonFile(), true);
+        }
+
+        return $this->composer;
     }
 
     public function useCloudResolver()
