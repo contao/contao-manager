@@ -15,6 +15,7 @@ use Composer\Factory;
 use Composer\IO\NullIO;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Environment
 {
@@ -29,6 +30,11 @@ class Environment
     private $managerConfig;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @var Composer
      */
     private $composer;
@@ -39,10 +45,11 @@ class Environment
      * @param ApiKernel     $kernel
      * @param ManagerConfig $managerConfig
      */
-    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig)
+    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, Filesystem $filesystem)
     {
         $this->kernel = $kernel;
         $this->managerConfig = $managerConfig;
+        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     public function getAll()
@@ -77,6 +84,15 @@ class Environment
     public function getVendorDir()
     {
         return $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'vendor';
+    }
+
+    public function getUploadDir()
+    {
+        $dir = $this->kernel->getConfigDir().'/uploads';
+
+        $this->filesystem->mkdir($dir);
+
+        return $dir;
     }
 
     public function getComposer()
