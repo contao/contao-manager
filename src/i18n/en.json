@@ -183,6 +183,8 @@
     "ui.packages.uploadMessage": "You have {total} unconfirmed upload. ::: You have {total} unconfirmed uploads.",
     "ui.packages.uploadApply": "Confirm Uploads",
     "ui.packages.uploadReset": "Delete Uploads",
+    "ui.packages.uploadIncomplete": "This file was not uploaded completely. Please remove it and try again.",
+    "ui.packages.uploadDuplicate": "This file seems to be uploaded multiple times. Please remove the duplicates.",
     "ui.packages.changesMessage": "You have {total} unconfirmed change. ::: You have {total} unconfirmed changes.",
     "ui.packages.changesDryrun": "Dry Run",
     "ui.packages.changesApply": "Apply Changes",

@@ -1,7 +1,7 @@
 <template>
     <package
         :title="data.name"
-        :hint="hint"
+        :hint="hintUploading"
         v-if="!data.success || data.error"
     >
         <template slot="release">
@@ -23,6 +23,7 @@
         :title="pkg.title"
         :name="pkg.name"
         :description="pkg.description"
+        :hint="hintDuplicate"
         release-disabled
         v-else
     >
@@ -44,18 +45,19 @@
         </template>
 
         <template slot="actions">
-            <button-group :label="$t('ui.package.installButton')" type="primary" icon="add" :disabled="removing" @click="addPackage">
-                <button :class="removeClass" :disabled="removing" @click="removeUpload">
-                    <span v-if="!removing">{{ $t('ui.package.removeButton') }}</span>
-                    <loader v-else/>
-                </button>
-            </button-group>
+            <button class="widget-button widget-button--primary widget-button--add" :disabled="removing || isDuplicate(data.id)" @click="addPackage">{{ $t('ui.package.installButton') }}</button>
+            <button :class="removeClass" :disabled="removing" @click="removeUpload">
+                <span v-if="!removing">{{ $t('ui.package.removeButton') }}</span>
+                <loader v-else/>
+            </button>
         </template>
     </package>
 
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     import Loader from '../../fragments/Loader';
     import Package from './Package';
     import More from './More';
@@ -81,6 +83,8 @@
         }),
 
         computed: {
+            ...mapGetters('packages/uploads', ['isDuplicate']),
+
             progress: vm => 100 / vm.data.size * vm.data.filesize,
 
             removeClass: vm => ({
@@ -97,16 +101,24 @@
                 );
             },
 
-            hint() {
+            hintUploading() {
                 if (this.data.error) {
                     return this.data.error;
                 }
 
                 if (this.data.size !== this.data.filesize) {
-                    return 'This file was not uploaded completely.';
+                    return this.$t('ui.packages.uploadIncomplete');
                 }
 
                 return '';
+            },
+
+            hintDuplicate() {
+                if (!this.isDuplicate(this.data.id)) {
+                    return '';
+                }
+
+                return this.$t('ui.packages.uploadDuplicate');
             },
 
             filesize() {

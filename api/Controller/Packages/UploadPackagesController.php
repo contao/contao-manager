@@ -223,9 +223,8 @@ class UploadPackagesController
             return $this->installError($id, 'version');
         }
 
-        // TODO: make sure file does not yet exist (same name and checksum)
-
         $config['success'] = true;
+        $config['hash'] = md5_file($uploadFile);
         $config['package'] = $data;
 
         $this->config->set($id, $config);
