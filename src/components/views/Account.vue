@@ -122,7 +122,7 @@
                         if (success) {
                             this.$store.commit('setView', views.BOOT);
                         } else {
-                            this.$store.dispatch('apiError');
+                            this.$store.commit('apiError');
                         }
                     },
                 );

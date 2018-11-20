@@ -84,7 +84,7 @@
                 } else if (statusCode === 401) {
                     this.$store.commit('setView', views.LOGIN);
                 } else {
-                    this.$store.dispatch('apiError', statusCode);
+                    this.$store.commit('apiError', statusCode);
                 }
             });
         },

@@ -29,24 +29,28 @@ const store = new Vuex.Store({
         },
 
         setError(state, error) {
-            if (state.error === null) {
-                state.error = error;
+            if (state.error) {
+                return;
             }
+
+            state.error = error;
         },
 
         setVersions(state, result) {
             state.contaoVersion = result.version;
             state.apiVersion = result.api;
         },
-    },
 
-    actions: {
-        apiError: ({ commit }, statusCode) => {
-            commit('setError', {
+        apiError: (state, statusCode) => {
+            if (state.error) {
+                return;
+            }
+
+            state.error = {
                 title: Vue.i18n.translate('ui.app.apiError'),
                 type: 'about:blank',
                 status: statusCode || '',
-            });
+            };
         },
     },
 });
