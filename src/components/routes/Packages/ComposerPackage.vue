@@ -16,7 +16,7 @@
     >
         <template slot="logo"><slot name="logo"/></template>
 
-        <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :private="private" slot="more"/>
+        <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :is-private="isPrivate" slot="more"/>
 
         <template slot="additional">
             <strong class="package__version package__version--additional" v-if="data.version">{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
@@ -71,7 +71,7 @@
                 required: true,
             },
             updateOnly: Boolean,
-            private: Boolean,
+            isPrivate: Boolean,
             badge: Object,
         },
 

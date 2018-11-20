@@ -1,5 +1,5 @@
 <template>
-    <composer-package :data="data" :private="isPrivate" :badge="badge">
+    <composer-package :data="data" :is-private="isPrivate" :badge="badge">
         <template slot="release" v-if="isPrivate">
             <p class="package__proprietary">
                 <img src="../../../assets/images/buy.svg" width="24" height="24"/>

@@ -16,7 +16,7 @@
             name: String,
             homepage: String,
             support: Object,
-            private: Boolean,
+            isPrivate: Boolean,
         },
 
         data: () => ({
@@ -31,7 +31,7 @@
                     items.push({ label: this.$t('ui.package.homepage'), href: this.homepage, target: '_blank' });
                 }
 
-                if (this.name && !this.private) {
+                if (this.name && !this.isPrivate) {
                     items.push({ label: this.$t('ui.package.packagist'), href: `https://packagist.org/packages/${this.name}`, target: '_blank' });
                 }
 

@@ -10,7 +10,9 @@
 
 namespace Contao\ManagerApi\Controller\Contao;
 
+use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Process\ContaoApi;
+use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,7 +72,10 @@ class AccessKeyController extends Controller
     private function getAccessKey()
     {
         if (!$this->isSupported('get')) {
-            return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+            return new ApiProblemResponse(
+                (new ApiProblem('Contao does not support the access-key API.'))
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+            );
         }
 
         return new JsonResponse(['access-key' => $this->api->runCommand($this->getAccessKeyArguments('get'))]);

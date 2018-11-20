@@ -28,7 +28,7 @@
                 <div class="config-check__issues" v-if="cloudIssues && cloudIssues.length">
                     <p>{{ 'ui.server.config.stateErrorCloud' | translate }}</p>
                     <ul>
-                        <li v-for="issue in cloudIssues">{{ issue }}</li>
+                        <li v-for="(issue,k) in cloudIssues" :key="k">{{ issue }}</li>
                     </ul>
                 </div>
 

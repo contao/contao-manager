@@ -39,12 +39,10 @@
 
     import BoxedLayout from '../layouts/Boxed';
     import TextField from '../widgets/TextField';
-    import SelectMenu from '../widgets/SelectMenu';
-    import Checkbox from '../widgets/Checkbox';
     import Loader from '../fragments/Loader';
 
     export default {
-        components: { BoxedLayout, TextField, SelectMenu, Checkbox, Loader },
+        components: { BoxedLayout, TextField, Loader },
 
         data: () => ({
             username: '',
