@@ -177,6 +177,7 @@ export default {
                     require,
                     remove,
                     update,
+                    uploads: true,
                     dry_run: dryRun === true,
                 },
             };

@@ -110,6 +110,11 @@ en:
             summary: 'Adding Composer packages …'
         composer-remove:
             summary: 'Removing Composer packages …'
+        install-uploads:
+            summary: 'Installing uploaded packages …'
+            console: 'Installed artifact for {package} (version {version}) [to packages/{name}]'
+        remove-uploads:
+            summary: 'Removing upload files …'
         composer-install:
             summary: 'Installing Composer dependencies …'
             summaryRetry: 'Installing Composer dependencies (retrying {current}/{max}) …'

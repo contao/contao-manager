@@ -172,7 +172,7 @@ abstract class AbstractPackagesTask extends AbstractTask
                 }
             }
 
-            if ($previous = $config->getState('backup-artifacts')) {
+            if (($previous = $config->getState('backup-artifacts')) !== null) {
                 foreach (array_diff($this->environment->getArtifacts(), $previous) as $delete) {
                     $this->filesystem->remove($this->environment->getArtifactDir().'/'.$delete);
                 }

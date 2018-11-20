@@ -13,6 +13,7 @@ namespace Contao\ManagerApi\Task\Packages;
 use Contao\ManagerApi\Composer\CloudChanges;
 use Contao\ManagerApi\Composer\CloudResolver;
 use Contao\ManagerApi\Composer\Environment;
+use Contao\ManagerApi\Config\UploadsConfig;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\System\ServerInfo;
@@ -23,6 +24,8 @@ use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
 use Contao\ManagerApi\TaskOperation\Composer\RemoveOperation;
 use Contao\ManagerApi\TaskOperation\Composer\RequireOperation;
 use Contao\ManagerApi\TaskOperation\Composer\UpdateOperation;
+use Contao\ManagerApi\TaskOperation\Filesystem\InstallUploadsOperation;
+use Contao\ManagerApi\TaskOperation\Filesystem\RemoveUploadsOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
 class UpdateTask extends AbstractPackagesTask
@@ -38,6 +41,11 @@ class UpdateTask extends AbstractPackagesTask
     private $cloudResolver;
 
     /**
+     * @var UploadsConfig
+     */
+    private $uploads;
+
+    /**
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
@@ -47,12 +55,13 @@ class UpdateTask extends AbstractPackagesTask
      * @param Translator            $translator
      * @param Filesystem            $filesystem
      */
-    public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
+    public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, UploadsConfig $uploads, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $serverInfo, $filesystem, $translator);
 
         $this->processFactory = $processFactory;
         $this->cloudResolver = $cloudResolver;
+        $this->uploads = $uploads;
     }
 
     /**
@@ -104,6 +113,34 @@ class UpdateTask extends AbstractPackagesTask
             $operations[] = new InstallOperation($this->processFactory, $config, $this->translator, $changes->getDryRun(), $this->getInstallTimeout());
         } else {
             $operations[] = new UpdateOperation($this->processFactory, $this->translator, $changes->getUpdates(), $changes->getDryRun());
+        }
+
+        if ($config->getOption('uploads', false) && count($this->uploads)) {
+            $uploads = array_filter(
+                $this->uploads->all(),
+                function ($upload) use ($changes) {
+                    return $upload['success']
+                        && isset($upload['package']['name'])
+                        && in_array($upload['package']['name'], $changes->getUpdates());
+                }
+            );
+
+            array_unshift($operations, new InstallUploadsOperation(
+                $uploads,
+                $config,
+                $this->environment,
+                $this->translator,
+                $this->filesystem
+            ));
+
+            $operations[] = new RemoveUploadsOperation(
+                $uploads,
+                $this->uploads,
+                $config,
+                $this->environment,
+                $this->translator,
+                $this->filesystem
+            );
         }
 
         return $operations;
