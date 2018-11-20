@@ -10,7 +10,7 @@
 
                 <h2 class="package-list__headline" v-if="showHeadlines">{{ 'ui.packagelist.added' | translate }}</h2>
                 <local-package v-for="item in addedPackages" :package="item" :key="item.name"/>
-                <local-package v-for="item in notRootRequired" :package="item" :key="item.name"/>
+                <local-package v-for="item in requiredNotAdded" :package="item" :key="item.name"/>
 
                 <h2 class="package-list__headline" v-if="showHeadlines || hasUploads || files.length">{{ 'ui.packagelist.installed' | translate }}</h2>
                 <root-package :package="packages['contao/manager-bundle'] || requiredPackages['contao/manager-bundle']" v-if="packages"/>
@@ -27,7 +27,7 @@
             <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
             <button class="package-actions__button widget-button" @click="dryrunChanges">{{ 'ui.packages.changesDryrun' | translate }}</button>
             <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
-            <button class="package-actions__button widget-button widget-button--alert" :disabled="!canResetChanges" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
+            <button class="package-actions__button widget-button widget-button--alert" :disabled="!canResetChanges && !confirmed.length" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
         </div>
     </package-base>
 </template>
@@ -51,12 +51,14 @@
                 'addedPackages': 'add',
                 'requiredPackages': 'required',
             }),
-            ...mapState('packages/uploads', ['uploads', 'uploading', 'files', 'removing']),
+            ...mapState('packages/uploads', ['uploads', 'uploading', 'files', 'removing', 'confirmed']),
             ...mapGetters('packages', ['totalChanges', 'hasAdded', 'packageAdded', 'packageInstalled', 'canResetChanges']),
             ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
 
             notRootInstalled: vm => Object.values(vm.packages).filter(pkg => pkg.name !== 'contao/manager-bundle'),
-            notRootRequired: vm => Object.values(vm.requiredPackages).filter(pkg => pkg.name !== 'contao/manager-bundle'),
+            requiredNotAdded: vm => Object.values(vm.requiredPackages).filter(
+                pkg => pkg.name !== 'contao/manager-bundle' && !Object.values(vm.addedPackages).find(add => add.name === pkg.name),
+            ),
             removingUploads: vm => vm.removing.length > 0,
             showHeadlines: vm => vm.hasAdded && vm.packages.length,
         },

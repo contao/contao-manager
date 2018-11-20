@@ -42,7 +42,7 @@
         </template>
 
         <template slot="actions">
-            <button class="widget-button widget-button--primary widget-button--add" :disabled="removing || isDuplicate(data.id)" @click="addPackage">{{ $t('ui.package.installButton') }}</button>
+            <button class="widget-button widget-button--primary widget-button--add" :disabled="!canBeAdded" @click="addPackage">{{ $t('ui.package.installButton') }}</button>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
     </package>
@@ -72,19 +72,18 @@
         },
 
         computed: {
+            ...mapGetters('packages', ['packageRemoved']),
             ...mapGetters('packages/uploads', ['isDuplicate', 'isRemoving']),
 
             removing: vm => vm.isRemoving(vm.data.id),
             progress: vm => 100 / vm.data.size * vm.data.filesize,
 
-            pkg() {
-                return Object.assign(
-                    {
-                        name: this.data.name,
-                    },
-                    this.data.package || {}
-                );
-            },
+            canBeAdded: vm => !vm.removing && !vm.isDuplicate(vm.data.id) && !vm.packageRemoved(vm.pkg.name),
+
+            pkg: vm => Object.assign(
+                { name: vm.data.name, },
+                vm.data.package || {}
+            ),
 
             hintUploading() {
                 if (this.data.error) {
