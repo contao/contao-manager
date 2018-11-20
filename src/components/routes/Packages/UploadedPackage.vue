@@ -12,10 +12,7 @@
         </template>
 
         <template slot="actions">
-            <button :class="removeClass" :disabled="removing" @click="removeUpload">
-                <span v-if="!removing">{{ $t('ui.package.removeButton') }}</span>
-                <loader v-else/>
-            </button>
+            <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
     </package>
 
@@ -46,10 +43,7 @@
 
         <template slot="actions">
             <button class="widget-button widget-button--primary widget-button--add" :disabled="removing || isDuplicate(data.id)" @click="addPackage">{{ $t('ui.package.installButton') }}</button>
-            <button :class="removeClass" :disabled="removing" @click="removeUpload">
-                <span v-if="!removing">{{ $t('ui.package.removeButton') }}</span>
-                <loader v-else/>
-            </button>
+            <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
     </package>
 
@@ -58,14 +52,13 @@
 <script>
     import { mapGetters } from 'vuex';
 
-    import Loader from '../../fragments/Loader';
     import Package from './Package';
     import More from './More';
     import ProgressBar from '../../fragments/ProgressBar';
-    import ButtonGroup from '../../widgets/ButtonGroup';
+    import LoadingButton from '../../widgets/LoadingButton';
 
     export default {
-        components: { Loader, ProgressBar, Package, More, ButtonGroup },
+        components: { ProgressBar, Package, More, LoadingButton },
 
         props: {
             data: {
@@ -86,11 +79,6 @@
             ...mapGetters('packages/uploads', ['isDuplicate']),
 
             progress: vm => 100 / vm.data.size * vm.data.filesize,
-
-            removeClass: vm => ({
-                'widget-button widget-button--alert': true,
-                'widget-button--trash': !vm.removing
-            }),
 
             pkg() {
                 return Object.assign(
