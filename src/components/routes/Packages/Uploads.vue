@@ -33,6 +33,8 @@
     import { mapState, mapGetters, mapMutations } from 'vuex';
     import FileUpload from 'vue-upload-component';
 
+    import views from '../../../router/views';
+
     import UploadingPackage from './UploadingPackage';
     import UploadedPackage from './UploadedPackage';
 
@@ -75,8 +77,12 @@
                     return;
                 }
 
-                if (newFile.error && newFile.xhr && newFile.xhr.getResponseHeader('Content-Type') === 'application/problem+json') {
-                    this.$store.commit('setError', JSON.parse(newFile.response));
+                if (newFile.error && newFile.xhr) {
+                    if (newFile.xhr.status === 401) {
+                        this.$store.commit('setView', views.LOGIN);
+                    } else if (newFile.xhr.getResponseHeader('Content-Type') === 'application/problem+json') {
+                        this.$store.commit('setError', JSON.parse(newFile.response));
+                    }
                 }
 
                 if (Boolean(newFile) !== Boolean(oldFile) || oldFile.error !== newFile.error) {
