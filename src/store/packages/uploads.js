@@ -68,13 +68,18 @@ export default {
             state.confirmed.push(id);
         },
 
-        unconfirm(state, name) {
+        unconfirm(state, idOrName) {
+            if (state.confirmed.includes[idOrName]) {
+                Vue.delete(state.confirmed, state.confirmed.indexOf(idOrName));
+                return;
+            }
+
             Object.keys(state.uploads).forEach((id) => {
                 if (state.uploads[id].package
-                    && state.uploads[id].package.name === name
+                    && state.uploads[id].package.name === idOrName
                     && state.confirmed.includes(id)
                 ) {
-                    state.confirmed.splice(state.confirmed.indexOf(name), 1);
+                    Vue.delete(state.confirmed, state.confirmed.indexOf(id));
                 }
             });
         },
@@ -87,14 +92,8 @@ export default {
             state.confirmed = [];
         },
 
-        toggleRemoving(state, value) {
-            if (!value) {
-                state.removing = [];
-            } else if (state.removing.includes(value)) {
-                state.removing.splice(state.removing.indexOf(value), 1);
-            } else {
-                state.removing.push(value);
-            }
+        setRemoved(state, id) {
+            state.removing.push(value);
         },
     },
 
@@ -112,21 +111,21 @@ export default {
         },
 
         async remove({ commit, dispatch }, id) {
-            commit('toggleRemoving', id);
+            commit('setRemoved', id);
             await Vue.http.delete(`api/packages/uploads/${id}`);
             await dispatch('load');
-            commit('toggleRemoving', id);
+            commit('unconfirm', id);
         },
 
         async removeAll({ state, commit, dispatch }) {
             await Promise.all(Object.keys(state.uploads).map(
                 (id) => {
-                    commit('toggleRemoving', id);
+                    commit('setRemoved', id);
                     return Vue.http.delete(`api/packages/uploads/${id}`)
                 },
             ));
             await dispatch('load');
-            commit('toggleRemoving', null);
+            commit('unconfirmAll');
         }
     },
 };
