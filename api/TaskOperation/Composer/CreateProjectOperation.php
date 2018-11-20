@@ -104,7 +104,13 @@ class CreateProjectOperation extends AbstractInlineOperation
      */
     protected function doRun()
     {
-        if ($this->filesystem->exists($this->environment->getAll())) {
+        $protected = [
+            $this->environment->getJsonFile(),
+            $this->environment->getLockFile(),
+            $this->environment->getVendorDir(),
+        ];
+
+        if ($this->filesystem->exists($protected)) {
             throw new \RuntimeException('Cannot install into existing application');
         }
 

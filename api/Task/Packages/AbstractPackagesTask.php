@@ -174,7 +174,7 @@ abstract class AbstractPackagesTask extends AbstractTask
 
             if ($previous = $config->getState('backup-artifacts')) {
                 foreach (array_diff($this->environment->getArtifacts(), $previous) as $delete) {
-                    $this->filesystem->remove($this->environment->getArtifactsDir().'/'.$delete);
+                    $this->filesystem->remove($this->environment->getArtifactDir().'/'.$delete);
                 }
             }
 

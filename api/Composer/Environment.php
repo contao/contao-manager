@@ -72,21 +72,42 @@ class Environment
         return $this->kernel->getConfigDir();
     }
 
+    /**
+     * Gets path to the composer.json file in the Contao root.
+     *
+     * @return string
+     */
     public function getJsonFile()
     {
         return $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'composer.json';
     }
 
+    /**
+     * Gets path to the composer.lock file in the Contao root.
+     *
+     * @return string
+     */
     public function getLockFile()
     {
         return $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'composer.lock';
     }
 
+    /**
+     * Gets the directory where Composer installs its packages to.
+     *
+     * @return string
+     */
     public function getVendorDir()
     {
         return $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'vendor';
     }
 
+    /**
+     * Gets the directory where uploads are stored to.
+     * These are temporary and only until they are installed as artifact or provider.
+     *
+     * @return string
+     */
     public function getUploadDir()
     {
         $dir = $this->kernel->getConfigDir().'/uploads';
@@ -96,7 +117,14 @@ class Environment
         return $dir;
     }
 
-    public function getArtifactsDir()
+    /**
+     * Gets the path where artifacts are installed to.
+     * Artifacts are ZIP files that contain Composer packages.
+     * @see https://getcomposer.org/doc/05-repositories.md#artifact
+     *
+     * @return string
+     */
+    public function getArtifactDir()
     {
         $dir = $this->kernel->getConfigDir().'/packages';
 
@@ -105,13 +133,18 @@ class Environment
         return $dir;
     }
 
+    /**
+     * Gets list of file names in the artifacts directory.
+     *
+     * @return array
+     */
     public function getArtifacts()
     {
         $files = [];
         $finder = (new Finder())
             ->files()
             ->depth(0)
-            ->in($this->getArtifactsDir())
+            ->in($this->getArtifactDir())
         ;
 
         foreach ($finder->getIterator() as $file) {
@@ -121,6 +154,11 @@ class Environment
         return $files;
     }
 
+    /**
+     * Gets the Composer instance.
+     *
+     * @return Composer
+     */
     public function getComposer()
     {
         if (null === $this->composer) {
@@ -130,6 +168,11 @@ class Environment
         return $this->composer;
     }
 
+    /**
+     * Gets whether the Cloud resolver is enabled in the Manager configuration.
+     *
+     * @return bool
+     */
     public function useCloudResolver()
     {
         return !$this->managerConfig->get('disable_cloud', false);
