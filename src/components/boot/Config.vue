@@ -36,10 +36,7 @@
             </fieldset>
 
             <fieldset class="config-check__fields">
-                <button class="widget-button widget-button--primary" @click="save" :disabled="!inputValid || processing">
-                    <span v-if="!processing" class="widget-button--save">{{ 'ui.server.config.save' | translate }}</span>
-                    <loader v-else/>
-                </button>
+                <loading-button color="primary" :disabled="!inputValid" :loading="processing" @click="save">{{ $t('ui.server.config.save') }}</loading-button>
             </fieldset>
 
         </main>
@@ -59,11 +56,11 @@
     import TextField from '../widgets/TextField';
     import SelectMenu from '../widgets/SelectMenu';
     import Checkbox from '../widgets/Checkbox';
-    import Loader from '../fragments/Loader';
+    import LoadingButton from '../widgets/LoadingButton';
 
     export default {
         mixins: [boot],
-        components: { BootCheck, BoxedLayout, TextField, SelectMenu, Checkbox, Loader },
+        components: { BootCheck, BoxedLayout, TextField, SelectMenu, Checkbox, LoadingButton },
 
 
         data: () => ({

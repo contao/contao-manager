@@ -47,10 +47,9 @@
                 <button class="widget-button" @click="cancelTask" v-if="isActive" :disabled="!currentTask || !currentTask.cancellable">{{ 'ui.taskpopup.buttonCancel' | translate }}</button>
                 <button class="widget-button" v-if="isAborting" disabled>{{ 'ui.taskpopup.buttonAborting' | translate }}</button>
                 <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
-                <button class="widget-button" @click="hidePopup" :disabled="closing" v-if="!isActive && !isAborting">
-                    <span v-if="!closing">{{ 'ui.taskpopup.buttonConfirm' | translate }}</span>
-                    <loader v-else/>
-                </button>
+                <loading-button :loading="closing" @click="hidePopup" v-if="!isActive && !isAborting">
+                    {{ $t('ui.taskpopup.buttonConfirm') }}
+                </loading-button>
             </div>
 
             <div class="task-popup__console">
@@ -63,10 +62,10 @@
 <script>
     import { mapState } from 'vuex';
 
-    import Loader from './Loader';
+    import LoadingButton from '../widgets/LoadingButton';
 
     export default {
-        components: { Loader },
+        components: { LoadingButton },
 
         data: () => ({
             showConsole: false,

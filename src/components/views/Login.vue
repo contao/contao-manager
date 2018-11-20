@@ -13,10 +13,9 @@
 
             <a href="https://github.com/contao/contao-manager/issues/14" target="_blank" class="view-login__link">{{ 'ui.login.forgotPassword' | translate }}</a>
 
-            <button class="view-login__button widget-button widget-button--primary" @click="login" :disabled="!inputValid || logging_in || login_failed">
-                <span v-if="!logging_in">{{ 'ui.login.button' | translate }}</span>
-                <loader v-else></loader>
-            </button>
+            <loading-button class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in" @click="login">
+                {{ $t('ui.login.button') }}
+            </loading-button>
         </main>
     </boxed-layout>
 </template>
@@ -26,10 +25,10 @@
 
     import BoxedLayout from '../layouts/Boxed';
     import TextField from '../widgets/TextField';
-    import Loader from '../fragments/Loader';
+    import LoadingButton from '../widgets/LoadingButton';
 
     export default {
-        components: { BoxedLayout, TextField, Loader },
+        components: { BoxedLayout, TextField, LoadingButton },
 
         data: () => ({
             username: '',

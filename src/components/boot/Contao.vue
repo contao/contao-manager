@@ -19,10 +19,7 @@
             </fieldset>
 
             <fieldset class="contao-check__fields">
-                <button class="widget-button widget-button--primary" @click="install" :disabled="processing">
-                    <span v-if="!processing" class="widget-button--run">{{ 'ui.server.contao.install' | translate }}</span>
-                    <loader v-else/>
-                </button>
+                <loading-button color="primary" icon="run" :loading="processing" @click="install">{{ $t('ui.server.contao.install') }}</loading-button>
             </fieldset>
 
         </section>
@@ -40,11 +37,11 @@
     import BootCheck from '../fragments/BootCheck';
     import BoxedLayout from '../layouts/Boxed';
     import SelectMenu from '../widgets/SelectMenu';
-    import Loader from '../fragments/Loader';
+    import LoadingButton from '../widgets/LoadingButton';
 
     export default {
         mixins: [boot],
-        components: { BootCheck, BoxedLayout, SelectMenu, Loader },
+        components: { BootCheck, BoxedLayout, SelectMenu, LoadingButton },
 
         data: () => ({
             processing: false,

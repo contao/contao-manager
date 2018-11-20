@@ -20,10 +20,7 @@
             </fieldset>
 
             <fieldset class="view-account__fields">
-                <button class="widget-button widget-button--primary" @click="createAccount" :disabled="!inputValid || installing">
-                    <span v-if="!installing">{{ 'ui.account.submit' | translate }}</span>
-                    <loader v-else></loader>
-                </button>
+                <loading-button color="primary" :disabled="!inputValid" :loading="installing" @click="createAccount">{{ $t('ui.account.submit') }}</loading-button>
             </fieldset>
         </main>
 
@@ -39,10 +36,10 @@
 
     import BoxedLayout from '../layouts/Boxed';
     import TextField from '../widgets/TextField';
-    import Loader from '../fragments/Loader';
+    import LoadingButton from '../widgets/LoadingButton';
 
     export default {
-        components: { BoxedLayout, TextField, Loader },
+        components: { BoxedLayout, TextField, LoadingButton },
 
         data: () => ({
             username: '',

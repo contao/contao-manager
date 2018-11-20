@@ -9,10 +9,9 @@
             <p class="view-oauth__description">{{ 'ui.oauth.description' | translate }}</p>
             <p class="view-oauth__client">{{ clientId }}</p>
 
-            <button class="view-oauth__button widget-button widget-button--primary" @click.prevent="allowAccess" :disabled="!valid || authenticating">
-                <span v-if="!authenticating">{{ 'ui.oauth.allow' | translate }}</span>
-                <loader v-else/>
-            </button>
+            <loading-button class="view-oauth__button" color="primary" :disabled="!valid" :loading="authenticating" @click="allowAccess">
+                {{ $t('ui.oauth.allow') }}
+            </loading-button>
             <button class="view-oauth__button widget-button" @click.prevent="denyAccess" :disabled="!valid || authenticating">
                 {{ 'ui.oauth.deny' | translate }}
             </button>
@@ -24,10 +23,10 @@
     import Vue from 'vue';
 
     import BoxedLayout from '../layouts/Boxed';
-    import Loader from '../fragments/Loader';
+    import LoadingButton from '../widgets/LoadingButton';
 
     export default {
-        components: { BoxedLayout, Loader },
+        components: { BoxedLayout, LoadingButton },
 
         data: () => ({
             valid: false,
