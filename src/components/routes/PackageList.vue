@@ -73,10 +73,8 @@
                 this.$store.commit('packages/uploads/confirmAll');
             },
 
-            removeUploads() {
-                Object.keys(this.uploads).forEach((id) => {
-                    this.$store.dispatch('packages/uploads/remove', id);
-                });
+            async removeUploads() {
+                await this.$store.dispatch('packages/uploads/removeAll');
             },
 
             dryrunChanges() {

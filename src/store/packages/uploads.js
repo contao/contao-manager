@@ -103,5 +103,10 @@ export default {
             await Vue.http.delete(`api/packages/uploads/${id}`);
             await dispatch('load');
         },
+
+        async removeAll({ state, dispatch }) {
+            await Promise.all(Object.keys(state.uploads).map(id => Vue.http.delete(`api/packages/uploads/${id}`)));
+            await dispatch('load');
+        }
     },
 };
