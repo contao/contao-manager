@@ -71,13 +71,10 @@
             },
         },
 
-        data: () => ({
-            removing: false,
-        }),
-
         computed: {
-            ...mapGetters('packages/uploads', ['isDuplicate']),
+            ...mapGetters('packages/uploads', ['isDuplicate', 'isRemoving']),
 
+            removing: vm => vm.isRemoving(vm.data.id),
             progress: vm => 100 / vm.data.size * vm.data.filesize,
 
             pkg() {

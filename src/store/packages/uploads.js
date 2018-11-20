@@ -21,12 +21,14 @@ export default {
         uploading: false,
         files: [],
         confirmed: [],
+        removing: [],
     },
 
     getters: {
         hasUploads: (state, get) => get.totalUploads > 0,
         hasDuplicates: state => hasDuplicates(state.uploads),
         isDuplicate: state => id => Object.values(state.uploads).find(v => v.id !== id && v.hash === state.uploads[id].hash),
+        isRemoving: state => id => state.removing.includes(id),
 
         totalUploads: (state, get) => state.uploads ? get.unconfirmedUploads.length : 0,
         unconfirmedUploads: state => Object.values(state.uploads).filter(item => !state.confirmed.includes(item.id)),
@@ -84,6 +86,16 @@ export default {
         unconfirmAll(state) {
             state.confirmed = [];
         },
+
+        toggleRemoving(state, value) {
+            if (!value) {
+                state.removing = [];
+            } else if (state.removing.includes(value)) {
+                state.removing.splice(state.removing.indexOf(value), 1);
+            } else {
+                state.removing.push(value);
+            }
+        },
     },
 
     actions: {
@@ -99,14 +111,22 @@ export default {
             }
         },
 
-        async remove({ dispatch }, id) {
+        async remove({ commit, dispatch }, id) {
+            commit('toggleRemoving', id);
             await Vue.http.delete(`api/packages/uploads/${id}`);
             await dispatch('load');
+            commit('toggleRemoving', id);
         },
 
-        async removeAll({ state, dispatch }) {
-            await Promise.all(Object.keys(state.uploads).map(id => Vue.http.delete(`api/packages/uploads/${id}`)));
+        async removeAll({ state, commit, dispatch }) {
+            await Promise.all(Object.keys(state.uploads).map(
+                (id) => {
+                    commit('toggleRemoving', id);
+                    return Vue.http.delete(`api/packages/uploads/${id}`)
+                },
+            ));
             await dispatch('load');
+            commit('toggleRemoving', null);
         }
     },
 };

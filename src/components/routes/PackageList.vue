@@ -20,8 +20,8 @@
 
         <div class="package-actions__inner" slot="actions" v-if="hasUploads && !uploading">
             <p class="package-actions__text">{{ $t('ui.packages.uploadMessage', { total: totalUploads }, totalUploads) }}</p>
-            <button class="package-actions__button widget-button widget-button--primary" :disabled="!canConfirmUploads" @click="confirmUploads">{{ $t('ui.packages.uploadApply') }}</button>
-            <button class="package-actions__button widget-button widget-button--alert" @click="removeUploads">{{ $t('ui.packages.uploadReset') }}</button>
+            <button class="package-actions__button widget-button widget-button--primary" :disabled="!canConfirmUploads || removingUploads" @click="confirmUploads">{{ $t('ui.packages.uploadApply') }}</button>
+            <loading-button class="package-actions__button" color="alert" :loading="removingUploads" @click="removeUploads">{{ $t('ui.packages.uploadReset') }}</loading-button>
         </div>
         <div class="package-actions__inner" slot="actions" v-else-if="totalChanges && !uploading">
             <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
@@ -40,9 +40,10 @@
     import PackageUploads from './Packages/Uploads';
     import LocalPackage from './Packages/LocalPackage';
     import RootPackage from './Packages/RootPackage';
+    import LoadingButton from '../widgets/LoadingButton';
 
     export default {
-        components: { Loader, PackageBase, PackageUploads, RootPackage, LocalPackage },
+        components: { Loader, PackageBase, PackageUploads, RootPackage, LocalPackage, LoadingButton },
 
         computed: {
             ...mapState('packages', {
@@ -50,13 +51,13 @@
                 'addedPackages': 'add',
                 'requiredPackages': 'required',
             }),
-            ...mapState('packages/uploads', ['uploads', 'uploading', 'files']),
+            ...mapState('packages/uploads', ['uploads', 'uploading', 'files', 'removing']),
             ...mapGetters('packages', ['totalChanges', 'hasAdded', 'packageAdded', 'packageInstalled', 'canResetChanges']),
             ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
 
             notRootInstalled: vm => Object.values(vm.packages).filter(pkg => pkg.name !== 'contao/manager-bundle'),
             notRootRequired: vm => Object.values(vm.requiredPackages).filter(pkg => pkg.name !== 'contao/manager-bundle'),
-
+            removingUploads: vm => vm.removing.length > 0,
             showHeadlines: vm => vm.hasAdded && vm.packages.length,
         },
 
