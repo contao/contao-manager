@@ -47,7 +47,10 @@
                 <button class="widget-button" @click="cancelTask" v-if="isActive" :disabled="!currentTask || !currentTask.cancellable">{{ 'ui.taskpopup.buttonCancel' | translate }}</button>
                 <button class="widget-button" v-if="isAborting" disabled>{{ 'ui.taskpopup.buttonAborting' | translate }}</button>
                 <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
-                <button class="widget-button" @click="hidePopup" v-if="!isActive && !isAborting">{{ 'ui.taskpopup.buttonConfirm' | translate }}</button>
+                <button class="widget-button" @click="hidePopup" :disabled="closing" v-if="!isActive && !isAborting">
+                    <span v-if="!closing">{{ 'ui.taskpopup.buttonConfirm' | translate }}</span>
+                    <loader v-else/>
+                </button>
             </div>
 
             <div class="task-popup__console">
@@ -60,13 +63,19 @@
 <script>
     import { mapState } from 'vuex';
 
+    import Loader from './Loader';
+
     export default {
+        components: { Loader },
+
         data: () => ({
             showConsole: false,
             autoClose: false,
             scrollToBottom: true,
             swallowScroll: true,
             audit: false,
+
+            closing: false,
         }),
 
         computed: {
@@ -181,10 +190,13 @@
             },
 
             hidePopup() {
+                this.closing = true;
                 const reload = this.taskStatus === 'stopped' || this.taskStatus === 'error';
 
                 this.$store.dispatch('tasks/deleteCurrent').then(
                     () => {
+                        this.closing = false;
+
                         if (reload) {
                             window.location.reload();
                         }
