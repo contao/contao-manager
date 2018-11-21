@@ -2,15 +2,15 @@ nl:
   integrity:
     allow_url_fopen:
       title: 'De PHP instelling "allow_url_fopen" is niet ingeschakeld op de server.'
-    openssl:
-      title: 'De PHP OpenSSL extensie is niet beschikbaar.'
-      detail: 'Contao Manager vereist de OpenSSL extensie om bestanden over versleutelde verbindingen (https) te downloaden.'
     process:
       title: 'De PHP functie "proc_open" en/of "proc_close" is niet beschikbaar op de server.'
       detail: 'De "proc_open" en "proc_close" functies zijn nodig om de opdrachtregeltaken op de achtergrond te kunnen uitvoeren. Vraag na bij uw hostingprovider waarom deze methode niet beschikbaar is. Zowel de Contao Manager als Contao 4 zullen niet goed werken zonder deze functies.'
     intl:
       title: 'De PHP Intl extensie is niet beschikbaar.'
       detail: 'Contao 4 vereist de Intl extension voor internationalisering.'
+    openssl:
+      title: 'De PHP OpenSSL extensie is niet beschikbaar.'
+      detail: 'Contao Manager vereist de OpenSSL extensie om bestanden over versleutelde verbindingen (https) te downloaden.'
     session:
       title: 'PHP-sessie kan niet worden gestart.'
     web_root:

@@ -2,15 +2,15 @@ cs:
   integrity:
     allow_url_fopen:
       title: 'Služba PHP "allow_url_fopen" není na tomto serveru spuštěna.'
-    openssl:
-      title: 'Rozšíření PHP OpenSSL není na tomto serveru spuštěno.'
-      detail: 'Správce Contaa vyžaduje rozšíření OpenSSL, aby mohl stahovat soubory přes zabezpečené připojení (https).'
     process:
       title: 'Funkce PHP "proc_open" a/nebo "proc_close" není na serveru povolena.'
       detail: 'Funkce "proc_open" a "proc_close" jsou nezbytné pro spouštění příkazů na pozadí. Dotázejte se Vašeho poskytovatele, proč dané funkce neběží a zda je může spustit. Jinak nebude Správce Contaa  4 fungovat správně.'
     intl:
       title: 'Rozšíření PHP Intl není na tomto serveru spuštěno.'
       detail: 'Contao 4 vyžaduje rozšíření PHP Intl pro mezinárodní záležitosti.'
+    openssl:
+      title: 'Rozšíření PHP OpenSSL není na tomto serveru spuštěno.'
+      detail: 'Správce Contaa vyžaduje rozšíření OpenSSL, aby mohl stahovat soubory přes zabezpečené připojení (https).'
     session:
       title: 'Sezení PHP nelze zahájit.'
     web_root:
