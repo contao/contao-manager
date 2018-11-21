@@ -49,27 +49,19 @@ export default {
             });
         },
 
-        find(store, value) {
+        find(store, params) {
             return new Promise((resolve, reject) => {
-                algolia(store).search(value, (err, content) => {
-                    if (err) {
-                        reject(false);
-                        return;
-                    }
+                algolia(store).search(
+                    params,
+                    (err, response) => {
+                        if (err) {
+                            reject(false);
+                            return;
+                        }
 
-                    if (content.nbHits === 0) {
-                        resolve({});
-                        return;
-                    }
-
-                    const packages = {};
-
-                    content.hits.forEach((pkg) => {
-                        packages[pkg.name] = pkg;
-                    });
-
-                    resolve(packages);
-                });
+                        resolve(response);
+                    },
+                );
             });
         },
     },

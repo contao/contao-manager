@@ -212,5 +212,6 @@
     "ui.packagesearch.offlineExplain": "Check your internet connection and disable JavaScript blockers in your browser.",
     "ui.packagesearch.start": "Enter a keyword to start searching …",
     "ui.packagesearch.searching": "Searching for Contao packages matching <i>{query}</i> …",
-    "ui.packagesearch.empty": "No results for <i>{query}</i>"
+    "ui.packagesearch.empty": "No results for <i>{query}</i>",
+    "ui.packagesearch.more": "More Results"
 }

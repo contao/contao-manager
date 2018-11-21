@@ -8,7 +8,8 @@
                 type="text"
                 :placeholder="$t('ui.packages.searchPlaceholder')"
                 autocomplete="off"
-                v-model="searchInput"
+                :value="this.query"
+                @input="searchInput"
                 @keypress.esc.prevent="stopSearch"
             >
             <button class="package-tools__cancel" @click="stopSearch">
@@ -33,6 +34,10 @@
 
             <search-package v-for="item in results" :package="item" :key="item.name"/>
 
+            <div class="package-search__more">
+                <loading-button inline icon="update" :loading="searching" v-if="hasMore" @click="loadMore">{{ $t('ui.packagesearch.more') }}</loading-button>
+            </div>
+
             <a href="https://www.algolia.com/" target="_blank" class="package-search__algolia"><img src="../../assets/images/search-by-algolia.svg" width="200"></a>
         </div>
 
@@ -50,14 +55,16 @@
     import PackageBase from './Packages/Base';
     import SearchPackage from './Packages/SearchPackage';
     import Loader from '../fragments/Loader';
+    import LoadingButton from '../widgets/LoadingButton';
 
     export default {
-        components: { PackageBase, SearchPackage, Loader },
+        components: { PackageBase, SearchPackage, Loader, LoadingButton },
 
         data: () => ({
             results: null,
             previousRequest: null,
-            searchInput: '',
+            hasMore: false,
+            searching: false,
 
             packageRoute: routes.packages,
         }),
@@ -66,45 +73,82 @@
             ...mapState('packages', ['installed']),
             ...mapGetters('packages', ['totalChanges']),
 
-            query() {
-                return this.$route.query.q;
-            },
+            query: vm => vm.$route.query.q,
+            pages: vm => vm.$route.query.pages || 1,
         },
 
-        watch: {
-            searchInput() {
+        methods: {
+            async searchPackages() {
+                if (!this.query) {
+                    this.results = null;
+                    return;
+                }
+
+                this.searching = true;
+
+                try {
+                    const response = await this.$store.dispatch('packages/search/find', {
+                        query: this.query,
+                        hitsPerPage: 10 * this.pages,
+                    });
+
+                    this.hasMore = response.nbPages > 1;
+
+                    if (response.nbHits === 0) {
+                        this.results = {};
+                        return;
+                    }
+
+                    const packages = {};
+
+                    response.hits.forEach((pkg) => {
+                        packages[pkg.name] = pkg;
+                    });
+
+                    this.results = packages;
+
+                } catch (err) {
+                    this.results = false;
+                }
+
+                this.searching = false;
+            },
+
+            loadMore() {
+                this.updateRoute(this.query, this.pages + 1);
+            },
+
+            updateRoute(q, pages = 1) {
+                const query = { q };
+
+                if (pages > 1) {
+                    query.pages = pages;
+                }
+
                 this.$router.push(
                     Object.assign(
-                        { query: { q: this.searchInput } },
+                        { query },
                         routes.packagesSearch,
                     ),
                 );
             },
 
-            query(value) {
-                this.searchPackages(value);
-            },
-        },
-
-        methods: {
-            async searchPackages(value) {
-                this.searchInput = value;
-
-                if (!value) {
-                    this.results = null;
-                    return;
-                }
-
-                try {
-                    this.results = await this.$store.dispatch('packages/search/find', value);
-                } catch (err) {
-                    this.results = false;
-                }
+            searchInput(e) {
+                this.updateRoute(e.target.value);
             },
 
             stopSearch() {
-                this.searchInput = '';
                 this.$router.push(routes.packages);
+            },
+        },
+
+        watch: {
+            query() {
+                this.searchPackages();
+            },
+
+            pages() {
+                this.searchPackages();
             },
         },
 
@@ -114,7 +158,7 @@
             }
 
             if (this.query) {
-                this.searchPackages(this.query);
+                this.searchPackages();
             }
 
             this.$nextTick(() => {
@@ -165,6 +209,16 @@
 
         &__explain {
             font-size: 16px;
+        }
+
+        &__more {
+            margin: 30px 0 60px;
+            text-align: center;
+
+            button {
+                padding-left: 50px;
+                padding-right: 50px;
+            }
         }
 
         &__algolia {
