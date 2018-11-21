@@ -277,6 +277,20 @@ select {
         }
     }
 
+    &--search {
+        &:before {
+            position: relative;
+            display: inline-block;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            background: url("../assets/images/button-search.svg") center no-repeat;
+            background-size: 20px 20px;
+            content:"";
+        }
+    }
+
     &:hover {
         text-decoration: none;
     }
