@@ -5,7 +5,7 @@
             <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
             <button class="package-tools__button widget-button widget-button--search" :disabled="uploading" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
             <slot name="search"/>
-            <button class="package-tools__button package-tools__button--upload widget-button" :disabled="!uploads || uploading" :title="uploadError" @click.prevent="$emit('start-upload')">{{ 'ui.packages.uploadButton' | translate }}</button>
+            <button class="package-tools__button widget-button widget-button--upload" :disabled="!uploads || uploading" :title="uploadError" @click.prevent="$emit('start-upload')">{{ 'ui.packages.uploadButton' | translate }}</button>
         </section>
 
         <slot/>
@@ -64,19 +64,6 @@
                 margin-bottom: 10px;
                 line-height: 36px;
                 border: 1px solid $border-color;
-            }
-
-            &--upload:before {
-                position: relative;
-                display: inline-block;
-                top: 4px;
-                width: 18px;
-                height: 18px;
-                margin-right: 8px;
-                background: center center no-repeat;
-                background-size: 22px 22px;
-                content: "";
-                background-image: url('../../../assets/images/button-add.svg');
             }
         }
 

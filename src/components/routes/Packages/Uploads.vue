@@ -2,7 +2,7 @@
     <div v-if="uploads !== null">
         <div v-show="$refs.uploader && $refs.uploader.dropActive" class="package-uploads__overlay">
             <div>
-                <img src="../../../assets/images/upload.svg" width="128" height="128">
+                <img src="../../../assets/images/button-upload.svg" width="128" height="128">
                 <p>{{ $t('ui.packages.uploadOverlay') }}</p>
             </div>
         </div>
