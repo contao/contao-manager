@@ -118,7 +118,7 @@
 
                 if (this.data.abandoned) {
                     return {
-                        title: this.data.replacement === true && this.$t('ui.package.abandonedText') || this.$t('ui.package.replacement', { replacement: this.data.replacement }),
+                        title: this.data.replacement && this.$t('ui.package.replacement', { replacement: this.data.replacement }) || this.$t('ui.package.abandonedText'),
                         text: this.$t('ui.package.abandonedTitle'),
                     };
                 }
