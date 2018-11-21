@@ -46,7 +46,7 @@
 
                 <loading-button :disabled="!currentTask || !currentTask.cancellable" :loading="isAborting" @click="cancelTask" v-if="isActive || isAborting">{{ $t('ui.taskpopup.buttonCancel') }}</loading-button>
                 <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
-                <loading-button :loading="closing" @click="hidePopup" v-if="!isActive && !isAborting">
+                <loading-button :loading="deletingTask" @click="hidePopup" v-if="!isActive && !isAborting">
                     {{ $t('ui.taskpopup.buttonConfirm') }}
                 </loading-button>
             </div>
@@ -72,11 +72,11 @@
             scrollToBottom: true,
             swallowScroll: true,
             audit: false,
-
-            closing: false,
         }),
 
         computed: {
+            ...mapState('tasks', { taskStatus: 'status', currentTask: 'current', deletingTask: 'deleting' }),
+
             popupClass() {
                 return {
                     'task-popup': true,
@@ -160,11 +160,6 @@
             isAborting() {
                 return this.taskStatus === 'aborting';
             },
-
-            ...mapState({
-                taskStatus: state => state.tasks.status,
-                currentTask: state => state.tasks.current,
-            }),
         },
 
         methods: {
@@ -188,13 +183,10 @@
             },
 
             hidePopup() {
-                this.closing = true;
                 const reload = this.taskStatus === 'stopped' || this.taskStatus === 'error';
 
                 this.$store.dispatch('tasks/deleteCurrent').then(
                     () => {
-                        this.closing = false;
-
                         if (reload) {
                             window.location.reload();
                         }

@@ -84,15 +84,23 @@ export default {
         type: null,
         consoleOutput: '',
         current: null,
+
+        deleting: false,
     },
 
     mutations: {
         setStatus(state, status) {
             state.status = status;
         },
+
         setCurrent(state, task) {
+            state.deleting = false;
             state.current = task;
             state.status = task ? task.status : null;
+        },
+
+        setDeleting(state, value) {
+            state.deleting = !!value;
         },
     },
 
@@ -136,6 +144,7 @@ export default {
         },
 
         deleteCurrent(store) {
+            store.commit('setDeleting', true);
             return Vue.http.delete('api/task').then(
                 () => {
                     store.commit('setCurrent', null);
