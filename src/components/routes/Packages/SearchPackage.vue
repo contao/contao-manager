@@ -60,13 +60,7 @@
             },
 
             isPrivate() {
-                const license = this.data.license;
-
-                if (license instanceof Array) {
-                    return this.data.license.includes('proprietary');
-                }
-
-                return String(license) === 'proprietary';
+                return !!this.data.private;
             },
 
             isIncompatible() {
