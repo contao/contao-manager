@@ -123,7 +123,31 @@ select {
         background-color: $red-button;
     }
 
-    &--trash {
+    $iconSelector: '.icon-selector';
+    $icons: (
+        'add',
+        'check',
+        'edit',
+        'hide',
+        'link',
+        'power',
+        'run',
+        'save',
+        'search',
+        'show',
+        'trash',
+        'update',
+    );
+
+    @each $buttonIcon in $icons {
+        $iconSelector: "#{$iconSelector}, &--#{$buttonIcon}";
+
+        &--#{$buttonIcon}:before {
+            background-image: url('../assets/images/button-#{$buttonIcon}.svg');
+        }
+    }
+
+    #{$iconSelector} {
         &:before {
             position: relative;
             display: inline-block;
@@ -131,161 +155,8 @@ select {
             width: 16px;
             height: 22px;
             margin-right: 8px;
-            background: url('../assets/images/delete.svg') center no-repeat;
-            background-size: 22px 22px;
-            content:"";
-        }
-    }
-
-    &--power {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 4px;
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            background: url('../assets/images/power.svg') center no-repeat;
-            background-size: 20px 20px;
-            content:"";
-        }
-    }
-
-    &--run {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            background: url("../assets/images/button-run.svg") center no-repeat;
-            background-size: 20px 20px;
-            content:"";
-        }
-    }
-
-    &--update {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            margin-right: 6px;
-            background: url("../assets/images/button-update.svg") center no-repeat;
-            background-size: 20px 20px;
-            content:"";
-        }
-    }
-
-    &--save {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            background: url("../assets/images/button-save.svg") center no-repeat;
-            background-size: 20px 20px;
-            content:"";
-        }
-    }
-
-    &--show {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            background: url("../assets/images/button-show.svg") center no-repeat;
-            background-size: 20px 20px;
-            content:"";
-        }
-    }
-
-    &--hide {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            background: url("../assets/images/button-hide.svg") center no-repeat;
-            background-size: 20px 20px;
-            content:"";
-        }
-    }
-
-    &--edit {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            margin-right: 5px;
-            background: url("../assets/images/button-edit.svg") center no-repeat;
-            background-size: 20px 20px;
-            content:"";
-        }
-    }
-
-    &--check {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            margin-right: 5px;
-            background: url("../assets/images/button-check.svg") center no-repeat;
-            background-size: 20px 20px;
-            content:"";
-        }
-    }
-
-    &--add {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            margin-right: 5px;
-            background: url("../assets/images/button-add.svg") center no-repeat;
-            background-size: 20px 20px;
-            content:"";
-        }
-    }
-
-    &--link {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            margin-right: 5px;
-            background: url("../assets/images/button-link.svg") center no-repeat;
-            background-size: 20px 20px;
-            content:"";
-        }
-    }
-
-    &--search {
-        &:before {
-            position: relative;
-            display: inline-block;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            margin-right: 5px;
-            background: url("../assets/images/button-search.svg") center no-repeat;
+            background-position: center;
+            background-repeat: no-repeat;
             background-size: 20px 20px;
             content:"";
         }
