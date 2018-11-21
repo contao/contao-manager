@@ -93,7 +93,7 @@ export default {
         },
 
         setRemoved(state, id) {
-            state.removing.push(value);
+            state.removing.push(id);
         },
     },
 
