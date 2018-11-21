@@ -18,12 +18,11 @@
 </template>
 
 <script>
-    import SelectMenu from '../../widgets/SelectMenu';
     import ButtonGroup from '../../widgets/ButtonGroup';
     import LinkMenu from '../../fragments/LinkMenu';
 
     export default {
-        components: { SelectMenu, ButtonGroup, LinkMenu },
+        components: { ButtonGroup, LinkMenu },
 
         methods: {
             advancedActions() {

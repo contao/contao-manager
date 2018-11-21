@@ -1,6 +1,6 @@
 <template>
     <ul :class="'link-menu' + (color ? ' link-menu--'+color : '')">
-        <li v-for="item in items" class="link-menu__item"><a class="link-menu__action" :href="item.href" :target="item.target" @click="event => click(event, item)">{{ item.label }}</a></li>
+        <li v-for="(item, k) in items" :key="k" class="link-menu__item"><a class="link-menu__action" :href="item.href" :target="item.target" @click="event => click(event, item)">{{ item.label }}</a></li>
     </ul>
 </template>
 

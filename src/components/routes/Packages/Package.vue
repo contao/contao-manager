@@ -362,6 +362,10 @@
                 margin-left: 40px;
                 padding-left: 0;
             }
+
+            button:not(:last-child) {
+                margin-bottom: 5px;
+            }
         }
 
         &__unavailable {

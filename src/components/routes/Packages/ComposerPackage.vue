@@ -43,8 +43,6 @@
             <slot name="actions">
                 <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
                 <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isInstalled" :disabled="isModified" @click="update">
-                    <!--<button class="widget-button widget-button&#45;&#45;primary widget-button&#45;&#45;power" key="enable" v-if="isModified">Enable</button>-->
-                    <!--<button class="widget-button widget-button&#45;&#45;power" key="disable" v-if="!isModified">Disable</button>-->
                     <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
                 </button-group>
                 <button class="widget-button widget-button--primary widget-button--add" v-else @click="install" :disabled="isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>

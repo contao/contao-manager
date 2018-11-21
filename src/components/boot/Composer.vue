@@ -1,18 +1,16 @@
 <template>
-    <boot-check v-else :progress="bootState" :title="$t('ui.server.composer.title')" :description="bootDescription">
+    <boot-check :progress="bootState" :title="$t('ui.server.composer.title')" :description="bootDescription">
         <button v-if="bootState === 'action'" @click="install" class="widget-button widget-button--primary widget-button--run">{{ 'ui.server.composer.button' | translate }}</button>
     </boot-check>
 </template>
 
 <script>
     import boot from '../../mixins/boot';
-
     import BootCheck from '../fragments/BootCheck';
-    import BoxedLayout from '../layouts/Boxed';
 
     export default {
         mixins: [boot],
-        components: { BootCheck, BoxedLayout },
+        components: { BootCheck },
 
         methods: {
             boot() {

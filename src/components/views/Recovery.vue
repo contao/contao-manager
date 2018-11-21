@@ -32,11 +32,10 @@
     import views from '../../router/views';
 
     import BoxedLayout from '../layouts/Boxed';
-    import Loader from '../fragments/Loader';
     import LoadingButton from '../widgets/LoadingButton';
 
     export default {
-        components: { LoadingButton, BoxedLayout, Loader },
+        components: { BoxedLayout, LoadingButton },
 
         data: () => ({
             repairStarted: false,
@@ -51,11 +50,6 @@
             async runRepair() {
                 this.repairStarted = true;
 
-                const success = async () => {
-                    await this.$store.dispatch('tasks/deleteCurrent');
-                    window.location.reload(true);
-                };
-
                 let task;
                 const tasks = [
                     { name: 'contao/rebuild-cache' },
@@ -63,7 +57,7 @@
                     { name: 'composer/install', config: { 'remove-vendor': true } },
                 ];
 
-                while (task = tasks.shift()) {
+                while ((task = tasks.shift()) !== undefined) {
                     try {
                         await this.$store.dispatch('tasks/execute', task);
                         await this.$store.dispatch('tasks/deleteCurrent');

@@ -7,7 +7,7 @@
         </header>
         <main v-if="boot" class="view-boot__checks">
 
-            <component v-for="(component, name) in views" :is="component" :current="false" :ready="canShow(name)" @result="result" @view="setView"/>
+            <component v-for="(component, name) in views" :is="component" :current="false" :ready="canShow(name)" :key="name" @result="result" @view="setView"/>
 
             <div class="clearfix"></div>
             <div class="view-boot__summary view-boot__summary--error" v-if="hasError">

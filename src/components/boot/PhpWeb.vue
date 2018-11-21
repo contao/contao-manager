@@ -1,5 +1,5 @@
 <template>
-    <boot-check v-else :progress="bootState" :title="$t('ui.server.php_web.title')" :description="bootDescription" :detail="problem && problem.detail">
+    <boot-check :progress="bootState" :title="$t('ui.server.php_web.title')" :description="bootDescription" :detail="problem && problem.detail">
         <a v-if="problem && problem.type" :href="problem.type" target="_blank">{{ 'ui.server.details' | translate }}</a>
     </boot-check>
 </template>
