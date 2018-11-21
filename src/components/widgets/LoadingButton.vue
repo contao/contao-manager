@@ -5,7 +5,7 @@
         :disabled="disabled || loading"
         @click.prevent="(e) => { $emit('click', e) }"
     >
-        <span :class="{ loading }"><slot/></span>
+        <span :class="slotClass"><slot/></span>
         <loader v-show="loading"/>
     </button>
 </template>
@@ -19,6 +19,7 @@
         props: {
             color: String,
             icon: String,
+            inline: Boolean,
             loading: Boolean,
             disabled: Boolean,
         },
@@ -27,8 +28,13 @@
             buttonClass: vm => ({
                 'loading-button': true,
                 'widget-button': true,
-                [`widget-button--${vm.color}`]: vm.color && !vm.loading,
-                [`widget-button--${vm.icon}`]: vm.icon && !vm.loading,
+                'widget-button--inline': vm.inline,
+                [`widget-button--${vm.color}`]: vm.color,
+            }),
+
+            slotClass: vm => ({
+                loading: vm.loading,
+                [`widget-button--${vm.icon}`]: vm.icon,
             }),
         },
     };
