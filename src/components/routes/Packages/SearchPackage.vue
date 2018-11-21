@@ -7,7 +7,7 @@
                 {{ $t('ui.package.proprietaryText') }}
             </p>
         </template>
-        <template slot="release" v-if="isIncompatible">
+        <template slot="release" v-else-if="isIncompatible">
             <p class="package__unavailable">
                 <img src="../../../assets/images/incompatible.svg" width="24" height="24"/>
                 <strong>{{ $t('ui.package.incompatibleTitle') }}</strong><br>
@@ -18,7 +18,7 @@
         <template slot="actions" v-if="isPrivate">
             <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="data.homepage">{{ 'ui.package.homepage' | translate }}</a>
         </template>
-        <template slot="actions" v-if="isIncompatible">
+        <template slot="actions" v-else-if="isIncompatible">
             <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
         </template>
     </composer-package>
