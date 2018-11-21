@@ -19,6 +19,7 @@ const store = new Vuex.Store({
     state: {
         view: views.INIT,
         error: null,
+        safeMode: false,
         contaoVersion: null,
         apiVersion: null,
     },
@@ -34,6 +35,10 @@ const store = new Vuex.Store({
             }
 
             state.error = error;
+        },
+
+        setSafeMode(state, value) {
+            state.safeMode = !!value;
         },
 
         setVersions(state, result) {

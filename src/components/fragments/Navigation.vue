@@ -7,9 +7,9 @@
             <li class="navigation__item navigation__item--main">
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ 'ui.navigation.tools' | translate }}</a>
                 <ul class="navigation__group navigation__group--sub">
-                    <li class="navigation__item navigation__item--sub"><a href="/contao" target="_blank">{{ 'ui.navigation.backend' | translate }}</a></li>
-                    <li class="navigation__item navigation__item--sub" v-if="showDebugMode"><a href="/app_dev.php/" target="_blank">{{ 'ui.navigation.debug' | translate }}</a></li>
-                    <li class="navigation__item navigation__item--sub"><a href="/contao/install" target="_blank">{{ 'ui.navigation.installTool' | translate }}</a></li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a href="/contao" target="_blank">{{ 'ui.navigation.backend' | translate }}</a></li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showDebugMode"><a href="/app_dev.php/" target="_blank">{{ 'ui.navigation.debug' | translate }}</a></li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a href="/contao/install" target="_blank">{{ 'ui.navigation.installTool' | translate }}</a></li>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="phpinfo">{{ 'ui.navigation.phpinfo' | translate }}</a></li>
                 </ul>
             </li>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     import store from '../../store';
     import views from '../../router/views';
     import routes from '../../router/routes';
@@ -38,9 +40,8 @@
         }),
 
         computed: {
-            showDebugMode() {
-                return this.$store.state.contao['access-key'].isEnabled;
-            },
+            ...mapState(['safeMode']),
+            ...mapState('contao/access-key', { showDebugMode: 'isEnabled' }),
         },
 
         methods: {

@@ -8,17 +8,15 @@
 
         <error v-if="hasError"></error>
 
-        <div v-if="viewInit" class="view-init">
+        <div v-if="isInitializing" class="view-init">
             <div class="view-init__cell">
                 <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo">
                 <p class="view-init__message">{{ 'ui.app.loading' | translate }}</p>
             </div>
         </div>
 
-        <account v-else-if="viewAccount"></account>
-        <login v-else-if="viewLogin"></login>
+        <component :is="currentView" :class="taskRunning ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
 
-        <boot v-else-if="viewBoot" :class="taskRunning ? 'blur-in' : 'blur-out'"></boot>
         <router-view v-else :class="taskRunning ? 'blur-in' : 'blur-out'"></router-view>
 
         <keep-alive><task-popup v-if="taskRunning"></task-popup></keep-alive>
@@ -26,6 +24,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import views from '../router/views';
 
     import TaskPopup from './fragments/TaskPopup';
@@ -35,38 +34,30 @@
     import Account from './views/Account';
     import Login from './views/Login';
     import Boot from './views/Boot';
+    import Recovery from './views/Recovery';
 
     export default {
-        components: { Loader, TaskPopup, Error, Account, Login, Boot },
+        components: { Loader, TaskPopup, Error },
+
+        data: () => ({
+            views: {
+                [views.ACCOUNT]: Account,
+                [views.LOGIN]: Login,
+                [views.BOOT]: Boot,
+                [views.RECOVERY]: Recovery,
+            }
+        }),
 
         computed: {
-            taskRunning() {
-                return this.$store.state.tasks.status !== null;
-            },
+            ...mapState(['view', 'error']),
+            ...mapState('tasks', { taskStatus: 'status' }),
 
-            hasError() {
-                return this.$store.state.error !== null;
-            },
+            isInitializing: vm => vm.view === views.INIT,
+            isInsecure: () => window.location.protocol !== 'https:' && window.location.hostname !== 'localhost',
+            taskRunning: vm => vm.taskStatus !== null,
+            hasError: vm => vm.error !== null,
 
-            isInsecure() {
-                return window.location.protocol !== 'https:' && window.location.hostname !== 'localhost';
-            },
-
-            viewInit() {
-                return this.$store.state.view === views.INIT;
-            },
-
-            viewAccount() {
-                return this.$store.state.view === views.ACCOUNT;
-            },
-
-            viewLogin() {
-                return this.$store.state.view === views.LOGIN;
-            },
-
-            viewBoot() {
-                return this.$store.state.view === views.BOOT;
-            },
+            currentView: vm => vm.views[vm.view] || null,
         },
 
         watch: {

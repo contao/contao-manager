@@ -96,6 +96,8 @@ en:
             detail: 'Updating from {old} to {new}'
         remove-cache:
             summary: 'Deleting cache directory …'
+        remove-vendor:
+            summary: 'Deleting vendor directory …'
         cache-warmup:
             summary: 'Warming application cache …'
         cache-clear:

@@ -102,7 +102,7 @@ class ContaoController extends Controller
                         $translator->trans('integrity.contao_version.title')
                     ))->setDetail(
                         $translator->trans('integrity.contao_version.detail', ['output' => $e->getProcess()->getOutput()])
-                    )
+                    )->setStatus(Response::HTTP_BAD_GATEWAY)
                 );
             }
 
@@ -115,6 +115,7 @@ class ContaoController extends Controller
                     [
                         'version' => null,
                         'api' => 0,
+                        'supported' => false,
                     ]
                 );
             }

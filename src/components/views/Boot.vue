@@ -88,6 +88,7 @@
 
             finish() {
                 window.localStorage.setItem('contao_manager_booted', '1');
+                this.$store.commit('setSafeMode', false);
                 this.$store.commit('setView', views.READY);
             },
 

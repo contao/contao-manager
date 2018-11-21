@@ -1,28 +1,33 @@
 <template>
-    <section class="maintenance" v-if="$store.state.apiVersion >= 1">
-        <div class="maintenance__inside">
-            <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" /></figure>
-            <div class="maintenance__about">
-                <h1>{{ 'ui.maintenance.debugMode.title' | translate }}</h1>
-                <p v-html="$t('ui.maintenance.debugMode.description')"></p>
+    <message-overlay :message="overlayMessage" :active="safeMode || (!loading && !supported)">
+        <section class="maintenance">
+            <div class="maintenance__inside">
+                <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" /></figure>
+                <div class="maintenance__about">
+                    <h1>{{ 'ui.maintenance.debugMode.title' | translate }}</h1>
+                    <p v-html="$t('ui.maintenance.debugMode.description')"></p>
+                </div>
+                <fieldset class="maintenance__actions" v-if="loading">
+                    <loader class="maintenance__loader"/>
+                </fieldset>
+                <fieldset class="maintenance__actions" v-else>
+                    <button class="widget-button widget-button--primary widget-button--show" :disabled="!supported" v-if="!hasAccessKey" @click="setAccessKey">{{ 'ui.maintenance.debugMode.activate' | translate }}</button>
+                    <button class="widget-button widget-button--alert widget-button--hide" v-if="hasAccessKey" @click="removeAccessKey">{{ 'ui.maintenance.debugMode.deactivate' | translate }}</button>
+                    <button class="widget-button widget-button--edit" v-if="hasAccessKey" @click="setAccessKey">{{ 'ui.maintenance.debugMode.credentials' | translate }}</button>
+                </fieldset>
             </div>
-            <fieldset class="maintenance__actions" v-if="loading">
-                <loader class="maintenance__loader"/>
-            </fieldset>
-            <fieldset class="maintenance__actions" v-else>
-                <button class="widget-button widget-button--primary widget-button--show" :disabled="!supported" v-if="!hasAccessKey" @click="setAccessKey">{{ 'ui.maintenance.debugMode.activate' | translate }}</button>
-                <button class="widget-button widget-button--alert widget-button--hide" v-if="hasAccessKey" @click="removeAccessKey">{{ 'ui.maintenance.debugMode.deactivate' | translate }}</button>
-                <button class="widget-button widget-button--edit" v-if="hasAccessKey" @click="setAccessKey">{{ 'ui.maintenance.debugMode.credentials' | translate }}</button>
-            </fieldset>
-        </div>
-    </section>
+        </section>
+    </message-overlay>
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
+    import MessageOverlay from '../../fragments/MessageOverlay';
     import Loader from '../../fragments/Loader';
 
     export default {
-        components: { Loader },
+        components: { MessageOverlay, Loader },
 
         data: () => ({
             supported: false,
@@ -30,9 +35,9 @@
         }),
 
         computed: {
-            hasAccessKey() {
-                return this.$store.state.contao['access-key'].isEnabled;
-            },
+            ...mapState(['safeMode']),
+            ...mapState('contao/access-key', { hasAccessKey: 'isEnabled' }),
+            overlayMessage: vm => vm.safeMode ? vm.$t('ui.maintenance.safeMode') : vm.$t('ui.maintenance.debugMode.unsupported'),
         },
 
         methods: {

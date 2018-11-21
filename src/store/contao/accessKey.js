@@ -30,18 +30,20 @@ export default {
         setCache(state, value) {
             state.cache = value;
         },
+
         setIsEnabled(state, value) {
             state.isEnabled = value;
         },
     },
 
     actions: {
-
         get(store, cache = true) {
             if (cache && store.state.cache) {
-                return new Promise((resolve) => {
-                    resolve(store.state.cache);
-                });
+                return Promise.resolve(store.state.cache);
+            }
+
+            if (store.rootState.safeMode || store.rootState.apiVersion < 1) {
+                return Promise.reject();
             }
 
             return handle(Vue.http.get('api/contao/access-key'), store);
@@ -54,6 +56,5 @@ export default {
         delete(store) {
             return handle(Vue.http.delete('api/contao/access-key'), store);
         },
-
     },
 };

@@ -19,6 +19,7 @@ use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\Composer\CloudOperation;
 use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
+use Contao\ManagerApi\TaskOperation\Filesystem\RemoveVendorOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
 class InstallTask extends AbstractPackagesTask
@@ -73,6 +74,10 @@ class InstallTask extends AbstractPackagesTask
         $changes->setDryRun((bool) $config->getOption('dry_run', false));
 
         $operations = [];
+
+        if ($config->getOption('remove-vendor', false)) {
+            $operations[] = new RemoveVendorOperation($config, $this->environment, $this->translator, $this->filesystem);
+        }
 
         if ($this->environment->useCloudResolver() && !$this->filesystem->exists($this->environment->getLockFile())) {
             $operations[] = new CloudOperation(

@@ -32,6 +32,7 @@
 </template>
 
 <script>
+    import views from '../../router/views';
     import boot from '../../mixins/boot';
 
     import BootCheck from '../fragments/BootCheck';
@@ -96,8 +97,11 @@
                     if (response.status === 503) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.prerequisite');
+                    } else if (response.status === 502) {
+                        window.localStorage.removeItem('contao_manager_booted');
+                        this.$store.commit('setView', views.RECOVERY);
                     } else {
-                        this.bootState = 'error';
+                        this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.error');
                     }
                 }).then(() => {
