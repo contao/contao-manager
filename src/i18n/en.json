@@ -182,7 +182,7 @@
     "ui.package.hintRemoved": "This package will be removed when you apply the changes.",
     "ui.package.requiredTitle": "manually added",
     "ui.package.requiredText": "This package is required in your composer.json but not installed.",
-    "ui.package.incompatibleTitle": "incompatible",
+    "ui.package.incompatibleTitle": "Incompatible Package",
     "ui.package.incompatibleText": "This package is not supported in Contao 4 Managed Edition.",
     "ui.package.abandonedTitle": "abandoned",
     "ui.package.abandonedText": "This package is marked as abandoned.",

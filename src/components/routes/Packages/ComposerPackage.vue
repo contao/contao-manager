@@ -3,7 +3,7 @@
         :title="data.title"
         :name="data.hideName ? '' : data.name"
         :logo="data.logo"
-        :badge="badge || composerBadge"
+        :badge="badge"
         :description="data.description"
         :hint="hint"
         :hint-close="hintClose"
@@ -16,7 +16,7 @@
     >
         <template slot="logo"><slot name="logo"/></template>
 
-        <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :is-private="isPrivate" slot="more"/>
+        <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :hide-packagist="isPrivate" slot="more"/>
 
         <template slot="additional">
             <strong class="package__version package__version--additional" v-if="data.version">{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
@@ -72,7 +72,6 @@
             },
             updateOnly: Boolean,
             isPrivate: Boolean,
-            badge: Object,
         },
 
         data: () => ({
@@ -109,7 +108,7 @@
                 );
             },
 
-            composerBadge() {
+            badge() {
                 if (this.isRequired) {
                     return {
                         title: this.$t('ui.package.requiredText'),

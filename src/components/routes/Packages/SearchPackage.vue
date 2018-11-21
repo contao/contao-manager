@@ -1,10 +1,17 @@
 <template>
-    <composer-package :data="data" :is-private="isPrivate" :badge="badge">
+    <composer-package :data="data" :is-private="isPrivate">
         <template slot="release" v-if="isPrivate">
-            <p class="package__proprietary">
+            <p class="package__unavailable">
                 <img src="../../../assets/images/buy.svg" width="24" height="24"/>
                 <strong>{{ $t('ui.package.proprietaryTitle') }}</strong><br>
                 {{ $t('ui.package.proprietaryText') }}
+            </p>
+        </template>
+        <template slot="release" v-if="isIncompatible">
+            <p class="package__unavailable">
+                <img src="../../../assets/images/incompatible.svg" width="24" height="24"/>
+                <strong>{{ $t('ui.package.incompatibleTitle') }}</strong><br>
+                {{ $t('ui.package.incompatibleText') }}
             </p>
         </template>
 

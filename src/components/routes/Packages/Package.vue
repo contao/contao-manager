@@ -364,7 +364,7 @@
             }
         }
 
-        &__proprietary {
+        &__unavailable {
             text-align: center;
 
             img {
