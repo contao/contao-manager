@@ -11,6 +11,12 @@ de:
     openssl:
       title: 'Die PHP OpenSSL-Erweiterung ist nicht verfügbar.'
       detail: 'Der Contao Manager benötigt die OpenSSL-Erweiterung, um Dateien über eine verschlüsselte Verbindung (https) herunterzuladen.'
+    dom:
+      title: 'Die PHP DOM-Erweiterung ist nicht verfügbar.'
+      detail: 'Contao 4 benötigt die PHP DOM-Erweiterung, um XML-Dokumente zu parsen.'
+    xmlreader:
+      title: 'Die PHP XMLReader-Erweiterung ist nicht verfügbar.'
+      detail: 'Contao 4 benötigt die PHP DOM-Erweiterung, um XML-Dokumente zu parsen.'
     session:
       title: 'Die PHP Session konnte nicht gestartet werden.'
     web_root:
