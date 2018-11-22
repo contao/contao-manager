@@ -1,5 +1,5 @@
 <template>
-    <composer-package :data="data" :update-only="packageInstalled('contao/manager-bundle')">
+    <composer-package :data="data" :update-only="packageInstalled('contao/manager-bundle')" hide-packagist>
         <img src="../../../assets/images/logo.svg" slot="logo">
 
         <template slot="actions" v-if="!packageInstalled('contao/manager-bundle')">
