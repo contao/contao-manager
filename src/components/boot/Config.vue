@@ -303,10 +303,6 @@
                     }
                 }
 
-                .widget-checkbox {
-                    margin-left: 120px;
-                }
-
                 .widget-button {
                     width: 250px;
                     margin-left: 120px;
