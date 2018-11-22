@@ -92,8 +92,6 @@ nl:
       summaryRetry: 'Installeren Composer afhankelijkheden (opnieuw {current}/{max}) …'
     dump-autoload:
       summary: 'Dump class autoloader ...'
-    create-project:
-      summary: 'Applicatie template downloaden …'
     cloud:
       queuedSummary: 'Opdracht in Composer Cloud wachtrij geplaatst gedurende {seconds} seconden'
       queuedDetail: 'Begint in ca. {seconds} seconden (actuele {jobs} taken op {workers} servers)'

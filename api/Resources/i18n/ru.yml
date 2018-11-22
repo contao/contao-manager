@@ -92,8 +92,6 @@ ru:
       summaryRetry: 'Установка зависимостей Composer (повтор: {current}/{max}) …'
     dump-autoload:
       summary: 'Дамп автозагрузчика классов...'
-    create-project:
-      summary: 'Загрузка шаблона приложения...'
     cloud:
       queuedSummary: 'Работа очереди в Composer Cloud за {seconds} сек.'
       queuedDetail: 'Начиная с прибл. {seconds} сек. (в данный момент {jobs} рабочих {workers} задач)'

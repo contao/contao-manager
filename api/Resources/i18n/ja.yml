@@ -92,8 +92,6 @@ ja:
       summaryRetry: 'Composerの依存関係をインストール中(再試行中: {current}/{max})...'
     dump-autoload:
       summary: 'クラスのオートローダーを書きだし中...'
-    create-project:
-      summary: 'アプリケーションのテンプレートをダウンロード中...'
     cloud:
       queuedSummary: 'ジョブはComposerクラウドのキューに{seconds}秒間待機中'
       queuedDetail: '約{seconds}秒で開始 (現在{workers}のワーカーに{jobs}のジョブ)'

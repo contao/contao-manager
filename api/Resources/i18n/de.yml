@@ -92,8 +92,6 @@ de:
       summaryRetry: 'Installiere Composer-Abhängigkeiten (Versuch {current}/{max}) …'
     dump-autoload:
       summary: 'Klassen-Autoloader wird geschrieben …'
-    create-project:
-      summary: 'Lade Applikations-Vorlage …'
     cloud:
       queuedSummary: 'Aufgabe in der Warteschlange der Composer Cloud seit {seconds} Sekunden'
       queuedDetail: 'Beginnt in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'

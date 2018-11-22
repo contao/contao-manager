@@ -85,6 +85,7 @@
     "ui.server.composer.success": "Nebyly nalezeny žádné chyby.",
     "ui.server.composer.install": "Věci závislé na Composorovi nejsou nainstalované.",
     "ui.server.composer.button": "Spustit Composera",
+    "ui.server.composer.safeMode": "Run Safe Mode",
     "ui.server.contao.title": "Instalace Contaa",
     "ui.server.contao.setup": "Nastavení",
     "ui.server.contao.empty": "Nebyla nalezena žádná instalace Contaa.",
@@ -102,6 +103,10 @@
     "ui.server.contao.formTitle": "Instalace Contaa",
     "ui.server.contao.formText": "Vyberte verzi Contaa, kterou chcete nainstalovat.",
     "ui.server.contao.version": "Verze",
+    "ui.server.contao.coreOnly": "Initial Packages",
+    "ui.server.contao.coreOnlyNo": "Official Bundles (News, Calendar, etc.)",
+    "ui.server.contao.coreOnlyYes": "Contao Core Only",
+    "ui.server.contao.noUpdate": "Bypass installation (Expert Only!)",
     "ui.server.contao.install": "Nainstalovat Contao",
 
     "ui.widget.mandatory": "Toto pole nesmí být prázdné.",

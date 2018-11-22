@@ -85,6 +85,7 @@
     "ui.server.composer.success": "Netika atrastas zināmas problēmas.",
     "ui.server.composer.install": "Composer dependencies are not installed.",
     "ui.server.composer.button": "Palaist Composer",
+    "ui.server.composer.safeMode": "Run Safe Mode",
     "ui.server.contao.title": "Contao instalācija",
     "ui.server.contao.setup": "Uzstādīt",
     "ui.server.contao.empty": "Neviena Contao instalācija nav atrasta.",
@@ -102,6 +103,10 @@
     "ui.server.contao.formTitle": "Contao instalācija",
     "ui.server.contao.formText": "Izvēlieties Contao versiju instalācijai.",
     "ui.server.contao.version": "Versija",
+    "ui.server.contao.coreOnly": "Initial Packages",
+    "ui.server.contao.coreOnlyNo": "Official Bundles (News, Calendar, etc.)",
+    "ui.server.contao.coreOnlyYes": "Contao Core Only",
+    "ui.server.contao.noUpdate": "Bypass installation (Expert Only!)",
     "ui.server.contao.install": "Instalēt Contao",
 
     "ui.widget.mandatory": "Šis lauks nedrīkst būt tukšs.",

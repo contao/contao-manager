@@ -86,8 +86,6 @@ cs:
       summaryRetry: 'Instalování na Composeru závislých věc (opětovný pokus {current}/{max}) …'
     dump-autoload:
       summary: 'Spustit autloadera class'
-    create-project:
-      summary: 'Stahování předlohy aplikace…'
     cloud:
       queuedSummary: 'Příkaz je prováděný v Cloudu Composeru: {seconds} s'
       queuedDetail: 'Proces začne za {seconds} s. (současný {jobs} proces - počet uživatelů: {workers})'

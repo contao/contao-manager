@@ -85,6 +85,7 @@
     "ui.server.composer.success": "No se encontraron problemas conocidos.",
     "ui.server.composer.install": "Las dependencias del Composer no están instaladas.",
     "ui.server.composer.button": "Ejecutar Composer",
+    "ui.server.composer.safeMode": "Run Safe Mode",
     "ui.server.contao.title": "Instalación de Contao",
     "ui.server.contao.setup": "Configuración",
     "ui.server.contao.empty": "No se ha encontrado una instalación de Contao.",
@@ -102,6 +103,10 @@
     "ui.server.contao.formTitle": "Instalación de Contao",
     "ui.server.contao.formText": "Seleccione la versión de Contao para instalar.",
     "ui.server.contao.version": "Versión",
+    "ui.server.contao.coreOnly": "Initial Packages",
+    "ui.server.contao.coreOnlyNo": "Official Bundles (News, Calendar, etc.)",
+    "ui.server.contao.coreOnlyYes": "Contao Core Only",
+    "ui.server.contao.noUpdate": "Bypass installation (Expert Only!)",
     "ui.server.contao.install": "Instalar Contao",
 
     "ui.widget.mandatory": "Este campo no debe estar vacío.",

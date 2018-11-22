@@ -85,6 +85,7 @@
     "ui.server.composer.success": "没有发现已知问题",
     "ui.server.composer.install": "没有安装Composer依赖。",
     "ui.server.composer.button": "运行Composer",
+    "ui.server.composer.safeMode": "Run Safe Mode",
     "ui.server.contao.title": "Contao 安装",
     "ui.server.contao.setup": "安装",
     "ui.server.contao.empty": "没有发现安装Contao。",
@@ -102,6 +103,10 @@
     "ui.server.contao.formTitle": "Contao 安装",
     "ui.server.contao.formText": "选择要安装的Contao版本。",
     "ui.server.contao.version": "版本",
+    "ui.server.contao.coreOnly": "Initial Packages",
+    "ui.server.contao.coreOnlyNo": "Official Bundles (News, Calendar, etc.)",
+    "ui.server.contao.coreOnlyYes": "Contao Core Only",
+    "ui.server.contao.noUpdate": "Bypass installation (Expert Only!)",
     "ui.server.contao.install": "安装Contao",
 
     "ui.widget.mandatory": "该字段不能为空。",
