@@ -98,10 +98,10 @@ class PhpExecutableFinder
 
         try {
             $process = (new Process($commandline))->mustRun(null, array_map(function () { return false; }, $_ENV));
-            $output = json_decode(trim($process->getOutput()), true);
+            $output = @json_decode(trim($process->getOutput()), true);
 
             if (null === $output) {
-                throw new RuntimeException('Received unexpected output from console: '.$process->getOutput());
+                throw new RuntimeException('Unexpected output from "'.$commandline.'": '.$process->getOutput());
             }
 
             return $output;

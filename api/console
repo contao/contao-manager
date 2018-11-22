@@ -26,6 +26,7 @@ unset($xdebug);
 
 if (function_exists('ini_set')) {
     @ini_set('display_errors', 1);
+    @ini_set('zlib.output_compression', 0);
 
     $memoryInBytes = function ($value) {
         $unit = strtolower(substr($value, -1, 1));
