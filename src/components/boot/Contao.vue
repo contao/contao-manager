@@ -69,9 +69,9 @@
                 };
             },
 
-            packages: () => ({
-                'no': this.$t('ui.server.contao.coreOnlyNo'),
-                'yes': this.$t('ui.server.contao.coreOnlyYes'),
+            packages: vm => ({
+                'no': vm.$t('ui.server.contao.coreOnlyNo'),
+                'yes': vm.$t('ui.server.contao.coreOnlyYes'),
             }),
         },
 
