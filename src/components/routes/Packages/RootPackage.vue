@@ -38,8 +38,8 @@
                         support: {
                             docs: 'https://docs.contao.org',
                             forum: 'https://community.contao.org',
-                            issues: 'https://github.com/contao/core-bundle/issues',
-                            source: 'https://github.com/contao/core-bundle',
+                            issues: 'https://github.com/contao/contao/issues',
+                            source: 'https://github.com/contao/contao',
                         },
                     },
                 );
