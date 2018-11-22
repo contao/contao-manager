@@ -45,7 +45,6 @@ class RemoveOperation extends AbstractProcessOperation
                 ],
                 $removed,
                 [
-                    '--no-progress',
                     '--no-update',
                     '--no-scripts',
                     '--no-ansi',

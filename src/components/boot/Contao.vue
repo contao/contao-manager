@@ -15,7 +15,9 @@
             <fieldset class="contao-check__fields">
                 <legend class="contao-check__fieldtitle">{{ 'ui.server.contao.formTitle' | translate }}</legend>
                 <p class="contao-check__fielddesc">{{ 'ui.server.contao.formText' | translate }}</p>
-                <select-menu name="version" :label="$t('ui.server.contao.version')" class="inline" v-model="version" :options="versions" :disabled="processing"/>
+                <select-menu name="version" :label="$t('ui.server.contao.version')" :options="versions" :disabled="processing" v-model="version"/>
+                <select-menu name="coreOnly" :label="$t('ui.server.contao.coreOnly')" :options="packages" :disabled="processing" v-model="coreOnly"/>
+                <checkbox name="noUpdate" :label="$t('ui.server.contao.noUpdate')" :disabled="processing" v-model="noUpdate"/>
             </fieldset>
 
             <fieldset class="contao-check__fields">
@@ -39,30 +41,38 @@
     import BoxedLayout from '../layouts/Boxed';
     import SelectMenu from '../widgets/SelectMenu';
     import LoadingButton from '../widgets/LoadingButton';
+    import Checkbox from '../widgets/Checkbox';
 
     export default {
         mixins: [boot],
-        components: { BootCheck, BoxedLayout, SelectMenu, LoadingButton },
+        components: { Checkbox, BootCheck, BoxedLayout, SelectMenu, LoadingButton },
 
         data: () => ({
             processing: false,
             supportsLatest: true,
             version: '',
+            coreOnly: 'no',
+            noUpdate: false,
         }),
 
         computed: {
             versions() {
                 if (!this.supportsLatest) {
                     return {
-                        '4.4.*': 'Contao 4.4 (Long Term Support)',
+                        '4.4': 'Contao 4.4 (Long Term Support)',
                     };
                 }
 
                 return {
-                    '4.6.*': 'Contao 4.6 (Latest)',
-                    '4.4.*': 'Contao 4.4 (Long Term Support)',
+                    '4.6': 'Contao 4.6 (Latest)',
+                    '4.4': 'Contao 4.4 (Long Term Support)',
                 };
             },
+
+            packages: () => ({
+                'no': this.$t('ui.server.contao.coreOnlyNo'),
+                'yes': this.$t('ui.server.contao.coreOnlyYes'),
+            }),
         },
 
         methods: {
@@ -113,12 +123,23 @@
                 this.$emit('view', 'Contao');
             },
 
-            install() {
+            async install() {
                 this.processing = true;
 
-                this.$store.dispatch('contao/install', this.version).then(() => {
-                    window.location.reload();
+                await this.$store.dispatch('contao/install', {
+                    version: this.version,
+                    coreOnly: this.coreOnly === 'yes',
+                    noUpdate: this.noUpdate,
                 });
+
+                if (this.noUpdate) {
+                    await this.$store.dispatch('tasks/deleteCurrent');
+                    this.$store.commit('setSafeMode', true);
+                    this.$store.commit('setView', views.READY);
+                    return;
+                }
+
+                window.location.reload();
             },
         },
     };
@@ -175,6 +196,11 @@
                     font-weight: $font-weight-medium;
                 }
             }
+
+            .widget-checkbox {
+                margin-top: 20px;
+                font-weight: $font-weight-medium;
+            }
         }
 
         &__fields {
@@ -221,6 +247,10 @@
                     select {
                         width: 250px;
                     }
+                }
+
+                .widget-checkbox {
+                    margin-left: 120px;
                 }
 
                 .widget-button {

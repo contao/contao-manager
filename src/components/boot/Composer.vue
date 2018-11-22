@@ -1,10 +1,12 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.composer.title')" :description="bootDescription">
         <button v-if="bootState === 'action'" @click="install" class="widget-button widget-button--primary widget-button--run">{{ 'ui.server.composer.button' | translate }}</button>
+        <button v-if="bootState === 'action'" @click="runSafeMode" class="widget-button">{{ 'ui.server.composer.safeMode' | translate }}</button>
     </boot-check>
 </template>
 
 <script>
+    import views from '../../router/views';
     import boot from '../../mixins/boot';
     import BootCheck from '../fragments/BootCheck';
 
@@ -41,6 +43,11 @@
                 this.$store.dispatch('tasks/execute', { name: 'composer/install' }).then(() => {
                     window.location.reload();
                 });
+            },
+
+            runSafeMode() {
+                this.$store.commit('setSafeMode', true);
+                this.$store.commit('setView', views.READY);
             },
         },
     };

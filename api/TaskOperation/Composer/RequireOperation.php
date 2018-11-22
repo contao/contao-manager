@@ -45,7 +45,6 @@ class RequireOperation extends AbstractProcessOperation
                 ],
                 $required,
                 [
-                    '--no-progress',
                     '--no-suggest',
                     '--no-update',
                     '--no-scripts',

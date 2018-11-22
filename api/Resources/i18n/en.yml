@@ -114,7 +114,7 @@ en:
         dump-autoload:
             summary: 'Dumping class autoloader …'
         create-project:
-            summary: 'Downloading application template …'
+            summary: 'Installing application template …'
         cloud:
             queuedSummary: 'Job queued in Composer Cloud for {seconds} seconds'
             queuedDetail: 'Starting in approx. {seconds} seconds (currently {jobs} jobs on {workers} workers)'

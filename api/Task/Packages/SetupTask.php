@@ -73,6 +73,10 @@ class SetupTask extends AbstractPackagesTask
     {
         $operations = [new CreateProjectOperation($config, $this->environment, $this->translator, $this->filesystem)];
 
+        if ($config->getOption('no-update')) {
+            return $operations;
+        }
+
         if ($this->environment->useCloudResolver()) {
             $operations[] = new CloudOperation(
                 $this->cloudResolver,

@@ -37,7 +37,7 @@
         </template>
 
         <template slot="actions" v-if="updateOnly">
-            <button :class="{ 'widget-button': true, 'widget-button--update': !isModified, 'widget-button--check': isModified }" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
+            <button class="widget-button widget-button--update" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
         </template>
         <template slot="actions" v-else>
             <slot name="actions">

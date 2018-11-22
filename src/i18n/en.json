@@ -85,6 +85,7 @@
     "ui.server.composer.success": "No known issues found.",
     "ui.server.composer.install": "Composer dependencies are not installed.",
     "ui.server.composer.button": "Run Composer",
+    "ui.server.composer.safeMode": "Run Safe Mode",
     "ui.server.contao.title": "Contao Installation",
     "ui.server.contao.setup": "Setup",
     "ui.server.contao.empty": "No Contao installation has been found.",
@@ -102,6 +103,10 @@
     "ui.server.contao.formTitle": "Contao Installation",
     "ui.server.contao.formText": "Select the Contao version to install.",
     "ui.server.contao.version": "Version",
+    "ui.server.contao.coreOnly": "Initial Packages",
+    "ui.server.contao.coreOnlyNo": "Official Bundles (News, Calendar, etc.)",
+    "ui.server.contao.coreOnlyYes": "Contao Core Only",
+    "ui.server.contao.noUpdate": "Bypass installation (Expert Only!)",
     "ui.server.contao.install": "Install Contao",
 
     "ui.widget.mandatory": "This field must not be empty.",

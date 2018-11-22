@@ -12,11 +12,13 @@ export default {
     },
 
     actions: {
-        install({ dispatch }, version) {
+        install({ dispatch }, { version, coreOnly, noUpdate }) {
             const task = {
                 name: 'contao/install',
                 config: {
                     version,
+                    'core-only': coreOnly ? '1' : '0',
+                    'no-update': noUpdate ? '1' : '0',
                 },
             };
 

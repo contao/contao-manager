@@ -1,10 +1,16 @@
 <template>
-    <composer-package :data="data" update-only>
+    <composer-package :data="data" :update-only="packageInstalled('contao/manager-bundle')">
         <img src="../../../assets/images/logo.svg" slot="logo">
+
+        <template slot="actions" v-if="!packageInstalled('contao/manager-bundle')">
+            <button class="widget-button widget-button--update" disabled>{{ $t('ui.package.updateButton') }}</button>
+        </template>
     </composer-package>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     import ComposerPackage from './ComposerPackage';
 
     export default {
@@ -18,6 +24,8 @@
         },
 
         computed: {
+            ...mapGetters('packages', ['packageInstalled']),
+
             data() {
                 return Object.assign(
                     {},

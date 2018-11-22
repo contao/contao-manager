@@ -10,12 +10,6 @@
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
-use Composer\DependencyResolver\Pool;
-use Composer\IO\BufferIO;
-use Composer\Package\Version\VersionSelector;
-use Composer\Repository\CompositeRepository;
-use Composer\Repository\RepositoryFactory;
-use Composer\Util\RemoteFilesystem;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
@@ -28,7 +22,7 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * @var array
      */
-    private static $supportedVersions = ['4.4.*', '4.6.*'];
+    private static $supportedVersions = ['4.4', '4.6'];
 
     /**
      * @var Environment
@@ -110,38 +104,56 @@ class CreateProjectOperation extends AbstractInlineOperation
      */
     protected function doRun()
     {
-        if (function_exists('ini_set')) {
-            @ini_set('memory_limit', '1536M');
-        }
-
         if ($this->filesystem->exists($this->environment->getAll())) {
             throw new \RuntimeException('Cannot install into existing application');
         }
 
-        $io = new BufferIO();
-        $sourceRepo = new CompositeRepository(RepositoryFactory::defaultRepos($io));
-        $pool = new Pool('stable');
-        $pool->addRepository($sourceRepo);
-        $selector = new VersionSelector($pool);
-        $phpVersion = sprintf('%s.%s.%s', PHP_MAJOR_VERSION, PHP_MINOR_VERSION, PHP_RELEASE_VERSION);
-
-        $package = $selector->findBestCandidate('contao/managed-edition', $this->version, $phpVersion);
-
-        if (!$package) {
-            throw new \RuntimeException('No valid package to install');
-        }
-
-        $remoteFilesystem = new RemoteFilesystem($io);
-
-        $result = $remoteFilesystem->copy(
-            'raw.githubusercontent.com',
-            'https://raw.githubusercontent.com/contao/managed-edition/'.$package->getDistReference().'/composer.json',
+        $this->filesystem->dumpFile(
             $this->environment->getJsonFile(),
-            true
+            $this->generateComposerJson(
+                $this->taskConfig->getOption('version'),
+                !!$this->taskConfig->getOption('core-only', false)
+            )
         );
 
-        $this->taskConfig->setState($this->getName().'.console', $io->getOutput());
+        return true;
+    }
 
-        return $result;
+    private function generateComposerJson($version, $coreOnly = false)
+    {
+        if ($coreOnly) {
+            $require = "        \"contao/manager-bundle\": \"$version.*\"";
+        } else {
+            $require = <<<JSON
+        "contao/manager-bundle": "$version.*",
+        "contao/calendar-bundle": "^$version",
+        "contao/comments-bundle": "^$version",
+        "contao/faq-bundle": "^$version",
+        "contao/listing-bundle": "^$version",
+        "contao/news-bundle": "^$version",
+        "contao/newsletter-bundle": "^$version"
+JSON;
+
+        }
+
+        return <<<JSON
+{
+    "type": "project",
+    "require": {
+$require
+    },
+    "extra": {
+        "contao-component-dir": "assets"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Contao\\\\ManagerBundle\\\\Composer\\\\ScriptHandler::initializeApplication"
+        ],
+        "post-update-cmd": [
+            "Contao\\\\ManagerBundle\\\\Composer\\\\ScriptHandler::initializeApplication"
+        ]
+    }
+}
+JSON;
     }
 }

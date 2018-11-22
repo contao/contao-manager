@@ -58,7 +58,7 @@ select {
     border: 1px solid $border-color;
     border-radius: 2px;
     color: $text-color;
-    -webkit-appearance: none;
+    appearance: none;
 
     &:focus {
         outline: none;
@@ -87,6 +87,24 @@ select {
         border-top: 6px solid $border-color;
         content: "";
         pointer-events: none;
+    }
+}
+
+.widget-checkbox {
+    input {
+        position: absolute;
+        visibility: hidden;
+    }
+
+    label {
+        display: block;
+        padding-left: 25px;
+        background: url("../assets/images/widget-checkbox--off.svg") 0 1px no-repeat;
+        background-size: 20px 20px;
+    }
+
+    input:checked + label {
+        background-image: url("../assets/images/widget-checkbox--on.svg");
     }
 }
 
