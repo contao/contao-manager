@@ -60,7 +60,7 @@
     "ui.server.config.save": "Speichern",
     "ui.server.config.blankOption": "Bitte wählen …",
     "ui.server.config.customOption": "Andere …",
-    "ui.server.config.description": "Der Contao Manager benötigt den Pfad zum PHP-Binary und weitere Server-Informationen um Hintergrund-Prozesse korrekt auszufürehn.<br><br>Die meisten Server werden automatisch erkannt. Sollte Ihr Hosting-Anbieter nicht aufgeführt sein, können Sie diesen <a href=\"https://github.com/contao/contao-manager/wiki\" target=\"_blank\">in unserem Wiki ergänzen</a>.",
+    "ui.server.config.description": "Der Contao Manager benötigt den Pfad zum PHP-Binary und weitere Server-Informationen um Hintergrund-Prozesse korrekt auszuführen.<br><br>Die meisten Server werden automatisch erkannt. Sollte Ihr Hosting-Anbieter nicht aufgeführt sein, können Sie diesen <a href=\"https://github.com/contao/contao-manager/wiki\" target=\"_blank\">in unserem Wiki ergänzen</a>.",
     "ui.server.config.formTitle": "Serverkonfiguration",
     "ui.server.config.formText": "Wählen Sie die passende Konfiguration für ihren Server oder Hosting-Anbieter. Für eine manuelle Konfiguration wählen Sie \"Andere …\".",
     "ui.server.config.customTitle": "Individuelle Konfiguration",
