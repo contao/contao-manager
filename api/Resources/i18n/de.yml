@@ -17,6 +17,11 @@ de:
     xmlreader:
       title: 'Die PHP XMLReader-Erweiterung ist nicht verfügbar.'
       detail: 'Contao 4 benötigt die PHP DOM-Erweiterung, um XML-Dokumente zu parsen.'
+    graphics_lib:
+      title: 'Keine PHP Bild-Bibliothek verfügbar.'
+      detail: 'Contao 4 benötigt entweder die GD, Imagick oder Gmagick Erweiterung um Bilder zu verarbeiten.'
+    symlink:
+      title: 'Die PHP Symlink-Methode ist nicht verfügbar oder funktioniert nicht korrekt.'
     session:
       title: 'Die PHP Session konnte nicht gestartet werden.'
     web_root:
@@ -47,15 +52,19 @@ de:
     complete:
       summary: 'Konsolentask abgeschlossen!'
       detail: 'Der Hintergrundprozess wurde erfolgreich beendet. Prüfen Sie das Konsolenprotokoll für weitere Details.'
+      console: '### Prozess erfolgreich abgeschlossen ###'
     aborting:
       summary: 'Aktuelle Aktion wird gestoppt …'
       detail: 'Der Hintergrund-Prozess wird abgebrochen.'
+      console: '### Der Hintergrundprozess wird abgebrochen ###'
     stopped:
       summary: 'Konsolentask beendet!'
       detail: 'Der Hintergrund-Prozess wurde abgebrochen. Bitte prüfen Sie das Konsolen-Protokoll.'
+      console: '### Der Hintergrundprozess wurde abgebrochen ###'
     error:
       summary: 'Konsolentask beendet!'
       detail: 'Der Hintergrund-Prozess wurde unerwartet beendet. Bitte prüfen Sie das Konsolen-Protokoll.'
+      console: '### Der Hintergrundprozess wurde unerwartet beendet ###'
   task:
     setup_packages:
       title: 'Contao wird installiert'
@@ -83,6 +92,8 @@ de:
       detail: 'Aktualisiere von {old} nach {new}'
     remove-cache:
       summary: 'Cache-Verzeichnis wird gelöscht …'
+    remove-vendor:
+      summary: 'Vendor-Verzeichnis wird gelöscht …'
     cache-warmup:
       summary: 'Cache wird neu aufgebaut …'
     cache-clear:
@@ -98,6 +109,8 @@ de:
       summaryRetry: 'Installiere Composer-Abhängigkeiten (Versuch {current}/{max}) …'
     dump-autoload:
       summary: 'Klassen-Autoloader wird geschrieben …'
+    create-project:
+      summary: 'Installiere Applikations-Vorlage …'
     cloud:
       queuedSummary: 'Aufgabe in der Warteschlange der Composer Cloud seit {seconds} Sekunden'
       queuedDetail: 'Beginnt in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'

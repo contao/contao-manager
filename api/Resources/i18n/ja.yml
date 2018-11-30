@@ -7,10 +7,21 @@ ja:
       detail: '"proc_open"と"proc_close"関数はコマンド行のタスクをバックグラウンドで動作させるために必要です。ホスティングサービスの提供者に、これらのメソッドを利用できない理由を確認してください。これらがないと、Contao ManagerもContao 4も正しく動作しません。'
     intl:
       title: 'PHPのIntl拡張を利用できません。'
-      detail: 'Contao 4は国際化の目的でPHPのIntl拡張を必要とします。'
+      detail: 'Contao 4は国際化の目的のためにPHPのIntl拡張を必要とします。'
     openssl:
       title: 'PHPのOpenSSL拡張を利用できません。'
-      detail: 'Contao Managerは、暗号化した接続(https)でファイルをダウンロードするためにOpenSSL拡張が必要です。'
+      detail: 'Contao Managerは暗号化した接続(https)でファイルをダウンロードするためにOpenSSL拡張が必要です。'
+    dom:
+      title: 'PHPのDOM拡張を利用できません。'
+      detail: 'Contao 4はXMLドキュメントの解析のためにPHPのDOM拡張を必要とします。'
+    xmlreader:
+      title: 'PHPのXMLReader拡張を利用できません。'
+      detail: 'Contao 4はXMLドキュメントの解析のためにPHPのDOM拡張を必要とします。'
+    graphics_lib:
+      title: 'PHPの画像処理のライブラリが何も利用できません。'
+      detail: 'Contao 4は画像を処理するためにGD、IMagick、Gmagickの拡張のいずれかを必要とします。'
+    symlink:
+      title: 'PHPのsymlinkメソッドを利用できないか、正しく動作しません。'
     session:
       title: 'PHPのセッションを開始できませんでした。'
     web_root:
@@ -41,15 +52,19 @@ ja:
     complete:
       summary: 'コンソールタスクが完了しました!'
       detail: 'バックグランドのタスクは正常に完了しました。詳細はコンソールのログを調べてください。'
+      console: '### タスクは正常に終了 ###'
     aborting:
       summary: '現在の操作を停止中...'
       detail: 'バックグラウンドのタスクを取り止め中です。'
+      console: '### バックグランドのタスクを取り止め中 ###'
     stopped:
       summary: 'コンソールタスクが終了しました!'
       detail: 'バックグラウンドのタスクを取り止めました。コンソールのプロトコルを確認してください。'
+      console: '### バックグラウンドのタスクを取り止めました。 ###'
     error:
       summary: 'コンソールタスクが終了しました!'
       detail: 'バックグラウンドのタスクが予想外の停止をしました。コンソールのプロトコルを確認してください。'
+      console: '### バックグラウンドのタスクは予想外に停止しました。 ###'
   task:
     setup_packages:
       title: 'Contaoアプリケーションをインストール中'
@@ -77,6 +92,8 @@ ja:
       detail: '{old}から{new}に更新中'
     remove-cache:
       summary: 'キャッシュのディレクトリを削除中...'
+    remove-vendor:
+      summary: 'ベンダーのディレクトリを削除中...'
     cache-warmup:
       summary: 'アプリケーションキャッシュを準備中...'
     cache-clear:
@@ -92,13 +109,15 @@ ja:
       summaryRetry: 'Composerの依存関係をインストール中(再試行中: {current}/{max})...'
     dump-autoload:
       summary: 'クラスのオートローダーを書きだし中...'
+    create-project:
+      summary: 'アプリケーションのテンプレートをインストール中...'
     cloud:
-      queuedSummary: 'ジョブはComposerクラウドのキューに{seconds}秒間待機中'
+      queuedSummary: 'ジョブはComposer Cloudのキューに{seconds}秒間待機中'
       queuedDetail: '約{seconds}秒で開始 (現在{workers}のワーカーに{jobs}のジョブ)'
-      processingSummary: 'Composerクラウドを使用して依存関係を解決中'
+      processingSummary: 'Composer Cloudを使用して依存関係を解決中'
       processingDetail: 'ジョブID {job}は{seconds}秒間動作中'
       errorSummary: '依存関係の解決に失敗...'
-      finishedSummary: 'Composerクラウドのジョブを完了'
+      finishedSummary: 'Composer Cloudのジョブを完了'
       finishedDetail: 'ジョブID {job}は{seconds}秒で完了'
     clear-cache:
       summary: 'キャッシュファイルを削除中...'

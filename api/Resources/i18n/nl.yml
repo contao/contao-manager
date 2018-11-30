@@ -11,6 +11,17 @@ nl:
     openssl:
       title: 'De PHP OpenSSL extensie is niet beschikbaar.'
       detail: 'Contao Manager vereist de OpenSSL extensie om bestanden over versleutelde verbindingen (https) te downloaden.'
+    dom:
+      title: 'De PHP DOM extensie is niet beschikbaar.'
+      detail: 'Contao 4 vereist de PHP DOM extensie om XML-documenten te parsen.'
+    xmlreader:
+      title: 'De PHP XML Reader extensie is niet beschikbaar.'
+      detail: 'Contao 4 vereist de PHP DOM extensie om XML-documenten te parsen.'
+    graphics_lib:
+      title: 'Er is geen bibliotheek voor PHP-beeldverwerking beschikbaar.'
+      detail: 'Contao 4 vereist ofwel de GD, Imagick of Gmagick-extensie om afbeeldingen te verwerken.'
+    symlink:
+      title: 'PHP-symlink methode is niet beschikbaar of werkt niet correct.'
     session:
       title: 'PHP-sessie kan niet worden gestart.'
     web_root:
@@ -41,15 +52,19 @@ nl:
     complete:
       summary: 'Console taak afgerond!'
       detail: 'De taak op de achtergrond is met succes afgerond. Controleer het console protocol voor details.'
+      console: '### Taak met succes voltooid ###'
     aborting:
       summary: 'De huidige bewerking stoppen ...'
       detail: 'De achtergrond taak wordt geannuleerd.'
+      console: '### De achtergrondtaak wordt geannuleerd ###'
     stopped:
       summary: 'Console taak beëindigd!'
       detail: 'De achtergrond taak is geannuleerd. Controleer het console-protocol.'
+      console: '### De achtergrondtaak is geannuleerd ###'
     error:
       summary: 'Console taak beëindigd!'
       detail: 'De achtergrond taak is onverwacht gestopt. Controleer het console protocol.'
+      console: '### De achtergrondtaak is onverwachts gestopt. ###'
   task:
     setup_packages:
       title: 'Contao-applicatie installeren'
@@ -92,6 +107,8 @@ nl:
       summaryRetry: 'Installeren Composer afhankelijkheden (opnieuw {current}/{max}) …'
     dump-autoload:
       summary: 'Dump class autoloader ...'
+    create-project:
+      summary: 'Applicatie template installeren …'
     cloud:
       queuedSummary: 'Opdracht in Composer Cloud wachtrij geplaatst gedurende {seconds} seconden'
       queuedDetail: 'Begint in ca. {seconds} seconden (actuele {jobs} taken op {workers} servers)'

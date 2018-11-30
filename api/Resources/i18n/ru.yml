@@ -11,6 +11,17 @@ ru:
     openssl:
       title: 'Расширение PHP OpenSSL недоступно.'
       detail: 'Contao Manager необходимо расширение OpenSSL для передачи файлов по зашифрованному соединению (https).'
+    dom:
+      title: 'Расширение PHP DOM недоступно.'
+      detail: 'Contao 4 необходимо расширение PHP DOM для анализа XML-документов.'
+    xmlreader:
+      title: 'Расширение PHP XMLReader недоступно.'
+      detail: 'Contao 4 необходимо расширение PHP DOM для анализа XML-документов.'
+    graphics_lib:
+      title: 'Библиотека обработки изображений PHP не доступна.'
+      detail: 'Для обработки изображений Contao 4 требует расширения GD, Imagick или Gmagick.'
+    symlink:
+      title: 'Метод PHP symlink недоступен или работает неправильно.'
     session:
       title: 'Не удалось запустить сеанс PHP.'
     web_root:
@@ -35,21 +46,25 @@ ru:
       path: 'Репозитории путей не поддерживаются.'
       artifact: 'Репозитории артефактов не поддерживаются.'
       platform: 'Платформа не должна быть настроена в composer.json.'
-      cache: 'Свойства кэша не должны быть настроены в composer.json.'
+      cache: 'Свойства кеша не должны быть настроены в composer.json.'
   taskstatus:
     created: 'Консольная задача создана...'
     complete:
       summary: 'Консольная задача завершена!'
       detail: 'Фоновая задача была успешно завершена. Проверьте протокол консоли.'
+      console: '### Задание успешно завершено ###'
     aborting:
       summary: 'Остановка текущей операции...'
       detail: 'Фоновая задача отменяется.'
+      console: '### Фоновая задача отменяется ###'
     stopped:
       summary: 'Консольная задача завершена!'
       detail: 'Фоновая задача была отменена. Проверьте протокол консоли.'
+      console: '### Фоновая задача была отменена. ###'
     error:
       summary: 'Консольная задача завершена!'
       detail: 'Фоновая задача неожиданно прекращена. Проверьте протокол консоли.'
+      console: '# # # Фоновая задача неожиданно остановилась. ###'
   task:
     setup_packages:
       title: 'Установка приложения Contao'
@@ -77,10 +92,12 @@ ru:
       detail: 'Обновление с {old} до {new}'
     remove-cache:
       summary: 'Удаление каталога кеша...'
+    remove-vendor:
+      summary: 'Удаление каталога vendor...'
     cache-warmup:
-      summary: '"Подогреть" кэш приложений...'
+      summary: '"Подогреть" кеш приложений...'
     cache-clear:
-      summary: 'Очистка кэша приложений...'
+      summary: 'Очистка кеша приложений...'
     composer-update:
       summary: 'Обновление зависимостей Composer...'
     composer-require:
@@ -92,6 +109,8 @@ ru:
       summaryRetry: 'Установка зависимостей Composer (повтор: {current}/{max}) …'
     dump-autoload:
       summary: 'Дамп автозагрузчика классов...'
+    create-project:
+      summary: 'Установка шаблона приложения...'
     cloud:
       queuedSummary: 'Работа очереди в Composer Cloud за {seconds} сек.'
       queuedDetail: 'Начиная с прибл. {seconds} сек. (в данный момент {jobs} рабочих {workers} задач)'
