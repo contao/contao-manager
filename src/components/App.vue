@@ -83,8 +83,6 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import url('https://fonts.googleapis.com/css?family=Lato:100,300,400,700&subset=latin-ext');
-
     @import "../assets/styles/defaults";
     @import "../assets/styles/layout";
 

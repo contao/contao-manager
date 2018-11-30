@@ -54,8 +54,12 @@ img, svg {
 
 
 body, input, textarea, button {
-    font: $font-weight-normal 14px/1.4 Lato, Arial, sans-serif;
+    font: $font-weight-normal 14px/1.4 $font-sans-serif;
     color: $text-color;
+}
+
+code {
+    font-family: $font-monospace;
 }
 
 select, input, textarea {

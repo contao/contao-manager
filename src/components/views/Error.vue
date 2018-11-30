@@ -31,7 +31,7 @@
         overflow: auto;
         padding: 10px;
         color: #e8e8e8;
-        font-family: Menlo, Consolas, monospace;
+        font-family: $font-monospace;
         font-size: 13px;
         line-height: 1.2;
         background-color: rgba(0, 0, 0, 0.85098);
