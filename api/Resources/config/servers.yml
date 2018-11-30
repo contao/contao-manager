@@ -44,6 +44,18 @@ configs:
             /usr/bin/php{major}.{minor}: []
             /usr/lib/cgi-bin/php{major}.{minor}: []
 
+    abaton:
+        name: abaton EDV-Dienstleistungs GmbH
+        website: www.abaton.at
+        php:
+            /opt/plesk/php/{major}.{minor}/bin/php: []
+
+    aditsystems:
+        name: ADITSYSTEMS
+        website: www.aditsystems.de
+        php:
+            /usr/bin/php{major}.{minor}: []
+
     alfahosting:
         name: Alfahosting GmbH
         website: alfahosting.de
@@ -99,6 +111,12 @@ configs:
         php:
             /usr/bin/php{major}.{minor}: []
 
+    greensta:
+        name: Greensta Öko Webhosting
+        website: ssl.greensta.de
+        php:
+            /opt/phpbrew/php/php-{major}.{minor}/bin/php: []
+
     goneo:
         name: goneo Internet GmbH
         website: www.goneo.de
@@ -151,6 +169,12 @@ configs:
         php:
             /usr/bin/php{major}.{minor}: []
 
+    hosttech:
+        name: Hosttech GmbH
+        website: www.hosttech.eu
+        php:
+            /opt/plesk/php/{major}.{minor}/bin/php: []
+
     infomaniak:
         name: Infomaniak Network SA
         website: www.infomaniak.com
@@ -169,6 +193,12 @@ configs:
         php:
             /opt/phpfarm/inst/php-{major}.{minor}/bin/php-cgi: []
 
+    lahno-webhosting:
+        name: Lahno Webhosting
+        website: lahno-webhosting.de
+        php:
+            /opt/plesk/php/{major}.{minor}/bin/php: []
+
     mamp_mac:
         name: MAMP (macOS)
         website: www.mamp.info
@@ -181,6 +211,12 @@ configs:
         php:
             C:\MAMP\bin\php\php{major}.{minor}.{release}\php.exe: []
             D:\MAMP\bin\php\php{major}.{minor}.{release}\php.exe: []
+
+    manitu:
+        name: manitu GmbH
+        website: www.manitu.de
+        php:
+            /usr/local/php{major}{minor}/bin/php: []
 
     metanet:
         name: METANET AG
@@ -268,6 +304,12 @@ configs:
         php:
             /usr/bin/php{major}{minor}: []
             /usr/bin/php: []
+
+    wintglobal:
+        name: wint.global GmbH
+        website: wint.global
+        php:
+            /opt/plesk/php/{major}.{minor}/bin/php: []
 
     world4you:
         name: World4You Internet Services GmbH
