@@ -49,10 +49,14 @@
             },
 
             update() {
-                this.$store.dispatch('tasks/execute', { name: 'manager/self-update' }).then(
-                    () => { window.location.reload(true); },
-                    () => { window.location.reload(true); },
-                );
+                const reload = () => {
+                    this.$store.dispatch('tasks/setDeleting', true);
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 3000);
+                };
+
+                this.$store.dispatch('tasks/execute', { name: 'manager/self-update' }).then(reload, reload);
             },
         },
     };
