@@ -112,7 +112,7 @@ class CreateProjectOperation extends AbstractInlineOperation
             $this->environment->getJsonFile(),
             $this->generateComposerJson(
                 $this->taskConfig->getOption('version'),
-                !!$this->taskConfig->getOption('core-only', false)
+                (bool) $this->taskConfig->getOption('core-only', false)
             )
         );
 
@@ -133,7 +133,6 @@ class CreateProjectOperation extends AbstractInlineOperation
         "contao/news-bundle": "^$version",
         "contao/newsletter-bundle": "^$version"
 JSON;
-
         }
 
         return <<<JSON

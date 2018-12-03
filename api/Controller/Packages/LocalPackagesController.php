@@ -10,9 +10,6 @@
 
 namespace Contao\ManagerApi\Controller\Packages;
 
-use Composer\Composer;
-use Composer\Factory;
-use Composer\IO\NullIO;
 use Composer\Package\Dumper\ArrayDumper;
 use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -10,7 +10,6 @@
 
 namespace Contao\ManagerApi\TaskOperation\Filesystem;
 
-use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
@@ -38,11 +37,10 @@ class RemoveVendorOperation extends AbstractInlineOperation
     /**
      * Constructor.
      *
-     * @param string     $environment
-     * @param ApiKernel  $kernel
-     * @param TaskConfig $taskConfig
-     * @param Translator $translator
-     * @param Filesystem $filesystem
+     * @param TaskConfig  $taskConfig
+     * @param Environment $environment
+     * @param Translator  $translator
+     * @param Filesystem  $filesystem
      */
     public function __construct(TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem)
     {

@@ -10,7 +10,7 @@ EOF;
 
 $finder = PhpCsFixer\Finder::create()
     ->exclude('Resources')
-    ->in([__DIR__.'/api', __DIR__.'/web'])
+    ->in([__DIR__.'/api', __DIR__.'/public'])
 ;
 
 return PhpCsFixer\Config::create()

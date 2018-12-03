@@ -10,8 +10,6 @@
 
 namespace Contao\ManagerApi\Controller\Server;
 
-use Composer\Factory;
-use Composer\IO\NullIO;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
