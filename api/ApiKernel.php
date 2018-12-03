@@ -40,7 +40,12 @@ class ApiKernel extends Kernel
     /**
      * @var string
      */
-    private $contaoDir;
+    private $projectDir;
+
+    /**
+     * @var string
+     */
+    private $configDir;
 
     /**
      * {@inheritdoc}
@@ -87,25 +92,11 @@ class ApiKernel extends Kernel
      */
     public function getProjectDir()
     {
-        // @see https://getcomposer.org/doc/03-cli.md#composer
-        if (false !== ($composer = getenv('COMPOSER'))) {
-            return dirname($composer);
+        if (null === $this->projectDir) {
+            $this->projectDir = $this->findProjectDir();
         }
 
-        if ('' !== ($phar = \Phar::running(false))) {
-            $current = dirname($phar);
-
-            if ('web' === basename($current)) {
-                return dirname($current);
-            }
-
-            return $current;
-        }
-
-        $testDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'test-dir';
-        (new Filesystem())->mkdir($testDir);
-
-        return $testDir;
+        return $this->projectDir;
     }
 
     /**
@@ -131,7 +122,39 @@ class ApiKernel extends Kernel
      */
     public function getConfigDir()
     {
-        return $this->getProjectDir().DIRECTORY_SEPARATOR.'contao-manager';
+        if (null !== $this->configDir) {
+            return $this->configDir;
+        }
+
+        $this->configDir = $this->getProjectDir().DIRECTORY_SEPARATOR.'contao-manager';
+        $filesystem = new Filesystem();
+
+        // Try to find a config directory in the parent from previous version
+        if (!$filesystem->exists($this->configDir)) {
+            $parentDir = dirname($this->getProjectDir()).DIRECTORY_SEPARATOR.'contao-manager';
+
+            if ($filesystem->exists($parentDir)) {
+                $filesystem->rename($parentDir, $this->configDir);
+            }
+
+            $filesystem->mkdir($this->configDir);
+        }
+
+        // Make sure the config directory contains a .htaccess file
+        if (!$filesystem->exists($this->configDir.DIRECTORY_SEPARATOR.'.htaccess')) {
+            $filesystem->dumpFile($this->configDir.DIRECTORY_SEPARATOR.'.htaccess', <<<CODE
+<IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+</IfModule>
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+CODE
+            );
+        }
+
+        return $this->configDir;
     }
 
     /**
@@ -185,5 +208,33 @@ class ApiKernel extends Kernel
         putenv('COMPOSER_HTACCESS_PROTECT=0');
 
         chdir($root);
+    }
+
+    /**
+     * Finds the Contao installation directory depending on the Phar file or development mode.
+     *
+     * @return string
+     */
+    private function findProjectDir()
+    {
+        // @see https://getcomposer.org/doc/03-cli.md#composer
+        if (false !== ($composer = getenv('COMPOSER'))) {
+            return dirname($composer);
+        }
+
+        if ('' !== ($phar = \Phar::running(false))) {
+            $current = dirname($phar);
+
+            if ('web' === basename($current)) {
+                return dirname($current);
+            }
+
+            return $current;
+        }
+
+        $testDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'test-dir';
+        (new Filesystem())->mkdir($testDir);
+
+        return $testDir;
     }
 }
