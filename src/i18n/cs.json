@@ -5,6 +5,8 @@
     "ui.app.httpsHref": "https://https.cio.gov/everything/",
     "ui.app.loading": "Nahrávání Správce Contaa",
     "ui.app.apiError": "Nečekaný status API",
+    "ui.app.configSecurity1": "SECURITY ALERT !!! Unprotected config directory detected",
+    "ui.app.configSecurity2": "The Contao Manager has detected that its config files are publicly accessible. All operations are disabled until the directory is secured, otherwise an attacker could access sensitive data of your installation.\n\nTo fix this issue, make sure to prevent access to the \"contao-manager\" directory on your server. To learn how to do this, please refer to the manual of your webserver or contact your hosting provider.",
     "ui.account.welcome": "Vítejte",
     "ui.account.intro": "Vítejte ve Správci Contaa, univerzálním nástroji, pomocí kterého můžete nainstalovat a spravovat Contao 4 Open Source CMS. Pokud jste tu poprvé, přečtěte si prosím <strong><a href=\"https://docs.contao.org/books/manager/\" target=\"_blank\"> návod</a>, abyste mohli začít</strong>. <br><br>Pokud narazíte na jakékoli problémy, <a href=\"https://github.com/contao/contao-manager/issues\" target=\"_blank\">podívejte se na jiná chybová hlášení</a> a případně nahlašte novou chybu, pokud ještě není nahlášená.",
     "ui.account.headline": "Uživatelský účet",

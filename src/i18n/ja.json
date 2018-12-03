@@ -5,6 +5,8 @@
     "ui.app.httpsHref": "https://https.cio.gov/everything/",
     "ui.app.loading": "Contao Managerを読み込み中…",
     "ui.app.apiError": "予期しないAPIの状態",
+    "ui.app.configSecurity1": "SECURITY ALERT !!! Unprotected config directory detected",
+    "ui.app.configSecurity2": "The Contao Manager has detected that its config files are publicly accessible. All operations are disabled until the directory is secured, otherwise an attacker could access sensitive data of your installation.\n\nTo fix this issue, make sure to prevent access to the \"contao-manager\" directory on your server. To learn how to do this, please refer to the manual of your webserver or contact your hosting provider.",
     "ui.account.welcome": "ようこそ",
     "ui.account.intro": "Contao Managerにようこそ。Contao ManagerはContao 4 Open Source CMSのインストールと管理を行う多才なツールです。Contao Managerを初めて利用する場合は、<strong>始める前に<a href=\"https://docs.contao.org/books/manager/\" target=\"_blank\">マニュアルを読んでください</a>。<br><br>問題が起きた場合は、 <a href=\"https://github.com/contao/contao-manager/issues\" target=\"_blank\">GitHubのIssues</a>を確認し、まだ報告されていない場合はどのような問題でも遠慮なく新しいIssueを作成してください。",
     "ui.account.headline": "ユーザーアカウント",

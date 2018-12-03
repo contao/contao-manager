@@ -5,6 +5,8 @@
     "ui.app.httpsHref": "https://https.cio.gov/everything/",
     "ui.app.loading": "Contao Manager wird geladen …",
     "ui.app.apiError": "Unerwarteter API-Status",
+    "ui.app.configSecurity1": "SICHERHEITSWARNUNG !!! Das Konfigurations-Verzeichnis ist ungeschützt",
+    "ui.app.configSecurity2": "Der Contao Manager hat erkannt, dass seine Konfigurationsdateien öffentlich erreichbar sind. Sie müssen diese Dateien schützen, bevor der Manager verwendet werden kann, da ein Angreifer sonst auf sensible Daten zugreifen könnte.\n\nUm dieses Problem zu beheben, schützen Sie das Verzeichnis \"contao-manager\" auf Ihrem Server. Bei Fragen lesen Sie das Handbuch ihres Webservers oder wenden Sie sich an Ihren Hosting-Anbieter.",
     "ui.account.welcome": "Willkommen",
     "ui.account.intro": "Willkommen zum Contao Manager, ein universelles Werkzeug um das Contao 4 Open Source CMS zu installieren, konfigurieren und warten. Wenn Sie den Manager zum ersten Mal einsetzen, <strong><a href=\"https://docs.contao.org/books/manager/\" target=\"_blank\">lesen Sie bitte die Dokumentation</a> bevor Sie anfangen</strong>.<br><br>Sollten Probleme auftreten, dann prüfen Sie bitte <a href=\"https://github.com/contao/contao-manager/issues\" target=\"_blank\">die Tickets auf GitHub</a>. Falls es für Ihr Anliegen noch kein Ticket gibt, dann können Sie gern ein neues erstellen.",
     "ui.account.headline": "Benutzerkonto",
