@@ -127,14 +127,21 @@ class ApiKernel extends Kernel
         }
 
         $this->configDir = $this->getProjectDir().DIRECTORY_SEPARATOR.'contao-manager';
+
+        if ('' === ($phar = \Phar::running(false))) {
+            return $this->configDir;
+        }
+
         $filesystem = new Filesystem();
 
         // Try to find a config directory in the parent from previous version
         if (!$filesystem->exists($this->configDir)) {
-            $parentDir = dirname($this->getProjectDir()).DIRECTORY_SEPARATOR.'contao-manager';
+            if ('web' !== basename(dirname($phar))) {
+                $parentDir = dirname($this->getProjectDir()).DIRECTORY_SEPARATOR.'contao-manager';
 
-            if ($filesystem->exists($parentDir)) {
-                $filesystem->rename($parentDir, $this->configDir);
+                if ($filesystem->exists($parentDir)) {
+                    $filesystem->mirror($parentDir, $this->configDir);
+                }
             }
 
             $filesystem->mkdir($this->configDir);

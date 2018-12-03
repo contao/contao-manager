@@ -53,7 +53,7 @@
             ...mapState('tasks', { taskStatus: 'status' }),
 
             isInitializing: vm => vm.view === views.INIT,
-            isInsecure: () => window.location.protocol !== 'https:' && window.location.hostname !== 'localhost',
+            isInsecure: () => location.protocol !== 'https:' && location.hostname !== 'localhost',
             taskRunning: vm => vm.taskStatus !== null,
             hasError: vm => vm.error !== null,
 
@@ -66,18 +66,38 @@
             },
         },
 
-        mounted() {
-            this.$store.dispatch('auth/status').then((statusCode) => {
-                if (statusCode === 200) {
-                    this.$store.commit('setView', views.BOOT);
-                } else if (statusCode === 204) {
-                    this.$store.commit('setView', views.ACCOUNT);
-                } else if (statusCode === 401) {
-                    this.$store.commit('setView', views.LOGIN);
-                } else {
-                    this.$store.commit('apiError', statusCode);
+        async mounted() {
+            const accountStatus = await this.$store.dispatch('auth/status');
+
+            const chunks = location.pathname.split('/').filter(v => v !== '');
+            chunks.unshift('');
+
+            while (chunks.pop() !== undefined && chunks.length) {
+                try {
+                    await this.$http.get(`${chunks.join('/')}/contao-manager/users.json`);
+
+                    this.$store.commit('setError', {
+                        title: this.$t('ui.app.configSecurity1'),
+                        type: 'about:blank',
+                        status: '500',
+                        detail: this.$t('ui.app.configSecurity2'),
+                    });
+
+                    return;
+                } catch (err) {
+                    // user.json could not be loaded, seems like a valid config
                 }
-            });
+            }
+
+            if (accountStatus === 200) {
+                this.$store.commit('setView', views.BOOT);
+            } else if (accountStatus === 204) {
+                this.$store.commit('setView', views.ACCOUNT);
+            } else if (accountStatus === 401) {
+                this.$store.commit('setView', views.LOGIN);
+            } else {
+                this.$store.commit('apiError', accountStatus);
+            }
         },
     };
 </script>

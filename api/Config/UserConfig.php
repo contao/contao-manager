@@ -340,8 +340,6 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
             if ($config->has('secret')) {
                 $this->data['secret'] = $config->get('secret');
                 $config->remove('secret');
-            } else {
-                $this->getSecret();
             }
         }
     }
