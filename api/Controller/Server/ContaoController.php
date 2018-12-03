@@ -10,7 +10,7 @@
 
 namespace Contao\ManagerApi\Controller\Server;
 
-use Contao\ManagerApi\Composer\Environment;
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Exception\ProcessOutputException;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
@@ -34,9 +34,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class ContaoController extends Controller
 {
     /**
-     * @var Environment
+     * @var ApiKernel
      */
-    private $environment;
+    private $kernel;
 
     /**
      * @var ContaoApi
@@ -64,14 +64,14 @@ class ContaoController extends Controller
     private $filesystem;
 
     public function __construct(
-        Environment $environment,
+        ApiKernel $kernel,
         ContaoApi $contaoApi,
         ContaoConsole $contaoConsole,
         ConsoleProcessFactory $processFactory,
         LoggerInterface $logger = null,
         Filesystem $filesystem = null
     ) {
-        $this->environment = $environment;
+        $this->kernel = $kernel;
         $this->contaoApi = $contaoApi;
         $this->contaoConsole = $contaoConsole;
         $this->processFactory = $processFactory;
@@ -145,7 +145,7 @@ class ContaoController extends Controller
      */
     private function getProjectFiles()
     {
-        $content = scandir($this->environment->getContaoDir(), SCANDIR_SORT_NONE);
+        $content = scandir($this->kernel->getProjectDir(), SCANDIR_SORT_NONE);
         $content = array_diff(
             $content,
             [
@@ -195,11 +195,11 @@ class ContaoController extends Controller
         }
 
         // Required for Contao 2.11
-        define('TL_ROOT', $this->environment->getContaoDir());
+        define('TL_ROOT', $this->kernel->getProjectDir());
 
         $files = [
-            $this->environment->getContaoDir().'/system/constants.php',
-            $this->environment->getContaoDir().'/system/config/constants.php',
+            $this->kernel->getProjectDir().'/system/constants.php',
+            $this->kernel->getProjectDir().'/system/config/constants.php',
         ];
 
         // Test if the Phar was placed in the Contao 2/3 root

@@ -54,29 +54,24 @@ class Environment
         ];
     }
 
-    public function getManagerDir()
+    public function getBackupDir()
     {
         return $this->kernel->getConfigDir();
     }
 
-    public function getContaoDir()
-    {
-        return $this->kernel->getProjectDir();
-    }
-
     public function getJsonFile()
     {
-        return $this->kernel->getProjectDir().'/composer.json';
+        return $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'composer.json';
     }
 
     public function getLockFile()
     {
-        return $this->kernel->getProjectDir().'/composer.lock';
+        return $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'composer.lock';
     }
 
     public function getVendorDir()
     {
-        return $this->kernel->getProjectDir().'/vendor';
+        return $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'vendor';
     }
 
     public function getComposer()

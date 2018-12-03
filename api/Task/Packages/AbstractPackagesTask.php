@@ -183,8 +183,8 @@ abstract class AbstractPackagesTask extends AbstractTask
     private function getBackupPaths()
     {
         return [
-            $this->environment->getJsonFile() => sprintf('%s/%s~', $this->environment->getManagerDir(), basename($this->environment->getJsonFile())),
-            $this->environment->getLockFile() => sprintf('%s/%s~', $this->environment->getManagerDir(), basename($this->environment->getLockFile())),
+            $this->environment->getJsonFile() => sprintf('%s/%s~', $this->environment->getBackupDir(), basename($this->environment->getJsonFile())),
+            $this->environment->getLockFile() => sprintf('%s/%s~', $this->environment->getBackupDir(), basename($this->environment->getLockFile())),
         ];
     }
 }

@@ -10,7 +10,7 @@
 
 namespace Contao\ManagerApi\Config;
 
-use Contao\ManagerApi\Composer\Environment;
+use Contao\ManagerApi\ApiKernel;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -29,11 +29,12 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      * Constructor.
      *
      * @param ContainerInterface $container
+     * @param ApiKernel          $kernel
      * @param Filesystem         $filesystem
      */
-    public function __construct(ContainerInterface $container, Filesystem $filesystem = null)
+    public function __construct(ContainerInterface $container, ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $configFile = $container->get(Environment::class)->getManagerDir().DIRECTORY_SEPARATOR.'users.json';
+        $configFile = $kernel->getConfigDir().DIRECTORY_SEPARATOR.'users.json';
 
         parent::__construct($configFile, $filesystem);
 
@@ -319,7 +320,6 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     public static function getSubscribedServices()
     {
         return [
-            Environment::class,
             UserPasswordEncoderInterface::class,
             ManagerConfig::class,
         ];
