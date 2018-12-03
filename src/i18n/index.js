@@ -32,9 +32,13 @@ const i18n = {
         return this.load(userLang);
     },
 
-    async load(locale) {
+    async switch(locale) {
         window.localStorage.setItem('contao_manager_locale', locale);
 
+        this.load(locale);
+    },
+
+    async load(locale) {
         if (Vue.i18n.localeExists(locale)) {
             Vue.i18n.set(locale);
             return;

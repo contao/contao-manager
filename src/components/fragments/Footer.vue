@@ -42,7 +42,7 @@
 
         methods: {
             updateLanguage(value) {
-                i18n.load(value);
+                i18n.switch(value);
             },
 
             open() {
