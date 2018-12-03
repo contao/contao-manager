@@ -68,7 +68,6 @@ class ApiKernel extends Kernel
         $bundles = [
             new FrameworkBundle(),
             new SecurityBundle(),
-
             new MonologBundle(),
         ];
 

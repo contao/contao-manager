@@ -35,7 +35,7 @@
             <search-package v-for="item in results" :package="item" :key="item.name"/>
 
             <div class="package-search__more">
-                <loading-button inline icon="update" :loading="searching" v-if="hasMore" @click="loadMore">{{ $t('ui.packagesearch.more') }}</loading-button>
+                <loading-button inline icon="search" :loading="searching" v-if="hasMore" @click="loadMore">{{ $t('ui.packagesearch.more') }}</loading-button>
             </div>
 
             <a href="https://www.algolia.com/" target="_blank" class="package-search__algolia"><img src="../../assets/images/search-by-algolia.svg" width="200"></a>
