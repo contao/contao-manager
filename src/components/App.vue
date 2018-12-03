@@ -2,7 +2,7 @@
     <div id="app">
         <div class="https-warning" v-if="isInsecure">
             <strong class="https-warning__headline">{{ 'ui.app.httpsHeadline' | translate }}</strong>
-            <span class="https-warning__description">{{ 'ui.app.httpsDescription' | translate }}</span>
+            <span class="https-warning__description"> {{ 'ui.app.httpsDescription' | translate }} </span>
             <a :href="$t('ui.app.httpsHref')" target="_blank" class="https-warning__link">{{ 'ui.app.httpsLink' | translate }}</a>
         </div>
 
