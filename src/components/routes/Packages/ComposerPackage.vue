@@ -120,6 +120,8 @@
                         text: this.$t('ui.package.abandonedTitle'),
                     };
                 }
+
+                return '';
             },
 
             hint() {

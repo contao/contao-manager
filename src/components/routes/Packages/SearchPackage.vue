@@ -57,6 +57,8 @@
                         text: this.$t('ui.package.incompatibleTitle'),
                     };
                 }
+
+                return '';
             },
 
             isPrivate() {
