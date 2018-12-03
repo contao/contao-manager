@@ -70,7 +70,7 @@
             <arg value="-i" />
             <arg value="--" />
             <arg value="s/@symfony_env@/prod/g" />
-            <arg value="dist/api.php" />
+            <arg value="public/api.php" />
         </exec>
     </target>
 
@@ -100,7 +100,6 @@
         <echo message="Installing UI dependencies" />
         <exec executable="npm" dir="contao-manager-${version}" checkreturn="true">
             <arg value="install" />
-            <arg value="--no-bin-links" />
             <arg value="--no-optional" />
         </exec>
     </target>
@@ -133,7 +132,7 @@
     <target name="box-dev">
         <echo message="Creating the .phar file" />
         <exec executable="box" checkreturn="true" passthru="true">
-        <arg value="compile" />
+            <arg value="compile" />
         </exec>
         <exec executable="php" checkreturn="true">
             <arg value="-r" />
