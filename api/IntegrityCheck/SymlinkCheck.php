@@ -10,56 +10,60 @@
 
 namespace Contao\ManagerApi\IntegrityCheck;
 
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\I18n\Translator;
-use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
+use Symfony\Component\Filesystem\Filesystem;
 
 class SymlinkCheck extends AbstractIntegrityCheck
 {
     /**
-     * @var ServerInfo
+     * @var ApiKernel
      */
-    private $serverInfo;
+    private $kernel;
 
     /**
      * Constructor.
+     *
+     * @param ApiKernel  $kernel
+     * @param Translator $translator
      */
-    public function __construct(ServerInfo $serverInfo, Translator $translator)
+    public function __construct(ApiKernel $kernel, Translator $translator)
     {
         parent::__construct($translator);
 
-        $this->serverInfo = $serverInfo;
+        $this->kernel = $kernel;
     }
 
     public function run()
     {
-        // Skip symlink check on Windows for now
-        if ($this->serverInfo->getPlatform() === ServerInfo::PLATFORM_WINDOWS) {
+        if (($error = $this->canCreateSymlinks()) === null) {
             return null;
         }
 
-        if ($this->canCreateSymlinks()) {
-            return null;
-        }
-
-        return new ApiProblem(
+        return (new ApiProblem(
             $this->trans('symlink.title'),
             'https://php.net/symlink'
-        );
+        ))->setDetail($error);
     }
 
     private function canCreateSymlinks()
     {
         if (!function_exists('symlink')) {
-            return false;
+            return '';
         }
 
-        $tmpfile = tempnam(sys_get_temp_dir(), '');
+        try {
+            $filesystem = new Filesystem();
+            $tempname = tempnam(sys_get_temp_dir(), '');
 
-        @unlink($tmpfile);
-        $result = @symlink(__FILE__, $tmpfile);
-        @unlink($tmpfile);
+            $filesystem->remove($tempname);
+            $filesystem->symlink($this->kernel->getProjectDir(), $tempname);
+            $filesystem->remove($tempname);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
 
-        return true === $result;
+        return null;
     }
 }
