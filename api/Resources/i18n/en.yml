@@ -62,11 +62,11 @@ en:
         stopped:
             summary: 'Console task terminated!'
             detail: 'The background task was cancelled. Please check the console protocol.'
-            console: '### The background task was cancelled. ###'
+            console: '### The background task was cancelled ###'
         error:
             summary: 'Console task terminated!'
             detail: 'The background task has stopped unexpectedly. Please check the console protocol.'
-            console: '### The background task has stopped unexpectedly. ###'
+            console: '### The background task has stopped unexpectedly ###'
 
     task:
         setup_packages:
