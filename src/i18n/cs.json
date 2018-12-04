@@ -99,7 +99,7 @@
     "ui.server.contao.ltsTitle": "Několikaletá podpora - Long Term Support",
     "ui.server.contao.ltsText": "Pro verzi LTS vychází po několik let další opravy, ale žádné nové funkce.",
     "ui.server.contao.latestTitle": "Poslední",
-    "ui.server.contao.latestText": "A new latest version is release every six months in August and February.",
+    "ui.server.contao.latestText": "A new latest version is released every six months in February and August.",
     "ui.server.contao.noLatest": "Vyžaduje přinejmenším PHP 7.1.",
     "ui.server.contao.releaseplan": "Více informací získáte v <a href=\"https://contao.org/en/release-plan.html\" target=\"_blank\">realizačním plánu</a>",
     "ui.server.contao.formTitle": "Instalace Contaa",

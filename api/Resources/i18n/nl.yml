@@ -64,7 +64,7 @@ nl:
     error:
       summary: 'Console taak beëindigd!'
       detail: 'De achtergrond taak is onverwacht gestopt. Controleer het console protocol.'
-      console: '### De achtergrondtaak is onverwachts gestopt. ###'
+      console: '### De achtergrondtaak is onverwachts gestopt ###'
   task:
     setup_packages:
       title: 'Contao-applicatie installeren'

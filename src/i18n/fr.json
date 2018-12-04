@@ -99,7 +99,7 @@
     "ui.server.contao.ltsTitle": "Long Term Support (LTS)",
     "ui.server.contao.ltsText": "La version LTS dispose d'une période de support étendue pouvant aller jusqu'à quatre ans.",
     "ui.server.contao.latestTitle": "Dernière version",
-    "ui.server.contao.latestText": "A new latest version is release every six months in August and February.",
+    "ui.server.contao.latestText": "A new latest version is released every six months in February and August.",
     "ui.server.contao.noLatest": "Nécessite au moins PHP 7.1.",
     "ui.server.contao.releaseplan": "Voir le <a href=\"https://contao.org/en/release-plan.html\" target=\"_blank\">plan de publication de Contao</a> pour de plus amples informations.",
     "ui.server.contao.formTitle": "Installation de Contao",
