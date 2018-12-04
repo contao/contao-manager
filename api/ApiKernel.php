@@ -11,8 +11,6 @@
 namespace Contao\ManagerApi;
 
 use Composer\Util\ErrorHandler;
-use Contao\ManagerApi\IntegrityCheck\CliIntegrityCheckInterface;
-use Contao\ManagerApi\IntegrityCheck\WebIntegrityCheckInterface;
 use Contao\ManagerApi\Task\TaskInterface;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -149,7 +147,7 @@ class ApiKernel extends Kernel
 
         // Make sure the config directory contains a .htaccess file
         if (!$filesystem->exists($this->configDir.DIRECTORY_SEPARATOR.'.htaccess')) {
-            $filesystem->dumpFile($this->configDir.DIRECTORY_SEPARATOR.'.htaccess', <<<CODE
+            $filesystem->dumpFile($this->configDir.DIRECTORY_SEPARATOR.'.htaccess', <<<'CODE'
 <IfModule !mod_authz_core.c>
     Order deny,allow
     Deny from all
