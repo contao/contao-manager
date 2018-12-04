@@ -74,7 +74,11 @@
 
             while (chunks.pop() !== undefined && chunks.length) {
                 try {
-                    await this.$http.get(`${chunks.join('/')}/contao-manager/users.json`);
+                    const config = (await this.$http.get(`${chunks.join('/')}/contao-manager/users.json`, { responseType: 'json' })).body;
+
+                    if (!config.hasOwnProperty('users') && !config.hasOwnProperty('version')) {
+                        continue;
+                    }
 
                     this.$store.commit('setError', {
                         title: this.$t('ui.app.configSecurity1'),
