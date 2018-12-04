@@ -189,14 +189,6 @@ CODE
     {
         $loader->load(__DIR__.'/Resources/config/config_'.$c->getParameter('kernel.environment').'.yml');
 
-        $c->registerForAutoconfiguration(WebIntegrityCheckInterface::class)
-            ->addTag('app.integrity.web')
-        ;
-
-        $c->registerForAutoconfiguration(CliIntegrityCheckInterface::class)
-          ->addTag('app.integrity.cli')
-        ;
-
         $c->registerForAutoconfiguration(TaskInterface::class)
             ->addTag('monolog.logger', ['channel' => 'tasks'])
             ->addTag('app.task')

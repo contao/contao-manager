@@ -10,7 +10,7 @@
 
 namespace Contao\ManagerApi\Command;
 
-use Contao\ManagerApi\IntegrityCheck\IntegrityCheckInterface;
+use Contao\ManagerApi\IntegrityCheck\IntegrityCheckFactory;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,18 +20,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class IntegrityCheckCommand extends Command
 {
     /**
-     * @var IntegrityCheckInterface[]
+     * @var IntegrityCheckFactory
      */
-    private $checks;
+    private $integrity;
 
-    /**
-     * @param iterable $cliIntegrityChecks
-     */
-    public function __construct($cliIntegrityChecks)
+    public function __construct(IntegrityCheckFactory $integrity)
     {
         parent::__construct();
 
-        $this->checks = $cliIntegrityChecks;
+        $this->integrity = $integrity;
     }
 
     /**
@@ -51,14 +48,8 @@ class IntegrityCheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $problem = null;
+        $problem = $this->integrity->runCliCheck();
         $format = $input->getOption('format');
-
-        foreach ($this->checks as $check) {
-            if ($problem = $check->run()) {
-                break;
-            }
-        }
 
         if ('json' === $format) {
             return $this->writeJson($output, $problem);

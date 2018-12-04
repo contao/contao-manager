@@ -10,10 +10,9 @@
 
 namespace Contao\ManagerApi\Controller\Server;
 
-use Contao\ManagerApi\IntegrityCheck\IntegrityCheckInterface;
+use Contao\ManagerApi\IntegrityCheck\IntegrityCheckFactory;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,19 +20,16 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/server/php-web", methods={"GET"})
  */
-class PhpWebController extends Controller
+class PhpWebController
 {
     /**
-     * @var IntegrityCheckInterface[]
+     * @var IntegrityCheckFactory
      */
-    private $checks;
+    private $integrity;
 
-    /**
-     * @param iterable $webIntegrityChecks
-     */
-    public function __construct($webIntegrityChecks)
+    public function __construct(IntegrityCheckFactory $integrity)
     {
-        $this->checks = $webIntegrityChecks;
+        $this->integrity = $integrity;
     }
 
     /**
@@ -60,12 +56,10 @@ class PhpWebController extends Controller
      */
     private function runIntegrityChecks()
     {
-        foreach ($this->checks as $check) {
-            $response = $this->get($check)->run();
+        $problem = $this->integrity->runWebChecks();
 
-            if ($response instanceof ApiProblem) {
-                return $response->asArray();
-            }
+        if ($problem instanceof ApiProblem) {
+            return $problem->asArray();
         }
 
         return null;

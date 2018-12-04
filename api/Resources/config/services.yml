@@ -4,8 +4,6 @@ services:
         autowire: true
         bind:
             $debug: '%kernel.debug%'
-            $cliIntegrityChecks: !tagged app.integrity.cli
-            $webIntegrityChecks: !tagged app.integrity.web
             $serverConfigFile: '%kernel.root_dir%/Resources/config/servers.yml'
 
     Contao\ManagerApi\:

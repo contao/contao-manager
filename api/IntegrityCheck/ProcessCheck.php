@@ -12,7 +12,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class ProcessCheck extends AbstractIntegrityCheck implements CliIntegrityCheckInterface
+class ProcessCheck extends AbstractIntegrityCheck
 {
     public function run()
     {

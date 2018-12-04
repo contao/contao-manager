@@ -12,7 +12,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class PhpExtensionsCheck extends AbstractIntegrityCheck implements CliIntegrityCheckInterface
+class PhpExtensionsCheck extends AbstractIntegrityCheck
 {
     private static $extensions = [
         'intl',

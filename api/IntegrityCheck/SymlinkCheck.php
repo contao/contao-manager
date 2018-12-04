@@ -14,7 +14,7 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 
-class SymlinkCheck extends AbstractIntegrityCheck implements CliIntegrityCheckInterface
+class SymlinkCheck extends AbstractIntegrityCheck
 {
     /**
      * @var ServerInfo

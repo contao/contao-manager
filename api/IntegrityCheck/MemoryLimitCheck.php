@@ -12,7 +12,7 @@ namespace Contao\ManagerApi\IntegrityCheck;
 
 use Crell\ApiProblem\ApiProblem;
 
-class MemoryLimitCheck extends AbstractIntegrityCheck implements CliIntegrityCheckInterface
+class MemoryLimitCheck extends AbstractIntegrityCheck
 {
     /**
      * {@inheritdoc}
