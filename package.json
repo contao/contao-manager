@@ -11,23 +11,24 @@
   },
   "dependencies": {
     "algoliasearch": "^3.32.0",
-    "vue": "^2.6.6",
+    "shave": "^2.5.2",
+    "vue": "^2.5.21",
     "vue-resource": "^1.5.1",
     "vue-router": "^2.8.1",
-    "vue-upload-component": "^2.8.15",
+    "vue-upload-component": "^2.8.16",
     "vuex": "^2.5.0",
     "vuex-i18n": "^1.11.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.5.0",
-    "@vue/cli-plugin-eslint": "^3.5.0",
-    "@vue/cli-service": "^3.5.0",
+    "@vue/cli-plugin-babel": "^3.2.2",
+    "@vue/cli-plugin-eslint": "^3.2.2",
+    "@vue/cli-service": "^3.2.3",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.15.1",
-    "eslint-plugin-vue": "^5.2.2",
+    "eslint": "^5.11.1",
+    "eslint-plugin-vue": "^5.1.0",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.8"
+    "vue-template-compiler": "^2.5.21"
   },
   "eslintConfig": {
     "root": true,

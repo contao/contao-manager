@@ -14,8 +14,8 @@
         <div class="package__inside">
             <figure class="package__icon">
                 <slot name="logo">
-                    <img :src="logo" v-if="logo">
-                    <img src="../../../assets/images/placeholder.png" v-else>
+                    <img :src="logo" alt="" v-if="logo">
+                    <img src="../../../assets/images/placeholder.png" alt="" v-else>
                 </slot>
             </figure>
 
@@ -26,12 +26,10 @@
                     <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
                 </h1>
 
-                <div class="package__description">
-                    <p v-html="description"></p>
-                    <slot name="more"/>
-                </div>
-                <p class="package__additional" v-if="!!$slots.additional">
+                <shave tag="p" class="package__description"><span v-html="description"></span></shave>
+                <p class="package__additional">
                     <slot name="additional"/>
+                    <slot name="more"/>
                 </p>
             </div>
 
@@ -52,7 +50,11 @@
 </template>
 
 <script>
+    import Shave from '../../fragments/Shave';
+
     export default {
+        components: { Shave },
+
         props: {
             title: String,
             name: String,
@@ -225,10 +227,6 @@
         &__description {
             margin-bottom: 1em;
 
-            p {
-                display: inline;
-            }
-
             em {
                 background-color: $highlight-color;
                 font-style: normal;
@@ -238,7 +236,7 @@
         &__additional {
             margin-top: -5px;
 
-            *:not(:last-child):after {
+            > *:not(:last-child):after {
                 margin: 0 10px;
                 font-weight: $font-weight-normal;
                 content: "|";
