@@ -290,18 +290,29 @@
             }
 
             button {
+                position: relative;
                 width: 30px;
                 height: 30px;
                 padding: 6px;
+                background: $orange-button;
                 line-height: 20px;
-                background: $orange-button url('../../../assets/images/settings.svg') center no-repeat;
-                background-size: 20px 20px;
                 text-indent: -999em;
+
+                &:after {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    background: url('../../../assets/images/settings.svg') center no-repeat;
+                    background-size: 20px 20px;
+                    content: "";
+                }
             }
 
-            /*&.validating button {
+            &--validating button:after {
                 animation: release-validating 2s linear infinite;
-            }*/
+            }
 
             &--error input {
                 animation: input-error .15s linear 3;
@@ -387,11 +398,11 @@
         }
     }
 
-    /*@keyframes release-validating {
+    @keyframes release-validating {
         100% {
             transform: rotate(360deg);
         }
-    }*/
+    }
 
     @include screen(960) {
         .package__hint {
