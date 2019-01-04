@@ -270,6 +270,13 @@ class UploadPackagesController
 
     private function validateUploadSupport()
     {
+        if (!extension_loaded('zip')) {
+            throw new ApiProblemException(
+                (new ApiProblem('The artifact repository requires PHP\'s zip extension'))
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+            );
+        }
+
         $packages = $this->environment
             ->getComposer()
             ->getRepositoryManager()
