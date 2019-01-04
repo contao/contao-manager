@@ -77,7 +77,7 @@ class Environment
     public function getComposer()
     {
         if (null === $this->composer) {
-            $this->composer = Factory::create(new NullIO(), $this->getJsonFile(), true);
+            $this->composer = Factory::create(new NullIO(), $this->getJsonFile());
         }
 
         return $this->composer;
