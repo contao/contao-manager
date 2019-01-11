@@ -7,6 +7,7 @@
         :description="data.description"
         :hint="hint"
         :hint-close="hintClose"
+        :shave-description="shaveDescription"
 
         :release-validating="constraintValidating"
         :release-error="constraintError"
@@ -70,6 +71,7 @@
             },
             updateOnly: Boolean,
             hidePackagist: Boolean,
+            shaveDescription: Boolean,
         },
 
         data: () => ({

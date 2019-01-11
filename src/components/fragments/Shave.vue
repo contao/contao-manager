@@ -1,5 +1,5 @@
 <template>
-    <component :is="tag"><slot/></component>
+    <component :is="tag" v-html="html"><slot/></component>
 </template>
 
 <script>
@@ -11,15 +11,27 @@
                 type: String,
                 default: 'div',
             },
+            html: {
+                type: String,
+            },
+            disabled: {
+                type: Boolean,
+                default: false,
+            },
         },
 
         methods: {
             shave() {
+                if (this.disabled) {
+                    return;
+                }
+
                 this.$nextTick(() => {
                     shave(
                         this.$el,
                         38,
                         {
+                            spaces: false,
                             character: '… <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>',
                         },
                     );
@@ -44,6 +56,12 @@
                         }, false);
                     }
                 });
+            },
+        },
+
+        watch: {
+            html() {
+                this.shave();
             },
         },
 
@@ -74,6 +92,8 @@
     }
 
     .js-shave-on {
+        padding-right: 20px;
+
         .js-shave-char {
             display: initial;
         }

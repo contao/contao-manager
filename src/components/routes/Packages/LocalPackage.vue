@@ -1,5 +1,5 @@
 <template>
-    <composer-package :data="data"/>
+    <composer-package shave-description :data="data"/>
 </template>
 
 <script>

@@ -22,6 +22,7 @@
         :description="pkg.description"
         :hint="hintDuplicate"
         release-disabled
+        shave-description
         v-else
     >
         <more private :name="pkg.name" :homepage="pkg.homepage" :support="Object.assign({}, pkg.support)" slot="more"/>

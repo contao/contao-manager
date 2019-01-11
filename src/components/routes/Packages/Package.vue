@@ -26,7 +26,7 @@
                     <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
                 </h1>
 
-                <shave tag="p" class="package__description"><span v-html="description"></span></shave>
+                <shave tag="p" class="package__description" :disabled="!shaveDescription" :html="description"/>
                 <p class="package__additional">
                     <slot name="additional"/>
                     <slot name="more"/>
@@ -67,6 +67,8 @@
             releaseValidating: Boolean,
             releaseError: Boolean,
             releaseDisabled: Boolean,
+
+            shaveDescription: Boolean,
         },
     };
 </script>
