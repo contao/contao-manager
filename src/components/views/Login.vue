@@ -101,8 +101,8 @@
             max-width: 250px;
             margin: 0 auto 80px;
 
-            input,
-            select {
+            input {
+                padding-right: 30px;
                 margin: 5px 0 10px;
             }
         }
