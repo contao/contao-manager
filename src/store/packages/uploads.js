@@ -92,8 +92,12 @@ export default {
             state.confirmed = [];
         },
 
-        setRemoved(state, id) {
+        setRemoving(state, id) {
             state.removing.push(id);
+        },
+
+        setRemoved(state, id) {
+            state.removing = state.removing.filter(r => r !== id);
         },
     },
 
@@ -111,17 +115,19 @@ export default {
         },
 
         async remove({ commit, dispatch }, id) {
-            commit('setRemoved', id);
+            commit('setRemoving', id);
             await Vue.http.delete(`api/packages/uploads/${id}`);
             await dispatch('load');
+            commit('setRemoved', id);
             commit('unconfirm', id);
         },
 
         async removeAll({ state, commit, dispatch }) {
             await Promise.all(Object.keys(state.uploads).map(
-                (id) => {
+                async (id) => {
+                    commit('setRemoving', id);
+                    await Vue.http.delete(`api/packages/uploads/${id}`);
                     commit('setRemoved', id);
-                    return Vue.http.delete(`api/packages/uploads/${id}`)
                 },
             ));
             await dispatch('load');
