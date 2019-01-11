@@ -1,8 +1,8 @@
 <template>
     <package
-        :title="data.name"
+        :title="upload.name"
         :hint="hintUploading"
-        v-if="!data.success || data.error"
+        v-if="!upload.success || upload.error"
     >
         <template slot="release">
             <progress-bar :amount="progress"/>
@@ -17,9 +17,10 @@
     </package>
 
     <package
-        :title="pkg.title || pkg.name"
-        :name="data.name"
-        :description="pkg.description"
+        :title="(metadata && metadata.title) || pkg.title || pkg.name"
+        :name="upload.name"
+        :logo="metadata && metadata.logo"
+        :description="(metadata && metadata.description) || pkg.description"
         :hint="hintDuplicate"
         release-disabled
         shave-description
@@ -53,16 +54,18 @@
 <script>
     import { mapGetters } from 'vuex';
 
+    import metadata from '../../../mixins/metadata';
     import Package from './Package';
     import More from './More';
     import ProgressBar from '../../fragments/ProgressBar';
     import LoadingButton from '../../widgets/LoadingButton';
 
     export default {
+        mixins: [metadata],
         components: { ProgressBar, Package, More, LoadingButton },
 
         props: {
-            data: {
+            upload: {
                 type: Object,
                 required: true,
             },
@@ -76,22 +79,24 @@
             ...mapGetters('packages', ['packageRemoved']),
             ...mapGetters('packages/uploads', ['isDuplicate', 'isRemoving']),
 
-            removing: vm => vm.isRemoving(vm.data.id),
-            progress: vm => 100 / vm.data.size * vm.data.filesize,
+            removing: vm => vm.isRemoving(vm.upload.id),
+            progress: vm => 100 / vm.upload.size * vm.upload.filesize,
 
-            canBeAdded: vm => !vm.removing && !vm.isDuplicate(vm.data.id) && !vm.packageRemoved(vm.pkg.name),
+            canBeAdded: vm => !vm.removing && !vm.isDuplicate(vm.upload.id) && !vm.packageRemoved(vm.pkg.name),
+
+            data: vm => vm.upload.package || { name: '' },
 
             pkg: vm => Object.assign(
-                { name: vm.data.name, },
-                vm.data.package || {}
+                { name: vm.upload.name, },
+                vm.upload.package || {}
             ),
 
             hintUploading() {
-                if (this.data.error) {
-                    return this.data.error;
+                if (this.upload.error) {
+                    return this.upload.error;
                 }
 
-                if (this.data.size !== this.data.filesize) {
+                if (this.upload.size !== this.upload.filesize) {
                     return this.$t('ui.packages.uploadIncomplete');
                 }
 
@@ -99,7 +104,7 @@
             },
 
             hintDuplicate() {
-                if (!this.isDuplicate(this.data.id)) {
+                if (!this.isDuplicate(this.upload.id)) {
                     return '';
                 }
 
@@ -109,7 +114,7 @@
             filesize() {
                 let sizes = ['KB', 'MB', 'GB'];
                 let size = 'Bytes';
-                let bytes = this.data.size;
+                let bytes = this.upload.size;
 
                 while (bytes > 1024) {
                     bytes = bytes/1024;
@@ -144,12 +149,11 @@
 
         methods: {
             addPackage() {
-                this.$store.commit('packages/uploads/confirm', this.data.id);
+                this.$store.commit('packages/uploads/confirm', this.upload.id);
             },
 
             removeUpload() {
-                this.removing = true;
-                this.$store.dispatch('packages/uploads/remove', this.data.id);
+                this.$store.dispatch('packages/uploads/remove', this.upload.id);
             },
         },
     };

@@ -24,7 +24,7 @@
         <template v-if="$refs.uploader">
             <h2 class="package-list__headline" v-if="hasUploads || files.length">{{ 'ui.packagelist.uploads' | translate }}</h2>
             <uploading-package v-for="file in files" :file="file" :uploader="$refs.uploader" :key="file.id"/>
-            <uploaded-package v-for="item in unconfirmedUploads" :data="item" :uploader="$refs.uploader" :key="item.id"/>
+            <uploaded-package v-for="item in unconfirmedUploads" :upload="item" :uploader="$refs.uploader" :key="item.id"/>
         </template>
     </div>
 </template>

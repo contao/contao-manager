@@ -8,13 +8,13 @@
             <template v-else>
                 <package-uploads ref="uploader" v-if="uploads !== false"/>
 
-                <h2 class="package-list__headline" v-if="showHeadlines">{{ 'ui.packagelist.added' | translate }}</h2>
-                <local-package v-for="item in addedPackages" :package="item" :key="item.name"/>
-                <local-package v-for="item in requiredNotAdded" :package="item" :key="item.name"/>
+                <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.added' | translate }}</h2>
+                <local-package v-for="item in addedPackages" :data="item" :key="item.name"/>
+                <local-package v-for="item in requiredNotAdded" :data="item" :key="item.name"/>
 
-                <h2 class="package-list__headline" v-if="showHeadlines || hasUploads || files.length">{{ 'ui.packagelist.installed' | translate }}</h2>
+                <h2 class="package-list__headline" v-if="showHeadline">{{ 'ui.packagelist.installed' | translate }}</h2>
                 <root-package :package="packages['contao/manager-bundle'] || requiredPackages['contao/manager-bundle']" v-if="packages"/>
-                <local-package v-for="item in notRootInstalled" :package="item" :key="item.name"/>
+                <local-package v-for="item in notRootInstalled" :data="item" :key="item.name"/>
             </template>
         </div>
 
@@ -60,7 +60,7 @@
                 pkg => pkg.name !== 'contao/manager-bundle' && !Object.values(vm.addedPackages).find(add => add.name === pkg.name),
             ),
             removingUploads: vm => vm.removing.length > 0,
-            showHeadlines: vm => vm.hasAdded && vm.packages.length,
+            showHeadline: vm => vm.hasAdded || vm.hasUploads || vm.files.length,
         },
 
         methods: {

@@ -1,15 +1,17 @@
 <template>
-    <composer-package shave-description :data="data"/>
+    <composer-package shave-description :data="metadata || data"/>
 </template>
 
 <script>
+    import metadata from '../../../mixins/metadata';
     import ComposerPackage from './ComposerPackage';
 
     export default {
+        mixins: [metadata],
         components: { ComposerPackage },
 
         props: {
-            package: {
+            data: {
                 type: Object,
                 required: true,
             },
