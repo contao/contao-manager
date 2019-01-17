@@ -2,6 +2,7 @@
     <main-layout>
 
         <rebuild-cache/>
+        <install-tool/>
         <debug-mode/>
         <dump-autoload/>
         <composer-install/>
@@ -14,20 +15,22 @@
 <script>
     import MainLayout from '../layouts/Main';
     import RebuildCache from './maintenance/RebuildCache';
-    import DumpAutoload from './maintenance/DumpAutoload';
+    import InstallTool from './maintenance/InstallTool';
     import DebugMode from './maintenance/DebugMode';
+    import DumpAutoload from './maintenance/DumpAutoload';
     import ComposerInstall from './maintenance/ComposerInstall';
     import ComposerCache from './maintenance/ComposerCache';
     import OpcodeCache from './maintenance/OpcodeCache';
 
     export default {
         components: {
-            ComposerInstall,
-            ComposerCache,
             MainLayout,
             RebuildCache,
-            DumpAutoload,
+            InstallTool,
             DebugMode,
+            DumpAutoload,
+            ComposerInstall,
+            ComposerCache,
             OpcodeCache,
         },
     };

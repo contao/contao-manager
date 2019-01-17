@@ -85,6 +85,8 @@ en:
             title: 'Clearing Composer Cache'
         rebuild_cache:
             title: 'Rebuilding Contao Cache'
+        install_tool:
+            title: 'Contao Install Tool'
         self_update:
             title: 'Updating Contao Manager'
             completeSummary: 'Contao Manager was successfully updated'
@@ -113,6 +115,10 @@ en:
             summaryRetry: 'Installing Composer dependencies (retrying {current}/{max}) …'
         dump-autoload:
             summary: 'Dumping class autoloader …'
+        install-lock:
+            summary: 'Locking Contao Install Tool …'
+        install-unlock:
+            summary: 'Unlocking Contao Install Tool …'
         create-project:
             summary: 'Installing application template …'
         cloud:
