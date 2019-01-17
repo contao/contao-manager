@@ -9,7 +9,7 @@
             </div>
 
             <fieldset class="maintenance__actions">
-                <button-group :label="$t('ui.maintenance.installTool.unlock')" type="primary" icon="update" @click="unlock">
+                <button-group :label="$t('ui.maintenance.installTool.unlock')" type="primary" icon="lock" @click="unlock">
                     <link-menu :items="advancedActions()" color="primary"/>
                 </button-group>
             </fieldset>
