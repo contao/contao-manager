@@ -73,7 +73,7 @@
         },
 
         mounted() {
-            this.$store.dispatch('contao/access-key/get');
+            this.$store.dispatch('contao/access-key/get').catch(() => {});
         },
     };
 </script>
