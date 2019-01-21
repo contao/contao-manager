@@ -223,8 +223,8 @@
 
         &__algolia {
             display: block;
-            margin: 50px 0 0;
-            text-align: center;
+            width: 200px;
+            margin: 50px auto 0;
         }
     }
 </style>
