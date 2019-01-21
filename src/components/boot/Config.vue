@@ -1,44 +1,45 @@
 <template>
     <boxed-layout v-if="current" :wide="true" slotClass="config-check">
         <header class="config-check__header">
-            <img src="../../assets/images/server-config.svg" width="80" height="80" class="config-check__icon">
+            <img src="../../assets/images/server-config.svg" width="80" height="80" class="config-check__icon" alt="">
             <h1 class="config-check__headline">{{ 'ui.server.config.title' | translate }}</h1>
             <p class="config-check__description" v-html="$t('ui.server.config.description')"></p>
         </header>
 
         <main class="config-check__form">
-            <fieldset class="config-check__fields">
-                <legend class="config-check__fieldtitle">{{ 'ui.server.config.formTitle' | translate }}</legend>
-                <p class="config-check__fielddesc">{{ 'ui.server.config.formText' | translate }}</p>
-                <p class="config-check__detected" v-if="detected && server">{{ 'ui.server.config.detected' | translate }}</p>
-                <select-menu name="server" :label="$t('Configuration')" class="inline" :disabled="processing" :error="errors.server" :options="servers" v-model="server" @input="detected = false"/>
-            </fieldset>
+            <form @submit.prevent="save">
+                <fieldset class="config-check__fields">
+                    <legend class="config-check__fieldtitle">{{ 'ui.server.config.formTitle' | translate }}</legend>
+                    <p class="config-check__fielddesc">{{ 'ui.server.config.formText' | translate }}</p>
+                    <p class="config-check__detected" v-if="detected && server">{{ 'ui.server.config.detected' | translate }}</p>
+                    <select-menu name="server" :label="$t('Configuration')" class="inline" :disabled="processing" :error="errors.server" :options="servers" v-model="server" @input="detected = false"/>
+                </fieldset>
 
-            <fieldset v-if="showCustom" class="config-check__fields">
-                <legend class="config-check__fieldtitle">{{ 'ui.server.config.customTitle' | translate }}</legend>
-                <p class="config-check__fielddesc">{{ 'ui.server.config.customText' | translate }}</p>
-                <p class="config-check__detected" v-if="detected && php_cli">{{ 'ui.server.config.phpDetected' | translate }}</p>
-                <text-field name="php_cli" :label="$t('ui.server.config.cli')" :disabled="processing" :error="errors.php_cli" v-model="php_cli" @enter="save"/>
-            </fieldset>
+                <fieldset v-if="showCustom" class="config-check__fields">
+                    <legend class="config-check__fieldtitle">{{ 'ui.server.config.customTitle' | translate }}</legend>
+                    <p class="config-check__fielddesc">{{ 'ui.server.config.customText' | translate }}</p>
+                    <p class="config-check__detected" v-if="detected && php_cli">{{ 'ui.server.config.phpDetected' | translate }}</p>
+                    <text-field name="php_cli" :label="$t('ui.server.config.cli')" :disabled="processing" :error="errors.php_cli" v-model="php_cli"/>
+                </fieldset>
 
-            <fieldset class="config-check__fields">
-                <legend class="config-check__fieldtitle">{{ 'ui.server.config.cloudTitle' | translate }}</legend>
-                <p class="config-check__fielddesc">{{ 'ui.server.config.cloudText' | translate }}</p>
+                <fieldset class="config-check__fields">
+                    <legend class="config-check__fieldtitle">{{ 'ui.server.config.cloudTitle' | translate }}</legend>
+                    <p class="config-check__fielddesc">{{ 'ui.server.config.cloudText' | translate }}</p>
 
-                <div class="config-check__issues" v-if="cloudIssues && cloudIssues.length">
-                    <p>{{ 'ui.server.config.stateErrorCloud' | translate }}</p>
-                    <ul>
-                        <li v-for="(issue,k) in cloudIssues" :key="k">{{ issue }}</li>
-                    </ul>
-                </div>
+                    <div class="config-check__issues" v-if="cloudIssues && cloudIssues.length">
+                        <p>{{ 'ui.server.config.stateErrorCloud' | translate }}</p>
+                        <ul>
+                            <li v-for="(issue,k) in cloudIssues" :key="k">{{ issue }}</li>
+                        </ul>
+                    </div>
 
-                <checkbox name="cloud" :label="$t('ui.server.config.cloud')" :disabled="processing" v-model="cloud"/>
-            </fieldset>
+                    <checkbox name="cloud" :label="$t('ui.server.config.cloud')" :disabled="processing" v-model="cloud"/>
+                </fieldset>
 
-            <fieldset class="config-check__fields">
-                <loading-button color="primary" :disabled="!inputValid" :loading="processing" @click="save">{{ $t('ui.server.config.save') }}</loading-button>
-            </fieldset>
-
+                <fieldset class="config-check__fields">
+                    <loading-button submit color="primary" :disabled="!inputValid" :loading="processing">{{ $t('ui.server.config.save') }}</loading-button>
+                </fieldset>
+            </form>
         </main>
     </boxed-layout>
 

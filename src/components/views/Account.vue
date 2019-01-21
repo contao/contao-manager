@@ -10,18 +10,20 @@
         </header>
 
         <main class="view-account__form">
-            <h1 class="view-account__headline">{{ 'ui.account.headline' | translate }}</h1>
-            <p class="view-account__description">{{ 'ui.account.description' | translate }}</p>
+            <form @submit.prevent="createAccount">
+                <h1 class="view-account__headline">{{ 'ui.account.headline' | translate }}</h1>
+                <p class="view-account__description">{{ 'ui.account.description' | translate }}</p>
 
-            <fieldset class="view-account__fields">
-                <text-field ref="username" name="username" :label="$t('ui.account.username')" class="inline" :disabled="installing" v-model="username" @enter="createAccount"></text-field>
-                <text-field type="password" name="password" :label="$t('ui.account.password')" :placeholder="$t('ui.account.passwordPlaceholder')" :error="errors.password" :disabled="installing" v-model="password" @input="validatePassword" @enter="createAccount"></text-field>
-                <text-field type="password" name="password_confirm" :label="$t('ui.account.passwordConfirm')" :disabled="installing" :error="errors.password_confirm" v-model="password_confirm" @input="validatePasswordConfirm" @enter="createAccount"></text-field>
-            </fieldset>
+                <fieldset class="view-account__fields">
+                    <text-field ref="username" name="username" :label="$t('ui.account.username')" class="inline" :disabled="installing" v-model="username"></text-field>
+                    <text-field type="password" name="password" :label="$t('ui.account.password')" :placeholder="$t('ui.account.passwordPlaceholder')" :error="errors.password" :disabled="installing" v-model="password" @input="validatePassword"></text-field>
+                    <text-field type="password" name="password_confirm" :label="$t('ui.account.passwordConfirm')" :disabled="installing" :error="errors.password_confirm" v-model="password_confirm" @input="validatePasswordConfirm"></text-field>
+                </fieldset>
 
-            <fieldset class="view-account__fields">
-                <loading-button color="primary" :disabled="!inputValid" :loading="installing" @click="createAccount">{{ $t('ui.account.submit') }}</loading-button>
-            </fieldset>
+                <fieldset class="view-account__fields">
+                    <loading-button submit color="primary" :disabled="!inputValid" :loading="installing">{{ $t('ui.account.submit') }}</loading-button>
+                </fieldset>
+            </form>
         </main>
 
         <div class="clearfix"></div>

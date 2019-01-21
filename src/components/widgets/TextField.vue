@@ -10,7 +10,6 @@
             :disabled="disabled"
             :value="value"
             @input="input($event.target.value)"
-            @keypress.enter.prevent="enter"
             autocapitalize="none"
         >
         <p class="widget__error" v-if="error">{{ error }}</p>

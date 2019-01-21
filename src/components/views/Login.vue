@@ -5,17 +5,19 @@
             <p class="view-login__product">Contao Manager</p>
         </header>
         <main class="view-login__form">
-            <h1 class="view-login__headline">{{ 'ui.login.headline' | translate }}</h1>
-            <p class="view-login__description">{{ 'ui.login.description' | translate }}</p>
+            <form @submit.prevent="login">
+                <h1 class="view-login__headline">{{ 'ui.login.headline' | translate }}</h1>
+                <p class="view-login__description">{{ 'ui.login.description' | translate }}</p>
 
-            <text-field ref="username" name="username" :label="'ui.login.username' | translate" :placeholder="'ui.login.username' | translate" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @enter="login" @input="reset"></text-field>
-            <text-field type="password" name="password" :label="'ui.login.password' | translate" :placeholder="'ui.login.password' | translate" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @enter="login" @input="reset"></text-field>
+                <text-field ref="username" name="username" :label="'ui.login.username' | translate" :placeholder="'ui.login.username' | translate" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
+                <text-field type="password" name="password" :label="'ui.login.password' | translate" :placeholder="'ui.login.password' | translate" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
 
-            <a href="https://github.com/contao/contao-manager/issues/14" target="_blank" class="view-login__link">{{ 'ui.login.forgotPassword' | translate }}</a>
+                <a href="https://github.com/contao/contao-manager/issues/14" target="_blank" class="view-login__link">{{ 'ui.login.forgotPassword' | translate }}</a>
 
-            <loading-button class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in" @click="login">
-                {{ $t('ui.login.button') }}
-            </loading-button>
+                <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in">
+                    {{ $t('ui.login.button') }}
+                </loading-button>
+            </form>
         </main>
     </boxed-layout>
 </template>

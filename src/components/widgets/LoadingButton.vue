@@ -1,9 +1,9 @@
 <template>
     <button
-        type="button"
+        :type="submit ? 'submit' : 'button'"
         :class="buttonClass"
         :disabled="disabled || loading"
-        @click.prevent="(e) => { $emit('click', e) }"
+        @click="click"
     >
         <span :class="slotClass"><slot/></span>
         <loader v-show="loading"/>
@@ -22,6 +22,7 @@
             inline: Boolean,
             loading: Boolean,
             disabled: Boolean,
+            submit: Boolean,
         },
 
         computed: {
@@ -36,6 +37,15 @@
                 loading: vm.loading,
                 [`widget-button--${vm.icon}`]: vm.icon,
             }),
+        },
+
+        methods: {
+            click(e) {
+                if (!this.submit) {
+                    e.preventDefault();
+                    $emit('click', e);
+                }
+            },
         },
     };
 </script>
