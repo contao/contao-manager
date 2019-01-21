@@ -58,7 +58,7 @@
                     };
                 }
 
-                return '';
+                return null;
             },
 
             isPrivate() {

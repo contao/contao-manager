@@ -121,7 +121,7 @@
                     };
                 }
 
-                return '';
+                return null;
             },
 
             hint() {
