@@ -222,7 +222,8 @@
         }
 
         &__algolia {
-            display: table;
+            display: block;
+            width: 200px;
             margin: 50px auto 0;
         }
     }
