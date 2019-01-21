@@ -34,6 +34,7 @@ const i18n = {
 
     async switch(locale) {
         window.localStorage.setItem('contao_manager_locale', locale);
+        store.commit('packages/search/reset');
 
         this.load(locale);
     },

@@ -39,6 +39,7 @@
 
         created() {
             this.load();
+            this.$watch(this.$i18n.locale, this.load);
         },
     };
 </script>

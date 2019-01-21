@@ -28,6 +28,11 @@ export default {
         cache(state, { name, data }) {
             state.metadata[name] = data;
         },
+
+        reset(state) {
+            state.algolia = null;
+            state.metadata = {};
+        },
     },
 
     actions: {
