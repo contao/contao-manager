@@ -68,7 +68,7 @@ abstract class AbstractPackagesTask extends AbstractTask
 
         $status = parent::update($config);
 
-        if (!$this->environment->useCloudResolver() && ($status->hasError() || $status->isStopped())) {
+        if ($status->hasError() || $status->isStopped()) {
             $this->restoreState($config);
         }
 
