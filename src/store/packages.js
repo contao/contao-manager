@@ -78,9 +78,7 @@ export default {
         },
 
         add(state, pkg) {
-            if (!state.add[pkg.name] && !state.required[pkg.name]) {
-                Vue.set(state.add, pkg.name, pkg);
-            }
+            Vue.set(state.add, pkg.name, pkg);
         },
 
         change(state, { name, version }) {
