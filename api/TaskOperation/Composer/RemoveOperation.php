@@ -23,6 +23,11 @@ class RemoveOperation extends AbstractProcessOperation
     private $translator;
 
     /**
+     * @var array
+     */
+    private $removed;
+
+    /**
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
@@ -32,6 +37,7 @@ class RemoveOperation extends AbstractProcessOperation
     public function __construct(ConsoleProcessFactory $processFactory, Translator $translator, array $removed)
     {
         $this->translator = $translator;
+        $this->removed = $removed;
 
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-remove');
@@ -65,7 +71,7 @@ class RemoveOperation extends AbstractProcessOperation
     {
         $status->setSummary($this->translator->trans('taskoperation.composer-remove.summary'));
 
-        $status->setDetail($this->process->getCommandLine());
+        $status->setDetail(implode(', ', $this->removed));
 
         $this->addConsoleStatus($status);
     }

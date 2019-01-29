@@ -23,6 +23,11 @@ class RequireOperation extends AbstractProcessOperation
     private $translator;
 
     /**
+     * @var array
+     */
+    private $required;
+
+    /**
      * Constructor.
      *
      * @param ConsoleProcessFactory $processFactory
@@ -32,6 +37,7 @@ class RequireOperation extends AbstractProcessOperation
     public function __construct(ConsoleProcessFactory $processFactory, Translator $translator, array $required)
     {
         $this->translator = $translator;
+        $this->required = $required;
 
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-require');
@@ -68,7 +74,7 @@ class RequireOperation extends AbstractProcessOperation
     {
         $status->setSummary($this->translator->trans('taskoperation.composer-require.summary'));
 
-        $status->setDetail($this->process->getCommandLine());
+        $status->setDetail(implode(', ', $this->required));
 
         $this->addConsoleStatus($status);
     }
