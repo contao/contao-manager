@@ -253,9 +253,16 @@ class ConsoleProcessFactory implements LoggerAwareInterface
      */
     private function buildCommandLine($console, array $arguments)
     {
+        $defaultArgs = ['-q'];
+
+        if (file_exists($this->kernel->getConfigDir().'/php.ini')) {
+            $defaultArgs[] = '-c';
+            $defaultArgs[] = $this->kernel->getConfigDir().'/php.ini';
+        }
+
         if (null !== ($phpCli = $this->serverInfo->getPhpExecutable())) {
             $cmd = $phpCli;
-            $arguments = array_merge(['-q'], $this->serverInfo->getPhpArguments(), [$console], $arguments);
+            $arguments = array_merge($defaultArgs, $this->serverInfo->getPhpArguments(), [$console], $arguments);
         } else {
             $cmd = $console;
         }
