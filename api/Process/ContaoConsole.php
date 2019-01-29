@@ -48,7 +48,7 @@ class ContaoConsole
         $lines = preg_split('/\r\n|\r|\n/', $process->getOutput());
 
         while ($line = array_shift($lines)) {
-            if (0 === strpos($line, 'PHP Warning:')) {
+            if (0 === strpos($line, 'PHP Warning:') || 0 === strpos($line, 'Failed loading ')) {
                 continue;
             }
 
