@@ -38,11 +38,11 @@
                 <loading-button inline icon="search" :loading="searching" v-if="hasMore" @click="loadMore">{{ $t('ui.packagesearch.more') }}</loading-button>
             </div>
 
-            <a href="https://www.algolia.com/" target="_blank" class="package-search__algolia"><img src="../../assets/images/search-by-algolia.svg" width="200"></a>
+            <a href="https://www.algolia.com/" target="_blank" class="package-search__algolia"><img src="../../assets/images/search-by-algolia.svg" alt="Algolia | Fast, Reliable and Modern Search and Discovery" width="200"></a>
         </div>
 
-        <div class="package-actions__inner" slot="actions" v-if="totalChanges">
-            <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
+        <div class="package-actions__inner" slot="actions" v-if="totalChanges || hasUploads">
+            <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges + totalUploads }, totalChanges + totalUploads) }}</p>
             <router-link :to="packageRoute" class="package-actions__button widget-button widget-button--primary">{{ $t('ui.packages.changesReview') }}</router-link>
         </div>
     </package-base>
@@ -72,6 +72,7 @@
         computed: {
             ...mapState('packages', ['installed']),
             ...mapGetters('packages', ['totalChanges']),
+            ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads']),
 
             query: vm => vm.$route.query.q,
             pages: vm => vm.$route.query.pages || 1,
