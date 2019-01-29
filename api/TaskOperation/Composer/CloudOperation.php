@@ -241,8 +241,9 @@ class CloudOperation implements TaskOperationInterface
                 break;
 
             case CloudJob::STATUS_ERROR:
+                $output = sprintf("%s\n\n# Cloud Job ID %s failed", $this->cloud->getOutput($job), $job->getId());
                 $status->setSummary($this->translator->trans('taskoperation.cloud.errorSummary'));
-                $status->setConsole($this->cloud->getOutput($job));
+                $status->addConsole($output, $console);
                 $status->setStatus(TaskStatus::STATUS_ERROR);
                 break;
 
