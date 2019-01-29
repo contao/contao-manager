@@ -43,7 +43,7 @@
             click(e) {
                 if (!this.submit) {
                     e.preventDefault();
-                    $emit('click', e);
+                    this.$emit('click', e);
                 }
             },
         },
