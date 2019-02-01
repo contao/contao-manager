@@ -34,9 +34,9 @@ abstract class AbstractForker implements ForkerInterface
      * @param array|null           $env
      * @param LoggerInterface|null $logger
      */
-    public function __construct($executable = null, array $env = null, LoggerInterface $logger = null)
+    public function __construct($executable, array $env = null, LoggerInterface $logger = null)
     {
-        $this->executable = $executable ?: escapeshellarg(__DIR__.'/../../background-process');
+        $this->executable = $executable;
         $this->env = $env;
         $this->logger = $logger;
     }
