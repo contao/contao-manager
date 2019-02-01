@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+set_time_limit(0);
+ignore_user_abort(true);
+error_reporting(E_ALL);
+ini_set('display_errors', true);
+ini_set('display_startup_errors', true);
+
+require_once __DIR__.'/../vendor/autoload.php';
+
+$process = new Contao\ManagerApi\Process\ProcessRunner($argv[1]);
+
+try {
+    $process->run();
+} catch (\Exception $e) {
+    $process->addErrorOutput((string) $e);
+    $process->stop();
+}

@@ -47,7 +47,4 @@ services:
     Contao\ManagerApi\Task\TaskManager:
         arguments:
             - !tagged app.task
-        tags:
-            - { name: monolog.logger, channel: tasks }
-
-    Terminal42\BackgroundProcess\Command\ProcessRunnerCommand: ~
+        tags: [{ name: monolog.logger, channel: tasks }]

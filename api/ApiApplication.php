@@ -12,6 +12,7 @@ namespace Contao\ManagerApi;
 
 use Contao\ManagerApi\Command\AboutCommand;
 use Contao\ManagerApi\Command\IntegrityCheckCommand;
+use Contao\ManagerApi\Command\ProcessRunnerCommand;
 use Contao\ManagerApi\Command\TaskAbortCommand;
 use Contao\ManagerApi\Command\TaskDeleteCommand;
 use Contao\ManagerApi\Command\TaskUpdateCommand;
@@ -22,7 +23,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Terminal42\BackgroundProcess\Command\ProcessRunnerCommand;
 
 class ApiApplication extends Application
 {
@@ -103,7 +103,7 @@ class ApiApplication extends Application
 
         $container = $this->kernel->getContainer();
 
-        $this->add((new ProcessRunnerCommand())->setName('run'));
+        $this->add($container->get(ProcessRunnerCommand::class)->setName('run'));
         $this->add($container->get(AboutCommand::class));
         $this->add($container->get(IntegrityCheckCommand::class));
         $this->add($container->get(TaskAbortCommand::class));

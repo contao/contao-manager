@@ -10,11 +10,11 @@
 
 namespace Contao\ManagerApi\TaskOperation;
 
+use Contao\ManagerApi\Process\ProcessController;
 use Contao\ManagerApi\Task\TaskStatus;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Process\Process;
-use Terminal42\BackgroundProcess\ProcessController;
 
 abstract class AbstractProcessOperation implements TaskOperationInterface, LoggerAwareInterface
 {

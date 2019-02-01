@@ -12,10 +12,10 @@ namespace Contao\ManagerApi\System;
 
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Process\PhpExecutableFinder;
+use Contao\ManagerApi\Process\Forker\DisownForker;
+use Contao\ManagerApi\Process\Forker\NohupForker;
+use Contao\ManagerApi\Process\Forker\WindowsStartForker;
 use Symfony\Component\Yaml\Yaml;
-use Terminal42\BackgroundProcess\Forker\DisownForker;
-use Terminal42\BackgroundProcess\Forker\NohupForker;
-use Terminal42\BackgroundProcess\Forker\WindowsStartForker;
 
 class ServerInfo
 {
