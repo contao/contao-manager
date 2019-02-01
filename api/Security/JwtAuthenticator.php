@@ -40,6 +40,14 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
     /**
      * {@inheritdoc}
      */
+    public function supports(Request $request)
+    {
+        return $this->jwtManager->hasRequestToken($request);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function start(Request $request, AuthenticationException $authException = null)
     {
         return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));

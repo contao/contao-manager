@@ -41,6 +41,14 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * {@inheritdoc}
      */
+    public function supports(Request $request)
+    {
+        return $request->headers->has('Contao-Manager-Auth') || null !== $this->getAuthenticationHeader($request);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function start(Request $request, AuthenticationException $authException = null)
     {
         return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
