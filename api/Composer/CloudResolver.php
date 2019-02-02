@@ -43,7 +43,7 @@ class CloudResolver implements LoggerAwareInterface
      *
      * @return CloudJob
      */
-    public function createJob(CloudChanges $definition)
+    public function createJob(CloudChanges $definition, $debugMode = false)
     {
         $data = [
             'composerJson' => $definition->getJson(),
@@ -51,10 +51,17 @@ class CloudResolver implements LoggerAwareInterface
             'platform' => $definition->getPlatform(),
         ];
 
+        $command = $definition->getUpdates();
+        $command[] = '--with-dependencies';
+
+        if ($debugMode) {
+            $command[] = '-vvv --profile';
+        }
+
         $options = [
             RequestOptions::JSON => $data,
             RequestOptions::HEADERS => [
-                'Composer-Resolver-Command' => implode(' ', $definition->getUpdates()).' --with-dependencies',
+                'Composer-Resolver-Command' => implode(' ', $command),
             ],
         ];
 

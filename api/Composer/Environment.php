@@ -54,6 +54,11 @@ class Environment
         ];
     }
 
+    public function isDebug()
+    {
+        return $this->kernel->isDebug();
+    }
+
     public function getBackupDir()
     {
         return $this->kernel->getConfigDir();

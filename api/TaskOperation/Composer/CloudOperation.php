@@ -128,7 +128,7 @@ class CloudOperation implements TaskOperationInterface
 
             if (!$job instanceof CloudJob) {
                 $this->taskConfig->setState('cloud-job-queued', time());
-                $this->job = $job = $this->cloud->createJob($this->changes);
+                $this->job = $job = $this->cloud->createJob($this->changes, $this->environment->isDebug());
                 $this->taskConfig->setState('cloud-job', $this->job->getId());
             }
 
@@ -233,6 +233,10 @@ class CloudOperation implements TaskOperationInterface
                 $status->setSummary($this->translator->trans('taskoperation.cloud.processingSummary'));
                 $status->setDetail($detail);
                 $status->addConsole($console."\n\n ".$detail);
+
+                if ($this->environment->isDebug()) {
+                    $status->addConsole($this->cloud->getOutput($job));
+                }
                 break;
 
             case CloudJob::STATUS_ERROR:
