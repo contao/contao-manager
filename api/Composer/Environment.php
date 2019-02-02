@@ -53,20 +53,21 @@ class Environment
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    public function getAll()
-    {
-        return [
-            $this->getJsonFile(),
-            $this->getLockFile(),
-            $this->getVendorDir(),
-        ];
-    }
-
+    /**
+     * Returns whether debug mode is activated.
+     *
+     * @return bool
+     */
     public function isDebug()
     {
         return $this->kernel->isDebug();
     }
 
+    /**
+     * Gets path to the directory where all Contao Manager related information is stored.
+     *
+     * @return string
+     */
     public function getBackupDir()
     {
         return $this->kernel->getConfigDir();
