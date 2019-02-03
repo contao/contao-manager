@@ -29,6 +29,11 @@ class CloudResolver implements LoggerAwareInterface
      */
     private $http;
 
+    /**
+     * @var array
+     */
+    private $output = [];
+
     public function __construct()
     {
         $this->http = new Client();
@@ -53,9 +58,10 @@ class CloudResolver implements LoggerAwareInterface
 
         $command = $definition->getUpdates();
         $command[] = '--with-dependencies';
+        $command[] = '--profile';
 
         if ($debugMode) {
-            $command[] = '-vvv --profile';
+            $command[] = '-vvv';
         }
 
         $options = [
@@ -91,7 +97,7 @@ class CloudResolver implements LoggerAwareInterface
 
         $response = $this->request('/jobs/'.$jobId);
 
-        return new CloudJob(json_decode((string) $response->getBody(), true));
+        return new CloudJob(JsonFile::parseJson((string) $response->getBody(), true));
     }
 
     /**
@@ -167,9 +173,13 @@ class CloudResolver implements LoggerAwareInterface
             return null;
         }
 
-        $response = $this->request($job->getLink(CloudJob::LINK_OUTPUT));
+        if (!isset($this->output[$job->getId()])) {
+            $response = $this->request($job->getLink(CloudJob::LINK_OUTPUT));
 
-        return (string) $response->getBody();
+            $this->output[$job->getId()] = (string) $response->getBody();
+        }
+
+        return $this->output[$job->getId()];
     }
 
     /**

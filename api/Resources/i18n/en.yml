@@ -127,7 +127,7 @@ en:
             processingSummary: 'Resolving dependencies using Composer Cloud'
             processingDetail: 'Job ID {job} is running for {seconds} seconds'
             errorSummary: 'Failed resolving dependencies …'
-            finishedSummary: 'Composer Cloud job completed'
-            finishedDetail: 'Job ID {job} completed in {seconds} seconds'
+            finishedSummary: 'Composer Cloud job completed in {seconds} seconds'
+            finishedDetail: 'Memory usage: {memory} (peak: {peak}), time: {time}.'
         clear-cache:
             summary: 'Deleting cache files …'

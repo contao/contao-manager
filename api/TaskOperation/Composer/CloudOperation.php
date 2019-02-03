@@ -229,6 +229,7 @@ class CloudOperation implements TaskOperationInterface
                         'seconds' => time() - $this->taskConfig->getState('cloud-job-processing'),
                     ]
                 );
+                $detail .= ' '.$this->getCurrentProfile($this->cloud->getOutput($job));
 
                 $status->setSummary($this->translator->trans('taskoperation.cloud.processingSummary'));
                 $status->setDetail($detail);
@@ -246,17 +247,24 @@ class CloudOperation implements TaskOperationInterface
                 break;
 
             case CloudJob::STATUS_FINISHED:
+                $seconds = $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing');
+
+                $profile = $this->getFinalProfile($this->cloud->getOutput($job));
+                preg_match('{Memory usage: ([^ ]+) \(peak: ([^\)]+)\), time: ([0-9\.]+s)\.}', $profile, $match);
+
                 $detail = $this->translator->trans(
                     'taskoperation.cloud.finishedDetail',
                     [
                         'job' => $job->getId(),
-                        'seconds' => $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing'),
+                        'memory' => $match[1],
+                        'peak' => $match[2],
+                        'time' => $match[3],
                     ]
                 );
 
-                $status->setSummary($this->translator->trans('taskoperation.cloud.finishedSummary'));
+                $status->setSummary($this->translator->trans('taskoperation.cloud.finishedSummary', ['seconds' => $seconds]));
                 $status->setDetail($detail);
-                $status->addConsole($console."\n\n# ".$detail."\n");
+                $status->addConsole("# Job ID {$job->getId()} completed in $seconds seconds\n# ".$profile, $console);
                 break;
 
             default:
@@ -288,5 +296,35 @@ class CloudOperation implements TaskOperationInterface
         }
 
         return $this->job;
+    }
+
+    private function getCurrentProfile($output)
+    {
+        // [351.1MiB/0.21s]
+
+        $lines = array_reverse(explode("\n", $output));
+
+        foreach ($lines as $line) {
+            if (preg_match('{^\[([\d\.]+MiB)/[\d\.]+s\]}', $line, $match)) {
+                return $match[0];
+            }
+        }
+
+        return '';
+    }
+
+    private function getFinalProfile($output)
+    {
+        // Memory usage: 353.94MB (peak: 1327.09MB), time: 160.17s
+
+        $lines = array_reverse(explode("\n", $output));
+
+        foreach ($lines as $line) {
+            if (false !== ($pos = strpos($line, 'Memory usage:'))) {
+                return substr($line, $pos);
+            }
+        }
+
+        return '';
     }
 }
