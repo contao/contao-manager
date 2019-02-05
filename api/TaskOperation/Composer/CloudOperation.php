@@ -99,11 +99,7 @@ class CloudOperation implements TaskOperationInterface
         try {
             $job = $this->getCurrentJob();
 
-            return $job instanceof CloudJob
-                && ($job->isQueued()
-                    || $job->isProcessing()
-                    || ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-successful', false))
-                );
+            return $job instanceof CloudJob && null === $this->taskConfig->getState('cloud-job-successful');
         } catch (\Exception $e) {
             $this->exception = $e;
 
@@ -118,7 +114,7 @@ class CloudOperation implements TaskOperationInterface
 
     public function hasError()
     {
-        return $this->exception instanceof \Exception;
+        return false === $this->taskConfig->getState('cloud-job-successful');
     }
 
     public function run()
@@ -144,6 +140,10 @@ class CloudOperation implements TaskOperationInterface
 
                 $this->taskConfig->setState('cloud-job-successful', true);
             }
+
+            if ($job->isFailed()) {
+                $this->taskConfig->setState('cloud-job-successful', false);
+            }
         } catch (\Exception $e) {
             $this->exception = $e;
             $this->taskConfig->setState('cloud-job-successful', false);
@@ -152,8 +152,7 @@ class CloudOperation implements TaskOperationInterface
 
     public function abort()
     {
-        $this->taskConfig->clearState('cloud-job');
-        $this->taskConfig->clearState('cloud-job-successful');
+        $this->taskConfig->setState('cloud-job-successful', false);
     }
 
     public function delete()
