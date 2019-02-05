@@ -133,14 +133,16 @@ class UpdateTask extends AbstractPackagesTask
                 $this->filesystem
             ));
 
-            $operations[] = new RemoveUploadsOperation(
-                $uploads,
-                $this->uploads,
-                $config,
-                $this->environment,
-                $this->translator,
-                $this->filesystem
-            );
+            if (!$config->getOption('dry_run', false)) {
+                $operations[] = new RemoveUploadsOperation(
+                    $uploads,
+                    $this->uploads,
+                    $config,
+                    $this->environment,
+                    $this->translator,
+                    $this->filesystem
+                );
+            }
         }
 
         return $operations;
