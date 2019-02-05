@@ -80,7 +80,7 @@ class SetupTask extends AbstractPackagesTask
         if ($this->environment->useCloudResolver()) {
             $operations[] = new CloudOperation(
                 $this->cloudResolver,
-                new CloudChanges($this->environment->getJsonFile()),
+                new CloudChanges($this->environment->getComposer()),
                 $config,
                 $this->environment,
                 $this->translator,

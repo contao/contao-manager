@@ -10,16 +10,20 @@
 
 namespace Contao\ManagerApi\Composer;
 
-use Composer\Config;
-use Composer\Installer\InstallationManager;
-use Composer\IO\NullIO;
+use Composer\Composer;
 use Composer\Json\JsonFile;
-use Composer\Package\Locker;
+use Composer\Package\Dumper\ArrayDumper;
+use Composer\Repository\ArtifactRepository;
+use Composer\Repository\PathRepository;
 use Composer\Repository\PlatformRepository;
-use Composer\Repository\RepositoryManager;
 
 class CloudChanges
 {
+    /**
+     * @var Composer
+     */
+    private $composer;
+
     /**
      * @var JsonFile
      */
@@ -50,8 +54,12 @@ class CloudChanges
      *
      * @param string $file
      */
-    public function __construct($file)
+    public function __construct(Composer $composer)
     {
+        $this->composer = $composer;
+
+        $file = $composer->getConfig()->getConfigSource()->getName();
+
         $this->json = new JsonFile($file);
     }
 
@@ -109,18 +117,19 @@ class CloudChanges
 
     public function getJson()
     {
-        return $this->json->read();
+        $json = $this->getJsonFile()->read();
+
+        $repositories = $this->composer->getConfig()->getRepositories();
+        unset($repositories['packagist.org']);
+
+        $json['repositories'] = array_values($repositories);
+
+        return $json;
     }
 
     public function getLock()
     {
-        $locker = new Locker(
-            new NullIO(),
-            new JsonFile(dirname($this->json->getPath()).'/composer.lock'),
-            new RepositoryManager(new NullIO(), new Config()),
-            new InstallationManager(),
-            file_get_contents($this->json->getPath())
-        );
+        $locker = $this->composer->getLocker();
 
         if (!$locker->isLocked()) {
             return [];
@@ -131,11 +140,10 @@ class CloudChanges
 
     public function getPlatform()
     {
-        $json = $this->json->read();
-        $overrides = isset($json['config']['platform']) ? $json['config']['platform'] : [];
+        $platformOverrides = $this->composer->getConfig()->get('platform');
         $platform = [];
 
-        foreach ((new PlatformRepository([], $overrides))->getPackages() as $package) {
+        foreach ((new PlatformRepository([], $platformOverrides))->getPackages() as $package) {
             if ('composer-plugin-api' === $package->getName()) {
                 continue;
             }
