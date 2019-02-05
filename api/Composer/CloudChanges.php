@@ -153,4 +153,26 @@ class CloudChanges
 
         return $platform;
     }
+
+    public function getLocalPackages()
+    {
+        $packages = [];
+        $repositories = $this->composer->getRepositoryManager()->getRepositories();
+        $dumper = new ArrayDumper();
+
+        foreach ($repositories as $repository) {
+            if ($repository instanceof ArtifactRepository || $repository instanceof PathRepository) {
+                foreach ($repository->getPackages() as $package) {
+                    $dump = $dumper->dump($package);
+
+                    // see https://github.com/composer/composer/issues/7955
+                    unset($dump['dist']['reference']);
+
+                    $packages[] = $dump;
+                }
+            }
+        }
+
+        return $packages;
+    }
 }

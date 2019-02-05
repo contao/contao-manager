@@ -50,6 +50,7 @@ class CloudResolver implements LoggerAwareInterface
             'composerJson' => $definition->getJson(),
             'composerLock' => $definition->getLock(),
             'platform' => $definition->getPlatform(),
+            'localPackages' => $definition->getLocalPackages(),
         ];
 
         $command = $definition->getUpdates();
