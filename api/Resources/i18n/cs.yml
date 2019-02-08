@@ -92,7 +92,5 @@ cs:
       processingSummary: 'Řešení závislostí použitím Cloudu Composera'
       processingDetail: 'Úkol {job} běží  {seconds} s.'
       errorSummary: 'Vyřešení závislostí nevyšlo…'
-      finishedSummary: 'Úkol Cloudu Composera byl dokončen'
-      finishedDetail: 'Úkol {job} bude ukončený za  {seconds} s.'
     clear-cache:
       summary: 'Mazání meziúložiště souborů…'

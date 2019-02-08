@@ -117,7 +117,5 @@ ru:
       processingSummary: 'Разрешение зависимостей с помощью Composer Cloud'
       processingDetail: 'Задание ID {job} работает {seconds} сек.'
       errorSummary: 'Ошибка разрешения зависимостей...'
-      finishedSummary: 'Задание Composer Cloud завершено'
-      finishedDetail: 'Задание ID {job} завершено за {seconds} сек.'
     clear-cache:
       summary: 'Удаление файлов кеша...'

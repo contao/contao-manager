@@ -5,8 +5,8 @@
     "ui.app.httpsHref": "https://https.cio.gov/everything/",
     "ui.app.loading": "Contao Managerを読み込み中…",
     "ui.app.apiError": "予期しないAPIの状態",
-    "ui.app.configSecurity1": "SECURITY ALERT !!! Unprotected config directory detected",
-    "ui.app.configSecurity2": "The Contao Manager has detected that its config files are publicly accessible. All operations are disabled until the directory is secured, otherwise an attacker could access sensitive data of your installation.\n\nTo fix this issue, make sure to prevent access to the \"contao-manager\" directory on your server. To learn how to do this, please refer to the manual of your webserver or contact your hosting provider.",
+    "ui.app.configSecurity1": "セキュリティ警告!!!  保護していない設定ディレクトリを検出",
+    "ui.app.configSecurity2": "Contao Managerは設定ファイルが公開してアクセスできる状態を検出しました。ディレクトリを安全な状態にするまで、すべての操作は動作しません、そうしないとインストールに含まれている極秘データを攻撃者がアクセスできる可能性があるためです。\n\nこれを修正するには\"contao-manager\"のディレクトリへのアクセスを禁止してください。この方法を学ぶには、ウェブサーバーのマニュアルを参照するかホスティング提供者に連絡してください。",
     "ui.account.welcome": "ようこそ",
     "ui.account.intro": "Contao Managerにようこそ。Contao ManagerはContao 4 Open Source CMSのインストールと管理を行う多才なツールです。Contao Managerを初めて利用する場合は、<strong>始める前に<a href=\"https://docs.contao.org/books/manager/\" target=\"_blank\">マニュアルを読んでください</a>。<br><br>問題が起きた場合は、 <a href=\"https://github.com/contao/contao-manager/issues\" target=\"_blank\">GitHubのIssues</a>を確認し、まだ報告されていない場合はどのような問題でも遠慮なく新しいIssueを作成してください。",
     "ui.account.headline": "ユーザーアカウント",
@@ -146,6 +146,10 @@
     "ui.maintenance.rebuildCache.rebuildDev": "開発用のキャッシュを再構築",
     "ui.maintenance.rebuildCache.clearProd": "実稼働用のキャッシュを消去",
     "ui.maintenance.rebuildCache.clearDev": "開発用のキャッシュを消去",
+    "ui.maintenance.installTool.title": "Contao Install Tool",
+    "ui.maintenance.installTool.description": "The Contao Install Tool is automatically locked if you enter a wrong password too many times.",
+    "ui.maintenance.installTool.unlock": "Unlock Install Tool",
+    "ui.maintenance.installTool.lock": "Lock Install Tool",
     "ui.maintenance.dumpAutoload.title": "Composerクラスローダー",
     "ui.maintenance.dumpAutoload.description": "PHPのクラスの読み込みにComposerのオートローダーが担当します。rootのcomposer.jsonに独自のネームスペースを追加した後でオートローダーは書き出さなければなりません。",
     "ui.maintenance.dumpAutoload.button": "オートローダーを書き出し",
@@ -163,7 +167,7 @@
     "ui.maintenance.debugMode.credentials": "認証情報",
     "ui.maintenance.debugMode.user": "デバッグモードのユーザー名を入力してください。",
     "ui.maintenance.debugMode.password": "デバッグモードのパスワードを入力してください。",
-    "ui.maintenance.debugMode.unsupported": "Contao 4.4ではサポートなし",
+    "ui.maintenance.debugMode.unsupported": "Contao 4.4はサポートしていません。",
     "ui.maintenance.opcodeCache.title": "Opcodeキャッシュ",
     "ui.maintenance.opcodeCache.description": "Opcodeは高速な実行のためにPHPのファイルをウェブプロセス常にキャッシュします。変更後にファイルの変化を認識していないといった、特定の状況では削除しなければなりません。",
     "ui.maintenance.opcodeCache.button": "キャッシュを切り詰め",
@@ -220,5 +224,5 @@
     "ui.packagesearch.start": "キーワードを入力して検索を開始…",
     "ui.packagesearch.searching": "<i>{query}</i>に合致するContaoのパッケージを検索中…",
     "ui.packagesearch.empty": "<i>{query}</i>の結果がありません",
-    "ui.packagesearch.more": "より多くの結果"
+    "ui.packagesearch.more": "さらに多くの結果"
 }

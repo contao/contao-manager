@@ -92,6 +92,8 @@ nl:
       detail: 'Bijwerken van {old} naar {new}'
     remove-cache:
       summary: 'Verwijderen cache directory …'
+    remove-vendor:
+      summary: 'Vendor map verwijderen ...'
     cache-warmup:
       summary: 'Warming applicatie cache …'
     cache-clear:
@@ -115,7 +117,5 @@ nl:
       processingSummary: 'Afhankelijkheden met Composer Cloud oplossen'
       processingDetail: 'Job ID {job} wordt uitgevoerd voor {seconds} seconden'
       errorSummary: 'Oplossen van afhankelijkheden mislukt ...'
-      finishedSummary: 'Composer Cloud-taak voltooid'
-      finishedDetail: 'Job ID {job} voltooid in {seconds} seconden'
     clear-cache:
       summary: 'Verwijderen van cache bestanden …'

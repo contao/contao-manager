@@ -82,6 +82,8 @@ de:
       title: 'Leere den Composer-Cache'
     rebuild_cache:
       title: 'Contao-Cache neu erstellen'
+    install_tool:
+      title: 'Contao-Installtool'
     self_update:
       title: 'Der Contao Manager wird aktualisiert'
       completeSummary: 'Contao Manager wurde erfolgreich aktualisiert'
@@ -109,6 +111,10 @@ de:
       summaryRetry: 'Installiere Composer-Abhängigkeiten (Versuch {current}/{max}) …'
     dump-autoload:
       summary: 'Klassen-Autoloader wird geschrieben …'
+    install-lock:
+      summary: 'Contao-Installtool wird gesperrt …'
+    install-unlock:
+      summary: 'Contao-Installtool wird entsperrt …'
     create-project:
       summary: 'Installiere Applikations-Vorlage …'
     cloud:
@@ -117,7 +123,7 @@ de:
       processingSummary: 'Abhängigkeiten werden mit Hilfe der Composer Cloud aufgelöst'
       processingDetail: 'Aufgabe ID {job} aktiv seit {seconds} Sekunden'
       errorSummary: 'Fehler beim auflösen der Abhängigkeiten'
-      finishedSummary: 'Composer Cloud Aufgabe fertiggestellt'
-      finishedDetail: 'Aufgabe ID {job} abgearbeitet in {seconds} Sekunden'
+      finishedSummary: 'Composer Cloud Aufgabe abgearbeitet in {seconds} Sekunden'
+      finishedDetail: 'RAM-Verbrauch: {memory} (Spitze: {peak}), Dauer: {time}.'
     clear-cache:
       summary: 'Lösche Cache-Dateien …'
