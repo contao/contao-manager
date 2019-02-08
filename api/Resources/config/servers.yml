@@ -22,6 +22,7 @@ domains:
     vhost.io: hostingwerk
     your-server.de: hetzner
     etes.de: etes
+    webkeeper.ch: webkeeper
 
 networks:
     AS15817: mittwald
@@ -304,6 +305,12 @@ configs:
         php:
             /usr/bin/php{major}{minor}: []
             /usr/bin/php: []
+            
+    webkeeper:
+        name: webkeeper GmbH
+        website: www.webkeeper.ch
+        php:
+            /opt/php{major}{minor}/bin/php: ['-d', 'allow_url_fopen=1']
 
     wintglobal:
         name: wint.global GmbH
