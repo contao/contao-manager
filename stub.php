@@ -3,10 +3,9 @@
 error_reporting(-1);
 
 if (function_exists('ini_set')) {
-    /** @noinspection UsageOfSilenceOperatorInspection */
     @ini_set('display_errors', 1);
-    /** @noinspection UsageOfSilenceOperatorInspection */
     @ini_set('display_startup_errors', 1);
+    @ini_set('opcache.enable', '0');
 }
 
 if (version_compare(phpversion(), '5.5.9', '<')) {
