@@ -33,6 +33,8 @@ services:
         tags: [{ name: kernel.event_subscriber }]
 
     Contao\ManagerApi\Composer\CloudResolver:
+        calls:
+            - ['setLogger', ['@logger']]
         tags:
             - { name: monolog.logger, channel: tasks }
 
