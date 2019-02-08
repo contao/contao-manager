@@ -15,8 +15,8 @@
                 <h1 class="view-boot__issue">{{ 'ui.boot.issue1' | translate }}</h1>
                 <p class="view-boot__issue">{{ 'ui.boot.issue2' | translate }}</p>
             </div>
-            <div class="view-boot__summary" v-if="canContinue">
-                <button @click="finish" class="widget-button widget-button--primary view-boot__continue">{{ 'ui.boot.run' | translate }}</button>
+            <div class="view-boot__summary" v-if="!hasError">
+                <button @click="finish" class="widget-button widget-button--primary view-boot__continue" :disabled="!canContinue">{{ 'ui.boot.run' | translate }}</button>
             </div>
         </main>
         <main v-else class="view-boot__loading">
