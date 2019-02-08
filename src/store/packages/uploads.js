@@ -62,7 +62,7 @@ export default {
             if (this.getters['packages/packageInstalled'](pkg.name)) {
                 this.commit('packages/update', pkg.name);
             } else {
-                this.commit('packages/add', pkg);
+                this.commit('packages/add', Object.assign({}, pkg, { constraint: pkg.version }));
             }
 
             state.confirmed.push(id);
