@@ -5,8 +5,7 @@
             <h1 class="contao-check__headline">{{ 'ui.server.contao.headline' | translate }}</h1>
             <p class="contao-check__description">{{ 'ui.server.contao.description' | translate }}</p>
             <p class="contao-check__version"><strong>{{ 'ui.server.contao.ltsTitle' | translate }}:</strong> {{ 'ui.server.contao.ltsText' | translate }}</p>
-            <p class="contao-check__version" v-if="supportsLatest"><strong>{{ 'ui.server.contao.latestTitle' | translate }}:</strong> {{ 'ui.server.contao.latestText' | translate }}</p>
-            <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ 'ui.server.contao.latestTitle' | translate }}:</strong> {{ 'ui.server.contao.latestText' | translate }}</span> <span class="contao-check__version--warning">{{ 'ui.server.contao.noLatest' | translate }}</span></p>
+            <p class="contao-check__version"><strong>{{ 'ui.server.contao.latestTitle' | translate }}:</strong> {{ 'ui.server.contao.latestText' | translate }}</p>
             <p class="contao-check__version" v-html="$t('ui.server.contao.releaseplan')"></p>
         </header>
 
@@ -49,7 +48,6 @@
 
         data: () => ({
             processing: false,
-            supportsLatest: true,
             version: '',
             coreOnly: 'no',
             noUpdate: false,
@@ -57,12 +55,6 @@
 
         computed: {
             versions() {
-                if (!this.supportsLatest) {
-                    return {
-                        '4.4': 'Contao 4.4 (Long Term Support)',
-                    };
-                }
-
                 return {
                     '4.7': 'Contao 4.7 (Latest)',
                     '4.4': 'Contao 4.4 (Long Term Support)',
@@ -83,17 +75,6 @@
                     if (!result.version) {
                         this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.contao.empty');
-
-                        this.$store.dispatch('server/php-web/get').then((phpWeb) => {
-                            if (phpWeb.version_id < 70100) {
-                                this.supportsLatest = false;
-                            }
-
-                            if (phpWeb.version_id < 50600) {
-                                this.bootState = 'error';
-                                this.bootDescription = this.$t('ui.server.contao.unsupported', phpWeb);
-                            }
-                        });
                     } else if (!result.supported) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.contao.old', result);

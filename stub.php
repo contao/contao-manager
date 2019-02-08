@@ -8,7 +8,7 @@ if (function_exists('ini_set')) {
     @ini_set('opcache.enable', '0');
 }
 
-if (PHP_VERSION_ID < 50509) {
+if (PHP_VERSION_ID < 70103) {
     die('You are using PHP '.phpversion().' but you need least PHP 5.5.9 to run the Contao Manager.');
 }
 
