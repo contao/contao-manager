@@ -252,6 +252,12 @@ configs:
         php:
             /usr/local/bin/php: []
 
+    tandao:
+        name: tandao (Achenbach & Fischer GbR)
+        website: www.tandao.de
+        php:
+            /usr/bin/php{major}.{minor}: []
+
     timme:
         name: Timme Hosting GmbH & Co. KG
         website: timmehosting.de
@@ -305,7 +311,7 @@ configs:
         php:
             /usr/bin/php{major}{minor}: []
             /usr/bin/php: []
-            
+
     webkeeper:
         name: webkeeper GmbH
         website: www.webkeeper.ch
