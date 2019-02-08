@@ -7,7 +7,7 @@ services:
             $serverConfigFile: '%kernel.root_dir%/Resources/config/servers.yml'
 
     Contao\ManagerApi\:
-        resource: ../../{Command,Config,Controller,EventListener,IntegrityCheck,Process,Security,System,Task/Composer/,Task/Contao,Task/Manager,Task/Packages}
+        resource: ../../{Command,Config,Controller,EventListener,IntegrityCheck,Security,System,Task/Composer/,Task/Contao,Task/Manager,Task/Packages}
 
 
     ####################
@@ -43,6 +43,10 @@ services:
     Contao\ManagerApi\Process\ConsoleProcessFactory:
         tags:
             - { name: monolog.logger, channel: tasks }
+
+    Contao\ManagerApi\Process\ContaoApi: ~
+
+    Contao\ManagerApi\Process\ContaoConsole: ~
 
     Contao\ManagerApi\Task\TaskManager:
         arguments:
