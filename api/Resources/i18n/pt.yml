@@ -1,0 +1,121 @@
+pt:
+  integrity:
+    allow_url_fopen:
+      title: 'A função PHP "allow_url_fopen" não está ativada no servidor. '
+    process:
+      title: 'A função PHP "proc_open" e/ou "proc_close" não está disponível no servidor.'
+      detail: 'As funções "proc_open" and "proc_close" são necessárias para executar tarefas de linha de comandos em segundo plano. Verifique junto do seu fornecedor se existe uma razão para esta funcionalidade não estar disponível; O Contao Manager e o Contao 4 não irão funcionar correctamente sem estas funções.'
+    intl:
+      title: 'A extensão PHP Intl não está disponível.'
+      detail: 'O Contao 4 necessita da extensão PHP Intl para propósitos de internacionalização.'
+    openssl:
+      title: 'A extensão PHP OpenSSL não se encontra disponível.'
+      detail: 'O Contao Manager necessita da extensão OpenSSL para receber ficheiros através de uma ligação encriptada (https).'
+    dom:
+      title: 'A extensão PHP DOM não se encontra disponivel.'
+      detail: 'O contao 4 necessita da extensão PHP DOM para reconhecer documentos XML.'
+    xmlreader:
+      title: 'A extensão PHP XMLReader não está disponível.'
+      detail: 'O contao 4 necessita da extensão PHP DOM para reconhecer documentos XML.'
+    graphics_lib:
+      title: 'Nenhuma biblioteca de processamento de imagens PHP está disponível. '
+      detail: 'O Contao 4 necessita da(s) extensão(ões) GD, Imagick ou Gmagick para poder processar imagens.'
+    symlink:
+      title: 'A utilização de Links Simbólicos (symlink) está desactivada ou não funciona correctamente.'
+    session:
+      title: 'A sessão PHP falhou ao iniciar.'
+    web_root:
+      title: 'O ficheiro Phar necessita estar na pasta /web .'
+    memory_limit:
+      title: 'Memória limite PHP insuficiente'
+      detail: 'A configuração PHP atual apenas permite {limit} de memória (na linha de comandos). Estes recursos não são suficientes para executar o Composer e não é possível aumentar este limite automaticamente. Por favor contacte o seu fornecedor de conteúdo  para assistência.'
+    systempdir:
+      title: 'Impossível escrever no directório de memória de sistema temporário.'
+      detail: 'Aparentemente existe um problema com a sua configuração hosting (servidor). Certifique-se que open _basedir permite acesso ao directório temporário e que sys_temp_dir está configurado correctamente. '
+    contao_unknown:
+      title: 'Estado de instalação desconhecido'
+      detail: "Alguns ficheiros foram encontrados no seu servidor mas nenhuma versão conhecida do Contao foi detectada.\nDeverá reparar manualmente a sua aplicação  ou remover os seguintes ficheiros e pastas para instalar o Contao:\n\n{files}"
+    contao_version:
+      title: 'A versão do Contao não pôde ser determinada'
+      detail: "A consola devolveu conteúdo inesperado relativo à versão do Contao. Por favor verifique o texto de saída para mais informação:\n\n{output}"
+  config:
+    php_cli:
+      not_found: 'Este caminho não contém um binário PHP válido. '
+      incompatible: 'Este binário é uma versão PHP {cli} mas o seu servidor web é versão {web}.'
+    cloud:
+      path: 'Repositórios via path não são suportados.'
+      artifact: 'Repo6sitorios artifact não são suportados.'
+      platform: 'A plataforma não pode estar configurada em composer.json .'
+      cache: 'Propriedades de cache não podem estar configuradas em composer.json .'
+  taskstatus:
+    created: 'Tarefa em consola criada...'
+    complete:
+      summary: 'Tarefa em consola completa!'
+      detail: 'A tarefa em segundo plano foi completada com sucesso. Verifique a consola para mais detalhes.'
+      console: '### Tarefa em consola completada com sucesso ###'
+    aborting:
+      summary: 'A interromper operação atual ...'
+      detail: 'A tarefa em segundo plano está a ser cancelada.'
+      console: '### A tarefa em segundo plano está a ser cancelada ###'
+    stopped:
+      summary: 'Tarefa em consola cancelada!'
+      detail: 'A tarefa em segundo plano foi cancelada. Por favor verifique a consola.'
+      console: '### A tarefa em segundo plano foi cancelada ###'
+    error:
+      summary: 'Tarefa em consola cancelada!'
+      detail: 'A tarefa em segundo plano parou inesperadamente. Por favor verifique a consola.'
+      console: '### A tarefa em segundo plano parou  inesperadamente ###'
+  task:
+    setup_packages:
+      title: 'A instalar aplicação Contao'
+      completeSummary: 'Instalação completa!'
+      completeDetail: 'Para completar a configuração por favor inicie a ferramenta de instalação e introduza as suas credenciais de base de dados.'
+    install_packages:
+      title: 'A instalar dependências composer'
+    update_packages:
+      title: 'A atualizar pacotes'
+      completeSummary: 'Pacotes Contao atualizados!'
+      completeDetail: 'Por favor inicie a ferramenta de instalação para aplicar quaisquer alterações à base de dados necessárias.'
+    dump_autoload:
+      title: 'A analisar o Composer Autoloader'
+    clear_cache:
+      title: 'A limpar Cache Composer'
+    rebuild_cache:
+      title: 'A reconstruir Cache Composer'
+    self_update:
+      title: 'A actualizar o Contao Manager'
+      completeSummary: 'Contao Manager atualizado com sucesso'
+      completeDetail: 'Atualizado para a versão  {current}'
+  taskoperation:
+    self-update:
+      summary: 'A instalar o Contao Manager mais recente ...'
+      detail: 'A atualizar de {old} para {new}'
+    remove-cache:
+      summary: 'A apagar directório cache ...'
+    remove-vendor:
+      summary: 'A apagar directório vendor ...'
+    cache-warmup:
+      summary: 'A preparar cache de aplicação ...'
+    cache-clear:
+      summary: 'A limpar cache de aplicação ...'
+    composer-update:
+      summary: 'A atualizar dependências Composer ...'
+    composer-require:
+      summary: 'A adicionar pacotes Composer ...'
+    composer-remove:
+      summary: ' A remover pacotes Composer ...'
+    composer-install:
+      summary: 'A instalar dependências Composer ...'
+      summaryRetry: 'A instalar dependências Composer (tentativa {current}/{max}) ...'
+    dump-autoload:
+      summary: 'A analisar o class autoloader ...'
+    create-project:
+      summary: 'A instalar modelo de aplicação...'
+    cloud:
+      queuedSummary: 'Tarefa em fila de espera na Composer Cloud há {seconds} seconds'
+      queuedDetail: 'A iniciar em aprox. {seconds} seconds (atualmente {jobs} trabalhos em {workers} pedidos)'
+      processingSummary: 'A resolver dependências via Composer Cloud'
+      processingDetail: 'Tarefa ID {job} está a correr há {seconds} segundos'
+      errorSummary: 'Falha ao resolver dependências ...'
+    clear-cache:
+      summary: 'A apagar ficheiros em cache ...'

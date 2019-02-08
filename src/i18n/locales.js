@@ -14,6 +14,7 @@ export default {
     lv: 'Latviešu Valoda (Latvian)',
     nl: 'Nederlands (Dutch)',
     pl: 'Polszczyzna (Polish)',
+    pt: 'Português (Portuguese)',
     ru: 'Русский (Russian)',
     sr: 'српски језик (Serbian)',
     zh: '中文 (Chinese)',
