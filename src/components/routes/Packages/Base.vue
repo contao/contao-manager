@@ -2,10 +2,11 @@
     <main-layout>
 
         <section :class="{ 'package-tools': true, 'package-tools--search': showSearch }">
-            <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
-            <button class="package-tools__button widget-button widget-button--search" :disabled="uploading" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
-            <slot name="search"/>
-            <button class="package-tools__button widget-button widget-button--upload" :disabled="!uploads || uploading" :title="uploadError" @click.prevent="$emit('start-upload')">{{ 'ui.packages.uploadButton' | translate }}</button>
+            <slot name="search">
+                <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
+                <button class="package-tools__button widget-button widget-button--search" :disabled="uploading" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
+                <button class="package-tools__button widget-button widget-button--upload" :disabled="!uploads || uploading" :title="uploadError" @click.prevent="$emit('start-upload')">{{ 'ui.packages.uploadButton' | translate }}</button>
+            </slot>
         </section>
 
         <slot/>
@@ -70,7 +71,7 @@
         &__cancel {
             display: none;
             position: absolute;
-            top: 48px;
+            top: 0;
             right: 0;
             width: 38px;
             height: 38px;
@@ -111,17 +112,19 @@
             }
         }
 
-        @include screen(1024) {
+        @include screen(800) {
             &__button.widget-button {
                 width: 180px;
                 margin: 0 15px;
             }
 
             &__search {
-                position: absolute !important;
-                top: 0;
-                right: 0;
                 width: 50% !important;
+                margin: 0 auto;
+            }
+
+            &__cancel {
+                right: 25%;
             }
         }
     }
