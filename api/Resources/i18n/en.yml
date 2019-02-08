@@ -44,8 +44,6 @@ en:
             not_found: 'This path does not contain a valid PHP binary.'
             incompatible: 'This binary is a PHP version {cli} but your web server is version {web}.'
         cloud:
-            path: 'Path repositories are not supported.'
-            artifact: 'Artifact repositories are not supported.'
             platform: 'Platform must not be configured in composer.json.'
             cache: 'Cache properties must not be configured in composer.json.'
 

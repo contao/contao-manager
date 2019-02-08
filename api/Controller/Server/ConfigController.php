@@ -232,18 +232,6 @@ class ConfigController extends Controller
 
         $issues = [];
 
-        if (isset($data['repositories']) && is_array($data['repositories'])) {
-            foreach ($data['repositories'] as $repository) {
-                if (isset($repository['type']) && 'path' === $repository['type']) {
-                    $issues[] = $this->translator->trans('config.cloud.path');
-                }
-
-                if (isset($repository['type']) && 'artifact' === $repository['type']) {
-                    $issues[] = $this->translator->trans('config.cloud.artifact');
-                }
-            }
-        }
-
         if (isset($data['config']['platform'])) {
             $issues[] = $this->translator->trans('config.cloud.platform');
         }
