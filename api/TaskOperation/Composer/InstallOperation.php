@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
+use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
@@ -37,7 +38,7 @@ class InstallOperation extends AbstractProcessOperation
      * @param bool                  $dryRun
      * @param null                  $timeout
      */
-    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Translator $translator, $dryRun = false, $timeout = null)
+    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Environment $environment, Translator $translator, $dryRun = false, $timeout = null)
     {
         $this->taskConfig = $taskConfig;
         $this->translator = $translator;
@@ -68,6 +69,11 @@ class InstallOperation extends AbstractProcessOperation
 
             if ($dryRun) {
                 $arguments[] = '--dry-run';
+            }
+
+            if ($environment->isDebug()) {
+                $arguments[] = '--profile';
+                $arguments[] = '-vvv';
             }
 
             $process = $processFactory->createManagerConsoleBackgroundProcess(

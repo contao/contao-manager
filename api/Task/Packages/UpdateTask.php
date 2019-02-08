@@ -110,9 +110,9 @@ class UpdateTask extends AbstractPackagesTask
 
         if ($this->environment->useCloudResolver()) {
             $operations[] = new CloudOperation($this->cloudResolver, $changes, $config, $this->environment, $this->translator, $this->filesystem);
-            $operations[] = new InstallOperation($this->processFactory, $config, $this->translator, $changes->getDryRun(), $this->getInstallTimeout());
+            $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $changes->getDryRun(), $this->getInstallTimeout());
         } else {
-            $operations[] = new UpdateOperation($this->processFactory, $this->translator, $changes->getUpdates(), $changes->getDryRun());
+            $operations[] = new UpdateOperation($this->processFactory, $this->environment, $this->translator, $changes->getUpdates(), $changes->getDryRun());
         }
 
         if ($config->getOption('uploads', false) && count($this->uploads)) {

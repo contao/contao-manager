@@ -90,7 +90,7 @@ class InstallTask extends AbstractPackagesTask
             );
         }
 
-        $operations[] = new InstallOperation($this->processFactory, $config, $this->translator, $changes->getDryRun(), $this->getInstallTimeout());
+        $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $changes->getDryRun(), $this->getInstallTimeout());
 
         return $operations;
     }

@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
+use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskStatus;
@@ -30,7 +31,7 @@ class UpdateOperation extends AbstractProcessOperation
      * @param array                 $packages
      * @param bool                  $dryRun
      */
-    public function __construct(ConsoleProcessFactory $processFactory, Translator $translator, array $packages = [], $dryRun = false)
+    public function __construct(ConsoleProcessFactory $processFactory, Environment $environment, Translator $translator, array $packages = [], $dryRun = false)
     {
         $this->translator = $translator;
 
@@ -57,6 +58,11 @@ class UpdateOperation extends AbstractProcessOperation
 
             if ($dryRun) {
                 $arguments[] = '--dry-run';
+            }
+
+            if ($environment->isDebug()) {
+                $arguments[] = '--profile';
+                $arguments[] = '-vvv';
             }
 
             parent::__construct(
