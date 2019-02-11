@@ -15,7 +15,7 @@
                 <h1 class="view-boot__issue">{{ 'ui.boot.issue1' | translate }}</h1>
                 <p class="view-boot__issue">{{ 'ui.boot.issue2' | translate }}</p>
             </div>
-            <div class="view-boot__summary" v-if="!hasError">
+            <div class="view-boot__summary" v-else-if="!autoContinue">
                 <button @click="finish" class="widget-button widget-button--primary view-boot__continue" :disabled="!canContinue">{{ 'ui.boot.run' | translate }}</button>
             </div>
         </main>
@@ -50,29 +50,24 @@
         }),
 
         computed: {
+            hasError: vm => Object.values(vm.status).indexOf('error') !== -1,
+            autoContinue: vm => window.localStorage.getItem('contao_manager_booted') === '1' || vm.$route.name === routes.oauth.name,
+
+            canContinue: vm => Object.values(vm.status).indexOf(null) === -1
+                    && Object.values(vm.status).indexOf('error') === -1
+                    && Object.values(vm.status).indexOf('action') === -1,
+
+            shouldContinue: vm => Object.values(vm.status).indexOf(null) === -1
+                    && Object.values(vm.status).indexOf('error') === -1
+                    && Object.values(vm.status).indexOf('action') === -1
+                    && Object.values(vm.status).indexOf('warning') === -1,
+
             views() {
                 if (this.$route.name === routes.oauth.name) {
                     return { PhpWeb, Config, PhpCli, SelfUpdate };
                 }
 
                 return { PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao };
-            },
-
-            hasError() {
-                return Object.values(this.status).indexOf('error') !== -1;
-            },
-
-            canContinue() {
-                return Object.values(this.status).indexOf(null) === -1
-                    && Object.values(this.status).indexOf('error') === -1
-                    && Object.values(this.status).indexOf('action') === -1;
-            },
-
-            shouldContinue() {
-                return Object.values(this.status).indexOf(null) === -1
-                    && Object.values(this.status).indexOf('error') === -1
-                    && Object.values(this.status).indexOf('action') === -1
-                    && Object.values(this.status).indexOf('warning') === -1;
             },
         },
 
@@ -136,10 +131,7 @@
             },
 
             shouldContinue(value) {
-                if (value && (
-                    window.localStorage.getItem('contao_manager_booted') === '1'
-                    || this.$route.name === routes.oauth.name
-                )) {
+                if (value && this.autoContinue) {
                     this.finish();
                 }
             },
