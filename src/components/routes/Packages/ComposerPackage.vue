@@ -1,7 +1,7 @@
 <template>
     <package
         :title="data.title"
-        :name="data.hideName ? '' : data.name"
+        :name="visibleName"
         :logo="data.logo"
         :badge="badge"
         :description="data.description"
@@ -71,6 +71,7 @@
             },
             updateOnly: Boolean,
             hidePackagist: Boolean,
+            hideName: Boolean,
             shaveDescription: Boolean,
         },
 
@@ -90,6 +91,8 @@
                 'packageChanged',
                 'packageRemoved'
             ]),
+
+            visibleName: vm => (((vm.hideName && vm.data.title) || vm.data.name === vm.data.title) ? '' : vm.data.name),
 
             isInstalled: vm => vm.packageInstalled(vm.data.name),
             isRequired: vm => vm.packageRequired(vm.data.name),

@@ -1,5 +1,5 @@
 <template>
-    <composer-package :data="data" :update-only="packageInstalled('contao/manager-bundle')" hide-packagist>
+    <composer-package hide-name hide-packagist :update-only="packageInstalled('contao/manager-bundle')" :data="data">
         <img src="../../../assets/images/logo.svg" slot="logo">
 
         <template slot="actions" v-if="!packageInstalled('contao/manager-bundle')">
@@ -32,7 +32,6 @@
                     this.package,
                     {
                         title: 'Contao Open Source CMS',
-                        hideName: true,
                         description: 'Contao is an Open Source PHP Content Management System.',
                         homepage: 'https://contao.org',
                         support: {
