@@ -4,7 +4,7 @@ export default {
     }),
 
     methods: {
-        async load() {
+        async loadMetadata() {
             const metadata = await this.$store.dispatch('packages/search/get', this.data.name);
 
             if (metadata) {
@@ -15,12 +15,12 @@ export default {
 
     watch: {
         data() {
-            this.load();
+            this.loadMetadata();
         },
     },
 
     created() {
-        this.load();
+        this.loadMetadata();
         this.$watch(this.$i18n.locale, this.load);
     },
 }
