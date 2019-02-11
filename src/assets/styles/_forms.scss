@@ -125,7 +125,14 @@ select {
     text-decoration: none;
     text-align: center;
     cursor: pointer;
+    border-bottom: 1px solid inherit;
     border-radius: 2px;
+
+    &:hover,
+    &:active {
+        background-color: darken($text-color, 5);
+        border-bottom: 1px solid darken($text-color, 10);
+    }
 
     &--inline {
         width: auto;
@@ -135,14 +142,32 @@ select {
 
     &--primary {
         background-color: $green-button;
+
+        &:hover,
+        &:active {
+            background-color: darken($green-button, 5);
+            border-bottom: 1px solid darken($green-button, 10);
+        }
     }
 
     &--warning {
         background-color: $orange-button;
+
+        &:hover,
+        &:active {
+            background-color: darken($orange-button, 5);
+            border-bottom: 1px solid darken($orange-button, 10);
+        }
     }
 
     &--alert {
         background-color: $red-button;
+
+        &:hover,
+        &:active {
+            background-color: darken($red-button, 5);
+            border-bottom: 1px solid darken($red-button, 10);
+        }
     }
 
     $iconSelector: '.icon-selector';
@@ -193,6 +218,7 @@ select {
     &:disabled,
     &.disabled {
         background-color: $border-color !important;
+        border-color: $border-color !important;
         cursor: not-allowed;
     }
 }

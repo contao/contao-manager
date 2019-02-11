@@ -61,10 +61,7 @@
 
         &__button {
             &.widget-button {
-                height: 38px;
                 margin-bottom: 10px;
-                line-height: 36px;
-                border: 1px solid $border-color;
             }
         }
 

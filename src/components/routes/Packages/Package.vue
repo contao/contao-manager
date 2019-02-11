@@ -298,6 +298,11 @@
                 line-height: 20px;
                 text-indent: -999em;
 
+                &:hover {
+                    background: darken($orange-button, 5);
+                    border-color: darken($orange-button, 10);
+                }
+
                 &:after {
                     position: absolute;
                     left: 0;
