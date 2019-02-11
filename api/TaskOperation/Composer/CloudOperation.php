@@ -133,10 +133,6 @@ class CloudOperation implements TaskOperationInterface
                     $this->environment->getLockFile(),
                     $this->cloud->getComposerLock($job)
                 );
-                $this->filesystem->dumpFile(
-                    $this->environment->getJsonFile(),
-                    $this->cloud->getComposerJson($job)
-                );
 
                 $this->taskConfig->setState('cloud-job-successful', true);
             }
