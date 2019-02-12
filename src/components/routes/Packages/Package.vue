@@ -293,7 +293,6 @@
                 position: relative;
                 width: 30px;
                 height: 30px;
-                padding: 6px;
                 background: $orange-button;
                 line-height: 20px;
                 text-indent: -999em;
@@ -303,19 +302,15 @@
                     border-color: darken($orange-button, 10);
                 }
 
-                &:after {
+                &:before {
                     position: absolute;
-                    left: 0;
-                    right: 0;
-                    top: 0;
-                    bottom: 0;
-                    background: url('../../../assets/images/settings.svg') center no-repeat;
-                    background-size: 20px 20px;
-                    content: "";
+                    left: 50%;
+                    top: 50%;
+                    margin: -10px 0 0 -10px;
                 }
             }
 
-            &--validating button:after {
+            &--validating button:before {
                 animation: release-validating 2s linear infinite;
             }
 
