@@ -40,24 +40,27 @@ class CloudResolver implements LoggerAwareInterface
      * Creates a Cloud job for given composer changes.
      *
      * @param CloudChanges $definition
+     * @param Environment  $environment
      * @param bool         $debugMode
      *
      * @return CloudJob
      */
-    public function createJob(CloudChanges $definition, $debugMode = false)
+    public function createJob(CloudChanges $changes, Environment $environment)
     {
+        $environment->reset();
+
         $data = [
-            'composerJson' => $definition->getJson(),
-            'composerLock' => $definition->getLock(),
-            'platform' => $definition->getPlatform(),
-            'localPackages' => $definition->getLocalPackages(),
+            'composerJson' => $environment->getComposerJson(),
+            'composerLock' => $environment->getComposerLock(),
+            'platform' => $environment->getPlatformPackages(),
+            'localPackages' => $environment->getLocalPackages(),
         ];
 
-        $command = $definition->getUpdates();
+        $command = $changes->getUpdates();
         $command[] = '--with-dependencies';
         $command[] = '--profile';
 
-        if ($debugMode) {
+        if ($environment->isDebug()) {
             $command[] = '-vvv';
         }
 

@@ -13,6 +13,11 @@ namespace Contao\ManagerApi\Composer;
 use Composer\Composer;
 use Composer\Factory;
 use Composer\IO\NullIO;
+use Composer\Json\JsonFile;
+use Composer\Package\Dumper\ArrayDumper;
+use Composer\Repository\ArtifactRepository;
+use Composer\Repository\PathRepository;
+use Composer\Repository\PlatformRepository;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Symfony\Component\Filesystem\Filesystem;
@@ -51,6 +56,14 @@ class Environment
         $this->kernel = $kernel;
         $this->managerConfig = $managerConfig;
         $this->filesystem = $filesystem ?: new Filesystem();
+    }
+
+    /**
+     * Resets the Composer object (necessary after modifying Composer files).
+     */
+    public function reset()
+    {
+        $this->composer = null;
     }
 
     /**
@@ -160,9 +173,9 @@ class Environment
      *
      * @return Composer
      */
-    public function getComposer()
+    public function getComposer($reload = false)
     {
-        if (null === $this->composer) {
+        if (null === $this->composer || $reload) {
             $this->composer = Factory::create(new NullIO(), $this->getJsonFile());
         }
 
@@ -177,5 +190,76 @@ class Environment
     public function useCloudResolver()
     {
         return !$this->managerConfig->get('disable_cloud', false);
+    }
+
+    /**
+     * @return JsonFile
+     */
+    public function getComposerJsonFile()
+    {
+        $file = $this->getComposer()->getConfig()->getConfigSource()->getName();
+
+        return new JsonFile($file);
+    }
+
+    public function getComposerJson()
+    {
+        $json = $this->getComposerJsonFile()->read();
+
+        $repositories = $this->getComposer()->getConfig()->getRepositories();
+        unset($repositories['packagist.org']);
+
+        $json['repositories'] = array_values($repositories);
+
+        return $json;
+    }
+
+    public function getComposerLock()
+    {
+        $locker = $this->getComposer()->getLocker();
+
+        if (!$locker->isLocked()) {
+            return [];
+        }
+
+        return $locker->getLockData();
+    }
+
+    public function getPlatformPackages()
+    {
+        $platformOverrides = $this->getComposer()->getConfig()->get('platform');
+        $platform = [];
+
+        foreach ((new PlatformRepository([], $platformOverrides))->getPackages() as $package) {
+            if ('composer-plugin-api' === $package->getName()) {
+                continue;
+            }
+
+            $platform[$package->getName()] = $package->getVersion();
+        }
+
+        return $platform;
+    }
+
+    public function getLocalPackages()
+    {
+        $packages = [];
+        $repositories = $this->getComposer()->getRepositoryManager()->getRepositories();
+        $dumper = new ArrayDumper();
+
+        foreach ($repositories as $repository) {
+            if ($repository instanceof ArtifactRepository || $repository instanceof PathRepository) {
+                foreach ($repository->getPackages() as $package) {
+                    $dump = $dumper->dump($package);
+
+                    // see https://github.com/composer/composer/issues/7955
+                    unset($dump['dist']['reference']);
+
+                    $packages[] = $dump;
+                }
+            }
+        }
+
+        return $packages;
     }
 }

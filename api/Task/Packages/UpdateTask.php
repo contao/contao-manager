@@ -150,7 +150,7 @@ class UpdateTask extends AbstractPackagesTask
 
     protected function getComposerDefinition(TaskConfig $config)
     {
-        $definition = new CloudChanges($this->environment->getComposer());
+        $definition = new CloudChanges();
 
         foreach ($config->getOption('require', []) as $name => $version) {
             $definition->requirePackage($name, $version);

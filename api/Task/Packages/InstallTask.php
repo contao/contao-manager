@@ -70,7 +70,7 @@ class InstallTask extends AbstractPackagesTask
      */
     protected function buildOperations(TaskConfig $config)
     {
-        $changes = new CloudChanges($this->environment->getComposer());
+        $changes = new CloudChanges();
         $changes->setDryRun((bool) $config->getOption('dry_run', false));
 
         $operations = [];
