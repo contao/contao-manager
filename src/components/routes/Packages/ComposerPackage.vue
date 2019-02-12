@@ -41,7 +41,7 @@
                 </fieldset>
                 <div class="package__version package__version--release" v-if="data.version">
                     <strong>{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
-                    <time :dateTime="data.time" v-if="data.time">({{ released }})</time>
+                    <time :dateTime="data.time" v-if="data.time">({{ this.data.time | datimFormat }})</time>
                 </div>
             </slot>
         </template>
@@ -196,7 +196,7 @@
                 }
 
                 if (this.data.downloads) {
-                    additionals.push(this.$t('ui.package.additionalDownloads', { count: this.data.downloads }, this.data.downloads));
+                    additionals.push(this.$t('ui.package.additionalDownloads', { count: Vue.filter('numberFormat')(this.data.downloads) }, this.data.downloads));
                 }
 
                 if (this.data.favers) {
@@ -204,14 +204,6 @@
                 }
 
                 return additionals;
-            },
-
-            released() {
-                if (this.data.time === undefined) {
-                    return '';
-                }
-
-                return new Date(this.data.time).toLocaleString();
             },
 
             constraintPlaceholder() {

@@ -5,6 +5,7 @@ import router from './router';
 import views from './router/views';
 import store from './store';
 import i18n from './i18n';
+import './filters';
 
 import App from './components/App';
 
