@@ -8,11 +8,6 @@
         :hint="hint"
         :hint-close="hintClose"
         :shave-description="shaveDescription"
-
-        :release-validating="constraintValidating"
-        :release-error="constraintError"
-        :release-disabled="(willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired))"
-
         @close-hint="restore"
     >
         <template slot="logo"><slot name="logo"/></template>
@@ -27,8 +22,22 @@
         <template slot="release">
             <slot name="release">
                 <fieldset>
-                    <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button class="widget-button widget-button--gear" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)">{{ 'ui.package.editConstraint' | translate }}</button>
+                    <input
+                        ref="constraint"
+                        type="text"
+                        :placeholder="constraintPlaceholder"
+                        v-model="constraint"
+                        :class="{ disabled: willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired), error: constraintError }"
+                        :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
+                        @keypress.enter.prevent="saveConstraint"
+                        @keypress.esc.prevent="resetConstraint"
+                        @blur="saveConstraint"
+                    >
+                    <button
+                        :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
+                        @click="editConstraint"
+                        :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
+                    >{{ 'ui.package.editConstraint' | translate }}</button>
                 </fieldset>
                 <div class="package__version package__version--release" v-if="data.version">
                     <strong>{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>

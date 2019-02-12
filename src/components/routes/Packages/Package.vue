@@ -33,7 +33,7 @@
                 </p>
             </div>
 
-            <div :class="{package__release: true, 'package__release--validating': releaseValidating, 'package__release--error': releaseError, 'package__release--disabled': releaseDisabled }">
+            <div class="package__release">
                 <slot name="release">
                     <div></div>
                 </slot>
@@ -63,11 +63,6 @@
             description: String,
             hint: String,
             hintClose: String,
-
-            releaseValidating: Boolean,
-            releaseError: Boolean,
-            releaseDisabled: Boolean,
-
             shaveDescription: Boolean,
         },
     };
@@ -284,9 +279,19 @@
                 }
             }
 
-            fieldset > input[type=text] {
+            fieldset > input[type=text],
+            fieldset > input[type=text]:disabled {
                 float: left;
                 width: calc(100% - 32px);
+
+                &.disabled {
+                    background: $border-color;
+                    border-color: $border-color;
+                }
+
+                &.error {
+                    animation: input-error .15s linear 3;
+                }
             }
 
             button {
@@ -308,25 +313,9 @@
                     top: 50%;
                     margin: -10px 0 0 -10px;
                 }
-            }
 
-            &--validating button:before {
-                animation: release-validating 2s linear infinite;
-            }
-
-            &--error input {
-                animation: input-error .15s linear 3;
-            }
-
-            &--disabled {
-                input[type=text],
-                input[type=text]:disabled {
-                    background: $border-color;
-                    border-color: $border-color;
-
-                    &::placeholder {
-                        text-decoration: line-through;
-                    }
+                &.rotate:before {
+                    animation: release-validating 2s linear infinite;
                 }
             }
         }
