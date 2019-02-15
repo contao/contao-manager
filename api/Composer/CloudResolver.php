@@ -67,7 +67,6 @@ class CloudResolver implements LoggerAwareInterface
         $options = [
             RequestOptions::JSON => $data,
             RequestOptions::HEADERS => [
-                'Composer-Resolver-Client' => 'contao',
                 'Composer-Resolver-Command' => implode(' ', $command),
             ],
         ];
@@ -198,7 +197,12 @@ class CloudResolver implements LoggerAwareInterface
     private function request($path, $method = 'GET', array $options = [])
     {
         $options = array_replace_recursive(
-            ['headers' => ['Accept' => 'application/json']],
+            [
+                RequestOptions::HEADERS => [
+                    'Accept' => 'application/json',
+                    'Composer-Resolver-Client' => 'contao',
+                ]
+            ],
             $options
         );
 
