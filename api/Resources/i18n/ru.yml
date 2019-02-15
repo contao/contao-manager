@@ -82,6 +82,8 @@ ru:
       title: 'Очистка кеша Composer'
     rebuild_cache:
       title: 'Перестроение кеша Contao'
+    install_tool:
+      title: 'Мастер установки Contao'
     self_update:
       title: 'Обновление Contao Manager'
       completeSummary: 'Contao Manager был успешно обновлен'
@@ -109,6 +111,10 @@ ru:
       summaryRetry: 'Установка зависимостей Composer (повтор: {current}/{max}) …'
     dump-autoload:
       summary: 'Дамп автозагрузчика классов...'
+    install-lock:
+      summary: 'Блокировка мастера установки Contao...'
+    install-unlock:
+      summary: 'Разблокировка мастера установки Contao...'
     create-project:
       summary: 'Установка шаблона приложения...'
     cloud:
@@ -117,5 +123,7 @@ ru:
       processingSummary: 'Разрешение зависимостей с помощью Composer Cloud'
       processingDetail: 'Задание ID {job} работает {seconds} сек.'
       errorSummary: 'Ошибка разрешения зависимостей...'
+      finishedSummary: 'Задание Composer Cloud выполнено за {seconds} сек.'
+      finishedDetail: 'Использование памяти: {memory} (пик: {peak}), время: {time}.'
     clear-cache:
       summary: 'Удаление файлов кеша...'

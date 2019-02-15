@@ -82,6 +82,8 @@ nl:
       title: 'Composer Cache Wissen'
     rebuild_cache:
       title: 'Contao Cache opnieuw opbouwen'
+    install_tool:
+      title: 'Contao Installatie tool'
     self_update:
       title: 'Contao Manager updaten'
       completeSummary: 'Contao Manager is bijgewerkt'
@@ -109,6 +111,10 @@ nl:
       summaryRetry: 'Installeren Composer afhankelijkheden (opnieuw {current}/{max}) …'
     dump-autoload:
       summary: 'Dump class autoloader ...'
+    install-lock:
+      summary: 'Contao Installatie Programma vergrendelen'
+    install-unlock:
+      summary: 'Contao Installatie Programma ontgrendelen'
     create-project:
       summary: 'Applicatie template installeren …'
     cloud:
@@ -117,5 +123,7 @@ nl:
       processingSummary: 'Afhankelijkheden met Composer Cloud oplossen'
       processingDetail: 'Job ID {job} wordt uitgevoerd voor {seconds} seconden'
       errorSummary: 'Oplossen van afhankelijkheden mislukt ...'
+      finishedSummary: 'Composer Cloud job klaar in {seconds} seconden'
+      finishedDetail: 'Geheugen gebruik: {memory} (peak: {peak}), time: {time}.'
     clear-cache:
       summary: 'Verwijderen van cache bestanden …'
