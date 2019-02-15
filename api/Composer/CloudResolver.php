@@ -67,6 +67,7 @@ class CloudResolver implements LoggerAwareInterface
         $options = [
             RequestOptions::JSON => $data,
             RequestOptions::HEADERS => [
+                'Composer-Resolver-Client' => 'contao',
                 'Composer-Resolver-Command' => implode(' ', $command),
             ],
         ];
