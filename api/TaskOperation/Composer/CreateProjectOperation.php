@@ -82,7 +82,7 @@ class CreateProjectOperation extends AbstractInlineOperation
      */
     protected function addConsoleStatus(TaskStatus $status)
     {
-        $status->addConsole('> Downloading contao/managed-edition '.$this->version);
+        $status->addConsole('> Installing contao/managed-edition '.$this->version);
 
         if ($console = $this->taskConfig->getState($this->getName().'.console')) {
             $status->addConsole($console);
