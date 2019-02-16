@@ -42,8 +42,12 @@ class UpdateCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->updater->canUpdate()) {
-            throw new \RuntimeException('This development build of Contao Manager cannot be automatically updated.');
+        if ($this->updater->supportsUpdate()) {
+            throw new \RuntimeException('Your server does not meet the requirements of the next Contao Manager version.');
+        }
+
+        if ($this->updater->canUpdate()) {
+            throw new \RuntimeException('This build of Contao Manager cannot be automatically updated.');
         }
 
         return $this->update($output);

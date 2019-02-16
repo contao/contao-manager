@@ -1,6 +1,7 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.selfUpdate.title')" :description="bootDescription">
-        <button class="widget-button widget-button--alert" v-if="hasUpdate" @click="update" :disabled="processing">{{ 'ui.server.selfUpdate.button' | translate }}</button>
+        <button class="widget-button widget-button--warning" v-if="!isSupported && bootState === 'action'" @click="next" :disabled="processing">{{ 'ui.server.selfUpdate.continue' | translate }}</button>
+        <button class="widget-button widget-button--alert" v-else-if="hasUpdate" @click="update" :disabled="processing">{{ 'ui.server.selfUpdate.button' | translate }}</button>
     </boot-check>
 </template>
 
@@ -16,6 +17,7 @@
         data: () => ({
             processing: false,
             hasUpdate: false,
+            isSupported: true,
         }),
 
         methods: {
@@ -31,6 +33,10 @@
                     } else if (result.current_version === result.latest_version) {
                         this.bootState = 'success';
                         this.bootDescription = this.$t('ui.server.selfUpdate.latest', context);
+                    } else if (!result.supported) {
+                        this.bootState = 'action';
+                        this.bootDescription = this.$t('ui.server.selfUpdate.unsupported', context);
+                        this.isSupported = false;
                     } else if (result.channel === 'dev') {
                         this.bootState = 'warning';
                         this.bootDescription = this.$t('ui.server.selfUpdate.update', context);
@@ -57,6 +63,11 @@
                 };
 
                 this.$store.dispatch('tasks/execute', { name: 'manager/self-update' }).then(reload, reload);
+            },
+
+            next() {
+                this.bootState = 'info';
+                this.$emit('result', 'SelfUpdate', this.bootState);
             },
         },
     };

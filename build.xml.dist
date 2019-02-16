@@ -13,11 +13,11 @@
         <echo message="  phing tx    -  Syncs language files with Transifex" />
     </target>
 
-    <target name="prod" depends="clone, composer, cache, npm, build-prod, box-prod, finish">
+    <target name="prod" depends="clone, composer, cache, npm, build-prod, box-prod, cleanup, version">
         <echo message="Contao Manager ${version} build complete" />
     </target>
 
-    <target name="dev" depends="build-dev, box-dev">
+    <target name="dev" depends="build-dev, box-dev, version">
         <echo message="Contao Manager ${version} build complete" />
     </target>
 
@@ -134,18 +134,17 @@
         <exec executable="box" checkreturn="true" passthru="true">
             <arg value="compile" />
         </exec>
-        <exec executable="php" checkreturn="true">
-            <arg value="-r" />
-            <arg value="file_put_contents('contao-manager.version', json_encode(['version' => '${version}', 'sha1' => sha1_file('contao-manager.phar')]));" />
-        </exec>
     </target>
 
-    <target name="finish">
+    <target name="cleanup">
         <move file="contao-manager-${version}/contao-manager.phar" tofile="contao-manager.phar" overwrite="true"/>
         <delete dir="contao-manager-${version}" />
+    </target>
+
+    <target name="version">
         <exec executable="php" checkreturn="true">
             <arg value="-r" />
-            <arg value="file_put_contents('contao-manager.version', json_encode(['version' => '${version}', 'sha1' => sha1_file('contao-manager.phar')]));" />
+            <arg value="file_put_contents('contao-manager.version', json_encode(['version' => '${version}', 'sha1' => sha1_file('contao-manager.phar'), 'requires' => ['php' => '^5.5.9 || ^7']]));" />
         </exec>
     </target>
 </project>

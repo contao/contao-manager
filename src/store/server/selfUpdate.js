@@ -32,6 +32,7 @@ export default {
                             current_version: null,
                             latest_version: null,
                             channel: 'dev',
+                            supported: false,
                         };
                     }
 

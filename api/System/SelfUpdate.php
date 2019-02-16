@@ -10,6 +10,7 @@
 
 namespace Contao\ManagerApi\System;
 
+use Composer\Repository\PlatformRepository;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
 
@@ -33,6 +34,8 @@ class SelfUpdate
      */
     private $managerConfig;
 
+    private $checkedForUpdates = false;
+
     /**
      * Constructor.
      *
@@ -53,6 +56,27 @@ class SelfUpdate
     public function canUpdate()
     {
         return '' !== \Phar::running(false);
+    }
+
+    /**
+     * Returns whether the current environments supports the new requirements.
+     *
+     * @return bool
+     */
+    public function supportsUpdate()
+    {
+        $this->checkForUpdate();
+
+        $requires = $this->managerConfig->get('latest_requires', []);
+        $repository = new PlatformRepository();
+
+        foreach ($requires as $name => $constraint) {
+            if (null === $repository->findPackage($name, $constraint)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -85,7 +109,7 @@ class SelfUpdate
      */
     public function hasUpdate()
     {
-        return $this->canUpdate() && $this->getOldVersion() !== $this->getNewVersion();
+        return $this->getOldVersion() !== $this->getNewVersion();
     }
 
     /**
@@ -105,25 +129,21 @@ class SelfUpdate
      */
     public function getNewVersion()
     {
-        $lastUpdate = $this->managerConfig->get('last_update');
-        $latestVersion = $this->managerConfig->get('latest_version');
+        $this->checkForUpdate();
 
-        if (!$this->isDev()
-            && null !== $lastUpdate
-            && null !== $latestVersion
-            && false !== ($lastUpdate = strtotime($lastUpdate))
-            && $lastUpdate <= time()
-            && $lastUpdate > strtotime('-1 hour')
-        ) {
-            return $latestVersion;
-        }
+        return $this->managerConfig->get('latest_version');
+    }
 
-        $remote = $this->getRemoteInfo();
+    /**
+     * Returns the requirements for the remotely available Phar.
+     *
+     * @return array
+     */
+    public function getNewRequires()
+    {
+        $this->checkForUpdate();
 
-        $this->managerConfig->set('last_update', (new \DateTime())->format('c'));
-        $this->managerConfig->set('latest_version', $remote['version']);
-
-        return $remote['version'];
+        return $this->managerConfig->get('latest_requires', []);
     }
 
     /**
@@ -135,7 +155,7 @@ class SelfUpdate
      */
     public function update()
     {
-        if (!$this->hasUpdate()) {
+        if (!$this->hasUpdate() || !$this->canUpdate() || !$this->supportsUpdate()) {
             return false;
         }
 
@@ -157,7 +177,42 @@ class SelfUpdate
             throw $e;
         }
 
+        // Check the update server after update.
+        // This might be necessary if an updated version contains a new update URL,
+        // which will be the case one the PHP version is no longer supported.
+        $this->managerConfig->remove('last_update');
+
         return true;
+    }
+
+    /**
+     * Loads latest information from the update server if the local cache has expired.
+     */
+    private function checkForUpdate()
+    {
+        if ($this->checkedForUpdates) {
+            return;
+        }
+
+        $lastUpdate = $this->managerConfig->get('last_update');
+        $latestVersion = $this->managerConfig->get('latest_version');
+
+        if (!$this->isDev()
+            && null !== $lastUpdate
+            && null !== $latestVersion
+            && false !== ($lastUpdate = strtotime($lastUpdate))
+            && $lastUpdate <= time()
+            && $lastUpdate > strtotime('-1 hour')
+        ) {
+            return;
+        }
+
+        $remote = $this->getRemoteInfo();
+
+        $this->checkedForUpdates = true;
+        $this->managerConfig->set('last_update', (new \DateTime())->format('c'));
+        $this->managerConfig->set('latest_version', $remote['version']);
+        $this->managerConfig->set('latest_requires', isset($remote['requires']) ? $remote['requires'] : []);
     }
 
     /**

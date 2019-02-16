@@ -118,7 +118,7 @@
                 text-align: center;
 
                 button {
-                    margin: 5px 0;
+                    margin: 3px 0;
                 }
 
                 a[target="_blank"] {

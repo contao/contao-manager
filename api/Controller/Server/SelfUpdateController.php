@@ -48,6 +48,7 @@ class SelfUpdateController extends Controller
                 'current_version' => $updater->getOldVersion(),
                 'latest_version' => $latestVersion,
                 'channel' => $updater->getChannel(),
+                'supported' => $updater->supportsUpdate(),
             ]
         );
     }
