@@ -59,13 +59,13 @@
             versions() {
                 if (!this.supportsLatest) {
                     return {
-                        '4.4.35': 'Contao 4.4 (Long Term Support)',
+                        '4.4': 'Contao 4.4 (Long Term Support)',
                     };
                 }
 
                 return {
-                    '4.7.1': 'Contao 4.7 (Latest)',
-                    '4.4.35': 'Contao 4.4 (Long Term Support)',
+                    '4.7': 'Contao 4.7 (Latest)',
+                    '4.4': 'Contao 4.4 (Long Term Support)',
                 };
             },
 

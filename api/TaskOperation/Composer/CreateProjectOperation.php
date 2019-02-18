@@ -22,7 +22,7 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * @var array
      */
-    private static $supportedVersions = ['4.4.35', '4.7.1'];
+    private static $supportedVersions = ['4.4', '4.7'];
 
     /**
      * @var Environment
@@ -122,10 +122,10 @@ class CreateProjectOperation extends AbstractInlineOperation
     private function generateComposerJson($version, $coreOnly = false)
     {
         if ($coreOnly) {
-            $require = "        \"contao/manager-bundle\": \"~$version\"";
+            $require = "        \"contao/manager-bundle\": \"$version.*\"";
         } else {
             $require = <<<JSON
-        "contao/manager-bundle": "~$version",
+        "contao/manager-bundle": "$version.*",
         "contao/calendar-bundle": "^$version",
         "contao/comments-bundle": "^$version",
         "contao/faq-bundle": "^$version",
