@@ -113,6 +113,8 @@ class UpdateTask extends AbstractPackagesTask
     {
         $definition = new CloudChanges($this->environment->getJsonFile());
 
+        $definition->requirePackage('contao/conflicts', '*@dev');
+
         foreach ($config->getOption('require', []) as $name => $version) {
             $definition->requirePackage($name, $version);
         }

@@ -122,7 +122,10 @@ class CreateProjectOperation extends AbstractInlineOperation
     private function generateComposerJson($version, $coreOnly = false)
     {
         if ($coreOnly) {
-            $require = "        \"contao/manager-bundle\": \"$version.*\"";
+            $require = <<<JSON
+        "contao/manager-bundle": "$version.*",
+        "contao/conflicts": "*@dev"
+JSON;
         } else {
             $require = <<<JSON
         "contao/manager-bundle": "$version.*",
@@ -131,7 +134,8 @@ class CreateProjectOperation extends AbstractInlineOperation
         "contao/faq-bundle": "^$version",
         "contao/listing-bundle": "^$version",
         "contao/news-bundle": "^$version",
-        "contao/newsletter-bundle": "^$version"
+        "contao/newsletter-bundle": "^$version",
+        "contao/conflicts": "*@dev"
 JSON;
         }
 
