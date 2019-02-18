@@ -113,8 +113,6 @@ class UpdateTask extends AbstractPackagesTask
     {
         $definition = new CloudChanges($this->environment->getJsonFile());
 
-        $definition->requirePackage('contao/conflicts', '*@dev');
-
         foreach ($config->getOption('require', []) as $name => $version) {
             $definition->requirePackage($name, $version);
         }
@@ -123,6 +121,7 @@ class UpdateTask extends AbstractPackagesTask
             $definition->removePackage($name);
         }
 
+        $this->addContaoConflictsRequirement($definition);
         $definition->setUpdates($config->getOption('update', []));
         $definition->setDryRun($config->getOption('dry_run', false));
 
@@ -140,5 +139,18 @@ class UpdateTask extends AbstractPackagesTask
         }
 
         return parent::updateStatus($status);
+    }
+
+    private function addContaoConflictsRequirement(CloudChanges $definition)
+    {
+        $rootPackage = $this->environment->getComposer()->getPackage();
+
+        foreach ($rootPackage->getRequires() as $package => $constraint) {
+            if ('contao/conflicts' === $package && '*@dev' === $constraint->getPrettyConstraint()) {
+                return;
+            }
+        }
+
+        $definition->requirePackage('contao/conflicts', '*@dev');
     }
 }
