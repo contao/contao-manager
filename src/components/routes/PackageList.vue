@@ -7,12 +7,13 @@
 
             <template v-else>
                 <h2 class="package-list__headline" v-if="showHeadlines">{{ 'ui.packagelist.added' | translate }}</h2>
+                <root-package :package="requiredPackages['contao/manager-bundle']" v-if="requiredPackages['contao/manager-bundle']"/>
+                <local-package v-for="item in visibleRequired" :package="item" :key="item.name"/>
                 <local-package v-for="item in addedPackages" :package="item" :key="item.name"/>
-                <local-package v-for="item in notRootRequired" :package="item" :key="item.name"/>
 
                 <h2 class="package-list__headline" v-if="showHeadlines">{{ 'ui.packagelist.installed' | translate }}</h2>
-                <root-package :package="packages['contao/manager-bundle'] || requiredPackages['contao/manager-bundle']"/>
-                <local-package v-for="item in notRootInstalled" :package="item" :key="item.name"/>
+                <root-package :package="packages['contao/manager-bundle']" v-if="packages['contao/manager-bundle']"/>
+                <local-package v-for="item in visibleInstalled" :package="item" :key="item.name"/>
             </template>
         </div>
 
@@ -42,10 +43,15 @@
                 'addedPackages': 'add',
                 'requiredPackages': 'required',
             }),
-            ...mapGetters('packages', ['totalChanges', 'hasAdded', 'packageAdded', 'packageInstalled', 'canResetChanges']),
-
-            notRootInstalled: vm => Object.values(vm.packages).filter(pkg => pkg.name !== 'contao/manager-bundle'),
-            notRootRequired: vm => Object.values(vm.requiredPackages).filter(pkg => pkg.name !== 'contao/manager-bundle'),
+            ...mapGetters('packages', [
+                'totalChanges',
+                'hasAdded',
+                'packageAdded',
+                'packageInstalled',
+                'canResetChanges',
+                'visibleRequired',
+                'visibleInstalled'
+            ]),
 
             showHeadlines: vm => vm.hasAdded && vm.packages.length,
         },

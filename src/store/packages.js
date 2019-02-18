@@ -4,6 +4,10 @@ import Vue from 'vue';
 
 import search from './packages/search';
 
+const filterInvisiblePackages = (pkg) => {
+    return pkg.name !== 'contao/manager-bundle' && pkg.name !== 'contao/conflicts';
+};
+
 export default {
     namespaced: true,
 
@@ -43,6 +47,9 @@ export default {
             - state.remove.filter(pkg => Object.keys(state.required).includes(pkg)).length,
 
         canResetChanges: (s, get) => get.totalChanges > get.totalRequired,
+
+        visibleInstalled: s => Object.values(s.installed).filter(filterInvisiblePackages),
+        visibleRequired: s => Object.values(s.required).filter(filterInvisiblePackages),
     },
 
     mutations: {
