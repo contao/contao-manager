@@ -61,7 +61,17 @@ class CloudJob implements \JsonSerializable
      */
     public function getWaitingTime()
     {
-        return (int) $this->result['stats']['approxWaitingTime'];
+        if (self::STATUS_QUEUED !== $this->result['status']) {
+            return 0;
+        }
+
+        $currentPos = $this->result['queuePosition'] ?: $this->result['stats']['numberOfJobsInQueue'];
+
+        return (int) round(
+            $currentPos
+            * ($this->result['stats']['averageProcessingTimeInMs'] / 1000)
+            / max($this->result['stats']['numberOfWorkers'], 1)
+        );
     }
 
     /**
@@ -69,7 +79,7 @@ class CloudJob implements \JsonSerializable
      */
     public function getJobsInQueue()
     {
-        return (int) $this->result['stats']['numberOfJobsInQueue'];
+        return (int) $this->result['queuePosition'] ?: $this->result['stats']['numberOfJobsInQueue'];
     }
 
     /**
