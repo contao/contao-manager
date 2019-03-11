@@ -225,7 +225,7 @@ class CloudOperation implements TaskOperationInterface
                 $detail = $this->translator->trans(
                     'taskoperation.cloud.processingDetail',
                     [
-                        'job' => $job->getId(),
+                        'job' => substr($job->getId(), 0, 8).'…',
                         'seconds' => time() - $this->taskConfig->getState('cloud-job-processing'),
                     ]
                 );
