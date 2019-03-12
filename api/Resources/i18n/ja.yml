@@ -82,6 +82,8 @@ ja:
       title: 'Composerのキャッシュを消去中'
     rebuild_cache:
       title: 'Contaoのキャッシュを再作成'
+    install_tool:
+      title: 'Contaoインストールツール'
     self_update:
       title: 'Contao Managerを更新'
       completeSummary: 'Contao Managerを更新しました'
@@ -109,6 +111,10 @@ ja:
       summaryRetry: 'Composerの依存関係をインストール中(再試行中: {current}/{max})...'
     dump-autoload:
       summary: 'クラスのオートローダーを書きだし中...'
+    install-lock:
+      summary: 'Contaoインストールツールをロックを実行中...'
+    install-unlock:
+      summary: 'Contaoインストールツールのロックを解除中...'
     create-project:
       summary: 'アプリケーションのテンプレートをインストール中...'
     cloud:
@@ -117,5 +123,7 @@ ja:
       processingSummary: 'Composer Cloudを使用して依存関係を解決中'
       processingDetail: 'ジョブID {job}は{seconds}秒間動作中'
       errorSummary: '依存関係の解決に失敗...'
+      finishedSummary: 'Composer Cloudのジョブは{seconds}で完了しました。'
+      finishedDetail: 'メモリの使用: {memory} (最大: {peak}), 時間: {time}.'
     clear-cache:
       summary: 'キャッシュファイルを削除中...'

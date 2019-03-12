@@ -11,6 +11,17 @@ cs:
     openssl:
       title: 'Rozšíření PHP OpenSSL není na tomto serveru spuštěno.'
       detail: 'Správce Contaa vyžaduje rozšíření OpenSSL, aby mohl stahovat soubory přes zabezpečené připojení (https).'
+    dom:
+      title: 'Rozšíření PHP DOM není na tomto serveru spuštěno.'
+      detail: 'Contao 4 vyžaduje rozšíření PHP DOM pro zpracování dokumentů XML.'
+    xmlreader:
+      title: 'Rozšíření PHP XMLReader není na tomto serveru spuštěno.'
+      detail: 'Contao 4 vyžaduje rozšíření PHP DOM pro zpracování dokumentů XML.'
+    graphics_lib:
+      title: 'Není dostupná žádná knihovna PHP na zpracování obrázků.'
+      detail: 'Contao 4 vyžaduje pro zpracování obrázku jedno z následujících rozšíření: GD, Imagick nebo Gmagick.'
+    symlink:
+      title: 'Metoda pro vytvoření symlinků buď není dostupná nebo nefunguje správně.'
     session:
       title: 'Sezení PHP nelze zahájit.'
     web_root:
@@ -31,20 +42,29 @@ cs:
     php_cli:
       not_found: 'Tato cesta neobsahuje platné binární PHP.'
       incompatible: 'Tato verze je verze PHP {cli}, ale Váš server je ve verzi {web}.'
+    cloud:
+      path: 'Nejsou podporované žádné cesty k úložištím.'
+      artifact: 'Nejsou žádná podporovaná atefaktová úložiště.'
+      platform: 'Platforma nemusí být nastavená v composer.json.'
+      cache: 'Položky meziúložiště nemusí být nastavené v composer.json.'
   taskstatus:
     created: 'Byl spuštěn příkaz…'
     complete:
       summary: 'Příkaz konzoly byl dokončen!'
       detail: 'Příkaz na pozadí byl úspěšně proveden. Podívejte se na podrobnosti v zápisu konzoly.'
+      console: '### Úloha byla úspěšně dokončená ###'
     aborting:
       summary: 'Zastavování probíhající operace…'
       detail: 'Proces na pozadí byl zastaven.'
+      console: '### Úloha na pozadí se pozastavuje ###'
     stopped:
       summary: 'Úloha konzoly nebyla dokončená!'
       detail: 'Příkaz na pozadí byl zastaven. Zkontrolujte prosím protokol konzoly.'
+      console: '### Úloha na pozadí byla zrušena ###'
     error:
       summary: 'Úloha konzoly nebyla dokončená!'
       detail: 'Příkaz na pozadí byl znenadání zastaven. Zkontrolujte prosím protokol konzoly.'
+      console: '### Úloha na pozadí byla nečekaně pozastavená ###'
   task:
     setup_packages:
       title: 'Instalování aplikací Contaa'
@@ -62,15 +82,20 @@ cs:
       title: 'Vyprazdňování meziúložiště Composeru'
     rebuild_cache:
       title: 'Přetváří se meziúložiště Contaa.'
+    install_tool:
+      title: 'Instalační nástroj Contaa'
     self_update:
       title: 'Aktualizuje se Správce Contaa'
       completeSummary: 'Správce Contaa byl úspěšně zaktualizovaný'
+      completeDetail: 'Aktualizovat na verzi {current}'
   taskoperation:
     self-update:
       summary: 'Instalování poslední verze Správce Contaa'
       detail: 'Aktualizování {old} na {new}'
     remove-cache:
       summary: 'Mazání složky meziúložiště'
+    remove-vendor:
+      summary: 'Mazání složky vendor ...'
     cache-warmup:
       summary: 'Vytváření meziúložiště aplikace…'
     cache-clear:
@@ -86,11 +111,19 @@ cs:
       summaryRetry: 'Instalování na Composeru závislých věc (opětovný pokus {current}/{max}) …'
     dump-autoload:
       summary: 'Spustit autloadera class'
+    install-lock:
+      summary: 'Zamykání Instalačního nástroje Contaa ...'
+    install-unlock:
+      summary: 'Odemykání Instalačního nástroje Contaa ...'
+    create-project:
+      summary: 'Instalování předlohy aplikace ...'
     cloud:
       queuedSummary: 'Příkaz je prováděný v Cloudu Composeru: {seconds} s'
       queuedDetail: 'Proces začne za {seconds} s. (současný {jobs} proces - počet uživatelů: {workers})'
       processingSummary: 'Řešení závislostí použitím Cloudu Composera'
       processingDetail: 'Úkol {job} běží  {seconds} s.'
       errorSummary: 'Vyřešení závislostí nevyšlo…'
+      finishedSummary: 'Úloha Composer Cloudu bude dokončená za {seconds} s'
+      finishedDetail: 'Využití paměti: {memory} (výše: {peak}), doba: {time}.'
     clear-cache:
       summary: 'Mazání meziúložiště souborů…'
