@@ -24,13 +24,21 @@ const locales = {
 
 const i18n = {
     init() {
-        let userLang = window.localStorage.getItem('contao_manager_locale');
+        const userLang = localStorage.getItem('contao_manager_locale');
 
-        if (!userLang) {
-            userLang = navigator.language || navigator.userLanguage;
+        if (userLang && locales[userLang]) {
+            return this.load(userLang);
         }
 
-        return this.load(userLang);
+        const languages = Array.from(navigator.languages);
+
+        for (let i = 0; i < languages.length; i += 1) {
+            if (locales[languages[i]]) {
+                return this.load(languages[i]);
+            }
+        }
+
+        return this.load('en');
     },
 
     async switch(locale) {
