@@ -28,6 +28,10 @@ services:
         synthetic: true
         autowire: false
 
+    locale_listener:
+        class: Contao\ManagerApi\EventListener\LocaleListener
+        tags: [{ name: kernel.event_subscriber }]
+
     Contao\ManagerApi\Composer\CloudResolver:
         tags:
             - { name: monolog.logger, channel: tasks }
