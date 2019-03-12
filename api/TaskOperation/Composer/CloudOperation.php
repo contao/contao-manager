@@ -222,18 +222,24 @@ class CloudOperation implements TaskOperationInterface
                 break;
 
             case CloudJob::STATUS_PROCESSING:
-                $detail = $this->translator->trans(
-                    'taskoperation.cloud.processingDetail',
-                    [
-                        'job' => substr($job->getId(), 0, 8).'…',
-                        'seconds' => time() - $this->taskConfig->getState('cloud-job-processing'),
-                    ]
-                );
-                $detail .= ' '.$this->getCurrentProfile($this->cloud->getOutput($job));
+                $profile = $this->getCurrentProfile($this->cloud->getOutput($job));
+                $seconds = time() - $this->taskConfig->getState('cloud-job-processing');
 
                 $status->setSummary($this->translator->trans('taskoperation.cloud.processingSummary'));
-                $status->setDetail($detail);
-                $status->addConsole($console."\n\n ".$detail);
+
+                $status->setDetail(
+                    $this->translator->trans(
+                           'taskoperation.cloud.processingDetail',
+                           ['job' => '['.substr($job->getId(), 0, 8).'…]', 'seconds' => $seconds]
+                    ).$profile
+                );
+
+                $status->addConsole(
+                    $console."\n\n ".$this->translator->trans(
+                        'taskoperation.cloud.processingDetail',
+                        ['job' => $job->getId(), 'seconds' => $seconds]
+                    ).$profile
+                );
 
                 if ($this->environment->isDebug()) {
                     $status->addConsole($this->cloud->getOutput($job));
