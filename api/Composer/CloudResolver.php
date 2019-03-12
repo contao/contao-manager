@@ -40,6 +40,7 @@ class CloudResolver implements LoggerAwareInterface
      * Creates a Cloud job for given composer changes.
      *
      * @param CloudChanges $definition
+     * @param bool         $debugMode
      *
      * @return CloudJob
      */
@@ -68,7 +69,7 @@ class CloudResolver implements LoggerAwareInterface
         if (null !== $this->logger) {
             $this->logger->info('Creating Composer Cloud job', [
                 'headers' => $headers,
-                'body' => $body
+                'body' => $body,
             ]);
         }
 
@@ -80,11 +81,9 @@ class CloudResolver implements LoggerAwareInterface
                 return new CloudJob(JsonFile::parseJson($content));
 
             case 400:
-                throw new CloudException("Composer Resolver did not accept the API call", $statusCode, $content, $body);
-
+                throw new CloudException('Composer Resolver did not accept the API call', $statusCode, $content, $body);
             case 503:
                 throw new CloudException('Too many jobs on the Composer Resolver queue.', $statusCode, $content, $body);
-
             default:
                 throw $this->createUnknownResponseException($statusCode, $content, $body);
         }
