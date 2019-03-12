@@ -231,14 +231,14 @@ class CloudOperation implements TaskOperationInterface
                     $this->translator->trans(
                            'taskoperation.cloud.processingDetail',
                            ['job' => '['.substr($job->getId(), 0, 8).'…]', 'seconds' => $seconds]
-                    ).$profile
+                    ).' '.$profile
                 );
 
                 $status->addConsole(
                     $console."\n\n ".$this->translator->trans(
                         'taskoperation.cloud.processingDetail',
                         ['job' => $job->getId(), 'seconds' => $seconds]
-                    ).$profile
+                    ).' '.$profile
                 );
 
                 if ($this->environment->isDebug()) {
