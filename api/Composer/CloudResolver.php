@@ -22,7 +22,7 @@ class CloudResolver implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    const API_URL = 'https://resolve.contao.org';
+    const API_URL = 'https://composer-resolver.cloud';
 
     /**
      * @var Client
