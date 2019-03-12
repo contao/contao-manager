@@ -51,7 +51,7 @@ de:
     created: 'Konsolen-Task wurde angelegt …'
     complete:
       summary: 'Konsolentask abgeschlossen!'
-      detail: 'Der Hintergrundprozess wurde erfolgreich beendet. Prüfen Sie das Konsolenprotokoll für weitere Details.'
+      detail: 'Der Hintergrund-Prozess wurde erfolgreich beendet. Prüfen Sie die Konsolenausgabe für weitere Details.'
       console: '### Prozess erfolgreich abgeschlossen ###'
     aborting:
       summary: 'Aktuelle Aktion wird gestoppt …'
@@ -59,11 +59,11 @@ de:
       console: '### Der Hintergrundprozess wird abgebrochen ###'
     stopped:
       summary: 'Konsolentask beendet!'
-      detail: 'Der Hintergrund-Prozess wurde abgebrochen. Bitte prüfen Sie das Konsolen-Protokoll.'
+      detail: 'Der Hintergrund-Prozess wurde abgebrochen. Bitte prüfen Sie die Konsolenausgabe.'
       console: '### Der Hintergrundprozess wurde abgebrochen ###'
     error:
       summary: 'Konsolentask beendet!'
-      detail: 'Der Hintergrund-Prozess wurde unerwartet beendet. Bitte prüfen Sie das Konsolen-Protokoll.'
+      detail: 'Der Hintergrund-Prozess wurde unerwartet beendet. Bitte prüfen Sie die Konsolenausgabe.'
       console: '### Der Hintergrundprozess wurde unerwartet beendet ###'
   task:
     setup_packages:
@@ -118,12 +118,12 @@ de:
     create-project:
       summary: 'Installiere Applikations-Vorlage …'
     cloud:
-      queuedSummary: 'Aufgabe in der Warteschlange der Composer Cloud seit {seconds} Sekunden'
-      queuedDetail: 'Beginnt in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'
-      processingSummary: 'Abhängigkeiten werden mit Hilfe der Composer Cloud aufgelöst'
+      queuedSummary: 'Warte auf freie Rechenleistung der Composer Cloud seit {seconds} Sekunden'
+      queuedDetail: 'Berechnung startet in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'
+      processingSummary: 'Berechnung der Abhängigkeiten durch die Composer Cloud'
       processingDetail: 'Aufgabe ID {job} aktiv seit {seconds} Sekunden'
       errorSummary: 'Fehler beim auflösen der Abhängigkeiten'
-      finishedSummary: 'Composer Cloud Aufgabe abgearbeitet in {seconds} Sekunden'
+      finishedSummary: 'Berechnung durch die Composer Cloud in {seconds} Sekunden abgeschlossen'
       finishedDetail: 'RAM-Verbrauch: {memory} (Spitze: {peak}), Dauer: {time}.'
     clear-cache:
       summary: 'Lösche Cache-Dateien …'
