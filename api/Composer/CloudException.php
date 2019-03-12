@@ -10,24 +10,27 @@
 
 namespace Contao\ManagerApi\Composer;
 
-use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message\ResponseInterface;
-
 class CloudException extends \RuntimeException
 {
     /**
-     * @var RequestException
+     * @var string
      */
-    private $exception;
+    private $responseBody;
+
+    /**
+     * @var string|null
+     */
+    private $requestBody;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(RequestException $exception)
+    public function __construct($message, $code, $responseBody, $requestBody = null)
     {
-        $this->exception = $exception;
+        parent::__construct($message, $code);
 
-        parent::__construct($exception->getMessage(), $exception->getCode(), $exception);
+        $this->responseBody = $responseBody;
+        $this->requestBody = $requestBody;
     }
 
     /**
@@ -37,11 +40,7 @@ class CloudException extends \RuntimeException
      */
     public function getStatusCode()
     {
-        if (($response = $this->exception->getResponse()) instanceof ResponseInterface) {
-            return $response->getStatusCode();
-        }
-
-        return 500;
+        return $this->getCode();
     }
 
     /**
@@ -51,18 +50,12 @@ class CloudException extends \RuntimeException
      */
     public function getErrorMessage()
     {
-        if (($response = $this->exception->getResponse()) instanceof ResponseInterface) {
-            try {
-                $json = \GuzzleHttp\json_decode($response->getBody(), true);
+        $message = $this->getMessage()."\n\nResponse:\n".$this->responseBody;
 
-                if (array_key_exists('msg', $json)) {
-                    return $json['msg'];
-                }
-            } catch (\InvalidArgumentException $e) {
-                // do nothing
-            }
+        if ($this->requestBody) {
+            $message .= "\n\nRequest:\n".$this->requestBody;
         }
 
-        return $this->exception->getMessage();
+        return $message;
     }
 }

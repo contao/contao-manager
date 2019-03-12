@@ -34,7 +34,6 @@
 
         "terminal42/background-process": "dev-master@dev",
         "crell/api-problem": "^2.0",
-        "guzzlehttp/guzzle": "^6.3",
         "composer/composer": "^1.7"
     },
     "require-dev": {

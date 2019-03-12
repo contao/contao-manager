@@ -11,10 +11,7 @@
 namespace Contao\ManagerApi\Composer;
 
 use Composer\Json\JsonFile;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\RequestOptions;
+use Contao\ManagerApi\System\Request;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -25,26 +22,24 @@ class CloudResolver implements LoggerAwareInterface
     const API_URL = 'https://composer-resolver.cloud';
 
     /**
-     * @var Client
+     * @var Request
      */
-    private $http;
+    private $request;
 
     /**
      * @var array
      */
     private $output = [];
 
-    public function __construct()
+    public function __construct(Request $request)
     {
-        $this->http = new Client();
+        $this->request = $request;
     }
 
     /**
      * Creates a Cloud job for given composer changes.
      *
      * @param CloudChanges $definition
-     *
-     * @throws GuzzleException
      *
      * @return CloudJob
      */
@@ -64,28 +59,41 @@ class CloudResolver implements LoggerAwareInterface
             $command[] = '-vvv';
         }
 
-        $options = [
-            RequestOptions::JSON => $data,
-            RequestOptions::HEADERS => [
-                'Composer-Resolver-Command' => implode(' ', $command),
-            ],
+        $body = json_encode($data);
+        $headers = [
+            'Composer-Resolver-Client: contao',
+            'Composer-Resolver-Command: '.implode(' ', $command),
         ];
 
         if (null !== $this->logger) {
-            $this->logger->info('Creating Composer Cloud job', $options);
+            $this->logger->info('Creating Composer Cloud job', [
+                'headers' => $headers,
+                'body' => $body
+            ]);
         }
 
-        $response = $this->request('/jobs', 'POST', $options);
+        $content = $this->request->postJson(self::API_URL.'/jobs', $body, $headers, $statusCode);
 
-        return new CloudJob(JsonFile::parseJson((string) $response->getBody()));
+        switch ($statusCode) {
+            case 201:
+            case 202: // Location redirect to fetch the job content
+                return new CloudJob(JsonFile::parseJson($content));
+
+            case 400:
+                throw new CloudException("Composer Resolver did not accept the API call", $statusCode, $content, $body);
+
+            case 503:
+                throw new CloudException('Too many jobs on the Composer Resolver queue.', $statusCode, $content, $body);
+
+            default:
+                throw $this->createUnknownResponseException($statusCode, $content, $body);
+        }
     }
 
     /**
      * Gets job information from the Composer Cloud.
      *
      * @param string $jobId
-     *
-     * @throws GuzzleException
      *
      * @return CloudJob|null
      */
@@ -95,9 +103,20 @@ class CloudResolver implements LoggerAwareInterface
             return null;
         }
 
-        $response = $this->request('/jobs/'.$jobId);
+        $content = $this->request->getJson(
+            self::API_URL.'/jobs/'.$jobId,
+            ['Composer-Resolver-Client: contao'],
+            $statusCode
+        );
 
-        return new CloudJob(JsonFile::parseJson((string) $response->getBody(), true));
+        switch ($statusCode) {
+            case 200:
+            case 202:
+                return new CloudJob(JsonFile::parseJson($content, true));
+
+            default:
+                throw $this->createUnknownResponseException($statusCode, $content);
+        }
     }
 
     /**
@@ -113,13 +132,17 @@ class CloudResolver implements LoggerAwareInterface
             return false;
         }
 
-        try {
-            $response = $this->request('/jobs/'.$jobId, 'DELETE');
+        $content = $this->request->deleteJson(
+            self::API_URL.'/jobs/'.$jobId,
+            ['Composer-Resolver-Client: contao'],
+            $statusCode
+        );
 
-            return $response->getStatusCode() >= 200 && $response->getStatusCode() < 300;
-        } catch (GuzzleException $e) {
-            return false;
+        if (204 === $statusCode) {
+            return true;
         }
+
+        throw $this->createUnknownResponseException($statusCode, $content);
     }
 
     /**
@@ -127,23 +150,17 @@ class CloudResolver implements LoggerAwareInterface
      *
      * @param CloudJob $job
      *
-     * @throws GuzzleException
-     *
      * @return string
      */
     public function getComposerJson(CloudJob $job)
     {
-        $response = $this->request($job->getLink(CloudJob::LINK_JSON));
-
-        return (string) $response->getBody();
+        return $this->getContent($job->getLink(CloudJob::LINK_JSON));
     }
 
     /**
      * Gets the composer.lock file or null if the cloud job was not successful.
      *
      * @param CloudJob $job
-     *
-     * @throws GuzzleException
      *
      * @return null|string
      */
@@ -153,17 +170,13 @@ class CloudResolver implements LoggerAwareInterface
             return null;
         }
 
-        $response = $this->request($job->getLink(CloudJob::LINK_LOCK));
-
-        return (string) $response->getBody();
+        return $this->getContent($job->getLink(CloudJob::LINK_LOCK));
     }
 
     /**
      * Gets the console output for a cloud job.
      *
      * @param CloudJob $job
-     *
-     * @throws GuzzleException
      *
      * @return null|string
      */
@@ -174,42 +187,31 @@ class CloudResolver implements LoggerAwareInterface
         }
 
         if (!isset($this->output[$job->getId()])) {
-            $response = $this->request($job->getLink(CloudJob::LINK_OUTPUT));
-
-            $this->output[$job->getId()] = (string) $response->getBody();
+            $this->output[$job->getId()] = $this->getContent($job->getLink(CloudJob::LINK_OUTPUT));
         }
 
         return $this->output[$job->getId()];
     }
 
-    /**
-     * Sends Guzzle request with JSON data.
-     *
-     * @param string $path
-     * @param string $method
-     * @param array  $options
-     *
-     * @throws CloudException
-     * @throws GuzzleException
-     *
-     * @return mixed|\Psr\Http\Message\ResponseInterface
-     */
-    private function request($path, $method = 'GET', array $options = [])
+    private function getContent($link)
     {
-        $options = array_replace_recursive(
-            [
-                RequestOptions::HEADERS => [
-                    'Accept' => 'application/json',
-                    'Composer-Resolver-Client' => 'contao',
-                ]
-            ],
-            $options
+        $content = $this->request->getJson(
+            self::API_URL.$link,
+            ['Composer-Resolver-Client: contao'],
+            $statusCode
         );
 
-        try {
-            return $this->http->request($method, self::API_URL.$path, $options);
-        } catch (RequestException $e) {
-            throw new CloudException($e);
+        switch ($statusCode) {
+            case 200:
+                return $content;
+
+            default:
+                throw $this->createUnknownResponseException($statusCode, $content);
         }
+    }
+
+    private function createUnknownResponseException($statusCode, $responseBody, $requestBody = null)
+    {
+        return new CloudException('Composer Resolver returned an unexpected status code', $statusCode, $responseBody, $requestBody);
     }
 }

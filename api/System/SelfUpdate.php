@@ -25,14 +25,19 @@ class SelfUpdate
     private $kernel;
 
     /**
-     * @var array
+     * @var Request
      */
-    private $remote;
+    private $request;
 
     /**
      * @var ManagerConfig
      */
     private $managerConfig;
+
+    /**
+     * @var array
+     */
+    private $remote;
 
     private $checkedForUpdates = false;
 
@@ -42,10 +47,11 @@ class SelfUpdate
      * @param ApiKernel     $kernel
      * @param ManagerConfig $managerConfig
      */
-    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig)
+    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, Request $request)
     {
         $this->kernel = $kernel;
         $this->managerConfig = $managerConfig;
+        $this->request = $request;
     }
 
     /**
@@ -224,7 +230,7 @@ class SelfUpdate
     {
         if (null === $this->remote) {
             $url = sprintf(self::VERSION_URL, $this->getChannel());
-            $content = trim(file_get_contents($url));
+            $content = trim($this->request->get($url));
             $data = json_decode($content, true);
 
             if (!isset($data['version'], $data['sha1'])
@@ -264,7 +270,7 @@ class SelfUpdate
     {
         $url = sprintf(self::DOWNLOAD_URL, $this->getChannel());
 
-        $result = file_get_contents($url);
+        $result = $this->request->getStream($url);
 
         if (false === $result) {
             throw new \RuntimeException(sprintf('Request to URL failed: %s', $url));

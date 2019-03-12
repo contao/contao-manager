@@ -13,6 +13,16 @@ namespace Contao\ManagerApi\System;
 class IpInfo
 {
     /**
+     * @var Request
+     */
+    private $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
+    /**
      * Resolves IP information of the current server.
      *
      * @return array
@@ -29,18 +39,18 @@ class IpInfo
             'org' => '',
         ];
 
-        $data = @file_get_contents('https://ipinfo.io/json') ?: @file_get_contents('http://ipinfo.io/json');
+        $data = $this->request->get('https://ipinfo.io/json') ?: $this->request->get('http://ipinfo.io/json');
 
         if (!empty($data)) {
             $template = array_merge($template, json_decode($data, true));
         }
 
         if (empty($template['ip'])) {
-            $template['ip'] = (string) @file_get_contents('https://api.ipify.org');
+            $template['ip'] = (string) $this->request->get('https://api.ipify.org');
         }
 
         if (empty($template['ip'])) {
-            $template['ip'] = @file_get_contents('http://api.ipify.org');
+            $template['ip'] = $this->request->get('http://api.ipify.org');
         }
 
         if (empty($template['hostname'])) {
