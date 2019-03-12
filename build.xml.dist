@@ -2,6 +2,7 @@
 <project name="Contao Manager" default="list" basedir=".">
     <exec executable="git" outputProperty="version" checkreturn="true">
         <arg value="describe" />
+        <arg value="--tags" />
         <arg value="--always" />
     </exec>
 

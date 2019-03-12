@@ -184,7 +184,7 @@ class AboutCommand extends Command implements ServiceSubscriberInterface
         $version = $kernel->getVersion();
 
         if ($version === ('@'.'package_version'.'@')) {
-            $git = new Process('git describe --always');
+            $git = new Process('git describe --tags --always');
 
             try {
                 $git->mustRun();
