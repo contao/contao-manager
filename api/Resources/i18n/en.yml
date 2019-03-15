@@ -137,8 +137,7 @@ en:
 
     upload:
         error:
-            zip: 'The upload does not seem to be a valid ZIP package.'
-            composer: 'The ZIP file does not contain a composer.json'
+            file: 'The file is invalid or does not contain a composer.json.'
             json: 'The composer.json does not contain valid JSON data.'
-            version: 'Package version is missing in the composer.json'
+            version: 'Package version is missing in the composer.json.'
             partial: 'The file upload was not completed.'

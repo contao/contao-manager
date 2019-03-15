@@ -18,8 +18,6 @@ use Contao\ManagerApi\Config\UploadsConfig;
 use Contao\ManagerApi\Exception\ApiProblemException;
 use Contao\ManagerApi\I18n\Translator;
 use Crell\ApiProblem\ApiProblem;
-use PhpZip\Exception\ZipException;
-use PhpZip\ZipFile;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -210,21 +208,11 @@ class UploadPackagesController
         }
 
         try {
-            $zipFile = new ZipFile();
-            $zipFile->openFile($uploadFile);
-        } catch (ZipException $e) {
-            return $this->installError($id, 'zip', $e);
-        }
+            $data = $this->getComposerInformation($uploadFile);
 
-        if (!in_array('composer.json', $zipFile->getListFiles())) {
-            return $this->installError($id, 'composer');
-        }
-
-        try {
-            $data = JsonFile::parseJson(
-                $zipFile->getEntryContents('composer.json'),
-                $config['name'] . '/composer.json'
-            );
+            if (null === $data) {
+                return $this->installError($id, 'file');
+            }
         } catch (\Exception $e) {
             return $this->installError($id, 'json', $e);
         }
@@ -301,5 +289,71 @@ class UploadPackagesController
             (new ApiProblem('Must install contao/manager-plugin 2.7 or later to support artifacts.'))
                 ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
         );
+    }
+
+    /**
+     * @see ArtifactRepository::getComposerInformation()
+     */
+    private function getComposerInformation(string $zipPath): ?array
+    {
+        $zip = new \ZipArchive();
+        $zip->open($zipPath);
+
+        if (!$zip->numFiles) {
+            return null;
+        }
+
+        $foundFileIndex = $this->locateFile($zip, 'composer.json');
+
+        if (false === $foundFileIndex) {
+            return null;
+        }
+
+        $configurationFileName = $zip->getNameIndex($foundFileIndex);
+        $composerFile = "zip://$zipPath#$configurationFileName";
+        $json = file_get_contents($composerFile);
+
+        return JsonFile::parseJson($json, $composerFile);
+    }
+
+    /**
+     * @see ArtifactRepository::locateFile()
+     */
+    private function locateFile(\ZipArchive $zip, string $filename)
+    {
+        $indexOfShortestMatch = false;
+        $lengthOfShortestMatch = -1;
+
+        for ($i = 0; $i < $zip->numFiles; ++$i) {
+            $stat = $zip->statIndex($i);
+
+            if (0 === strcmp(basename($stat['name']), $filename)) {
+                $directoryName = \dirname($stat['name']);
+
+                if ('.' === $directoryName) {
+                    // If composer.json is in root directory, it has to be the one to use
+                    return $i;
+                }
+
+                if (false !== strpos($directoryName, '\\') || false !== strpos($directoryName, '/')) {
+                    // composer.json files below first directory are rejected
+                    continue;
+                }
+
+                $length = \strlen($stat['name']);
+
+                if (false === $indexOfShortestMatch || $length < $lengthOfShortestMatch) {
+                    // Check it's not a directory
+                    $contents = $zip->getFromIndex($i);
+
+                    if (false !== $contents) {
+                        $indexOfShortestMatch = $i;
+                        $lengthOfShortestMatch = $length;
+                    }
+                }
+            }
+        }
+
+        return $indexOfShortestMatch;
     }
 }

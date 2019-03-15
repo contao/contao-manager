@@ -21,6 +21,7 @@
     "require": {
         "php": "^7.1.3",
         "ext-json": "*",
+        "ext-zip": "*",
         "symfony/framework-bundle": "3.4.*",
         "symfony/security-bundle": "3.4.*",
         "symfony/console": "3.4.*",
@@ -48,8 +49,7 @@
         "firebase/php-jwt": "^4.0",
 
         "crell/api-problem": "^2.0",
-        "composer/composer": "^1.7",
-        "nelexa/zip": "^3.1"
+        "composer/composer": "^1.7"
     },
     "conflict": {
         "symfony/symfony": ">=4"
