@@ -21,6 +21,6 @@ export default {
 
     created() {
         this.loadMetadata();
-        this.$watch(this.$i18n.locale, this.load);
+        this.$watch(this.$i18n.locale, this.loadMetadata);
     },
 }
