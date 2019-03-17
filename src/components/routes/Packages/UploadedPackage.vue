@@ -16,38 +16,16 @@
         </template>
     </package>
 
-    <package
-        :title="(metadata && metadata.title) || pkg.title || pkg.name"
-        :name="upload.name"
-        :logo="metadata && metadata.logo"
-        :description="(metadata && metadata.description) || pkg.description"
+    <local-package
+        :data="pkg"
         :hint="hintDuplicate"
-        release-disabled
-        shave-description
         v-else
     >
-        <more private :name="pkg.name" :homepage="pkg.homepage" :support="Object.assign({}, pkg.support)" slot="more"/>
-
-        <template slot="additional">
-            <strong class="package__version package__version--additional">{{ 'ui.package.version' | translate({ version: pkg.version }) }}</strong>
-            <span v-for="(item,k) in additional" :key="k">{{ item }}</span>
-        </template>
-
-        <template slot="release">
-            <fieldset>
-                <input type="text" :placeholder="$t('ui.package.latestConstraint')" disabled>
-                <button class="widget-button" disabled>{{ 'ui.package.editConstraint' | translate }}</button>
-            </fieldset>
-            <div class="package__version package__version--release">
-                <strong>{{ 'ui.package.version' | translate({ version: pkg.version }) }}</strong>
-            </div>
-        </template>
-
         <template slot="actions">
             <button class="widget-button widget-button--primary widget-button--add" :disabled="!canBeAdded" @click="addPackage">{{ $t('ui.package.installButton') }}</button>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
-    </package>
+    </local-package>
 
 </template>
 
@@ -56,13 +34,13 @@
 
     import metadata from '../../../mixins/metadata';
     import Package from './Package';
-    import More from './More';
+    import LocalPackage from './LocalPackage';
     import ProgressBar from '../../fragments/ProgressBar';
     import LoadingButton from '../../widgets/LoadingButton';
 
     export default {
         mixins: [metadata],
-        components: { ProgressBar, Package, More, LoadingButton },
+        components: { ProgressBar, Package, LocalPackage, LoadingButton },
 
         props: {
             upload: {

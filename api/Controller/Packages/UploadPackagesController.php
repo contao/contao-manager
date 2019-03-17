@@ -222,8 +222,18 @@ class UploadPackagesController
         }
 
         $config['success'] = true;
-        $config['hash'] = md5_file($uploadFile);
-        $config['package'] = $data;
+        $config['hash'] = sha1_file($uploadFile);
+        $config['package'] = array_merge(
+            $data,
+            [
+                'installation-source' => 'dist',
+                'dist' => [
+                    'shasum' => $config['hash'],
+                    'type' => 'zip',
+                    'url' => '/contao-manager/packages/'.$config['name'],
+                ],
+            ]
+        );
 
         $this->config->set($id, $config);
 
