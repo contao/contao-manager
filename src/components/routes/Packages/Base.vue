@@ -56,8 +56,11 @@
 
     .package-tools {
         position: relative;
-        margin-bottom: 40px;
         text-align: center;
+
+        @include screen(800) {
+            margin-bottom: 40px;
+        }
 
         &__button {
             &.widget-button {

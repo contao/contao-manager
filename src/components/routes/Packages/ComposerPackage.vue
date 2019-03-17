@@ -15,7 +15,9 @@
         <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :hide-packagist="hidePackagist" slot="more"/>
 
         <template slot="additional">
-            <strong class="package__version package__version--additional" v-if="data.version">{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
+            <strong class="package__version package__version--additional" v-if="data.version">
+                {{ 'ui.package.version' | translate({ version: data.version }) }}
+            </strong>
             <span v-for="(item,k) in additional" :key="k">{{ item }}</span>
         </template>
 

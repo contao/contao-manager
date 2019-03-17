@@ -277,12 +277,6 @@
                     background: $orange-button;
                     -webkit-text-fill-color: #fff;
                 }
-            }
-
-            fieldset > input[type=text],
-            fieldset > input[type=text]:disabled {
-                float: left;
-                width: calc(100% - 32px);
 
                 &.disabled {
                     background: $border-color;
@@ -292,6 +286,12 @@
                 &.error {
                     animation: input-error .15s linear 3;
                 }
+            }
+
+            fieldset > input[type=text],
+            fieldset > input[type=text]:disabled {
+                float: left;
+                width: calc(100% - 32px);
             }
 
             button {
@@ -371,17 +371,32 @@
             }
         }
 
-        &__unavailable {
+        &__release-description {
+            margin-top: -10px;
             text-align: center;
+
+            @include screen(1024) {
+                margin-top: 0;
+            }
 
             img {
                 top: 6px;
+                margin: 0 5px 0 0;
                 position: relative;
 
                 @include screen(1024) {
                     display: block;
                     top: 0;
                     margin: 0 auto;
+                }
+            }
+
+            input + &,
+            fieldset + & {
+                margin: 0 0 20px;
+
+                @include screen(600) {
+                    margin: 15px 0 0;
                 }
             }
         }
