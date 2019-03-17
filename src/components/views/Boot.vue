@@ -51,7 +51,11 @@
 
         computed: {
             hasError: vm => Object.values(vm.status).indexOf('error') !== -1,
-            autoContinue: vm => window.localStorage.getItem('contao_manager_booted') === '1' || vm.$route.name === routes.oauth.name,
+            autoContinue: vm => (window.localStorage.getItem('contao_manager_booted') === '1'
+                    && Object.values(vm.status).indexOf('error') === -1
+                    && Object.values(vm.status).indexOf('action') === -1
+                    && Object.values(vm.status).indexOf('warning') === -1
+                ) || vm.$route.name === routes.oauth.name,
 
             canContinue: vm => Object.values(vm.status).indexOf(null) === -1
                     && Object.values(vm.status).indexOf('error') === -1
