@@ -21,8 +21,8 @@
 
             <div class="package__about">
                 <h1 :class="{ package__headline: true, 'package__headline--badge': badge }">
-                    <span class="package__title" v-html="title || name"></span>
-                    <span class="package__name" v-if="title && name && title !== name">{{ name }}</span>
+                    <span class="package__title" v-html="title"></span>
+                    <span class="package__name" v-if="name">{{ name }}</span>
                     <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
                 </h1>
 

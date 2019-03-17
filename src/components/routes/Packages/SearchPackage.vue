@@ -44,7 +44,6 @@
                     this.package,
                     {
                         title: this.package._highlightResult.title.value,
-                        hideName: this.package.title === this.package.name,
                         description: this.package._highlightResult.description.value,
                     }
                 );

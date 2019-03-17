@@ -1,11 +1,11 @@
 <template>
     <package
-        :title="data.title"
-        :name="visibleName"
+        :name="packageName"
+        :title="packageTitle"
         :logo="data.logo"
         :badge="badge"
         :description="data.description"
-        :hint="hint"
+        :hint="packageHint"
         :hint-close="hintClose"
         :shave-description="shaveDescription"
         @close-hint="restore"
@@ -78,9 +78,11 @@
                 type: Object,
                 required: true,
             },
+            name: String,
+            title: String,
+            hint: String,
             updateOnly: Boolean,
             hidePackagist: Boolean,
-            hideName: Boolean,
             shaveDescription: Boolean,
         },
 
@@ -101,8 +103,6 @@
                 'packageRemoved'
             ]),
 
-            visibleName: vm => (((vm.hideName && vm.data.title) || vm.data.name === vm.data.title) ? '' : vm.data.name),
-
             isInstalled: vm => vm.packageInstalled(vm.data.name),
             isRequired: vm => vm.packageRequired(vm.data.name),
             isChanged: vm => vm.packageChanged(vm.data.name),
@@ -111,34 +111,31 @@
             willBeInstalled: vm => vm.packageAdded(vm.data.name),
             isModified: vm => vm.isUpdated || vm.isChanged || vm.willBeRemoved || vm.willBeInstalled,
 
-            packageUpdates() {
-                return this.isInstalled && (
-                    Object.keys(this.$store.state.packages.add).length > 0
-                    || Object.keys(this.$store.state.packages.change).length > 0
-                    || this.$store.state.packages.update.length > 0
-                    || this.$store.state.packages.remove.length > 0
-                );
-            },
-
-            badge() {
-                if (this.isRequired) {
-                    return {
-                        title: this.$t('ui.package.requiredText'),
-                        text: this.$t('ui.package.requiredTitle'),
-                    };
+            packageName() {
+                if (this.name || this.name === '') {
+                    return this.name;
                 }
 
-                if (this.data.abandoned) {
-                    return {
-                        title: this.data.replacement && this.$t('ui.package.replacement', { replacement: this.data.replacement }) || this.$t('ui.package.abandonedText'),
-                        text: this.$t('ui.package.abandonedTitle'),
-                    };
+                if (this.data.name === this.data.title) {
+                    return '';
                 }
 
-                return null;
+                return this.data.name;
             },
 
-            hint() {
+            packageTitle() {
+                if (this.title || this.title === '') {
+                    return this.title;
+                }
+
+                return this.data.title || this.data.name;
+            },
+
+            packageHint() {
+                if (this.hint) {
+                    return this.hint;
+                }
+
                 if (this.willBeRemoved) {
                     return this.$t('ui.package.hintRemoved');
                 }
@@ -167,6 +164,33 @@
 
                 if (this.isUpdated) {
                     return this.$t('ui.package.hintConstraintUpdate');
+                }
+
+                return null;
+            },
+
+            packageUpdates() {
+                return this.isInstalled && (
+                    Object.keys(this.$store.state.packages.add).length > 0
+                    || Object.keys(this.$store.state.packages.change).length > 0
+                    || this.$store.state.packages.update.length > 0
+                    || this.$store.state.packages.remove.length > 0
+                );
+            },
+
+            badge() {
+                if (this.isRequired) {
+                    return {
+                        title: this.$t('ui.package.requiredText'),
+                        text: this.$t('ui.package.requiredTitle'),
+                    };
+                }
+
+                if (this.data.abandoned) {
+                    return {
+                        title: this.data.replacement && this.$t('ui.package.replacement', { replacement: this.data.replacement }) || this.$t('ui.package.abandonedText'),
+                        text: this.$t('ui.package.abandonedTitle'),
+                    };
                 }
 
                 return null;
