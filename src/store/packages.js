@@ -18,6 +18,7 @@ export default {
     },
 
     state: {
+        local: null,
         installed: null,
         required: {},
         add: {},
@@ -57,6 +58,7 @@ export default {
     mutations: {
         setInstalled(state, packages) {
             if (packages === null) {
+                state.local = null;
                 state.installed = null;
                 state.required = {};
                 return;
@@ -75,6 +77,10 @@ export default {
 
             state.installed = installed;
             state.required = required;
+        },
+
+        setLocal(state, packages) {
+            state.local = packages;
         },
 
         add(state, pkg) {
@@ -153,6 +159,7 @@ export default {
             });
 
             commit('setInstalled', packages);
+            commit('setLocal', local);
 
             return packages;
         },
