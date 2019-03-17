@@ -1,6 +1,6 @@
 <template>
-    <composer-package hide-name hide-packagist :update-only="packageInstalled('contao/manager-bundle')" :data="data">
-        <img src="../../../assets/images/logo.svg" slot="logo">
+    <composer-package hide-packagist :name="''" :update-only="packageInstalled('contao/manager-bundle')" :data="data">
+        <img src="../../../assets/images/logo.svg" alt="" slot="logo">
 
         <template slot="actions" v-if="!packageInstalled('contao/manager-bundle')">
             <button class="widget-button widget-button--update" disabled>{{ $t('ui.package.updateButton') }}</button>
