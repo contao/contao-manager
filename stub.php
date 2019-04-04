@@ -16,10 +16,6 @@ if (!extension_loaded('Phar')) {
     die('The PHP Phar extension is not enabled.');
 }
 
-if (function_exists('ioncube_loader_iversion') && ioncube_loader_iversion() < 40009) {
-    die('The PHP ionCube Loader extension prior to version 4.0.9 cannot handle .phar files.');
-}
-
 if (false !== ($suhosin = ini_get('suhosin.executor.include.whitelist'))) {
     $allowed = array_map('trim', explode(',', $suhosin));
 
@@ -29,7 +25,7 @@ if (false !== ($suhosin = ini_get('suhosin.executor.include.whitelist'))) {
 }
 
 if (false !== ($multibyte = ini_get('zend.multibyte')) && '' !== $multibyte && 0 !== (int) $multibyte && 'Off' !== $multibyte) {
-    $unicode = ini_get(version_compare(phpversion(), '5.4', '<') ? 'detect_unicode' : 'zend.detect_unicode');
+    $unicode = ini_get('zend.detect_unicode');
 
     if ('' !== $unicode && 0 !== (int) $unicode && 'Off' !== $unicode) {
         die('The detect_unicode setting needs to be disabled in your php.ini.');
@@ -37,10 +33,6 @@ if (false !== ($multibyte = ini_get('zend.multibyte')) && '' !== $multibyte && 0
 }
 
 unset($multibyte, $unicode);
-
-if ('cgi-fcgi' === php_sapi_name() && extension_loaded('eaccelerator') && ini_get('eaccelerator.enable')) {
-    die('The PHP eAccelerator extension cannot handle .phar files.');
-}
 
 if (function_exists('date_default_timezone_set') && function_exists('date_default_timezone_get')) {
     /** @noinspection UsageOfSilenceOperatorInspection */
