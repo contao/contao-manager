@@ -103,6 +103,10 @@
                 this.$store.commit('apiError', accountStatus);
             }
         },
+
+        created() {
+            document.title = `Contao Manager @package_version@ | ${location.hostname}`;
+        },
     };
 </script>
 
