@@ -6,6 +6,7 @@ import Vuex from 'vuex';
 import views from '../router/views';
 
 import auth from './auth';
+import config from './config';
 import packages from './packages';
 import contao from './contao';
 import server from './server';
@@ -14,7 +15,7 @@ import tasks from './tasks';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    modules: { auth, packages, contao, server, tasks },
+    modules: { auth, config, packages, contao, server, tasks },
 
     state: {
         view: views.INIT,

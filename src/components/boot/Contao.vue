@@ -68,10 +68,12 @@
         },
 
         methods: {
-            boot() {
+            async boot() {
                 this.bootDescription = this.$t('ui.server.running');
 
-                this.$store.dispatch('server/contao/get').then((result) => {
+                try {
+                    const result = await this.$store.dispatch('server/contao/get');
+
                     if (!result.version) {
                         this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.contao.empty');
@@ -79,12 +81,18 @@
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.contao.old', result);
                     } else {
+                        const composerConfig = await this.$store.dispatch('config/composer/get');
+
+                        if (!composerConfig || composerConfig.length === 0) {
+                            this.$store.dispatch('config/composer/writeDefaults');
+                        }
+
                         this.bootState = 'success';
                         this.bootDescription = this.$t('ui.server.contao.found', result);
 
                         this.$store.commit('setVersions', result);
                     }
-                }).catch((response) => {
+                } catch (response) {
                     if (response.status === 503) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.prerequisite');
@@ -95,9 +103,9 @@
                         this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.error');
                     }
-                }).then(() => {
-                    this.$emit('result', 'Contao', this.bootState);
-                });
+                }
+
+                this.$emit('result', 'Contao', this.bootState);
             },
 
             show() {
