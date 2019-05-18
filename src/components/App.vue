@@ -15,19 +15,23 @@
             </div>
         </div>
 
-        <component :is="currentView" :class="taskRunning ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
+        <component :is="currentView" :class="blurView ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
 
-        <router-view v-else :class="taskRunning ? 'blur-in' : 'blur-out'"></router-view>
+        <router-view v-else :class="blurView ? 'blur-in' : 'blur-out'"></router-view>
 
-        <keep-alive><task-popup v-if="taskRunning"></task-popup></keep-alive>
+        <keep-alive>
+            <logout-warning v-if="warnForLogout"></logout-warning>
+            <task-popup v-else-if="taskRunning"></task-popup>
+        </keep-alive>
     </div>
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
     import views from '../router/views';
 
     import TaskPopup from './fragments/TaskPopup';
+    import LogoutWarning from './fragments/LogoutWarning';
     import Loader from './fragments/Loader';
 
     import Error from './views/Error';
@@ -37,7 +41,7 @@
     import Recovery from './views/Recovery';
 
     export default {
-        components: { Loader, TaskPopup, Error },
+        components: { Loader, TaskPopup, LogoutWarning, Error },
 
         data: () => ({
             views: {
@@ -51,10 +55,12 @@
         computed: {
             ...mapState(['view', 'error']),
             ...mapState('tasks', { taskStatus: 'status' }),
+            ...mapGetters('auth', ['warnForLogout']),
 
             isInitializing: vm => vm.view === views.INIT,
             isInsecure: () => location.protocol !== 'https:' && location.hostname !== 'localhost',
             taskRunning: vm => vm.taskStatus !== null,
+            blurView: vm => vm.warnForLogout || vm.taskRunning,
             hasError: vm => vm.error !== null,
 
             currentView: vm => vm.views[vm.view] || null,

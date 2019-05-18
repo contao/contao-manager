@@ -22,13 +22,22 @@ Vue.http.interceptors.push((request, next) => {
 
     next((response) => {
         if (response.status === 401 && url !== 'api/session') {
+            store.commit('auth/reset');
             store.commit('setView', views.LOGIN);
-        } else if (response.headers.get('Content-Type') === 'application/problem+json') {
+            return;
+        }
+
+        if (response.headers.get('Content-Type') === 'application/problem+json') {
             if (response.status === 500) {
                 store.commit('setError', response.data);
             }
 
             throw response.data;
+        }
+
+        // Successful request, Renew login expiration 30 minutes
+        if (url !== 'api/session' || response.status !== 204) {
+            store.commit('auth/renewCountdown');
         }
     });
 });

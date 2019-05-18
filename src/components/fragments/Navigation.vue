@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import { mapState, mapGetters, mapActions } from 'vuex';
 
     import views from '../../router/views';
     import routes from '../../router/routes';
@@ -50,6 +50,8 @@
         },
 
         methods: {
+            ...mapActions('auth', ['logout']),
+
             toggleNavigation() {
                 document.body.classList.toggle('nav-active');
             },
@@ -69,11 +71,6 @@
             systemCheck() {
                 window.localStorage.removeItem('contao_manager_booted');
                 this.$store.commit('setView', views.BOOT);
-            },
-
-            logout() {
-                this.$store.dispatch('auth/logout');
-                this.$store.commit('setView', views.LOGIN);
             },
         },
 
