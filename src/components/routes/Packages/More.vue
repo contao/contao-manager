@@ -16,6 +16,7 @@
             name: String,
             homepage: String,
             support: Object,
+            metadata: String,
             hidePackagist: Boolean,
         },
 
@@ -39,6 +40,10 @@
                     Object.keys(this.support).forEach((key) => {
                         items.push({ label: this.$t(`ui.package.support_${key}`), href: this.support[key], target: '_blank' });
                     });
+                }
+
+                if (this.metadata) {
+                    items.push({ label: this.$t('ui.package.metadata'), href: this.metadata, target: '_blank' });
                 }
 
                 return items;

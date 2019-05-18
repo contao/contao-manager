@@ -222,6 +222,7 @@
     "ui.package.more": "More",
     "ui.package.homepage": "Project Website",
     "ui.package.packagist": "Package Details",
+    "ui.package.metadata": "Edit Metadata",
     "ui.package.support_docs": "Documentation",
     "ui.package.support_wiki": "Wiki",
     "ui.package.support_forum": "Support Forum",
