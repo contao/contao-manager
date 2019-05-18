@@ -215,7 +215,7 @@
     "ui.package.uploadedTitle": "Artifact Package",
     "ui.package.uploadedText": "Upload a new file to update.",
     "ui.package.providerTitle": "Provider Package",
-    "ui.package.providerText": "Provides authentication for a package.",
+    "ui.package.providerText": "Requires private packages.",
     "ui.package.proprietaryTitle": "Proprietary Package!",
     "ui.package.proprietaryText": "Please visit the website for more information.",
     "ui.package.replacement": "This package is marked as abandoned, please use \"{replacement}\" instead.",
