@@ -35,10 +35,11 @@ Vue.http.interceptors.push((request, next) => {
             throw response.data;
         }
 
-        // Successful request, Renew login expiration 30 minutes
-        if (url !== 'api/session' || response.status !== 204) {
-            store.commit('auth/renewCountdown');
+        if (url === 'api/session' && response.status !== 200) {
+            return;
         }
+
+        store.commit('auth/renewCountdown');
     });
 });
 

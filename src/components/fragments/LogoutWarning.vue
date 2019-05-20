@@ -3,7 +3,7 @@
         <div ref="popup" :class="popupClass">
             <h1 :class="headlineClass">{{$t('ui.logout.headline')}}</h1>
 
-            <template v-if="expires > 0">
+            <template v-if="countdown > 0">
                 <p class="logout-warning__text">{{$t('ui.logout.warning')}}</p>
                 <p class="logout-warning__countdown">{{minutes}}:{{seconds}}</p>
 
@@ -31,14 +31,14 @@
         }),
 
         computed: {
-            ...mapState('auth', ['expires']),
+            ...mapState('auth', ['countdown']),
 
             minutes() {
-                return Math.floor(this.expires / 60);
+                return Math.floor(this.countdown / 60);
             },
 
             seconds() {
-                const seconds = this.expires % 60;
+                const seconds = this.countdown % 60;
 
                 if (seconds < 10) {
                     return `0${seconds}`;
@@ -57,7 +57,7 @@
             headlineClass() {
                 return {
                     'logout-warning__headline': true,
-                    'logout-warning__headline--error': this.expires === 0,
+                    'logout-warning__headline--error': this.countdown === 0,
                 };
             },
         },

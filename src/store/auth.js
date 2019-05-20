@@ -11,12 +11,17 @@ export default {
     state: {
         username: null,
         expires: null,
+        countdown: null,
     },
 
     getters: {
         warnForLogout(state) {
-            return state.expires !== null && state.expires <= (5 * 60);
+            return state.countdown !== null && state.countdown <= (5 * 60);
         },
+
+        isExpired(state) {
+            return state.countdown !== null && state.countdown <= 0;
+        }
     },
 
     mutations: {
@@ -25,7 +30,8 @@ export default {
         },
 
         renewCountdown(state) {
-            state.expires = 30 * 60;
+            state.expires = (Date.now() + 30 * 60 * 1000);
+            state.countdown = 30 * 60;
 
             if (!countdown) {
                 countdown = setInterval(() => {
@@ -36,16 +42,17 @@ export default {
 
         resetCountdown(state) {
             state.expires = null;
+            state.countdown = null;
             clearInterval(countdown);
             countdown = undefined;
         },
 
         countdown(state) {
-            if (state.expires > 0) {
-                state.expires = state.expires - 1;
+            if (state.countdown > 0) {
+                state.countdown = Math.floor(Math.max(state.expires - Date.now(), 0) / 1000);
             }
 
-            if (state.expires === 0) {
+            if (state.countdown === 0) {
                 this.dispatch('auth/logout');
             }
         },
@@ -81,15 +88,18 @@ export default {
 
         logout({ commit }) {
             return Vue.http.delete('api/session').then(
-                () => {
+                () => true,
+                response => (response.code === 401),
+            ).then((result) => {
+                if (result) {
                     commit('setUsername', null);
                     commit('setView', views.LOGIN, { root: true });
                     clearInterval(countdown);
+                    countdown = undefined;
+                }
 
-                    return true;
-                },
-                () => false,
-            );
+                return result;
+            });
         },
     },
 };
