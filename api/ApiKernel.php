@@ -223,7 +223,13 @@ CODE
             $current = dirname($phar);
 
             if ('web' === basename($current)) {
-                return dirname($current);
+                $projectDir = dirname($current);
+                if ('shared' === basename($projectDir) && is_file($projectDir.'/../.dep/releases')) {
+                    // Support deployer environment
+                    $projectDir = dirname($projectDir).'/current';
+                }
+
+                return $projectDir;
             }
 
             return $current;
