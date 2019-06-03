@@ -219,8 +219,16 @@ CODE
             return dirname($composer);
         }
 
+        if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && !empty($_SERVER['PWD'])) {
+            return $_SERVER['PWD'];
+        }
+
         if ('' !== ($phar = \Phar::running(false))) {
-            $current = dirname($phar);
+            $current = getcwd();
+
+            if (!$current) {
+                $current = dirname($phar);
+            }
 
             if ('web' === basename($current)) {
                 return dirname($current);
