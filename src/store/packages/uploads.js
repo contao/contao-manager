@@ -60,7 +60,7 @@ export default {
             }
 
             if (this.getters['packages/packageInstalled'](pkg.name)) {
-                this.commit('packages/update', pkg.name);
+                this.commit('packages/change', pkg);
             } else {
                 this.commit('packages/add', Object.assign({}, pkg, { constraint: pkg.version }));
             }
