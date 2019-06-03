@@ -6,6 +6,7 @@ if (function_exists('ini_set')) {
     @ini_set('display_errors', 1);
     @ini_set('display_startup_errors', 1);
     @ini_set('opcache.enable', '0');
+    @ini_set('opcache.enable_cli', '0');
 }
 
 if (PHP_VERSION_ID < 70103) {
@@ -41,7 +42,6 @@ if (function_exists('date_default_timezone_set') && function_exists('date_defaul
 
 if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
     Phar::mapPhar('contao-manager.phar');
-    /** @noinspection UntrustedInclusionInspection */
     /** @noinspection PhpIncludeInspection */
     require 'phar://contao-manager.phar/api/console';
 } else {
