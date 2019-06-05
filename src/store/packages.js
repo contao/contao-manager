@@ -31,6 +31,7 @@ export default {
         hasAdded: state => Object.keys(state.add).length > 0 || Object.keys(state.required).length > 0,
 
         packageInstalled: state => name => Object.keys(state.installed).includes(name),
+        versionInstalled: state => (name, version) => Object.keys(state.installed).includes(name) && state.installed[name].version === version,
         packageRequired: state => name => Object.keys(state.required).includes(name),
         packageAdded: state => name => Object.keys(state.add).includes(name),
         packageChanged: state => name => Object.keys(state.change).includes(name),

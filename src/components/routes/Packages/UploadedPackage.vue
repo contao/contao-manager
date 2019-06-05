@@ -18,7 +18,28 @@
 
     <local-package
         :data="pkg"
-        :hint="hintDuplicate"
+        :hint="$t('ui.packages.uploadDuplicate')"
+        v-else-if="isDuplicate(upload.id)"
+    >
+        <template slot="actions">
+            <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
+            <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
+        </template>
+    </local-package>
+
+    <local-package
+        :data="pkg"
+        :hint="$t('ui.packages.uploadInstalled')"
+        v-else-if="versionInstalled(pkg.name, pkg.version)"
+    >
+        <template slot="actions">
+            <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
+            <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
+        </template>
+    </local-package>
+
+    <local-package
+        :data="pkg"
         v-else
     >
         <template slot="actions">
@@ -54,18 +75,18 @@
         },
 
         computed: {
-            ...mapGetters('packages', ['packageRemoved']),
+            ...mapGetters('packages', ['packageRemoved', 'versionInstalled']),
             ...mapGetters('packages/uploads', ['isDuplicate', 'isRemoving']),
 
             removing: vm => vm.isRemoving(vm.upload.id),
             progress: vm => 100 / vm.upload.size * vm.upload.filesize,
 
-            canBeAdded: vm => !vm.removing && !vm.isDuplicate(vm.upload.id) && !vm.packageRemoved(vm.pkg.name),
+            canBeAdded: vm => !vm.removing && !vm.packageRemoved(vm.pkg.name),
 
             data: vm => vm.upload.package || { name: '' },
 
             pkg: vm => Object.assign(
-                { name: vm.upload.name, },
+                { name: vm.upload.name, version: null },
                 vm.upload.package || {}
             ),
 
@@ -79,14 +100,6 @@
                 }
 
                 return '';
-            },
-
-            hintDuplicate() {
-                if (!this.isDuplicate(this.upload.id)) {
-                    return '';
-                }
-
-                return this.$t('ui.packages.uploadDuplicate');
             },
 
             filesize() {

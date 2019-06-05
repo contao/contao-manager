@@ -26,16 +26,18 @@ export default {
 
     getters: {
         hasUploads: (state, get) => get.totalUploads > 0,
-        hasDuplicates: state => hasDuplicates(state.uploads),
         isDuplicate: state => id => Object.values(state.uploads).find(v => v.id !== id && v.hash === state.uploads[id].hash),
         isRemoving: state => id => state.removing.includes(id),
 
         totalUploads: (state, get) => state.uploads ? get.unconfirmedUploads.length : 0,
         unconfirmedUploads: state => Object.values(state.uploads).filter(item => !state.confirmed.includes(item.id)),
 
-        canConfirmUploads: (state, get) => state.uploads
+        canConfirmUploads: (state, get, rootState) => state.uploads
             ? Object.values(state.uploads).find(item => !item.success || item.error) === undefined
-                && !get.hasDuplicates
+                && !hasDuplicates(state.uploads)
+                && Object.values(state.uploads).find(
+                    item => (Object.keys(rootState.packages.installed).includes(item.package.name) && rootState.packages.installed[item.package.name].version === item.package.version)
+                ) === undefined
             : false,
     },
 
