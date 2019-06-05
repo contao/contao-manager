@@ -13,6 +13,7 @@ namespace Contao\ManagerApi\Controller\Packages;
 use Composer\Json\JsonFile;
 use Composer\Semver\Constraint\Constraint;
 use Composer\Semver\Constraint\MultiConstraint;
+use Composer\Semver\VersionParser;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Config\UploadsConfig;
 use Contao\ManagerApi\Exception\ApiProblemException;
@@ -221,6 +222,8 @@ class UploadPackagesController
             return $this->installError($id, 'version');
         }
 
+        list($vendor, $package) = explode('/', $data['name']);
+
         $config['success'] = true;
         $config['hash'] = sha1_file($uploadFile);
         $config['package'] = array_merge(
@@ -230,7 +233,13 @@ class UploadPackagesController
                 'dist' => [
                     'shasum' => $config['hash'],
                     'type' => 'zip',
-                    'url' => '/contao-manager/packages/'.$config['name'],
+                    'url' => sprintf(
+                        '/contao-manager/packages/%s__%s__%s__%s.zip',
+                        $vendor,
+                        $package,
+                        (new VersionParser())->normalize($data['version']),
+                        substr(sha1_file($uploadFile), 0, 8)
+                    ),
                 ],
             ]
         );

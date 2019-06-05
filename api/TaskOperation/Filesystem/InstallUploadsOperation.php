@@ -77,7 +77,12 @@ class InstallUploadsOperation extends AbstractInlineOperation
         $installed = [];
 
         foreach ($this->uploads as $config) {
-            $target = $this->getArtifactName($config['name']);
+            $target = basename($config['package']['dist']['url']);
+
+            // Ignore if a file is already installed, so it's not deleted on failed operation
+            if ($this->filesystem->exists($this->environment->getArtifactDir().'/'.$target)) {
+                continue;
+            }
 
             $this->filesystem->copy(
                 $this->environment->getUploadDir().'/'.$config['id'],
@@ -102,11 +107,5 @@ class InstallUploadsOperation extends AbstractInlineOperation
     protected function getName()
     {
         return 'install-uploads';
-    }
-
-    private function getArtifactName($name)
-    {
-        // TODO do not overwrite if name exists
-        return $name;
     }
 }
