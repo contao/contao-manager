@@ -39,8 +39,8 @@ configs:
             /opt/php{major}/bin/php: []
 
     1und1:
-        name: 1&1 Internet SE
-        website: www.1und1.de
+        name: 1&1 IONOS SE
+        website: www.ionos.de
         php:
             /usr/bin/php{major}.{minor}-cli: ['-d', 'memory_limit=-1']
             /usr/bin/php{major}.{minor}: []
