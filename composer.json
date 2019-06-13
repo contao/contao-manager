@@ -59,12 +59,6 @@
             "Contao\\ManagerApi\\": "api/"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/terminal42/background-process.git"
-        }
-    ],
     "config": {
         "platform": {
             "php": "7.1.3"
