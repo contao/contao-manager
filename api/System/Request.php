@@ -93,15 +93,13 @@ class Request
 
     private function createStreamContext($url, array $options = [])
     {
-        unset($http_response_header);
-
-        if (isset($options['http']['header']) && !\is_array($options['http']['header'])) {
+        if (isset($options['http']['header']) && !is_array($options['http']['header'])) {
             $options['http']['header'] = [$options['http']['header']];
         }
 
         $options['http']['header'][] = sprintf(
             'User-Agent: Contao Manager/%s (%s; %s; %s%s)',
-            $this->kernel->getVersion() === '@package_version@' ? 'source' : $this->kernel->getVersion(),
+            $this->kernel->getVersion() === ('@'.'package_version'.'@') ? 'source' : $this->kernel->getVersion(),
             function_exists('php_uname') ? php_uname('s') : 'Unknown',
             function_exists('php_uname') ? php_uname('r') : 'Unknown',
             PHP_VERSION,
@@ -113,7 +111,7 @@ class Request
 
     private function getLastStatusCode($http_response_header)
     {
-        if (!\is_array($http_response_header)) {
+        if (!is_array($http_response_header)) {
             return 500;
         }
 

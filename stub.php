@@ -10,7 +10,10 @@ if (function_exists('ini_set')) {
 }
 
 if (PHP_VERSION_ID < 70103) {
-    die('You are using PHP '.phpversion().' but you need least PHP 5.5.9 to run the Contao Manager.');
+    Phar::mapPhar('contao-manager.phar');
+    /** @noinspection PhpIncludeInspection */
+    require 'phar://contao-manager.phar/api/downgrade.php';
+    exit;
 }
 
 if (!extension_loaded('Phar')) {
