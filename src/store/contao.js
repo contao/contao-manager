@@ -2,6 +2,7 @@
 
 import accessKey from './contao/accessKey';
 import installTool from './contao/installTool';
+import jwtCookie from './contao/jwtCookie';
 
 export default {
     namespaced: true,
@@ -9,6 +10,7 @@ export default {
     modules: {
         'access-key': accessKey,
         'install-tool': installTool,
+        'jwt-cookie': jwtCookie,
     },
 
     actions: {

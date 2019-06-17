@@ -10,7 +10,8 @@
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ 'ui.navigation.tools' | translate }}</a>
                 <ul class="navigation__group navigation__group--sub">
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a href="/contao">{{ 'ui.navigation.backend' | translate }}</a></li>
-                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showDebugMode"><a href="/app_dev.php/" target="_blank">{{ 'ui.navigation.debug' | translate }}</a></li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showAppDev"><a href="/app_dev.php/" target="_blank">{{ 'ui.navigation.debug' | translate }}</a></li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showPreview"><a href="/preview.php/" target="_blank">{{ 'ui.navigation.debug' | translate }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a href="/contao/install" target="_blank">{{ 'ui.navigation.installTool' | translate }}</a></li>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="phpinfo">{{ 'ui.navigation.phpinfo' | translate }}</a></li>
                 </ul>
@@ -42,7 +43,8 @@
 
         computed: {
             ...mapState(['safeMode']),
-            ...mapState('contao/access-key', { showDebugMode: 'isEnabled' }),
+            ...mapState('contao/access-key', { showAppDev: 'isEnabled' }),
+            ...mapState('contao/jwt-cookie', { showPreview: 'isDebugEnabled' }),
             ...mapGetters('packages', ['totalChanges']),
             ...mapGetters('packages/uploads', ['totalUploads']),
 
@@ -75,6 +77,7 @@
         },
 
         mounted() {
+            this.$store.dispatch('contao/jw-token/get').catch(() => {});
             this.$store.dispatch('contao/access-key/get').catch(() => {});
         },
     };
