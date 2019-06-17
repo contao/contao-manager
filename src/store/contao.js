@@ -1,12 +1,14 @@
 /* eslint-disable no-param-reassign */
 
 import accessKey from './contao/accessKey';
+import installTool from './contao/installTool';
 
 export default {
     namespaced: true,
 
     modules: {
         'access-key': accessKey,
+        'install-tool': installTool,
     },
 
     actions: {

@@ -37,7 +37,7 @@
         computed: {
             ...mapState(['safeMode']),
             ...mapState('contao/access-key', { hasAccessKey: 'isEnabled' }),
-            overlayMessage: vm => vm.safeMode ? vm.$t('ui.maintenance.safeMode') : vm.$t('ui.maintenance.debugMode.unsupported'),
+            overlayMessage: vm => vm.safeMode ? vm.$t('ui.maintenance.safeMode') : vm.$t('ui.maintenance.unsupported'),
         },
 
         methods: {
