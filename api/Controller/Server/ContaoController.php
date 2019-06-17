@@ -133,7 +133,7 @@ class ContaoController extends Controller
             [
                 'version' => $contaoVersion,
                 'api' => $this->getApiVersion(),
-                'supported' => version_compare($contaoVersion, '4.3.5', '>='),
+                'supported' => version_compare($contaoVersion, '4.0.0', '>=') || 0 === strpos($contaoVersion, 'dev-'),
             ]
         );
     }
