@@ -89,7 +89,7 @@ export default {
         logout({ commit }) {
             return Vue.http.delete('api/session').then(
                 () => true,
-                response => (response.code === 401),
+                response => (response.status === 401),
             ).then((result) => {
                 if (result) {
                     commit('setUsername', null);
