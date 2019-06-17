@@ -2,7 +2,7 @@
     <message-overlay :message="overlayMessage" :active="safeMode || (!loading && !supported)">
         <section class="maintenance">
             <div class="maintenance__inside">
-                <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" /></figure>
+                <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" alt="" /></figure>
                 <div class="maintenance__about">
                     <h1>{{ 'ui.maintenance.debugMode.title' | translate }}</h1>
                     <p v-html="$t('ui.maintenance.debugMode.description')"></p>
@@ -37,7 +37,7 @@
         computed: {
             ...mapState(['safeMode']),
             ...mapState('contao/access-key', { hasAccessKey: 'isEnabled' }),
-            overlayMessage: vm => vm.safeMode ? vm.$t('ui.maintenance.safeMode') : vm.$t('ui.maintenance.debugMode.unsupported'),
+            overlayMessage: vm => vm.safeMode ? vm.$t('ui.maintenance.safeMode') : vm.$t('ui.maintenance.unsupported'),
         },
 
         methods: {
