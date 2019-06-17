@@ -77,7 +77,7 @@
         },
 
         mounted() {
-            this.$store.dispatch('contao/jw-token/get').catch(() => {});
+            this.$store.dispatch('contao/jwt-cookie/get').catch(() => {});
             this.$store.dispatch('contao/access-key/get').catch(() => {});
         },
     };
