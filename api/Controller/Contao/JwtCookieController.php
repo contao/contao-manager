@@ -123,8 +123,9 @@ class JwtCookieController extends Controller
 
     private function isSupported(): bool
     {
-        $features = $this->api->getFeatures()['contao/manager-bundle'];
+        $features = $this->api->getFeatures();
 
-        return isset($features['jwt-cookie']) && \in_array('debug', $features['jwt-cookie']);
+        return isset($features['contao/manager-bundle']['jwt-cookie'])
+            && \in_array('debug', $features['contao/manager-bundle']['jwt-cookie']);
     }
 }
