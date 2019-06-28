@@ -19,7 +19,12 @@ class SessionCheck extends AbstractIntegrityCheck
         $detail = '';
 
         try {
-            if (false !== session_start()) {
+            $options = [
+                'read_and_close' => '1',
+                'use_cookies' => '0',
+            ];
+
+            if (false !== session_start($options)) {
                 return null;
             }
         } catch (\ErrorException $exception) {
