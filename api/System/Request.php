@@ -25,39 +25,75 @@ class Request
         $this->kernel = $kernel;
     }
 
-    public function get($url, &$statusCode = null)
+    /**
+     * @throws \ErrorException
+     */
+    public function get($url, &$statusCode = null, $catch = false)
     {
         $context = $this->createStreamContext($url);
 
-        $content = file_get_contents($url, false, $context);
-        $statusCode = $this->getLastStatusCode($http_response_header);
+        try {
+            $content = file_get_contents($url, false, $context);
+            $statusCode = $this->getLastStatusCode($http_response_header);
+        } catch (\ErrorException $e) {
+            if ($catch) {
+                return false;
+            }
+
+            throw $e;
+        }
 
         return $content;
     }
 
-    public function getStream($url, &$statusCode = null)
+    /**
+     * @throws \ErrorException
+     */
+    public function getStream($url, &$statusCode = null, $catch = false)
     {
         $context = $this->createStreamContext($url);
 
-        $stream = fopen($url, 'rb', false, $context);
-        $statusCode = $this->getLastStatusCode($http_response_header);
+        try {
+            $stream = fopen($url, 'rb', false, $context);
+            $statusCode = $this->getLastStatusCode($http_response_header);
+        } catch (\ErrorException $e) {
+            if ($catch) {
+                return false;
+            }
+
+            throw $e;
+        }
 
         return $stream;
     }
 
-    public function getJson($url, array $headers = [], &$statusCode = null)
+    /**
+     * @throws \ErrorException
+     */
+    public function getJson($url, array $headers = [], &$statusCode = null, $catch = false)
     {
         $headers[] = 'Accept: application/json';
 
         $context = $this->createStreamContext($url, ['http' => ['header' => $headers]]);
 
-        $content = file_get_contents($url, false, $context);
-        $statusCode = $this->getLastStatusCode($http_response_header);
+        try {
+            $content = file_get_contents($url, false, $context);
+            $statusCode = $this->getLastStatusCode($http_response_header);
+        } catch (\ErrorException $e) {
+            if ($catch) {
+                return false;
+            }
+
+            throw $e;
+        }
 
         return $content;
     }
 
-    public function postJson($url, $content, array $headers = [], &$statusCode = null)
+    /**
+     * @throws \ErrorException
+     */
+    public function postJson($url, $content, array $headers = [], &$statusCode = null, $catch = false)
     {
         $headers[] = 'Accept: application/json';
         $headers[] = 'Content-Type: application/json';
@@ -69,13 +105,24 @@ class Request
 
         $context = $this->createStreamContext($url, $options);
 
-        $content = file_get_contents($url, false, $context);
-        $statusCode = $this->getLastStatusCode($http_response_header);
+        try {
+            $content = file_get_contents($url, false, $context);
+            $statusCode = $this->getLastStatusCode($http_response_header);
+        } catch (\ErrorException $e) {
+            if ($catch) {
+                return false;
+            }
+
+            throw $e;
+        }
 
         return $content;
     }
 
-    public function deleteJson($url, array $headers = [], &$statusCode = null)
+    /**
+     * @throws \ErrorException
+     */
+    public function deleteJson($url, array $headers = [], &$statusCode = null, $catch = false)
     {
         $headers[] = 'Accept: application/json';
         $options = ['http' => [
@@ -85,8 +132,16 @@ class Request
 
         $context = $this->createStreamContext($url, $options);
 
-        $content = file_get_contents($url, false, $context);
-        $statusCode = $this->getLastStatusCode($http_response_header);
+        try {
+            $content = file_get_contents($url, false, $context);
+            $statusCode = $this->getLastStatusCode($http_response_header);
+        } catch (\ErrorException $e) {
+            if ($catch) {
+                return false;
+            }
+
+            throw $e;
+        }
 
         return $content;
     }
