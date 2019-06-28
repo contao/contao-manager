@@ -42,7 +42,7 @@ class UpdateCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->updater->supportsUpdate()) {
+        if (!$this->updater->supportsUpdate()) {
             throw new \RuntimeException('Your server does not meet the requirements of the next Contao Manager version.');
         }
 
