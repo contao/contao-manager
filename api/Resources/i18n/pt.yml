@@ -82,6 +82,8 @@ pt:
       title: 'A limpar Cache Composer'
     rebuild_cache:
       title: 'A reconstruir Cache Composer'
+    install_tool:
+      title: 'Ferramenta de Instalação do Contao'
     self_update:
       title: 'A actualizar o Contao Manager'
       completeSummary: 'Contao Manager atualizado com sucesso'
@@ -109,6 +111,10 @@ pt:
       summaryRetry: 'A instalar dependências Composer (tentativa {current}/{max}) ...'
     dump-autoload:
       summary: 'A analisar o class autoloader ...'
+    install-lock:
+      summary: 'A bloquear a ferramenta de instalação...'
+    install-unlock:
+      summary: 'A desbloquear a ferramenta de instalação ...'
     create-project:
       summary: 'A instalar modelo de aplicação...'
     cloud:
@@ -117,5 +123,7 @@ pt:
       processingSummary: 'A resolver dependências via Composer Cloud'
       processingDetail: 'Tarefa ID {job} está a correr há {seconds} segundos'
       errorSummary: 'Falha ao resolver dependências ...'
+      finishedSummary: 'Trabalho Composer Cloud concluído em {seconds} segundos'
+      finishedDetail: 'Utilização de memória : {memory} (peak: {peak}), tempo: {time}.'
     clear-cache:
       summary: 'A apagar ficheiros em cache ...'
