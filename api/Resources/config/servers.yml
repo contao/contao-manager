@@ -29,6 +29,7 @@ networks:
     AS8560: 1und1
     AS15817: mittwald
     AS29097: hostpoint
+    AS34432: profihost
     AS47302: cyon
     AS57169: edis
 
@@ -79,11 +80,23 @@ configs:
         php:
             /opt/php{major}.{minor}/bin/php: []
 
+    celeros:
+        name: Celeros Online KG
+        website: www.celeros.de
+        php:
+            /opt/plesk/php/{major}.{minor}/bin/php: []
+
     cyon:
         name: cyon GmbH
         website: www.cyon.ch
         php:
             /opt/alt/php{major}{minor}/usr/bin/php: []
+
+    dmservices:
+        name: DM Solutions e.K.
+        website: www.dmsolutions.de
+        php:
+            /opt/plesk/php/{major}.{minor}/bin/php: []
 
     dogado:
         name: dogado GmbH
@@ -198,6 +211,12 @@ configs:
         php:
             /opt/phpfarm/inst/php-{major}.{minor}/bin/php-cgi: []
 
+    jweiland:
+        name: jweiland.net
+        website: jweiland.net
+        php:
+            /usr/local/bin/php{major}.{minor}.{release}-cli: []
+
     lahno-webhosting:
         name: Lahno Webhosting
         website: lahno-webhosting.de
@@ -255,6 +274,12 @@ configs:
         website: www.novatrend.ch
         php:
             /usr/local/bin/php: []
+
+    profihost:
+        name: Profihost AG
+        website: www.profihost.com
+        php:
+            /usr/bin/php{major}.{minor}: []
 
     tandao:
         name: tandao (Achenbach & Fischer GbR)
