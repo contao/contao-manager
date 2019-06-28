@@ -12,6 +12,7 @@ const locales = {
     es: () => import('./es.json'),
     fa: () => import('./fa.json'),
     fr: () => import('./fr.json'),
+    it: () => import('./it.json'),
     ja: () => import('./ja.json'),
     lv: () => import('./lv.json'),
     nl: () => import('./nl.json'),
@@ -31,6 +32,8 @@ const i18n = {
         }
 
         const languages = Array.from(navigator.languages);
+
+        console.log(languages);
 
         for (let i = 0; i < languages.length; i += 1) {
             if (locales[languages[i]]) {
