@@ -10,8 +10,11 @@
 
 namespace Contao\ManagerApi\System;
 
+use Composer\CaBundle\CaBundle;
+use Composer\Util\RemoteFilesystem;
 use Composer\Util\StreamContextFactory;
 use Contao\ManagerApi\ApiKernel;
+use Psr\Log\LoggerInterface;
 
 class Request
 {
@@ -20,9 +23,15 @@ class Request
      */
     private $kernel;
 
-    public function __construct(ApiKernel $kernel)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(ApiKernel $kernel, LoggerInterface $logger = null)
     {
         $this->kernel = $kernel;
+        $this->logger = $logger;
     }
 
     /**
@@ -148,7 +157,7 @@ class Request
 
     private function createStreamContext($url, array $options = [])
     {
-        unset($http_response_header);
+        $options = $this->getTlsDefaults($options);
 
         if (isset($options['http']['header']) && !\is_array($options['http']['header'])) {
             $options['http']['header'] = [$options['http']['header']];
@@ -164,6 +173,98 @@ class Request
         );
 
         return StreamContextFactory::getContext($url, $options);
+    }
+
+    /**
+     * @see RemoteFilesystem::getTlsDefaults()
+     */
+    private function getTlsDefaults(array $options)
+    {
+        $ciphers = implode(':', array(
+            'ECDHE-RSA-AES128-GCM-SHA256',
+            'ECDHE-ECDSA-AES128-GCM-SHA256',
+            'ECDHE-RSA-AES256-GCM-SHA384',
+            'ECDHE-ECDSA-AES256-GCM-SHA384',
+            'DHE-RSA-AES128-GCM-SHA256',
+            'DHE-DSS-AES128-GCM-SHA256',
+            'kEDH+AESGCM',
+            'ECDHE-RSA-AES128-SHA256',
+            'ECDHE-ECDSA-AES128-SHA256',
+            'ECDHE-RSA-AES128-SHA',
+            'ECDHE-ECDSA-AES128-SHA',
+            'ECDHE-RSA-AES256-SHA384',
+            'ECDHE-ECDSA-AES256-SHA384',
+            'ECDHE-RSA-AES256-SHA',
+            'ECDHE-ECDSA-AES256-SHA',
+            'DHE-RSA-AES128-SHA256',
+            'DHE-RSA-AES128-SHA',
+            'DHE-DSS-AES128-SHA256',
+            'DHE-RSA-AES256-SHA256',
+            'DHE-DSS-AES256-SHA',
+            'DHE-RSA-AES256-SHA',
+            'AES128-GCM-SHA256',
+            'AES256-GCM-SHA384',
+            'AES128-SHA256',
+            'AES256-SHA256',
+            'AES128-SHA',
+            'AES256-SHA',
+            'AES',
+            'CAMELLIA',
+            'DES-CBC3-SHA',
+            '!aNULL',
+            '!eNULL',
+            '!EXPORT',
+            '!DES',
+            '!RC4',
+            '!MD5',
+            '!PSK',
+            '!aECDH',
+            '!EDH-DSS-DES-CBC3-SHA',
+            '!EDH-RSA-DES-CBC3-SHA',
+            '!KRB5-DES-CBC3-SHA',
+        ));
+
+        /**
+         * CN_match and SNI_server_name are only known once a URL is passed.
+         * They will be set in the getOptionsForUrl() method which receives a URL.
+         *
+         * cafile or capath can be overridden by passing in those options to constructor.
+         */
+        $defaults = array(
+            'ssl' => array(
+                'ciphers' => $ciphers,
+                'verify_peer' => true,
+                'verify_depth' => 7,
+                'SNI_enabled' => true,
+            ),
+        );
+
+        if (isset($options['ssl'])) {
+            $defaults['ssl'] = array_replace_recursive($defaults['ssl'], $options['ssl']);
+        }
+
+        /**
+         * Attempt to find a local cafile or throw an exception if none pre-set
+         * The user may go download one if this occurs.
+         */
+        if (!isset($defaults['ssl']['cafile']) && !isset($defaults['ssl']['capath'])) {
+            $result = CaBundle::getSystemCaRootBundlePath($this->logger);
+
+            if (is_dir($result)) {
+                $defaults['ssl']['capath'] = $result;
+            } else {
+                $defaults['ssl']['cafile'] = $result;
+            }
+        }
+
+        /**
+         * Disable TLS compression to prevent CRIME attacks where supported.
+         */
+        if (PHP_VERSION_ID >= 50413) {
+            $defaults['ssl']['disable_compression'] = true;
+        }
+
+        return $defaults;
     }
 
     private function getLastStatusCode($http_response_header)
