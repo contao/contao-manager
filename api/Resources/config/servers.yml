@@ -6,6 +6,7 @@ domains:
     alfahosting.de: alfahosting
     cyon.ch: cyon
     cyon.net: cyon
+    edis.at: edis
     goserver.host: webgo
     hosteurope.de: hosteurope
     hostpoint.ch: hostpoint
@@ -29,6 +30,7 @@ networks:
     AS15817: mittwald
     AS29097: hostpoint
     AS47302: cyon
+    AS57169: edis
 
 configs:
     1blu:
@@ -100,6 +102,7 @@ configs:
         website: www.edis.at
         php:
             /usr/local/bin/edis-php-cli-{major}{minor}-stable-openssl: []
+            /usr/local/bin/edis-php-cli-{major}{minor}: []
 
     etes:
         name: ETES GmbH
