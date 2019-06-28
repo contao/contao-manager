@@ -69,6 +69,8 @@ class PhpExecutableFinder
             $paths[] = $php;
         }
 
+        $paths[] = '/usr/bin/php';
+
         $paths = array_merge($paths, $this->findExecutables());
         $paths = array_unique($paths);
 
