@@ -29,7 +29,7 @@ class Request
     {
         $context = $this->createStreamContext($url);
 
-        $content = @file_get_contents($url, false, $context);
+        $content = file_get_contents($url, false, $context);
         $statusCode = $this->getLastStatusCode($http_response_header);
 
         return $content;
@@ -39,7 +39,7 @@ class Request
     {
         $context = $this->createStreamContext($url);
 
-        $stream = @fopen($url, 'rb', false, $context);
+        $stream = fopen($url, 'rb', false, $context);
         $statusCode = $this->getLastStatusCode($http_response_header);
 
         return $stream;
@@ -51,7 +51,7 @@ class Request
 
         $context = $this->createStreamContext($url, ['http' => ['header' => $headers]]);
 
-        $content = @file_get_contents($url, false, $context);
+        $content = file_get_contents($url, false, $context);
         $statusCode = $this->getLastStatusCode($http_response_header);
 
         return $content;
@@ -69,7 +69,7 @@ class Request
 
         $context = $this->createStreamContext($url, $options);
 
-        $content = @file_get_contents($url, false, $context);
+        $content = file_get_contents($url, false, $context);
         $statusCode = $this->getLastStatusCode($http_response_header);
 
         return $content;
@@ -85,7 +85,7 @@ class Request
 
         $context = $this->createStreamContext($url, $options);
 
-        $content = @file_get_contents($url, false, $context);
+        $content = file_get_contents($url, false, $context);
         $statusCode = $this->getLastStatusCode($http_response_header);
 
         return $content;
@@ -101,7 +101,7 @@ class Request
 
         $options['http']['header'][] = sprintf(
             'User-Agent: Contao Manager/%s (%s; %s; %s%s)',
-            $this->kernel->getVersion() === '@package_version@' ? 'source' : $this->kernel->getVersion(),
+            $this->kernel->getVersion() === '@'.'package_version'.'@' ? 'source' : $this->kernel->getVersion(),
             function_exists('php_uname') ? php_uname('s') : 'Unknown',
             function_exists('php_uname') ? php_uname('r') : 'Unknown',
             PHP_VERSION,
