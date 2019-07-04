@@ -7,12 +7,18 @@ class ContaoManagerDowngrade
 {
     public static function run()
     {
-        if (PHP_VERSION_ID < 50509) {
-            die('You are using PHP '.phpversion()." but you need least PHP 5.5.9 to run the Contao Manager.\n");
+        if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] === 'test') {
+            // Ignore test command to check different PHP binaries
+            return;
         }
 
-        include_once __DIR__.'/../vendor/composer/composer/src/Composer/Util/NoProxyPattern.php';
-        include_once __DIR__.'/../vendor/composer/composer/src/Composer/Util/StreamContextFactory.php';
+        if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI']))
+            && (!isset($_SERVER['argv'][1]) || $_SERVER['argv'][1] !== 'downgrade')
+        ) {
+            echo 'You are using PHP '.phpversion()." but you need least PHP 7.1.3 to run the Contao Manager.\n";
+            echo 'Run "'.$_SERVER['argv'][0]." downgrade\" to downgrade to a PHP 5 compatible version.\n";
+            exit;
+        }
 
         $phar = Phar::running(false);
         $tempFile = $phar.'.downgrade';

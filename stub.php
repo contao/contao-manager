@@ -9,11 +9,8 @@ if (function_exists('ini_set')) {
     @ini_set('opcache.enable_cli', '0');
 }
 
-if (PHP_VERSION_ID < 70103) {
-    Phar::mapPhar('contao-manager.phar');
-    /** @noinspection PhpIncludeInspection */
-    require 'phar://contao-manager.phar/api/downgrade.php';
-    exit;
+if (PHP_VERSION_ID < 50509) {
+    die('You are using PHP '.phpversion()." but you need least PHP 5.5.9 to run the Contao Manager.\n");
 }
 
 if (!extension_loaded('Phar')) {
@@ -38,12 +35,22 @@ if (false !== ($multibyte = ini_get('zend.multibyte')) && '' !== $multibyte && 0
 
 unset($multibyte, $unicode);
 
+if (PHP_VERSION_ID < 70103) {
+    Phar::mapPhar('contao-manager.phar');
+    /** @noinspection PhpIncludeInspection */
+    require 'phar://contao-manager.phar/api/downgrade.php';
+}
+
 if (function_exists('date_default_timezone_set') && function_exists('date_default_timezone_get')) {
     /** @noinspection UsageOfSilenceOperatorInspection */
     date_default_timezone_set(@date_default_timezone_get());
 }
 
 if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
+    if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] === 'test') {
+        die(json_encode(['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI]));
+    }
+
     Phar::mapPhar('contao-manager.phar');
     /** @noinspection PhpIncludeInspection */
     require 'phar://contao-manager.phar/api/console';

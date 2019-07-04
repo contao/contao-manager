@@ -11,6 +11,7 @@
 setlocale(LC_ALL, 'C');
 require __DIR__.'/../vendor/autoload.php';
 
+use Composer\Console\Application as ComposerApplication;
 use Composer\XdebugHandler\XdebugHandler;
 use Contao\ManagerApi\ApiApplication;
 use Contao\ManagerApi\ApiKernel;
@@ -66,12 +67,8 @@ $kernel = new ApiKernel('@symfony_env@' === 'prod' ? 'prod' : 'dev');
 $input = new ArgvInput();
 
 switch ($input->getFirstArgument()) {
-    case 'test':
-        die(json_encode(['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI]));
-        break;
-
     case 'composer':
-        $application = new \Composer\Console\Application();
+        $application = new ComposerApplication();
         $argv = $_SERVER['argv'];
         array_shift($argv);
         $input = new ArgvInput($argv);
