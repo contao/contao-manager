@@ -157,7 +157,8 @@ class Request
 
     private function createStreamContext($url, array $options = [])
     {
-        $options = $this->getTlsDefaults($options);
+        $tlsDefaults = $this->getTlsDefaults($options);
+        $options = array_replace_recursive($tlsDefaults, $options);
 
         if (isset($options['http']['header']) && !\is_array($options['http']['header'])) {
             $options['http']['header'] = [$options['http']['header']];
