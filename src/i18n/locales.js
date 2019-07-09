@@ -10,6 +10,7 @@ export default {
     es: 'Español (Spanish)',
     fa: 'فارسی (Persian)',
     fr: 'Français (French)',
+    it: 'Italiano (Italian)',
     ja: '日本語 (Japanese)',
     lv: 'Latviešu Valoda (Latvian)',
     nl: 'Nederlands (Dutch)',

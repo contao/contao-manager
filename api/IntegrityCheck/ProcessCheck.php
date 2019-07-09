@@ -16,7 +16,11 @@ class ProcessCheck extends AbstractIntegrityCheck
 {
     public function run()
     {
-        if (function_exists('proc_open') && function_exists('proc_close')) {
+        if (function_exists('proc_open')
+            && function_exists('proc_close')
+            && function_exists('proc_get_status')
+            && function_exists('proc_terminate')
+        ) {
             return null;
         }
 

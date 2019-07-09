@@ -39,18 +39,18 @@ class IpInfo
             'org' => '',
         ];
 
-        $data = $this->request->get('https://ipinfo.io/json') ?: $this->request->get('http://ipinfo.io/json');
+        $data = $this->request->get('https://ipinfo.io/json', $status, true) ?: $this->request->get('http://ipinfo.io/json', $status, true);
 
         if (!empty($data)) {
             $template = array_merge($template, json_decode($data, true));
         }
 
         if (empty($template['ip'])) {
-            $template['ip'] = (string) $this->request->get('https://api.ipify.org');
+            $template['ip'] = (string) $this->request->get('https://api.ipify.org', $status, true);
         }
 
         if (empty($template['ip'])) {
-            $template['ip'] = $this->request->get('http://api.ipify.org');
+            $template['ip'] = $this->request->get('http://api.ipify.org', $status, true);
         }
 
         if (empty($template['hostname'])) {

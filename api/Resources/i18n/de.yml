@@ -7,7 +7,7 @@ de:
       detail: 'Die Funktionen "proc_open" und "proc_close" sind notwendig, um Kommandozeilentasks im Hintergrund auszuführen. Bitte fragen Sie bei Ihrem Hosting-Anbieter nach, warum die Funktionen nicht verfügbar sind; weder der Contao Manager noch Contao 4 laufen ohne sie.'
     intl:
       title: 'Die PHP Intl-Erweiterung ist nicht verfügbar.'
-      detail: 'Contao 4 benötigt die Intl-Erweiterung für die Internationalisierung der Anwendung.'
+      detail: 'Contao 4 benötigt die PHP Intl-Erweiterung für die Internationalisierung der Anwendung.'
     openssl:
       title: 'Die PHP OpenSSL-Erweiterung ist nicht verfügbar.'
       detail: 'Der Contao Manager benötigt die OpenSSL-Erweiterung, um Dateien über eine verschlüsselte Verbindung (https) herunterzuladen.'
@@ -19,11 +19,11 @@ de:
       detail: 'Contao 4 benötigt die PHP DOM-Erweiterung, um XML-Dokumente zu parsen.'
     graphics_lib:
       title: 'Keine PHP Bild-Bibliothek verfügbar.'
-      detail: 'Contao 4 benötigt entweder die GD, Imagick oder Gmagick Erweiterung um Bilder zu verarbeiten.'
+      detail: 'Contao 4 benötigt entweder die GD-, Imagick- oder Gmagick-Erweiterung, um Bilder zu verarbeiten.'
     symlink:
       title: 'Die PHP Symlink-Methode ist nicht verfügbar oder funktioniert nicht korrekt.'
     session:
-      title: 'Die PHP Session konnte nicht gestartet werden.'
+      title: 'Die PHP-Session konnte nicht gestartet werden.'
     web_root:
       title: 'Die Phar-Datei muss sich im /web-Ordner befinden.'
     memory_limit:
@@ -37,7 +37,7 @@ de:
       detail: "Auf Ihrem Server wurden Dateien gefunden, die keiner bekannten Contao-Version zugeordnet werden konnten.\nUm Contao zu installieren, müssen Sie entweder Ihre Installation manuell reparieren oder folgende Dateien und Ordner entfernen:\n\n{files}"
     contao_version:
       title: 'Die Contao-Version wurde nicht erkannt.'
-      detail: "Der Konsolenprozess hat eine ungültige Ausgabe anstelle der Contao Version ausgegeben. Bitte prüfen Sie die Ausgabe für weitere Informationen."
+      detail: "Der Konsolenprozess hat eine ungültige Ausgabe anstelle der Contao-Version ausgegeben. Bitte prüfen Sie die Ausgabe für weitere Informationen:\n\n{output}"
   config:
     php_cli:
       not_found: 'Der Pfad enthält kein gültiges PHP-Binary.'
@@ -77,7 +77,7 @@ de:
       completeSummary: 'Contao-Pakete aktualisiert!'
       completeDetail: 'Bitte öffnen Sie das Installtool und führen Sie eventuell notwendige Datenbank-Änderungen durch.'
     dump_autoload:
-      title: 'Composer Autloader leeren'
+      title: 'Composer-Autloader schreiben'
     clear_cache:
       title: 'Leere den Composer-Cache'
     rebuild_cache:
@@ -103,9 +103,9 @@ de:
     composer-update:
       summary: 'Composer-Abhängkeiten werden aktualisiert …'
     composer-require:
-      summary: 'Composer Pakete werden hinzugefügt …'
+      summary: 'Composer-Pakete werden hinzugefügt …'
     composer-remove:
-      summary: 'Composer Pakete werden entfernt …'
+      summary: 'Composer-Pakete werden entfernt …'
     composer-install:
       summary: 'Installiere Composer-Abhängigkeiten …'
       summaryRetry: 'Installiere Composer-Abhängigkeiten (Versuch {current}/{max}) …'
@@ -122,7 +122,7 @@ de:
       queuedDetail: 'Berechnung startet in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'
       processingSummary: 'Berechnung der Abhängigkeiten durch die Composer Cloud'
       processingDetail: 'Aufgabe ID {job} aktiv seit {seconds} Sekunden'
-      errorSummary: 'Fehler beim auflösen der Abhängigkeiten'
+      errorSummary: 'Fehler beim Auflösen der Abhängigkeiten'
       finishedSummary: 'Berechnung durch die Composer Cloud in {seconds} Sekunden abgeschlossen'
       finishedDetail: 'RAM-Verbrauch: {memory} (Spitze: {peak}), Dauer: {time}.'
     clear-cache:

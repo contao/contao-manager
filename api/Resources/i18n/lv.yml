@@ -2,24 +2,30 @@ lv:
   integrity:
     allow_url_fopen:
       title: 'PHP iestatījums "allow_url_fopen" serverī nav iespējots.'
-    openssl:
-      title: 'PHP OpenSSL paplašinājums nav pieejams.'
+    process:
+      title: 'PHP funkcija "proc_open" un / vai "proc_close" serverī nav pieejama.'
     intl:
       title: 'PHP Intl paplašinājums nav pieejams.'
       detail: 'Contao 4 ir nepieciešams PHP Intl paplašinājums internacionalizācijas vajadzībām.'
+    openssl:
+      title: 'PHP OpenSSL paplašinājums nav pieejams.'
+    dom:
+      title: 'PHP DOM paplašinājums nav pieejams.'
+    xmlreader:
+      title: 'PHP XMLReader paplašinājums nav pieejams.'
+    graphics_lib:
+      title: 'Nav pieejama neviena PHP attēlu apstrādes bibliotēka.'
+      detail: 'Lai apstrādātu attēlus, Contao 4 nepieciešams paplašinājums GD, Imagick vai Gmagick.'
+    symlink:
+      title: 'PHP simbolu metode nav pieejama vai nedarbojas pareizi.'
     session:
       title: 'Nevarēja uzsākt PHP sesiju.'
     web_root:
       title: 'Phar datnei jāatrod mapē /web.'
-    windows:
-      title: 'Šī Contao pārvaldnieka versija pašlaik netiek atbalstīta operētājsistēmā Windows.'
     memory_limit:
       title: 'Nepietiekams PHP atmiņas ierobežojums'
     systempdir:
       title: 'Nevar rakstīt sistēmas pagaidu direktorijā.'
-    contao_old:
-      title: 'Nesaderīga Contao versija'
-      detail: 'Contao versija {versija} nav savietojama ar Contao pārvaldnieku, lūdzu, manuāli atjauniniet instalāciju.'
     contao_unknown:
       title: 'Nezināms instalācijas statuss'
     contao_version:
@@ -27,3 +33,62 @@ lv:
   config:
     php_cli:
       not_found: 'Šis ceļš nesatur derīgu PHP bināru.'
+      incompatible: 'Šis binārs ir PHP versija {cli}, bet jūsu tīmekļa serveris ir versija {web}.'
+    cloud:
+      platform: 'Platforma nedrīkst būt konfigurēta composer.json.'
+      cache: 'Kešatmiņas rekvizīti nedrīkst būt konfigurēti composer.json.'
+  taskstatus:
+    created: 'Konsoles uzdevums ir izveidots ...'
+    complete:
+      summary: 'Konsoles uzdevums ir pabeigts!'
+      detail: 'Fona uzdevums tika veiksmīgi pabeigts. Vairāk informācijai apskatiet konsoles protokolu.'
+      console: '### Uzdevums veiksmīgi pabeigts ###'
+    aborting:
+      summary: 'Aptur pašreizējo darbību ...'
+      detail: 'Fona uzdevums tiek atcelts.'
+      console: '### Fona uzdevums tiek atcelts ###'
+    stopped:
+      summary: 'Konsoles uzdevums ir pārtraukts!'
+      console: '### Fona uzdevums tika atcelts ###'
+    error:
+      summary: 'Konsoles uzdevums ir pārtraukts!'
+      console: '### Fona uzdevums negaidīti ir apturēts ###'
+  task:
+    setup_packages:
+      title: 'Instalē Contao lietotni'
+      completeSummary: 'Uzstādīšana ir pabeigta!'
+      completeDetail: 'Lai pabeigtu iestatīšanas procesu, lūdzu, atveriet instalēšanas rīku un ievadiet datubāzes akreditācijas datus.'
+    update_packages:
+      title: 'Atjaunina pakotnes'
+      completeSummary: 'Contao pakotnes ir atjauninātas!'
+      completeDetail: 'Lūdzu, atveriet instalēšanas rīku, lai piemērotu nepieciešamās datu bāzes izmaiņas.'
+    clear_cache:
+      title: 'Iztīra Composer kešatmiņu'
+    rebuild_cache:
+      title: 'Pārbūvē Contao kešatmiņu'
+    install_tool:
+      title: 'Contao instalēšanas rīks'
+    self_update:
+      title: 'Atjaunina Contao pārvaldnieku'
+      completeSummary: 'Contao Manager tika veiksmīgi atjaunināts'
+      completeDetail: 'Atjaunināts uz versiju {current}'
+  taskoperation:
+    self-update:
+      summary: 'Instalē jaunāko Contao Manager …'
+      detail: 'Atjaunina no {old} uz {new}'
+    remove-cache:
+      summary: 'Dzēš kešatmiņas direktoriju ...'
+    cache-clear:
+      summary: 'Iztīra lietojumprogrammas kešatmiņu ...'
+    composer-require:
+      summary: 'Pievieno Composer pakotnes ...'
+    composer-remove:
+      summary: 'Noņem Composer pakotnes ...'
+    install-lock:
+      summary: 'Bloķē Contao instalēšanas rīku ...'
+    install-unlock:
+      summary: 'Atbloķē Contao instalēšanas rīku ...'
+    cloud:
+      processingDetail: 'Darbs ID {job} darbojas {seconds} sekundes'
+    clear-cache:
+      summary: 'Dzēš kešatmiņas datnes ...'

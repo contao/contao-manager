@@ -147,7 +147,7 @@
     "ui.maintenance.rebuildCache.clearProd": "Clear Production Cache",
     "ui.maintenance.rebuildCache.clearDev": "Clear Development Cache",
     "ui.maintenance.installTool.title": "Contao Install Tool",
-    "ui.maintenance.installTool.description": "The Contao Install Tool is automatically locked if you enter a wrong password too many times.",
+    "ui.maintenance.installTool.description": "The Contao Install Tool is automatically locked if you enter a wrong password three times in a row.",
     "ui.maintenance.installTool.unlock": "Unlock Install Tool",
     "ui.maintenance.installTool.lock": "Lock Install Tool",
     "ui.maintenance.dumpAutoload.title": "Cargador Composer Class",
