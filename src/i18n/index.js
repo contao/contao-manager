@@ -33,8 +33,6 @@ const i18n = {
 
         const languages = Array.from(navigator.languages);
 
-        console.log(languages);
-
         for (let i = 0; i < languages.length; i += 1) {
             if (locales[languages[i]]) {
                 return this.load(languages[i]);
