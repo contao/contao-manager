@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -17,7 +19,6 @@ use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/server/config", methods={"GET", "PUT"})
  */
-class ConfigController extends Controller
+class ConfigController
 {
     /**
      * @var ManagerConfig
@@ -48,14 +49,6 @@ class ConfigController extends Controller
      */
     private $translator;
 
-    /**
-     * Constructor.
-     *
-     * @param ManagerConfig $config
-     * @param ServerInfo    $serverInfo
-     * @param Environment   $environment
-     * @param Translator    $translator
-     */
     public function __construct(ManagerConfig $config, ServerInfo $serverInfo, Environment $environment, Translator $translator)
     {
         $this->config = $config;
@@ -64,12 +57,7 @@ class ConfigController extends Controller
         $this->translator = $translator;
     }
 
-    /**
-     * Gets response about hosting configuration of the Contao Manager.
-     *
-     * @return Response
-     */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         if ($request->isMethod('PUT')) {
             $server = $request->request->get('server');
@@ -99,7 +87,7 @@ class ConfigController extends Controller
         return $this->getTestResult();
     }
 
-    private function getTestResult()
+    private function getTestResult(): Response
     {
         $detected = false;
         $server = '';
@@ -140,11 +128,11 @@ class ConfigController extends Controller
      *
      * @return ApiProblem|null
      */
-    private function validateHostingConfig($server, $phpCli)
+    private function validateHostingConfig($server, $phpCli): ?ApiProblem
     {
         $errors = [];
 
-        if ('custom' !== $server && !array_key_exists($server, $this->serverInfo->getConfigs())) {
+        if ('custom' !== $server && !\array_key_exists($server, $this->serverInfo->getConfigs())) {
             $errors[] = [
                 'source' => 'server',
                 'message' => sprintf('Unknown server configuration "%s"', $server),
@@ -179,7 +167,7 @@ class ConfigController extends Controller
         return $problem;
     }
 
-    private function validatePhpCli($phpCli, array &$errors)
+    private function validatePhpCli($phpCli, array &$errors): void
     {
         $info = $this->serverInfo->getPhpExecutableFinder()->getServerInfo($phpCli);
 
@@ -206,7 +194,7 @@ class ConfigController extends Controller
         }
     }
 
-    private function getCloudConfig()
+    private function getCloudConfig(): array
     {
         $issues = $this->checkCloudIssues();
 
@@ -216,7 +204,7 @@ class ConfigController extends Controller
         ];
     }
 
-    private function checkCloudIssues()
+    private function checkCloudIssues(): array
     {
         $json = new JsonFile($this->environment->getJsonFile());
 

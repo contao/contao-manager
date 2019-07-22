@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -12,25 +14,20 @@ namespace Contao\ManagerApi\Composer;
 
 class CloudJob implements \JsonSerializable
 {
-    const STATUS_QUEUED = 'queued';
-    const STATUS_PROCESSING = 'processing';
-    const STATUS_FINISHED = 'finished';
-    const STATUS_ERROR = 'finished_with_errors';
+    public const STATUS_QUEUED = 'queued';
+    public const STATUS_PROCESSING = 'processing';
+    public const STATUS_FINISHED = 'finished';
+    public const STATUS_ERROR = 'finished_with_errors';
 
-    const LINK_JSON = 'composerJson';
-    const LINK_LOCK = 'composerLock';
-    const LINK_OUTPUT = 'composerOutput';
+    public const LINK_JSON = 'composerJson';
+    public const LINK_LOCK = 'composerLock';
+    public const LINK_OUTPUT = 'composerOutput';
 
     /**
      * @var array
      */
     private $result;
 
-    /**
-     * Constructor.
-     *
-     * @param array $result
-     */
     public function __construct(array $result)
     {
         $this->result = $result;
@@ -100,22 +97,22 @@ class CloudJob implements \JsonSerializable
 
     public function isQueued()
     {
-        return $this->getStatus() === self::STATUS_QUEUED;
+        return self::STATUS_QUEUED === $this->getStatus();
     }
 
     public function isProcessing()
     {
-        return $this->getStatus() === self::STATUS_PROCESSING;
+        return self::STATUS_PROCESSING === $this->getStatus();
     }
 
     public function isSuccessful()
     {
-        return $this->getStatus() === self::STATUS_FINISHED;
+        return self::STATUS_FINISHED === $this->getStatus();
     }
 
     public function isFailed()
     {
-        return $this->getStatus() === self::STATUS_ERROR;
+        return self::STATUS_ERROR === $this->getStatus();
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -12,11 +14,11 @@ namespace Contao\ManagerApi\Task;
 
 class TaskStatus
 {
-    const STATUS_ACTIVE = 'active';
-    const STATUS_COMPLETE = 'complete';
-    const STATUS_ERROR = 'error';
-    const STATUS_ABORTING = 'aborting';
-    const STATUS_STOPPED = 'stopped';
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_COMPLETE = 'complete';
+    public const STATUS_ERROR = 'error';
+    public const STATUS_ABORTING = 'aborting';
+    public const STATUS_STOPPED = 'stopped';
 
     /**
      * @var string
@@ -34,7 +36,7 @@ class TaskStatus
     private $detail = '';
 
     /**
-     * @var string|null|false
+     * @var string|false|null
      */
     private $console;
 
@@ -62,56 +64,40 @@ class TaskStatus
      * @param string $title
      * @param bool   $audit
      */
-    public function __construct($title, $audit = false)
+    public function __construct(string $title, bool $audit = false)
     {
         $this->title = $title;
         $this->audit = $audit;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
     /**
-     * @param mixed $title
-     *
      * @return TaskStatus
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->summary;
     }
 
-    /**
-     * @param string $summary
-     *
-     * @return TaskStatus
-     */
-    public function setSummary($summary)
+    public function setSummary(string $summary): self
     {
         $this->summary = $summary;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDetail()
+    public function getDetail(): string
     {
         return $this->detail;
     }
@@ -121,27 +107,22 @@ class TaskStatus
      *
      * @return TaskStatus
      */
-    public function setDetail($detail)
+    public function setDetail(string $detail): self
     {
         $this->detail = $detail;
 
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getConsole()
     {
         return $this->console;
     }
 
     /**
-     * @param string|null|false $console
-     *
-     * @return TaskStatus
+     * @param string|false|null $console
      */
-    public function setConsole($console)
+    public function setConsole($console): self
     {
         $this->console = $console;
 
@@ -154,7 +135,7 @@ class TaskStatus
      * @param string      $console
      * @param string|null $title
      */
-    public function addConsole($console, $title = null)
+    public function addConsole(string $console, string $title = null): void
     {
         if (null !== $title) {
             $console = sprintf("%s\n\n%s", $title, $console);
@@ -171,70 +152,43 @@ class TaskStatus
         $this->console = $console;
     }
 
-    /**
-     * @return bool
-     */
-    public function isCancellable()
+    public function isCancellable(): bool
     {
         return $this->cancellable;
     }
 
-    /**
-     * @param bool $stoppable
-     *
-     * @return TaskStatus
-     */
-    public function setCancellable($stoppable)
+    public function setCancellable(bool $stoppable): self
     {
         $this->cancellable = $stoppable;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function canAutoClose()
+    public function canAutoClose(): bool
     {
         return $this->autoClose;
     }
 
-    /**
-     * @param bool $autoClose
-     *
-     * @return TaskStatus
-     */
-    public function setAutoClose($autoClose)
+    public function setAutoClose(bool $autoClose): self
     {
         $this->autoClose = $autoClose;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasAudit()
+    public function hasAudit(): bool
     {
         return $this->audit;
     }
 
-    /**
-     * @param bool $audit
-     *
-     * @return TaskStatus
-     */
-    public function setAudit($audit)
+    public function setAudit(bool $audit): self
     {
         $this->audit = $audit;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -244,30 +198,30 @@ class TaskStatus
      *
      * @return TaskStatus
      */
-    public function setStatus($status)
+    public function setStatus($status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function isActive()
+    public function isActive(): bool
     {
-        return $this->status === self::STATUS_ACTIVE;
+        return self::STATUS_ACTIVE === $this->status;
     }
 
-    public function isComplete()
+    public function isComplete(): bool
     {
-        return $this->status === self::STATUS_COMPLETE;
+        return self::STATUS_COMPLETE === $this->status;
     }
 
-    public function isStopped()
+    public function isStopped(): bool
     {
-        return $this->status === self::STATUS_STOPPED;
+        return self::STATUS_STOPPED === $this->status;
     }
 
-    public function hasError()
+    public function hasError(): bool
     {
-        return $this->status === self::STATUS_ERROR;
+        return self::STATUS_ERROR === $this->status;
     }
 }

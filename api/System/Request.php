@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -35,6 +37,8 @@ class Request
     }
 
     /**
+     * @param mixed|null $statusCode
+     *
      * @throws \ErrorException
      */
     public function get($url, &$statusCode = null, $catch = false)
@@ -44,7 +48,7 @@ class Request
         try {
             $content = file_get_contents($url, false, $context);
             $statusCode = $this->getLastStatusCode($http_response_header);
-        } catch (\ErrorException $e) {
+        } catch (\Throwable $e) {
             if ($catch) {
                 return false;
             }
@@ -56,6 +60,8 @@ class Request
     }
 
     /**
+     * @param mixed|null $statusCode
+     *
      * @throws \ErrorException
      */
     public function getStream($url, &$statusCode = null, $catch = false)
@@ -65,7 +71,7 @@ class Request
         try {
             $stream = fopen($url, 'rb', false, $context);
             $statusCode = $this->getLastStatusCode($http_response_header);
-        } catch (\ErrorException $e) {
+        } catch (\Throwable $e) {
             if ($catch) {
                 return false;
             }
@@ -77,6 +83,8 @@ class Request
     }
 
     /**
+     * @param mixed|null $statusCode
+     *
      * @throws \ErrorException
      */
     public function getJson($url, array $headers = [], &$statusCode = null, $catch = false)
@@ -88,7 +96,7 @@ class Request
         try {
             $content = file_get_contents($url, false, $context);
             $statusCode = $this->getLastStatusCode($http_response_header);
-        } catch (\ErrorException $e) {
+        } catch (\Throwable $e) {
             if ($catch) {
                 return false;
             }
@@ -100,6 +108,8 @@ class Request
     }
 
     /**
+     * @param mixed|null $statusCode
+     *
      * @throws \ErrorException
      */
     public function postJson($url, $content, array $headers = [], &$statusCode = null, $catch = false)
@@ -117,7 +127,7 @@ class Request
         try {
             $content = file_get_contents($url, false, $context);
             $statusCode = $this->getLastStatusCode($http_response_header);
-        } catch (\ErrorException $e) {
+        } catch (\Throwable $e) {
             if ($catch) {
                 return false;
             }
@@ -129,6 +139,8 @@ class Request
     }
 
     /**
+     * @param mixed|null $statusCode
+     *
      * @throws \ErrorException
      */
     public function deleteJson($url, array $headers = [], &$statusCode = null, $catch = false)
@@ -144,7 +156,7 @@ class Request
         try {
             $content = file_get_contents($url, false, $context);
             $statusCode = $this->getLastStatusCode($http_response_header);
-        } catch (\ErrorException $e) {
+        } catch (\Throwable $e) {
             if ($catch) {
                 return false;
             }
@@ -167,8 +179,8 @@ class Request
         $options['http']['header'][] = sprintf(
             'User-Agent: Contao Manager/%s (%s; %s; %s%s)',
             $this->kernel->getVersion() === ('@'.'package_version'.'@') ? 'source' : $this->kernel->getVersion(),
-            function_exists('php_uname') ? php_uname('s') : 'Unknown',
-            function_exists('php_uname') ? php_uname('r') : 'Unknown',
+            \function_exists('php_uname') ? php_uname('s') : 'Unknown',
+            \function_exists('php_uname') ? php_uname('r') : 'Unknown',
             PHP_VERSION,
             getenv('CI') ? '; CI' : ''
         );
@@ -181,7 +193,7 @@ class Request
      */
     private function getTlsDefaults(array $options)
     {
-        $ciphers = implode(':', array(
+        $ciphers = implode(':', [
             'ECDHE-RSA-AES128-GCM-SHA256',
             'ECDHE-ECDSA-AES128-GCM-SHA256',
             'ECDHE-RSA-AES256-GCM-SHA384',
@@ -223,7 +235,7 @@ class Request
             '!EDH-DSS-DES-CBC3-SHA',
             '!EDH-RSA-DES-CBC3-SHA',
             '!KRB5-DES-CBC3-SHA',
-        ));
+        ]);
 
         /**
          * CN_match and SNI_server_name are only known once a URL is passed.
@@ -231,20 +243,20 @@ class Request
          *
          * cafile or capath can be overridden by passing in those options to constructor.
          */
-        $defaults = array(
-            'ssl' => array(
+        $defaults = [
+            'ssl' => [
                 'ciphers' => $ciphers,
                 'verify_peer' => true,
                 'verify_depth' => 7,
                 'SNI_enabled' => true,
-            ),
-        );
+            ],
+        ];
 
         if (isset($options['ssl'])) {
             $defaults['ssl'] = array_replace_recursive($defaults['ssl'], $options['ssl']);
         }
 
-        /**
+        /*
          * Attempt to find a local cafile or throw an exception if none pre-set
          * The user may go download one if this occurs.
          */
@@ -258,19 +270,17 @@ class Request
             }
         }
 
-        /**
+        /*
          * Disable TLS compression to prevent CRIME attacks where supported.
          */
-        if (PHP_VERSION_ID >= 50413) {
-            $defaults['ssl']['disable_compression'] = true;
-        }
+        $defaults['ssl']['disable_compression'] = true;
 
         return $defaults;
     }
 
     private function getLastStatusCode($http_response_header)
     {
-        if (!is_array($http_response_header)) {
+        if (!\is_array($http_response_header)) {
             return 500;
         }
 

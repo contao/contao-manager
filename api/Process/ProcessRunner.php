@@ -1,6 +1,16 @@
-<?php
+<?php /** @noinspection PhpComposerExtensionStubsInspection */
 
-declare(ticks = 1);
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
+declare(ticks=1);
 
 namespace Contao\ManagerApi\Process;
 
@@ -23,19 +33,14 @@ class ProcessRunner extends AbstractProcess
     private $stdout;
     private $stderr;
 
-    /**
-     * Constructor.
-     *
-     * @param string $configFile
-     */
-    public function __construct($configFile)
+    public function __construct(string $configFile)
     {
         $config = static::readConfig($configFile);
 
-        parent::__construct($config['id'], dirname($configFile));
+        parent::__construct($config['id'], \dirname($configFile));
 
-        $commandline = isset($config['commandline']) ? $config['commandline'] : '';
-        $cwd = isset($config['cwd']) ? $config['cwd'] : null;
+        $commandline = $config['commandline'] ?? '';
+        $cwd = $config['cwd'] ?? null;
 
         $this->process = new Process($commandline, $cwd);
 
@@ -47,26 +52,28 @@ class ProcessRunner extends AbstractProcess
         $this->stop(0);
     }
 
-    public function run($interval = 1)
+    public function run(int $interval = 1): int
     {
         $this->start();
 
         return $this->wait($interval);
     }
 
-    public function start()
+    public function start(): void
     {
         if ($this->process->isStarted()) {
             return;
         }
 
         $handler = function ($signo = 15) {
-            return $this->signalHandler($signo);
+            $this->signalHandler($signo);
+
+            return null;
         };
 
         register_shutdown_function($handler);
 
-        if (function_exists('pcntl_signal')) {
+        if (\function_exists('pcntl_signal')) {
             pcntl_signal(SIGHUP, $handler);
             pcntl_signal(SIGINT, $handler);
             pcntl_signal(SIGQUIT, $handler);
@@ -79,7 +86,7 @@ class ProcessRunner extends AbstractProcess
         }
 
         $this->process->start(
-            function ($type, $data) {
+            function ($type, $data): void {
                 if (Process::OUT === $type) {
                     $this->addOutput($data);
                 } else {
@@ -91,7 +98,7 @@ class ProcessRunner extends AbstractProcess
         $this->saveConfig();
     }
 
-    public function wait($interval)
+    public function wait(int $interval): int
     {
         do {
             usleep($interval * 1000000);
@@ -118,7 +125,7 @@ class ProcessRunner extends AbstractProcess
         return $this->process->getExitCode();
     }
 
-    public function stop($timeout = 10)
+    public function stop(int $timeout = 10): int
     {
         if (!$this->process->isRunning()) {
             return $this->process->getExitCode();
@@ -132,42 +139,42 @@ class ProcessRunner extends AbstractProcess
         return $exitCode;
     }
 
-    private function close()
+    public function addOutput(string $line): void
     {
-        if (is_resource($this->stdin)) {
-            fclose($this->stdin);
-        }
-
-        if (is_resource($this->stdout)) {
-            fclose($this->stdout);
-        }
-
-        if (is_resource($this->stderr)) {
-            fclose($this->stderr);
-        }
-    }
-
-    private function signalHandler($signo)
-    {
-        $this->stop(15 === $signo ? 0 : 10);
-    }
-
-    public function addOutput($line)
-    {
-        if (!is_resource($this->stdout)) {
+        if (!\is_resource($this->stdout)) {
             $this->stdout = fopen($this->outputFile, 'wb');
         }
 
         fwrite($this->stdout, $line);
     }
 
-    public function addErrorOutput($line)
+    public function addErrorOutput(string $line): void
     {
-        if (!is_resource($this->stderr)) {
+        if (!\is_resource($this->stderr)) {
             $this->stderr = fopen($this->errorOutputFile, 'wb');
         }
 
         fwrite($this->stderr, $line);
+    }
+
+    private function close(): void
+    {
+        if (\is_resource($this->stdin)) {
+            fclose($this->stdin);
+        }
+
+        if (\is_resource($this->stdout)) {
+            fclose($this->stdout);
+        }
+
+        if (\is_resource($this->stderr)) {
+            fclose($this->stderr);
+        }
+    }
+
+    private function signalHandler(int $signo): void
+    {
+        $this->stop(15 === $signo ? 0 : 10);
     }
 
     private function loadConfig(array $config = null)
@@ -190,7 +197,7 @@ class ProcessRunner extends AbstractProcess
         return $config;
     }
 
-    private function saveConfig()
+    private function saveConfig(): void
     {
         $status = $this->process->getStatus();
 
@@ -218,8 +225,6 @@ class ProcessRunner extends AbstractProcess
 
     /**
      * Returns the timeout type.
-     *
-     * @return int
      */
     private function timeoutCode()
     {

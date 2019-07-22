@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -30,8 +32,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * Constructor.
-     *
-     * @param UserConfig $config
      */
     public function __construct(UserConfig $config)
     {
@@ -65,7 +65,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
         $authentication = $this->getAuthenticationHeader($request);
 
-        if (is_string($authentication) && 0 === stripos($authentication, 'bearer ')) {
+        if (\is_string($authentication) && 0 === stripos($authentication, 'bearer ')) {
             return substr($authentication, 7);
         }
 
@@ -107,7 +107,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        $token->setAttribute('authenticator', get_called_class());
+        $token->setAttribute('authenticator', \get_called_class());
 
         return null;
     }
@@ -123,8 +123,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * Gets the authentication header from request or HTTP headers.
      *
-     * @param Request $request
-     *
      * @return string|null
      */
     private function getAuthenticationHeader(Request $request)
@@ -137,7 +135,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             return $request->server->get('REDIRECT_HTTP_AUTHORIZATION');
         }
 
-        if (function_exists('getallheaders')) {
+        if (\function_exists('getallheaders')) {
             /** @noinspection PhpComposerExtensionStubsInspection */
             $headers = getallheaders();
 

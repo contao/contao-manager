@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -25,16 +27,9 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     private $container;
 
-    /**
-     * Constructor.
-     *
-     * @param ContainerInterface $container
-     * @param ApiKernel          $kernel
-     * @param Filesystem         $filesystem
-     */
     public function __construct(ContainerInterface $container, ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $configFile = $kernel->getConfigDir().DIRECTORY_SEPARATOR.'users.json';
+        $configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'users.json';
 
         parent::__construct($configFile, $filesystem);
 
@@ -50,10 +45,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Gets the application secret.
-     *
-     * @return string
      */
-    public function getSecret()
+    public function getSecret(): string
     {
         if (!isset($this->data['secret'])) {
             $this->setSecret(bin2hex(random_bytes(40)));
@@ -67,7 +60,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      *
      * @param string $secret
      */
-    public function setSecret($secret)
+    public function setSecret($secret): void
     {
         if (empty($secret)) {
             throw new \InvalidArgumentException('Secret cannot be empty.');
@@ -80,16 +73,14 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Counts the users.
-     *
-     * @return int
      */
-    public function countUsers()
+    public function countUsers(): int
     {
         if (!isset($this->data['users'])) {
             return 0;
         }
 
-        return count($this->data['users']);
+        return \count($this->data['users']);
     }
 
     /**
@@ -97,7 +88,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      *
      * @return UserInterface[]
      */
-    public function getUsers()
+    public function getUsers(): array
     {
         if (0 === $this->countUsers()) {
             return [];
@@ -117,24 +108,16 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Returns whether a user with the given username exists.
-     *
-     * @param string $username
-     *
-     * @return bool
      */
-    public function hasUser($username)
+    public function hasUser(string $username): bool
     {
         return isset($this->data['users'][$username]);
     }
 
     /**
      * Gets the user by username or null if it does not exist.
-     *
-     * @param string $username
-     *
-     * @return User|null
      */
-    public function getUser($username)
+    public function getUser(string $username): ?UserInterface
     {
         if (!isset($this->data['users'][$username])) {
             return null;
@@ -148,13 +131,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Creates user from given username and plaintext password but does not add it.
-     *
-     * @param string $username
-     * @param string $password
-     *
-     * @return UserInterface
      */
-    public function createUser($username, $password)
+    public function createUser(string $username, string $password): UserInterface
     {
         $password = $this->container->get(UserPasswordEncoderInterface::class)->encodePassword(
             new User($username, null),
@@ -166,10 +144,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Adds a user to the configuration file.
-     *
-     * @param UserInterface $user
      */
-    public function addUser(UserInterface $user)
+    public function addUser(UserInterface $user): void
     {
         $username = $user->getUsername();
 
@@ -187,10 +163,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Replaces a user in the configuration file.
-     *
-     * @param UserInterface $user
      */
-    public function updateUser(UserInterface $user)
+    public function updateUser(UserInterface $user): void
     {
         unset($this->data['users'][$user->getUsername()]);
 
@@ -199,10 +173,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Deletes a user from the configuration file.
-     *
-     * @param mixed $username
      */
-    public function deleteUser($username)
+    public function deleteUser(string $username): void
     {
         unset($this->data['users'][$username]);
 
@@ -211,10 +183,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Gets tokens from the configuration file.
-     *
-     * @return array
      */
-    public function getTokens()
+    public function getTokens(): array
     {
         if (!isset($this->data['tokens']) || !\is_array($this->data['tokens'])) {
             return [];
@@ -234,12 +204,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Gets token payload by ID (hashed token value).
-     *
-     * @param string $id
-     *
-     * @return array|null
      */
-    public function getToken($id)
+    public function getToken(string $id): ?array
     {
         if (!isset($this->data['tokens'][$id])) {
             return null;
@@ -253,26 +219,16 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Finds token payload by unhashed token value.
-     *
-     * @param string $token
-     *
-     * @return array|null
      */
-    public function findToken($token)
+    public function findToken(string $token): ?array
     {
         return $this->getToken(hash('sha256', $token));
     }
 
     /**
      * Creates a token for given username.
-     *
-     * @param string $username
-     * @param string $clientId
-     * @param string $scope
-     *
-     * @return string
      */
-    public function createToken($username, $clientId, $scope = 'admin')
+    public function createToken(string $username, string $clientId, string $scope = 'admin'): array
     {
         if (!$this->hasUser($username)) {
             throw new \RuntimeException(sprintf('Username "%s" does not exist.', $username));
@@ -304,10 +260,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     /**
      * Deletes a token from the configuration file.
-     *
-     * @param string $id
      */
-    public function deleteToken($id)
+    public function deleteToken(string $id): void
     {
         unset($this->data['tokens'][$id]);
 
@@ -317,7 +271,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return [
             UserPasswordEncoderInterface::class,
@@ -328,7 +282,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     /**
      * Migrates the secret from manager config to user config.
      */
-    private function migrateSecret()
+    private function migrateSecret(): void
     {
         if (!isset($this->data['secret'])) {
             $config = $this->container->get(ManagerConfig::class);
@@ -344,7 +298,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
         }
     }
 
-    private function hashTokens()
+    private function hashTokens(): void
     {
         if (!isset($this->data['tokens']) || !\is_array($this->data['tokens'])) {
             return;

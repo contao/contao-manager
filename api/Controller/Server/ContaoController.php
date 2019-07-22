@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -21,7 +23,6 @@ use Contao\ManagerApi\Process\ContaoConsole;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/server/contao", methods={"GET"})
  */
-class ContaoController extends Controller
+class ContaoController
 {
     /**
      * @var ApiKernel
@@ -79,12 +80,7 @@ class ContaoController extends Controller
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    /**
-     * Gets response about Composer configuration and file validation.
-     *
-     * @return Response
-     */
-    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo, Translator $translator)
+    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo, Translator $translator): Response
     {
         if (!$managerConfig->has('server') || !$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
@@ -110,7 +106,7 @@ class ContaoController extends Controller
         }
 
         if (null === $contaoVersion) {
-            if (0 === count($files = $this->getProjectFiles())) {
+            if (0 === \count($files = $this->getProjectFiles())) {
                 return new JsonResponse(
                     [
                         'version' => null,
@@ -140,13 +136,12 @@ class ContaoController extends Controller
 
     /**
      * Gets a list of files in the project root directory, excluding what is allowed to install Contao.
-     *
-     * @return array
      */
-    private function getProjectFiles()
+    private function getProjectFiles(): array
     {
         $content = scandir($this->kernel->getProjectDir(), SCANDIR_SORT_NONE);
-        $content = array_diff(
+
+        return array_diff(
             $content,
             [
                 '.',
@@ -165,16 +160,12 @@ class ContaoController extends Controller
                 'user.ini',
             ]
         );
-
-        return $content;
     }
 
     /**
      * Gets the Contao API version.
-     *
-     * @return int|null
      */
-    private function getApiVersion()
+    private function getApiVersion(): ?int
     {
         try {
             return $this->contaoApi->getVersion();
@@ -185,17 +176,15 @@ class ContaoController extends Controller
 
     /**
      * Tries to detect the Contao 4/3/2 version by analyzing the filesystem.
-     *
-     * @return null|string
      */
-    private function getContaoVersion()
+    private function getContaoVersion(): ?string
     {
         if ($this->filesystem->exists($this->processFactory->getContaoConsolePath())) {
             return $this->contaoConsole->getVersion();
         }
 
         // Required for Contao 2.11
-        define('TL_ROOT', $this->kernel->getProjectDir());
+        \define('TL_ROOT', $this->kernel->getProjectDir());
 
         $files = [
             $this->kernel->getProjectDir().'/system/constants.php',
@@ -204,8 +193,8 @@ class ContaoController extends Controller
 
         // Test if the Phar was placed in the Contao 2/3 root
         if ('' !== ($phar = \Phar::running(false))) {
-            $files[] = dirname($phar).'/system/constants.php';
-            $files[] = dirname($phar).'/system/config/constants.php';
+            $files[] = \dirname($phar).'/system/constants.php';
+            $files[] = \dirname($phar).'/system/config/constants.php';
         }
 
         if ($this->logger instanceof LoggerInterface) {
@@ -222,7 +211,7 @@ class ContaoController extends Controller
                     // do nothing on exception
                 }
 
-                if (defined('VERSION') && defined('BUILD')) {
+                if (\defined('VERSION') && \defined('BUILD')) {
                     return VERSION.'.'.BUILD;
                 }
 

@@ -1,5 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Contao\ManagerApi\Exception;
 
 class InvalidJsonException extends \InvalidArgumentException
@@ -32,7 +42,7 @@ class InvalidJsonException extends \InvalidArgumentException
      * @param int        $code
      * @param \Exception $previous
      */
-    public function __construct($filename, $content = '', $code = 0, \Exception $previous = null)
+    public function __construct(string $filename, string $content = '', int $code = 0, \Exception $previous = null)
     {
         parent::__construct(sprintf('File "%s" does not contain valid JSON.', $filename), $code, $previous);
 
@@ -45,40 +55,32 @@ class InvalidJsonException extends \InvalidArgumentException
 
     /**
      * Gets name of the JSON file.
-     *
-     * @return string
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
 
     /**
      * Gets the invalid file content.
-     *
-     * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
     /**
      * Gets the json_last_error.
-     *
-     * @return string
      */
-    public function getJsonError()
+    public function getJsonError(): int
     {
         return $this->jsonError;
     }
 
     /**
      * Gets the json_last_error_msg.
-     *
-     * @return string
      */
-    public function getJsonErrorMessage()
+    public function getJsonErrorMessage(): string
     {
         return $this->jsonErrorMsg;
     }

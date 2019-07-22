@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -34,7 +36,7 @@ class IntegrityCheckCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('integrity-check')
@@ -76,21 +78,13 @@ class IntegrityCheckCommand extends Command
         return 0;
     }
 
-    /**
-     * Writes JSON response to output.
-     *
-     * @param OutputInterface $output
-     * @param ApiProblem|null $problem
-     *
-     * @return int
-     */
-    private function writeJson(OutputInterface $output, ApiProblem $problem = null)
+    private function writeJson(OutputInterface $output, ApiProblem $problem = null): int
     {
         $output->write(
             json_encode(
                 [
                     'version' => PHP_VERSION,
-                    'version_id' => PHP_VERSION_ID,
+                    'version_id' => \PHP_VERSION_ID,
                     'problem' => $problem ? $problem->asArray() : null,
                 ],
                 JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT

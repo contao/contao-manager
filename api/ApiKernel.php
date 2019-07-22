@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -50,13 +52,13 @@ class ApiKernel extends Kernel
      */
     public function __construct($environment)
     {
-        $debug = $environment === 'dev';
+        $debug = 'dev' === $environment;
 
         ErrorHandler::register();
 
         error_reporting($debug ? E_ALL : E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR);
         ini_set('display_errors', $debug);
-        ini_set('error_log', $this->getLogDir().DIRECTORY_SEPARATOR.'error.log');
+        ini_set('error_log', $this->getLogDir().\DIRECTORY_SEPARATOR.'error.log');
 
         parent::__construct($environment, $debug);
 
@@ -66,21 +68,19 @@ class ApiKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function registerBundles()
+    public function registerBundles(): array
     {
-        $bundles = [
+        return [
             new FrameworkBundle(),
             new SecurityBundle(),
             new MonologBundle(),
         ];
-
-        return $bundles;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRootDir()
+    public function getRootDir(): string
     {
         return __DIR__;
     }
@@ -88,7 +88,7 @@ class ApiKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         if (null === $this->projectDir) {
             $this->projectDir = $this->findProjectDir();
@@ -100,7 +100,7 @@ class ApiKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return $this->debug ? $this->getConfigDir().'/appcache' : __DIR__.'/Resources/cache';
     }
@@ -108,7 +108,7 @@ class ApiKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return $this->getConfigDir().'/logs';
     }
@@ -118,13 +118,13 @@ class ApiKernel extends Kernel
      *
      * @return string
      */
-    public function getConfigDir()
+    public function getConfigDir(): string
     {
         if (null !== $this->configDir) {
             return $this->configDir;
         }
 
-        $this->configDir = $this->getProjectDir().DIRECTORY_SEPARATOR.'contao-manager';
+        $this->configDir = $this->getProjectDir().\DIRECTORY_SEPARATOR.'contao-manager';
 
         if ('' === ($phar = \Phar::running(false))) {
             return $this->configDir;
@@ -134,8 +134,8 @@ class ApiKernel extends Kernel
 
         // Try to find a config directory in the parent from previous version
         if (!$filesystem->exists($this->configDir)) {
-            if ('web' !== basename(dirname($phar))) {
-                $parentDir = dirname($this->getProjectDir()).DIRECTORY_SEPARATOR.'contao-manager';
+            if ('web' !== basename(\dirname($phar))) {
+                $parentDir = \dirname($this->getProjectDir()).\DIRECTORY_SEPARATOR.'contao-manager';
 
                 if ($filesystem->exists($parentDir)) {
                     $filesystem->mirror($parentDir, $this->configDir);
@@ -146,8 +146,8 @@ class ApiKernel extends Kernel
         }
 
         // Make sure the config directory contains a .htaccess file
-        if (!$filesystem->exists($this->configDir.DIRECTORY_SEPARATOR.'.htaccess')) {
-            $filesystem->dumpFile($this->configDir.DIRECTORY_SEPARATOR.'.htaccess', <<<'CODE'
+        if (!$filesystem->exists($this->configDir.\DIRECTORY_SEPARATOR.'.htaccess')) {
+            $filesystem->dumpFile($this->configDir.\DIRECTORY_SEPARATOR.'.htaccess', <<<'CODE'
 <IfModule !mod_authz_core.c>
     Order deny,allow
     Deny from all
@@ -167,7 +167,7 @@ CODE
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->version;
     }
@@ -175,7 +175,7 @@ CODE
     /**
      * {@inheritdoc}
      */
-    protected function configureRoutes(RouteCollectionBuilder $routes)
+    protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
         $routes->import(__DIR__.'/Controller', '/api', 'annotation');
     }
@@ -183,7 +183,7 @@ CODE
     /**
      * {@inheritdoc}
      */
-    protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
+    protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader): void
     {
         $loader->load(__DIR__.'/Resources/config/config_'.$c->getParameter('kernel.environment').'.yml');
 
@@ -196,11 +196,11 @@ CODE
     /**
      * Configures the Composer environment variables to match the current setup.
      */
-    private function configureComposerEnvironment()
+    private function configureComposerEnvironment(): void
     {
         $root = $this->getProjectDir();
 
-        putenv('COMPOSER='.$root.DIRECTORY_SEPARATOR.'composer.json');
+        putenv('COMPOSER='.$root.\DIRECTORY_SEPARATOR.'composer.json');
         putenv('COMPOSER_HOME='.$this->getConfigDir());
         putenv('COMPOSER_HTACCESS_PROTECT=0');
 
@@ -212,32 +212,32 @@ CODE
      *
      * @return string
      */
-    private function findProjectDir()
+    private function findProjectDir(): string
     {
         // @see https://getcomposer.org/doc/03-cli.md#composer
         if (false !== ($composer = getenv('COMPOSER'))) {
-            return dirname($composer);
+            return \dirname($composer);
         }
 
         if ('' !== ($phar = \Phar::running(false))) {
-            if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && !empty($_SERVER['PWD'])) {
+            if (('cli' === \PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && !empty($_SERVER['PWD'])) {
                 return $_SERVER['PWD'];
             }
 
             $current = getcwd();
 
             if (!$current) {
-                $current = dirname($phar);
+                $current = \dirname($phar);
             }
 
             if ('web' === basename($current)) {
-                return dirname($current);
+                return \dirname($current);
             }
 
             return $current;
         }
 
-        $testDir = dirname(__DIR__).DIRECTORY_SEPARATOR.'test-dir';
+        $testDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'test-dir';
         (new Filesystem())->mkdir($testDir);
 
         return $testDir;

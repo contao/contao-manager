@@ -1,19 +1,24 @@
 <?php
 
-/**
- * Attempt to downgrade the current Contao Manager to version 1.1 if running on PHP < 7.1.3
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
  */
+
 class ContaoManagerDowngrade
 {
     public static function run()
     {
-        if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] === 'test') {
+        if (isset($_SERVER['argv'][1]) && 'test' === $_SERVER['argv'][1]) {
             // Ignore test command to check different PHP binaries
             return;
         }
 
         if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI']))
-            && (!isset($_SERVER['argv'][1]) || $_SERVER['argv'][1] !== 'downgrade')
+            && (!isset($_SERVER['argv'][1]) || 'downgrade' !== $_SERVER['argv'][1])
         ) {
             echo 'You are using PHP '.phpversion()." but you need least PHP 7.1.3 to run the Contao Manager.\n";
             echo 'Run "'.$_SERVER['argv'][0]." downgrade\" to downgrade to a PHP 5 compatible version.\n";

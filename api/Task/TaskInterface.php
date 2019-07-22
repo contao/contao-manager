@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -13,35 +15,27 @@ namespace Contao\ManagerApi\Task;
 interface TaskInterface
 {
     /**
-     * @return string
+     * Gets the task name.
      */
-    public function getName();
+    public function getName(): string;
 
     /**
-     * @param TaskConfig $config
-     *
-     * @return TaskStatus
+     * Creates a task.
      */
-    public function create(TaskConfig $config);
+    public function create(TaskConfig $config): TaskStatus;
 
     /**
-     * @param TaskConfig $config
-     *
-     * @return TaskStatus
+     * Updates the task.
      */
-    public function update(TaskConfig $config);
+    public function update(TaskConfig $config): TaskStatus;
 
     /**
-     * @param TaskConfig $config
-     *
-     * @return TaskStatus
+     * Cancels a task.
      */
-    public function abort(TaskConfig $config);
+    public function abort(TaskConfig $config): TaskStatus;
 
     /**
-     * @param TaskConfig $config
-     *
-     * @return bool
+     * Deletes a task.
      */
-    public function delete(TaskConfig $config);
+    public function delete(TaskConfig $config): bool;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -46,11 +48,6 @@ class CreateProjectOperation extends AbstractInlineOperation
 
     /**
      * Constructor.
-     *
-     * @param TaskConfig  $taskConfig
-     * @param Environment $environment
-     * @param Translator  $translator
-     * @param Filesystem  $filesystem
      */
     public function __construct(TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem)
     {
@@ -61,7 +58,7 @@ class CreateProjectOperation extends AbstractInlineOperation
         $this->filesystem = $filesystem;
         $this->version = $taskConfig->getOption('version');
 
-        if (!in_array($this->version, static::$supportedVersions, true)) {
+        if (!\in_array($this->version, static::$supportedVersions, true)) {
             throw new \InvalidArgumentException('Unsupported Contao version');
         }
     }
@@ -69,7 +66,7 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         $status->setSummary($this->translator->trans('taskoperation.create-project.summary'));
         $status->setDetail('contao/managed-edition '.$this->version);
@@ -80,12 +77,12 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    protected function addConsoleStatus(TaskStatus $status)
+    protected function addConsoleStatus(TaskStatus $status): void
     {
         $status->addConsole('> Installing contao/managed-edition '.$this->version);
 
         if ($console = $this->taskConfig->getState($this->getName().'.console')) {
-            $status->addConsole($console);
+            $status->addConsole((string) $console);
         }
 
         parent::addConsoleStatus($status);
@@ -94,7 +91,7 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    protected function getName()
+    protected function getName(): string
     {
         return 'create-project';
     }
@@ -102,7 +99,7 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    protected function doRun()
+    protected function doRun(): bool
     {
         $protected = [
             $this->environment->getJsonFile(),

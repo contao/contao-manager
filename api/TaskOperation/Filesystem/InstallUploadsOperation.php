@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -49,7 +51,7 @@ class InstallUploadsOperation extends AbstractInlineOperation
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         $status->setSummary($this->translator->trans('taskoperation.install-uploads.summary'));
 
@@ -72,7 +74,7 @@ class InstallUploadsOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    protected function doRun()
+    protected function doRun(): bool
     {
         $installed = [];
 
@@ -104,7 +106,7 @@ class InstallUploadsOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    protected function getName()
+    protected function getName(): string
     {
         return 'install-uploads';
     }

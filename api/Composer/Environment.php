@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -45,12 +47,6 @@ class Environment
      */
     private $composer;
 
-    /**
-     * Constructor.
-     *
-     * @param ApiKernel     $kernel
-     * @param ManagerConfig $managerConfig
-     */
     public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, Filesystem $filesystem)
     {
         $this->kernel = $kernel;
@@ -61,68 +57,56 @@ class Environment
     /**
      * Resets the Composer object (necessary after modifying Composer files).
      */
-    public function reset()
+    public function reset(): void
     {
         $this->composer = null;
     }
 
     /**
      * Returns whether debug mode is activated.
-     *
-     * @return bool
      */
-    public function isDebug()
+    public function isDebug(): bool
     {
         return $this->kernel->isDebug();
     }
 
     /**
      * Gets path to the directory where all Contao Manager related information is stored.
-     *
-     * @return string
      */
-    public function getBackupDir()
+    public function getBackupDir(): string
     {
         return $this->kernel->getConfigDir();
     }
 
     /**
      * Gets path to the composer.json file in the Contao root.
-     *
-     * @return string
      */
-    public function getJsonFile()
+    public function getJsonFile(): string
     {
-        return $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'composer.json';
+        return $this->kernel->getProjectDir().\DIRECTORY_SEPARATOR.'composer.json';
     }
 
     /**
      * Gets path to the composer.lock file in the Contao root.
-     *
-     * @return string
      */
-    public function getLockFile()
+    public function getLockFile(): string
     {
-        return $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'composer.lock';
+        return $this->kernel->getProjectDir().\DIRECTORY_SEPARATOR.'composer.lock';
     }
 
     /**
      * Gets the directory where Composer installs its packages to.
-     *
-     * @return string
      */
-    public function getVendorDir()
+    public function getVendorDir(): string
     {
-        return $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'vendor';
+        return $this->kernel->getProjectDir().\DIRECTORY_SEPARATOR.'vendor';
     }
 
     /**
      * Gets the directory where uploads are stored to.
      * These are temporary and only until they are installed as artifact or provider.
-     *
-     * @return string
      */
-    public function getUploadDir()
+    public function getUploadDir(): string
     {
         $dir = $this->kernel->getConfigDir().'/uploads';
 
@@ -134,11 +118,10 @@ class Environment
     /**
      * Gets the path where artifacts are installed to.
      * Artifacts are ZIP files that contain Composer packages.
-     * @see https://getcomposer.org/doc/05-repositories.md#artifact
      *
-     * @return string
+     * @see https://getcomposer.org/doc/05-repositories.md#artifact
      */
-    public function getArtifactDir()
+    public function getArtifactDir(): string
     {
         $dir = $this->kernel->getConfigDir().'/packages';
 
@@ -149,10 +132,8 @@ class Environment
 
     /**
      * Gets list of file names in the artifacts directory.
-     *
-     * @return array
      */
-    public function getArtifacts()
+    public function getArtifacts(): array
     {
         $files = [];
         $finder = (new Finder())
@@ -170,10 +151,8 @@ class Environment
 
     /**
      * Gets the Composer instance.
-     *
-     * @return Composer
      */
-    public function getComposer($reload = false)
+    public function getComposer($reload = false): Composer
     {
         if (null === $this->composer || $reload) {
             $this->composer = Factory::create(new NullIO(), $this->getJsonFile());
@@ -184,25 +163,20 @@ class Environment
 
     /**
      * Gets whether the Cloud resolver is enabled in the Manager configuration.
-     *
-     * @return bool
      */
-    public function useCloudResolver()
+    public function useCloudResolver(): bool
     {
         return !$this->managerConfig->get('disable_cloud', false);
     }
 
-    /**
-     * @return JsonFile
-     */
-    public function getComposerJsonFile()
+    public function getComposerJsonFile(): JsonFile
     {
         $file = $this->getComposer()->getConfig()->getConfigSource()->getName();
 
         return new JsonFile($file);
     }
 
-    public function getComposerJson()
+    public function getComposerJson(): array
     {
         $json = $this->getComposerJsonFile()->read();
 
@@ -214,7 +188,7 @@ class Environment
         return $json;
     }
 
-    public function getComposerLock()
+    public function getComposerLock(): array
     {
         $locker = $this->getComposer()->getLocker();
 
@@ -225,7 +199,7 @@ class Environment
         return $locker->getLockData();
     }
 
-    public function getPlatformPackages()
+    public function getPlatformPackages(): array
     {
         $platformOverrides = $this->getComposer()->getConfig()->get('platform');
         $platform = [];
@@ -241,7 +215,7 @@ class Environment
         return $platform;
     }
 
-    public function getLocalPackages()
+    public function getLocalPackages(): array
     {
         $packages = [];
         $repositories = $this->getComposer()->getRepositoryManager()->getRepositories();

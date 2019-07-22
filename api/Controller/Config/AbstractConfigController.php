@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -23,22 +25,12 @@ abstract class AbstractConfigController extends Controller
      */
     protected $config;
 
-    /**
-     * Constructor.
-     *
-     * @param AbstractConfig $config
-     */
     public function __construct(AbstractConfig $config)
     {
         $this->config = $config;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         switch ($request->getMethod()) {
             case 'PUT':

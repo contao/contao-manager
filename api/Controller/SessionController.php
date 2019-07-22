@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -14,22 +16,27 @@ use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Security\JwtManager;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/session", methods={"GET", "POST", "DELETE"})
  */
-class SessionController extends Controller
+class SessionController
 {
     /**
      * @var UserConfig
      */
     private $config;
+
+    /**
+     * @var Security
+     */
+    private $security;
 
     /**
      * @var JwtManager
@@ -41,31 +48,19 @@ class SessionController extends Controller
      */
     private $passwordEncoder;
 
-    /**
-     * Constructor.
-     *
-     * @param UserConfig                   $config
-     * @param JwtManager                   $jwtManager
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     */
     public function __construct(
         UserConfig $config,
+        Security $security,
         JwtManager $jwtManager,
         UserPasswordEncoderInterface $passwordEncoder
     ) {
         $this->config = $config;
+        $this->security = $security;
         $this->jwtManager = $jwtManager;
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    /**
-     * Handles the controller action.
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         switch ($request->getMethod()) {
             case 'GET':
@@ -83,13 +78,11 @@ class SessionController extends Controller
 
     /**
      * Returns the login status of the user.
-     *
-     * @return Response
      */
-    private function getStatus()
+    private function getStatus(): Response
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new JsonResponse(['username' => (string) $this->getUser()]);
+        if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return new JsonResponse(['username' => (string) $this->security->getUser()]);
         }
 
         if (0 === $this->config->countUsers()) {
@@ -101,14 +94,10 @@ class SessionController extends Controller
 
     /**
      * Logs the user in from request data. If no user exist, the first user is created from this data.
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
-    private function handleLogin(Request $request)
+    private function handleLogin(Request $request): Response
     {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
             return new ApiProblemResponse(
                 (new ApiProblem('User is already logged in'))->setStatus(Response::HTTP_BAD_REQUEST)
             );
@@ -138,12 +127,14 @@ class SessionController extends Controller
 
     /**
      * Logs the user out by removing cookies from the browser.
-     *
-     * @return Response
      */
-    private function handleLogout(Request $request)
+    private function handleLogout(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if (!$this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return new ApiProblemResponse(
+                (new ApiProblem('User is not logged in'))->setStatus(Response::HTTP_BAD_REQUEST)
+            );
+        }
 
         $response = new Response('', Response::HTTP_NO_CONTENT);
 

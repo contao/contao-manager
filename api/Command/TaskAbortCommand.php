@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -16,11 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TaskAbortCommand extends TaskUpdateCommand
 {
-    /**
-     * Constructor.
-     *
-     * @param TaskManager $taskManager
-     */
     public function __construct(TaskManager $taskManager)
     {
         parent::__construct($taskManager);
@@ -29,7 +26,7 @@ class TaskAbortCommand extends TaskUpdateCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

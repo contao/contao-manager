@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -32,11 +34,8 @@ class InstallOperation extends AbstractProcessOperation
     /**
      * Constructor.
      *
-     * @param ConsoleProcessFactory $processFactory
-     * @param TaskConfig            $taskConfig
-     * @param Translator            $translator
-     * @param bool                  $dryRun
-     * @param null                  $timeout
+     * @param bool $dryRun
+     * @param null $timeout
      */
     public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Environment $environment, Translator $translator, $dryRun = false, $timeout = null)
     {
@@ -89,7 +88,7 @@ class InstallOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         if (!$this->process->isStarted()) {
             return;

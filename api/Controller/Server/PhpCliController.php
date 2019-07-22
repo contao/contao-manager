@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -15,7 +17,6 @@ use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,14 +24,9 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/server/php-cli", methods={"GET"})
  */
-class PhpCliController extends Controller
+class PhpCliController
 {
-    /**
-     * Gets response about PHP command line version and issues.
-     *
-     * @return Response
-     */
-    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo, ConsoleProcessFactory $processFactory)
+    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo, ConsoleProcessFactory $processFactory): Response
     {
         if (!$managerConfig->has('server') || !$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
@@ -42,7 +38,7 @@ class PhpCliController extends Controller
         return new JsonResponse($this->runIntegrityChecks($processFactory));
     }
 
-    private function runIntegrityChecks(ConsoleProcessFactory $processFactory)
+    private function runIntegrityChecks(ConsoleProcessFactory $processFactory): array
     {
         $process = $processFactory->createManagerConsoleProcess(
             [

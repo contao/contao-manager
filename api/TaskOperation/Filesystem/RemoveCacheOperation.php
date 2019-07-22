@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -42,11 +44,7 @@ class RemoveCacheOperation extends AbstractInlineOperation
     /**
      * Constructor.
      *
-     * @param string     $environment
-     * @param ApiKernel  $kernel
-     * @param TaskConfig $taskConfig
-     * @param Translator $translator
-     * @param Filesystem $filesystem
+     * @param string $environment
      */
     public function __construct($environment, ApiKernel $kernel, TaskConfig $taskConfig, Translator $translator, Filesystem $filesystem)
     {
@@ -61,7 +59,7 @@ class RemoveCacheOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    public function doRun()
+    public function doRun(): bool
     {
         $this->filesystem->remove($this->getCacheDir());
 
@@ -71,7 +69,7 @@ class RemoveCacheOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         $status->setSummary($this->translator->trans('taskoperation.remove-cache.summary'));
         $status->setDetail($this->getCacheDir());
@@ -79,7 +77,7 @@ class RemoveCacheOperation extends AbstractInlineOperation
         $this->addConsoleStatus($status);
     }
 
-    protected function getName()
+    protected function getName(): string
     {
         return 'remove-cache@'.$this->getCacheDir();
     }

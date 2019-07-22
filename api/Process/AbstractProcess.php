@@ -1,10 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Contao\ManagerApi\Process;
 
+use Contao\ManagerApi\Exception\InvalidJsonException;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Contao\ManagerApi\Exception\InvalidJsonException;
 
 abstract class AbstractProcess
 {
@@ -15,14 +25,9 @@ abstract class AbstractProcess
     protected $errorOutputFile;
 
     /**
-     * Constructor.
-     *
-     * @param string $id
-     * @param string $workDir
-     *
      * @throws \InvalidArgumentException If the working directory does not exist
      */
-    public function __construct($id, $workDir)
+    public function __construct(string $id, string $workDir)
     {
         $workDir = realpath(rtrim($workDir, '/'));
 
@@ -40,13 +45,9 @@ abstract class AbstractProcess
     }
 
     /**
-     * @param string $filename
-     *
-     * @return array
-     *
      * @throws InvalidJsonException
      */
-    protected static function readConfig($filename)
+    protected static function readConfig(string $filename): array
     {
         if (!is_file($filename)) {
             throw new \InvalidArgumentException(sprintf('Config file "%s" does not exist.', $filename));
@@ -55,7 +56,7 @@ abstract class AbstractProcess
         $content = file_get_contents($filename);
         $config = json_decode($content, true);
 
-        if (!is_array($config)) {
+        if (!\is_array($config)) {
             throw new InvalidJsonException($filename, $content);
         }
 
@@ -63,12 +64,9 @@ abstract class AbstractProcess
     }
 
     /**
-     * @param string $filename
-     * @param array  $config
-     *
      * @throws \RuntimeException
      */
-    protected static function writeConfig($filename, array $config)
+    protected static function writeConfig(string $filename, array $config): void
     {
         try {
             (new Filesystem())->dumpFile($filename, json_encode($config));

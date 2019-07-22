@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -14,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class GraphicsLibCheck extends AbstractIntegrityCheck
 {
-    public function run()
+    public function run(): ?ApiProblem
     {
         if ($this->hasGraphicsLib()) {
             return null;
@@ -26,9 +28,9 @@ class GraphicsLibCheck extends AbstractIntegrityCheck
         ))->setDetail($this->trans('graphics_lib.detail'));
     }
 
-    private function hasGraphicsLib()
+    private function hasGraphicsLib(): bool
     {
-        if (function_exists('gd_info') && version_compare(\constant('GD_VERSION'), '2.0.1', '>')) {
+        if (\function_exists('gd_info') && version_compare(\constant('GD_VERSION'), '2.0.1', '>')) {
             return true;
         }
 

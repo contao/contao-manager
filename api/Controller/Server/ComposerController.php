@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -16,7 +18,6 @@ use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Seld\JsonLint\ParsingException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,14 +25,9 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/server/composer", methods={"GET"})
  */
-class ComposerController extends Controller
+class ComposerController
 {
-    /**
-     * Gets response about Composer configuration and file validation.
-     *
-     * @return Response
-     */
-    public function __invoke(Environment $environment, ManagerConfig $managerConfig, ServerInfo $serverInfo)
+    public function __invoke(Environment $environment, ManagerConfig $managerConfig, ServerInfo $serverInfo): Response
     {
         if (!$managerConfig->has('server') || !$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(

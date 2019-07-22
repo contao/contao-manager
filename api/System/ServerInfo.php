@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -11,16 +13,16 @@
 namespace Contao\ManagerApi\System;
 
 use Contao\ManagerApi\Config\ManagerConfig;
-use Contao\ManagerApi\Process\PhpExecutableFinder;
 use Contao\ManagerApi\Process\Forker\DisownForker;
 use Contao\ManagerApi\Process\Forker\NohupForker;
 use Contao\ManagerApi\Process\Forker\WindowsStartForker;
+use Contao\ManagerApi\Process\PhpExecutableFinder;
 use Symfony\Component\Yaml\Yaml;
 
 class ServerInfo
 {
-    const PLATFORM_WINDOWS = 'windows';
-    const PLATFORM_UNIX = 'unix';
+    public const PLATFORM_WINDOWS = 'windows';
+    public const PLATFORM_UNIX = 'unix';
 
     /**
      * @var IpInfo
@@ -102,8 +104,8 @@ class ServerInfo
     {
         if (false === $this->server) {
             // localhost, try path detection
-            if ((!isset($_SERVER['REMOTE_ADDR']) || in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', 'fe80::1', '::1'], true))
-                && null !== ($binary = constant('PHP_BINARY'))
+            if ((!isset($_SERVER['REMOTE_ADDR']) || \in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', 'fe80::1', '::1'], true))
+                && null !== ($binary = \constant('PHP_BINARY'))
             ) {
                 foreach ($this->pathMap as $path => $configName) {
                     if (0 === strpos($binary, $path)) {
@@ -123,7 +125,7 @@ class ServerInfo
     /**
      * Gets PHP executable by detecting known server paths.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPhpExecutable()
     {
@@ -176,7 +178,7 @@ class ServerInfo
     public function getPhpEnv()
     {
         $env = array_map(function () { return false; }, $_ENV);
-        $env['PATH'] = isset($_ENV['PATH']) ? $_ENV['PATH'] : false;
+        $env['PATH'] = $_ENV['PATH'] ?? false;
         $env['PHP_PATH'] = $this->getPhpExecutable();
 
         return $env;
@@ -226,7 +228,7 @@ class ServerInfo
      */
     public function getPlatform()
     {
-        return '\\' === DIRECTORY_SEPARATOR ? self::PLATFORM_WINDOWS : self::PLATFORM_UNIX;
+        return '\\' === \DIRECTORY_SEPARATOR ? self::PLATFORM_WINDOWS : self::PLATFORM_UNIX;
     }
 
     /**

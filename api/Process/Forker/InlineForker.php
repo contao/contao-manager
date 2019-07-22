@@ -1,16 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Contao\ManagerApi\Process\Forker;
 
 class InlineForker extends AbstractForker
 {
-
     /**
-     * Executes a command.
-     *
-     * @param string $configFile
+     * {@inheritdoc}
      */
-    public function run($configFile)
+    public function run(string $configFile): void
     {
         $commandline = sprintf(
             '%s %s',
@@ -23,11 +30,9 @@ class InlineForker extends AbstractForker
     }
 
     /**
-     * Returns whether this forker is supported on the current platform.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isSupported()
+    public function isSupported(): bool
     {
         return true;
     }

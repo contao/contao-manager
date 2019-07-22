@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -15,6 +17,7 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\AbstractTask;
 use Contao\ManagerApi\Task\TaskConfig;
+use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Contao\InstallLockOperation;
 use Contao\ManagerApi\TaskOperation\Contao\InstallUnlockOperation;
 use Symfony\Component\Filesystem\Filesystem;
@@ -36,14 +39,6 @@ class InstallToolTask extends AbstractTask
      */
     private $filesystem;
 
-    /**
-     * Constructor.
-     *
-     * @param ApiKernel             $environment
-     * @param ConsoleProcessFactory $processFactory
-     * @param Translator            $translator
-     * @param Filesystem            $filesystem
-     */
     public function __construct(
         ApiKernel $environment,
         ConsoleProcessFactory $processFactory,
@@ -60,7 +55,7 @@ class InstallToolTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'contao/install-tool';
     }
@@ -68,12 +63,12 @@ class InstallToolTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    public function create(TaskConfig $config)
+    public function create(TaskConfig $config): TaskStatus
     {
         return parent::create($config)->setAutoClose(true);
     }
 
-    protected function getTitle()
+    protected function getTitle(): string
     {
         return $this->translator->trans('task.install_tool.title');
     }
@@ -81,7 +76,7 @@ class InstallToolTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    protected function buildOperations(TaskConfig $config)
+    protected function buildOperations(TaskConfig $config): array
     {
         if (true === $config->getOption('lock')) {
             return [new InstallLockOperation($this->processFactory, $this->translator)];

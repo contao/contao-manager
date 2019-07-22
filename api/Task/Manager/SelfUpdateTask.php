@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -25,12 +27,6 @@ class SelfUpdateTask extends AbstractTask
      */
     private $updater;
 
-    /**
-     * Constructor.
-     *
-     * @param Translator $translator
-     * @param SelfUpdate $updater
-     */
     public function __construct(SelfUpdate $updater, Translator $translator)
     {
         $this->updater = $updater;
@@ -41,7 +37,7 @@ class SelfUpdateTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'manager/self-update';
     }
@@ -49,22 +45,20 @@ class SelfUpdateTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    public function create(TaskConfig $config)
+    public function create(TaskConfig $config): TaskStatus
     {
         return parent::create($config)->setConsole(false);
     }
 
-    protected function getTitle()
+    protected function getTitle(): string
     {
         return $this->translator->trans('task.self_update.title');
     }
 
     /**
-     * @param TaskConfig $config
-     *
      * @return TaskOperationInterface[]
      */
-    protected function buildOperations(TaskConfig $config)
+    protected function buildOperations(TaskConfig $config): array
     {
         return [
             new SelfUpdateOperation($this->updater, $config, $this->translator),
@@ -74,9 +68,9 @@ class SelfUpdateTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    protected function updateStatus(TaskStatus $status)
+    protected function updateStatus(TaskStatus $status): void
     {
-        if ($status->getStatus() === TaskStatus::STATUS_COMPLETE) {
+        if (TaskStatus::STATUS_COMPLETE === $status->getStatus()) {
             $status->setSummary($this->translator->trans('task.self_update.completeSummary'));
             $status->setDetail(
                 $this->translator->trans(

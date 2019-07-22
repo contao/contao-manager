@@ -21,7 +21,7 @@ try {
     $response = $kernel->handle($request);
     $response->send();
     $kernel->terminate($request, $response);
-} catch (\Exception $e) {
+} catch (Exception $e) {
     $response = ApiProblemResponse::createFromException($e, '@symfony_env@' !== 'prod');
     $response->send();
 }

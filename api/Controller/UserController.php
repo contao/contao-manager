@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -30,11 +32,6 @@ class UserController extends Controller
      */
     private $config;
 
-    /**
-     * Constructor.
-     *
-     * @param UserConfig $config
-     */
     public function __construct(UserConfig $config)
     {
         $this->config = $config;
@@ -43,11 +40,9 @@ class UserController extends Controller
     /**
      * Returns a list of users in the configuration file.
      *
-     * @return Response
-     *
      * @Route("/users", methods={"GET"})
      */
-    public function listUsers()
+    public function listUsers(): Response
     {
         return $this->getUserResponse($this->config->getUsers());
     }
@@ -55,13 +50,9 @@ class UserController extends Controller
     /**
      * Adds a new user to the configuration file.
      *
-     * @param Request $request
-     *
-     * @return Response
-     *
      * @Route("/users", methods={"POST"})
      */
-    public function createUser(Request $request)
+    public function createUser(Request $request): Response
     {
         $user = $this->createUserFromRequest($request);
 
@@ -77,13 +68,9 @@ class UserController extends Controller
     /**
      * Returns user data from the configuration file.
      *
-     * @param string $username
-     *
-     * @return Response
-     *
      * @Route("/users/{username}", name="user_get", methods={"GET"})
      */
-    public function retrieveUser($username)
+    public function retrieveUser(string $username): Response
     {
         if ($this->config->hasUser($username)) {
             return $this->getUserResponse($this->config->getUser($username));
@@ -95,13 +82,9 @@ class UserController extends Controller
     /**
      * Replaces user data in the configuration file.
      *
-     * @param Request $request
-     *
-     * @return Response
-     *
      * @Route("/users/{username}", methods={"PUT"})
      */
-    public function replaceUser(Request $request)
+    public function replaceUser(Request $request): Response
     {
         $user = $this->createUserFromRequest($request);
 
@@ -117,13 +100,9 @@ class UserController extends Controller
     /**
      * Deletes a user from the configuration file.
      *
-     * @param string $username
-     *
-     * @return Response
-     *
      * @Route("/users/{username}", methods={"DELETE"})
      */
-    public function deleteUser($username)
+    public function deleteUser(string $username): Response
     {
         $user = $this->config->getUser($username);
 
@@ -139,13 +118,9 @@ class UserController extends Controller
     /**
      * Returns a list of tokens of a user in the configuration file.
      *
-     * @param string $username
-     *
-     * @return Response
-     *
      * @Route("/users/{username}/tokens", methods={"GET"})
      */
-    public function listTokens($username)
+    public function listTokens(string $username): Response
     {
         $tokens = array_filter(
             $this->config->getTokens(),
@@ -160,14 +135,9 @@ class UserController extends Controller
     /**
      * Adds a new token for a user to the configuration file.
      *
-     * @param string  $username
-     * @param Request $request
-     *
-     * @return Response
-     *
      * @Route("/users/{username}/tokens", methods={"POST"})
      */
-    public function createToken($username, Request $request)
+    public function createToken(string $username, Request $request): Response
     {
         if (!$this->config->hasUser($username)) {
             throw new BadRequestHttpException(sprintf('User "%s" does not exists.', $username));
@@ -176,7 +146,7 @@ class UserController extends Controller
         $clientId = $request->request->get('client_id');
         $scope = $request->request->get('scope');
 
-        if (!$clientId || $scope !== 'admin') {
+        if (!$clientId || 'admin' !== $scope) {
             throw new BadRequestHttpException('Invalid payload for OAuth token.');
         }
 
@@ -192,14 +162,9 @@ class UserController extends Controller
     /**
      * Returns token data of a user from the configuration file.
      *
-     * @param string $username
-     * @param string $id
-     *
-     * @return Response
-     *
      * @Route("/users/{username}/tokens/{id}", methods={"GET"})
      */
-    public function retrieveToken($username, $id)
+    public function retrieveToken(string $username, string $id): Response
     {
         $payload = $this->config->getToken($id);
 
@@ -213,14 +178,9 @@ class UserController extends Controller
     /**
      * Deletes a user from the configuration file.
      *
-     * @param string $username
-     * @param string $id
-     *
-     * @return Response
-     *
      * @Route("/users/{username}/tokens/{id}", methods={"DELETE"})
      */
-    public function deleteToken($username, $id)
+    public function deleteToken(string $username, string $id): Response
     {
         $payload = $this->config->getToken($id);
 
@@ -237,12 +197,8 @@ class UserController extends Controller
      * Creates a response for given user information.
      *
      * @param UserInterface|UserInterface[] $user
-     * @param int                           $status
-     * @param bool                          $addLocation
-     *
-     * @return Response
      */
-    private function getUserResponse($user, $status = Response::HTTP_OK, $addLocation = false)
+    private function getUserResponse($user, int $status = Response::HTTP_OK, bool $addLocation = false): Response
     {
         $response = new JsonResponse(
             $this->convertToJson($user),
@@ -262,10 +218,8 @@ class UserController extends Controller
      * @param UserInterface[]|UserInterface $user
      *
      * @throws \InvalidArgumentException
-     *
-     * @return array
      */
-    private function convertToJson($user)
+    private function convertToJson($user): array
     {
         if ($user instanceof UserInterface) {
             return [
@@ -273,7 +227,7 @@ class UserController extends Controller
             ];
         }
 
-        if (!is_array($user)) {
+        if (!\is_array($user)) {
             throw new \InvalidArgumentException('Can only convert UserInterface or array of UserInterface');
         }
 
@@ -287,13 +241,9 @@ class UserController extends Controller
     /**
      * Creates and returns a new user from request data.
      *
-     * @param Request $request
-     *
      * @throws BadRequestHttpException
-     *
-     * @return UserInterface
      */
-    private function createUserFromRequest(Request $request)
+    private function createUserFromRequest(Request $request): UserInterface
     {
         if (!$request->request->has('username') || !$request->request->has('password')) {
             throw new BadRequestHttpException('Username and password must be given.');

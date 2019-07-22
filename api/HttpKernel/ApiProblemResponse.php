@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -19,9 +21,6 @@ class ApiProblemResponse extends Response
 {
     /**
      * Constructor.
-     *
-     * @param ApiProblem $problem
-     * @param array      $headers
      */
     public function __construct(ApiProblem $problem, array $headers = [])
     {
@@ -43,13 +42,8 @@ class ApiProblemResponse extends Response
 
     /**
      * Creates a ApiProblemResponse from exception.
-     *
-     * @param \Exception $exception
-     * @param bool       $debug
-     *
-     * @return static
      */
-    public static function createFromException(\Exception $exception, $debug = false)
+    public static function createFromException(\Exception $exception, bool $debug = false): self
     {
         $headers = [];
 

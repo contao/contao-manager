@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -23,15 +25,7 @@ class ApiProblemException extends HttpException
      */
     private $problem;
 
-    /**
-     * Constructor.
-     *
-     * @param ApiProblem      $problem
-     * @param \Exception|null $previous
-     * @param array           $headers
-     * @param int             $code
-     */
-    public function __construct(ApiProblem $problem, \Exception $previous = null, array $headers = [], $code = 0)
+    public function __construct(ApiProblem $problem, \Exception $previous = null, array $headers = [], int $code = 0)
     {
         $this->problem = $problem;
 
@@ -46,10 +40,8 @@ class ApiProblemException extends HttpException
 
     /**
      * Gets the API problem.
-     *
-     * @return ApiProblem
      */
-    public function getApiProblem()
+    public function getApiProblem(): ApiProblem
     {
         return $this->problem;
     }

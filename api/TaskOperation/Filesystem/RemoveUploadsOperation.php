@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -57,7 +59,7 @@ class RemoveUploadsOperation extends AbstractInlineOperation
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         $status->setSummary($this->translator->trans('taskoperation.remove-uploads.summary'));
 
@@ -67,13 +69,13 @@ class RemoveUploadsOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    protected function doRun()
+    protected function doRun(): bool
     {
         foreach ($this->uploads as $config) {
             $this->uploadsConfig->remove($config['id']);
 
             try {
-                $this->filesystem->remove($this->environment->getUploadDir() . '/' . $config['id']);
+                $this->filesystem->remove($this->environment->getUploadDir().'/'.$config['id']);
             } catch (IOException $e) {
                 // Ignore if file could not be deleted
             }
@@ -85,7 +87,7 @@ class RemoveUploadsOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    protected function getName()
+    protected function getName(): string
     {
         return 'remove-uploads';
     }

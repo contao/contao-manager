@@ -1,5 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Contao\ManagerApi\Process\Forker;
 
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -10,7 +20,7 @@ class NohupForker extends AbstractForker
     /**
      * {@inheritdoc}
      */
-    public function run($configFile)
+    public function run(string $configFile): void
     {
         $commandline = sprintf(
             'exec nohup %s %s >/dev/null </dev/null 2>&1 &',
@@ -24,7 +34,7 @@ class NohupForker extends AbstractForker
     /**
      * {@inheritdoc}
      */
-    public function isSupported()
+    public function isSupported(): bool
     {
         try {
             (new Process('exec nohup ls'))->mustRun(null, $this->env);

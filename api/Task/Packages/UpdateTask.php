@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -45,16 +47,6 @@ class UpdateTask extends AbstractPackagesTask
      */
     private $uploads;
 
-    /**
-     * Constructor.
-     *
-     * @param ConsoleProcessFactory $processFactory
-     * @param ServerInfo            $serverInfo
-     * @param CloudResolver         $cloudResolver
-     * @param Environment           $environment
-     * @param Translator            $translator
-     * @param Filesystem            $filesystem
-     */
     public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, UploadsConfig $uploads, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $serverInfo, $filesystem, $translator);
@@ -67,7 +59,7 @@ class UpdateTask extends AbstractPackagesTask
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'composer/update';
     }
@@ -75,7 +67,7 @@ class UpdateTask extends AbstractPackagesTask
     /**
      * {@inheritdoc}
      */
-    public function update(TaskConfig $config)
+    public function update(TaskConfig $config): TaskStatus
     {
         $status = parent::update($config);
 
@@ -86,7 +78,7 @@ class UpdateTask extends AbstractPackagesTask
         return $status;
     }
 
-    protected function getTitle()
+    protected function getTitle(): string
     {
         return $this->translator->trans('task.update_packages.title');
     }
@@ -94,7 +86,7 @@ class UpdateTask extends AbstractPackagesTask
     /**
      * {@inheritdoc}
      */
-    protected function buildOperations(TaskConfig $config)
+    protected function buildOperations(TaskConfig $config): array
     {
         $changes = $this->getComposerDefinition($config);
 
@@ -115,13 +107,13 @@ class UpdateTask extends AbstractPackagesTask
             $operations[] = new UpdateOperation($this->processFactory, $this->environment, $this->translator, $changes->getUpdates(), $changes->getDryRun());
         }
 
-        if ($config->getOption('uploads', false) && count($this->uploads)) {
+        if ($config->getOption('uploads', false) && \count($this->uploads)) {
             $uploads = array_filter(
                 $this->uploads->all(),
                 function ($upload) use ($changes) {
                     return $upload['success']
                         && isset($upload['package']['name'])
-                        && in_array($upload['package']['name'], $changes->getUpdates());
+                        && \in_array($upload['package']['name'], $changes->getUpdates(), true);
                 }
             );
 
@@ -148,7 +140,7 @@ class UpdateTask extends AbstractPackagesTask
         return $operations;
     }
 
-    protected function getComposerDefinition(TaskConfig $config)
+    protected function getComposerDefinition(TaskConfig $config): CloudChanges
     {
         $definition = new CloudChanges();
 
@@ -170,17 +162,17 @@ class UpdateTask extends AbstractPackagesTask
     /**
      * {@inheritdoc}
      */
-    protected function updateStatus(TaskStatus $status)
+    protected function updateStatus(TaskStatus $status): void
     {
         if (TaskStatus::STATUS_COMPLETE === $status->getStatus()) {
             $status->setSummary($this->translator->trans('task.update_packages.completeSummary'));
             $status->setDetail($this->translator->trans('task.update_packages.completeDetail'));
         }
 
-        return parent::updateStatus($status);
+        parent::updateStatus($status);
     }
 
-    private function addContaoConflictsRequirement(CloudChanges $definition)
+    private function addContaoConflictsRequirement(CloudChanges $definition): void
     {
         $rootPackage = $this->environment->getComposer()->getPackage();
 

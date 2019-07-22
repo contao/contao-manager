@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -23,7 +25,7 @@ class ContaoApi
     private $processFactory;
 
     /**
-     * @var null|Filesystem
+     * @var Filesystem|null
      */
     private $filesystem;
 
@@ -34,9 +36,6 @@ class ContaoApi
 
     /**
      * Constructor.
-     *
-     * @param ConsoleProcessFactory $processFactory
-     * @param Filesystem|null       $filesystem
      */
     public function __construct(ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
     {
@@ -46,56 +45,45 @@ class ContaoApi
 
     /**
      * Gets the Contao API version.
-     *
-     * @return int
      */
-    public function getVersion()
+    public function getVersion(): int
     {
-        return $this->getApiInfo()['version'];
+        return (int) $this->getApiInfo()['version'];
     }
 
     /**
      * Returns list of available API commands.
-     *
-     * @return array
      */
-    public function getCommands()
+    public function getCommands(): array
     {
         return $this->getApiInfo()['commands'];
     }
 
     /**
      * Returns whether the given API command is available.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
-    public function hasCommand($name)
+    public function hasCommand(string $name): bool
     {
-        return in_array($name, $this->getApiInfo()['commands'], true);
+        return \in_array($name, $this->getApiInfo()['commands'], true);
     }
 
     /**
      * Returns list of available API features.
-     *
-     * @return array
      */
-    public function getFeatures()
+    public function getFeatures(): array
     {
         return $this->getApiInfo()['features'];
     }
 
     /**
      * @param string|array $arguments
-     * @param bool         $parseJson
      *
      * @throws ParsingException
      * @throws ProcessFailedException
      *
-     * @return string
+     * @return mixed
      */
-    public function runCommand($arguments, $parseJson = false)
+    public function runCommand($arguments, bool $parseJson = false)
     {
         $process = $this->processFactory->createContaoApiProcess((array) $arguments);
         $process->mustRun();
@@ -105,20 +93,16 @@ class ContaoApi
 
     /**
      * Checks whether the Contao API binary exists.
-     *
-     * @return bool
      */
-    private function hasBinary()
+    private function hasBinary(): bool
     {
         return $this->filesystem->exists($this->processFactory->getContaoApiPath());
     }
 
     /**
      * Returns version, commands and features of the Contao API.
-     *
-     * @return array
      */
-    private function getApiInfo()
+    private function getApiInfo(): array
     {
         if (null !== $this->apiInfo) {
             return $this->apiInfo;
@@ -155,13 +139,11 @@ class ContaoApi
     }
 
     /**
-     * @param string $output
-     *
      * @throws ParsingException
      *
      * @return mixed
      */
-    private function parseJson($output)
+    private function parseJson(string $output)
     {
         $data = json_decode($output, true);
 

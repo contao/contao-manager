@@ -1,5 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Contao\ManagerApi\Process\Forker;
 
 use Psr\Log\LoggerInterface;
@@ -27,14 +37,7 @@ abstract class AbstractForker implements ForkerInterface
      */
     private $timeout = 500;
 
-    /**
-     * Constructor.
-     *
-     * @param string               $executable
-     * @param array|null           $env
-     * @param LoggerInterface|null $logger
-     */
-    public function __construct($executable, array $env = null, LoggerInterface $logger = null)
+    public function __construct(string $executable, array $env = null, LoggerInterface $logger = null)
     {
         $this->executable = $executable;
         $this->env = $env;
@@ -44,7 +47,7 @@ abstract class AbstractForker implements ForkerInterface
     /**
      * {@inheritdoc}
      */
-    public function setExecutable($executable)
+    public function setExecutable(string $executable): ForkerInterface
     {
         $this->executable = $executable;
 
@@ -54,7 +57,7 @@ abstract class AbstractForker implements ForkerInterface
     /**
      * {@inheritdoc}
      */
-    public function getExecutable()
+    public function getExecutable(): string
     {
         return $this->executable;
     }
@@ -62,9 +65,9 @@ abstract class AbstractForker implements ForkerInterface
     /**
      * {@inheritdoc}
      */
-    public function setTimeout($timeout)
+    public function setTimeout(int $timeout): ForkerInterface
     {
-        $this->timeout = (int) $timeout;
+        $this->timeout = $timeout;
 
         return $this;
     }
@@ -72,24 +75,19 @@ abstract class AbstractForker implements ForkerInterface
     /**
      * {@inheritdoc}
      */
-    public function getTimeout()
+    public function getTimeout(): int
     {
         return $this->timeout;
     }
 
-    /**
-     * @param string $commandline
-     *
-     * @return Process
-     */
-    protected function startCommand($commandline)
+    protected function startCommand(string $commandline): Process
     {
         if (null !== $this->logger) {
             $this->logger->info(
                 'Starting "{commandline}" with {forker_class}',
                 [
                     'commandline' => $commandline,
-                    'forker_class' => get_called_class(),
+                    'forker_class' => \get_called_class(),
                 ]
             );
         }
@@ -107,7 +105,7 @@ abstract class AbstractForker implements ForkerInterface
                 'Process did not start correctly',
                 [
                     'commandline' => $commandline,
-                    'forker_class' => get_called_class(),
+                    'forker_class' => \get_called_class(),
                     'exit_code' => $process->getExitCode(),
                     'exit_text' => $process->getExitCodeText(),
                     'stopped' => $process->hasBeenStopped(),

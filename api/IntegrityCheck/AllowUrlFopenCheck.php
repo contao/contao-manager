@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -14,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class AllowUrlFopenCheck extends AbstractIntegrityCheck
 {
-    public function run()
+    public function run(): ?ApiProblem
     {
         if (ini_get('allow_url_fopen')) {
             return null;

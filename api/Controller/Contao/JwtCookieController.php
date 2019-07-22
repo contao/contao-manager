@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -13,7 +15,6 @@ namespace Contao\ManagerApi\Controller\Contao;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Process\ContaoApi;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/contao/jwt-cookie", methods={"GET", "PUT", "DELETE"})
  */
-class JwtCookieController extends Controller
+class JwtCookieController
 {
     public const COOKIE_NAME = '_contao_preview';
 
@@ -34,8 +35,6 @@ class JwtCookieController extends Controller
 
     /**
      * Constructor.
-     *
-     * @param ContaoApi $api
      */
     public function __construct(ContaoApi $api)
     {
@@ -44,8 +43,6 @@ class JwtCookieController extends Controller
 
     /**
      * Handles the controller action.
-     *
-     * @param Request $request
      *
      * @throws \Seld\JsonLint\ParsingException
      *
@@ -126,6 +123,6 @@ class JwtCookieController extends Controller
         $features = $this->api->getFeatures();
 
         return isset($features['contao/manager-bundle']['jwt-cookie'])
-            && \in_array('debug', $features['contao/manager-bundle']['jwt-cookie']);
+            && \in_array('debug', $features['contao/manager-bundle']['jwt-cookie'], true);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -22,9 +24,7 @@ class ProcessOutputException extends \RuntimeException
     /**
      * Constructor.
      *
-     * @param string          $message
-     * @param Process         $process
-     * @param \Exception|null $previous
+     * @param string $message
      */
     public function __construct($message, Process $process, \Exception $previous = null)
     {

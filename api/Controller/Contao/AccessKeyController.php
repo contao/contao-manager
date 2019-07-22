@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -29,11 +31,6 @@ class AccessKeyController extends Controller
      */
     private $api;
 
-    /**
-     * Constructor.
-     *
-     * @param ContaoApi $api
-     */
     public function __construct(ContaoApi $api)
     {
         $this->api = $api;
@@ -42,13 +39,9 @@ class AccessKeyController extends Controller
     /**
      * Handles the controller action.
      *
-     * @param Request $request
-     *
      * @throws \Seld\JsonLint\ParsingException
-     *
-     * @return Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         switch ($request->getMethod()) {
             case 'GET':
@@ -66,10 +59,8 @@ class AccessKeyController extends Controller
 
     /**
      * @throws \Seld\JsonLint\ParsingException
-     *
-     * @return Response
      */
-    private function getAccessKey()
+    private function getAccessKey(): Response
     {
         if (!$this->isSupported('get')) {
             return new ApiProblemResponse(
@@ -82,13 +73,9 @@ class AccessKeyController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
      * @throws \Seld\JsonLint\ParsingException
-     *
-     * @return Response
      */
-    private function setAccessKey(Request $request)
+    private function setAccessKey(Request $request): Response
     {
         if (!$this->isSupported('set')) {
             return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
@@ -113,10 +100,8 @@ class AccessKeyController extends Controller
 
     /**
      * @throws \Seld\JsonLint\ParsingException
-     *
-     * @return Response
      */
-    private function removeAccessKey()
+    private function removeAccessKey(): Response
     {
         if (!$this->isSupported('remove')) {
             return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
@@ -127,14 +112,9 @@ class AccessKeyController extends Controller
         return new JsonResponse(['access-key' => '']);
     }
 
-    /**
-     * @param string $action
-     *
-     * @return array
-     */
-    private function getAccessKeyArguments($action)
+    private function getAccessKeyArguments(string $action): array
     {
-        if ($this->api->getVersion() === 1) {
+        if (1 === $this->api->getVersion()) {
             return ['access-key:'.$action];
         }
 
@@ -143,16 +123,12 @@ class AccessKeyController extends Controller
 
     /**
      * Returns whether access key command is supported.
-     *
-     * @param string $action
-     *
-     * @return bool
      */
-    private function isSupported($action)
+    private function isSupported(string $action): bool
     {
-        return $this->api->getVersion() === 1
+        return 1 === $this->api->getVersion()
             || ($this->api->hasCommand('dot-env:'.$action)
-                && in_array('APP_DEV_ACCESSKEY', $this->api->getFeatures()['contao/manager-bundle']['dot-env'], true)
+                && \in_array('APP_DEV_ACCESSKEY', $this->api->getFeatures()['contao/manager-bundle']['dot-env'], true)
             );
     }
 }

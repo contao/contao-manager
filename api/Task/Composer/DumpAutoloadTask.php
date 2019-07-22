@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -14,6 +16,7 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\AbstractTask;
 use Contao\ManagerApi\Task\TaskConfig;
+use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Composer\DumpAutoloadOperation;
 
 class DumpAutoloadTask extends AbstractTask
@@ -23,12 +26,6 @@ class DumpAutoloadTask extends AbstractTask
      */
     private $processFactory;
 
-    /**
-     * Constructor.
-     *
-     * @param ConsoleProcessFactory $processFactory
-     * @param Translator            $translator
-     */
     public function __construct(ConsoleProcessFactory $processFactory, Translator $translator)
     {
         $this->processFactory = $processFactory;
@@ -39,7 +36,7 @@ class DumpAutoloadTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'composer/dump-autoload';
     }
@@ -47,12 +44,12 @@ class DumpAutoloadTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    public function create(TaskConfig $config)
+    public function create(TaskConfig $config): TaskStatus
     {
         return parent::create($config)->setAutoClose(true);
     }
 
-    protected function getTitle()
+    protected function getTitle(): string
     {
         return $this->translator->trans('task.dump_autoload.title');
     }
@@ -60,7 +57,7 @@ class DumpAutoloadTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    protected function buildOperations(TaskConfig $config)
+    protected function buildOperations(TaskConfig $config): array
     {
         return [
             new DumpAutoloadOperation($this->processFactory, $this->translator),

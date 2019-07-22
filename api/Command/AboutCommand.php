@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -52,7 +54,7 @@ class AboutCommand extends Command implements ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('about')
@@ -63,19 +65,14 @@ class AboutCommand extends Command implements ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $data = $this->collectData();
 
         $this->outputTable($input, $output, $data);
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param array           $data
-     */
-    private function outputTable(InputInterface $input, OutputInterface $output, $data)
+    private function outputTable(InputInterface $input, OutputInterface $output, array $data): void
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -156,9 +153,9 @@ class AboutCommand extends Command implements ServiceSubscriberInterface
             ],
             'php' => [
                 'version' => PHP_VERSION,
-                'version_id' => PHP_VERSION_ID,
+                'version_id' => \PHP_VERSION_ID,
                 'arch' => PHP_INT_SIZE * 8,
-                'sapi' => PHP_SAPI,
+                'sapi' => \PHP_SAPI,
                 'locale' => class_exists('Locale', false) && \Locale::getDefault() ? \Locale::getDefault() : '',
                 'timezone' => date_default_timezone_get(),
                 'binary' => $serverInfo->getPhpExecutableFinder()->find(),

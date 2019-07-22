@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -22,11 +24,6 @@ class TaskDeleteCommand extends Command
      */
     private $taskManager;
 
-    /**
-     * Constructor.
-     *
-     * @param TaskManager $taskManager
-     */
     public function __construct(TaskManager $taskManager)
     {
         parent::__construct();
@@ -37,7 +34,7 @@ class TaskDeleteCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('task:delete')

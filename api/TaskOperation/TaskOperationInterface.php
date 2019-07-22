@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -14,19 +16,19 @@ use Contao\ManagerApi\Task\TaskStatus;
 
 interface TaskOperationInterface
 {
-    public function isStarted();
+    public function isStarted(): bool;
 
-    public function isRunning();
+    public function isRunning(): bool;
 
-    public function isSuccessful();
+    public function isSuccessful(): bool;
 
-    public function hasError();
+    public function hasError(): bool;
 
-    public function run();
+    public function run(): void;
 
-    public function abort();
+    public function abort(): void;
 
-    public function delete();
+    public function delete(): void;
 
-    public function updateStatus(TaskStatus $status);
+    public function updateStatus(TaskStatus $status): void;
 }

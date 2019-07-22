@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -29,10 +31,6 @@ class RequireOperation extends AbstractProcessOperation
 
     /**
      * Constructor.
-     *
-     * @param ConsoleProcessFactory $processFactory
-     * @param Translator            $translator
-     * @param array                 $required
      */
     public function __construct(ConsoleProcessFactory $processFactory, Translator $translator, array $required)
     {
@@ -70,7 +68,7 @@ class RequireOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         $status->setSummary($this->translator->trans('taskoperation.composer-require.summary'));
 

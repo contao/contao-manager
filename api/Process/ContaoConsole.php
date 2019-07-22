@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -12,7 +14,6 @@ namespace Contao\ManagerApi\Process;
 
 use Composer\Semver\VersionParser;
 use Contao\ManagerApi\Exception\ProcessOutputException;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ContaoConsole
 {
@@ -23,8 +24,6 @@ class ContaoConsole
 
     /**
      * Constructor.
-     *
-     * @param ConsoleProcessFactory $processFactory
      */
     public function __construct(ConsoleProcessFactory $processFactory)
     {
@@ -35,10 +34,8 @@ class ContaoConsole
      * Gets the Contao version.
      *
      * @throws ProcessOutputException
-     *
-     * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         $process = $this->processFactory->createContaoConsoleProcess(['contao:version']);
         $process->run();

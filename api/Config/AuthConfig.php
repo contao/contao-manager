@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -15,15 +17,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class AuthConfig extends AbstractConfig
 {
-    /**
-     * Constructor.
-     *
-     * @param ApiKernel  $kernel
-     * @param Filesystem $filesystem
-     */
     public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $configFile = $kernel->getConfigDir().DIRECTORY_SEPARATOR.'auth.json';
+        $configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'auth.json';
 
         parent::__construct($configFile, $filesystem);
     }
@@ -33,24 +29,22 @@ class AuthConfig extends AbstractConfig
      *
      * @return string|null
      */
-    public function getGithubToken()
+    public function getGithubToken(): ?string
     {
         if (!isset($this->data['github-oauth']['github.com'])) {
             return null;
         }
 
-        return $this->data['github-oauth']['github.com'];
+        return (string) $this->data['github-oauth']['github.com'];
     }
 
     /**
      * Stores the GitHub OAuth token in the config file.
-     *
-     * @param string $token
      */
-    public function setGithubToken($token)
+    public function setGithubToken(string $token): void
     {
         $this->data['github-oauth'] = [
-            'github.com' => (string) $token,
+            'github.com' => $token,
         ];
 
         $this->save();
@@ -58,16 +52,12 @@ class AuthConfig extends AbstractConfig
 
     /**
      * Adds basic authentication info for given domain.
-     *
-     * @param string $domain
-     * @param string $username
-     * @param string $password
      */
-    public function setBasicAuth($domain, $username, $password)
+    public function setBasicAuth(string $domain, string $username, string $password): void
     {
-        $this->data['http-basic'][(string) $domain] = [
-            'username' => (string) $username,
-            'password' => (string) $password,
+        $this->data['http-basic'][$domain] = [
+            'username' => $username,
+            'password' => $password,
         ];
 
         $this->save();
@@ -75,16 +65,14 @@ class AuthConfig extends AbstractConfig
 
     /**
      * Deletes basic authentication for given domain.
-     *
-     * @param string $domain
      */
-    public function deleteBasicAuth($domain)
+    public function deleteBasicAuth(string $domain): void
     {
-        if (!isset($this->data['http-basic'][(string) $domain])) {
+        if (!isset($this->data['http-basic'][$domain])) {
             return;
         }
 
-        unset($this->data['http-basic'][(string) $domain]);
+        unset($this->data['http-basic'][$domain]);
 
         $this->save();
     }

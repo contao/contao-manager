@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -15,7 +17,7 @@ use Crell\ApiProblem\ApiProblem;
 interface IntegrityCheckInterface
 {
     /**
-     * @return ApiProblem|null
+     * Runs the integrity check.
      */
-    public function run();
+    public function run(): ?ApiProblem;
 }

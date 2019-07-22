@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -43,16 +45,13 @@ class TaskManager implements LoggerAwareInterface
     /**
      * Constructor.
      *
-     * @param TaskInterface[]       $tasks
-     * @param ApiKernel             $kernel
-     * @param ConsoleProcessFactory $processFactory
-     * @param Filesystem|null       $filesystem
+     * @param TaskInterface[] $tasks
      */
-    public function __construct($tasks, ApiKernel $kernel, ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
+    public function __construct(array $tasks, ApiKernel $kernel, ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
     {
         $this->filesystem = $filesystem;
         $this->processFactory = $processFactory;
-        $this->configFile = $kernel->getConfigDir().DIRECTORY_SEPARATOR.'task.json';
+        $this->configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'task.json';
 
         foreach ($tasks as $task) {
             $this->tasks[$task->getName()] = $task;
@@ -64,26 +63,17 @@ class TaskManager implements LoggerAwareInterface
      *
      * @return bool
      */
-    public function supportsTask($name)
+    public function supportsTask(string $name): bool
     {
         return isset($this->tasks[$name]);
     }
 
-    /**
-     * @return bool
-     */
-    public function hasTask()
+    public function hasTask(): bool
     {
         return $this->filesystem->exists($this->configFile);
     }
 
-    /**
-     * @param string $name
-     * @param array  $options
-     *
-     * @return TaskStatus
-     */
-    public function createTask($name, array $options)
+    public function createTask(string $name, array $options): TaskStatus
     {
         if ($this->hasTask()) {
             throw new \RuntimeException('A task already exists.');
@@ -95,7 +85,7 @@ class TaskManager implements LoggerAwareInterface
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->info('Created new task', ['name' => $name, 'options' => $options, 'class' => get_class($task)]);
+            $this->logger->info('Created new task', ['name' => $name, 'options' => $options, 'class' => \get_class($task)]);
         }
 
         $this->processFactory->createManagerConsoleBackgroundProcess(['task:update', '--poll']);
@@ -106,7 +96,7 @@ class TaskManager implements LoggerAwareInterface
     /**
      * @return TaskStatus|null
      */
-    public function updateTask()
+    public function updateTask(): ?TaskStatus
     {
         $config = $this->getTaskConfig();
 
@@ -117,13 +107,13 @@ class TaskManager implements LoggerAwareInterface
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->info('Updating task status', ['name' => $task->getName(), 'class' => get_class($task)]);
+            $this->logger->info('Updating task status', ['name' => $task->getName(), 'class' => \get_class($task)]);
         }
 
         $status = $task->update($config);
 
         if ($status->isComplete() && null !== $this->logger) {
-            $this->logger->info('Task has been completed', ['name' => $task->getName(), 'class' => get_class($task)]);
+            $this->logger->info('Task has been completed', ['name' => $task->getName(), 'class' => \get_class($task)]);
         }
 
         return $status;
@@ -143,7 +133,7 @@ class TaskManager implements LoggerAwareInterface
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->info('Aborting task', ['name' => $task->getName(), 'class' => get_class($task)]);
+            $this->logger->info('Aborting task', ['name' => $task->getName(), 'class' => \get_class($task)]);
         }
 
         return $task->abort($config);
@@ -163,7 +153,7 @@ class TaskManager implements LoggerAwareInterface
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->info('Deleting task', ['name' => $task->getName(), 'class' => get_class($task)]);
+            $this->logger->info('Deleting task', ['name' => $task->getName(), 'class' => \get_class($task)]);
         }
 
         $status = $task->update($config);
@@ -176,8 +166,6 @@ class TaskManager implements LoggerAwareInterface
     }
 
     /**
-     * @param TaskConfig $config
-     *
      * @return TaskInterface
      */
     private function loadTask(TaskConfig $config)
@@ -192,7 +180,7 @@ class TaskManager implements LoggerAwareInterface
 
         if (!$task instanceof TaskInterface) {
             throw new \RuntimeException(
-                sprintf('"%s" is not an instance of "%s"', get_class($task), TaskInterface::class)
+                sprintf('"%s" is not an instance of "%s"', \get_class($task), TaskInterface::class)
             );
         }
 

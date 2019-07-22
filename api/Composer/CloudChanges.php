@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -32,7 +34,7 @@ class CloudChanges
      */
     private $dryRun = false;
 
-    public function requirePackage($packageName, $version = null)
+    public function requirePackage($packageName, $version = null): void
     {
         if ($version) {
             $this->require[] = $packageName.'='.$version;
@@ -46,7 +48,7 @@ class CloudChanges
         return $this->require;
     }
 
-    public function removePackage($packageName)
+    public function removePackage($packageName): void
     {
         $this->remove[] = $packageName;
     }
@@ -56,7 +58,7 @@ class CloudChanges
         return $this->remove;
     }
 
-    public function setUpdates(array $updates)
+    public function setUpdates(array $updates): void
     {
         $this->updates = $updates;
     }
@@ -66,7 +68,7 @@ class CloudChanges
         return $this->updates;
     }
 
-    public function setDryRun($dryRun)
+    public function setDryRun($dryRun): void
     {
         $this->dryRun = (bool) $dryRun;
     }

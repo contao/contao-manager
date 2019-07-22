@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -10,7 +12,6 @@
 
 namespace Contao\ManagerApi\Controller\Server;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,18 +20,11 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/server/opcache", methods={"GET", "DELETE"})
  */
-class OpcacheController extends Controller
+class OpcacheController
 {
-    /**
-     * Handles the controller action.
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
-        if (!function_exists('opcache_get_status')) {
+        if (!\function_exists('opcache_get_status') || !\function_exists('opcache_reset')) {
             return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
         }
 
@@ -45,10 +39,7 @@ class OpcacheController extends Controller
         return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
     }
 
-    /**
-     * @return Response
-     */
-    private function getOpcache()
+    private function getOpcache(): Response
     {
         /** @noinspection PhpComposerExtensionStubsInspection */
         $status = opcache_get_status(false);
@@ -68,15 +59,8 @@ class OpcacheController extends Controller
         return new JsonResponse($status);
     }
 
-    /**
-     * @return Response
-     */
-    private function deleteOpcache()
+    private function deleteOpcache(): Response
     {
-        if (!function_exists('opcache_reset')) {
-            return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
-        }
-
         /* @noinspection PhpComposerExtensionStubsInspection */
         opcache_reset();
 

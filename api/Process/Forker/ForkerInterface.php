@@ -1,50 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Contao\ManagerApi\Process\Forker;
 
 interface ForkerInterface
 {
     /**
      * Sets the executable to use for the background process.
-     *
-     * @param string $executable
      */
-    public function setExecutable($executable);
+    public function setExecutable(string $executable): ForkerInterface;
 
     /**
      * Gets the executable to use for the background process.
-     *
-     * @return string
      */
-    public function getExecutable();
+    public function getExecutable(): string;
 
     /**
      * Sets the timeout in milliseconds to wait after starting a process.
-     *
-     * @param int $timeout
-     *
-     * @return $this
      */
-    public function setTimeout($timeout);
+    public function setTimeout(int $timeout): ForkerInterface;
 
     /**
      * Gets the timeout in milliseconds to wait after starting a process.
-     *
-     * @return int
      */
-    public function getTimeout();
+    public function getTimeout(): int;
 
     /**
      * Executes a command.
-     *
-     * @param string $configFile
      */
-    public function run($configFile);
+    public function run(string $configFile): void;
 
     /**
      * Returns whether this forker is supported on the current platform.
      *
      * @return bool
      */
-    public function isSupported();
+    public function isSupported(): bool;
 }

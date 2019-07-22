@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -26,10 +28,7 @@ class UpdateOperation extends AbstractProcessOperation
     /**
      * Constructor.
      *
-     * @param ConsoleProcessFactory $processFactory
-     * @param Translator            $translator
-     * @param array                 $packages
-     * @param bool                  $dryRun
+     * @param bool $dryRun
      */
     public function __construct(ConsoleProcessFactory $processFactory, Environment $environment, Translator $translator, array $packages = [], $dryRun = false)
     {
@@ -74,7 +73,7 @@ class UpdateOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         $status->setSummary($this->translator->trans('taskoperation.composer-update.summary'));
         $status->setDetail($this->process->getCommandLine());

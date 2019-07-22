@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -15,9 +17,8 @@ use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
@@ -36,8 +37,7 @@ class ExceptionListener implements EventSubscriberInterface
     /**
      * Constructor.
      *
-     * @param LoggerInterface $logger
-     * @param bool            $debug
+     * @param bool $debug
      */
     public function __construct(LoggerInterface $logger, $debug = false)
     {
@@ -47,12 +47,10 @@ class ExceptionListener implements EventSubscriberInterface
 
     /**
      * Responds with application/problem+json on kernel.exception.
-     *
-     * @param GetResponseForExceptionEvent $event
      */
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event): void
     {
-        if (!in_array('application/json', $event->getRequest()->getAcceptableContentTypes(), true)) {
+        if (!\in_array('application/json', $event->getRequest()->getAcceptableContentTypes(), true)) {
             return;
         }
 
@@ -74,17 +72,15 @@ class ExceptionListener implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return ['kernel.exception' => ['onKernelException', 10]];
     }
 
     /**
      * Logs the exception if a logger is available.
-     *
-     * @param \Exception $exception
      */
-    private function logException(\Exception $exception)
+    private function logException(\Exception $exception): void
     {
         if (null === $this->logger) {
             return;
@@ -92,7 +88,7 @@ class ExceptionListener implements EventSubscriberInterface
 
         $message = sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
-            get_class($exception),
+            \get_class($exception),
             $exception->getMessage(),
             $exception->getFile(),
             $exception->getLine()
@@ -107,12 +103,8 @@ class ExceptionListener implements EventSubscriberInterface
 
     /**
      * Tries to convert known exceptions to a HttpException.
-     *
-     * @param \Exception $exception
-     *
-     * @return \Exception
      */
-    private function convertException(\Exception $exception)
+    private function convertException(\Exception $exception): \Exception
     {
         switch (true) {
             case $exception instanceof AccessDeniedException:

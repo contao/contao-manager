@@ -1,5 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Contao\ManagerApi\Process\Forker;
 
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -10,7 +20,7 @@ class WindowsStartForker extends AbstractForker
     /**
      * {@inheritdoc}
      */
-    public function run($configFile)
+    public function run(string $configFile): void
     {
         $commandline = sprintf(
             'start /b %s %s 2>&1 >nul <nul',
@@ -24,9 +34,9 @@ class WindowsStartForker extends AbstractForker
     /**
      * {@inheritdoc}
      */
-    public function isSupported()
+    public function isSupported(): bool
     {
-        if ('\\' !== DIRECTORY_SEPARATOR) {
+        if ('\\' !== \DIRECTORY_SEPARATOR) {
             return false;
         }
 

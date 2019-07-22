@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -35,11 +37,6 @@ class ApiApplication extends Application
      */
     private $commandsRegistered = false;
 
-    /**
-     * Constructor.
-     *
-     * @param ApiKernel $kernel
-     */
     public function __construct(ApiKernel $kernel)
     {
         $this->kernel = $kernel;
@@ -54,7 +51,7 @@ class ApiApplication extends Application
      *
      * @return ApiKernel
      */
-    public function getKernel()
+    public function getKernel(): ApiKernel
     {
         return $this->kernel;
     }
@@ -62,7 +59,7 @@ class ApiApplication extends Application
     /**
      * {@inheritdoc}
      */
-    public function doRun(InputInterface $input, OutputInterface $output)
+    public function doRun(InputInterface $input, OutputInterface $output): int
     {
         $this->registerCommands();
 
@@ -72,13 +69,13 @@ class ApiApplication extends Application
             $this->setDispatcher($this->kernel->getContainer()->get('event_dispatcher'));
         }
 
-        return parent::doRun($input, $output);
+        return (int) parent::doRun($input, $output);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands(): array
     {
         $commands = parent::getDefaultCommands();
 
@@ -90,7 +87,7 @@ class ApiApplication extends Application
     /**
      * {@inheritdoc}
      */
-    private function registerCommands()
+    private function registerCommands(): void
     {
         if ($this->commandsRegistered) {
             return;

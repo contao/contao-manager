@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -30,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UploadPackagesController
 {
-    const CHUNK_SIZE = 1048576; // 1MB
+    public const CHUNK_SIZE = 1048576; // 1MB
 
     /**
      * @var UploadsConfig
@@ -116,7 +118,7 @@ class UploadPackagesController
                     'data' => [
                         'session_id' => $id,
                         'end_offset' => self::CHUNK_SIZE,
-                    ]
+                    ],
                 ], Response::HTTP_CREATED);
 
             case 'upload':
@@ -125,10 +127,12 @@ class UploadPackagesController
                     $request->request->get('start_offset'),
                     $request->files->get('chunk')
                 );
+
                 return new JsonResponse(['status' => 'success']);
 
             case 'finish':
                 $id = $request->request->get('session_id');
+
                 return $this->finishUpload($id);
         }
 
@@ -159,6 +163,7 @@ class UploadPackagesController
 
     private function createUpload($name, $size)
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $id = bin2hex(random_bytes(8));
 
         $this->filesystem->touch($this->uploadPath($id));
@@ -175,7 +180,7 @@ class UploadPackagesController
         return $id;
     }
 
-    private function addChunk($id, $offset, UploadedFile $file)
+    private function addChunk($id, $offset, UploadedFile $file): void
     {
         if (!$this->config->has($id)) {
             throw new NotFoundHttpException(sprintf('Unknown file ID "%s"', $id));
@@ -222,7 +227,7 @@ class UploadPackagesController
             return $this->installError($id, 'version');
         }
 
-        list($vendor, $package) = explode('/', $data['name']);
+        [$vendor, $package] = explode('/', $data['name']);
 
         $config['success'] = true;
         $config['hash'] = sha1_file($uploadFile);
@@ -275,9 +280,9 @@ class UploadPackagesController
         return new JsonResponse($config);
     }
 
-    private function validateUploadSupport()
+    private function validateUploadSupport(): void
     {
-        if (!extension_loaded('zip')) {
+        if (!\extension_loaded('zip')) {
             throw new ApiProblemException(
                 (new ApiProblem('The artifact repository requires PHP\'s zip extension'))
                     ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
@@ -292,7 +297,7 @@ class UploadPackagesController
         ;
 
         foreach ($packages as $package) {
-            if ($package->getName() === 'contao/manager-plugin') {
+            if ('contao/manager-plugin' === $package->getName()) {
                 $require = new MultiConstraint([
                     new Constraint('>=', '2.7'),
                     new Constraint('=', 'dev-master'),

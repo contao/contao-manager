@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -13,6 +15,7 @@ namespace Contao\ManagerApi\Controller\Packages;
 use Composer\Package\Dumper\ArrayDumper;
 use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -30,7 +33,7 @@ class RootPackageController
         $this->environment = $environment;
     }
 
-    public function __invoke()
+    public function __invoke(): Response
     {
         $dumper = new ArrayDumper();
 

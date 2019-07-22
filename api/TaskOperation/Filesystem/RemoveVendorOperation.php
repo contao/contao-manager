@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -36,11 +38,6 @@ class RemoveVendorOperation extends AbstractInlineOperation
 
     /**
      * Constructor.
-     *
-     * @param TaskConfig  $taskConfig
-     * @param Environment $environment
-     * @param Translator  $translator
-     * @param Filesystem  $filesystem
      */
     public function __construct(TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem)
     {
@@ -54,7 +51,7 @@ class RemoveVendorOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    public function doRun()
+    public function doRun(): bool
     {
         $this->filesystem->remove($this->environment->getVendorDir());
 
@@ -64,7 +61,7 @@ class RemoveVendorOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         $status->setSummary($this->translator->trans('taskoperation.remove-vendor.summary'));
         $status->setDetail($this->environment->getVendorDir());
@@ -72,7 +69,7 @@ class RemoveVendorOperation extends AbstractInlineOperation
         $this->addConsoleStatus($status);
     }
 
-    protected function getName()
+    protected function getName(): string
     {
         return 'remove-vendor';
     }

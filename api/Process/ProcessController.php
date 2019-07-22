@@ -1,9 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Contao\ManagerApi\Process;
 
-use Symfony\Component\Process\Process;
 use Contao\ManagerApi\Process\Forker\ForkerInterface;
+use Symfony\Component\Process\Process;
 
 class ProcessController extends AbstractProcess
 {
@@ -20,8 +30,7 @@ class ProcessController extends AbstractProcess
     /**
      * Constructor.
      *
-     * @param array                $config
-     * @param string               $workDir
+     * @param string $workDir
      *
      * @throws \InvalidArgumentException If the working directory does not exist
      */
@@ -36,44 +45,38 @@ class ProcessController extends AbstractProcess
         parent::__construct($this->config['id'], $workDir);
     }
 
-    public function addForker(ForkerInterface $forker)
+    public function addForker(ForkerInterface $forker): void
     {
         $this->forkers[] = $forker;
     }
 
     /**
      * Gets the task ID.
-     *
-     * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return (string) $this->config['id'];
     }
 
-    /**
+    /**y
      * Stores meta information about the process.
-     *
-     * @param array $meta
      */
-    public function setMeta(array $meta)
+    public function setMeta(array $meta): void
     {
         $this->config['meta'] = $meta;
     }
 
     /**
      * Gets meta information of the process.
-     *
-     * @return array|null
      */
-    public function getMeta()
+    public function getMeta(): ?array
     {
-        return array_key_exists('meta', $this->config) ? $this->config['meta'] : null;
+        return \array_key_exists('meta', $this->config) ? $this->config['meta'] : null;
     }
 
-    public function start()
+    public function start(): void
     {
-        if ($this->config['status'] === Process::STATUS_STARTED) {
+        if (Process::STATUS_STARTED === $this->config['status']) {
             return;
         }
 
@@ -84,21 +87,21 @@ class ProcessController extends AbstractProcess
         $this->getForker()->run($this->setFile);
     }
 
-    public function getPid()
+    public function getPid(): ?int
     {
         $this->updateStatus();
 
-        return $this->config['pid'];
+        return isset($this->config['pid']) ? (int) $this->config['pid'] : null;
     }
 
-    public function getExitCode()
+    public function getExitCode(): ?int
     {
         $this->updateStatus();
 
         return isset($this->config['exitcode']) ? (int) $this->config['exitcode'] : null;
     }
 
-    public function getExitCodeText()
+    public function getExitCodeText(): string
     {
         if (null === $exitcode = $this->getExitCode()) {
             return '';
@@ -107,47 +110,47 @@ class ProcessController extends AbstractProcess
         return isset(Process::$exitCodes[$exitcode]) ? Process::$exitCodes[$exitcode] : 'Unknown error';
     }
 
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
         return 0 === $this->getExitCode();
     }
 
-    public function hasBeenSignaled()
+    public function hasBeenSignaled(): bool
     {
         return isset($this->config['signaled']) ? (bool) $this->config['signaled'] : false;
     }
 
-    public function getTermSignal()
+    public function getTermSignal(): ?int
     {
         return isset($this->config['termsig']) ? (int) $this->config['termsig'] : null;
     }
 
-    public function hasBeenStopped()
+    public function hasBeenStopped(): bool
     {
         return isset($this->config['stopped']) ? (bool) $this->config['stopped'] : false;
     }
 
-    public function getStopSignal()
+    public function getStopSignal(): ?int
     {
         return isset($this->config['stopsig']) ? (int) $this->config['stopsig'] : null;
     }
 
-    public function isRunning()
+    public function isRunning(): bool
     {
         return Process::STATUS_STARTED === $this->getStatus();
     }
 
-    public function isStarted()
+    public function isStarted(): bool
     {
         return Process::STATUS_READY !== $this->getStatus();
     }
 
-    public function isTerminated()
+    public function isTerminated(): bool
     {
         return Process::STATUS_TERMINATED === $this->getStatus();
     }
 
-    public function isTimedOut()
+    public function isTimedOut(): bool
     {
         return Process::STATUS_TERMINATED === $this->getStatus() && $this->config['timedout'] > 0;
     }
@@ -159,14 +162,14 @@ class ProcessController extends AbstractProcess
         return $this->config['status'];
     }
 
-    public function stop()
+    public function stop(): void
     {
         $this->config['stop'] = true;
 
         $this->saveConfig();
     }
 
-    public function delete()
+    public function delete(): void
     {
         if ($this->isRunning()) {
             throw new \LogicException('Cannot delete a running process.');
@@ -175,26 +178,26 @@ class ProcessController extends AbstractProcess
         $this->close();
     }
 
-    public function getCommandLine()
+    public function getCommandLine(): string
     {
-        return $this->config['commandline'];
+        return (string) $this->config['commandline'];
     }
 
-    public function setCommandLine($commandline)
+    public function setCommandLine(string $commandline): void
     {
         $this->config['commandline'] = $commandline;
 
         $this->saveConfig();
     }
 
-    public function setWorkingDirectory($cwd)
+    public function setWorkingDirectory(string $cwd): void
     {
         $this->config['cwd'] = $cwd;
 
         $this->saveConfig();
     }
 
-    public function getOutput()
+    public function getOutput(): string
     {
         if (!is_file($this->outputFile)) {
             return '';
@@ -203,7 +206,7 @@ class ProcessController extends AbstractProcess
         return file_get_contents($this->outputFile);
     }
 
-    public function getErrorOutput()
+    public function getErrorOutput(): string
     {
         if (!is_file($this->errorOutputFile)) {
             return '';
@@ -212,59 +215,21 @@ class ProcessController extends AbstractProcess
         return file_get_contents($this->errorOutputFile);
     }
 
-    public function setTimeout($timeout)
+    public function setTimeout(int $timeout): void
     {
         $this->config['timeout'] = $timeout;
 
         $this->saveConfig();
     }
 
-    public function setIdleTimeout($timeout)
+    public function setIdleTimeout(int $timeout): void
     {
         $this->config['idleTimeout'] = $timeout;
 
         $this->saveConfig();
     }
 
-    private function getForker()
-    {
-        foreach ($this->forkers as $forker) {
-            if ($forker->isSupported()) {
-                return $forker;
-            }
-        }
-
-        throw new \RuntimeException('No forker found for your current platform.');
-    }
-
-    private function saveConfig($always = false)
-    {
-        if ($always || Process::STATUS_STARTED === $this->config['status']) {
-            static::writeConfig($this->setFile, $this->config);
-        }
-    }
-
-    private function updateStatus()
-    {
-        if (Process::STATUS_STARTED !== $this->config['status']) {
-            return;
-        }
-
-        if (is_file($this->getFile)) {
-            $this->config = array_merge($this->config, static::readConfig($this->getFile));
-        }
-    }
-
-    private function close()
-    {
-        @unlink($this->setFile);
-        @unlink($this->getFile);
-        @unlink($this->inputFile);
-        @unlink($this->outputFile);
-        @unlink($this->errorOutputFile);
-    }
-
-    public static function create($workDir, $commandline, $cwd = null, $id = null)
+    public static function create(string $workDir, string $commandline, string $cwd = null, string $id = null)
     {
         return new static(
             [
@@ -276,7 +241,7 @@ class ProcessController extends AbstractProcess
         );
     }
 
-    public static function restore($workDir, $id)
+    public static function restore(string $workDir, string $id)
     {
         $config = static::readConfig($workDir.'/'.$id.'.set.json');
 
@@ -285,5 +250,43 @@ class ProcessController extends AbstractProcess
         }
 
         return new static($config, $workDir);
+    }
+
+    private function getForker(): ForkerInterface
+    {
+        foreach ($this->forkers as $forker) {
+            if ($forker->isSupported()) {
+                return $forker;
+            }
+        }
+
+        throw new \RuntimeException('No forker found for your current platform.');
+    }
+
+    private function saveConfig(bool $always = false): void
+    {
+        if ($always || Process::STATUS_STARTED === $this->config['status']) {
+            static::writeConfig($this->setFile, $this->config);
+        }
+    }
+
+    private function updateStatus(): void
+    {
+        if (Process::STATUS_STARTED !== $this->config['status']) {
+            return;
+        }
+
+        if (is_file($this->getFile)) {
+            $this->config = array_merge($this->config, static::readConfig($this->getFile));
+        }
+    }
+
+    private function close(): void
+    {
+        @unlink($this->setFile);
+        @unlink($this->getFile);
+        @unlink($this->inputFile);
+        @unlink($this->outputFile);
+        @unlink($this->errorOutputFile);
     }
 }

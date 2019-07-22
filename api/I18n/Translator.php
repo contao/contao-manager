@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -27,8 +29,6 @@ class Translator
 
     /**
      * Constructor.
-     *
-     * @param RequestStack $requestStack
      */
     public function __construct(RequestStack $requestStack)
     {
@@ -37,20 +37,15 @@ class Translator
 
     /**
      * Gets label for given ID from translation files.
-     *
-     * @param string $id
-     * @param array  $params
-     *
-     * @return string
      */
-    public function trans($id, array $params = [])
+    public function trans(string $id, array $params = []): string
     {
         $locales = ['en'];
 
         if (null !== ($request = $this->requestStack->getCurrentRequest())) {
             $locale = $request->getLocale();
 
-            if (5 === strlen($locale)) {
+            if (5 === \strlen($locale)) {
                 array_unshift($locales, substr($locale, 0, 2));
             }
 
@@ -62,13 +57,8 @@ class Translator
 
     /**
      * Searches for label by ID in the given locales.
-     *
-     * @param string $id
-     * @param array  $locales
-     *
-     * @return string
      */
-    private function findLabel($id, array $locales)
+    private function findLabel(string $id, array $locales): string
     {
         foreach ($locales as $locale) {
             $this->load($locale);
@@ -83,13 +73,8 @@ class Translator
 
     /**
      * Replaces parameters in label.
-     *
-     * @param string $label
-     * @param array  $params
-     *
-     * @return string
      */
-    private function replaceParameters($label, array $params)
+    private function replaceParameters(string $label, array $params): string
     {
         if (empty($params)) {
             return $label;
@@ -105,10 +90,8 @@ class Translator
 
     /**
      * Loads labels from file for given locale if it exists.
-     *
-     * @param string $locale
      */
-    private function load($locale)
+    private function load(string $locale): void
     {
         if (isset($this->labels[$locale])) {
             return;
@@ -122,7 +105,7 @@ class Translator
 
         $data = Yaml::parse(file_get_contents($file));
 
-        if (empty($data[$locale]) || !is_array($data[$locale])) {
+        if (empty($data[$locale]) || !\is_array($data[$locale])) {
             return;
         }
 
@@ -131,15 +114,11 @@ class Translator
 
     /**
      * Adds new labels to the label store by flattening array keys.
-     *
-     * @param string $locale
-     * @param array  $data
-     * @param string $prefix
      */
-    private function store($locale, array $data, $prefix = '')
+    private function store(string $locale, array $data, string $prefix = ''): void
     {
         foreach ($data as $k => $v) {
-            if (is_array($v)) {
+            if (\is_array($v)) {
                 $this->store($locale, $v, $prefix.$k.'.');
             } else {
                 $this->labels[$locale][$prefix.$k] = $v;
