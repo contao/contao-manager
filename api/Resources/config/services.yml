@@ -2,12 +2,21 @@ services:
     _defaults:
         autoconfigure: true
         autowire: true
+        public: false
         bind:
             $debug: '%kernel.debug%'
             $serverConfigFile: '%kernel.root_dir%/Resources/config/servers.yml'
 
     Contao\ManagerApi\:
-        resource: ../../{Command,Config,Controller,EventListener,IntegrityCheck,Security,System,Task/Composer/,Task/Contao,Task/Manager,Task/Packages}
+        resource: ../../{Config,EventListener,IntegrityCheck,Process,I18n,Security,System,Task/Composer/,Task/Contao,Task/Manager,Task/Packages}
+
+    Contao\ManagerApi\Command\:
+        resource: ../../Command
+        public: true
+
+    Contao\ManagerApi\Controller\:
+        resource: ../../Controller
+        public: true
 
 
     ####################
@@ -23,10 +32,7 @@ services:
     #  Additional configuration  #
     ##############################
 
-    kernel:
-        class: Contao\ManagerApi\ApiKernel
-        synthetic: true
-        autowire: false
+    Contao\ManagerApi\ApiKernel: '@kernel'
 
     locale_listener:
         class: Contao\ManagerApi\EventListener\LocaleListener

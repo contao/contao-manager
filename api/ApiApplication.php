@@ -17,7 +17,6 @@ use Contao\ManagerApi\Command\TaskAbortCommand;
 use Contao\ManagerApi\Command\TaskDeleteCommand;
 use Contao\ManagerApi\Command\TaskUpdateCommand;
 use Contao\ManagerApi\Command\UpdateCommand;
-use Symfony\Bundle\FrameworkBundle\Command\CacheWarmupCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -111,10 +110,8 @@ class ApiApplication extends Application
         $this->add($container->get(TaskUpdateCommand::class));
         $this->add($container->get(UpdateCommand::class));
 
-        if (!\Phar::running(false)) {
-            $command = new CacheWarmupCommand();
-            $command->setContainer($container);
-            $this->add($command);
+        if (!\Phar::running(false) && $container->has('console.command_loader')) {
+            $this->setCommandLoader($container->get('console.command_loader'));
         }
     }
 }

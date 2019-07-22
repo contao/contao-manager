@@ -22,37 +22,20 @@
         "php": "^7.1.3",
         "ext-json": "*",
         "ext-zip": "*",
-        "symfony/framework-bundle": "3.4.*",
-        "symfony/security-bundle": "3.4.*",
-        "symfony/console": "3.4.*",
-        "symfony/finder": "3.4.*",
-        "symfony/process": "3.4.*",
-        "symfony/yaml": "3.4.*",
+        "symfony/framework-bundle": "4.3.*",
+        "symfony/security-bundle": "4.3.*",
+        "symfony/http-kernel": "4.3.*",
+        "symfony/console": "4.3.*",
+        "symfony/finder": "4.3.*",
+        "symfony/process": "4.3.*",
+        "symfony/yaml": "4.3.*",
         "doctrine/annotations": "~1.0",
 
-        "symfony/routing": "3.4.*",
-        "symfony/http-foundation": "3.4.*",
-        "symfony/event-dispatcher": "3.4.*",
-        "symfony/http-kernel": "3.4.*",
-        "symfony/debug": "3.4.*",
-        "symfony/config": "3.4.*",
-        "symfony/security": "3.4.*",
-        "symfony/property-access": "3.4.*",
-        "symfony/dependency-injection": "3.4.*",
-        "symfony/cache": "3.4.*",
-        "symfony/filesystem": "3.4.*",
-        "symfony/inflector": "3.4.*",
-        "symfony/monolog-bridge": "3.4.*",
-
         "symfony/monolog-bundle": "^3.3",
-        "ircmaxell/password-compat": "^1.0",
         "firebase/php-jwt": "^4.0",
 
         "crell/api-problem": "^2.0",
         "composer/composer": "^1.7"
-    },
-    "conflict": {
-        "symfony/symfony": ">=4"
     },
     "autoload": {
         "psr-4": {

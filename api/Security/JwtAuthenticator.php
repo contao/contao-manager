@@ -42,7 +42,7 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
      */
     public function supports(Request $request)
     {
-        return $this->jwtManager->hasRequestToken($request);
+        return $this->jwtManager->hasRequestToken($request) && null !== $this->jwtManager->getPayload($request);
     }
 
     /**
