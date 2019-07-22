@@ -219,11 +219,11 @@ CODE
             return dirname($composer);
         }
 
-        if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && !empty($_SERVER['PWD'])) {
-            return $_SERVER['PWD'];
-        }
-
         if ('' !== ($phar = \Phar::running(false))) {
+            if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && !empty($_SERVER['PWD'])) {
+                return $_SERVER['PWD'];
+            }
+
             $current = getcwd();
 
             if (!$current) {
