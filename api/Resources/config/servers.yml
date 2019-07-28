@@ -315,7 +315,7 @@ configs:
 
     udmedia:
         name: UD Media GmbH
-        website: udmedia.de
+        website: www.udmedia.de
         php:
             /usr/bin/php{major}.{minor}: []
             /usr/lib64/php{major}.{minor}/bin/php: []
