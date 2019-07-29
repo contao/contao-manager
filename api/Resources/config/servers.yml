@@ -32,6 +32,7 @@ networks:
     AS34432: profihost
     AS47302: cyon
     AS57169: edis
+    AS199753: udmedia
 
 configs:
     1blu:
@@ -311,6 +312,13 @@ configs:
         php:
             /opt/RZphp{major}{minor}/bin/php-cli: ['-d', 'max_execution_time=300']
             /usr/bin/php{major}.{minor}: ['-d', 'max_execution_time=300']
+
+    udmedia:
+        name: UD Media GmbH
+        website: www.udmedia.de
+        php:
+            /usr/bin/php{major}.{minor}: []
+            /usr/lib64/php{major}.{minor}/bin/php: []
 
     uberspace:
         name: Uberspace
