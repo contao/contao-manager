@@ -17,6 +17,7 @@ services:
     Contao\ManagerApi\Controller\:
         resource: ../../Controller
         public: true
+        tags: ['controller.service_arguments']
 
 
     ####################
