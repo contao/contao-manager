@@ -38,7 +38,7 @@ unset($multibyte, $unicode);
 if (PHP_VERSION_ID < 70103) {
     Phar::mapPhar('contao-manager.phar');
     /** @noinspection PhpIncludeInspection */
-    require 'phar://contao-manager.phar/api/downgrade.php';
+    require 'phar://contao-manager.phar/downgrade.php';
 }
 
 if (function_exists('date_default_timezone_set') && function_exists('date_default_timezone_get')) {
