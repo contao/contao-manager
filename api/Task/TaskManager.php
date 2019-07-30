@@ -52,7 +52,7 @@ class TaskManager implements LoggerAwareInterface, ServiceAnnotationInterface
      *
      * @param TaskInterface[] $tasks
      */
-    public function __construct(array $tasks, ApiKernel $kernel, ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
+    public function __construct(iterable $tasks, ApiKernel $kernel, ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
     {
         $this->filesystem = $filesystem;
         $this->processFactory = $processFactory;

@@ -15,7 +15,7 @@ namespace Contao\ManagerApi\Controller\Contao;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Process\ContaoApi;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Seld\JsonLint\ParsingException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/contao/access-key", methods={"GET", "PUT", "DELETE"})
  */
-class AccessKeyController extends Controller
+class AccessKeyController
 {
     /**
      * @var ContaoApi
@@ -39,7 +39,7 @@ class AccessKeyController extends Controller
     /**
      * Handles the controller action.
      *
-     * @throws \Seld\JsonLint\ParsingException
+     * @throws ParsingException
      */
     public function __invoke(Request $request): Response
     {
@@ -58,7 +58,7 @@ class AccessKeyController extends Controller
     }
 
     /**
-     * @throws \Seld\JsonLint\ParsingException
+     * @throws ParsingException
      */
     private function getAccessKey(): Response
     {
@@ -73,7 +73,7 @@ class AccessKeyController extends Controller
     }
 
     /**
-     * @throws \Seld\JsonLint\ParsingException
+     * @throws ParsingException
      */
     private function setAccessKey(Request $request): Response
     {
@@ -99,7 +99,7 @@ class AccessKeyController extends Controller
     }
 
     /**
-     * @throws \Seld\JsonLint\ParsingException
+     * @throws ParsingException
      */
     private function removeAccessKey(): Response
     {

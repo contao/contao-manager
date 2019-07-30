@@ -58,7 +58,7 @@ class ApiKernel extends Kernel
         ErrorHandler::register();
 
         error_reporting($debug ? E_ALL : E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR);
-        ini_set('display_errors', $debug);
+        ini_set('display_errors', $debug ? '1' : '0');
         ini_set('error_log', $this->getLogDir().\DIRECTORY_SEPARATOR.'error.log');
 
         parent::__construct($environment, $debug);
@@ -176,6 +176,7 @@ CODE
 
     /**
      * {@inheritdoc}
+     * @throws \Symfony\Component\Config\Exception\LoaderLoadException
      */
     protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
@@ -184,6 +185,7 @@ CODE
 
     /**
      * {@inheritdoc}
+     * @throws \Exception
      */
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader): void
     {
