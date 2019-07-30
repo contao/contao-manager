@@ -8,16 +8,22 @@
 
         <error v-if="hasError"></error>
 
-        <div v-if="isInitializing" class="view-init">
-            <div class="view-init__cell">
-                <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo">
-                <p class="view-init__message">{{ 'ui.app.loading' | translate }}</p>
+        <transition name="fade" mode="out-in" style="height:100%">
+
+            <div v-if="isInitializing" class="view-init">
+                <div class="view-init__cell">
+                    <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo">
+                    <p class="view-init__message">{{ 'ui.app.loading' | translate }}</p>
+                </div>
             </div>
-        </div>
 
-        <component :is="currentView" :class="blurView ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
+            <component :is="currentView" :class="blurView ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
 
-        <router-view v-else :class="blurView ? 'blur-in' : 'blur-out'"></router-view>
+            <div v-else>
+                <router-view :class="blurView ? 'blur-in' : 'blur-out'"></router-view>
+            </div>
+
+        </transition>
 
         <keep-alive>
             <logout-warning v-if="warnForLogout"></logout-warning>
@@ -189,5 +195,19 @@
         100% {
             opacity: 0.5;
         }
+    }
+</style>
+
+<style lang="scss" scoped>
+    .fade-enter-active,
+    .fade-leave-active {
+        transition-duration: 0.2s;
+        transition-property: opacity;
+        transition-timing-function: ease;
+    }
+
+    .fade-enter,
+    .fade-leave-active {
+        opacity: 0
     }
 </style>
