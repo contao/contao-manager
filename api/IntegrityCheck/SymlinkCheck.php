@@ -34,7 +34,7 @@ class SymlinkCheck extends AbstractIntegrityCheck
         $this->kernel = $kernel;
     }
 
-    public function run(): ApiProblem
+    public function run(): ?ApiProblem
     {
         if (null === ($error = $this->canCreateSymlinks())) {
             return null;

@@ -16,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class SessionCheck extends AbstractIntegrityCheck
 {
-    public function run(): ApiProblem
+    public function run(): ?ApiProblem
     {
         $detail = '';
 

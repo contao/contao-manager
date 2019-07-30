@@ -16,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class SysTempDirCheck extends AbstractIntegrityCheck
 {
-    public function run(): ApiProblem
+    public function run(): ?ApiProblem
     {
         if (false !== ($tmpfile = tempnam(sys_get_temp_dir(), '')) && is_writable($tmpfile)) {
             return null;
