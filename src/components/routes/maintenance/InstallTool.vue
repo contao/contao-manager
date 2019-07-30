@@ -9,7 +9,7 @@
                     <p>{{ 'ui.maintenance.installTool.description' | translate }}</p>
                 </div>
 
-                <fieldset class="maintenance__actions">
+                <fieldset class="maintenance__actions" v-if="!safeMode">
                     <loader class="maintenance__loader" v-if="isLocked === null"/>
                     <loading-button class="widget-button widget-button--primary widget-button--unlock" :loading="loading" :disabled="!supported" v-else-if="isLocked" @click="unlock">{{ $t('ui.maintenance.installTool.unlock') }}</loading-button>
                     <loading-button class="widget-button widget-button--primary widget-button--lock" :loading="loading" :disabled="!supported" v-else @click="lock">{{ $t('ui.maintenance.installTool.lock') }}</loading-button>
@@ -55,6 +55,10 @@
         },
 
         mounted() {
+            if (this.safeMode) {
+                return;
+            }
+
             this.$store.dispatch('contao/install-tool/isLocked').then(
                 () => {
                     this.supported = true;
