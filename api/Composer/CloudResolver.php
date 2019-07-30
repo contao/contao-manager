@@ -16,7 +16,11 @@ use Composer\Json\JsonFile;
 use Contao\ManagerApi\System\Request;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
 
+/**
+ * @ServiceTag("monolog.logger", channel="tasks")
+ */
 class CloudResolver implements LoggerAwareInterface
 {
     use LoggerAwareTrait;

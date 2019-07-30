@@ -8,14 +8,15 @@ services:
             $serverConfigFile: '%kernel.root_dir%/Resources/config/servers.yml'
 
     Contao\ManagerApi\:
-        resource: ../../{Config,EventListener,IntegrityCheck,Process,I18n,Security,System,Task/Composer/,Task/Contao,Task/Manager,Task/Packages}
+        resource: '../../*'
+        exclude: '../../{Resources}'
 
     Contao\ManagerApi\Command\:
-        resource: ../../Command
+        resource: '../../Command'
         public: true
 
     Contao\ManagerApi\Controller\:
-        resource: ../../Controller
+        resource: '../../Controller'
         public: true
         tags: ['controller.service_arguments']
 
@@ -37,25 +38,7 @@ services:
 
     locale_listener:
         class: Contao\ManagerApi\EventListener\LocaleListener
-        tags: [{ name: kernel.event_subscriber }]
-
-    Contao\ManagerApi\Composer\CloudResolver:
-        calls:
-            - ['setLogger', ['@logger']]
-        tags:
-            - { name: monolog.logger, channel: tasks }
-
-    Contao\ManagerApi\Composer\Environment: ~
-
-    Contao\ManagerApi\Process\ConsoleProcessFactory:
-        tags:
-            - { name: monolog.logger, channel: tasks }
-
-    Contao\ManagerApi\Process\ContaoApi: ~
-
-    Contao\ManagerApi\Process\ContaoConsole: ~
 
     Contao\ManagerApi\Task\TaskManager:
         arguments:
             - !tagged app.task
-        tags: [{ name: monolog.logger, channel: tasks }]

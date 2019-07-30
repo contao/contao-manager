@@ -21,11 +21,15 @@ use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Process\Process;
+use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
+use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
 
 /**
  * Creates foreground and background processes for the Contao or Manager console.
+ *
+ * @ServiceTag("monolog.logger", channel="tasks")
  */
-class ConsoleProcessFactory implements LoggerAwareInterface
+class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationInterface
 {
     use LoggerAwareTrait;
 

@@ -17,8 +17,13 @@ use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Filesystem\Filesystem;
+use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
+use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
 
-class TaskManager implements LoggerAwareInterface
+/**
+ * @ServiceTag("monolog.logger", channel="tasks")
+ */
+class TaskManager implements LoggerAwareInterface, ServiceAnnotationInterface
 {
     use LoggerAwareTrait;
 
