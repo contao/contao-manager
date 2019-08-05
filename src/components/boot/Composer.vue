@@ -19,7 +19,10 @@
                 this.bootDescription = this.$t('ui.server.running');
 
                 this.$store.dispatch('server/composer/get').then((result) => {
-                    if (result.json.found && !result.vendor.found) {
+                    if (result.json.found && !result.json.valid) {
+                        this.bootState = 'error';
+                        this.bootDescription = result.json.error;
+                    } else if (result.json.found && !result.vendor.found) {
                         this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.composer.install');
                     } else {

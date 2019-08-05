@@ -39,6 +39,10 @@ en:
             title: 'The Contao version could not be determined'
             detail: "The console returned unexpected content when asked for the Contao version. Please check the output for more information:\n\n{output}"
 
+    boot:
+        composer:
+            invalid: 'composer.json schema validation: {exception}'
+
     config:
         php_cli:
             not_found: 'This path does not contain a valid PHP binary.'
