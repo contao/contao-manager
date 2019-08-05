@@ -16,6 +16,7 @@ use Composer\Json\JsonFile;
 use Composer\Semver\Constraint\Constraint;
 use Composer\Semver\Constraint\MultiConstraint;
 use Composer\Semver\VersionParser;
+use Composer\Util\Zip;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Config\UploadsConfig;
 use Contao\ManagerApi\Exception\ApiProblemException;
@@ -214,11 +215,13 @@ class UploadPackagesController
         }
 
         try {
-            $data = $this->getComposerInformation($uploadFile);
+            $json = Zip::getComposerJson($uploadFile);
 
-            if (null === $data) {
+            if (null === $json) {
                 return $this->installError($id, 'file');
             }
+
+            $data = JsonFile::parseJson($json, $uploadFile.'#composer.json');
         } catch (\Exception $e) {
             return $this->installError($id, 'json', $e);
         }
@@ -313,71 +316,5 @@ class UploadPackagesController
             (new ApiProblem('Must install contao/manager-plugin 2.7 or later to support artifacts.'))
                 ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
         );
-    }
-
-    /**
-     * @see ArtifactRepository::getComposerInformation()
-     */
-    private function getComposerInformation(string $zipPath): ?array
-    {
-        $zip = new \ZipArchive();
-        $zip->open($zipPath);
-
-        if (!$zip->numFiles) {
-            return null;
-        }
-
-        $foundFileIndex = $this->locateFile($zip, 'composer.json');
-
-        if (false === $foundFileIndex) {
-            return null;
-        }
-
-        $configurationFileName = $zip->getNameIndex($foundFileIndex);
-        $composerFile = "zip://$zipPath#$configurationFileName";
-        $json = file_get_contents($composerFile);
-
-        return JsonFile::parseJson($json, $composerFile);
-    }
-
-    /**
-     * @see ArtifactRepository::locateFile()
-     */
-    private function locateFile(\ZipArchive $zip, string $filename)
-    {
-        $indexOfShortestMatch = false;
-        $lengthOfShortestMatch = -1;
-
-        for ($i = 0; $i < $zip->numFiles; ++$i) {
-            $stat = $zip->statIndex($i);
-
-            if (0 === strcmp(basename($stat['name']), $filename)) {
-                $directoryName = \dirname($stat['name']);
-
-                if ('.' === $directoryName) {
-                    // If composer.json is in root directory, it has to be the one to use
-                    return $i;
-                }
-
-                if (false !== strpos($directoryName, '\\') || false !== strpos($directoryName, '/')) {
-                    // composer.json files below first directory are rejected
-                    continue;
-                }
-
-                $length = \strlen($stat['name']);
-
-                if (false === $indexOfShortestMatch || $length < $lengthOfShortestMatch) {
-                    // Check it's not a directory
-                    $contents = $zip->getFromIndex($i);
-
-                    if (false !== $contents) {
-                        $indexOfShortestMatch = $i;
-                        $lengthOfShortestMatch = $length;
-                    }
-                }
-            }
-        }
-
-        return $indexOfShortestMatch;
     }
 }
