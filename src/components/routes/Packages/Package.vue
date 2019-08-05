@@ -2,12 +2,14 @@
     <article class="package">
 
         <transition name="package__hint">
-            <div class="package__hint" v-if="hint">
-                <a href="#" class="package__hint-close" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
-                <p>
-                    {{ hint }}
-                    <!--<a href="#">Help</a>-->
-                </p>
+            <div class="package__hint" v-if="hint || !!$slots.hint">
+                <slot name="hint">
+                    <a href="#" class="package__hint-close" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
+                    <p>
+                        {{ hint }}
+                        <!--<a href="#">Help</a>-->
+                    </p>
+                </slot>
             </div>
         </transition>
 

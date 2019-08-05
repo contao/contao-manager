@@ -4,6 +4,13 @@
         :hint="hintUploading"
         v-if="!upload.success || upload.error"
     >
+        <template slot="hint" v-if="upload.error">
+            <p>
+                {{upload.error}}
+                <template v-if="upload.exception">{{upload.exception}}</template>
+            </p>
+        </template>
+
         <template slot="release">
             <progress-bar :amount="progress"/>
             <div class="package__version package__version--release">

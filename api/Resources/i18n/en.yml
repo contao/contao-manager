@@ -139,5 +139,5 @@ en:
         error:
             file: 'The file is invalid or does not contain a composer.json.'
             json: 'The composer.json does not contain valid JSON data.'
-            version: 'Package version is missing in the composer.json.'
+            schema: 'The composer.json schema validation failed.'
             partial: 'The file upload was not completed.'

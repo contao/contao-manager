@@ -22,6 +22,9 @@ use Contao\ManagerApi\Config\UploadsConfig;
 use Contao\ManagerApi\Exception\ApiProblemException;
 use Contao\ManagerApi\I18n\Translator;
 use Crell\ApiProblem\ApiProblem;
+use JsonSchema\Exception\ValidationException;
+use JsonSchema\Validator;
+use Seld\JsonLint\ParsingException;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -214,23 +217,44 @@ class UploadPackagesController
             throw new \RuntimeException(sprintf('Incomplete upload ID "%s": %s instead of %s bytes', $id, $size, $config['size']));
         }
 
+        $json = Zip::getComposerJson($uploadFile);
+
+        if (null === $json) {
+            return $this->installError($id, 'file');
+        }
+
         try {
-            $json = Zip::getComposerJson($uploadFile);
-
-            if (null === $json) {
-                return $this->installError($id, 'file');
-            }
-
             $data = JsonFile::parseJson($json, $uploadFile.'#composer.json');
-        } catch (\Exception $e) {
+        } catch (ParsingException $e) {
             return $this->installError($id, 'json', $e);
         }
 
-        if (!isset($data['version'])) {
-            return $this->installError($id, 'version');
+        try {
+            $schemaFile = __DIR__.'/../../../vendor/composer/composer/res/composer-schema.json';
+
+            // Prepend with file:// only when not using a special schema already (e.g. in the phar)
+            if (false === strpos($schemaFile, '://')) {
+                $schemaFile = 'file://'.$schemaFile;
+            }
+
+            $schema = (object) ['$ref' => $schemaFile];
+            $schema->required = ['name', 'version'];
+
+            $value = json_decode(json_encode($data), false);
+            $validator = new Validator();
+            $validator->validate($value, $schema, \JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS);
+        } catch (ValidationException $e) {
+            return $this->installError($id, 'schema', $e);
         }
 
-        [$vendor, $package] = explode('/', $data['name']);
+        // The package name should always contain a slash, but the schema does not validate it yet.
+        // TODO: remove this if https://github.com/composer/composer/pull/8262 is merged
+        if (false === strpos($data['name'], '/')) {
+            $vendor = '';
+            $package = $data['name'];
+        } else {
+            [$vendor, $package] = explode('/', $data['name']);
+        }
 
         $config['success'] = true;
         $config['hash'] = sha1_file($uploadFile);
