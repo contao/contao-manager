@@ -36,7 +36,7 @@
         "firebase/php-jwt": "^4.0",
 
         "crell/api-problem": "^2.0",
-        "composer/composer": "^1.7"
+        "composer/composer": "^1.9"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14"

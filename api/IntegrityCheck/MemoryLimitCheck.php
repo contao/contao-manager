@@ -56,6 +56,6 @@ class MemoryLimitCheck extends AbstractIntegrityCheck
                 $memoryLimit *= 1024;
         }
 
-        return $memoryLimit >= 1024 * 1024 * 1536;
+        return $memoryLimit >= 1024 * 1024 * 256;
     }
 }
