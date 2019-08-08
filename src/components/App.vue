@@ -112,7 +112,7 @@
             } else if (accountStatus === 401) {
                 this.$store.commit('setView', views.LOGIN);
             } else {
-                this.$store.commit('apiError', accountStatus);
+                this.$store.commit('apiError', { status: accountStatus });
             }
         },
 

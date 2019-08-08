@@ -47,7 +47,7 @@ const store = new Vuex.Store({
             state.apiVersion = result.api;
         },
 
-        apiError: (state, statusCode) => {
+        apiError: (state, { status, body }) => {
             if (state.error) {
                 return;
             }
@@ -55,7 +55,8 @@ const store = new Vuex.Store({
             state.error = {
                 title: Vue.i18n.translate('ui.app.apiError'),
                 type: 'about:blank',
-                status: statusCode || '',
+                status: status || '',
+                detail: body || '',
             };
         },
     },
