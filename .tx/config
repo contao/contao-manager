@@ -1,13 +1,13 @@
 [main]
 host = https://www.transifex.com
 
-[contao-manager.v1_1-ui]
+[contao-manager.v1_2-ui]
 source_file = src/i18n/en.json
 source_lang = en
 file_filter = src/i18n/<lang>.json
 type = KEYVALUEJSON
 
-[contao-manager.v1_1-api]
+[contao-manager.v1_2-api]
 source_file = api/Resources/i18n/en.yml
 source_lang = en
 file_filter = api/Resources/i18n/<lang>.yml
