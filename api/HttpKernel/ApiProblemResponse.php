@@ -14,6 +14,7 @@ namespace Contao\ManagerApi\HttpKernel;
 
 use Contao\ManagerApi\Exception\ApiProblemException;
 use Crell\ApiProblem\ApiProblem;
+use Crell\ApiProblem\JsonException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -33,8 +34,15 @@ class ApiProblemResponse extends Response
             $problem->setTitle(isset(Response::$statusTexts[$code]) ? Response::$statusTexts[$code] : 'unknown status');
         }
 
+        try {
+            $content = $problem->asJson();
+        } catch (JsonException $exception) {
+            $problem = new ApiProblem($exception->getMessage());
+            $content = $problem->asJson();
+        }
+
         parent::__construct(
-            $problem->asJson(),
+            $content,
             $problem->getStatus(),
             array_merge($headers, ['Content-Type' => 'application/problem+json'])
         );
