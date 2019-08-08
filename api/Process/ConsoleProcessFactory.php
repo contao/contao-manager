@@ -85,7 +85,9 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
      */
     public function createManagerConsoleProcess(array $arguments): Process
     {
-        return $this->createForegroundProcess($this->getManagerConsolePath(), $arguments);
+        array_unshift($arguments, $this->getManagerConsolePath());
+
+        return $this->createForegroundProcess($arguments);
     }
 
     /**
@@ -93,7 +95,9 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
      */
     public function createManagerConsoleBackgroundProcess(array $arguments, string $id = null): ProcessController
     {
-        return $this->createBackgroundProcess($this->getManagerConsolePath(), $arguments, $id);
+        array_unshift($arguments, $this->getManagerConsolePath());
+
+        return $this->createBackgroundProcess($arguments, $id);
     }
 
     /**
@@ -101,7 +105,9 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
      */
     public function createContaoConsoleProcess(array $arguments): Process
     {
-        return $this->createForegroundProcess($this->getContaoConsolePath(), $arguments);
+        array_unshift($arguments, $this->getContaoConsolePath());
+
+        return $this->createForegroundProcess($arguments);
     }
 
     /**
@@ -109,7 +115,9 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
      */
     public function createContaoConsoleBackgroundProcess(array $arguments, string $id = null): ProcessController
     {
-        return $this->createBackgroundProcess($this->getContaoConsolePath(), $arguments, $id);
+        array_unshift($arguments, $this->getContaoConsolePath());
+
+        return $this->createBackgroundProcess($arguments, $id);
     }
 
     /**
@@ -117,7 +125,9 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
      */
     public function createContaoApiProcess(array $arguments): Process
     {
-        return $this->createForegroundProcess($this->getContaoApiPath(), $arguments);
+        array_unshift($arguments, $this->getContaoApiPath());
+
+        return $this->createForegroundProcess($arguments);
     }
 
     /**
@@ -145,10 +155,10 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
     /**
      * Creates a foreground process.
      */
-    private function createForegroundProcess(string $console, array $arguments): Process
+    private function createForegroundProcess(array $arguments): Process
     {
         return (new Process(
-            $this->buildCommandLine($console, $arguments),
+            $this->addPhpRuntime($arguments),
             $this->kernel->getProjectDir(),
             $this->serverInfo->getPhpEnv()
         ))->inheritEnvironmentVariables()->setTimeout(0);
@@ -157,11 +167,11 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
     /**
      * Creates a background process controller.
      */
-    private function createBackgroundProcess(string $console, array $arguments, string $id = null): ProcessController
+    private function createBackgroundProcess(array $arguments, string $id = null): ProcessController
     {
         $process = ProcessController::create(
             $this->kernel->getConfigDir(),
-            $this->buildCommandLine($console, $arguments),
+            $this->addPhpRuntime($arguments),
             $this->kernel->getProjectDir(),
             $id
         );
@@ -178,9 +188,9 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
      */
     private function addForkers(ProcessController $process): void
     {
-        $backgroundCommand = $this->buildCommandLine(
-            $this->getManagerConsolePath(),
+        $backgroundCommand = $this->addPhpRuntime(
             [
+                $this->getManagerConsolePath(),
                 '--no-interaction',
                 'run',
             ]
@@ -201,24 +211,21 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
     }
 
     /**
-     * Builds a command line with PHP runtime from console path and arguments.
+     * Adds PHP runtime to console arguments.
      */
-    private function buildCommandLine(string $console, array $arguments): string
+    private function addPhpRuntime(array $arguments): array
     {
-        $defaultArgs = ['-q'];
+        if (null === ($phpCli = $this->serverInfo->getPhpExecutable())) {
+            return $arguments;
+        }
+
+        $defaultArgs = [$phpCli, '-q'];
 
         if (file_exists($this->kernel->getConfigDir().'/php.ini')) {
             $defaultArgs[] = '-c';
             $defaultArgs[] = $this->kernel->getConfigDir().'/php.ini';
         }
 
-        if (null !== ($phpCli = $this->serverInfo->getPhpExecutable())) {
-            $cmd = $phpCli;
-            $arguments = array_merge($defaultArgs, $this->serverInfo->getPhpArguments(), [$console], $arguments);
-        } else {
-            $cmd = $console;
-        }
-
-        return escapeshellcmd($cmd).' '.implode(' ', array_map('escapeshellarg', $arguments)).' 2>&1';
+        return array_merge($defaultArgs, $this->serverInfo->getPhpArguments(), $arguments);
     }
 }

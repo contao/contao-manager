@@ -180,10 +180,14 @@ class ProcessController extends AbstractProcess
 
     public function getCommandLine(): string
     {
-        return (string) $this->config['commandline'];
+        if (!\is_array($this->config['commandline'])) {
+            return (string) $this->config['commandline'];
+        }
+
+        return implode(' ', $this->config['commandline']);
     }
 
-    public function setCommandLine(string $commandline): void
+    public function setCommandLine(array $commandline): void
     {
         $this->config['commandline'] = $commandline;
 
@@ -229,7 +233,7 @@ class ProcessController extends AbstractProcess
         $this->saveConfig();
     }
 
-    public static function create(string $workDir, string $commandline, string $cwd = null, string $id = null)
+    public static function create(string $workDir, array $commandline, string $cwd = null, string $id = null)
     {
         return new static(
             [

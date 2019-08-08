@@ -24,8 +24,8 @@ class DisownForker extends AbstractForker
     {
         $commandline = sprintf(
             'exec %s %s >/dev/null 2>&1 </dev/null & disown',
-            $this->executable,
-            escapeshellarg($configFile)
+            implode(' ', array_map([$this, 'escapeArgument'], $this->command)),
+            $this->escapeArgument($configFile)
         );
 
         $this->startCommand($commandline);
@@ -37,7 +37,7 @@ class DisownForker extends AbstractForker
     public function isSupported(): bool
     {
         try {
-            (new Process("exec echo '' & disown"))->mustRun(null, $this->env);
+            Process::fromShellCommandline("exec echo '' & disown")->mustRun(null, $this->env);
         } catch (ProcessFailedException $e) {
             return false;
         }

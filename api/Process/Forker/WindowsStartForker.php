@@ -24,8 +24,8 @@ class WindowsStartForker extends AbstractForker
     {
         $commandline = sprintf(
             'start /b %s %s 2>&1 >nul <nul',
-            $this->executable,
-            escapeshellarg($configFile)
+            implode(' ', array_map([$this, 'escapeArgument'], $this->command)),
+            $this->escapeArgument($configFile)
         );
 
         $this->startCommand($commandline);
@@ -41,7 +41,7 @@ class WindowsStartForker extends AbstractForker
         }
 
         try {
-            (new Process('start /b dir'))->mustRun(null, $this->env);
+            Process::fromShellCommandline('start /b dir')->mustRun(null, $this->env);
         } catch (ProcessFailedException $e) {
             return false;
         }

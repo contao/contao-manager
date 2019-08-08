@@ -78,7 +78,7 @@ class PhpExecutableFinder
 
     public function getServerInfo(string $cli): ?array
     {
-        $arguments = ['-q'];
+        $arguments = [$cli, '-q'];
 
         if ('' !== ($phar = \Phar::running(false))) {
             $arguments[] = $phar;
@@ -88,14 +88,12 @@ class PhpExecutableFinder
 
         $arguments[] = 'test';
 
-        $commandline = escapeshellcmd($cli).' '.implode(' ', array_map('escapeshellarg', $arguments));
-
         try {
-            $process = (new Process($commandline))->mustRun(null, array_map(function () { return false; }, $_ENV));
+            $process = (new Process($arguments))->mustRun(null, array_map(function () { return false; }, $_ENV));
             $output = @json_decode(trim($process->getOutput()), true);
 
             if (null === $output) {
-                throw new RuntimeException('Unexpected output from "'.$commandline.'": '.$process->getOutput());
+                throw new RuntimeException('Unexpected output from "'.implode(' ', $arguments).'": '.$process->getOutput());
             }
 
             return $output;

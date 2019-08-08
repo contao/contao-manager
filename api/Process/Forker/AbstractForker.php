@@ -18,9 +18,9 @@ use Symfony\Component\Process\Process;
 abstract class AbstractForker implements ForkerInterface
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $executable;
+    protected $command;
 
     /**
      * @var array|null
@@ -37,9 +37,9 @@ abstract class AbstractForker implements ForkerInterface
      */
     private $timeout = 500;
 
-    public function __construct(string $executable, array $env = null, LoggerInterface $logger = null)
+    public function __construct(array $command, array $env = null, LoggerInterface $logger = null)
     {
-        $this->executable = $executable;
+        $this->command = $command;
         $this->env = $env;
         $this->logger = $logger;
     }
@@ -47,9 +47,9 @@ abstract class AbstractForker implements ForkerInterface
     /**
      * {@inheritdoc}
      */
-    public function setExecutable(string $executable): ForkerInterface
+    public function setCommand(array $command): ForkerInterface
     {
-        $this->executable = $executable;
+        $this->command = $command;
 
         return $this;
     }
@@ -57,9 +57,9 @@ abstract class AbstractForker implements ForkerInterface
     /**
      * {@inheritdoc}
      */
-    public function getExecutable(): string
+    public function getCommand(): array
     {
-        return $this->executable;
+        return $this->command;
     }
 
     /**
@@ -92,11 +92,11 @@ abstract class AbstractForker implements ForkerInterface
             );
         }
 
-        $process = new Process($commandline);
+        $process = Process::fromShellCommandline($commandline);
         $process->setTimeout(null);
         $process->setIdleTimeout(null);
 
-        $process->start(null, $this->env);
+        $process->start(null, $this->env ?: []);
 
         usleep($this->timeout);
 
@@ -117,5 +117,28 @@ abstract class AbstractForker implements ForkerInterface
         }
 
         return $process;
+    }
+
+    /**
+     * Escapes a string to be used as a shell argument.
+     * @see Process::escapeArgument()
+     */
+    protected function escapeArgument(?string $argument): string
+    {
+        if ('' === $argument || null === $argument) {
+            return '""';
+        }
+        if ('\\' !== \DIRECTORY_SEPARATOR) {
+            return "'".str_replace("'", "'\\''", $argument)."'";
+        }
+        if (false !== strpos($argument, "\0")) {
+            $argument = str_replace("\0", '?', $argument);
+        }
+        if (!preg_match('/[\/()%!^"<>&|\s]/', $argument)) {
+            return $argument;
+        }
+        $argument = preg_replace('/(\\\\+)$/', '$1$1', $argument);
+
+        return '"'.str_replace(['"', '^', '%', '!', "\n"], ['""', '"^^"', '"^%"', '"^!"', '!LF!'], $argument).'"';
     }
 }

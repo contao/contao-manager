@@ -39,7 +39,7 @@ class ProcessRunner extends AbstractProcess
 
         parent::__construct($config['id'], \dirname($configFile));
 
-        $commandline = $config['commandline'] ?? '';
+        $commandline = $config['commandline'] ?? [];
         $cwd = $config['cwd'] ?? null;
 
         $this->process = new Process($commandline, $cwd);
@@ -202,7 +202,6 @@ class ProcessRunner extends AbstractProcess
         $status = $this->process->getStatus();
 
         $config = [
-            'commandline' => $this->process->getCommandLine(),
             'cwd' => $this->process->getWorkingDirectory(),
             'timeout' => $this->process->getTimeout(),
             'idleTimeout' => $this->process->getIdleTimeout(),

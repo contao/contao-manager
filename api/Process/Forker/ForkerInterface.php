@@ -12,17 +12,21 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Process\Forker;
 
+use Psr\Log\LoggerInterface;
+
 interface ForkerInterface
 {
-    /**
-     * Sets the executable to use for the background process.
-     */
-    public function setExecutable(string $executable): ForkerInterface;
+    public function __construct(array $arguments, array $env = null, LoggerInterface $logger = null);
 
     /**
-     * Gets the executable to use for the background process.
+     * Sets the command to use for the background process.
      */
-    public function getExecutable(): string;
+    public function setCommand(array $command): ForkerInterface;
+
+    /**
+     * Gets the command to use for the background process.
+     */
+    public function getCommand(): array;
 
     /**
      * Sets the timeout in milliseconds to wait after starting a process.
