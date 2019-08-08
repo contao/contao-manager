@@ -31,6 +31,12 @@ handleTask = (response, store, resolve, reject) => {
         return;
     }
 
+    if (!(response.body instanceof Object)) {
+        store.commit('apiError', response, { root: true });
+        reject();
+        return;
+    }
+
     const task = response.body;
 
     store.commit('setCurrent', task);
