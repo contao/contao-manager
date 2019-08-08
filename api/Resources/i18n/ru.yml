@@ -1,129 +1,131 @@
 ru:
-  integrity:
-    allow_url_fopen:
-      title: 'Настройка PHP "allow_url_fopen" отключена на сервере.'
-    process:
-      title: 'Функция PHP "proc_open" и/или "proc_close" недоступна на сервере.'
-      detail: 'Функции "proc_open" и "proc_close" необходимы для выполнения задач командной строки в фоновом режиме. Узнайте у вашего хостинг-провайдера, почему этот метод недоступен. Contao Manager и Contao 4 не будут корректно работать без него.'
-    intl:
-      title: 'Расширение PHP Intl недоступно.'
-      detail: 'Contao 4 необходимо расширение PHP Intl в целях интернационализации.'
-    openssl:
-      title: 'Расширение PHP OpenSSL недоступно.'
-      detail: 'Contao Manager необходимо расширение OpenSSL для передачи файлов по зашифрованному соединению (https).'
-    dom:
-      title: 'Расширение PHP DOM недоступно.'
-      detail: 'Contao 4 необходимо расширение PHP DOM для анализа XML-документов.'
-    xmlreader:
-      title: 'Расширение PHP XMLReader недоступно.'
-      detail: 'Contao 4 необходимо расширение PHP DOM для анализа XML-документов.'
-    graphics_lib:
-      title: 'Библиотека обработки изображений PHP не доступна.'
-      detail: 'Для обработки изображений Contao 4 требует расширения GD, Imagick или Gmagick.'
-    symlink:
-      title: 'Метод PHP symlink недоступен или работает неправильно.'
-    session:
-      title: 'Не удалось запустить сеанс PHP.'
-    web_root:
-      title: 'Файл Phar должен находиться в каталоге /web.'
-    memory_limit:
-      title: 'Недостаточный предел памяти PHP'
-      detail: 'Конфигурация PHP позволяет использовать только {limit} памяти (в командной строке). Этого недостаточно для запуска Composer и автоматическое увеличение этого предела невозможно. Для получения поддержки обратитесь к вашему хостинг-провайдеру.'
-    systempdir:
-      title: 'Не удается записать во временный системный каталог.'
-      detail: 'Вероятно, это проблема с настройкой вашего хостинга. Убедитесь, что open_basedir разрешает доступ к временному каталогу или sys_temp_dir настроен правильно.'
-    contao_unknown:
-      title: 'Неизвестный статус установки'
-      detail: "Некоторые файлы были найдены на сервере, но известная версия Contao не обнаружена.\nНеобходимо вручную восстановить приложение или удалить следующие файлы и каталоги установки Contao:\n\n{files}"
-    contao_version:
-      title: 'Не удалось определить версию Contao'
-      detail: "Консоль вернула неожиданный ответ при запросе версии Contao. Пожалуйста, проверьте выходные данные для получения дополнительной информации:\n\n{output}"
-  config:
-    php_cli:
-      not_found: 'Путь не содержит верный бинарный файл PHP.'
-      incompatible: 'Двоичный файл PHP версии {cli}, а веб-сервер версии {web}.'
-    cloud:
-      path: 'Репозитории путей не поддерживаются.'
-      artifact: 'Репозитории артефактов не поддерживаются.'
-      platform: 'Платформа не должна быть настроена в composer.json.'
-      cache: 'Свойства кеша не должны быть настроены в composer.json.'
-  taskstatus:
-    created: 'Консольная задача создана...'
-    complete:
-      summary: 'Консольная задача завершена!'
-      detail: 'Фоновая задача была успешно завершена. Проверьте протокол консоли.'
-      console: '### Задание успешно завершено ###'
-    aborting:
-      summary: 'Остановка текущей операции...'
-      detail: 'Фоновая задача отменяется.'
-      console: '### Фоновая задача отменяется ###'
-    stopped:
-      summary: 'Консольная задача завершена!'
-      detail: 'Фоновая задача была отменена. Проверьте протокол консоли.'
-      console: '### Фоновая задача была отменена ###'
-    error:
-      summary: 'Консольная задача завершена!'
-      detail: 'Фоновая задача неожиданно прекращена. Проверьте протокол консоли.'
-      console: '# # # Фоновая задача неожиданно остановилась ###'
-  task:
-    setup_packages:
-      title: 'Установка приложения Contao'
-      completeSummary: 'Установка завершена!'
-      completeDetail: 'Для завершения процесса установки, откройте мастер установки и введите учетные данные своей базы данных.'
-    install_packages:
-      title: 'Установка зависимостей Composer'
-    update_packages:
-      title: 'Обновление пакетов'
-      completeSummary: 'Обновлены пакеты Contao!'
-      completeDetail: 'Откройте мастер установки для применения необходимых изменений к базе данных.'
-    dump_autoload:
-      title: 'Дамп автозагрузчика Composer'
-    clear_cache:
-      title: 'Очистка кеша Composer'
-    rebuild_cache:
-      title: 'Перестроение кеша Contao'
-    install_tool:
-      title: 'Мастер установки Contao'
-    self_update:
-      title: 'Обновление Contao Manager'
-      completeSummary: 'Contao Manager был успешно обновлен'
-      completeDetail: 'Обновлено до версии {current}'
-  taskoperation:
-    self-update:
-      summary: 'Установка последнего Contao Manager...'
-      detail: 'Обновление с {old} до {new}'
-    remove-cache:
-      summary: 'Удаление каталога кеша...'
-    remove-vendor:
-      summary: 'Удаление каталога vendor...'
-    cache-warmup:
-      summary: '"Подогреть" кеш приложений...'
-    cache-clear:
-      summary: 'Очистка кеша приложений...'
-    composer-update:
-      summary: 'Обновление зависимостей Composer...'
-    composer-require:
-      summary: 'Добавление пакетов Composer...'
-    composer-remove:
-      summary: 'Удаление пакетов Composer...'
-    composer-install:
-      summary: 'Установка зависимостей Composer...'
-      summaryRetry: 'Установка зависимостей Composer (повтор: {current}/{max}) …'
-    dump-autoload:
-      summary: 'Дамп автозагрузчика классов...'
-    install-lock:
-      summary: 'Блокировка мастера установки Contao...'
-    install-unlock:
-      summary: 'Разблокировка мастера установки Contao...'
-    create-project:
-      summary: 'Установка шаблона приложения...'
-    cloud:
-      queuedSummary: 'Работа очереди в Composer Cloud за {seconds} сек.'
-      queuedDetail: 'Начиная с прибл. {seconds} сек. (в данный момент {jobs} рабочих {workers} задач)'
-      processingSummary: 'Разрешение зависимостей с помощью Composer Cloud'
-      processingDetail: 'Задание ID {job} работает {seconds} сек.'
-      errorSummary: 'Ошибка разрешения зависимостей...'
-      finishedSummary: 'Задание Composer Cloud выполнено за {seconds} сек.'
-      finishedDetail: 'Использование памяти: {memory} (пик: {peak}), время: {time}.'
-    clear-cache:
-      summary: 'Удаление файлов кеша...'
+    integrity:
+        allow_url_fopen:
+            title: 'Настройка PHP "allow_url_fopen" отключена на сервере.'
+        process:
+            title: 'Функция PHP "proc_open" и/или "proc_close" недоступна на сервере.'
+            detail: 'Функции "proc_open" и "proc_close" необходимы для выполнения задач командной строки в фоновом режиме. Узнайте у вашего хостинг-провайдера, почему этот метод недоступен. Contao Manager и Contao 4 не будут корректно работать без него.'
+        intl:
+            title: 'Расширение PHP Intl недоступно.'
+            detail: 'Contao 4 необходимо расширение PHP Intl в целях интернационализации.'
+        openssl:
+            title: 'Расширение PHP OpenSSL недоступно.'
+            detail: 'Contao Manager необходимо расширение OpenSSL для передачи файлов по зашифрованному соединению (https).'
+        dom:
+            title: 'Расширение PHP DOM недоступно.'
+            detail: 'Contao 4 необходимо расширение PHP DOM для анализа XML-документов.'
+        xmlreader:
+            title: 'Расширение PHP XMLReader недоступно.'
+            detail: 'Contao 4 необходимо расширение PHP DOM для анализа XML-документов.'
+        graphics_lib:
+            title: 'Библиотека обработки изображений PHP не доступна.'
+            detail: 'Для обработки изображений Contao 4 требует расширения GD, Imagick или Gmagick.'
+        symlink:
+            title: 'Метод PHP symlink недоступен или работает неправильно.'
+        session:
+            title: 'Не удалось запустить сеанс PHP.'
+        web_root:
+            title: 'Файл Phar должен находиться в каталоге /web.'
+        memory_limit:
+            title: 'Недостаточный предел памяти PHP'
+            detail: 'Конфигурация PHP позволяет использовать только {limit} памяти (в командной строке). Этого недостаточно для запуска Composer и автоматическое увеличение этого предела невозможно. Для получения поддержки обратитесь к вашему хостинг-провайдеру.'
+        systempdir:
+            title: 'Не удается записать во временный системный каталог.'
+            detail: 'Вероятно, это проблема с настройкой вашего хостинга. Убедитесь, что open_basedir разрешает доступ к временному каталогу или sys_temp_dir настроен правильно.'
+        contao_unknown:
+            title: 'Неизвестный статус установки'
+            detail: "Некоторые файлы были найдены на сервере, но известная версия Contao не обнаружена.\nНеобходимо вручную восстановить приложение или удалить следующие файлы и каталоги установки Contao:\n\n{files}"
+        contao_version:
+            title: 'Не удалось определить версию Contao'
+            detail: "Консоль вернула неожиданный ответ при запросе версии Contao. Пожалуйста, проверьте выходные данные для получения дополнительной информации:\n\n{output}"
+
+    config:
+        php_cli:
+            not_found: 'Путь не содержит верный бинарный файл PHP.'
+            incompatible: 'Двоичный файл PHP версии {cli}, а веб-сервер версии {web}.'
+        cloud:
+            platform: 'Платформа не должна быть настроена в composer.json.'
+            cache: 'Свойства кеша не должны быть настроены в composer.json.'
+
+    taskstatus:
+        created: 'Консольная задача создана...'
+        complete:
+            summary: 'Консольная задача завершена!'
+            detail: 'Фоновая задача была успешно завершена. Проверьте протокол консоли.'
+            console: '### Задание успешно завершено ###'
+        aborting:
+            summary: 'Остановка текущей операции...'
+            detail: 'Фоновая задача отменяется.'
+            console: '### Фоновая задача отменяется ###'
+        stopped:
+            summary: 'Консольная задача завершена!'
+            detail: 'Фоновая задача была отменена. Проверьте протокол консоли.'
+            console: '### Фоновая задача была отменена ###'
+        error:
+            summary: 'Консольная задача завершена!'
+            detail: 'Фоновая задача неожиданно прекращена. Проверьте протокол консоли.'
+            console: '# # # Фоновая задача неожиданно остановилась ###'
+
+    task:
+        setup_packages:
+            title: 'Установка приложения Contao'
+            completeSummary: 'Установка завершена!'
+            completeDetail: 'Для завершения процесса установки, откройте мастер установки и введите учетные данные своей базы данных.'
+        install_packages:
+            title: 'Установка зависимостей Composer'
+        update_packages:
+            title: 'Обновление пакетов'
+            completeSummary: 'Обновлены пакеты Contao!'
+            completeDetail: 'Откройте мастер установки для применения необходимых изменений к базе данных.'
+        dump_autoload:
+            title: 'Дамп автозагрузчика Composer'
+        clear_cache:
+            title: 'Очистка кеша Composer'
+        rebuild_cache:
+            title: 'Перестроение кеша Contao'
+        install_tool:
+            title: 'Мастер установки Contao'
+        self_update:
+            title: 'Обновление Contao Manager'
+            completeSummary: 'Contao Manager был успешно обновлен'
+            completeDetail: 'Обновлено до версии {current}'
+
+    taskoperation:
+        self-update:
+            summary: 'Установка последнего Contao Manager...'
+            detail: 'Обновление с {old} до {new}'
+        remove-cache:
+            summary: 'Удаление каталога кеша...'
+        remove-vendor:
+            summary: 'Удаление каталога vendor...'
+        cache-warmup:
+            summary: '"Подогреть" кеш приложений...'
+        cache-clear:
+            summary: 'Очистка кеша приложений...'
+        composer-update:
+            summary: 'Обновление зависимостей Composer...'
+        composer-require:
+            summary: 'Добавление пакетов Composer...'
+        composer-remove:
+            summary: 'Удаление пакетов Composer...'
+        composer-install:
+            summary: 'Установка зависимостей Composer...'
+            summaryRetry: 'Установка зависимостей Composer (повтор: {current}/{max}) …'
+        dump-autoload:
+            summary: 'Дамп автозагрузчика классов...'
+        install-lock:
+            summary: 'Блокировка мастера установки Contao...'
+        install-unlock:
+            summary: 'Разблокировка мастера установки Contao...'
+        create-project:
+            summary: 'Установка шаблона приложения...'
+        cloud:
+            queuedSummary: 'Работа очереди в Composer Cloud за {seconds} сек.'
+            queuedDetail: 'Начиная с прибл. {seconds} сек. (в данный момент {jobs} рабочих {workers} задач)'
+            processingSummary: 'Разрешение зависимостей с помощью Composer Cloud'
+            processingDetail: 'Задание ID {job} работает {seconds} сек.'
+            errorSummary: 'Ошибка разрешения зависимостей...'
+            finishedSummary: 'Задание Composer Cloud выполнено за {seconds} сек.'
+            finishedDetail: 'Использование памяти: {memory} (пик: {peak}), время: {time}.'
+        clear-cache:
+            summary: 'Удаление файлов кеша...'

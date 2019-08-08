@@ -1,121 +1,123 @@
 sr:
-  integrity:
-    allow_url_fopen:
-      title: 'Опција PHP "allow_url_fopen" није омогућена на серверу.'
-    process:
-      title: 'Функције PHP "proc_open" и/или "proc_close" нису доступне на серверу.'
-      detail: 'Функције "proc_open" и "proc_close" су неопходне за покретање позадинских задатака у командној линији. Проверите са својим провајдером зашто овај метод није доступан. Contao Менаџер као и Contao 4 не могу да раде исправно без њега.'
-    intl:
-      title: 'Екстензија PHP Intl није доступна.'
-      detail: 'Contao 4 захтева Intl екстензију ради потреба интернационализације.'
-    openssl:
-      title: 'Екстензија PHP OpenSSL није доступна.'
-      detail: 'Contao Менаџер захтева OpenSSL екстензију ради преузимања фајлова преко заштићене конекције (https). '
-    dom:
-      title: 'Екстензија PHP DOM није доступна.'
-      detail: 'Contao 4 треба екстензију PHP DOM да би могао да обрађује XML документе.'
-    xmlreader:
-      title: 'Екстензија PHP XMLReader није доступна.'
-      detail: 'Contao 4 треба екстензију PHP DOM да би могао да обрађује XML документе.'
-    graphics_lib:
-      title: 'Није доступна нити једна PHP библиотека за обраду слика.'
-      detail: 'Contao 4 треба GD, Imagick или Gmagick да би могао да обрађује слике.'
-    symlink:
-      title: 'Метода PHP symlink није доступна или не ради исправно.'
-    session:
-      title: 'PHP сесија није покренута.'
-    web_root:
-      title: 'Фајл Phar мора бити смештен у фолдер  /web.'
-    memory_limit:
-      title: 'Недовољан лимит меморије за PHP'
-      detail: 'Ваша конфигурација PHP дозвољава употребу {limit} меморије (у командној линији). То није довољно да би Композер радио, а није успело ни аутоматско повећање лимита. Контактирајте вашег провајдера ради подршке.'
-    systempdir:
-      title: 'Неуспешан упис у привремени системски директоријум.'
-      detail: 'Ово је вероватно узроковано конфигурацијом хостинга. Проверите да ли open_basedir  дозвољава приступ привременом директоријуму, и да ли је sys_temp_dir исправно конфигурисан.'
-    contao_unknown:
-      title: 'Статус инсталације није познат.'
-      detail: "На вашем серверу су пронађени извесни фајлови, али није препозната верзија Contao. Како бисте инсталирали Contao, мораћете или ручно да поправите вашу апликацију или да уклоните следеће фајлове и фолдере:\n\n{files}"
-    contao_version:
-      title: 'Није могуће одредити верзију Contao.'
-      detail: "Конзола је вратила неочекиван одговор приликом провере верзије Contao. Проверите одговор за више информација:\n\n{output}"
-  config:
-    php_cli:
-      not_found: 'Ова путања не садржи валидан PHP binary.'
-      incompatible: 'Овај binary је намењен верзији PHP {cli} док је на вашем веб серверу верзија {web}.'
-    cloud:
-      path: 'Репозиторијум путања није подржан.'
-      artifact: 'Репозиторијум Artifact није подржан.'
-      platform: 'Платформа не сме бити конфигурисана у composer.json.'
-      cache: 'Подешавања Cache-а не смеју бити конфигурисана у composer.json.'
-  taskstatus:
-    created: 'Конзолни задатак је креиран...'
-    complete:
-      summary: 'Конзолни задатак је завршен!'
-      detail: 'Позадински задатак је завршен. За више детаља проверите протокол конзоле.'
-      console: '### Задатак успешно завршен ###'
-    aborting:
-      summary: 'Заустављање текуће операције...'
-      detail: 'Позадински задатак се зауставља.'
-      console: '### Позадински задатак је отказан ###'
-    stopped:
-      summary: 'Задатак унутар конзоле је прекинут!'
-      detail: 'Позадински задатак је отказан. Проверите конзолни протокол.'
-      console: '### Позадински задатак је отказан###'
-    error:
-      summary: 'Задатак унутар конзоле је прекинут!'
-      detail: 'Позадински задатак је неочекивано заустављен. Проверите конзолни протокол.'
-      console: '### Конзолни задатак се неочекивано зауставио ###'
-  task:
-    setup_packages:
-      title: 'Инсталирање Contao апликације'
-      completeSummary: 'Инсталација је завршена!'
-      completeDetail: 'Да бисте завршили процес инсталације, отворите Алат за инсталацију и унесите ваше креденцијале за базу података.'
-    install_packages:
-      title: 'Инсталирање Композер зависности'
-    update_packages:
-      title: 'Ажурирање Пакета'
-      completeSummary: 'Пакети Contao су ажурирани!'
-      completeDetail: 'Отворите Алат за инсталацију да извршите било које неопходне промене података о бази.'
-    dump_autoload:
-      title: 'Пражњење Composer Autoloader-а'
-    clear_cache:
-      title: 'Пражњење Композер Cache-а'
-    rebuild_cache:
-      title: 'Поновно креирање кеша'
-    self_update:
-      title: 'Ажурирам Contao Менаџер'
-      completeSummary: 'Contao Manager је успешно надограђен'
-      completeDetail: 'Надограђен на верзију {current}'
-  taskoperation:
-    self-update:
-      summary: 'Инсталирање последње верзије Contao Manager-а …'
-      detail: 'Надоградња са  {old} на {new}'
-    remove-cache:
-      summary: 'Брисање cache директоријума'
-    remove-vendor:
-      summary: 'Брисање vendor директоријума...'
-    cache-warmup:
-      summary: 'Загревање апликативног cache-а …'
-    cache-clear:
-      summary: 'Брисање апликативног cache-а …'
-    composer-update:
-      summary: 'Ажурирање Композер зависности...'
-    composer-require:
-      summary: 'Додавање Композер пакета...'
-    composer-remove:
-      summary: 'Уклањање Композер пакета...'
-    composer-install:
-      summary: 'Инсталирање Композер зависности...'
-      summaryRetry: 'Инсталирање Композер зависности (поново покушавам {current}/{max}) …'
-    dump-autoload:
-      summary: 'Пражњење class autoloader-а…'
-    create-project:
-      summary: 'Инсталирање апликативног шаблона...'
-    cloud:
-      queuedSummary: 'Задатак на чекању у Composer Cloud {seconds} секунди'
-      queuedDetail: 'Почетак, отприлике, за {seconds} секунди (тренутно {jobs} послова распоређених на {workers} радника)'
-      processingSummary: 'Разрешавање зависности помоћу Composer Cloud-а'
-      processingDetail: 'Посао ID {job} је покренут {seconds} секунди'
-      errorSummary: 'Неуспешно разрешавање зависности...'
-    clear-cache:
-      summary: 'Брисање кешираних фајлова...'
+    integrity:
+        allow_url_fopen:
+            title: 'Опција PHP "allow_url_fopen" није омогућена на серверу.'
+        process:
+            title: 'Функције PHP "proc_open" и/или "proc_close" нису доступне на серверу.'
+            detail: 'Функције "proc_open" и "proc_close" су неопходне за покретање позадинских задатака у командној линији. Проверите са својим провајдером зашто овај метод није доступан. Contao Менаџер као и Contao 4 не могу да раде исправно без њега.'
+        intl:
+            title: 'Екстензија PHP Intl није доступна.'
+            detail: 'Contao 4 захтева Intl екстензију ради потреба интернационализације.'
+        openssl:
+            title: 'Екстензија PHP OpenSSL није доступна.'
+            detail: 'Contao Менаџер захтева OpenSSL екстензију ради преузимања фајлова преко заштићене конекције (https). '
+        dom:
+            title: 'Екстензија PHP DOM није доступна.'
+            detail: 'Contao 4 треба екстензију PHP DOM да би могао да обрађује XML документе.'
+        xmlreader:
+            title: 'Екстензија PHP XMLReader није доступна.'
+            detail: 'Contao 4 треба екстензију PHP DOM да би могао да обрађује XML документе.'
+        graphics_lib:
+            title: 'Није доступна нити једна PHP библиотека за обраду слика.'
+            detail: 'Contao 4 треба GD, Imagick или Gmagick да би могао да обрађује слике.'
+        symlink:
+            title: 'Метода PHP symlink није доступна или не ради исправно.'
+        session:
+            title: 'PHP сесија није покренута.'
+        web_root:
+            title: 'Фајл Phar мора бити смештен у фолдер  /web.'
+        memory_limit:
+            title: 'Недовољан лимит меморије за PHP'
+            detail: 'Ваша конфигурација PHP дозвољава употребу {limit} меморије (у командној линији). То није довољно да би Композер радио, а није успело ни аутоматско повећање лимита. Контактирајте вашег провајдера ради подршке.'
+        systempdir:
+            title: 'Неуспешан упис у привремени системски директоријум.'
+            detail: 'Ово је вероватно узроковано конфигурацијом хостинга. Проверите да ли open_basedir  дозвољава приступ привременом директоријуму, и да ли је sys_temp_dir исправно конфигурисан.'
+        contao_unknown:
+            title: 'Статус инсталације није познат.'
+            detail: "На вашем серверу су пронађени извесни фајлови, али није препозната верзија Contao. Како бисте инсталирали Contao, мораћете или ручно да поправите вашу апликацију или да уклоните следеће фајлове и фолдере:\n\n{files}"
+        contao_version:
+            title: 'Није могуће одредити верзију Contao.'
+            detail: "Конзола је вратила неочекиван одговор приликом провере верзије Contao. Проверите одговор за више информација:\n\n{output}"
+
+    config:
+        php_cli:
+            not_found: 'Ова путања не садржи валидан PHP binary.'
+            incompatible: 'Овај binary је намењен верзији PHP {cli} док је на вашем веб серверу верзија {web}.'
+        cloud:
+            platform: 'Платформа не сме бити конфигурисана у composer.json.'
+            cache: 'Подешавања Cache-а не смеју бити конфигурисана у composer.json.'
+
+    taskstatus:
+        created: 'Конзолни задатак је креиран...'
+        complete:
+            summary: 'Конзолни задатак је завршен!'
+            detail: 'Позадински задатак је завршен. За више детаља проверите протокол конзоле.'
+            console: '### Задатак успешно завршен ###'
+        aborting:
+            summary: 'Заустављање текуће операције...'
+            detail: 'Позадински задатак се зауставља.'
+            console: '### Позадински задатак је отказан ###'
+        stopped:
+            summary: 'Задатак унутар конзоле је прекинут!'
+            detail: 'Позадински задатак је отказан. Проверите конзолни протокол.'
+            console: '### Позадински задатак је отказан###'
+        error:
+            summary: 'Задатак унутар конзоле је прекинут!'
+            detail: 'Позадински задатак је неочекивано заустављен. Проверите конзолни протокол.'
+            console: '### Конзолни задатак се неочекивано зауставио ###'
+
+    task:
+        setup_packages:
+            title: 'Инсталирање Contao апликације'
+            completeSummary: 'Инсталација је завршена!'
+            completeDetail: 'Да бисте завршили процес инсталације, отворите Алат за инсталацију и унесите ваше креденцијале за базу података.'
+        install_packages:
+            title: 'Инсталирање Композер зависности'
+        update_packages:
+            title: 'Ажурирање Пакета'
+            completeSummary: 'Пакети Contao су ажурирани!'
+            completeDetail: 'Отворите Алат за инсталацију да извршите било које неопходне промене података о бази.'
+        dump_autoload:
+            title: 'Пражњење Composer Autoloader-а'
+        clear_cache:
+            title: 'Пражњење Композер Cache-а'
+        rebuild_cache:
+            title: 'Поновно креирање кеша'
+        self_update:
+            title: 'Ажурирам Contao Менаџер'
+            completeSummary: 'Contao Manager је успешно надограђен'
+            completeDetail: 'Надограђен на верзију {current}'
+
+    taskoperation:
+        self-update:
+            summary: 'Инсталирање последње верзије Contao Manager-а …'
+            detail: 'Надоградња са  {old} на {new}'
+        remove-cache:
+            summary: 'Брисање cache директоријума'
+        remove-vendor:
+            summary: 'Брисање vendor директоријума...'
+        cache-warmup:
+            summary: 'Загревање апликативног cache-а …'
+        cache-clear:
+            summary: 'Брисање апликативног cache-а …'
+        composer-update:
+            summary: 'Ажурирање Композер зависности...'
+        composer-require:
+            summary: 'Додавање Композер пакета...'
+        composer-remove:
+            summary: 'Уклањање Композер пакета...'
+        composer-install:
+            summary: 'Инсталирање Композер зависности...'
+            summaryRetry: 'Инсталирање Композер зависности (поново покушавам {current}/{max}) …'
+        dump-autoload:
+            summary: 'Пражњење class autoloader-а…'
+        create-project:
+            summary: 'Инсталирање апликативног шаблона...'
+        cloud:
+            queuedSummary: 'Задатак на чекању у Composer Cloud {seconds} секунди'
+            queuedDetail: 'Почетак, отприлике, за {seconds} секунди (тренутно {jobs} послова распоређених на {workers} радника)'
+            processingSummary: 'Разрешавање зависности помоћу Composer Cloud-а'
+            processingDetail: 'Посао ID {job} је покренут {seconds} секунди'
+            errorSummary: 'Неуспешно разрешавање зависности...'
+        clear-cache:
+            summary: 'Брисање кешираних фајлова...'

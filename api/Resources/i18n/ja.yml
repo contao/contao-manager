@@ -1,129 +1,131 @@
 ja:
-  integrity:
-    allow_url_fopen:
-      title: 'サーバーのPHPの設定で"allow_url_fopen"が有効ではありません。'
-    process:
-      title: 'サーバーでPHPの関数"proc_open"と"proc_close"の両方または一方を利用できません。'
-      detail: '"proc_open"と"proc_close"関数はコマンド行のタスクをバックグラウンドで動作させるために必要です。ホスティングサービスの提供者に、これらのメソッドを利用できない理由を確認してください。これらがないと、Contao ManagerもContao 4も正しく動作しません。'
-    intl:
-      title: 'PHPのIntl拡張を利用できません。'
-      detail: 'Contao 4は国際化の目的のためにPHPのIntl拡張を必要とします。'
-    openssl:
-      title: 'PHPのOpenSSL拡張を利用できません。'
-      detail: 'Contao Managerは暗号化した接続(https)でファイルをダウンロードするためにOpenSSL拡張が必要です。'
-    dom:
-      title: 'PHPのDOM拡張を利用できません。'
-      detail: 'Contao 4はXMLドキュメントの解析のためにPHPのDOM拡張を必要とします。'
-    xmlreader:
-      title: 'PHPのXMLReader拡張を利用できません。'
-      detail: 'Contao 4はXMLドキュメントの解析のためにPHPのDOM拡張を必要とします。'
-    graphics_lib:
-      title: 'PHPの画像処理のライブラリが何も利用できません。'
-      detail: 'Contao 4は画像を処理するためにGD、IMagick、Gmagickの拡張のいずれかを必要とします。'
-    symlink:
-      title: 'PHPのsymlinkメソッドを利用できないか、正しく動作しません。'
-    session:
-      title: 'PHPのセッションを開始できませんでした。'
-    web_root:
-      title: 'Pharファイルは/webフォルダーになければなりません。'
-    memory_limit:
-      title: 'PHPのメモリの制限が不足しています。'
-      detail: 'PHPの設定は(コマンド行では){limit}のメモリだけを許可しています。こではComposerを動作させるのに十分ではなく、制限を自動的に増やすこともできませんでした。ホスティングの提供者に連絡してサポートを求めてください。'
-    systempdir:
-      title: 'システムの一時ディレクトリに書き込みできませんでした。'
-      detail: 'ホスティングの設定に問題の可能性がもっとも高いです。open_basedirが一時ディクトリへのアクセスを許可しているか、sys_temp_dirが正しく設定されているか確認してください。'
-    contao_unknown:
-      title: 'インストールの状態が不明'
-      detail: "サーバーにファイルがいくつかありますが、Contaoのバージョンを検出できませんでした。\n手作業でアプリケーションを修復するか、Contaoをインストールするために以下のファイルとフォルダーを削除しなければなりません:\n\n{files}"
-    contao_version:
-      title: 'Contaoのバージョンを決定不可能'
-      detail: "Contaoのバージョンを問い合わせた時にコンソールが予期しない内容を返しました。さらに詳しい情報は出力を確認してください。\n\n{output}"
-  config:
-    php_cli:
-      not_found: 'このパスに有効なPHPの実行ファイルがありません。'
-      incompatible: 'この実行ファイルはPHPのバージョンは{cli}ですが、ウェブサーバーでのバージョンは{web}です。'
-    cloud:
-      path: 'Pathレポジトリをサポートしていません。'
-      artifact: 'Artifactレポジトリをサポートしていません。'
-      platform: 'プラットフォームはcomposer.jsonに構成してはなりません。'
-      cache: 'キャッシュの属性をcomposer.jsonに構成してはなりません。'
-  taskstatus:
-    created: 'コンソールタスクを作成しました...'
-    complete:
-      summary: 'コンソールタスクが完了しました!'
-      detail: 'バックグランドのタスクは正常に完了しました。詳細はコンソールのログを調べてください。'
-      console: '### タスクは正常に終了 ###'
-    aborting:
-      summary: '現在の操作を停止中...'
-      detail: 'バックグラウンドのタスクを取り止め中です。'
-      console: '### バックグランドのタスクを取り止め中 ###'
-    stopped:
-      summary: 'コンソールタスクが終了しました!'
-      detail: 'バックグラウンドのタスクを取り止めました。コンソールのプロトコルを確認してください。'
-      console: '### バックグラウンドのタスクを取り止めました。 ###'
-    error:
-      summary: 'コンソールタスクが終了しました!'
-      detail: 'バックグラウンドのタスクが予想外の停止をしました。コンソールのプロトコルを確認してください。'
-      console: '### バックグラウンドのタスクは予想外に停止しました。 ###'
-  task:
-    setup_packages:
-      title: 'Contaoアプリケーションをインストール中'
-      completeSummary: 'インストールを完了!'
-      completeDetail: '設定の処理を完了するには、インストールツールを開いてデータベースの認証情報を入力してください。'
-    install_packages:
-      title: 'Composerの依存関係をインストール中'
-    update_packages:
-      title: 'パッケージを更新'
-      completeSummary: 'Contaoのパッケージを更新しました!'
-      completeDetail: 'インストールツールを開いて必要な変更をデータベースに適用してください。'
-    dump_autoload:
-      title: 'Composerのオートローダーを書き出し中'
-    clear_cache:
-      title: 'Composerのキャッシュを消去中'
-    rebuild_cache:
-      title: 'Contaoのキャッシュを再作成'
-    install_tool:
-      title: 'Contaoインストールツール'
-    self_update:
-      title: 'Contao Managerを更新'
-      completeSummary: 'Contao Managerを更新しました'
-      completeDetail: 'バージョン{current}に更新しました'
-  taskoperation:
-    self-update:
-      summary: '最新のContao Managerをインストール中...'
-      detail: '{old}から{new}に更新中'
-    remove-cache:
-      summary: 'キャッシュのディレクトリを削除中...'
-    remove-vendor:
-      summary: 'ベンダーのディレクトリを削除中...'
-    cache-warmup:
-      summary: 'アプリケーションキャッシュを準備中...'
-    cache-clear:
-      summary: 'アプリケーションキャッシュを消去中...'
-    composer-update:
-      summary: 'Composerの依存関係を更新中...'
-    composer-require:
-      summary: 'Composerのパッケージを追加中...'
-    composer-remove:
-      summary: 'Composerのパッケージを削除中...'
-    composer-install:
-      summary: 'Composerの依存関係をインストール中...'
-      summaryRetry: 'Composerの依存関係をインストール中(再試行中: {current}/{max})...'
-    dump-autoload:
-      summary: 'クラスのオートローダーを書きだし中...'
-    install-lock:
-      summary: 'Contaoインストールツールをロックを実行中...'
-    install-unlock:
-      summary: 'Contaoインストールツールのロックを解除中...'
-    create-project:
-      summary: 'アプリケーションのテンプレートをインストール中...'
-    cloud:
-      queuedSummary: 'ジョブはComposer Cloudのキューに{seconds}秒間待機中'
-      queuedDetail: '約{seconds}秒で開始 (現在{workers}のワーカーに{jobs}のジョブ)'
-      processingSummary: 'Composer Cloudを使用して依存関係を解決中'
-      processingDetail: 'ジョブID {job}は{seconds}秒間動作中'
-      errorSummary: '依存関係の解決に失敗...'
-      finishedSummary: 'Composer Cloudのジョブは{seconds}で完了しました。'
-      finishedDetail: 'メモリの使用: {memory} (最大: {peak}), 時間: {time}.'
-    clear-cache:
-      summary: 'キャッシュファイルを削除中...'
+    integrity:
+        allow_url_fopen:
+            title: 'サーバーのPHPの設定で"allow_url_fopen"が有効ではありません。'
+        process:
+            title: 'サーバーでPHPの関数"proc_open"と"proc_close"の両方または一方を利用できません。'
+            detail: '"proc_open"と"proc_close"関数はコマンド行のタスクをバックグラウンドで動作させるために必要です。ホスティングサービスの提供者に、これらのメソッドを利用できない理由を確認してください。これらがないと、Contao ManagerもContao 4も正しく動作しません。'
+        intl:
+            title: 'PHPのIntl拡張を利用できません。'
+            detail: 'Contao 4は国際化の目的のためにPHPのIntl拡張を必要とします。'
+        openssl:
+            title: 'PHPのOpenSSL拡張を利用できません。'
+            detail: 'Contao Managerは暗号化した接続(https)でファイルをダウンロードするためにOpenSSL拡張が必要です。'
+        dom:
+            title: 'PHPのDOM拡張を利用できません。'
+            detail: 'Contao 4はXMLドキュメントの解析のためにPHPのDOM拡張を必要とします。'
+        xmlreader:
+            title: 'PHPのXMLReader拡張を利用できません。'
+            detail: 'Contao 4はXMLドキュメントの解析のためにPHPのDOM拡張を必要とします。'
+        graphics_lib:
+            title: 'PHPの画像処理のライブラリが何も利用できません。'
+            detail: 'Contao 4は画像を処理するためにGD、IMagick、Gmagickの拡張のいずれかを必要とします。'
+        symlink:
+            title: 'PHPのsymlinkメソッドを利用できないか、正しく動作しません。'
+        session:
+            title: 'PHPのセッションを開始できませんでした。'
+        web_root:
+            title: 'Pharファイルは/webフォルダーになければなりません。'
+        memory_limit:
+            title: 'PHPのメモリの制限が不足しています。'
+            detail: 'PHPの設定は(コマンド行では){limit}のメモリだけを許可しています。こではComposerを動作させるのに十分ではなく、制限を自動的に増やすこともできませんでした。ホスティングの提供者に連絡してサポートを求めてください。'
+        systempdir:
+            title: 'システムの一時ディレクトリに書き込みできませんでした。'
+            detail: 'ホスティングの設定に問題の可能性がもっとも高いです。open_basedirが一時ディクトリへのアクセスを許可しているか、sys_temp_dirが正しく設定されているか確認してください。'
+        contao_unknown:
+            title: 'インストールの状態が不明'
+            detail: "サーバーにファイルがいくつかありますが、Contaoのバージョンを検出できませんでした。\n手作業でアプリケーションを修復するか、Contaoをインストールするために以下のファイルとフォルダーを削除しなければなりません:\n\n{files}"
+        contao_version:
+            title: 'Contaoのバージョンを決定不可能'
+            detail: "Contaoのバージョンを問い合わせた時にコンソールが予期しない内容を返しました。さらに詳しい情報は出力を確認してください。\n\n{output}"
+
+    config:
+        php_cli:
+            not_found: 'このパスに有効なPHPの実行ファイルがありません。'
+            incompatible: 'この実行ファイルはPHPのバージョンは{cli}ですが、ウェブサーバーでのバージョンは{web}です。'
+        cloud:
+            platform: 'プラットフォームはcomposer.jsonに構成してはなりません。'
+            cache: 'キャッシュの属性をcomposer.jsonに構成してはなりません。'
+
+    taskstatus:
+        created: 'コンソールタスクを作成しました...'
+        complete:
+            summary: 'コンソールタスクが完了しました!'
+            detail: 'バックグランドのタスクは正常に完了しました。詳細はコンソールのログを調べてください。'
+            console: '### タスクは正常に終了 ###'
+        aborting:
+            summary: '現在の操作を停止中...'
+            detail: 'バックグラウンドのタスクを取り止め中です。'
+            console: '### バックグランドのタスクを取り止め中 ###'
+        stopped:
+            summary: 'コンソールタスクが終了しました!'
+            detail: 'バックグラウンドのタスクを取り止めました。コンソールのプロトコルを確認してください。'
+            console: '### バックグラウンドのタスクを取り止めました。 ###'
+        error:
+            summary: 'コンソールタスクが終了しました!'
+            detail: 'バックグラウンドのタスクが予想外の停止をしました。コンソールのプロトコルを確認してください。'
+            console: '### バックグラウンドのタスクは予想外に停止しました。 ###'
+
+    task:
+        setup_packages:
+            title: 'Contaoアプリケーションをインストール中'
+            completeSummary: 'インストールを完了!'
+            completeDetail: '設定の処理を完了するには、インストールツールを開いてデータベースの認証情報を入力してください。'
+        install_packages:
+            title: 'Composerの依存関係をインストール中'
+        update_packages:
+            title: 'パッケージを更新'
+            completeSummary: 'Contaoのパッケージを更新しました!'
+            completeDetail: 'インストールツールを開いて必要な変更をデータベースに適用してください。'
+        dump_autoload:
+            title: 'Composerのオートローダーを書き出し中'
+        clear_cache:
+            title: 'Composerのキャッシュを消去中'
+        rebuild_cache:
+            title: 'Contaoのキャッシュを再作成'
+        install_tool:
+            title: 'Contaoインストールツール'
+        self_update:
+            title: 'Contao Managerを更新'
+            completeSummary: 'Contao Managerを更新しました'
+            completeDetail: 'バージョン{current}に更新しました'
+
+    taskoperation:
+        self-update:
+            summary: '最新のContao Managerをインストール中...'
+            detail: '{old}から{new}に更新中'
+        remove-cache:
+            summary: 'キャッシュのディレクトリを削除中...'
+        remove-vendor:
+            summary: 'ベンダーのディレクトリを削除中...'
+        cache-warmup:
+            summary: 'アプリケーションキャッシュを準備中...'
+        cache-clear:
+            summary: 'アプリケーションキャッシュを消去中...'
+        composer-update:
+            summary: 'Composerの依存関係を更新中...'
+        composer-require:
+            summary: 'Composerのパッケージを追加中...'
+        composer-remove:
+            summary: 'Composerのパッケージを削除中...'
+        composer-install:
+            summary: 'Composerの依存関係をインストール中...'
+            summaryRetry: 'Composerの依存関係をインストール中(再試行中: {current}/{max})...'
+        dump-autoload:
+            summary: 'クラスのオートローダーを書きだし中...'
+        install-lock:
+            summary: 'Contaoインストールツールをロックを実行中...'
+        install-unlock:
+            summary: 'Contaoインストールツールのロックを解除中...'
+        create-project:
+            summary: 'アプリケーションのテンプレートをインストール中...'
+        cloud:
+            queuedSummary: 'ジョブはComposer Cloudのキューに{seconds}秒間待機中'
+            queuedDetail: '約{seconds}秒で開始 (現在{workers}のワーカーに{jobs}のジョブ)'
+            processingSummary: 'Composer Cloudを使用して依存関係を解決中'
+            processingDetail: 'ジョブID {job}は{seconds}秒間動作中'
+            errorSummary: '依存関係の解決に失敗...'
+            finishedSummary: 'Composer Cloudのジョブは{seconds}で完了しました。'
+            finishedDetail: 'メモリの使用: {memory} (最大: {peak}), 時間: {time}.'
+        clear-cache:
+            summary: 'キャッシュファイルを削除中...'

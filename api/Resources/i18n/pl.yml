@@ -1,129 +1,131 @@
 pl:
-  integrity:
-    allow_url_fopen:
-      title: 'Ustawienie PHP "allow_url_fopen" nie jest włączone na serwerze.'
-    process:
-      title: 'Funkcje PHP "proc_open" i/lub "proc_close" nie są dostępne na serwerze.'
-      detail: 'Funkcje "proc_open" i "proc_close" są konieczne do wykonywania zadań w linii komend w tle. Sprawdź z hostingodawcą dlaczego te metody są niedostępne; ani Contao Manager, ani Contao 4 nie mogą działać prawidłowo bez nich.'
-    intl:
-      title: 'Rozszerzenie PHP Intl jest niedostępne.'
-      detail: 'Contao 4 wymaga rozszerzenia PHP Intl w celach umiędzynarodowienia.'
-    openssl:
-      title: 'Rozszerzenie PHP OpenSSL jest niedostępne.'
-      detail: 'Contao Manager wymaga rozszerzenia OpenSSL w celu pobierania plików przez szyfrowane połączenie (https).'
-    dom:
-      title: 'Rozszerzenie PHP DOM jest niedostępne.'
-      detail: 'Contao 4 wymaga rozszerzenia PHP DOM do czytania dokumentów XML.'
-    xmlreader:
-      title: 'Rozszerzenie PHP XMLReader jest niedostępne.'
-      detail: 'Contao 4 wymaga rozszerzenia PHP DOM do czytania dokumentów XML.'
-    graphics_lib:
-      title: 'Nie ma dostępnej biblioteki PHP do przetwarzania obrazków.'
-      detail: 'Contao 4 wymaga rozszerzenia GD, Imagick lub Gmgick do przetwarzania obrazków.'
-    symlink:
-      title: 'Metoda PHP symlink jest niedostępna lub nie działa prawidłowo.'
-    session:
-      title: 'Sesja PHP nie mogła zostać uruchomiona.'
-    web_root:
-      title: 'Plik Phar musi znajdować się w katalogu /web.'
-    memory_limit:
-      title: 'Niewystarczający limit pamięci'
-      detail: 'Twoja konfiguracja PHP pozwala tylko na {limit} pamięci (w linii komend). To nie wystarczy na uruchomienie Composera i automatycznie podniesienie limitu nie było możliwe. Skontaktuj się z hostingodawcą.'
-    systempdir:
-      title: 'Nie udało się zapisać do tymczasowego katalogu systemowego.'
-      detail: 'To jest prawdopodobnie problem z konfiguracją hostingu. Upewnij się, że open_basedir pozwala na dostęp do tymczasowego katalogu lub, że sys_temp_dir jest poprawnie skonfigurowane.'
-    contao_unknown:
-      title: 'Nieznany status instalacji'
-      detail: "Na serwerze znaleziono niektóre pliki, ale żadna wersja Contao nie mogła być określona. \nMusisz albo ręcznie naprawić aplikację lub usunąć poniższe pliki i foldery, aby zainstalować Contao:\n\n{files}"
-    contao_version:
-      title: 'Wersja Contao nie mogła zostać określona.'
-      detail: "Konsola zwróciła nieprawidłową treść przy pytaniu o wersje Contao. Sprawdź wyink po więcej informacji:\n\n{output}"
-  config:
-    php_cli:
-      not_found: 'Ta ścieżka nie zawiera prawidłowego PHP binary.'
-      incompatible: 'Ta wersja PHP binary to {cli}, ale wersja na serwerze to {web}.'
-    cloud:
-      path: 'Ścieżki repozytoriów są niewspierane.'
-      artifact: 'Repozytoria artifact są niewspierane.'
-      platform: 'Platforma nie może być skonfigurowana w composer.json.'
-      cache: 'Właściwości cache nie mogą być skonfigurowane w composer.json.'
-  taskstatus:
-    created: 'Zadanie Konsoli zostało utworzone …'
-    complete:
-      summary: 'Zadanie konsoli zakończone!'
-      detail: 'Zadanie w tle zostało zakończone powodzeniem. Szczegóły możesz sprawdzić w protokole konsoli.'
-      console: '### Zadanie zakończone sukcesem ###'
-    aborting:
-      summary: 'Zatrzymywanie bieżącej operacji …'
-      detail: 'Zadanie w tle zostało anulowane.'
-      console: '### Zadanie w tle jest zatrzymywane ###'
-    stopped:
-      summary: 'Zadanie konsoli przerwane!'
-      detail: 'Zadanie w tle zostało anulowane. Sprawdź protokół konsoli.'
-      console: '### Zadanie w tle zostało anulowane ###'
-    error:
-      summary: 'Zadanie konsoli przerwane!'
-      detail: 'Zadanie w tle zakończyło się niepowodzeniem. Sprawdź protokół konsoli.'
-      console: '### Zadanie w tle zakończone niepowodzeniem ###'
-  task:
-    setup_packages:
-      title: 'Instalowanie Aplikacji Contao'
-      completeSummary: 'Instalacja zakończona!'
-      completeDetail: 'Aby zakończyć proces instalacji, otwórz instalator i wprowadź dane dostępowe do bazy danych.'
-    install_packages:
-      title: 'Instalowanie Paczek Composera'
-    update_packages:
-      title: 'Aktualizowanie pakietów'
-      completeSummary: 'Pakiety Contao zaktualizowane!'
-      completeDetail: 'Otwórz instalator w celu zaktualizowania bazy danych.'
-    dump_autoload:
-      title: 'Odświeżanie Autolaodera Composera'
-    clear_cache:
-      title: 'Czyszczenie Cache Composera'
-    rebuild_cache:
-      title: 'Przebudowywanie Contao cache'
-    install_tool:
-      title: 'Instalator Contao'
-    self_update:
-      title: 'Aktualizowanie Contao Manager'
-      completeSummary: 'Contao Manager został zaktualizowany poprawnie'
-      completeDetail: 'Zaktualizowano do wersji {current}'
-  taskoperation:
-    self-update:
-      summary: 'Instalowanie najnowszego Contao Managera …'
-      detail: 'Aktualizowanie z {old} do {new}'
-    remove-cache:
-      summary: 'Usuwanie katalogu cache …'
-    remove-vendor:
-      summary: 'Usuwanie katalogu vendor …'
-    cache-warmup:
-      summary: 'Budowanie cache aplikacji …'
-    cache-clear:
-      summary: 'Czyszczenie cache aplikacji …'
-    composer-update:
-      summary: 'Aktualizowanie paczek Composera …'
-    composer-require:
-      summary: 'Dodawanie paczek Composera …'
-    composer-remove:
-      summary: 'Usuwanie paczek Composera …'
-    composer-install:
-      summary: 'Instalowanie paczek Composera …'
-      summaryRetry: 'Instalowanie paczek Composera (ponowna próba {current}/{max}) …'
-    dump-autoload:
-      summary: 'Odświeżanie autoloadera klas …'
-    install-lock:
-      summary: 'Blokowanie Instalatora Contao …'
-    install-unlock:
-      summary: 'Odblokowywanie Instalatora Contao …'
-    create-project:
-      summary: 'Instalowanie szablonu aplikacji …'
-    cloud:
-      queuedSummary: 'Zadanie w kolejce w Composer Cloud przez {seconds} sekund'
-      queuedDetail: 'Startowanie w około {seconds} sekund (aktualnie {jobs} zadań na {workers} jednostkach)'
-      processingSummary: 'Rozwiązywanie paczek używając Composer Cloud'
-      processingDetail: 'Zadanie ID {job} jest wykonywane przez {seconds} sekund'
-      errorSummary: 'Niepowodzenie rozwiązywania paczek …'
-      finishedSummary: 'Zadanie Composer Cloud zakończone w {seconds} sekund'
-      finishedDetail: 'Użycie pamięci: {memory} (najwyższe: {peak}), czas: {time}.'
-    clear-cache:
-      summary: 'Usuwanie plików cache …'
+    integrity:
+        allow_url_fopen:
+            title: 'Ustawienie PHP "allow_url_fopen" nie jest włączone na serwerze.'
+        process:
+            title: 'Funkcje PHP "proc_open" i/lub "proc_close" nie są dostępne na serwerze.'
+            detail: 'Funkcje "proc_open" i "proc_close" są konieczne do wykonywania zadań w linii komend w tle. Sprawdź z hostingodawcą dlaczego te metody są niedostępne; ani Contao Manager, ani Contao 4 nie mogą działać prawidłowo bez nich.'
+        intl:
+            title: 'Rozszerzenie PHP Intl jest niedostępne.'
+            detail: 'Contao 4 wymaga rozszerzenia PHP Intl w celach umiędzynarodowienia.'
+        openssl:
+            title: 'Rozszerzenie PHP OpenSSL jest niedostępne.'
+            detail: 'Contao Manager wymaga rozszerzenia OpenSSL w celu pobierania plików przez szyfrowane połączenie (https).'
+        dom:
+            title: 'Rozszerzenie PHP DOM jest niedostępne.'
+            detail: 'Contao 4 wymaga rozszerzenia PHP DOM do czytania dokumentów XML.'
+        xmlreader:
+            title: 'Rozszerzenie PHP XMLReader jest niedostępne.'
+            detail: 'Contao 4 wymaga rozszerzenia PHP DOM do czytania dokumentów XML.'
+        graphics_lib:
+            title: 'Nie ma dostępnej biblioteki PHP do przetwarzania obrazków.'
+            detail: 'Contao 4 wymaga rozszerzenia GD, Imagick lub Gmgick do przetwarzania obrazków.'
+        symlink:
+            title: 'Metoda PHP symlink jest niedostępna lub nie działa prawidłowo.'
+        session:
+            title: 'Sesja PHP nie mogła zostać uruchomiona.'
+        web_root:
+            title: 'Plik Phar musi znajdować się w katalogu /web.'
+        memory_limit:
+            title: 'Niewystarczający limit pamięci'
+            detail: 'Twoja konfiguracja PHP pozwala tylko na {limit} pamięci (w linii komend). To nie wystarczy na uruchomienie Composera i automatycznie podniesienie limitu nie było możliwe. Skontaktuj się z hostingodawcą.'
+        systempdir:
+            title: 'Nie udało się zapisać do tymczasowego katalogu systemowego.'
+            detail: 'To jest prawdopodobnie problem z konfiguracją hostingu. Upewnij się, że open_basedir pozwala na dostęp do tymczasowego katalogu lub, że sys_temp_dir jest poprawnie skonfigurowane.'
+        contao_unknown:
+            title: 'Nieznany status instalacji'
+            detail: "Na serwerze znaleziono niektóre pliki, ale żadna wersja Contao nie mogła być określona. \nMusisz albo ręcznie naprawić aplikację lub usunąć poniższe pliki i foldery, aby zainstalować Contao:\n\n{files}"
+        contao_version:
+            title: 'Wersja Contao nie mogła zostać określona.'
+            detail: "Konsola zwróciła nieprawidłową treść przy pytaniu o wersje Contao. Sprawdź wyink po więcej informacji:\n\n{output}"
+
+    config:
+        php_cli:
+            not_found: 'Ta ścieżka nie zawiera prawidłowego PHP binary.'
+            incompatible: 'Ta wersja PHP binary to {cli}, ale wersja na serwerze to {web}.'
+        cloud:
+            platform: 'Platforma nie może być skonfigurowana w composer.json.'
+            cache: 'Właściwości cache nie mogą być skonfigurowane w composer.json.'
+
+    taskstatus:
+        created: 'Zadanie Konsoli zostało utworzone …'
+        complete:
+            summary: 'Zadanie konsoli zakończone!'
+            detail: 'Zadanie w tle zostało zakończone powodzeniem. Szczegóły możesz sprawdzić w protokole konsoli.'
+            console: '### Zadanie zakończone sukcesem ###'
+        aborting:
+            summary: 'Zatrzymywanie bieżącej operacji …'
+            detail: 'Zadanie w tle zostało anulowane.'
+            console: '### Zadanie w tle jest zatrzymywane ###'
+        stopped:
+            summary: 'Zadanie konsoli przerwane!'
+            detail: 'Zadanie w tle zostało anulowane. Sprawdź protokół konsoli.'
+            console: '### Zadanie w tle zostało anulowane ###'
+        error:
+            summary: 'Zadanie konsoli przerwane!'
+            detail: 'Zadanie w tle zakończyło się niepowodzeniem. Sprawdź protokół konsoli.'
+            console: '### Zadanie w tle zakończone niepowodzeniem ###'
+
+    task:
+        setup_packages:
+            title: 'Instalowanie Aplikacji Contao'
+            completeSummary: 'Instalacja zakończona!'
+            completeDetail: 'Aby zakończyć proces instalacji, otwórz instalator i wprowadź dane dostępowe do bazy danych.'
+        install_packages:
+            title: 'Instalowanie Paczek Composera'
+        update_packages:
+            title: 'Aktualizowanie pakietów'
+            completeSummary: 'Pakiety Contao zaktualizowane!'
+            completeDetail: 'Otwórz instalator w celu zaktualizowania bazy danych.'
+        dump_autoload:
+            title: 'Odświeżanie Autolaodera Composera'
+        clear_cache:
+            title: 'Czyszczenie Cache Composera'
+        rebuild_cache:
+            title: 'Przebudowywanie Contao cache'
+        install_tool:
+            title: 'Instalator Contao'
+        self_update:
+            title: 'Aktualizowanie Contao Manager'
+            completeSummary: 'Contao Manager został zaktualizowany poprawnie'
+            completeDetail: 'Zaktualizowano do wersji {current}'
+
+    taskoperation:
+        self-update:
+            summary: 'Instalowanie najnowszego Contao Managera …'
+            detail: 'Aktualizowanie z {old} do {new}'
+        remove-cache:
+            summary: 'Usuwanie katalogu cache …'
+        remove-vendor:
+            summary: 'Usuwanie katalogu vendor …'
+        cache-warmup:
+            summary: 'Budowanie cache aplikacji …'
+        cache-clear:
+            summary: 'Czyszczenie cache aplikacji …'
+        composer-update:
+            summary: 'Aktualizowanie paczek Composera …'
+        composer-require:
+            summary: 'Dodawanie paczek Composera …'
+        composer-remove:
+            summary: 'Usuwanie paczek Composera …'
+        composer-install:
+            summary: 'Instalowanie paczek Composera …'
+            summaryRetry: 'Instalowanie paczek Composera (ponowna próba {current}/{max}) …'
+        dump-autoload:
+            summary: 'Odświeżanie autoloadera klas …'
+        install-lock:
+            summary: 'Blokowanie Instalatora Contao …'
+        install-unlock:
+            summary: 'Odblokowywanie Instalatora Contao …'
+        create-project:
+            summary: 'Instalowanie szablonu aplikacji …'
+        cloud:
+            queuedSummary: 'Zadanie w kolejce w Composer Cloud przez {seconds} sekund'
+            queuedDetail: 'Startowanie w około {seconds} sekund (aktualnie {jobs} zadań na {workers} jednostkach)'
+            processingSummary: 'Rozwiązywanie paczek używając Composer Cloud'
+            processingDetail: 'Zadanie ID {job} jest wykonywane przez {seconds} sekund'
+            errorSummary: 'Niepowodzenie rozwiązywania paczek …'
+            finishedSummary: 'Zadanie Composer Cloud zakończone w {seconds} sekund'
+            finishedDetail: 'Użycie pamięci: {memory} (najwyższe: {peak}), czas: {time}.'
+        clear-cache:
+            summary: 'Usuwanie plików cache …'

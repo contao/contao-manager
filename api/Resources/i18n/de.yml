@@ -1,129 +1,131 @@
 de:
-  integrity:
-    allow_url_fopen:
-      title: 'Die PHP-Einstellung "allow_url_fopen" ist auf dem Server deaktiviert.'
-    process:
-      title: 'Die PHP-Funktion "proc_open" und/oder "proc_close" ist auf dem Server nicht verfügbar.'
-      detail: 'Die Funktionen "proc_open" und "proc_close" sind notwendig, um Kommandozeilentasks im Hintergrund auszuführen. Bitte fragen Sie bei Ihrem Hosting-Anbieter nach, warum die Funktionen nicht verfügbar sind; weder der Contao Manager noch Contao 4 laufen ohne sie.'
-    intl:
-      title: 'Die PHP Intl-Erweiterung ist nicht verfügbar.'
-      detail: 'Contao 4 benötigt die PHP Intl-Erweiterung für die Internationalisierung der Anwendung.'
-    openssl:
-      title: 'Die PHP OpenSSL-Erweiterung ist nicht verfügbar.'
-      detail: 'Der Contao Manager benötigt die OpenSSL-Erweiterung, um Dateien über eine verschlüsselte Verbindung (https) herunterzuladen.'
-    dom:
-      title: 'Die PHP DOM-Erweiterung ist nicht verfügbar.'
-      detail: 'Contao 4 benötigt die PHP DOM-Erweiterung, um XML-Dokumente zu parsen.'
-    xmlreader:
-      title: 'Die PHP XMLReader-Erweiterung ist nicht verfügbar.'
-      detail: 'Contao 4 benötigt die PHP DOM-Erweiterung, um XML-Dokumente zu parsen.'
-    graphics_lib:
-      title: 'Keine PHP Bild-Bibliothek verfügbar.'
-      detail: 'Contao 4 benötigt entweder die GD-, Imagick- oder Gmagick-Erweiterung, um Bilder zu verarbeiten.'
-    symlink:
-      title: 'Die PHP Symlink-Methode ist nicht verfügbar oder funktioniert nicht korrekt.'
-    session:
-      title: 'Die PHP-Session konnte nicht gestartet werden.'
-    web_root:
-      title: 'Die Phar-Datei muss sich im /web-Ordner befinden.'
-    memory_limit:
-      title: 'Ungenügendes PHP Memory-Limit'
-      detail: 'Ihre PHP-Konfiguration erlaubt nur {limit} RAM (auf der Kommandozeile). Das ist nicht genug, um Composer auszuführen, und das Limit konnte auch nicht automatisch erhöht werden. Bitte kontaktieren Sie Ihren Hosting-Anbieter.'
-    systempdir:
-      title: 'Konnte nicht in den temporären Systemordner schreiben.'
-      detail: 'Dies ist höchstwahrscheinlich ein Problem mit Ihrer Serverkonfiguration. Stellen Sie sicher, dass entweder open_basedir den Zugriff auf den temporären Ordner erlaubt oder dass sys_temp_dir korrekt gesetzt ist.'
-    contao_unknown:
-      title: 'Unbekannter Installationsstatus'
-      detail: "Auf Ihrem Server wurden Dateien gefunden, die keiner bekannten Contao-Version zugeordnet werden konnten.\nUm Contao zu installieren, müssen Sie entweder Ihre Installation manuell reparieren oder folgende Dateien und Ordner entfernen:\n\n{files}"
-    contao_version:
-      title: 'Die Contao-Version wurde nicht erkannt.'
-      detail: "Der Konsolenprozess hat eine ungültige Ausgabe anstelle der Contao-Version ausgegeben. Bitte prüfen Sie die Ausgabe für weitere Informationen:\n\n{output}"
-  config:
-    php_cli:
-      not_found: 'Der Pfad enthält kein gültiges PHP-Binary.'
-      incompatible: 'Dieses Binary beinhaltet PHP {cli}, der Webprozess verwendet jedoch PHP {web}.'
-    cloud:
-      path: 'Pfad-Repositories werden nicht unterstützt.'
-      artifact: 'Artifact-Repositories werden nicht unterstützt.'
-      platform: 'Die Plattform darf in der composer.json nicht konfiguriert sein.'
-      cache: 'Cache-Einstellungen dürfen in der composer.json nicht konfiguriert sein.'
-  taskstatus:
-    created: 'Konsolen-Task wurde angelegt …'
-    complete:
-      summary: 'Konsolentask abgeschlossen!'
-      detail: 'Der Hintergrund-Prozess wurde erfolgreich beendet. Prüfen Sie die Konsolenausgabe für weitere Details.'
-      console: '### Prozess erfolgreich abgeschlossen ###'
-    aborting:
-      summary: 'Aktuelle Aktion wird gestoppt …'
-      detail: 'Der Hintergrund-Prozess wird abgebrochen.'
-      console: '### Der Hintergrundprozess wird abgebrochen ###'
-    stopped:
-      summary: 'Konsolentask beendet!'
-      detail: 'Der Hintergrund-Prozess wurde abgebrochen. Bitte prüfen Sie die Konsolenausgabe.'
-      console: '### Der Hintergrundprozess wurde abgebrochen ###'
-    error:
-      summary: 'Konsolentask beendet!'
-      detail: 'Der Hintergrund-Prozess wurde unerwartet beendet. Bitte prüfen Sie die Konsolenausgabe.'
-      console: '### Der Hintergrundprozess wurde unerwartet beendet ###'
-  task:
-    setup_packages:
-      title: 'Contao wird installiert'
-      completeSummary: 'Installation abgeschlossen!'
-      completeDetail: 'Um das Setup abzuschließen, öffnen Sie bitte das Installtool und geben Sie Ihre Datenbank-Zugangsdaten ein.'
-    install_packages:
-      title: 'Installieren von Composer-Abhängigkeiten'
-    update_packages:
-      title: 'Pakete werden aktualisiert'
-      completeSummary: 'Contao-Pakete aktualisiert!'
-      completeDetail: 'Bitte öffnen Sie das Installtool und führen Sie eventuell notwendige Datenbank-Änderungen durch.'
-    dump_autoload:
-      title: 'Composer-Autloader schreiben'
-    clear_cache:
-      title: 'Leere den Composer-Cache'
-    rebuild_cache:
-      title: 'Contao-Cache neu erstellen'
-    install_tool:
-      title: 'Contao-Installtool'
-    self_update:
-      title: 'Der Contao Manager wird aktualisiert'
-      completeSummary: 'Contao Manager wurde erfolgreich aktualisiert'
-      completeDetail: 'Aktualisiert auf Version {current}'
-  taskoperation:
-    self-update:
-      summary: 'Neuster Contao Manager wird installiert …'
-      detail: 'Aktualisiere von {old} nach {new}'
-    remove-cache:
-      summary: 'Cache-Verzeichnis wird gelöscht …'
-    remove-vendor:
-      summary: 'Vendor-Verzeichnis wird gelöscht …'
-    cache-warmup:
-      summary: 'Cache wird neu aufgebaut …'
-    cache-clear:
-      summary: 'Cache wird gelöscht …'
-    composer-update:
-      summary: 'Composer-Abhängkeiten werden aktualisiert …'
-    composer-require:
-      summary: 'Composer-Pakete werden hinzugefügt …'
-    composer-remove:
-      summary: 'Composer-Pakete werden entfernt …'
-    composer-install:
-      summary: 'Installiere Composer-Abhängigkeiten …'
-      summaryRetry: 'Installiere Composer-Abhängigkeiten (Versuch {current}/{max}) …'
-    dump-autoload:
-      summary: 'Klassen-Autoloader wird geschrieben …'
-    install-lock:
-      summary: 'Contao-Installtool wird gesperrt …'
-    install-unlock:
-      summary: 'Contao-Installtool wird entsperrt …'
-    create-project:
-      summary: 'Installiere Applikations-Vorlage …'
-    cloud:
-      queuedSummary: 'Warte auf freie Rechenleistung der Composer Cloud seit {seconds} Sekunden'
-      queuedDetail: 'Berechnung startet in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'
-      processingSummary: 'Berechnung der Abhängigkeiten durch die Composer Cloud'
-      processingDetail: 'Aufgabe ID {job} aktiv seit {seconds} Sekunden'
-      errorSummary: 'Fehler beim Auflösen der Abhängigkeiten'
-      finishedSummary: 'Berechnung durch die Composer Cloud in {seconds} Sekunden abgeschlossen'
-      finishedDetail: 'RAM-Verbrauch: {memory} (Spitze: {peak}), Dauer: {time}.'
-    clear-cache:
-      summary: 'Lösche Cache-Dateien …'
+    integrity:
+        allow_url_fopen:
+            title: 'Die PHP-Einstellung "allow_url_fopen" ist auf dem Server deaktiviert.'
+        process:
+            title: 'Die PHP-Funktion "proc_open" und/oder "proc_close" ist auf dem Server nicht verfügbar.'
+            detail: 'Die Funktionen "proc_open" und "proc_close" sind notwendig, um Kommandozeilentasks im Hintergrund auszuführen. Bitte fragen Sie bei Ihrem Hosting-Anbieter nach, warum die Funktionen nicht verfügbar sind; weder der Contao Manager noch Contao 4 laufen ohne sie.'
+        intl:
+            title: 'Die PHP Intl-Erweiterung ist nicht verfügbar.'
+            detail: 'Contao 4 benötigt die PHP Intl-Erweiterung für die Internationalisierung der Anwendung.'
+        openssl:
+            title: 'Die PHP OpenSSL-Erweiterung ist nicht verfügbar.'
+            detail: 'Der Contao Manager benötigt die OpenSSL-Erweiterung, um Dateien über eine verschlüsselte Verbindung (https) herunterzuladen.'
+        dom:
+            title: 'Die PHP DOM-Erweiterung ist nicht verfügbar.'
+            detail: 'Contao 4 benötigt die PHP DOM-Erweiterung, um XML-Dokumente zu parsen.'
+        xmlreader:
+            title: 'Die PHP XMLReader-Erweiterung ist nicht verfügbar.'
+            detail: 'Contao 4 benötigt die PHP DOM-Erweiterung, um XML-Dokumente zu parsen.'
+        graphics_lib:
+            title: 'Keine PHP Bild-Bibliothek verfügbar.'
+            detail: 'Contao 4 benötigt entweder die GD-, Imagick- oder Gmagick-Erweiterung, um Bilder zu verarbeiten.'
+        symlink:
+            title: 'Die PHP Symlink-Methode ist nicht verfügbar oder funktioniert nicht korrekt.'
+        session:
+            title: 'Die PHP-Session konnte nicht gestartet werden.'
+        web_root:
+            title: 'Die Phar-Datei muss sich im /web-Ordner befinden.'
+        memory_limit:
+            title: 'Ungenügendes PHP Memory-Limit'
+            detail: 'Ihre PHP-Konfiguration erlaubt nur {limit} RAM (auf der Kommandozeile). Das ist nicht genug, um Composer auszuführen, und das Limit konnte auch nicht automatisch erhöht werden. Bitte kontaktieren Sie Ihren Hosting-Anbieter.'
+        systempdir:
+            title: 'Konnte nicht in den temporären Systemordner schreiben.'
+            detail: 'Dies ist höchstwahrscheinlich ein Problem mit Ihrer Serverkonfiguration. Stellen Sie sicher, dass entweder open_basedir den Zugriff auf den temporären Ordner erlaubt oder dass sys_temp_dir korrekt gesetzt ist.'
+        contao_unknown:
+            title: 'Unbekannter Installationsstatus'
+            detail: "Auf Ihrem Server wurden Dateien gefunden, die keiner bekannten Contao-Version zugeordnet werden konnten.\nUm Contao zu installieren, müssen Sie entweder Ihre Installation manuell reparieren oder folgende Dateien und Ordner entfernen:\n\n{files}"
+        contao_version:
+            title: 'Die Contao-Version wurde nicht erkannt.'
+            detail: "Der Konsolenprozess hat eine ungültige Ausgabe anstelle der Contao-Version ausgegeben. Bitte prüfen Sie die Ausgabe für weitere Informationen:\n\n{output}"
+
+    config:
+        php_cli:
+            not_found: 'Der Pfad enthält kein gültiges PHP-Binary.'
+            incompatible: 'Dieses Binary beinhaltet PHP {cli}, der Webprozess verwendet jedoch PHP {web}.'
+        cloud:
+            platform: 'Die Plattform darf in der composer.json nicht konfiguriert sein.'
+            cache: 'Cache-Einstellungen dürfen in der composer.json nicht konfiguriert sein.'
+
+    taskstatus:
+        created: 'Konsolen-Task wurde angelegt …'
+        complete:
+            summary: 'Konsolentask abgeschlossen!'
+            detail: 'Der Hintergrund-Prozess wurde erfolgreich beendet. Prüfen Sie die Konsolenausgabe für weitere Details.'
+            console: '### Prozess erfolgreich abgeschlossen ###'
+        aborting:
+            summary: 'Aktuelle Aktion wird gestoppt …'
+            detail: 'Der Hintergrund-Prozess wird abgebrochen.'
+            console: '### Der Hintergrundprozess wird abgebrochen ###'
+        stopped:
+            summary: 'Konsolentask beendet!'
+            detail: 'Der Hintergrund-Prozess wurde abgebrochen. Bitte prüfen Sie die Konsolenausgabe.'
+            console: '### Der Hintergrundprozess wurde abgebrochen ###'
+        error:
+            summary: 'Konsolentask beendet!'
+            detail: 'Der Hintergrund-Prozess wurde unerwartet beendet. Bitte prüfen Sie die Konsolenausgabe.'
+            console: '### Der Hintergrundprozess wurde unerwartet beendet ###'
+
+    task:
+        setup_packages:
+            title: 'Contao wird installiert'
+            completeSummary: 'Installation abgeschlossen!'
+            completeDetail: 'Um das Setup abzuschließen, öffnen Sie bitte das Installtool und geben Sie Ihre Datenbank-Zugangsdaten ein.'
+        install_packages:
+            title: 'Installieren von Composer-Abhängigkeiten'
+        update_packages:
+            title: 'Pakete werden aktualisiert'
+            completeSummary: 'Contao-Pakete aktualisiert!'
+            completeDetail: 'Bitte öffnen Sie das Installtool und führen Sie eventuell notwendige Datenbank-Änderungen durch.'
+        dump_autoload:
+            title: 'Composer-Autloader schreiben'
+        clear_cache:
+            title: 'Leere den Composer-Cache'
+        rebuild_cache:
+            title: 'Contao-Cache neu erstellen'
+        install_tool:
+            title: 'Contao-Installtool'
+        self_update:
+            title: 'Der Contao Manager wird aktualisiert'
+            completeSummary: 'Contao Manager wurde erfolgreich aktualisiert'
+            completeDetail: 'Aktualisiert auf Version {current}'
+
+    taskoperation:
+        self-update:
+            summary: 'Neuster Contao Manager wird installiert …'
+            detail: 'Aktualisiere von {old} nach {new}'
+        remove-cache:
+            summary: 'Cache-Verzeichnis wird gelöscht …'
+        remove-vendor:
+            summary: 'Vendor-Verzeichnis wird gelöscht …'
+        cache-warmup:
+            summary: 'Cache wird neu aufgebaut …'
+        cache-clear:
+            summary: 'Cache wird gelöscht …'
+        composer-update:
+            summary: 'Composer-Abhängkeiten werden aktualisiert …'
+        composer-require:
+            summary: 'Composer-Pakete werden hinzugefügt …'
+        composer-remove:
+            summary: 'Composer-Pakete werden entfernt …'
+         composer-install:
+            summary: 'Installiere Composer-Abhängigkeiten …'
+            summaryRetry: 'Installiere Composer-Abhängigkeiten (Versuch {current}/{max}) …'
+        dump-autoload:
+            summary: 'Klassen-Autoloader wird geschrieben …'
+        install-lock:
+            summary: 'Contao-Installtool wird gesperrt …'
+        install-unlock:
+            summary: 'Contao-Installtool wird entsperrt …'
+        create-project:
+            summary: 'Installiere Applikations-Vorlage …'
+        cloud:
+            queuedSummary: 'Warte auf freie Rechenleistung der Composer Cloud seit {seconds} Sekunden'
+            queuedDetail: 'Berechnung startet in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'
+            processingSummary: 'Berechnung der Abhängigkeiten durch die Composer Cloud'
+            processingDetail: 'Aufgabe ID {job} aktiv seit {seconds} Sekunden'
+            errorSummary: 'Fehler beim Auflösen der Abhängigkeiten'
+            finishedSummary: 'Berechnung durch die Composer Cloud in {seconds} Sekunden abgeschlossen'
+            finishedDetail: 'RAM-Verbrauch: {memory} (Spitze: {peak}), Dauer: {time}.'
+        clear-cache:
+            summary: 'Lösche Cache-Dateien …'

@@ -1,129 +1,131 @@
 nl:
-  integrity:
-    allow_url_fopen:
-      title: 'De PHP instelling "allow_url_fopen" is niet ingeschakeld op de server.'
-    process:
-      title: 'De PHP functie "proc_open" en/of "proc_close" is niet beschikbaar op de server.'
-      detail: 'De "proc_open" en "proc_close" functies zijn nodig om de opdrachtregeltaken op de achtergrond te kunnen uitvoeren. Vraag na bij uw hostingprovider waarom deze methode niet beschikbaar is. Zowel de Contao Manager als Contao 4 zullen niet goed werken zonder deze functies.'
-    intl:
-      title: 'De PHP Intl extensie is niet beschikbaar.'
-      detail: 'Contao 4 vereist de Intl extension voor internationalisering.'
-    openssl:
-      title: 'De PHP OpenSSL extensie is niet beschikbaar.'
-      detail: 'Contao Manager vereist de OpenSSL extensie om bestanden over versleutelde verbindingen (https) te downloaden.'
-    dom:
-      title: 'De PHP DOM extensie is niet beschikbaar.'
-      detail: 'Contao 4 vereist de PHP DOM extensie om XML-documenten te parsen.'
-    xmlreader:
-      title: 'De PHP XML Reader extensie is niet beschikbaar.'
-      detail: 'Contao 4 vereist de PHP DOM extensie om XML-documenten te parsen.'
-    graphics_lib:
-      title: 'Er is geen bibliotheek voor PHP-beeldverwerking beschikbaar.'
-      detail: 'Contao 4 vereist ofwel de GD, Imagick of Gmagick-extensie om afbeeldingen te verwerken.'
-    symlink:
-      title: 'PHP-symlink methode is niet beschikbaar of werkt niet correct.'
-    session:
-      title: 'PHP-sessie kan niet worden gestart.'
-    web_root:
-      title: 'Het Phar bestand moet zich bevinden in de /web map.'
-    memory_limit:
-      title: 'Limiet PHP-geheugen onvoldoende'
-      detail: 'Uw PHP-configuratie staat alleen {limit} geheugen toe (op de opdrachtregel). Dit is niet genoeg om Composer uit te voeren, het was niet mogelijk om deze limiet automatisch te verhogen. Neem contact op met uw hostingprovider voor ondersteuning.'
-    systempdir:
-      title: 'Tijdelijke systeem directory niet beschrijfbaar.'
-      detail: 'Er is waarschijnlijk een probleem met uw hostingconfiguratie. Zorg ervoor dat open_basedir toegang geeft tot de tijdelijke directory, of dat sys_temp_dir correct is geconfigureerd.'
-    contao_unknown:
-      title: 'Installatiestatus onbekend'
-      detail: "Er zijn enkele bestanden op uw server gevonden maar geen bekende Contao versie.\nU dient uw applicatie handmatig te repareren of de volgende bestanden en mappen verwijderen om Contao te installeren:\n\n{files}"
-    contao_version:
-      title: 'Welke Contao-versie kon niet worden vastgesteld'
-      detail: "De console heeft onverwachte inhoud geretourneerd wanneer wordt gevraagd naar de Contao-versie. Controleer de output voor meer informatie:\n\n{output}"
-  config:
-    php_cli:
-      not_found: 'Dit pad bevat geen geldige PHP binary.'
-      incompatible: 'Dit binary is een PHP versie {cli} maar uw webserver is versie {web}.'
-    cloud:
-      path: 'Pad-Repositories worden niet ondersteund.'
-      artifact: 'Artifact-Repositories worden niet ondersteund.'
-      platform: 'Platform mag niet geconfigureerd zijn in composer.json.'
-      cache: 'Cache instellingen mogen niet geconfigureerd zijn in composer.json.'
-  taskstatus:
-    created: 'Console taak is aangemaakt ...'
-    complete:
-      summary: 'Console taak afgerond!'
-      detail: 'De taak op de achtergrond is met succes afgerond. Controleer het console protocol voor details.'
-      console: '### Taak met succes voltooid ###'
-    aborting:
-      summary: 'De huidige bewerking stoppen ...'
-      detail: 'De achtergrond taak wordt geannuleerd.'
-      console: '### De achtergrondtaak wordt geannuleerd ###'
-    stopped:
-      summary: 'Console taak beëindigd!'
-      detail: 'De achtergrond taak is geannuleerd. Controleer het console-protocol.'
-      console: '### De achtergrondtaak is geannuleerd ###'
-    error:
-      summary: 'Console taak beëindigd!'
-      detail: 'De achtergrond taak is onverwacht gestopt. Controleer het console protocol.'
-      console: '### De achtergrondtaak is onverwachts gestopt ###'
-  task:
-    setup_packages:
-      title: 'Contao-applicatie installeren'
-      completeSummary: 'Installatie afgerond!'
-      completeDetail: 'Om het installatieproces te voltooien, dient u het installatieprogramma te openen en de gegevens van uw database in te vullen.'
-    install_packages:
-      title: 'Composer Afhankelijkheden Installeren'
-    update_packages:
-      title: 'Pakketten bijwerken'
-      completeSummary: 'Contao pakketten bijgewerkt!'
-      completeDetail: 'Open het Installatie Tool om database wijzigingen aan te brengen.'
-    dump_autoload:
-      title: 'Dump Composer Autoloader'
-    clear_cache:
-      title: 'Composer Cache Wissen'
-    rebuild_cache:
-      title: 'Contao Cache opnieuw opbouwen'
-    install_tool:
-      title: 'Contao Installatie tool'
-    self_update:
-      title: 'Contao Manager updaten'
-      completeSummary: 'Contao Manager is bijgewerkt'
-      completeDetail: 'Bijgewerkt naar versie {current}'
-  taskoperation:
-    self-update:
-      summary: 'De nieuwste Contao Manager installeren ...'
-      detail: 'Bijwerken van {old} naar {new}'
-    remove-cache:
-      summary: 'Verwijderen cache directory …'
-    remove-vendor:
-      summary: 'Vendor map verwijderen ...'
-    cache-warmup:
-      summary: 'Warming applicatie cache …'
-    cache-clear:
-      summary: 'Legen applicatie cache …'
-    composer-update:
-      summary: 'Bijwerken Composer afhankelijkheden'
-    composer-require:
-      summary: 'Toevoegen Composer pakketten ...'
-    composer-remove:
-      summary: 'Verwijderen Composer pakketten ...'
-    composer-install:
-      summary: 'Installeren Composer afhankelijkheden ...'
-      summaryRetry: 'Installeren Composer afhankelijkheden (opnieuw {current}/{max}) …'
-    dump-autoload:
-      summary: 'Dump class autoloader ...'
-    install-lock:
-      summary: 'Contao Installatie Programma vergrendelen'
-    install-unlock:
-      summary: 'Contao Installatie Programma ontgrendelen'
-    create-project:
-      summary: 'Applicatie template installeren …'
-    cloud:
-      queuedSummary: 'Opdracht in Composer Cloud wachtrij geplaatst gedurende {seconds} seconden'
-      queuedDetail: 'Begint in ca. {seconds} seconden (actuele {jobs} taken op {workers} servers)'
-      processingSummary: 'Afhankelijkheden met Composer Cloud oplossen'
-      processingDetail: 'Job ID {job} wordt uitgevoerd voor {seconds} seconden'
-      errorSummary: 'Oplossen van afhankelijkheden mislukt ...'
-      finishedSummary: 'Composer Cloud job klaar in {seconds} seconden'
-      finishedDetail: 'Geheugen gebruik: {memory} (peak: {peak}), time: {time}.'
-    clear-cache:
-      summary: 'Verwijderen van cache bestanden …'
+    integrity:
+        allow_url_fopen:
+            title: 'De PHP instelling "allow_url_fopen" is niet ingeschakeld op de server.'
+        process:
+            title: 'De PHP functie "proc_open" en/of "proc_close" is niet beschikbaar op de server.'
+            detail: 'De "proc_open" en "proc_close" functies zijn nodig om de opdrachtregeltaken op de achtergrond te kunnen uitvoeren. Vraag na bij uw hostingprovider waarom deze methode niet beschikbaar is. Zowel de Contao Manager als Contao 4 zullen niet goed werken zonder deze functies.'
+        intl:
+            title: 'De PHP Intl extensie is niet beschikbaar.'
+            detail: 'Contao 4 vereist de Intl extension voor internationalisering.'
+        openssl:
+            title: 'De PHP OpenSSL extensie is niet beschikbaar.'
+            detail: 'Contao Manager vereist de OpenSSL extensie om bestanden over versleutelde verbindingen (https) te downloaden.'
+        dom:
+            title: 'De PHP DOM extensie is niet beschikbaar.'
+            detail: 'Contao 4 vereist de PHP DOM extensie om XML-documenten te parsen.'
+        xmlreader:
+            title: 'De PHP XML Reader extensie is niet beschikbaar.'
+            detail: 'Contao 4 vereist de PHP DOM extensie om XML-documenten te parsen.'
+        graphics_lib:
+            title: 'Er is geen bibliotheek voor PHP-beeldverwerking beschikbaar.'
+            detail: 'Contao 4 vereist ofwel de GD, Imagick of Gmagick-extensie om afbeeldingen te verwerken.'
+        symlink:
+            title: 'PHP-symlink methode is niet beschikbaar of werkt niet correct.'
+        session:
+            title: 'PHP-sessie kan niet worden gestart.'
+        web_root:
+            title: 'Het Phar bestand moet zich bevinden in de /web map.'
+        memory_limit:
+            title: 'Limiet PHP-geheugen onvoldoende'
+            detail: 'Uw PHP-configuratie staat alleen {limit} geheugen toe (op de opdrachtregel). Dit is niet genoeg om Composer uit te voeren, het was niet mogelijk om deze limiet automatisch te verhogen. Neem contact op met uw hostingprovider voor ondersteuning.'
+        systempdir:
+            title: 'Tijdelijke systeem directory niet beschrijfbaar.'
+            detail: 'Er is waarschijnlijk een probleem met uw hostingconfiguratie. Zorg ervoor dat open_basedir toegang geeft tot de tijdelijke directory, of dat sys_temp_dir correct is geconfigureerd.'
+        contao_unknown:
+            title: 'Installatiestatus onbekend'
+            detail: "Er zijn enkele bestanden op uw server gevonden maar geen bekende Contao versie.\nU dient uw applicatie handmatig te repareren of de volgende bestanden en mappen verwijderen om Contao te installeren:\n\n{files}"
+        contao_version:
+            title: 'Welke Contao-versie kon niet worden vastgesteld'
+            detail: "De console heeft onverwachte inhoud geretourneerd wanneer wordt gevraagd naar de Contao-versie. Controleer de output voor meer informatie:\n\n{output}"
+
+    config:
+        php_cli:
+            not_found: 'Dit pad bevat geen geldige PHP binary.'
+            incompatible: 'Dit binary is een PHP versie {cli} maar uw webserver is versie {web}.'
+        cloud:
+            platform: 'Platform mag niet geconfigureerd zijn in composer.json.'
+            cache: 'Cache instellingen mogen niet geconfigureerd zijn in composer.json.'
+
+    taskstatus:
+        created: 'Console taak is aangemaakt ...'
+        complete:
+            summary: 'Console taak afgerond!'
+            detail: 'De taak op de achtergrond is met succes afgerond. Controleer het console protocol voor details.'
+            console: '### Taak met succes voltooid ###'
+        aborting:
+            summary: 'De huidige bewerking stoppen ...'
+            detail: 'De achtergrond taak wordt geannuleerd.'
+            console: '### De achtergrondtaak wordt geannuleerd ###'
+        stopped:
+            summary: 'Console taak beëindigd!'
+            detail: 'De achtergrond taak is geannuleerd. Controleer het console-protocol.'
+            console: '### De achtergrondtaak is geannuleerd ###'
+        error:
+            summary: 'Console taak beëindigd!'
+            detail: 'De achtergrond taak is onverwacht gestopt. Controleer het console protocol.'
+            console: '### De achtergrondtaak is onverwachts gestopt ###'
+
+    task:
+        setup_packages:
+            title: 'Contao-applicatie installeren'
+            completeSummary: 'Installatie afgerond!'
+            completeDetail: 'Om het installatieproces te voltooien, dient u het installatieprogramma te openen en de gegevens van uw database in te vullen.'
+        install_packages:
+            title: 'Composer Afhankelijkheden Installeren'
+        update_packages:
+            title: 'Pakketten bijwerken'
+            completeSummary: 'Contao pakketten bijgewerkt!'
+            completeDetail: 'Open het Installatie Tool om database wijzigingen aan te brengen.'
+        dump_autoload:
+            title: 'Dump Composer Autoloader'
+        clear_cache:
+            title: 'Composer Cache Wissen'
+        rebuild_cache:
+            title: 'Contao Cache opnieuw opbouwen'
+        install_tool:
+            title: 'Contao Installatie Programma'
+        self_update:
+            title: 'Contao Manager updaten'
+            completeSummary: 'Contao Manager is bijgewerkt'
+            completeDetail: 'Bijgewerkt naar versie {current}'
+
+    taskoperation:
+        self-update:
+            summary: 'De nieuwste Contao Manager installeren ...'
+            detail: 'Bijwerken van {old} naar {new}'
+        remove-cache:
+            summary: 'Verwijderen cache directory …'
+        remove-vendor:
+            summary: 'Vendor map verwijderen ...'
+        cache-warmup:
+            summary: 'Warming applicatie cache …'
+        cache-clear:
+            summary: 'Legen applicatie cache …'
+        composer-update:
+            summary: 'Bijwerken Composer afhankelijkheden'
+        composer-require:
+            summary: 'Toevoegen Composer pakketten ...'
+        composer-remove:
+            summary: 'Verwijderen Composer pakketten ...'
+        composer-install:
+            summary: 'Installeren Composer afhankelijkheden ...'
+            summaryRetry: 'Installeren Composer afhankelijkheden (opnieuw {current}/{max}) …'
+        dump-autoload:
+            summary: 'Dump class autoloader ...'
+        install-lock:
+            summary: 'Contao Installatie Programma vergrendelen'
+        install-unlock:
+            summary: 'Contao Installatie Programma ontgrendelen'
+        create-project:
+            summary: 'Applicatie template installeren …'
+        cloud:
+            queuedSummary: 'Opdracht in Composer Cloud wachtrij geplaatst gedurende {seconds} seconden'
+            queuedDetail: 'Begint in ca. {seconds} seconden (actuele {jobs} taken op {workers} servers)'
+            processingSummary: 'Afhankelijkheden met Composer Cloud oplossen'
+            processingDetail: 'Job ID {job} wordt uitgevoerd voor {seconds} seconden'
+            errorSummary: 'Oplossen van afhankelijkheden mislukt ...'
+            finishedSummary: 'Composer Cloud job klaar in {seconds} seconden'
+            finishedDetail: 'Geheugen gebruik: {memory} (peak: {peak}), time: {time}.'
+        clear-cache:
+            summary: 'Verwijderen van cache bestanden …'
