@@ -157,7 +157,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
      */
     private function createForegroundProcess(array $arguments): Process
     {
-        return (new Process(
+        return (new Utf8Process(
             $this->addPhpRuntime($arguments),
             $this->kernel->getProjectDir(),
             $this->serverInfo->getPhpEnv()

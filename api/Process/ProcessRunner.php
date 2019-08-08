@@ -20,7 +20,7 @@ use Symfony\Component\Process\Process;
 class ProcessRunner extends AbstractProcess
 {
     /**
-     * @var Process
+     * @var Utf8Process
      */
     private $process;
 
@@ -42,7 +42,7 @@ class ProcessRunner extends AbstractProcess
         $commandline = $config['commandline'] ?? [];
         $cwd = $config['cwd'] ?? null;
 
-        $this->process = new Process($commandline, $cwd);
+        $this->process = new Utf8Process($commandline, $cwd);
 
         $this->loadConfig($config);
     }
