@@ -49,6 +49,9 @@ abstract class AbstractProcess
      */
     protected static function readConfig(string $filename): array
     {
+        // Make sure new process files are found (see https://github.com/contao/contao-manager/issues/438)
+        clearstatcache();
+
         if (!is_file($filename)) {
             throw new \InvalidArgumentException(sprintf('Config file "%s" does not exist.', $filename));
         }
