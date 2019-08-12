@@ -3,7 +3,8 @@
     "main": false,
     "directories": ["api", "dist"],
     "files": [
-        "LICENSE"
+        "LICENSE",
+        "downgrade.php"
     ],
     "blacklist": [
         "api/Tests"
@@ -11,7 +12,7 @@
     "finder": [
         {
             "name": "*",
-            "exclude": ["Tests", "tests"],
+            "exclude": ["Tests", "tests", "doc", "docs"],
             "in": "vendor"
         }
     ],
