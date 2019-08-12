@@ -17,17 +17,17 @@
     "vue-router": "^2.8.1",
     "vue-upload-component": "^2.8.20",
     "vuex": "^2.5.0",
-    "vuex-i18n": "^1.11.0"
+    "vuex-i18n": "^1.13.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.8.0",
-    "@vue/cli-plugin-eslint": "^3.8.0",
-    "@vue/cli-service": "^3.8.4",
+    "@vue/cli-plugin-babel": "^3.10.0",
+    "@vue/cli-plugin-eslint": "^3.10.0",
+    "@vue/cli-service": "^3.10.0",
     "babel-eslint": "^10.0.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
     "node-sass": "^4.12.0",
-    "sass-loader": "^7.1.0",
+    "sass-loader": "^7.2.0",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
