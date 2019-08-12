@@ -128,7 +128,7 @@ class UploadPackagesController
             case 'upload':
                 $this->addChunk(
                     $request->request->get('session_id'),
-                    $request->request->get('start_offset'),
+                    $request->request->getInt('start_offset'),
                     $request->files->get('chunk')
                 );
 
@@ -146,7 +146,7 @@ class UploadPackagesController
     /**
      * @Route("/packages/uploads/{id}", methods={"DELETE"})
      */
-    public function delete($id)
+    public function delete(string $id)
     {
         $this->validateUploadSupport();
 
@@ -165,7 +165,7 @@ class UploadPackagesController
         return new JsonResponse(['status' => 'success']);
     }
 
-    private function createUpload($name, $size)
+    private function createUpload(string $name, int $size)
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $id = bin2hex(random_bytes(8));
@@ -184,7 +184,7 @@ class UploadPackagesController
         return $id;
     }
 
-    private function addChunk($id, $offset, UploadedFile $file): void
+    private function addChunk(string $id, int $offset, UploadedFile $file): void
     {
         if (!$this->config->has($id)) {
             throw new NotFoundHttpException(sprintf('Unknown file ID "%s"', $id));
@@ -198,7 +198,7 @@ class UploadPackagesController
         fclose($fp);
     }
 
-    private function finishUpload($id)
+    private function finishUpload(string $id)
     {
         $uploadFile = $this->uploadPath($id);
         $config = $this->config->get($id);
@@ -286,12 +286,12 @@ class UploadPackagesController
         );
     }
 
-    private function uploadPath($id)
+    private function uploadPath(string $id)
     {
         return $this->environment->getUploadDir().'/'.$id;
     }
 
-    private function installError($id, $error, \Exception $e = null)
+    private function installError(string $id, string $error, \Exception $e = null)
     {
         $config = $this->config->get($id);
 
