@@ -39,6 +39,10 @@ de:
             title: 'Die Contao-Version wurde nicht erkannt.'
             detail: "Der Konsolenprozess hat eine ungültige Ausgabe anstelle der Contao-Version ausgegeben. Bitte prüfen Sie die Ausgabe für weitere Informationen:\n\n{output}"
 
+    boot:
+        composer:
+            invalid: 'composer.json Schema-Validierung: {exception}'
+
     config:
         php_cli:
             not_found: 'Der Pfad enthält kein gültiges PHP-Binary.'
@@ -108,7 +112,12 @@ de:
             summary: 'Composer-Pakete werden hinzugefügt …'
         composer-remove:
             summary: 'Composer-Pakete werden entfernt …'
-         composer-install:
+        install-uploads:
+            summary: 'Hochgeladene Pakete werden installiert …'
+            console: 'Artefakt für {package} (Version {version}) [nach packages/{name}] installiert'
+        remove-uploads:
+            summary: 'Hochgeladene Dateien werden entfernt …'
+        composer-install:
             summary: 'Installiere Composer-Abhängigkeiten …'
             summaryRetry: 'Installiere Composer-Abhängigkeiten (Versuch {current}/{max}) …'
         dump-autoload:
@@ -129,3 +138,10 @@ de:
             finishedDetail: 'RAM-Verbrauch: {memory} (Spitze: {peak}), Dauer: {time}.'
         clear-cache:
             summary: 'Lösche Cache-Dateien …'
+
+    upload:
+        error:
+            file: 'Die Datei ist ungültig oder enthält keine composer.json.'
+            json: 'Die composer.json enthält keine validen JSON-Daten.'
+            schema: 'Die composer.json Schema-Validierung ist fehlgeschlagen.'
+            partial: 'Der Upload wurde nicht abgeschlossen.'

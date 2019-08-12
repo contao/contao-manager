@@ -39,6 +39,10 @@ ru:
             title: 'Не удалось определить версию Contao'
             detail: "Консоль вернула неожиданный ответ при запросе версии Contao. Пожалуйста, проверьте выходные данные для получения дополнительной информации:\n\n{output}"
 
+    boot:
+        composer:
+            invalid: 'composer.json проверка схемы: {exception}'
+
     config:
         php_cli:
             not_found: 'Путь не содержит верный бинарный файл PHP.'
@@ -108,6 +112,11 @@ ru:
             summary: 'Добавление пакетов Composer...'
         composer-remove:
             summary: 'Удаление пакетов Composer...'
+        install-uploads:
+            summary: 'Установка загруженных пакетов…'
+            console: 'Установлен артефакт для {package} (версии {version}) [к пакетам/{name}]'
+        remove-uploads:
+            summary: 'Удаление загруженных файлов…'
         composer-install:
             summary: 'Установка зависимостей Composer...'
             summaryRetry: 'Установка зависимостей Composer (повтор: {current}/{max}) …'
@@ -129,3 +138,10 @@ ru:
             finishedDetail: 'Использование памяти: {memory} (пик: {peak}), время: {time}.'
         clear-cache:
             summary: 'Удаление файлов кеша...'
+
+    upload:
+        error:
+            file: 'Ошибка файла или отсутствует composer.json.'
+            json: 'Файл composer.json не содержит допустимых данных JSON.'
+            schema: 'Ошибка проверки схемы composer.json.'
+            partial: 'Загрузка файла не была завершена.'

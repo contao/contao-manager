@@ -38,7 +38,7 @@
     "ui.oauth.deny": "Accesso negato",
 
     "ui.boot.headline": "Verifica del sistema",
-    "ui.boot.description": "Please wait, we are analyzing your server …",
+    "ui.boot.description": "Per favore attendi, stiamo analizzando il tuo server...",
     "ui.boot.issue1": "Problemi di installazione rilevati",
     "ui.boot.issue2": "Your installation has issues that must be fixed before the Contao Manager can be used.",
     "ui.boot.run": "Avvia Contao Manager",
@@ -59,7 +59,7 @@
     "ui.server.prerequisite": "Check cancelled due to a missing prerequisite.",
     "ui.server.selfUpdate.title": "Aggiornamenti di Contao Manager",
     "ui.server.selfUpdate.update": "È disponibile una nuova versione {latest} di Contao Manager.",
-    "ui.server.selfUpdate.latest": "You are using the latest version {current}.",
+    "ui.server.selfUpdate.latest": "Stai usando l'ultima versione disponibile {current}.",
     "ui.server.selfUpdate.dev": "Il build di sviluppo non supportano gli aggiornamenti automatici.",
     "ui.server.selfUpdate.unsupported": "Una nuova versione è disponibile ma non supporta la versione di PHP.",
     "ui.server.selfUpdate.button": "Eseguire l'auto-aggiornamento",
