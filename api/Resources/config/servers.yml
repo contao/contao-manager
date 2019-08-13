@@ -180,7 +180,7 @@ configs:
         name: hosting.de GmbH
         website: www.hosting.de
         php:
-            /opt/php-{major}.{minor}/bin/php: []
+            /opt/php-{major}.{minor}/bin/php: ['-d', 'memory_limit=-1']
 
     hostingpilot:
         name: Hosting Pilot GmbH
