@@ -63,9 +63,9 @@ class ComposerController
             'vendor' => ['found' => is_dir($this->environment->getVendorDir())],
         ];
 
-        if (($errors = $this->validateSchema($result)) !== null) {
+        if (($errors = $this->validateLockFile($result)) !== null) {
             $result = $errors;
-        } elseif (($errors = $this->validateLockFile($result)) !== null) {
+        } elseif (($errors = $this->validateSchema($result)) !== null) {
             $result = $errors;
         }
 
