@@ -63,16 +63,14 @@ class ComposerController
             'vendor' => ['found' => is_dir($this->environment->getVendorDir())],
         ];
 
-        if (($errors = $this->validateLockFile($result)) !== null) {
-            $result = $errors;
-        } elseif (($errors = $this->validateSchema($result)) !== null) {
-            $result = $errors;
+        if ($this->validateLockFile($result)) {
+            $this->validateSchema($result);
         }
 
         return new JsonResponse($result);
     }
 
-    private function validateSchema(array $result): ?array
+    private function validateSchema(array &$result): bool
     {
         try {
             $schemaFile = __DIR__.'/../../../vendor/composer/composer/res/composer-schema.json';
@@ -89,16 +87,16 @@ class ComposerController
             $validator = new Validator();
             $validator->validate($value, $schema, Constraint::CHECK_MODE_EXCEPTIONS);
 
-            return null;
+            return true;
         } catch (ValidationException $e) {
             $result['json']['valid'] = false;
             $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage()]);
 
-            return $result;
+            return false;
         }
     }
 
-    private function validateLockFile(array $result): ?array
+    private function validateLockFile(array &$result): bool
     {
         try {
             $locker = $this->environment->getComposer()->getLocker();
@@ -111,7 +109,7 @@ class ComposerController
                 }
             }
 
-            return null;
+            return true;
         } catch (\InvalidArgumentException $e) {
             $result['json']['found'] = false;
             $result['json']['valid'] = false;
@@ -120,6 +118,6 @@ class ComposerController
             $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage().' '.$e->getDetails()]);
         }
 
-        return $result;
+        return false;
     }
 }
