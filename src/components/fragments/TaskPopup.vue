@@ -72,6 +72,8 @@
             scrollToBottom: true,
             swallowScroll: true,
             audit: false,
+            favicons: null,
+            faviconInterval: null,
         }),
 
         computed: {
@@ -209,6 +211,46 @@
 
                 this.swallowScroll = false;
             },
+
+            updateFavicon() {
+                let base;
+
+                if (this.faviconInterval) {
+                    clearInterval(this.faviconInterval);
+                }
+
+                const replaceIcon = (base) => {
+                    this.favicons.forEach((el) => {
+                        el.href = `${base}/${el.href.split('/').pop()}`;
+                    });
+                };
+
+                switch (this.taskStatus) {
+                    case 'active':
+                        base = 'icons/task-active';
+                        break;
+
+                    case 'complete':
+                        base = 'icons/task-success';
+                        break;
+
+                    case 'error':
+                    case 'failed':
+                    case 'stopped':
+                        base = 'icons/task-error';
+                        break;
+
+                    default:
+                        setTimeout(replaceIcon.bind(this, 'icons'), 5000);
+                        return;
+                }
+
+                let replace = false;
+                this.faviconInterval = setInterval(() => {
+                    replace = !replace;
+                    replaceIcon(replace ? base : 'icons');
+                }, 2000);
+            },
         },
 
         watch: {
@@ -222,6 +264,11 @@
                     );
                 }
             },
+
+            taskStatus() {
+                console.log(this.taskStatus);
+                this.updateFavicon();
+            }
         },
 
         activated() {
@@ -234,6 +281,11 @@
         deactivated() {
             this.$store.commit('tasks/setStatus', null);
             this.$store.commit('tasks/setCurrent', null);
+        },
+
+        mounted() {
+            this.favicons = document.querySelectorAll('link[class="favicon"]');
+            this.updateFavicon();
         },
     };
 </script>
