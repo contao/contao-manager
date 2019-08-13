@@ -149,18 +149,28 @@ export default {
             return Vue.http.patch('api/task', { status: 'aborting' });
         },
 
-        deleteCurrent(store) {
+        deleteCurrent(store, retry = 2) {
             store.commit('setDeleting', true);
             return Vue.http.delete('api/task').then(
                 () => {
                     store.commit('setCurrent', null);
                 },
                 (response) => {
-                    if (response.status !== 400) {
-                        throw response;
+                    // Bad request, there are no tasks
+                    if (response.status === 400) {
+                        store.commit('setCurrent', null);
+                        return;
                     }
 
-                    store.commit('setCurrent', null);
+                    if (response.status === 403 && retry > 0) {
+                        return new Promise((resolve) => {
+                            setTimeout(() => {
+                                resolve(store.dispatch('deleteCurrent', retry - 1));
+                            }, 1000);
+                        });
+                    }
+
+                    throw response;
                 },
             );
         },
