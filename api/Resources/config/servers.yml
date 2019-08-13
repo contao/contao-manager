@@ -182,6 +182,12 @@ configs:
         php:
             /opt/php-{major}.{minor}/bin/php: []
 
+    hostingpilot:
+        name: Hosting Pilot GmbH
+        website: hosting-pilot.com
+        php:
+            /usr/bin/php{major}{minor}: []
+
     hostingwerk:
         name: Hostingwerk (Feyer Media GmbH & Co. KG)
         website: hostingwerk.de
@@ -305,6 +311,12 @@ configs:
         website: www.serverprofis.de
         php:
             /opt/alt/php{major}{minor}/usr/bin/php: []
+
+    spieglhof:
+        name: SPIEGLHOF media GmbH
+        website: www.spieglhof-media.de
+        php:
+            /opt/php{major}{minor}/bin/php: []
 
     strato:
         name: STRATO AG
