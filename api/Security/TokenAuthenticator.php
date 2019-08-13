@@ -43,7 +43,13 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function supports(Request $request)
     {
-        return $request->headers->has('Contao-Manager-Auth') || null !== $this->getAuthenticationHeader($request);
+        if ($request->headers->has('Contao-Manager-Auth')) {
+            return true;
+        }
+
+        $authentication = $this->getAuthenticationHeader($request);
+
+        return \is_string($authentication) && 0 === stripos($authentication, 'bearer ');
     }
 
     /**
@@ -69,7 +75,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             return substr($authentication, 7);
         }
 
-        return null;
+        return '';
     }
 
     /**
