@@ -73,10 +73,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
 
         try {
             $success = $this->doRun();
-        } catch (\Error $e) {
-            $this->taskConfig->setState($this->getName().'.error', $e->getMessage());
-            $success = false;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->taskConfig->setState($this->getName().'.error', $e->getMessage());
             $success = false;
         }

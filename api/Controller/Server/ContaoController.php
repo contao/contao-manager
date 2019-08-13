@@ -205,10 +205,8 @@ class ContaoController
             if ($this->filesystem->exists($file)) {
                 try {
                     @include $file;
-                } catch (\Error $e) {
-                    // do nothing on error in PHP 7 or Symfony Polyfill
-                } catch (\Exception $e) {
-                    // do nothing on exception
+                } catch (\Throwable $e) {
+                    // do nothing on error or exception
                 }
 
                 if (\defined('VERSION') && \defined('BUILD')) {
