@@ -45,6 +45,7 @@
                 <p class="task-popup__text">{{ taskDetail }}</p>
 
                 <loading-button :disabled="!currentTask || !currentTask.cancellable" :loading="isAborting" @click="cancelTask" v-if="isActive || isAborting">{{ $t('ui.taskpopup.buttonCancel') }}</loading-button>
+                <!--suppress HtmlUnknownTarget -->
                 <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
                 <loading-button :loading="deletingTask" @click="hidePopup" v-if="!isActive && !isAborting">
                     {{ $t('ui.taskpopup.buttonConfirm') }}
@@ -266,7 +267,6 @@
             },
 
             taskStatus() {
-                console.log(this.taskStatus);
                 this.updateFavicon();
             }
         },

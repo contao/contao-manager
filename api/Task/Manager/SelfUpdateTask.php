@@ -80,7 +80,7 @@ class SelfUpdateTask extends AbstractTask
                     ]
                 )
             );
-            $status->setConsole(null);
+            $status->setConsole(false);
 
             return;
         }
