@@ -169,11 +169,11 @@
     "ui.maintenance.debugMode.credentials": "Données de connexion",
     "ui.maintenance.debugMode.user": "Veuillez saisir un nom d'utilisateur pour le mode de débogage.",
     "ui.maintenance.debugMode.password": "Veuillez saisir un mot de passe pour le mode de débogage.",
-    "ui.maintenance.debugMode.unsupported": "Not supported by Contao 4.4",
     "ui.maintenance.opcodeCache.title": "Opcode Cache",
     "ui.maintenance.opcodeCache.description": "Opcode met en cache les fichiers PHP pour améliorer la vitesse d'exécution du processus web. Cette fonctionnalité doit être supprimée dans certaines circontances et notammment si certanis fichiers ne sont pas reconnus après des modifications.",
     "ui.maintenance.opcodeCache.button": "Tronquer le cache",
     "ui.maintenance.safeMode": "Not available in Safe Mode",
+    "ui.maintenance.unsupported": "Not supported by your Contao version",
 
     "ui.packages.updateButton": "Mise à jour des paquets",
     "ui.packages.searchButton": "Search Packages",

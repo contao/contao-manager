@@ -169,11 +169,11 @@
     "ui.maintenance.debugMode.credentials": "证书",
     "ui.maintenance.debugMode.user": "请输入用于调试模式的用户名。",
     "ui.maintenance.debugMode.password": "请输入用于调试模式的密码。",
-    "ui.maintenance.debugMode.unsupported": "Not supported by Contao 4.4",
     "ui.maintenance.opcodeCache.title": "Opcode缓存",
     "ui.maintenance.opcodeCache.description": "Opcode在Web进程上缓存PHP文件以加快执行速度。 如果文件在更改后无法识别，则在某些情况下必须将其删除。",
     "ui.maintenance.opcodeCache.button": "清除缓存",
     "ui.maintenance.safeMode": "Not available in Safe Mode",
+    "ui.maintenance.unsupported": "Not supported by your Contao version",
 
     "ui.packages.updateButton": "更新包",
     "ui.packages.searchButton": "Search Packages",

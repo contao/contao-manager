@@ -169,11 +169,11 @@
     "ui.maintenance.debugMode.credentials": "Полномочия",
     "ui.maintenance.debugMode.user": "Введите имя пользователя для режима отладки.",
     "ui.maintenance.debugMode.password": "Введите пароль для режима отладки.",
-    "ui.maintenance.debugMode.unsupported": "Не поддерживается Contao 4.4",
     "ui.maintenance.opcodeCache.title": "Кеш Opcode",
     "ui.maintenance.opcodeCache.description": "Opcode кеширует PHP-файлы в веб-процессе для более быстрого выполнения. Он должен быть удален при определенных обстоятельствах, если файлы не распознаются после изменения.",
     "ui.maintenance.opcodeCache.button": "Усечение кеша",
     "ui.maintenance.safeMode": "Недоступно в безопасном режиме",
+    "ui.maintenance.unsupported": "Не поддерживается этой версией Contao",
 
     "ui.packages.updateButton": "Обновить пакеты",
     "ui.packages.searchButton": "Поиск пакетов",

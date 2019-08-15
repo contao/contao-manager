@@ -169,11 +169,11 @@
     "ui.maintenance.debugMode.credentials": "Credenciales",
     "ui.maintenance.debugMode.user": "Introduzca un nombre de usuario para el modo Debug.",
     "ui.maintenance.debugMode.password": "Introduzca una contraseña de usuario para el modo Debug.",
-    "ui.maintenance.debugMode.unsupported": "Not supported by Contao 4.4",
     "ui.maintenance.opcodeCache.title": "Caché Opcode",
     "ui.maintenance.opcodeCache.description": "Opcode guarda en caché los archivos PHP en el proceso web para una ejecución más rápida. Debe borrarse bajo ciertas circunstancias si los archivos no son reconocidos después de cambiarlos.",
     "ui.maintenance.opcodeCache.button": "Truncar caché",
     "ui.maintenance.safeMode": "Not available in Safe Mode",
+    "ui.maintenance.unsupported": "Not supported by your Contao version",
 
     "ui.packages.updateButton": "Paquetes de actualización",
     "ui.packages.searchButton": "Search Packages",

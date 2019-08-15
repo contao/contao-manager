@@ -169,11 +169,11 @@
     "ui.maintenance.debugMode.credentials": "Uživatelské informace",
     "ui.maintenance.debugMode.user": "Zadejte prosím uživatelské jméno pro vývojářský mód.",
     "ui.maintenance.debugMode.password": "Zadejte prosím heslo pro uživatele vývojářského módu.",
-    "ui.maintenance.debugMode.unsupported": "Není podporováno Contaem 4.4",
     "ui.maintenance.opcodeCache.title": "Operační kód mezinúložiště",
     "ui.maintenance.opcodeCache.description": "Operační kód meziúložiště souborů PHP dokáže rychleji zpracovat data. Musí být smazán za určitých podmínek, pokud se nepodařilo rozpoznat soubory po jejich změně.",
     "ui.maintenance.opcodeCache.button": "Zkrátit meziúložiště",
     "ui.maintenance.safeMode": "Není to dostupné v Bezpečnostním módu",
+    "ui.maintenance.unsupported": "Není podporováno Contaem",
 
     "ui.packages.updateButton": "Zaktualizovat balíčky",
     "ui.packages.searchButton": "Vyhledat balíčky",

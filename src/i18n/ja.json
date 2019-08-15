@@ -169,11 +169,11 @@
     "ui.maintenance.debugMode.credentials": "認証情報",
     "ui.maintenance.debugMode.user": "デバッグモードのユーザー名を入力してください。",
     "ui.maintenance.debugMode.password": "デバッグモードのパスワードを入力してください。",
-    "ui.maintenance.debugMode.unsupported": "Contao 4.4はサポートしていません。",
     "ui.maintenance.opcodeCache.title": "Opcodeキャッシュ",
     "ui.maintenance.opcodeCache.description": "Opcodeは高速な実行のためにPHPのファイルをウェブプロセス常にキャッシュします。変更後にファイルの変化を認識していないといった、特定の状況では削除しなければなりません。",
     "ui.maintenance.opcodeCache.button": "キャッシュを切り詰め",
     "ui.maintenance.safeMode": "セーフモードでは利用不可",
+    "ui.maintenance.unsupported": "このContaoのバージョンでは非サポート",
 
     "ui.packages.updateButton": "パッケージを更新",
     "ui.packages.searchButton": "パッケージを検索",
