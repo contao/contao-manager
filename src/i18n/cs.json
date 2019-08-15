@@ -177,7 +177,7 @@
     "ui.maintenance.opcodeCache.description": "Operační kód meziúložiště souborů PHP dokáže rychleji zpracovat data. Musí být smazán za určitých podmínek, pokud se nepodařilo rozpoznat soubory po jejich změně.",
     "ui.maintenance.opcodeCache.button": "Zkrátit meziúložiště",
     "ui.maintenance.safeMode": "Není to dostupné v Bezpečnostním módu",
-    "ui.maintenance.unsupported": "Not supported by your Contao version",
+    "ui.maintenance.unsupported": "Není podporováno Contaem",
 
     "ui.packages.updateButton": "Zaktualizovat balíčky",
     "ui.packages.searchButton": "Vyhledat balíčky",

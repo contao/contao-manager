@@ -232,6 +232,8 @@
     "ui.package.support_irc": "IRC / Chat",
     "ui.package.support_email": "Wsparcie E-mail",
     "ui.package.support_rss": "Kanał RSS",
+    "ui.package.proprietaryTitle": "Paczka Zastrzeżona!",
+    "ui.package.proprietaryText": "Odwiedź stronę po więcej informacji.",
     "ui.package.version": "Wersja {version}",
     "ui.package.additionalDownloads": "{count} Pobranie ::: {count} Pobrania",
     "ui.package.additionalStars": "{count} Gwiazdka ::: {count} Gwiazdki",

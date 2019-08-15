@@ -177,7 +177,7 @@
     "ui.maintenance.opcodeCache.description": "Opcode mette in cache i file PHP sul processo web per un'esecuzione più veloce. Deve essere cancellato in determinate circostanze se i file non vengono riconosciuti dopo la modifica.",
     "ui.maintenance.opcodeCache.button": "Troncare la cache",
     "ui.maintenance.safeMode": "Non disponibile in modalità Safe Mode",
-    "ui.maintenance.unsupported": "Not supported by your Contao version",
+    "ui.maintenance.unsupported": "Non supportato da Contao",
 
     "ui.packages.updateButton": "Aggiorna pacchetti",
     "ui.packages.searchButton": "Cerca pacchetti",

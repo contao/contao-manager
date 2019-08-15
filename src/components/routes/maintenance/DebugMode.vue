@@ -2,7 +2,7 @@
     <message-overlay :message="overlayMessage" :active="safeMode || (!loading && !supportsJwtCookie && !supportsAccessKey)">
         <section class="maintenance">
             <div class="maintenance__inside">
-                <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" /></figure>
+                <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" alt="" /></figure>
                 <div class="maintenance__about">
                     <h1>{{ $t('ui.maintenance.debugMode.title') }}</h1>
                     <p v-html="$t('ui.maintenance.debugMode.description')"></p>

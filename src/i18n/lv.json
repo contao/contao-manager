@@ -177,7 +177,7 @@
     "ui.maintenance.opcodeCache.description": "Opcode caches PHP files on the web process for faster execution. It must be deleted under certain circumstances if files are not recognized after changing.",
     "ui.maintenance.opcodeCache.button": "Saīsināt kešatmiņu",
     "ui.maintenance.safeMode": "Nav pieejams drošajā režīmā",
-    "ui.maintenance.unsupported": "Not supported by your Contao version",
+    "ui.maintenance.unsupported": "Contao neatbalsta",
 
     "ui.packages.updateButton": "Atjaunināt pakotnes",
     "ui.packages.searchButton": "Meklēt pakotnes",

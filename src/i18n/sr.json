@@ -177,7 +177,7 @@
     "ui.maintenance.opcodeCache.description": "Opcode кешира PHP фајлове ради бржег извршавања. У неким околностима мора бити обрисан ако фајлови нису препознати након измене.",
     "ui.maintenance.opcodeCache.button": "Испразни Cache",
     "ui.maintenance.safeMode": "Није доступно у Safe Mode",
-    "ui.maintenance.unsupported": "Not supported by your Contao version",
+    "ui.maintenance.unsupported": "Није подржано у Contao",
 
     "ui.packages.updateButton": "Ажурирај Пакете",
     "ui.packages.searchButton": "Претрага пакета",

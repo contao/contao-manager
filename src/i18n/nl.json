@@ -177,7 +177,7 @@
     "ui.maintenance.opcodeCache.description": "Opcode slaat PHP-bestanden op in het web-proces voor snellere uitvoering. Het moet onder bepaalde omstandigheden worden verwijderd als bestanden niet worden herkend na wijziging.",
     "ui.maintenance.opcodeCache.button": "Wis Cache",
     "ui.maintenance.safeMode": "Niet beschikbaar in Veilige Modus",
-    "ui.maintenance.unsupported": "Not supported by your Contao version",
+    "ui.maintenance.unsupported": "Wordt niet ondersteund door uw Contao versie",
 
     "ui.packages.updateButton": "Pakketten Updaten",
     "ui.packages.searchButton": "Pakketten zoeken",
