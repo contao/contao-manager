@@ -43,7 +43,7 @@
                 </fieldset>
                 <div class="package__version package__version--release" v-if="data.version">
                     <strong>{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
-                    <time :dateTime="data.time" v-if="data.time">({{ this.data.time | datimFormat }})</time>
+                    <time :dateTime="data.time" v-if="data.time">({{ data.time | datimFormat }})</time>
                 </div>
             </slot>
         </template>

@@ -25,7 +25,6 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
     import metadata from '../../../mixins/metadata';
     import ComposerPackage from './ComposerPackage';
 
@@ -42,8 +41,6 @@
         },
 
         computed: {
-            ...mapState('packages', ['local']),
-
             isProvider: vm => vm.data.type === 'contao-provider',
 
             isUpload:
