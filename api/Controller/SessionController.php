@@ -132,7 +132,7 @@ class SessionController
     {
         if (!$this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
             return new ApiProblemResponse(
-                (new ApiProblem('User is not logged in'))->setStatus(Response::HTTP_BAD_REQUEST)
+                (new ApiProblem('User is not logged in'))->setStatus(Response::HTTP_UNAUTHORIZED)
             );
         }
 
