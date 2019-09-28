@@ -39,7 +39,7 @@
     import BootCheck from '../fragments/BootCheck';
     import BoxedLayout from '../layouts/Boxed';
     import SelectMenu from '../widgets/SelectMenu';
-    import LoadingButton from '../widgets/LoadingButton';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import Checkbox from '../widgets/Checkbox';
 
     export default {
@@ -135,7 +135,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .contao-check {
         &__header {

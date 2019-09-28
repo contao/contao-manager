@@ -1,7 +1,7 @@
 <template>
     <section class="maintenance" v-if="opcodeEnabled">
         <div class="maintenance__inside">
-            <figure class="maintenance__image"><img src="../../../assets/images/php-logo.svg" /></figure>
+            <figure class="maintenance__image"><img src="../../../assets/images/php-logo.svg" alt="" /></figure>
 
             <div class="maintenance__about">
                 <h1>{{ 'ui.maintenance.opcodeCache.title' | translate }}</h1>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    import Loader from '../../fragments/Loader';
+    import Loader from 'contao-package-list/src/components/fragments/Loader';
 
     export default {
         components: { Loader },

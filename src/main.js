@@ -45,9 +45,13 @@ Vue.http.interceptors.push((request, next) => {
 
 i18n.init().then(() => {
     /* eslint-disable no-new */
-    new Vue({
+    const $vue = new Vue({
         router,
         store,
         render: h => h(App),
-    }).$mount('#app');
+    });
+
+    $vue.$store.commit('packages/details/setRouter', router);
+
+    $vue.$mount('#app');
 });

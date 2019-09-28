@@ -21,7 +21,7 @@
 <script>
     import { mapState } from 'vuex';
 
-    import LoadingButton from '../widgets/LoadingButton';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
         components: { LoadingButton },
@@ -84,7 +84,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .logout-warning {
         position: fixed;

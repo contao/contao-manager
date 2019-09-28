@@ -1,9 +1,11 @@
 <template>
     <div class="layout-main">
-        <header class="layout-main__header">
+        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.subheader }">
             <div class="layout-main__logo"><img src="../../assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />Contao Manager</div>
             <navigation></navigation>
         </header>
+
+        <slot name="subheader"/>
 
         <main class="layout-main__content">
             <slot/>
@@ -24,16 +26,19 @@
 
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .layout-main {
 
         &__header {
             height: 56px;
             padding: 8px;
-            margin-bottom: 30px;
             background: #ffffff;
             box-shadow: $shadow-color 0 1px;
+
+            &--margin {
+                margin-bottom: 30px;
+            }
         }
 
         &__logo {

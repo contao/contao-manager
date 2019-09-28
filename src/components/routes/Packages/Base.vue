@@ -1,10 +1,9 @@
 <template>
     <main-layout>
 
-        <section :class="{ 'package-tools': true, 'package-tools--search': showSearch }">
+        <section class="package-tools">
             <slot name="search">
                 <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
-                <button class="package-tools__button widget-button widget-button--search" :disabled="uploading" @click="startSearch">{{ 'ui.packages.searchButton' | translate }}</button>
                 <button class="package-tools__button widget-button widget-button--upload" :disabled="!uploads || uploading" :title="uploadError" @click.prevent="$emit('start-upload')">{{ 'ui.packages.uploadButton' | translate }}</button>
             </slot>
         </section>
@@ -20,16 +19,11 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import routes from '../../../router/routes';
 
     import MainLayout from '../../layouts/Main';
 
     export default {
         components: { MainLayout },
-
-        props: {
-            showSearch: Boolean,
-        },
 
         computed: {
             ...mapGetters('packages', ['totalChanges']),
@@ -42,20 +36,17 @@
             updatePackages() {
                 this.$store.commit('packages/updateAll');
             },
-
-            startSearch() {
-                this.$router.push(routes.packagesSearch);
-            },
         },
     };
 </script>
 
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .package-tools {
         position: relative;
+        clear: both;
         text-align: center;
 
         @include screen(800) {
@@ -68,63 +59,10 @@
             }
         }
 
-        &__cancel {
-            display: none;
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 38px;
-            height: 38px;
-            margin: 0;
-            padding: 7px;
-            color: $text-color;
-            border: none;
-            background: none;
-
-            @include screen(1024) {
-                top: 0;
-            }
-        }
-
-        &__search {
-            display: none;
-            margin-bottom: 10px;
-            padding-right: 40px;
-        }
-
-        &--search {
-            .package-tools {
-                &__search {
-                    display: block;
-                }
-
-                &__button--search {
-                    display: none;
-
-                    @include screen(1024) {
-                        display: inline-block;
-                    }
-                }
-
-                &__cancel {
-                    display: block;
-                }
-            }
-        }
-
         @include screen(800) {
             &__button.widget-button {
                 width: 180px;
                 margin: 0 15px;
-            }
-
-            &__search {
-                width: 50% !important;
-                margin: 0 auto;
-            }
-
-            &__cancel {
-                right: 25%;
             }
         }
     }

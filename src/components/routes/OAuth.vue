@@ -23,7 +23,7 @@
     import Vue from 'vue';
 
     import BoxedLayout from '../layouts/Boxed';
-    import LoadingButton from '../widgets/LoadingButton';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
         components: { BoxedLayout, LoadingButton },
@@ -86,7 +86,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .view-oauth {
         &__header {

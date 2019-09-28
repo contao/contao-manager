@@ -7,11 +7,8 @@
         :description="data.description"
         :hint="packageHint"
         :hint-close="hintClose"
-        :shave-description="shaveDescription"
         @close-hint="restore"
     >
-        <template slot="logo"><slot name="logo"/></template>
-
         <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :metadata="data.metadata" :hide-packagist="hidePackagist" slot="more"/>
 
         <template slot="additional">
@@ -49,15 +46,17 @@
         </template>
 
         <template slot="actions" v-if="updateOnly">
+            <details-button :name="data.name" v-if="data.name"/>
             <button class="widget-button widget-button--update" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
         </template>
         <template slot="actions" v-else>
             <slot name="actions">
+                <details-button :name="data.name" v-if="data.name"/>
                 <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
                 <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isInstalled" :disabled="isModified" @click="update">
                     <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
                 </button-group>
-                <button class="widget-button widget-button--primary widget-button--add" v-else @click="install" :disabled="isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
+                <install-button :data="data" v-else/>
             </slot>
         </template>
 
@@ -71,9 +70,11 @@
     import Package from './Package';
     import More from './More';
     import ButtonGroup from '../../widgets/ButtonGroup';
+    import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
+    import InstallButton from '../../fragments/InstallButton';
 
     export default {
-        components: { Package, More, ButtonGroup },
+        components: { Package, More, ButtonGroup, InstallButton, DetailsButton },
 
         props: {
             data: {
@@ -85,7 +86,6 @@
             hint: String,
             updateOnly: Boolean,
             hidePackagist: Boolean,
-            shaveDescription: Boolean,
         },
 
         data: () => ({
@@ -97,6 +97,7 @@
 
         computed: {
             ...mapGetters('packages', [
+                'installed',
                 'packageInstalled',
                 'packageRequired',
                 'packageAdded',
@@ -190,8 +191,8 @@
 
                 if (this.data.abandoned) {
                     return {
-                        title: this.data.replacement && this.$t('ui.package.replacement', { replacement: this.data.replacement }) || this.$t('ui.package.abandonedText'),
-                        text: this.$t('ui.package.abandonedTitle'),
+                        title: this.data.replacement && this.$t('ui.package.abandonedReplace', { replacement: this.data.replacement }) || this.$t('ui.package.abandonedText'),
+                        text: this.$t('ui.package.abandoned'),
                     };
                 }
 
@@ -245,7 +246,7 @@
                     return null;
                 }
 
-                return this.$store.state.packages.installed[this.data.name].constraint;
+                return this.installed[this.data.name].constraint;
             },
 
             constraintRequired() {

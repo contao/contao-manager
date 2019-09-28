@@ -41,7 +41,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .progress-bar {
         position: relative;

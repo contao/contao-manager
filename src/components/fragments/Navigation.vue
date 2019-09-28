@@ -2,6 +2,7 @@
     <nav role="navigation" class="navigation">
         <a class="navigation__toggle" @click.prevent="toggleNavigation"><span></span><span></span><span></span></a>
         <ul class="navigation__group navigation__group--main">
+            <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.discover"><a>{{ $t('ui.navigation.discover') }}</a></router-link>
             <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.packages">
                 <a>{{ 'ui.navigation.packages' | translate }}<span class="navigation__item-badge" v-if="packageChanges > 0">{{ packageChanges }}</span></a>
             </router-link>
@@ -85,7 +86,7 @@
 
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     $nav-offset: 250px;
 

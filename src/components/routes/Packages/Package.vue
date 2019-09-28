@@ -14,12 +14,7 @@
         </transition>
 
         <div class="package__inside">
-            <figure class="package__icon">
-                <slot name="logo">
-                    <img :src="logo" alt="" v-if="logo">
-                    <img src="../../../assets/images/placeholder.png" alt="" v-else>
-                </slot>
-            </figure>
+            <package-logo class="package__icon" :src="logo"/>
 
             <div class="package__about">
                 <h1 :class="{ package__headline: true, 'package__headline--badge': badge }">
@@ -28,7 +23,7 @@
                     <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
                 </h1>
 
-                <shave tag="p" class="package__description" :disabled="!shaveDescription" :html="description"/>
+                <p class="package__description" v-html="description"></p>
                 <p class="package__additional">
                     <slot name="additional"/>
                     <slot name="more"/>
@@ -52,10 +47,10 @@
 </template>
 
 <script>
-    import Shave from '../../fragments/Shave';
+    import PackageLogo from 'contao-package-list/src/components/fragments/Logo';
 
     export default {
-        components: { Shave },
+        components: { PackageLogo },
 
         props: {
             title: String,
@@ -65,13 +60,12 @@
             description: String,
             hint: String,
             hintClose: String,
-            shaveDescription: Boolean,
         },
     };
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .package {
         margin-bottom: 14px;
@@ -224,6 +218,10 @@
         }
 
         &__description {
+            display: -webkit-box;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             margin-bottom: 1em;
 
             em {

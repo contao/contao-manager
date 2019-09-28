@@ -60,11 +60,11 @@
 <script>
     import { mapGetters } from 'vuex';
 
-    import metadata from '../../../mixins/metadata';
+    import metadata from 'contao-package-list/src/mixins/metadata';
     import Package from './Package';
     import LocalPackage from './LocalPackage';
     import ProgressBar from '../../fragments/ProgressBar';
-    import LoadingButton from '../../widgets/LoadingButton';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
         mixins: [metadata],

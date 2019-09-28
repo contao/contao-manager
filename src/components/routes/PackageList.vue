@@ -1,22 +1,16 @@
 <template>
     <package-base @start-upload="openFileSelector()">
         <div class="package-list">
-            <loader v-if="packages === null || uploads === null" class="package-list__status">
-                <p>{{ 'ui.packagelist.loading' | translate }}</p>
-            </loader>
+            <package-uploads ref="uploader" v-if="uploads !== false"/>
 
-            <template v-else>
-                <package-uploads ref="uploader" v-if="uploads !== false"/>
+            <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.added' | translate }}</h2>
+            <root-package :package="requiredPackages['contao/manager-bundle']" v-if="requiredPackages['contao/manager-bundle']"/>
+            <local-package v-for="item in visibleRequired" :data="item" :key="item.name"/>
+            <local-package v-for="item in addedPackages" :data="item" :key="item.name"/>
 
-                <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.added' | translate }}</h2>
-                <root-package :package="requiredPackages['contao/manager-bundle']" v-if="requiredPackages['contao/manager-bundle']"/>
-                <local-package v-for="item in visibleRequired" :data="item" :key="item.name"/>
-                <local-package v-for="item in addedPackages" :data="item" :key="item.name"/>
-
-                <h2 class="package-list__headline" v-if="showHeadline">{{ 'ui.packagelist.installed' | translate }}</h2>
-                <root-package :package="packages['contao/manager-bundle']" v-if="packages['contao/manager-bundle']"/>
-                <local-package v-for="item in visibleInstalled" :data="item" :key="item.name"/>
-            </template>
+            <h2 class="package-list__headline" v-if="showHeadline">{{ 'ui.packagelist.installed' | translate }}</h2>
+            <root-package :package="installed['contao/manager-bundle']" v-if="installed['contao/manager-bundle']"/>
+            <local-package v-for="item in visibleInstalled" :data="item" :key="item.name"/>
         </div>
 
         <div class="package-actions__inner" slot="actions" v-if="hasUploads && !uploading">
@@ -36,24 +30,23 @@
 <script>
     import { mapState, mapGetters } from 'vuex';
 
-    import Loader from '../fragments/Loader';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import PackageBase from './Packages/Base';
     import PackageUploads from './Packages/Uploads';
     import LocalPackage from './Packages/LocalPackage';
     import RootPackage from './Packages/RootPackage';
-    import LoadingButton from '../widgets/LoadingButton';
 
     export default {
-        components: { Loader, PackageBase, PackageUploads, RootPackage, LocalPackage, LoadingButton },
+        components: { PackageBase, PackageUploads, RootPackage, LocalPackage, LoadingButton },
 
         computed: {
             ...mapState('packages', {
-                'packages': 'installed',
                 'addedPackages': 'add',
                 'requiredPackages': 'required',
             }),
             ...mapState('packages/uploads', ['uploads', 'uploading', 'files', 'removing', 'confirmed']),
             ...mapGetters('packages', [
+                'installed',
                 'totalChanges',
                 'hasAdded',
                 'packageAdded',
@@ -64,7 +57,7 @@
             ]),
             ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
 
-            notRootInstalled: vm => Object.values(vm.packages).filter(pkg => pkg.name !== 'contao/manager-bundle'),
+            notRootInstalled: vm => Object.values(vm.installed).filter(pkg => pkg.name !== 'contao/manager-bundle'),
             requiredNotAdded: vm => Object.values(vm.requiredPackages).filter(
                 pkg => pkg.name !== 'contao/manager-bundle' && !Object.values(vm.addedPackages).find(add => add.name === pkg.name),
             ),
@@ -102,21 +95,11 @@
                 this.$store.commit('packages/uploads/unconfirmAll');
             },
         },
-
-        mounted() {
-            if (null === this.packages) {
-                this.$store.dispatch('packages/load');
-            }
-
-            if (null === this.packages) {
-                this.$store.dispatch('packages/uploads/load');
-            }
-        },
     };
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .package-list {
         position: relative;

@@ -1,7 +1,5 @@
 <template>
     <composer-package hide-packagist :name="''" :update-only="packageInstalled('contao/manager-bundle')" :data="data">
-        <img src="../../../assets/images/logo.svg" alt="" slot="logo">
-
         <template slot="actions" v-if="!packageInstalled('contao/manager-bundle')">
             <button class="widget-button widget-button--update" disabled>{{ $t('ui.package.updateButton') }}</button>
         </template>
@@ -34,6 +32,7 @@
                         title: 'Contao Open Source CMS',
                         description: 'Contao is an Open Source PHP Content Management System.',
                         homepage: 'https://contao.org',
+                        logo: 'images/contao.svg',
                         support: {
                             docs: 'https://docs.contao.org',
                             forum: 'https://community.contao.org',

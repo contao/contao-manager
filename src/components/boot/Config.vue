@@ -57,7 +57,7 @@
     import TextField from '../widgets/TextField';
     import SelectMenu from '../widgets/SelectMenu';
     import Checkbox from '../widgets/Checkbox';
-    import LoadingButton from '../widgets/LoadingButton';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
         mixins: [boot],
@@ -186,7 +186,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .config-check {
         &__header {

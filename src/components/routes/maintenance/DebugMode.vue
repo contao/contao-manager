@@ -28,8 +28,8 @@
     import { mapState } from 'vuex';
 
     import MessageOverlay from '../../fragments/MessageOverlay';
-    import Loader from '../../fragments/Loader';
-    import LoadingButton from '../../widgets/LoadingButton';
+    import Loader from 'contao-package-list/src/components/fragments/Loader';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
         components: { MessageOverlay, Loader, LoadingButton },

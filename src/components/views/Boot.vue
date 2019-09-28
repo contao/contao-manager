@@ -32,7 +32,7 @@
     import routes from '../../router/routes';
 
     import BoxedLayout from '../layouts/Boxed';
-    import Loader from '../fragments/Loader';
+    import Loader from 'contao-package-list/src/components/fragments/Loader';
     import SelfUpdate from '../boot/SelfUpdate';
     import Config from '../boot/Config';
     import PhpWeb from '../boot/PhpWeb';
@@ -152,7 +152,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .view-boot {
         &__header {

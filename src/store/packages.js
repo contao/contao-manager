@@ -2,7 +2,7 @@
 
 import Vue from 'vue';
 
-import search from './packages/search';
+import details from 'contao-package-list/src/store/packages/details';
 import uploads from './packages/uploads';
 
 const filterInvisiblePackages = (pkg) => {
@@ -13,11 +13,12 @@ export default {
     namespaced: true,
 
     modules: {
-        search,
+        details,
         uploads,
     },
 
     state: {
+        root: null,
         local: null,
         installed: null,
         required: {},
@@ -52,19 +53,40 @@ export default {
 
         canResetChanges: (s, get) => get.totalChanges > get.totalRequired,
 
-        visibleInstalled: s => Object.values(s.installed).filter(filterInvisiblePackages),
+        isSuggested: state => name => !!Object.values(state.local).find(pkg => (pkg.type.substr(0, 7) === 'contao-' && pkg.suggest && pkg.suggest.hasOwnProperty(name))),
+
         visibleRequired: s => Object.values(s.required).filter(filterInvisiblePackages),
+        visibleInstalled: (s, g) => Object.values(g.installed).filter(filterInvisiblePackages),
+
+        installed: (state) => {
+            if (!state.root || !state.installed) {
+                return [];
+            }
+
+            const packages = [];
+
+            Object.keys(state.root.require).forEach((require) => {
+                if (!require.includes('/')) {
+                    return;
+                }
+
+                packages[require] = {
+                    name: require,
+                    version: false,
+                    constraint: state.root.require[require],
+                };
+
+                if (state.installed[require]) {
+                    packages[require] = Object.assign(packages[require], state.installed[require]);
+                }
+            });
+
+            return packages;
+        }
     },
 
     mutations: {
-        setInstalled(state, packages) {
-            if (packages === null) {
-                state.local = null;
-                state.installed = null;
-                state.required = {};
-                return;
-            }
-
+        setInstalled(state, { root, local: packages }) {
             const installed = {};
             const required = {};
 
@@ -76,12 +98,17 @@ export default {
                 }
             });
 
+            state.root = root;
+            state.local = packages;
             state.installed = installed;
             state.required = required;
         },
 
-        setLocal(state, packages) {
-            state.local = packages;
+        clearInstalled(state) {
+            state.root = null;
+            state.local = null;
+            state.installed = null;
+            state.required = {};
         },
 
         add(state, pkg) {
@@ -132,7 +159,7 @@ export default {
 
     actions: {
         async load({ commit }) {
-            commit('setInstalled', null);
+            commit('clearInstalled');
             commit('reset');
 
             const packages = {};
@@ -143,24 +170,7 @@ export default {
             const root = (await load[0]).body;
             const local = (await load[1]).body;
 
-            Object.keys(root.require).forEach((require) => {
-                if (!require.includes('/')) {
-                    return;
-                }
-
-                packages[require] = {
-                    name: require,
-                    version: false,
-                    constraint: root.require[require],
-                };
-
-                if (local[require]) {
-                    packages[require] = Object.assign(packages[require], local[require]);
-                }
-            });
-
-            commit('setInstalled', packages);
-            commit('setLocal', local);
+            commit('setInstalled', { root, local });
 
             return packages;
         },

@@ -1,8 +1,7 @@
 <template>
     <composer-package
-        shave-description
         :hide-packagist="isUpload"
-        :data="metadata || data"
+        :data="packageData"
         :name="nameOverride"
         :hint="hint"
     >
@@ -25,7 +24,9 @@
 </template>
 
 <script>
-    import metadata from '../../../mixins/metadata';
+    import { mapState } from 'vuex';
+
+    import metadata from 'contao-package-list/src/mixins/metadata';
     import ComposerPackage from './ComposerPackage';
 
     export default {
@@ -41,20 +42,22 @@
         },
 
         computed: {
+            ...mapState('packages', ['installed']),
+
             isProvider: vm => vm.data.type === 'contao-provider',
 
-            isUpload:
-                vm => vm.data['installation-source'] === 'dist'
-                    && vm.data.dist
-                    && (new RegExp('/contao-manager/packages/[^/]+.zip$', 'i')).test(vm.data.dist.url),
+            isUpload: vm => vm.data['installation-source'] === 'dist'
+                && vm.data.dist
+                && (new RegExp('/contao-manager/packages/[^/]+.zip$', 'i')).test(vm.data.dist.url),
 
-            nameOverride() {
-                if (this.isUpload) {
-                    return '';
-                }
+            nameOverride: vm => vm.isUpload ? '' : null,
 
-                return null;
-            },
+            packageData: vm => Object.assign(
+                {},
+                vm.installed[vm.data.name] || {},
+                vm.metadata || {},
+                vm.data
+            ),
         },
     };
 </script>

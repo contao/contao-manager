@@ -37,3 +37,23 @@
         },
     };
 </script>
+
+<style lang="scss">
+    .widget-checkbox {
+        input {
+            position: absolute;
+            visibility: hidden;
+        }
+
+        label {
+            display: block;
+            padding-left: 25px;
+            background: url("../../assets/images/widget-checkbox--off.svg") 0 1px no-repeat;
+            background-size: 20px 20px;
+        }
+
+        input:checked + label {
+            background-image: url("../../assets/images/widget-checkbox--on.svg");
+        }
+    }
+</style>
