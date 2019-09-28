@@ -2,12 +2,14 @@
     <package-details>
         <template #package-actions>
             <template v-if="isInstalled">
-                <strong>{{ $t('ui.package.installed') }}</strong>
-                <p>{{ $t('ui.package.version', { version: installedPackage.version }) }}</p>
-                <time :dateTime="installedPackage.time">({{ installedPackage.time | datimFormat }})</time>
+                <p class="package-popup__installed">
+                    <strong>{{ $t('ui.package.installed') }}</strong>
+                    {{ $t('ui.package.version', { version: installedPackage.version }) }}
+                    <time :dateTime="installedPackage.time">({{ installedPackage.time | datimFormat }})</time>
+                </p>
             </template>
             <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="metadata && metadata.private">{{ $t('ui.package.homepage') }}</a>
-            <install-button inline :data="data" v-else-if="canBeInstalled"/>
+            <install-button :data="data" v-else-if="canBeInstalled"/>
         </template>
         <template #suggest-actions="{ name }">
             <install-button inline small :data="{ name }" v-if="isSuggested(name)"/>
@@ -43,11 +45,25 @@
                 && ((vm.metadata && vm.metadata.supported) || vm.isSuggested(vm.data.name)),
 
             installedPackage: vm => vm.installed[vm.data.name],
-
         }
     };
 </script>
 
 <style lang="scss">
+    @import "~contao-package-list/src/assets/styles/defaults";
 
+    .package-popup {
+        &__installed {
+            strong {
+                display: block;
+            }
+
+            @include screen(600) {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                text-align: center;
+            }
+        }
+    }
 </style>
