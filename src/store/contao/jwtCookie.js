@@ -6,7 +6,7 @@ const handle = (request, { commit }) => new Promise((resolve, reject) => {
     request.then(
         (response) => {
             commit('setCache', response.body);
-            commit('setIsDebugEnabled', response.status !== 204);
+            commit('setIsDebugEnabled', response.status !== 204 && response.data.debug);
 
             resolve(response.body);
         },
