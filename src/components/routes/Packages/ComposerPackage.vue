@@ -9,8 +9,6 @@
         :hint-close="hintClose"
         @close-hint="restore"
     >
-        <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :metadata="data.metadata" :hide-packagist="hidePackagist" slot="more"/>
-
         <template slot="additional">
             <strong class="package__version package__version--additional" v-if="data.version">
                 {{ 'ui.package.version' | translate({ version: data.version }) }}
@@ -68,13 +66,12 @@
     import { mapGetters } from 'vuex';
 
     import Package from './Package';
-    import More from './More';
     import ButtonGroup from '../../widgets/ButtonGroup';
     import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
     import InstallButton from '../../fragments/InstallButton';
 
     export default {
-        components: { Package, More, ButtonGroup, InstallButton, DetailsButton },
+        components: { Package, ButtonGroup, InstallButton, DetailsButton },
 
         props: {
             data: {

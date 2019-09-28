@@ -19,7 +19,7 @@
 
 <script>
     import ButtonGroup from '../../widgets/ButtonGroup';
-    import LinkMenu from '../../fragments/LinkMenu';
+    import LinkMenu from 'contao-package-list/src/components/fragments/LinkMenu';
 
     export default {
         components: { ButtonGroup, LinkMenu },

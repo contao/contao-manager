@@ -26,7 +26,6 @@
                 <p class="package__description" v-html="description"></p>
                 <p class="package__additional">
                     <slot name="additional"/>
-                    <slot name="more"/>
                 </p>
             </div>
 
