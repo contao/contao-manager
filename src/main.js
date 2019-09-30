@@ -17,7 +17,7 @@ Vue.http.interceptors.push((request, next) => {
     const url = request.url;
 
     if (request.url.slice(0, 4) === 'api/') {
-        request.url = `${request.url}?_locale=${Vue.i18n.locale()}`;
+        request.headers.set('Accept-Language', Vue.i18n.locale());
     }
 
     next((response) => {

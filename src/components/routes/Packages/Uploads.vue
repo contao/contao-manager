@@ -2,7 +2,7 @@
     <div v-if="uploads !== null">
         <div v-show="$refs.uploader && $refs.uploader.dropActive" class="package-uploads__overlay">
             <div>
-                <img src="../../../assets/images/button-upload.svg" width="128" height="128">
+                <img src="../../../assets/images/button-upload.svg" alt="" width="128" height="128">
                 <p>{{ $t('ui.packages.uploadOverlay') }}</p>
             </div>
         </div>
@@ -10,12 +10,12 @@
         <file-upload
             name="package"
             ref="uploader"
-            :post-action="uploadUrl"
+            post-action="api/packages/uploads"
             :multiple="true"
             :drop="true"
             :drop-directory="false"
             :chunk-enabled="true"
-            :chunk="{ action: uploadUrl }"
+            :chunk="{ action: 'api/packages/uploads' }"
             @input="setFiles"
             @input-file="updateFile"
             @input-filter="filterFile"
@@ -44,8 +44,6 @@
         computed: {
             ...mapState('packages/uploads', ['uploads', 'files']),
             ...mapGetters('packages/uploads', ['hasUploads', 'unconfirmedUploads']),
-
-            uploadUrl: vm => `api/packages/uploads?_locale=${vm.$i18n.locale()}`,
         },
 
         methods: {

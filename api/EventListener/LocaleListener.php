@@ -23,7 +23,7 @@ class LocaleListener extends BaseLocaleListener
 
         $request = $event->getRequest();
 
-        if ($locale = $request->query->get('_locale')) {
+        if ($locale = $request->getPreferredLanguage()) {
             $request->setLocale($locale);
         }
     }
