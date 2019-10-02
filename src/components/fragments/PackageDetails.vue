@@ -14,6 +14,9 @@
         <template #suggest-actions="{ name }">
             <install-button inline small :data="{ name }" v-if="isSuggested(name)"/>
         </template>
+        <template #features-actions="{ name }">
+            <install-button inline small :data="{ name }"/>
+        </template>
     </package-details>
 </template>
 

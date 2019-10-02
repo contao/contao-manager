@@ -207,6 +207,7 @@
     "ui.package.hintConstraintBest": "This package will be installed in the best available version when you apply the changes.",
     "ui.package.hintConstraintChange": "The constraint for this package will be changed from \"{from}\" to \"{to}\" when you apply the changes.",
     "ui.package.hintConstraintUpdate": "This package will be updated when you apply the changes.",
+    "ui.package.hintAdded": "This package will be added when you apply the changes.",
     "ui.package.hintRemoved": "This package will be removed when you apply the changes.",
     "ui.package.requiredTitle": "manually added",
     "ui.package.requiredText": "This package is required in your composer.json but not installed.",

@@ -132,12 +132,12 @@ JSON;
         } else {
             $require = <<<JSON
         "contao/manager-bundle": "$version.*",
-        "contao/calendar-bundle": "^$version",
-        "contao/comments-bundle": "^$version",
-        "contao/faq-bundle": "^$version",
-        "contao/listing-bundle": "^$version",
-        "contao/news-bundle": "^$version",
-        "contao/newsletter-bundle": "^$version",
+        "contao/calendar-bundle": "$version.*",
+        "contao/comments-bundle": "$version.*",
+        "contao/faq-bundle": "$version.*",
+        "contao/listing-bundle": "$version.*",
+        "contao/news-bundle": "$version.*",
+        "contao/newsletter-bundle": "$version.*",
         "contao/conflicts": "*@dev"
 JSON;
         }

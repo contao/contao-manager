@@ -42,6 +42,8 @@
             </fieldset>
 
         </div>
+
+        <slot name="features"/>
     </article>
 </template>
 
@@ -75,7 +77,7 @@
         &__hint {
             position: relative;
             padding: 8px 20px 8px 20px;
-            background: #e8c8bc;
+            background: $hint-background;
             font-weight: $font-weight-medium;
             font-size: 12px;
             line-height: 1.8;
@@ -83,7 +85,7 @@
 
             @include screen(800) {
                 padding-left: 56px;
-                background: #e8c8bc url('../../../assets/images/hint.svg') 20px 5px no-repeat;
+                background: $hint-background url('../../../assets/images/hint.svg') 20px 5px no-repeat;
                 background-size: 28px 28px;
             }
 
@@ -105,7 +107,7 @@
         &__hint-close {
             float: right;
             padding-left: 18px;
-            color: #bd2e20;
+            color: $hint-link;
             background: url('../../../assets/images/close.svg') left center no-repeat;
             background-size: 14px 14px;
         }
@@ -397,6 +399,15 @@
                 @include screen(600) {
                     margin: 15px 0 0;
                 }
+            }
+        }
+
+        &__features {
+            padding: 0 0 10px 0;
+            margin: -20px 0 0;
+
+            @include screen(1024) {
+                margin-top: -10px;
             }
         }
     }

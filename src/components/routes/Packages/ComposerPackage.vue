@@ -58,6 +58,14 @@
             </slot>
         </template>
 
+        <template #features>
+            <section class="package__features">
+                <template v-for="(reason, name) in data.features">
+                    <feature-package :name="name" :reason="reason"/>
+                </template>
+            </section>
+        </template>
+
     </package>
 </template>
 
@@ -69,9 +77,10 @@
     import ButtonGroup from '../../widgets/ButtonGroup';
     import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
     import InstallButton from '../../fragments/InstallButton';
+    import FeaturePackage from './FeaturePackage';
 
     export default {
-        components: { Package, ButtonGroup, InstallButton, DetailsButton },
+        components: { Package, FeaturePackage, ButtonGroup, InstallButton, DetailsButton },
 
         props: {
             data: {
@@ -82,7 +91,6 @@
             title: String,
             hint: String,
             updateOnly: Boolean,
-            hidePackagist: Boolean,
         },
 
         data: () => ({
@@ -283,11 +291,7 @@
             },
 
             install() {
-                /* eslint-disable no-underscore-dangle */
-                const data = Object.assign({}, this.data);
-                delete data._highlightResult;
-
-                this.$store.commit('packages/add', data);
+                this.$store.commit('packages/add', { name: this.data.name });
             },
 
             update() {

@@ -5,9 +5,9 @@ import Vue from 'vue';
 import details from 'contao-package-list/src/store/packages/details';
 import uploads from './packages/uploads';
 
-const filterInvisiblePackages = (pkg) => {
-    return pkg.name !== 'contao/manager-bundle' && pkg.name !== 'contao/conflicts';
-};
+const filterInvisiblePackages = (packages, getters) => Object.values(packages).filter(
+    (pkg) => pkg.name !== 'contao/manager-bundle' && pkg.name !== 'contao/conflicts' && !getters.isFeature(pkg.name),
+);
 
 export default {
     namespaced: true,
@@ -26,10 +26,11 @@ export default {
         change: {},
         update: [],
         remove: [],
+        features: {},
     },
 
     getters: {
-        hasAdded: state => Object.keys(state.add).length > 0 || Object.keys(state.required).length > 0,
+        hasAdded: (s, g) => g.visibleAdded.length > 0 || g.visibleRequired.length > 0,
 
         packageInstalled: state => name => Object.keys(state.installed).includes(name),
         versionInstalled: state => (name, version) => Object.keys(state.installed).includes(name) && state.installed[name].version === version,
@@ -54,9 +55,11 @@ export default {
         canResetChanges: (s, get) => get.totalChanges > get.totalRequired,
 
         isSuggested: state => name => !!Object.values(state.local).find(pkg => (pkg.type.substr(0, 7) === 'contao-' && pkg.suggest && pkg.suggest.hasOwnProperty(name))),
+        isFeature: (s, g) => (name) => !!Object.keys(s.features).find((pkg) => s.features[pkg].includes(name) && g.packageInstalled(pkg)),
 
-        visibleRequired: s => Object.values(s.required).filter(filterInvisiblePackages),
-        visibleInstalled: (s, g) => Object.values(g.installed).filter(filterInvisiblePackages),
+        visibleRequired: (s, g) => filterInvisiblePackages(s.required, g),
+        visibleInstalled: (s, g) => filterInvisiblePackages(g.installed, g),
+        visibleAdded: (s, g) => filterInvisiblePackages(s.add, g),
 
         installed: (state) => {
             if (!state.root || !state.installed) {
@@ -82,7 +85,7 @@ export default {
             });
 
             return packages;
-        }
+        },
     },
 
     mutations: {
@@ -126,7 +129,11 @@ export default {
         },
 
         updateAll(state) {
-            Object.keys(state.installed).forEach((name) => {
+            Object.keys(state.root.require).forEach((name) => {
+                if (!name.includes('/')) {
+                    return;
+                }
+
                 state.update.push(name);
             });
         },
@@ -154,6 +161,12 @@ export default {
             state.change = {};
             state.update = [];
             state.remove = [];
+        },
+
+        pushFeatures(state, features) {
+            Object.keys(features).forEach((name) => {
+                Vue.set(state.features, name, features[name]);
+            });
         },
     },
 
@@ -187,6 +200,27 @@ export default {
             Object.keys(state.add).forEach((pkg) => {
                 require[state.add[pkg].name] = state.add[pkg].constraint || null;
                 update.push(state.add[pkg].name);
+            });
+
+            Object.keys(state.features).forEach((pkg) => {
+                state.features[pkg].forEach((feature) => {
+                    if (Object.keys(state.root.require).includes(feature)) {
+                        if (update.includes(pkg)) {
+                            update.push(feature);
+                        }
+
+                        if (require[pkg]) {
+                            require[feature] = require[pkg];
+                        } else if (remove.includes(pkg)) {
+                            remove.push(feature);
+                        }
+                    }
+
+                    // Feature was added, make sure it's the same version as the parent
+                    if (require.hasOwnProperty(feature) && !require.hasOwnProperty(pkg) && state.root.require[pkg]) {
+                        require[feature] = state.root.require[pkg];
+                    }
+                });
             });
 
             const task = {

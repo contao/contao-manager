@@ -4,12 +4,12 @@
             <package-uploads ref="uploader" v-if="uploads !== false"/>
 
             <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.added' | translate }}</h2>
-            <root-package :package="requiredPackages['contao/manager-bundle']" v-if="requiredPackages['contao/manager-bundle']"/>
+            <local-package update-only class="package-list__root" :data="requiredPackages['contao/manager-bundle']" v-if="requiredPackages['contao/manager-bundle']"/>
             <local-package v-for="item in visibleRequired" :data="item" :key="item.name"/>
-            <local-package v-for="item in addedPackages" :data="item" :key="item.name"/>
+            <local-package v-for="item in visibleAdded" :data="item" :key="item.name"/>
 
             <h2 class="package-list__headline" v-if="showHeadline">{{ 'ui.packagelist.installed' | translate }}</h2>
-            <root-package :package="installed['contao/manager-bundle']" v-if="installed['contao/manager-bundle']"/>
+            <local-package update-only class="package-list__root" :data="installed['contao/manager-bundle']" v-if="installed['contao/manager-bundle']"/>
             <local-package v-for="item in visibleInstalled" :data="item" :key="item.name"/>
         </div>
 
@@ -34,14 +34,12 @@
     import PackageBase from './Packages/Base';
     import PackageUploads from './Packages/Uploads';
     import LocalPackage from './Packages/LocalPackage';
-    import RootPackage from './Packages/RootPackage';
 
     export default {
-        components: { PackageBase, PackageUploads, RootPackage, LocalPackage, LoadingButton },
+        components: { PackageBase, PackageUploads, LocalPackage, LoadingButton },
 
         computed: {
             ...mapState('packages', {
-                'addedPackages': 'add',
                 'requiredPackages': 'required',
             }),
             ...mapState('packages/uploads', ['uploads', 'uploading', 'files', 'removing', 'confirmed']),
@@ -54,13 +52,10 @@
                 'canResetChanges',
                 'visibleRequired',
                 'visibleInstalled',
+                'visibleAdded',
             ]),
             ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
 
-            notRootInstalled: vm => Object.values(vm.installed).filter(pkg => pkg.name !== 'contao/manager-bundle'),
-            requiredNotAdded: vm => Object.values(vm.requiredPackages).filter(
-                pkg => pkg.name !== 'contao/manager-bundle' && !Object.values(vm.addedPackages).find(add => add.name === pkg.name),
-            ),
             removingUploads: vm => vm.removing.length > 0,
             showHeadline: vm => vm.hasAdded || vm.hasUploads || vm.files.length,
         },
@@ -121,6 +116,10 @@
             font-size: 18px;
             font-weight: $font-weight-normal;
             margin: 30px 0 10px;
+        }
+
+        &__root {
+            border-bottom-color: $contao-color;
         }
     }
 </style>

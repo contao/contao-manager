@@ -1,9 +1,9 @@
 <template>
     <composer-package
-        :hide-packagist="isUpload"
         :data="packageData"
         :name="nameOverride"
         :hint="hint"
+        :update-only="updateOnly"
     >
         <template slot="release" v-if="isUpload">
             <input type="text" class="disabled" :title="$t('ui.package.uploadConstraint')" :value="data.version" disabled>
@@ -39,6 +39,7 @@
                 required: true,
             },
             hint: String,
+            updateOnly: Boolean,
         },
 
         computed: {

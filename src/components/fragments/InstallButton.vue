@@ -1,9 +1,9 @@
 <template>
     <confirm-button
-        :class="{ 'widget-button--small': small, 'widget-button--inline': inline }"
         color="primary"
         icon="add"
         :small="small"
+        :inline="inline"
         :disabled="isInstalled || disabled"
         @click="install"
     >{{ $t(small ? 'ui.package.installButtonShort' : 'ui.package.installButton') }}</confirm-button>
