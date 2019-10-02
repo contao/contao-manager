@@ -13,17 +13,19 @@
             <local-package v-for="item in visibleInstalled" :data="item" :key="item.name"/>
         </div>
 
-        <div class="package-actions__inner" slot="actions" v-if="hasUploads && !uploading">
-            <p class="package-actions__text">{{ $t('ui.packages.uploadMessage', { total: totalUploads }, totalUploads) }}</p>
-            <button class="package-actions__button widget-button widget-button--primary" :disabled="!canConfirmUploads || removingUploads" @click="confirmUploads">{{ $t('ui.packages.uploadApply') }}</button>
-            <loading-button class="package-actions__button" color="alert" :loading="removingUploads" @click="removeUploads">{{ $t('ui.packages.uploadReset') }}</loading-button>
-        </div>
-        <div class="package-actions__inner" slot="actions" v-else-if="totalChanges && !uploading">
-            <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
-            <button class="package-actions__button widget-button" @click="dryrunChanges">{{ $t('ui.packages.changesDryrun') }}</button>
-            <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ $t('ui.packages.changesApply') }}</button>
-            <button class="package-actions__button widget-button widget-button--alert" :disabled="!canResetChanges && !confirmed.length" @click="resetChanges">{{ $t('ui.packages.changesReset') }}</button>
-        </div>
+        <template #actions>
+            <div class="package-actions__inner" v-if="hasUploads && !uploading">
+                <p class="package-actions__text">{{ $t('ui.packages.uploadMessage', { total: totalUploads }, totalUploads) }}</p>
+                <button class="package-actions__button widget-button widget-button--primary" :disabled="!canConfirmUploads || removingUploads" @click="confirmUploads">{{ $t('ui.packages.uploadApply') }}</button>
+                <loading-button class="package-actions__button" color="alert" :loading="removingUploads" @click="removeUploads">{{ $t('ui.packages.uploadReset') }}</loading-button>
+            </div>
+            <div class="package-actions__inner" v-else-if="totalChanges && !uploading">
+                <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
+                <button class="package-actions__button widget-button" @click="dryrunChanges">{{ $t('ui.packages.changesDryrun') }}</button>
+                <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ $t('ui.packages.changesApply') }}</button>
+                <button class="package-actions__button widget-button widget-button--alert" :disabled="!canResetChanges && !confirmed.length" @click="resetChanges">{{ $t('ui.packages.changesReset') }}</button>
+            </div>
+        </template>
     </package-base>
 </template>
 

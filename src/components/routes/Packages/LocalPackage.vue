@@ -5,7 +5,7 @@
         :hint="hint"
         :update-only="updateOnly"
     >
-        <template slot="release" v-if="isUpload">
+        <template #release v-if="isUpload">
             <input type="text" class="disabled" :title="$t('ui.package.uploadConstraint')" :value="data.version" disabled>
             <p class="package__release-description package__version--release" v-if="isProvider">
                 <img src="../../../assets/images/lock.svg" width="24" height="24" alt=""/>
@@ -19,7 +19,7 @@
             </p>
         </template>
 
-        <template slot="actions"><slot name="actions"/></template>
+        <slot name="actions" slot="actions"/>
     </composer-package>
 </template>
 

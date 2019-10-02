@@ -9,14 +9,14 @@
         :hint-close="hintClose"
         @close-hint="restore"
     >
-        <template slot="additional">
+        <template #additional>
             <strong class="package__version package__version--additional" v-if="data.version">
                 {{ $t('ui.package.version', { version: data.version }) }}
             </strong>
             <span v-for="(item,k) in additional" :key="k">{{ item }}</span>
         </template>
 
-        <template slot="release">
+        <template #release>
             <slot name="release">
                 <fieldset>
                     <input
@@ -43,11 +43,11 @@
             </slot>
         </template>
 
-        <template slot="actions" v-if="updateOnly">
+        <template #actions v-if="updateOnly">
             <details-button :name="data.name" v-if="data.name"/>
             <button class="widget-button widget-button--update" :disabled="isModified" @click="update">{{ $t('ui.package.updateButton') }}</button>
         </template>
-        <template slot="actions" v-else>
+        <template #actions v-else>
             <slot name="actions">
                 <details-button :name="data.name" v-if="data.name"/>
                 <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>

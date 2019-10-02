@@ -2,7 +2,7 @@
     <package
         :title="file.name"
     >
-        <template slot="release">
+        <template #release>
             <progress-bar :amount="file.progress"/>
             <div class="package__version package__version--release">
                 <p><strong>{{ filesize }}</strong></p>

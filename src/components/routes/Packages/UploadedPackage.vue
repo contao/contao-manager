@@ -4,21 +4,21 @@
         :hint="hintUploading"
         v-if="!upload.success || upload.error"
     >
-        <template slot="hint" v-if="upload.error">
+        <template #hint v-if="upload.error">
             <p>
                 {{upload.error}}
                 <template v-if="upload.exception">{{upload.exception}}</template>
             </p>
         </template>
 
-        <template slot="release">
+        <template #release>
             <progress-bar :amount="progress"/>
             <div class="package__version package__version--release">
                 <p><strong>{{ filesize }}</strong></p>
             </div>
         </template>
 
-        <template slot="actions">
+        <template #actions>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
     </package>
@@ -28,7 +28,7 @@
         :hint="$t('ui.packages.uploadDuplicate')"
         v-else-if="isDuplicate(upload.id)"
     >
-        <template slot="actions">
+        <template #actions>
             <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
@@ -39,7 +39,7 @@
         :hint="$t('ui.packages.uploadInstalled')"
         v-else-if="versionInstalled(pkg.name, pkg.version)"
     >
-        <template slot="actions">
+        <template #actions>
             <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
@@ -49,7 +49,7 @@
         :data="pkg"
         v-else
     >
-        <template slot="actions">
+        <template #actions>
             <button class="widget-button widget-button--primary widget-button--add" :disabled="!canBeAdded" @click="addPackage">{{ $t('ui.package.installButton') }}</button>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
