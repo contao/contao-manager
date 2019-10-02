@@ -1,15 +1,15 @@
 <template>
     <section class="maintenance">
         <div class="maintenance__inside">
-            <figure class="maintenance__image"><img src="../../../assets/images/composer-logo.png" /></figure>
+            <figure class="maintenance__image"><img src="../../../assets/images/composer-logo.png" alt=""></figure>
 
             <div class="maintenance__about">
-                <h1>{{ 'ui.maintenance.dumpAutoload.title' | translate }}</h1>
-                <p>{{ 'ui.maintenance.dumpAutoload.description' | translate }}</p>
+                <h1>{{ $t('ui.maintenance.dumpAutoload.title') }}</h1>
+                <p>{{ $t('ui.maintenance.dumpAutoload.description') }}</p>
             </div>
 
             <fieldset class="maintenance__actions">
-                <button class="widget-button widget-button--primary widget-button--update" @click="execute">{{ 'ui.maintenance.dumpAutoload.button' | translate }}</button>
+                <button class="widget-button widget-button--primary widget-button--update" @click="execute">{{ $t('ui.maintenance.dumpAutoload.button') }}</button>
             </fieldset>
         </div>
     </section>

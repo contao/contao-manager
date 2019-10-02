@@ -3,8 +3,8 @@
 
         <section class="package-tools">
             <slot name="search">
-                <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updatePackages">{{ 'ui.packages.updateButton' | translate }}</button>
-                <button class="package-tools__button widget-button widget-button--upload" :disabled="!uploads || uploading" :title="uploadError" @click.prevent="$emit('start-upload')">{{ 'ui.packages.uploadButton' | translate }}</button>
+                <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updatePackages">{{ $t('ui.packages.updateButton') }}</button>
+                <button class="package-tools__button widget-button widget-button--upload" :disabled="!uploads || uploading" :title="uploadError" @click.prevent="$emit('start-upload')">{{ $t('ui.packages.uploadButton') }}</button>
             </slot>
         </section>
 

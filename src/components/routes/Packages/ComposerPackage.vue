@@ -11,7 +11,7 @@
     >
         <template slot="additional">
             <strong class="package__version package__version--additional" v-if="data.version">
-                {{ 'ui.package.version' | translate({ version: data.version }) }}
+                {{ $t('ui.package.version', { version: data.version }) }}
             </strong>
             <span v-for="(item,k) in additional" :key="k">{{ item }}</span>
         </template>
@@ -34,10 +34,10 @@
                         :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
                         @click="editConstraint"
                         :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
-                    >{{ 'ui.package.editConstraint' | translate }}</button>
+                    >{{ $t('ui.package.editConstraint') }}</button>
                 </fieldset>
                 <div class="package__version package__version--release" v-if="data.version">
-                    <strong>{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
+                    <strong>{{ $t('ui.package.version', { version: data.version }) }}</strong>
                     <time :dateTime="data.time" v-if="data.time">({{ data.time | datimFormat }})</time>
                 </div>
             </slot>
@@ -45,14 +45,14 @@
 
         <template slot="actions" v-if="updateOnly">
             <details-button :name="data.name" v-if="data.name"/>
-            <button class="widget-button widget-button--update" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
+            <button class="widget-button widget-button--update" :disabled="isModified" @click="update">{{ $t('ui.package.updateButton') }}</button>
         </template>
         <template slot="actions" v-else>
             <slot name="actions">
                 <details-button :name="data.name" v-if="data.name"/>
-                <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
                 <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isInstalled" :disabled="isModified" @click="update">
-                    <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                    <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
                 </button-group>
                 <install-button :data="data" v-else/>
             </slot>

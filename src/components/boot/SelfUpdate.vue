@@ -1,7 +1,7 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.selfUpdate.title')" :description="bootDescription">
-        <button class="widget-button widget-button--warning" v-if="!isSupported && bootState === 'action'" @click="next" :disabled="processing">{{ 'ui.server.selfUpdate.continue' | translate }}</button>
-        <button class="widget-button widget-button--alert" v-else-if="hasUpdate" @click="update" :disabled="processing">{{ 'ui.server.selfUpdate.button' | translate }}</button>
+        <button class="widget-button widget-button--warning" v-if="!isSupported && bootState === 'action'" @click="next" :disabled="processing">{{ $t('ui.server.selfUpdate.continue') }}</button>
+        <button class="widget-button widget-button--alert" v-else-if="hasUpdate" @click="update" :disabled="processing">{{ $t('ui.server.selfUpdate.button') }}</button>
     </boot-check>
 </template>
 

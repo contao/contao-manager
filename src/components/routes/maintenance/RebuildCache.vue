@@ -1,11 +1,11 @@
 <template>
     <section class="maintenance">
         <div class="maintenance__inside">
-            <figure class="maintenance__image"><img src="../../../assets/images/symfony-logo.svg" /></figure>
+            <figure class="maintenance__image"><img src="../../../assets/images/symfony-logo.svg" alt=""></figure>
 
             <div class="maintenance__about">
-                <h1>{{ 'ui.maintenance.rebuildCache.title' | translate }}</h1>
-                <p>{{ 'ui.maintenance.rebuildCache.description' | translate }}</p>
+                <h1>{{ $t('ui.maintenance.rebuildCache.title') }}</h1>
+                <p>{{ $t('ui.maintenance.rebuildCache.description') }}</p>
             </div>
 
             <fieldset class="maintenance__actions">

@@ -3,7 +3,7 @@
         <header class="view-account__header">
             <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
             <p class="view-account__product">
-                <strong>{{ 'ui.account.welcome' | translate }}</strong>
+                <strong>{{ $t('ui.account.welcome') }}</strong>
                 Contao Manager @package_version@
             </p>
             <p class="view-account__intro" v-html="$t('ui.account.intro')"></p>
@@ -11,8 +11,8 @@
 
         <main class="view-account__form">
             <form @submit.prevent="createAccount">
-                <h1 class="view-account__headline">{{ 'ui.account.headline' | translate }}</h1>
-                <p class="view-account__description">{{ 'ui.account.description' | translate }}</p>
+                <h1 class="view-account__headline">{{ $t('ui.account.headline') }}</h1>
+                <p class="view-account__description">{{ $t('ui.account.description') }}</p>
 
                 <fieldset class="view-account__fields">
                     <text-field ref="username" name="username" :label="$t('ui.account.username')" class="inline" :disabled="installing" v-model="username"></text-field>

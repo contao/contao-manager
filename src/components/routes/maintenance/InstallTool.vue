@@ -5,8 +5,8 @@
                 <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" alt="" /></figure>
 
                 <div class="maintenance__about">
-                    <h1>{{ 'ui.maintenance.installTool.title' | translate }}</h1>
-                    <p>{{ 'ui.maintenance.installTool.description' | translate }}</p>
+                    <h1>{{ $t('ui.maintenance.installTool.title') }}</h1>
+                    <p>{{ $t('ui.maintenance.installTool.description') }}</p>
                 </div>
 
                 <fieldset class="maintenance__actions" v-if="!safeMode">

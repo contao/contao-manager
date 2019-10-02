@@ -1,7 +1,7 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.composer.title')" :description="bootDescription">
-        <button v-if="bootState === 'action'" @click="install" class="widget-button widget-button--primary widget-button--run">{{ 'ui.server.composer.button' | translate }}</button>
-        <button v-if="bootState === 'action'" @click="runSafeMode" class="widget-button">{{ 'ui.server.composer.safeMode' | translate }}</button>
+        <button v-if="bootState === 'action'" @click="install" class="widget-button widget-button--primary widget-button--run">{{ $t('ui.server.composer.button') }}</button>
+        <button v-if="bootState === 'action'" @click="runSafeMode" class="widget-button">{{ $t('ui.server.composer.safeMode') }}</button>
     </boot-check>
 </template>
 

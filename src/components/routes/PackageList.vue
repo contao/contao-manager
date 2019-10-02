@@ -3,12 +3,12 @@
         <div class="package-list">
             <package-uploads ref="uploader" v-if="uploads !== false"/>
 
-            <h2 class="package-list__headline" v-if="hasAdded">{{ 'ui.packagelist.added' | translate }}</h2>
+            <h2 class="package-list__headline" v-if="hasAdded">{{ $t('ui.packagelist.added') }}</h2>
             <local-package update-only class="package-list__root" :data="requiredPackages['contao/manager-bundle']" v-if="requiredPackages['contao/manager-bundle']"/>
             <local-package v-for="item in visibleRequired" :data="item" :key="item.name"/>
             <local-package v-for="item in visibleAdded" :data="item" :key="item.name"/>
 
-            <h2 class="package-list__headline" v-if="showHeadline">{{ 'ui.packagelist.installed' | translate }}</h2>
+            <h2 class="package-list__headline" v-if="showHeadline">{{ $t('ui.packagelist.installed') }}</h2>
             <local-package update-only class="package-list__root" :data="installed['contao/manager-bundle']" v-if="installed['contao/manager-bundle']"/>
             <local-package v-for="item in visibleInstalled" :data="item" :key="item.name"/>
         </div>
@@ -20,9 +20,9 @@
         </div>
         <div class="package-actions__inner" slot="actions" v-else-if="totalChanges && !uploading">
             <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
-            <button class="package-actions__button widget-button" @click="dryrunChanges">{{ 'ui.packages.changesDryrun' | translate }}</button>
-            <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ 'ui.packages.changesApply' | translate }}</button>
-            <button class="package-actions__button widget-button widget-button--alert" :disabled="!canResetChanges && !confirmed.length" @click="resetChanges">{{ 'ui.packages.changesReset' | translate }}</button>
+            <button class="package-actions__button widget-button" @click="dryrunChanges">{{ $t('ui.packages.changesDryrun') }}</button>
+            <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ $t('ui.packages.changesApply') }}</button>
+            <button class="package-actions__button widget-button widget-button--alert" :disabled="!canResetChanges && !confirmed.length" @click="resetChanges">{{ $t('ui.packages.changesReset') }}</button>
         </div>
     </package-base>
 </template>

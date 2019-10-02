@@ -2,8 +2,8 @@
     <boxed-layout :wide="true" slotClass="view-boot" v-if="!currentView">
         <header class="view-boot__header">
             <img src="../../assets/images/boot.svg" width="80" height="80" alt="Contao Logo" class="view-boot__icon">
-            <h1 class="view-boot__headline">{{ 'ui.boot.headline' | translate }}</h1>
-            <p class="view-boot__description">{{ 'ui.boot.description' | translate }}</p>
+            <h1 class="view-boot__headline">{{ $t('ui.boot.headline') }}</h1>
+            <p class="view-boot__description">{{ $t('ui.boot.description') }}</p>
         </header>
         <main v-if="boot" class="view-boot__checks">
 
@@ -12,11 +12,11 @@
             <div class="clearfix"></div>
             <div class="view-boot__summary view-boot__summary--error" v-if="hasError">
                 <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                <h1 class="view-boot__issue">{{ 'ui.boot.issue1' | translate }}</h1>
-                <p class="view-boot__issue">{{ 'ui.boot.issue2' | translate }}</p>
+                <h1 class="view-boot__issue">{{ $t('ui.boot.issue1') }}</h1>
+                <p class="view-boot__issue">{{ $t('ui.boot.issue2') }}</p>
             </div>
             <div class="view-boot__summary" v-else-if="!autoContinue">
-                <button @click="finish" class="widget-button widget-button--primary view-boot__continue" :disabled="!canContinue">{{ 'ui.boot.run' | translate }}</button>
+                <button @click="finish" class="widget-button widget-button--primary view-boot__continue" :disabled="!canContinue">{{ $t('ui.boot.run') }}</button>
             </div>
         </main>
         <main v-else class="view-boot__loading">

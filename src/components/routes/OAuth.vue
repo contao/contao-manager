@@ -5,15 +5,15 @@
             <p class="view-oauth__product">Contao Manager</p>
         </header>
         <main class="view-oauth__form">
-            <h1 class="view-oauth__headline">{{ 'ui.oauth.headline' | translate }}</h1>
-            <p class="view-oauth__description">{{ 'ui.oauth.description' | translate }}</p>
+            <h1 class="view-oauth__headline">{{ $t('ui.oauth.headline') }}</h1>
+            <p class="view-oauth__description">{{ $t('ui.oauth.description') }}</p>
             <p class="view-oauth__client">{{ clientId }}</p>
 
             <loading-button class="view-oauth__button" color="primary" :disabled="!valid" :loading="authenticating" @click="allowAccess">
                 {{ $t('ui.oauth.allow') }}
             </loading-button>
             <button class="view-oauth__button widget-button" @click.prevent="denyAccess" :disabled="!valid || authenticating">
-                {{ 'ui.oauth.deny' | translate }}
+                {{ $t('ui.oauth.deny') }}
             </button>
         </main>
     </boxed-layout>

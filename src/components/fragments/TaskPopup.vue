@@ -28,11 +28,11 @@
                 <p class="task-popup__progress-text" v-if="currentTask && currentTask.progress">{{ currentTask.progress }}%</p>
             </loader>
             <div class="task-popup__summary" v-if="taskStatus === 'failed'">
-                <h2 class="task-popup__text">{{ 'ui.taskpopup.failedHeadline' | translate }}</h2>
+                <h2 class="task-popup__text">{{ $t('ui.taskpopup.failedHeadline') }}</h2>
                 <p class="task-popup__text" v-html="$t('ui.taskpopup.failedDescription')"></p>
-                <p class="task-popup__text"><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ 'ui.taskpopup.reportProblem' | translate }}</a></p>
+                <p class="task-popup__text"><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ $t('ui.taskpopup.reportProblem') }}</a></p>
 
-                <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonClose' | translate }}</span></button>
+                <button class="widget-button" @click="hidePopup"><span>{{ $t('ui.taskpopup.buttonClose') }}</span></button>
             </div>
             <div class="task-popup__summary" v-else>
                 <h2 class="task-popup__text">{{ taskSummary }}</h2>
@@ -40,14 +40,14 @@
 
                 <loading-button :disabled="!currentTask || !currentTask.cancellable" :loading="isAborting" @click="cancelTask" v-if="isActive || isAborting">{{ $t('ui.taskpopup.buttonCancel') }}</loading-button>
                 <!--suppress HtmlUnknownTarget -->
-                <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
+                <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ $t('ui.taskpopup.buttonAudit') }}</a>
                 <loading-button :loading="deletingTask" @click="hidePopup" v-if="!isActive && !isAborting">
                     {{ $t('ui.taskpopup.buttonConfirm') }}
                 </loading-button>
             </div>
 
             <div class="task-popup__console">
-                <code ref="console" @scroll="scrolled" class="task-popup__output" v-show="showConsole && allowConsole"><i v-if="!taskConsole">{{ 'ui.taskpopup.noconsole' | translate }}</i>{{ taskConsole }}</code>
+                <code ref="console" @scroll="scrolled" class="task-popup__output" v-show="showConsole && allowConsole"><i v-if="!taskConsole">{{ $t('ui.taskpopup.noconsole') }}</i>{{ taskConsole }}</code>
             </div>
         </div>
     </div>

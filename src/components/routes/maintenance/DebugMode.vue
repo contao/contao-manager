@@ -17,7 +17,7 @@
                 <fieldset class="maintenance__actions" v-else-if="supportsAccessKey">
                     <loading-button class="widget-button widget-button--primary widget-button--show" :loading="loading" v-if="!hasAccessKey" @click="setAccessKey">{{ $t('ui.maintenance.debugMode.activate') }}</loading-button>
                     <loading-button class="widget-button widget-button--alert widget-button--hide" :loading="loading" v-if="hasAccessKey" @click="removeAccessKey">{{ $t('ui.maintenance.debugMode.deactivate') }}</loading-button>
-                    <loading-button class="widget-button widget-button--edit" v-if="hasAccessKey" :loading="loading" @click="setAccessKey">{{ 'ui.maintenance.debugMode.credentials' | translate }}</loading-button>
+                    <loading-button class="widget-button widget-button--edit" v-if="hasAccessKey" :loading="loading" @click="setAccessKey">{{ $t('ui.maintenance.debugMode.credentials') }}</loading-button>
                 </fieldset>
             </div>
         </section>

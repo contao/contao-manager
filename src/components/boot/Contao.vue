@@ -2,18 +2,18 @@
     <boxed-layout v-if="current" :wide="true" slotClass="contao-check">
         <header class="contao-check__header">
             <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="contao-check__icon" />
-            <h1 class="contao-check__headline">{{ 'ui.server.contao.headline' | translate }}</h1>
-            <p class="contao-check__description">{{ 'ui.server.contao.description' | translate }}</p>
-            <p class="contao-check__version"><strong>{{ 'ui.server.contao.ltsTitle' | translate }}:</strong> {{ 'ui.server.contao.ltsText' | translate }}</p>
-            <p class="contao-check__version"><strong>{{ 'ui.server.contao.latestTitle' | translate }}:</strong> {{ 'ui.server.contao.latestText' | translate }}</p>
+            <h1 class="contao-check__headline">{{ $t('ui.server.contao.headline') }}</h1>
+            <p class="contao-check__description">{{ $t('ui.server.contao.description') }}</p>
+            <p class="contao-check__version"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
+            <p class="contao-check__version"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
             <p class="contao-check__version" v-html="$t('ui.server.contao.releaseplan')"></p>
         </header>
 
         <section class="contao-check__form">
 
             <fieldset class="contao-check__fields">
-                <legend class="contao-check__fieldtitle">{{ 'ui.server.contao.formTitle' | translate }}</legend>
-                <p class="contao-check__fielddesc">{{ 'ui.server.contao.formText' | translate }}</p>
+                <legend class="contao-check__fieldtitle">{{ $t('ui.server.contao.formTitle') }}</legend>
+                <p class="contao-check__fielddesc">{{ $t('ui.server.contao.formText') }}</p>
                 <select-menu name="version" :label="$t('ui.server.contao.version')" :options="versions" :disabled="processing" v-model="version"/>
                 <select-menu name="coreOnly" :label="$t('ui.server.contao.coreOnly')" :options="packages" :disabled="processing" v-model="coreOnly"/>
                 <checkbox name="noUpdate" :label="$t('ui.server.contao.noUpdate')" :disabled="processing" v-model="noUpdate"/>
@@ -28,7 +28,7 @@
     </boxed-layout>
 
     <boot-check v-else :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription">
-        <button v-if="bootState === 'action'" @click="show" class="widget-button widget-button--primary widget-button--run">{{ 'ui.server.contao.setup' | translate }}</button>
+        <button v-if="bootState === 'action'" @click="show" class="widget-button widget-button--primary widget-button--run">{{ $t('ui.server.contao.setup') }}</button>
     </boot-check>
 </template>
 
