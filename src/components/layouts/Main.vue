@@ -29,6 +29,7 @@
     @import "~contao-package-list/src/assets/styles/defaults";
 
     .layout-main {
+        overflow: hidden;
 
         &__header {
             height: 56px;

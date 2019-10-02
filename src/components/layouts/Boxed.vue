@@ -31,6 +31,7 @@
 
         &__cell {
             display: table-cell;
+            overflow: hidden;
             vertical-align: middle;
             padding: 10px 0;
         }

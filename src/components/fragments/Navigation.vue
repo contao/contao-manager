@@ -90,6 +90,10 @@
 
     $nav-offset: 250px;
 
+    body.nav-active {
+        overflow: hidden !important;
+    }
+
     #app {
         transition: transform 0.4s cubic-bezier(0.55, 0, 0.1, 1);
 
