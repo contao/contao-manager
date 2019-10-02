@@ -39,6 +39,10 @@ pt:
             title: 'A versão do Contao não pôde ser determinada'
             detail: "A consola devolveu conteúdo inesperado relativo à versão do Contao. Por favor verifique o texto de saída para mais informação:\n\n{output}"
 
+    boot:
+        composer:
+            invalid: 'composer.json schema validation: {exception}'
+
     config:
         php_cli:
             not_found: 'Este caminho não contém um binário PHP válido. '
@@ -108,6 +112,11 @@ pt:
             summary: 'A adicionar pacotes Composer ...'
         composer-remove:
             summary: ' A remover pacotes Composer ...'
+        install-uploads:
+            summary: 'A instalar pacotes que foram uploaded ...'
+            console: 'Artifact instalado de {package} (versão {version}) [para packages/{name}]'
+        remove-uploads:
+            summary: 'A remover ficheiros uploaded ...'
         composer-install:
             summary: 'A instalar dependências Composer ...'
             summaryRetry: 'A instalar dependências Composer (tentativa {current}/{max}) ...'
@@ -129,3 +138,10 @@ pt:
             finishedDetail: 'Utilização de memória : {memory} (peak: {peak}), tempo: {time}.'
         clear-cache:
             summary: 'A apagar ficheiros em cache ...'
+
+    upload:
+        error:
+            file: 'O ficheiro é inválido ou não contém um composer.json .'
+            json: 'O composer.json não contém dados JSON válidos .'
+            schema: 'O composer.json não passou a validação de schemas.'
+            partial: 'O upload de ficheiros não completou com sucesso.'

@@ -39,6 +39,10 @@ nl:
             title: 'Welke Contao-versie kon niet worden vastgesteld'
             detail: "De console heeft onverwachte inhoud geretourneerd wanneer wordt gevraagd naar de Contao-versie. Controleer de output voor meer informatie:\n\n{output}"
 
+    boot:
+        composer:
+            invalid: 'composer.json schema validatie: {exception}'
+
     config:
         php_cli:
             not_found: 'Dit pad bevat geen geldige PHP binary.'
@@ -108,6 +112,11 @@ nl:
             summary: 'Toevoegen Composer pakketten ...'
         composer-remove:
             summary: 'Verwijderen Composer pakketten ...'
+        install-uploads:
+            summary: 'Bezig met installeren van geüploade pakketten...'
+            console: 'Artefact geïnstalleerd voor {package} (version {version}) [to packages/{name}]'
+        remove-uploads:
+            summary: 'Verwijderen bestanden ...'
         composer-install:
             summary: 'Installeren Composer afhankelijkheden ...'
             summaryRetry: 'Installeren Composer afhankelijkheden (opnieuw {current}/{max}) …'
@@ -129,3 +138,10 @@ nl:
             finishedDetail: 'Geheugen gebruik: {memory} (peak: {peak}), time: {time}.'
         clear-cache:
             summary: 'Verwijderen van cache bestanden …'
+
+    upload:
+        error:
+            file: 'Het bestand is ongeldig of bevat geen composer.json.'
+            json: 'De composer.json bevat geen geldige JSON-gegevens.'
+            schema: 'De validatie van het componer.json-schema is mislukt.'
+            partial: 'Het uploaden van het bestand is niet voltooid.'

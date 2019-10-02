@@ -108,6 +108,8 @@ cs:
             summary: 'Přidávání balíčků Composeru…'
         composer-remove:
             summary: 'Odstraňování balíčků Composeru…'
+        install-uploads:
+            summary: 'Instalují se nahrané balíčky...'
         composer-install:
             summary: 'Instalování na Composeru závislých věcí…'
             summaryRetry: 'Instalování na Composeru závislých věc (opětovný pokus {current}/{max}) …'

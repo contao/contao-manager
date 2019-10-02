@@ -39,6 +39,10 @@ ja:
             title: 'Contaoのバージョンを決定不可能'
             detail: "Contaoのバージョンを問い合わせた時にコンソールが予期しない内容を返しました。さらに詳しい情報は出力を確認してください。\n\n{output}"
 
+    boot:
+        composer:
+            invalid: 'composer.jsonスキームの検証: {exception}'
+
     config:
         php_cli:
             not_found: 'このパスに有効なPHPの実行ファイルがありません。'
@@ -108,6 +112,11 @@ ja:
             summary: 'Composerのパッケージを追加中...'
         composer-remove:
             summary: 'Composerのパッケージを削除中...'
+        install-uploads:
+            summary: 'アップロードしたパッケージをインストール中...'
+            console: '{package} (バージョン {version})のインストール過程[packages/{name}に存在]'
+        remove-uploads:
+            summary: 'アップロードしたファイルを削除中...'
         composer-install:
             summary: 'Composerの依存関係をインストール中...'
             summaryRetry: 'Composerの依存関係をインストール中(再試行中: {current}/{max})...'
@@ -129,3 +138,10 @@ ja:
             finishedDetail: 'メモリの使用: {memory} (最大: {peak}), 時間: {time}.'
         clear-cache:
             summary: 'キャッシュファイルを削除中...'
+
+    upload:
+        error:
+            file: 'ファイルが無効、またはcomposer.jsonを含んでいません。'
+            json: 'composer.jsonが正しいJSONのデータを含んでいません。'
+            schema: 'composer.jsonスキーマの検証に失敗しました。'
+            partial: 'アップロードしたファイルは完全ではありませんでした。'
