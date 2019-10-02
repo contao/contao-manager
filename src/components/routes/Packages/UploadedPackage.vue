@@ -2,6 +2,7 @@
     <package
         :title="upload.name"
         :hint="hintUploading"
+
         v-if="!upload.success || upload.error"
     >
         <template #hint v-if="upload.error">
@@ -24,6 +25,7 @@
     </package>
 
     <local-package
+        uncloseable-hint
         :data="pkg"
         :hint="$t('ui.packages.uploadDuplicate')"
         v-else-if="isDuplicate(upload.id)"

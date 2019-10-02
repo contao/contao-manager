@@ -6,7 +6,7 @@
         :badge="badge"
         :description="data.description"
         :hint="packageHint"
-        :hint-close="hintClose"
+        :hint-close="packageHintClose"
         @close-hint="restore"
     >
         <template #additional>
@@ -90,6 +90,7 @@
             name: String,
             title: String,
             hint: String,
+            uncloseableHint: Boolean,
             updateOnly: Boolean,
         },
 
@@ -177,6 +178,19 @@
                 return null;
             },
 
+            packageHintClose() {
+                if (this.uncloseableHint || (this.isRequired && !this.willBeRemoved && !this.isChanged)) {
+                    return null;
+                }
+
+                if (this.isUpdated) {
+                    return this.$t('ui.package.hintNoupdate');
+                }
+
+                return this.$t('ui.package.hintRevert');
+            },
+
+
             packageUpdates() {
                 return this.isInstalled && (
                     Object.keys(this.$store.state.packages.add).length > 0
@@ -202,18 +216,6 @@
                 }
 
                 return null;
-            },
-
-            hintClose() {
-                if (this.isRequired && !this.willBeRemoved && !this.isChanged) {
-                    return null;
-                }
-
-                if (this.isUpdated) {
-                    return this.$t('ui.package.hintNoupdate');
-                }
-
-                return this.$t('ui.package.hintRevert');
             },
 
             additional() {

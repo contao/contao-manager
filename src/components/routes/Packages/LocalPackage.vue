@@ -3,6 +3,7 @@
         :data="packageData"
         :name="nameOverride"
         :hint="hint"
+        :uncloseable-hint="uncloseableHint"
         :update-only="updateOnly"
     >
         <template #release v-if="isUpload">
@@ -39,6 +40,7 @@
                 required: true,
             },
             hint: String,
+            uncloseableHint: Boolean,
             updateOnly: Boolean,
         },
 
