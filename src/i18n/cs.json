@@ -213,8 +213,6 @@
     "ui.package.requiredText": "Tento balíček je už sice uvedený ve Vašem souboru composer.json, ale ještě není nainstalovaný.",
     "ui.package.incompatibleTitle": "Nekompatibilní balíček!",
     "ui.package.incompatibleText": "Tento balíček není podporován Contaem 4 Managed Edition.",
-    "ui.package.abandonedTitle": "nepřijatý",
-    "ui.package.abandonedText": "Tento balíček je označený jako nepřijatý.",
     "ui.package.uploadedTitle": "Artifact Package",
     "ui.package.uploadedText": "Upload a new file to update.",
     "ui.package.providerTitle": "Provider Package",
