@@ -37,7 +37,11 @@
 
                 if (this.support) {
                     Object.keys(this.support).forEach((key) => {
-                        items.push({ label: this.$t(`ui.package.support_${key}`), href: this.support[key], target: '_blank' });
+                        if (key === 'email') {
+                            items.push({ label: this.$t(`ui.package.support_${key}`), href: `mailto:${this.support[key]}` });
+                        } else {
+                            items.push({ label: this.$t(`ui.package.support_${key}`), href: this.support[key], target: '_blank' });
+                        }
                     });
                 }
 
