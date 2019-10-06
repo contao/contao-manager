@@ -58,10 +58,10 @@
             </slot>
         </template>
 
-        <template #features>
+        <template #features v-if="data.features">
             <section class="package__features">
-                <template v-for="(reason, name) in data.features">
-                    <feature-package :key="name" :name="name" :reason="reason"/>
+                <template v-for="name in data.features">
+                    <feature-package :key="name" :name="name"/>
                 </template>
             </section>
         </template>

@@ -3,7 +3,7 @@
         <p class="feature-package__text" :class="{ 'feature-package__text--hint': this.packageHint }">
             <strong class="feature-package__name">{{ packageTitle }}</strong>
             <span class="feature-package__hint" v-if="this.packageHint">{{ packageHint }}</span>
-            <template v-else>{{ reason }}</template>
+            <template v-else>{{ metadata.description }}</template>
         </p>
 
         <div class="feature-package__actions">
