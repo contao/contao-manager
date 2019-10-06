@@ -61,7 +61,7 @@
         <template #features>
             <section class="package__features">
                 <template v-for="(reason, name) in data.features">
-                    <feature-package :name="name" :reason="reason"/>
+                    <feature-package :key="name" :name="name" :reason="reason"/>
                 </template>
             </section>
         </template>

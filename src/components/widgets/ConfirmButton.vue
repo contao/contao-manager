@@ -13,11 +13,7 @@
 </template>
 
 <script>
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
-
     export default {
-        components: { Loader },
-
         props: {
             color: String,
             icon: String,

@@ -18,13 +18,11 @@
     import metadata from 'contao-package-list/src/mixins/metadata';
 
     import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
-    import InstallButton from '../../fragments/InstallButton';
-    import ConfirmButton from '../../widgets/ConfirmButton';
     import packageStatus from '../../../mixins/packageStatus';
 
     export default {
         mixins: [packageStatus, metadata],
-        components: { ConfirmButton, InstallButton, DetailsButton },
+        components: { DetailsButton },
 
         props: {
             name: String,
