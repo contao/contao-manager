@@ -217,8 +217,6 @@
     "ui.package.uploadedText": "Upload a new file to update.",
     "ui.package.providerTitle": "Provider Package",
     "ui.package.providerText": "Requires private packages.",
-    "ui.package.proprietaryTitle": "Proprietary Package!",
-    "ui.package.proprietaryText": "Please visit the website for more information.",
     "ui.package.installed": "Currently installed:",
     "ui.package.version": "Version {version}",
     "ui.package.additionalDownloads": "{count} Download ::: {count} Downloads",
