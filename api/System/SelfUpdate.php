@@ -105,7 +105,15 @@ class SelfUpdate
      */
     public function getChannel()
     {
-        return $this->isDev() ? 'dev' : 'stable';
+        if ($this->isDev()) {
+            return 'dev';
+        }
+
+        if (PHP_MAJOR_VERSION === 5) {
+            return '1.1';
+        }
+
+        return 'stable';
     }
 
     /**
