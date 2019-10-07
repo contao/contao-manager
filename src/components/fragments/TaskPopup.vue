@@ -265,21 +265,19 @@
             }
         },
 
-        activated() {
+        mounted() {
+            this.favicons = document.querySelectorAll('link[class="favicon"]');
+            this.updateFavicon();
+
             this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
             this.autoClose = window.localStorage.getItem('contao_manager_autoclose') === '1';
             this.scrollToBottom = true;
             this.audit = true;
         },
 
-        deactivated() {
+        beforeDestroy() {
             this.$store.commit('tasks/setStatus', null);
             this.$store.commit('tasks/setCurrent', null);
-        },
-
-        mounted() {
-            this.favicons = document.querySelectorAll('link[class="favicon"]');
-            this.updateFavicon();
         },
     };
 </script>
