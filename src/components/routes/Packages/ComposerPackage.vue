@@ -125,7 +125,7 @@
                     return this.name;
                 }
 
-                if (this.data.name === this.data.title) {
+                if (this.data.name === this.data.title || this.data.name === 'contao/manager-bundle') {
                     return '';
                 }
 
