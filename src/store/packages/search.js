@@ -1,28 +1,19 @@
-import Vue from 'vue';
 import algoliasearch from 'algoliasearch';
 
-const algolia = ({ state, commit }) => {
-    let index = state.algolia;
-
-    if (!index) {
-        index = algoliasearch('60DW2LJW0P', 'e6efbab031852e115032f89065b3ab9f').initIndex(`v2_${Vue.i18n.locale()}`);
-        commit('setAlgolia', index);
-    }
-
-    return index;
-};
+const index = algoliasearch('60DW2LJW0P', '13718a23f4e436f7e7614340bd87d913').initIndex(`v3_packages`);
 
 export default {
     namespaced: true,
 
     state: {
-        algolia: null,
+        language: 'en',
         metadata: {},
     },
 
     mutations: {
-        setAlgolia(state, client) {
-            state.algolia = client;
+        setLanguage(state, language) {
+            state.language = language;
+            state.metadata = {};
         },
 
         cache(state, { name, data }) {
@@ -30,44 +21,43 @@ export default {
         },
 
         reset(state) {
-            state.algolia = null;
             state.metadata = {};
         },
     },
 
     actions: {
-        async get(store, name) {
-            if (Object.keys(store.state.metadata).includes(name)) {
-                return store.state.metadata[name];
+        async get({ state, commit }, name) {
+            if (Object.keys(state.metadata).includes(name)) {
+                return state.metadata[name];
             }
 
-            return new Promise((resolve) => {
-                algolia(store).getObject(name, (err, content) => {
-                    const data = {
-                        name,
-                        data: err ? null : content
-                    };
+            let data;
 
-                    store.commit('cache', data);
-                    resolve(content);
+            try {
+                const content = await index.search({
+                    filters: `name:"${name}" AND languages:${state.language}`,
+                    hitsPerPage: 1,
                 });
-            });
+
+                data = content.hits[0];
+            } catch (err) {
+                return null;
+            }
+
+            delete data.versions;
+            delete data.version;
+            delete data.time;
+            delete data.constraint;
+
+            commit('cache', { name, data: data });
+
+            return data;
         },
 
-        find(store, params) {
-            return new Promise((resolve, reject) => {
-                algolia(store).search(
-                    params,
-                    (err, response) => {
-                        if (err) {
-                            reject(false);
-                            return;
-                        }
+        async find({ state }, params) {
+            params.filters = `languages:${state.language} AND dependency:false`;
 
-                        resolve(response);
-                    },
-                );
-            });
+            return await index.search(params);
         },
     },
 };

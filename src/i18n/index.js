@@ -52,6 +52,7 @@ const i18n = {
     async load(locale) {
         if (Vue.i18n.localeExists(locale)) {
             Vue.i18n.set(locale);
+            store.commit('packages/search/setLanguage', locale);
             return;
         }
 
@@ -65,6 +66,7 @@ const i18n = {
 
         Vue.i18n.add(locale, Object.assign({}, await locales[locale]()));
         Vue.i18n.set(locale);
+        store.commit('packages/search/setLanguage', locale);
     },
 };
 
