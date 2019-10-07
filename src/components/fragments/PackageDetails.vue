@@ -5,7 +5,7 @@
                 <p class="package-popup__installed">
                     <strong>{{ $t('ui.package.installed') }}</strong>
                     {{ $t('ui.package.version', { version: installedVersion }) }}
-                    <time :dateTime="installedTime">({{ installedTime | datimFormat }})</time>
+                    <time :dateTime="installedTime" v-if="installedTime">({{ installedTime | datimFormat }})</time>
                 </p>
             </template>
             <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">{{ $t('ui.package.homepage') }}</a>
