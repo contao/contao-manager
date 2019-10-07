@@ -38,11 +38,17 @@ class ContaoManagerDowngrade
             die('You are using PHP '.phpversion()." which is not supported by this Contao Manager. Automatic downgrade to version 1.1 was not successful.\n");
         }
 
-        if (!empty($_SERVER['REQUEST_URI'])) {
-            header('Location: '.$_SERVER['REQUEST_URI']);
+        if (function_exists('opcache_reset')) {
+            /** @noinspection PhpComposerExtensionStubsInspection */
+            opcache_reset();
         }
 
-        die("Contao Manager was downgraded to the latest version supported by your PHP version.\n");
+        $reload = '';
+        if (!empty($_SERVER['REQUEST_URI'])) {
+            $reload = '<script>setTimeout(function() { window.location.reload(true) }, 1000)</script>';
+        }
+
+        die("Contao Manager was downgraded to the latest version supported by your PHP version.\n$reload");
     }
 }
 
