@@ -211,8 +211,6 @@
     "ui.package.hintRemoved": "This package will be removed when you apply the changes.",
     "ui.package.requiredTitle": "manually added",
     "ui.package.requiredText": "This package is required in your composer.json but not installed.",
-    "ui.package.incompatibleTitle": "Incompatible Package!",
-    "ui.package.incompatibleText": "This package is not supported in Contao 4 Managed Edition.",
     "ui.package.uploadedTitle": "Artifact Package",
     "ui.package.uploadedText": "Upload a new file to update.",
     "ui.package.providerTitle": "Provider Package",

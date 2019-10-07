@@ -3,11 +3,6 @@
 
         <template #package-actions="{ data }">
             <a class="widget-button widget-button--small widget-button--primary widget-button--link" target="_blank" :href="data.homepage" v-if="data && data.private">{{ $t('ui.package.homepage') }}</a>
-            <!--<button
-                class="widget-button widget-button&#45;&#45;small"
-                disabled
-                v-else-if="isIncompatible && !isInstalled"
-            >Inkompatibel</button>-->
             <install-button small inline :data="data" v-else/>
         </template>
 
