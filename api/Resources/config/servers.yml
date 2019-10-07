@@ -72,8 +72,14 @@ configs:
         name: ALL-INKL.COM - Neue Medien Münnich
         website: all-inkl.com
         php:
-            /usr/bin/php{major}{minor}: []
-            /usr/bin/php: []
+            /usr/bin/php{major}{minor}: ['-d', 'memory_limit=-1']
+            /usr/bin/php: ['-d', 'memory_limit=-1']
+
+    artfiles:
+        name: Artfiles New Media GmbH
+        website: www.artfiles.de
+        php:
+            /usr/local/php-{major}.{minor}/bin/php: []
 
     biohost:
         name: BIOHOST
@@ -353,6 +359,12 @@ configs:
             /usr/bin/php{major}{minor}: []
             /opt/php-{major}.{minor}/bin/php: []
             /usr/bin/php: []
+
+    webhosting-franken:
+        name: Webhosting Franken
+        website: www.webhosting-franken.de
+        php:
+            /opt/php{major}.{minor}/bin/php: []
 
     webhostone:
         name: WebhostOne GmbH
