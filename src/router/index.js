@@ -37,4 +37,8 @@ const router = new Router({
     ],
 });
 
+router.afterEach(() => {
+    document.body.classList.remove('nav-active');
+});
+
 export default router;
