@@ -169,6 +169,7 @@
     "ui.maintenance.composerCache.button": "Clear Cache",
     "ui.maintenance.debugMode.title": "Debug Mode",
     "ui.maintenance.debugMode.description": "Activate the debug mode by setting a user and password for the <code>app_dev.php</code> entry point.",
+    "ui.maintenance.debugMode.descriptionJwt": "Activate the debug mode by setting the debug cookie for the current domain.",
     "ui.maintenance.debugMode.activate": "Activate",
     "ui.maintenance.debugMode.deactivate": "Deactivate",
     "ui.maintenance.debugMode.credentials": "Credentials",

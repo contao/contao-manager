@@ -5,7 +5,8 @@
                 <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" alt="" /></figure>
                 <div class="maintenance__about">
                     <h1>{{ $t('ui.maintenance.debugMode.title') }}</h1>
-                    <p v-html="$t('ui.maintenance.debugMode.description')"></p>
+                    <p v-if="supportsJwtCookie">{{ $t('ui.maintenance.debugMode.descriptionJwt') }}</p>
+                    <p v-else-if="supportsAccessKey" v-html="$t('ui.maintenance.debugMode.description')"></p>
                 </div>
                 <fieldset class="maintenance__actions" v-if="loading && !supportsJwtCookie && !supportsAccessKey">
                     <loader class="maintenance__loader"/>
