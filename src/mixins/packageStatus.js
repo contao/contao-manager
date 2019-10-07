@@ -1,6 +1,9 @@
 import { mapState, mapGetters } from 'vuex';
 
+import metadata from 'contao-package-list/src/mixins/metadata';
+
 export default {
+    mixins: [metadata],
 
     computed: {
         ...mapState('packages', [
@@ -26,9 +29,13 @@ export default {
         willBeInstalled: vm => vm.packageAdded(vm.data.name),
         isModified: vm => vm.isUpdated || vm.isChanged || vm.willBeRemoved || vm.willBeInstalled,
 
+        isPrivate: vm => vm.metadata && !!vm.metadata.private,
+        isDependency: vm => vm.metadata && !!vm.metadata.dependency,
 
         installedVersion: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].version : null,
         installedTime: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].time : null,
+
+        canBeInstalled: vm => !vm.isPrivate && (!vm.isDependency || vm.isSuggested(vm.data.name)),
 
         constraintInstalled() {
             if (!this.isInstalled) {

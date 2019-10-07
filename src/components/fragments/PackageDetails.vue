@@ -4,12 +4,13 @@
             <template v-if="isInstalled">
                 <p class="package-popup__installed">
                     <strong>{{ $t('ui.package.installed') }}</strong>
-                    {{ $t('ui.package.version', { version: installedPackage.version }) }}
-                    <time :dateTime="installedPackage.time">({{ installedPackage.time | datimFormat }})</time>
+                    {{ $t('ui.package.version', { version: installedVersion }) }}
+                    <time :dateTime="installedTime">({{ installedTime | datimFormat }})</time>
                 </p>
             </template>
-            <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="metadata && metadata.private">{{ $t('ui.package.homepage') }}</a>
+            <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">{{ $t('ui.package.homepage') }}</a>
             <install-button :data="data" v-else-if="canBeInstalled"/>
+            <div v-else></div>
         </template>
         <template #suggest-actions="{ name }">
             <install-button inline small :data="{ name }" v-if="isSuggested(name)"/>
@@ -22,13 +23,13 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import metadata from 'contao-package-list/src/mixins/metadata';
+    import packageStatus from '../../mixins/packageStatus';
 
     import PackageDetails from 'contao-package-list/src/components/fragments/PackageDetails';
     import InstallButton from './InstallButton';
 
     export default {
-        mixins: [metadata],
+        mixins: [packageStatus],
         components: { PackageDetails, InstallButton },
 
         computed: {
@@ -41,13 +42,6 @@
             ]),
 
             data: vm => ({ name: vm.$route.query.p }),
-
-            isInstalled: vm => vm.packageInstalled(vm.data.name),
-            willBeInstalled: vm => vm.packageAdded(vm.data.name),
-            canBeInstalled: vm => (vm.metadata && !vm.metadata.private)
-                && ((vm.metadata && vm.metadata.supported) || vm.isSuggested(vm.data.name)),
-
-            installedPackage: vm => vm.installed[vm.data.name],
         }
     };
 </script>

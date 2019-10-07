@@ -15,13 +15,12 @@
 </template>
 
 <script>
-    import metadata from 'contao-package-list/src/mixins/metadata';
-
-    import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
     import packageStatus from '../../../mixins/packageStatus';
 
+    import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
+
     export default {
-        mixins: [packageStatus, metadata],
+        mixins: [packageStatus],
         components: { DetailsButton },
 
         props: {
