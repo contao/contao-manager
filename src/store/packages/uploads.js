@@ -127,13 +127,14 @@ export default {
         async removeAll({ state, commit, dispatch }) {
             await Promise.all(Object.keys(state.uploads).map(
                 async (id) => {
-                    commit('setRemoving', id);
-                    await Vue.http.delete(`api/packages/uploads/${id}`);
-                    commit('setRemoved', id);
+                    if (!state.confirmed.includes(id)) {
+                        commit('setRemoving', id);
+                        await Vue.http.delete(`api/packages/uploads/${id}`);
+                        commit('setRemoved', id);
+                    }
                 },
             ));
             await dispatch('load');
-            commit('unconfirmAll');
         }
     },
 };
