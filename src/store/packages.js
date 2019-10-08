@@ -30,7 +30,7 @@ export default {
     },
 
     getters: {
-        hasAdded: (s, g) => g.visibleAdded.length > 0 || g.visibleRequired.length > 0,
+        hasAdded: (s, g) => g.visibleInstalled.length > 0 && (g.visibleAdded.length > 0 || g.visibleRequired.length > 0),
 
         packageInstalled: state => name => Object.keys(state.installed).includes(name),
         versionInstalled: state => (name, version) => Object.keys(state.installed).includes(name) && state.installed[name].version === version,
@@ -55,7 +55,7 @@ export default {
         canResetChanges: (s, get) => get.totalChanges > get.totalRequired,
 
         isSuggested: state => name => !!Object.values(state.local).find(pkg => (pkg.type.substr(0, 7) === 'contao-' && pkg.suggest && pkg.suggest.hasOwnProperty(name))),
-        isFeature: (s, g) => (name) => !!Object.keys(s.features).find((pkg) => s.features[pkg].includes(name) && g.packageInstalled(pkg)),
+        isFeature: (s, g) => (name) => !!Object.keys(s.features).find((pkg) => s.features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
 
         visibleRequired: (s, g) => filterInvisiblePackages(s.required, g),
         visibleInstalled: (s, g) => filterInvisiblePackages(g.installed, g),
@@ -63,23 +63,23 @@ export default {
 
         installed: (state) => {
             if (!state.root || !state.installed) {
-                return [];
+                return {};
             }
 
-            const packages = [];
+            const packages = {};
 
             Object.keys(state.root.require).forEach((require) => {
                 if (!require.includes('/')) {
                     return;
                 }
 
-                packages[require] = {
-                    name: require,
-                    version: false,
-                    constraint: state.root.require[require],
-                };
-
                 if (state.installed[require]) {
+                    packages[require] = {
+                        name: require,
+                        version: false,
+                        constraint: state.root.require[require],
+                    };
+
                     packages[require] = Object.assign(packages[require], state.installed[require]);
                 }
             });
@@ -98,6 +98,16 @@ export default {
                     required[name] = packages[name];
                 } else {
                     installed[name] = packages[name];
+                }
+            });
+
+            Object.keys(root.require).forEach((name) => {
+                if (!name.includes('/')) {
+                    return;
+                }
+
+                if (!installed.hasOwnProperty(name) && !required.hasOwnProperty(name)) {
+                    required[name] = { name, constraint: root.require[name] };
                 }
             });
 

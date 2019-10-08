@@ -45,7 +45,7 @@
 
         <template #actions v-if="updateOnly">
             <details-button :name="data.name" v-if="data.name"/>
-            <button class="widget-button widget-button--update" :disabled="isModified" @click="update">{{ $t('ui.package.updateButton') }}</button>
+            <button class="widget-button widget-button--update" :disabled="isModified" v-if="!isRequired" @click="update">{{ $t('ui.package.updateButton') }}</button>
         </template>
         <template #actions v-else>
             <slot name="actions">

@@ -1,8 +1,9 @@
 <template>
-    <article class="feature-package" v-if="isInstalled || willBeInstalled">
+    <article class="feature-package" v-if="isRequired || isInstalled || willBeInstalled">
         <p class="feature-package__text" :class="{ 'feature-package__text--hint': this.packageHint }">
             <strong class="feature-package__name">{{ packageTitle }}</strong>
             <span class="feature-package__hint" v-if="this.packageHint">{{ packageHint }}</span>
+            <span class="feature-package__badge" :title="$t('ui.package.requiredText')" v-else-if="isRequired">{{ $t('ui.package.requiredTitle') }}</span>
             <template v-else>{{ metadata.description }}</template>
         </p>
 
@@ -44,7 +45,7 @@
                     return this.$t('ui.package.hintRemoved');
                 }
 
-                if (this.isRequired || this.willBeInstalled) {
+                if (this.willBeInstalled) {
                     return this.$t('ui.package.hintAdded');
                 }
 
@@ -98,6 +99,18 @@
                 display: inline;
                 -webkit-line-clamp: none;
             }
+        }
+
+        &__badge {
+            margin-left: 5px;
+            padding: 2px 8px;
+            background: $red-button;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: $font-weight-bold;
+            line-height: 19px;
+            color: #fff;
+            cursor: help;
         }
 
         &__hint {

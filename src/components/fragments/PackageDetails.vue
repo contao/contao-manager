@@ -8,8 +8,8 @@
                     <time :dateTime="installedTime" v-if="installedTime">({{ installedTime | datimFormat }})</time>
                 </p>
             </template>
+            <install-button :data="data" v-else-if="canBeInstalled || isRequired"/>
             <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">{{ $t('ui.package.homepage') }}</a>
-            <install-button :data="data" v-else-if="canBeInstalled"/>
             <div v-else></div>
         </template>
         <template #suggest-actions="{ name }">
@@ -42,7 +42,7 @@
             ]),
 
             data: vm => ({ name: vm.$route.query.p }),
-        }
+        },
     };
 </script>
 
