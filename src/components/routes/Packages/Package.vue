@@ -18,8 +18,7 @@
 
             <div class="package__about">
                 <h1 :class="{ package__headline: true, 'package__headline--badge': badge }">
-                    <span class="package__title" v-html="title"></span>
-                    <span class="package__name" v-if="name">{{ name }}</span>
+                    <span class="package__title">{{ title }}</span>
                     <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
                 </h1>
 
@@ -55,7 +54,6 @@
 
         props: {
             title: String,
-            name: String,
             logo: String,
             badge: Object,
             description: String,
@@ -175,27 +173,8 @@
             }
         }
 
-        &__title,
-        &__name {
+        &__title {
             margin-right: 10px;
-        }
-
-        &__name {
-            position: relative;
-            display: inline-block;
-            top: -3px;
-            padding: 0 8px;
-            background: $border-color;
-            border-radius: 2px;
-            font-size: 12px;
-            line-height: 19px;
-            white-space: nowrap;
-            color: #fff;
-
-            em {
-                background-color: $highlight-color;
-                font-style: normal;
-            }
         }
 
         &__badge {

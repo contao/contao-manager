@@ -1,7 +1,6 @@
 <template>
     <package
-        :name="packageName"
-        :title="packageTitle"
+        :title="data.title || data.name"
         :logo="data.logo"
         :badge="badge"
         :description="data.description"
@@ -87,8 +86,6 @@
                 type: Object,
                 required: true,
             },
-            name: String,
-            title: String,
             hint: String,
             uncloseableHint: Boolean,
             updateOnly: Boolean,
@@ -119,26 +116,6 @@
             willBeRemoved: vm => vm.packageRemoved(vm.data.name),
             willBeInstalled: vm => vm.packageAdded(vm.data.name),
             isModified: vm => vm.isUpdated || vm.isChanged || vm.willBeRemoved || vm.willBeInstalled,
-
-            packageName() {
-                if (this.name || this.name === '') {
-                    return this.name;
-                }
-
-                if (this.data.name === this.data.title || this.data.name === 'contao/manager-bundle') {
-                    return '';
-                }
-
-                return this.data.name;
-            },
-
-            packageTitle() {
-                if (this.title || this.title === '') {
-                    return this.title;
-                }
-
-                return this.data.title || this.data.name;
-            },
 
             packageHint() {
                 if (this.hint) {

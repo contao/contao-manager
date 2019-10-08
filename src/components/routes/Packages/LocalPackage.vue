@@ -1,7 +1,6 @@
 <template>
     <composer-package
         :data="packageData"
-        :name="nameOverride"
         :hint="hint"
         :uncloseable-hint="uncloseableHint"
         :update-only="updateOnly"
@@ -47,8 +46,6 @@
             isUpload: vm => vm.data['installation-source'] === 'dist'
                 && vm.data.dist
                 && (new RegExp('/contao-manager/packages/[^/]+.zip$', 'i')).test(vm.data.dist.url),
-
-            nameOverride: vm => vm.isUpload ? '' : null,
 
             packageData: vm => Object.assign(
                 {},
