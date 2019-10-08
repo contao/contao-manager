@@ -26,7 +26,7 @@ export default {
 
     getters: {
         hasUploads: (state, get) => get.totalUploads > 0,
-        isDuplicate: state => id => Object.values(state.uploads).find(v => v.id !== id && v.hash === state.uploads[id].hash),
+        isDuplicate: state => (id, name) => Object.values(state.uploads).find(v => v.id !== id && (v.hash === state.uploads[id].hash || state.uploads[v.id].package.name === name)),
         isRemoving: state => id => state.removing.includes(id),
 
         totalUploads: (state, get) => state.uploads ? get.unconfirmedUploads.length : 0,

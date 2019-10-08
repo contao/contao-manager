@@ -28,7 +28,7 @@
         uncloseable-hint
         :data="pkg"
         :hint="$t('ui.packages.uploadDuplicate')"
-        v-else-if="isDuplicate(upload.id)"
+        v-else-if="isDuplicate(upload.id, pkg.name)"
     >
         <template #actions>
             <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
@@ -37,6 +37,7 @@
     </local-package>
 
     <local-package
+        uncloseable-hint
         :data="pkg"
         :hint="$t('ui.packages.uploadInstalled')"
         v-else-if="versionInstalled(pkg.name, pkg.version)"

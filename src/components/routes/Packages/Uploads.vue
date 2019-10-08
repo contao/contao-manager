@@ -72,6 +72,9 @@
 
                 // File is being deleted
                 if (oldFile && !newFile) {
+                    if (this.$refs.uploader.uploaded && !this.$refs.uploader.active) {
+                        this.setFiles([]);
+                    }
                     return;
                 }
 
