@@ -10,4 +10,3 @@ monolog:
 
         file:
             type: error_log
-            channels: [!event]
