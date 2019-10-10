@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -15,6 +17,7 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\AbstractTask;
 use Contao\ManagerApi\Task\TaskConfig;
+use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Contao\CacheClearOperation;
 use Contao\ManagerApi\TaskOperation\Contao\CacheWarmupOperation;
 use Contao\ManagerApi\TaskOperation\Filesystem\RemoveCacheOperation;
@@ -37,14 +40,6 @@ class RebuildCacheTask extends AbstractTask
      */
     private $filesystem;
 
-    /**
-     * Constructor.
-     *
-     * @param ApiKernel             $environment
-     * @param ConsoleProcessFactory $processFactory
-     * @param Translator            $translator
-     * @param Filesystem            $filesystem
-     */
     public function __construct(
         ApiKernel $environment,
         ConsoleProcessFactory $processFactory,
@@ -61,7 +56,7 @@ class RebuildCacheTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'contao/rebuild-cache';
     }
@@ -69,12 +64,12 @@ class RebuildCacheTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    public function create(TaskConfig $config)
+    public function create(TaskConfig $config): TaskStatus
     {
         return parent::create($config)->setAutoClose(true);
     }
 
-    protected function getTitle()
+    protected function getTitle(): string
     {
         return $this->translator->trans('task.rebuild_cache.title');
     }
@@ -82,7 +77,7 @@ class RebuildCacheTask extends AbstractTask
     /**
      * {@inheritdoc}
      */
-    protected function buildOperations(TaskConfig $config)
+    protected function buildOperations(TaskConfig $config): array
     {
         $operations = [
             new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, $this->translator, $this->filesystem),

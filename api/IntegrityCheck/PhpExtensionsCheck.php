@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -21,10 +23,10 @@ class PhpExtensionsCheck extends AbstractIntegrityCheck
         'openssl',
     ];
 
-    public function run()
+    public function run(): ?ApiProblem
     {
         foreach (self::$extensions as $extension) {
-            if (($problem = $this->checkExtension($extension)) !== null) {
+            if (null !== ($problem = $this->checkExtension($extension))) {
                 return $problem;
             }
         }
@@ -32,9 +34,9 @@ class PhpExtensionsCheck extends AbstractIntegrityCheck
         return null;
     }
 
-    private function checkExtension($extension)
+    private function checkExtension($extension): ?ApiProblem
     {
-        if (extension_loaded($extension)) {
+        if (\extension_loaded($extension)) {
             return null;
         }
 

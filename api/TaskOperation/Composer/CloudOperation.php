@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -65,13 +67,6 @@ class CloudOperation implements TaskOperationInterface
 
     /**
      * Constructor.
-     *
-     * @param CloudResolver $cloud
-     * @param CloudChanges  $changes
-     * @param TaskConfig    $taskConfig
-     * @param Environment   $environment
-     * @param Translator    $translator
-     * @param Filesystem    $filesystem
      */
     public function __construct(CloudResolver $cloud, CloudChanges $changes, TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem)
     {
@@ -83,7 +78,7 @@ class CloudOperation implements TaskOperationInterface
         $this->filesystem = $filesystem;
     }
 
-    public function isStarted()
+    public function isStarted(): bool
     {
         try {
             return (bool) $this->taskConfig->getState('cloud-job-queued');
@@ -94,16 +89,12 @@ class CloudOperation implements TaskOperationInterface
         }
     }
 
-    public function isRunning()
+    public function isRunning(): bool
     {
         try {
             $job = $this->getCurrentJob();
 
-            return $job instanceof CloudJob
-                && ($job->isQueued()
-                    || $job->isProcessing()
-                    || ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-successful', false))
-                );
+            return $job instanceof CloudJob && null === $this->taskConfig->getState('cloud-job-successful');
         } catch (\Exception $e) {
             $this->exception = $e;
 
@@ -111,24 +102,24 @@ class CloudOperation implements TaskOperationInterface
         }
     }
 
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
         return (bool) $this->taskConfig->getState('cloud-job-successful', false);
     }
 
-    public function hasError()
+    public function hasError(): bool
     {
-        return $this->exception instanceof \Exception;
+        return false === $this->taskConfig->getState('cloud-job-successful');
     }
 
-    public function run()
+    public function run(): void
     {
         try {
             $job = $this->getCurrentJob();
 
             if (!$job instanceof CloudJob) {
                 $this->taskConfig->setState('cloud-job-queued', time());
-                $this->job = $job = $this->cloud->createJob($this->changes, $this->environment->isDebug());
+                $this->job = $job = $this->cloud->createJob($this->changes, $this->environment);
                 $this->taskConfig->setState('cloud-job', $this->job->getId());
             }
 
@@ -137,12 +128,12 @@ class CloudOperation implements TaskOperationInterface
                     $this->environment->getLockFile(),
                     $this->cloud->getComposerLock($job)
                 );
-                $this->filesystem->dumpFile(
-                    $this->environment->getJsonFile(),
-                    $this->cloud->getComposerJson($job)
-                );
 
                 $this->taskConfig->setState('cloud-job-successful', true);
+            }
+
+            if ($job->isFailed()) {
+                $this->taskConfig->setState('cloud-job-successful', false);
             }
         } catch (\Exception $e) {
             $this->exception = $e;
@@ -150,22 +141,21 @@ class CloudOperation implements TaskOperationInterface
         }
     }
 
-    public function abort()
+    public function abort(): void
     {
-        $this->taskConfig->clearState('cloud-job');
-        $this->taskConfig->clearState('cloud-job-successful');
+        $this->taskConfig->setState('cloud-job-successful', false);
     }
 
-    public function delete()
+    public function delete(): void
     {
         try {
-            $this->cloud->deleteJob($this->taskConfig->getState('cloud-job'));
+            $this->cloud->deleteJob((string) $this->taskConfig->getState('cloud-job'));
         } catch (\Exception $e) {
             $this->exception = $e;
         }
     }
 
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         if ($this->exception instanceof CloudException) {
             $status->addConsole(
@@ -285,7 +275,7 @@ class CloudOperation implements TaskOperationInterface
     private function getCurrentJob()
     {
         if (null === $this->job) {
-            $this->job = $this->cloud->getJob($this->taskConfig->getState('cloud-job'));
+            $this->job = $this->cloud->getJob((string) $this->taskConfig->getState('cloud-job'));
         }
 
         if ($this->job instanceof CloudJob

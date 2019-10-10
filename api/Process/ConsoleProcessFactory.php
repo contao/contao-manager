@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -12,19 +14,22 @@ namespace Contao\ManagerApi\Process;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Exception\ApiProblemException;
+use Contao\ManagerApi\Exception\InvalidJsonException;
+use Contao\ManagerApi\Process\Forker\ForkerInterface;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Process\Process;
-use Terminal42\BackgroundProcess\Exception\InvalidJsonException;
-use Terminal42\BackgroundProcess\Forker\ForkerInterface;
-use Terminal42\BackgroundProcess\ProcessController;
+use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
+use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
 
 /**
  * Creates foreground and background processes for the Contao or Manager console.
+ *
+ * @ServiceTag("monolog.logger", channel="tasks")
  */
-class ConsoleProcessFactory implements LoggerAwareInterface
+class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationInterface
 {
     use LoggerAwareTrait;
 
@@ -40,9 +45,6 @@ class ConsoleProcessFactory implements LoggerAwareInterface
 
     /**
      * Constructor.
-     *
-     * @param ApiKernel  $kernel
-     * @param ServerInfo $serverInfo
      */
     public function __construct(ApiKernel $kernel, ServerInfo $serverInfo)
     {
@@ -52,10 +54,8 @@ class ConsoleProcessFactory implements LoggerAwareInterface
 
     /**
      * Gets the path to manager console or Phar file.
-     *
-     * @return string
      */
-    public function getManagerConsolePath()
+    public function getManagerConsolePath(): string
     {
         if ('' !== ($phar = \Phar::running(false))) {
             return $phar;
@@ -66,96 +66,76 @@ class ConsoleProcessFactory implements LoggerAwareInterface
 
     /**
      * Gets the path to the Contao console.
-     *
-     * @return string
      */
-    public function getContaoConsolePath()
+    public function getContaoConsolePath(): string
     {
         return $this->kernel->getProjectDir().'/vendor/contao/manager-bundle/bin/contao-console';
     }
 
     /**
      * Gets the path to the Contao API.
-     *
-     * @return string
      */
-    public function getContaoApiPath()
+    public function getContaoApiPath(): string
     {
         return $this->kernel->getProjectDir().'/vendor/contao/manager-bundle/bin/contao-api';
     }
 
     /**
      * Creates a foreground process for the Manager console.
-     *
-     * @param array $arguments
-     *
-     * @return Process
      */
-    public function createManagerConsoleProcess(array $arguments)
+    public function createManagerConsoleProcess(array $arguments): Process
     {
-        return $this->createForegroundProcess($this->getManagerConsolePath(), $arguments);
+        array_unshift($arguments, $this->getManagerConsolePath());
+
+        return $this->createForegroundProcess($arguments);
     }
 
     /**
      * Creates a background process for the Manager console.
-     *
-     * @param array       $arguments
-     * @param string|null $id
-     *
-     * @return ProcessController
      */
-    public function createManagerConsoleBackgroundProcess(array $arguments, $id = null)
+    public function createManagerConsoleBackgroundProcess(array $arguments, string $id = null): ProcessController
     {
-        return $this->createBackgroundProcess($this->getManagerConsolePath(), $arguments, $id);
+        array_unshift($arguments, $this->getManagerConsolePath());
+
+        return $this->createBackgroundProcess($arguments, $id);
     }
 
     /**
      * Creates a foreground process for the Contao console.
-     *
-     * @param array $arguments
-     *
-     * @return Process
      */
-    public function createContaoConsoleProcess(array $arguments)
+    public function createContaoConsoleProcess(array $arguments): Process
     {
-        return $this->createForegroundProcess($this->getContaoConsolePath(), $arguments);
+        array_unshift($arguments, $this->getContaoConsolePath());
+
+        return $this->createForegroundProcess($arguments);
     }
 
     /**
      * Creates a background process for the Contao console.
-     *
-     * @param array       $arguments
-     * @param string|null $id
-     *
-     * @return ProcessController
      */
-    public function createContaoConsoleBackgroundProcess(array $arguments, $id = null)
+    public function createContaoConsoleBackgroundProcess(array $arguments, string $id = null): ProcessController
     {
-        return $this->createBackgroundProcess($this->getContaoConsolePath(), $arguments, $id);
+        array_unshift($arguments, $this->getContaoConsolePath());
+
+        return $this->createBackgroundProcess($arguments, $id);
     }
 
     /**
      * Creates a foreground process for the Contao API.
-     *
-     * @param array $arguments
-     *
-     * @return Process
      */
-    public function createContaoApiProcess(array $arguments)
+    public function createContaoApiProcess(array $arguments): Process
     {
-        return $this->createForegroundProcess($this->getContaoApiPath(), $arguments);
+        array_unshift($arguments, $this->getContaoApiPath());
+
+        return $this->createForegroundProcess($arguments);
     }
 
     /**
      * Restores the ProcessController for given task ID.
      *
-     * @param string $id
-     *
      * @throws ApiProblemException
-     *
-     * @return ProcessController
      */
-    public function restoreBackgroundProcess($id)
+    public function restoreBackgroundProcess(string $id): ProcessController
     {
         try {
             $process = ProcessController::restore($this->kernel->getConfigDir(), $id);
@@ -174,16 +154,11 @@ class ConsoleProcessFactory implements LoggerAwareInterface
 
     /**
      * Creates a foreground process.
-     *
-     * @param string $console
-     * @param array  $arguments
-     *
-     * @return Process
      */
-    private function createForegroundProcess($console, array $arguments)
+    private function createForegroundProcess(array $arguments): Process
     {
-        return (new Process(
-            $this->buildCommandLine($console, $arguments),
+        return (new Utf8Process(
+            $this->addPhpRuntime($arguments),
             $this->kernel->getProjectDir(),
             $this->serverInfo->getPhpEnv()
         ))->inheritEnvironmentVariables()->setTimeout(0);
@@ -191,18 +166,12 @@ class ConsoleProcessFactory implements LoggerAwareInterface
 
     /**
      * Creates a background process controller.
-     *
-     * @param string      $console
-     * @param array       $arguments
-     * @param string|null $id
-     *
-     * @return ProcessController
      */
-    private function createBackgroundProcess($console, array $arguments, $id = null)
+    private function createBackgroundProcess(array $arguments, string $id = null): ProcessController
     {
         $process = ProcessController::create(
             $this->kernel->getConfigDir(),
-            $this->buildCommandLine($console, $arguments),
+            $this->addPhpRuntime($arguments),
             $this->kernel->getProjectDir(),
             $id
         );
@@ -216,14 +185,12 @@ class ConsoleProcessFactory implements LoggerAwareInterface
 
     /**
      * Adds forker instances to the process controller.
-     *
-     * @param ProcessController $process
      */
-    private function addForkers(ProcessController $process)
+    private function addForkers(ProcessController $process): void
     {
-        $backgroundCommand = $this->buildCommandLine(
-            $this->getManagerConsolePath(),
+        $backgroundCommand = $this->addPhpRuntime(
             [
+                $this->getManagerConsolePath(),
                 '--no-interaction',
                 'run',
             ]
@@ -244,29 +211,21 @@ class ConsoleProcessFactory implements LoggerAwareInterface
     }
 
     /**
-     * Builds a command line with PHP runtime from console path and arguments.
-     *
-     * @param string $console
-     * @param array  $arguments
-     *
-     * @return string
+     * Adds PHP runtime to console arguments.
      */
-    private function buildCommandLine($console, array $arguments)
+    private function addPhpRuntime(array $arguments): array
     {
-        $defaultArgs = ['-q'];
+        if (null === ($phpCli = $this->serverInfo->getPhpExecutable())) {
+            return $arguments;
+        }
+
+        $defaultArgs = [$phpCli, '-q'];
 
         if (file_exists($this->kernel->getConfigDir().'/php.ini')) {
             $defaultArgs[] = '-c';
             $defaultArgs[] = $this->kernel->getConfigDir().'/php.ini';
         }
 
-        if (null !== ($phpCli = $this->serverInfo->getPhpExecutable())) {
-            $cmd = $phpCli;
-            $arguments = array_merge($defaultArgs, $this->serverInfo->getPhpArguments(), [$console], $arguments);
-        } else {
-            $cmd = $console;
-        }
-
-        return escapeshellcmd($cmd).' '.implode(' ', array_map('escapeshellarg', $arguments)).' 2>&1';
+        return array_merge($defaultArgs, $this->serverInfo->getPhpArguments(), $arguments);
     }
 }

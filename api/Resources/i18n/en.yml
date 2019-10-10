@@ -39,13 +39,15 @@ en:
             title: 'The Contao version could not be determined'
             detail: "The console returned unexpected content when asked for the Contao version. Please check the output for more information:\n\n{output}"
 
+    boot:
+        composer:
+            invalid: 'composer.json schema validation: {exception}'
+
     config:
         php_cli:
             not_found: 'This path does not contain a valid PHP binary.'
             incompatible: 'This binary is a PHP version {cli} but your web server is version {web}.'
         cloud:
-            path: 'Path repositories are not supported.'
-            artifact: 'Artifact repositories are not supported.'
             platform: 'Platform must not be configured in composer.json.'
             cache: 'Cache properties must not be configured in composer.json.'
 
@@ -110,6 +112,11 @@ en:
             summary: 'Adding Composer packages …'
         composer-remove:
             summary: 'Removing Composer packages …'
+        install-uploads:
+            summary: 'Installing uploaded packages …'
+            console: 'Installed artifact for {package} (version {version}) [to packages/{name}]'
+        remove-uploads:
+            summary: 'Removing upload files …'
         composer-install:
             summary: 'Installing Composer dependencies …'
             summaryRetry: 'Installing Composer dependencies (retrying {current}/{max}) …'
@@ -131,3 +138,10 @@ en:
             finishedDetail: 'Memory usage: {memory} (peak: {peak}), time: {time}.'
         clear-cache:
             summary: 'Deleting cache files …'
+
+    upload:
+        error:
+            file: 'The file is invalid or does not contain a composer.json.'
+            json: 'The composer.json does not contain valid JSON data.'
+            schema: 'The composer.json schema validation failed.'
+            partial: 'The file upload was not completed.'

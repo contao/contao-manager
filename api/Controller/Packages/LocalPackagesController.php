@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -13,6 +15,7 @@ namespace Contao\ManagerApi\Controller\Packages;
 use Composer\Package\Dumper\ArrayDumper;
 use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -32,7 +35,7 @@ class LocalPackagesController
         $this->environment = $environment;
     }
 
-    public function __invoke($name = null)
+    public function __invoke(string $name = null): Response
     {
         $packages = $this->getLocalPackages();
 
@@ -47,7 +50,7 @@ class LocalPackagesController
         return new JsonResponse($packages[$name]);
     }
 
-    private function getLocalPackages()
+    private function getLocalPackages(): array
     {
         $packages = [];
         $dumper = new ArrayDumper();

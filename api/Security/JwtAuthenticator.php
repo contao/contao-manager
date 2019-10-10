@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -27,14 +29,17 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
      */
     private $jwtManager;
 
-    /**
-     * Constructor.
-     *
-     * @param JwtManager $jwtManager
-     */
     public function __construct(JwtManager $jwtManager)
     {
         $this->jwtManager = $jwtManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports(Request $request)
+    {
+        return $this->jwtManager->hasRequestToken($request) && null !== $this->jwtManager->getPayload($request);
     }
 
     /**
@@ -82,7 +87,7 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        $token->setAttribute('authenticator', get_called_class());
+        $token->setAttribute('authenticator', \get_called_class());
 
         return null;
     }

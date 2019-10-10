@@ -1,10 +1,10 @@
 <template>
     <section class="maintenance">
         <div class="maintenance__inside">
-            <figure class="maintenance__image"><img src="../../../assets/images/composer-logo.png" /></figure>
+            <figure class="maintenance__image"><img src="../../../assets/images/composer-logo.png" alt=""></figure>
 
             <div class="maintenance__about">
-                <h1>{{ 'ui.maintenance.composerInstall.title' | translate }}</h1>
+                <h1>{{ $t('ui.maintenance.composerInstall.title') }}</h1>
                 <p v-html="$t('ui.maintenance.composerInstall.description')"></p>
             </div>
 
@@ -19,7 +19,7 @@
 
 <script>
     import ButtonGroup from '../../widgets/ButtonGroup';
-    import LinkMenu from '../../fragments/LinkMenu';
+    import LinkMenu from 'contao-package-list/src/components/fragments/LinkMenu';
 
     export default {
         components: { ButtonGroup, LinkMenu },

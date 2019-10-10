@@ -1,34 +1,44 @@
 <template>
     <div id="app">
         <div class="https-warning" v-if="isInsecure">
-            <strong class="https-warning__headline">{{ 'ui.app.httpsHeadline' | translate }}</strong>
-            <span class="https-warning__description">{{ 'ui.app.httpsDescription' | translate }}</span>
-            <a :href="$t('ui.app.httpsHref')" target="_blank" class="https-warning__link">{{ 'ui.app.httpsLink' | translate }}</a>
+            <strong class="https-warning__headline">{{ $t('ui.app.httpsHeadline') }}</strong>&nbsp;
+            <span class="https-warning__description">{{ $t('ui.app.httpsDescription') }}</span>&nbsp;
+            <a :href="$t('ui.app.httpsHref')" target="_blank" class="https-warning__link">{{ $t('ui.app.httpsLink') }}</a>
         </div>
 
         <error v-if="hasError"></error>
 
-        <div v-if="isInitializing" class="view-init">
-            <div class="view-init__cell">
-                <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo">
-                <p class="view-init__message">{{ 'ui.app.loading' | translate }}</p>
+        <transition name="fade" mode="out-in" style="height:100%">
+
+            <div v-if="isInitializing || isReady" class="view-init">
+                <div class="view-init__cell">
+                    <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo">
+                    <p class="view-init__message">{{ $t('ui.app.loading') }}</p>
+                </div>
             </div>
-        </div>
 
-        <component :is="currentView" :class="taskRunning ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
+            <component :is="currentView" :class="hasPopup ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
 
-        <router-view v-else :class="taskRunning ? 'blur-in' : 'blur-out'"></router-view>
+            <div v-else>
+                <router-view :class="hasPopup ? 'blur-in' : 'blur-out'"></router-view>
+            </div>
 
-        <keep-alive><task-popup v-if="taskRunning"></task-popup></keep-alive>
+        </transition>
+
+        <logout-warning v-if="warnForLogout"/>
+        <task-popup v-else-if="taskRunning"/>
+        <package-details v-else-if="showPackage"/>
     </div>
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
     import views from '../router/views';
 
     import TaskPopup from './fragments/TaskPopup';
-    import Loader from './fragments/Loader';
+    import PackageDetails from './fragments/PackageDetails';
+    import LogoutWarning from './fragments/LogoutWarning';
+    import Loader from 'contao-package-list/src/components/fragments/Loader';
 
     import Error from './views/Error';
     import Account from './views/Account';
@@ -37,7 +47,7 @@
     import Recovery from './views/Recovery';
 
     export default {
-        components: { Loader, TaskPopup, Error },
+        components: { Loader, TaskPopup, PackageDetails, LogoutWarning, Error },
 
         data: () => ({
             views: {
@@ -45,25 +55,55 @@
                 [views.LOGIN]: Login,
                 [views.BOOT]: Boot,
                 [views.RECOVERY]: Recovery,
-            }
+            },
+            loaded: false,
         }),
 
         computed: {
             ...mapState(['view', 'error']),
+            ...mapState(['auth', 'username']),
             ...mapState('tasks', { taskStatus: 'status' }),
+            ...mapState('packages', ['installed']),
+            ...mapGetters('auth', ['warnForLogout']),
+
+
+            ...mapGetters('packages', [
+                'packageInstalled',
+                'packageRequired',
+                'packageAdded',
+                'isSuggested',
+            ]),
+
+            currentPackageName: vm => vm.$route.query.p,
 
             isInitializing: vm => vm.view === views.INIT,
+            isReady: vm => !vm.isInitializing && !vm.currentView && !vm.loaded,
             isInsecure: () => location.protocol !== 'https:' && location.hostname !== 'localhost',
+            showPackage: vm => vm.currentPackageName && !vm.isInitializing && !vm.currentView && vm.loaded,
             taskRunning: vm => vm.taskStatus !== null,
+            hasPopup: vm => vm.warnForLogout || vm.taskRunning || !!vm.showPackage,
             hasError: vm => vm.error !== null,
 
             currentView: vm => vm.views[vm.view] || null,
         },
 
         watch: {
-            taskRunning(running) {
-                document.body.style.overflow = running ? 'hidden' : 'scroll';
+            hasPopup(state) {
+                document.body.style.overflow = state ? 'hidden' : 'scroll';
             },
+
+            async isReady(ready) {
+                if (ready) {
+                    try {
+                        await this.$store.dispatch('packages/uploads/load');
+                        await this.$store.dispatch('packages/load');
+                        await this.$store.dispatch('algolia/discover');
+                    } catch (err) {
+                        // do nothing
+                    }
+                    this.loaded = true;
+                }
+            }
         },
 
         async mounted() {
@@ -103,12 +143,36 @@
                 this.$store.commit('apiError', { status: accountStatus });
             }
         },
+
+        created() {
+            document.title = `Contao Manager @package_version@ | ${location.hostname}`;
+        },
     };
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../assets/styles/defaults";
-    @import "../assets/styles/layout";
+    $icons: (
+        'add',
+        'check',
+        'edit',
+        'gear',
+        'hide',
+        'details',
+        'link',
+        'lock',
+        'power',
+        'run',
+        'save',
+        'search',
+        'show',
+        'trash',
+        'unlock',
+        'update',
+        'upload',
+    );
+
+    @import "~contao-package-list/src/assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/layout";
 
     .https-warning {
         position: absolute;
@@ -179,5 +243,19 @@
         100% {
             opacity: 0.5;
         }
+    }
+</style>
+
+<style lang="scss" scoped>
+    .fade-enter-active,
+    .fade-leave-active {
+        transition-duration: 0.2s;
+        transition-property: opacity;
+        transition-timing-function: ease;
+    }
+
+    .fade-enter,
+    .fade-leave-active {
+        opacity: 0
     }
 </style>

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -28,17 +30,12 @@ class TaskController
      */
     private $taskManager;
 
-    /**
-     * Constructor.
-     *
-     * @param TaskManager $taskManager
-     */
     public function __construct(TaskManager $taskManager)
     {
         $this->taskManager = $taskManager;
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         switch ($request->getMethod()) {
             case 'GET':
@@ -54,15 +51,15 @@ class TaskController
                 return $this->deleteTask();
         }
 
-        return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+        return new Response('', Response::HTTP_METHOD_NOT_ALLOWED);
     }
 
-    private function getTask()
+    private function getTask(): Response
     {
         return $this->getResponse($this->taskManager->updateTask());
     }
 
-    private function putTask(Request $request)
+    private function putTask(Request $request): Response
     {
         if ($this->taskManager->hasTask()) {
             throw new BadRequestHttpException('A task is already active');
@@ -71,14 +68,14 @@ class TaskController
         $name = $request->request->get('name');
         $config = $request->request->get('config', []);
 
-        if (empty($name) || !is_array($config)) {
+        if (empty($name) || !\is_array($config)) {
             throw new BadRequestHttpException('Invalid task data');
         }
 
         return $this->getResponse($this->taskManager->createTask($name, $config));
     }
 
-    private function patchTask(Request $request)
+    private function patchTask(Request $request): Response
     {
         if (!$this->taskManager->hasTask()) {
             throw new BadRequestHttpException('No active task found.');
@@ -91,7 +88,7 @@ class TaskController
         return $this->getResponse($this->taskManager->abortTask());
     }
 
-    private function deleteTask()
+    private function deleteTask(): Response
     {
         if (!$this->taskManager->hasTask()) {
             throw new BadRequestHttpException('No active task found.');
@@ -110,10 +107,10 @@ class TaskController
      *
      * @return Response
      */
-    private function getResponse(TaskStatus $status = null, $code = Response::HTTP_OK)
+    private function getResponse(TaskStatus $status = null, $code = Response::HTTP_OK): Response
     {
         if (!$status instanceof TaskStatus) {
-            return new Response(null, Response::HTTP_NO_CONTENT);
+            return new Response('', Response::HTTP_NO_CONTENT);
         }
 
         if (!$status->getDetail()) {

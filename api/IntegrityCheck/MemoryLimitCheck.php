@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -17,9 +19,9 @@ class MemoryLimitCheck extends AbstractIntegrityCheck
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(): ?ApiProblem
     {
-        if (PHP_SAPI !== 'cli' || $this->hasEnoughMemory()) {
+        if (\PHP_SAPI !== 'cli' || $this->hasEnoughMemory()) {
             return null;
         }
 
@@ -29,11 +31,11 @@ class MemoryLimitCheck extends AbstractIntegrityCheck
         ))->setDetail($this->trans('memory_limit.detail', ['limit' => trim(ini_get('memory_limit'))]));
     }
 
-    private function hasEnoughMemory()
+    private function hasEnoughMemory(): bool
     {
-        $memoryLimit = trim(ini_get('memory_limit'));
+        $memoryLimit = (string) trim(ini_get('memory_limit'));
 
-        if ($memoryLimit == -1) {
+        if ('-1' === $memoryLimit) {
             return true;
         }
 
@@ -45,8 +47,8 @@ class MemoryLimitCheck extends AbstractIntegrityCheck
             /* @noinspection PhpMissingBreakStatementInspection */
             case 'g':
                 $memoryLimit *= 1024;
-                // no break (cumulative multiplier)
             /* @noinspection PhpMissingBreakStatementInspection */
+            // no break
             case 'm':
                 $memoryLimit *= 1024;
                 // no break (cumulative multiplier)

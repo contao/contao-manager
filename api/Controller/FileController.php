@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -13,7 +15,6 @@ namespace Contao\ManagerApi\Controller;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/files/{file}", methods={"GET", "PUT"})
  */
-class FileController extends Controller
+class FileController
 {
     /**
      * @var ApiKernel
@@ -45,9 +46,6 @@ class FileController extends Controller
 
     /**
      * Constructor.
-     *
-     * @param KernelInterface $kernel
-     * @param Filesystem|null $filesystem
      */
     public function __construct(KernelInterface $kernel, Filesystem $filesystem = null)
     {
@@ -55,16 +53,9 @@ class FileController extends Controller
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    /**
-     * Reads and writes a file.
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
-        if (!in_array($request->attributes->get('file'), $this->allowedFiles, true)) {
+        if (!\in_array($request->attributes->get('file'), $this->allowedFiles, true)) {
             return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_FORBIDDEN));
         }
 

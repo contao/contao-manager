@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -14,12 +16,16 @@ use Composer\Json\JsonFile;
 use Contao\ManagerApi\System\Request;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
 
+/**
+ * @ServiceTag("monolog.logger", channel="tasks")
+ */
 class CloudResolver implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    const API_URL = 'https://composer-resolver.cloud';
+    private const API_URL = 'https://composer-resolver.cloud';
 
     /**
      * @var Request
@@ -38,25 +44,23 @@ class CloudResolver implements LoggerAwareInterface
 
     /**
      * Creates a Cloud job for given composer changes.
-     *
-     * @param CloudChanges $definition
-     * @param bool         $debugMode
-     *
-     * @return CloudJob
      */
-    public function createJob(CloudChanges $definition, $debugMode = false)
+    public function createJob(CloudChanges $changes, Environment $environment): CloudJob
     {
+        $environment->reset();
+
         $data = [
-            'composerJson' => $definition->getJson(),
-            'composerLock' => $definition->getLock(),
-            'platform' => $definition->getPlatform(),
+            'composerJson' => $environment->getComposerJson(),
+            'composerLock' => $environment->getComposerLock(),
+            'platform' => $environment->getPlatformPackages(),
+            'localPackages' => $environment->getLocalPackages(),
         ];
 
-        $command = $definition->getUpdates();
+        $command = $changes->getUpdates();
         $command[] = '--with-dependencies';
         $command[] = '--profile';
 
-        if ($debugMode) {
+        if ($environment->isDebug()) {
             $command[] = '-vvv';
         }
 
@@ -91,12 +95,8 @@ class CloudResolver implements LoggerAwareInterface
 
     /**
      * Gets job information from the Composer Cloud.
-     *
-     * @param string $jobId
-     *
-     * @return CloudJob|null
      */
-    public function getJob($jobId)
+    public function getJob(string $jobId): ?CloudJob
     {
         if (!$jobId) {
             return null;
@@ -120,12 +120,8 @@ class CloudResolver implements LoggerAwareInterface
 
     /**
      * Deletes a cloud job and returns whether it was successful.
-     *
-     * @param string $jobId
-     *
-     * @return bool
      */
-    public function deleteJob($jobId)
+    public function deleteJob(string $jobId): bool
     {
         if (!$jobId) {
             return false;
@@ -146,24 +142,16 @@ class CloudResolver implements LoggerAwareInterface
 
     /**
      * Gets the composer.json file.
-     *
-     * @param CloudJob $job
-     *
-     * @return string
      */
-    public function getComposerJson(CloudJob $job)
+    public function getComposerJson(CloudJob $job): string
     {
         return $this->getContent($job->getLink(CloudJob::LINK_JSON));
     }
 
     /**
      * Gets the composer.lock file or null if the cloud job was not successful.
-     *
-     * @param CloudJob $job
-     *
-     * @return null|string
      */
-    public function getComposerLock(CloudJob $job)
+    public function getComposerLock(CloudJob $job): ?string
     {
         if (!$job->isSuccessful()) {
             return null;
@@ -174,12 +162,8 @@ class CloudResolver implements LoggerAwareInterface
 
     /**
      * Gets the console output for a cloud job.
-     *
-     * @param CloudJob $job
-     *
-     * @return null|string
      */
-    public function getOutput(CloudJob $job)
+    public function getOutput(CloudJob $job): ?string
     {
         if ($job->isQueued()) {
             return null;
@@ -192,7 +176,7 @@ class CloudResolver implements LoggerAwareInterface
         return $this->output[$job->getId()];
     }
 
-    private function getContent($link)
+    private function getContent($link): string
     {
         $content = $this->request->getJson(
             self::API_URL.$link,

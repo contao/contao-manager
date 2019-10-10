@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -20,25 +22,28 @@ class JsonRequestListener implements EventSubscriberInterface
     /**
      * Disallow everything except JSON and convert data to request content.
      *
-     * @param KernelEvent $event
-     *
      * @throws UnsupportedMediaTypeHttpException
      * @throws BadRequestHttpException
      */
-    public function onKernelRequest(KernelEvent $event)
+    public function onKernelRequest(KernelEvent $event): void
     {
         $request = $event->getRequest();
+        $content = $content = $request->getContent();
+
+        if ('' === $content && $request->attributes->get('form-data')) {
+            return;
+        }
 
         $data = [];
 
-        if (($content = $request->getContent()) !== '') {
+        if ('' !== $content) {
             if ('json' !== $request->getContentType()) {
                 throw new UnsupportedMediaTypeHttpException('Only JSON requests are supported.');
             }
 
             $data = json_decode($content, true);
 
-            if (!is_array($data)) {
+            if (!\is_array($data)) {
                 throw new BadRequestHttpException('Invalid JSON data received.');
             }
         }
@@ -49,8 +54,9 @@ class JsonRequestListener implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
-        return ['kernel.request' => ['onKernelRequest', 100]];
+        // Priority must be lower than the router (defaults to 32)
+        return ['kernel.request' => ['onKernelRequest', 20]];
     }
 }

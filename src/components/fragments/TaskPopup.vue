@@ -24,35 +24,30 @@
             <div class="task-popup__status task-popup__status--error" v-else-if="taskStatus === 'error' || taskStatus === 'stopped' || taskStatus === 'failed'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2 12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z" /></svg>
             </div>
-            <div :class="statusClass" v-else>
-                <div class="task-popup__progress task-popup__progress--20"></div>
-                <div class="task-popup__progress task-popup__progress--40"></div>
-                <div class="task-popup__progress task-popup__progress--60"></div>
-                <div class="task-popup__progress task-popup__progress--80"></div>
-                <div class="task-popup__progress task-popup__progress--100"></div>
+            <loader horizontal :class="statusClass" v-else>
                 <p class="task-popup__progress-text" v-if="currentTask && currentTask.progress">{{ currentTask.progress }}%</p>
-            </div>
-
+            </loader>
             <div class="task-popup__summary" v-if="taskStatus === 'failed'">
-                <h2 class="task-popup__text">{{ 'ui.taskpopup.failedHeadline' | translate }}</h2>
+                <h2 class="task-popup__text">{{ $t('ui.taskpopup.failedHeadline') }}</h2>
                 <p class="task-popup__text" v-html="$t('ui.taskpopup.failedDescription')"></p>
-                <p class="task-popup__text"><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ 'ui.taskpopup.reportProblem' | translate }}</a></p>
+                <p class="task-popup__text"><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ $t('ui.taskpopup.reportProblem') }}</a></p>
 
-                <button class="widget-button" @click="hidePopup"><span>{{ 'ui.taskpopup.buttonClose' | translate }}</span></button>
+                <button class="widget-button" @click="hidePopup"><span>{{ $t('ui.taskpopup.buttonClose') }}</span></button>
             </div>
             <div class="task-popup__summary" v-else>
                 <h2 class="task-popup__text">{{ taskSummary }}</h2>
                 <p class="task-popup__text">{{ taskDetail }}</p>
 
                 <loading-button :disabled="!currentTask || !currentTask.cancellable" :loading="isAborting" @click="cancelTask" v-if="isActive || isAborting">{{ $t('ui.taskpopup.buttonCancel') }}</loading-button>
-                <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ 'ui.taskpopup.buttonAudit' | translate }}</a>
+                <!--suppress HtmlUnknownTarget -->
+                <a class="widget-button widget-button--primary" href="/contao/install" @click="completeAudit" target="_blank" v-if="!isActive && requiresAudit">{{ $t('ui.taskpopup.buttonAudit') }}</a>
                 <loading-button :loading="deletingTask" @click="hidePopup" v-if="!isActive && !isAborting">
                     {{ $t('ui.taskpopup.buttonConfirm') }}
                 </loading-button>
             </div>
 
             <div class="task-popup__console">
-                <code ref="console" @scroll="scrolled" class="task-popup__output" v-show="showConsole && allowConsole"><i v-if="!taskConsole">{{ 'ui.taskpopup.noconsole' | translate }}</i>{{ taskConsole }}</code>
+                <code ref="console" @scroll="scrolled" class="task-popup__output" v-show="showConsole && allowConsole"><i v-if="!taskConsole">{{ $t('ui.taskpopup.noconsole') }}</i>{{ taskConsole }}</code>
             </div>
         </div>
     </div>
@@ -61,10 +56,11 @@
 <script>
     import { mapState } from 'vuex';
 
-    import LoadingButton from '../widgets/LoadingButton';
+    import Loader from 'contao-package-list/src/components/fragments/Loader';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
-        components: { LoadingButton },
+        components: { Loader, LoadingButton },
 
         data: () => ({
             showConsole: false,
@@ -72,6 +68,8 @@
             scrollToBottom: true,
             swallowScroll: true,
             audit: false,
+            favicons: null,
+            faviconInterval: null,
         }),
 
         computed: {
@@ -80,7 +78,6 @@
             popupClass() {
                 return {
                     'task-popup': true,
-                    'task-popup--fixed': !this.$refs.popup || this.$refs.popup.clientHeight < window.innerHeight,
                     'task-popup--console': this.hasConsole && this.showConsole && this.taskStatus !== 'failed',
                 };
             },
@@ -209,6 +206,46 @@
 
                 this.swallowScroll = false;
             },
+
+            updateFavicon() {
+                let base;
+
+                if (this.faviconInterval) {
+                    clearInterval(this.faviconInterval);
+                }
+
+                const replaceIcon = (base) => {
+                    this.favicons.forEach((el) => {
+                        el.href = `${base}/${el.href.split('/').pop()}`;
+                    });
+                };
+
+                switch (this.taskStatus) {
+                    case 'active':
+                        base = 'icons/task-active';
+                        break;
+
+                    case 'complete':
+                        base = 'icons/task-success';
+                        break;
+
+                    case 'error':
+                    case 'failed':
+                    case 'stopped':
+                        base = 'icons/task-error';
+                        break;
+
+                    default:
+                        setTimeout(replaceIcon.bind(this, 'icons'), 5000);
+                        return;
+                }
+
+                let replace = false;
+                this.faviconInterval = setInterval(() => {
+                    replace = !replace;
+                    replaceIcon(replace ? base : 'icons');
+                }, 2000);
+            },
         },
 
         watch: {
@@ -222,16 +259,23 @@
                     );
                 }
             },
+
+            taskStatus() {
+                this.updateFavicon();
+            }
         },
 
-        activated() {
+        mounted() {
+            this.favicons = document.querySelectorAll('link[class="favicon"]');
+            this.updateFavicon();
+
             this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
             this.autoClose = window.localStorage.getItem('contao_manager_autoclose') === '1';
             this.scrollToBottom = true;
             this.audit = true;
         },
 
-        deactivated() {
+        beforeDestroy() {
             this.$store.commit('tasks/setStatus', null);
             this.$store.commit('tasks/setCurrent', null);
         },
@@ -239,7 +283,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .task-popup {
         position: fixed;
@@ -382,54 +426,21 @@
             }
         }
 
-        &__progress {
-            float: left;
-            width: 16px;
-            height: 16px;
-            margin-right: 1px;
-            background-color: $contao-color;
-            animation: loading 1.4s infinite ease-in-out both;
-
-            &--20 {
-                animation-delay: -0.64s;
-            }
-
-            &--40 {
-                animation-delay: -0.48s;
-            }
-
-            &--60 {
-                animation-delay: -0.32s;
-            }
-
-            &--80 {
-                animation-delay: -0.16s;
-            }
-
-            @keyframes loading {
-                0%, 90%, 100% { opacity: 0; }
-                20% { opacity: 1; }
-            }
-        }
-
         &__progress-text {
             float: left;
             width: 40px;
         }
 
         @include screen(960) {
+            position: relative;
             display: block;
-            top: 50%;
+            top: 0;
             left: 50%;
             width: 750px;
             margin-left: -375px;
             height: auto;
-            transform: translateY(-50%);
             border-bottom: 2px solid #ddd3bc;
             border-radius: 2px;
-
-            &.fixed {
-            }
 
             &__text {
                 margin: 0 70px;
@@ -443,6 +454,12 @@
                 height: 300px;
                 margin: 0 70px 30px;
             }
+        }
+
+        @media (min-width: 960px) and (min-height: 700px) {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
         }
     }
 </style>

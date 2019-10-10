@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -14,12 +16,12 @@ use Crell\ApiProblem\ApiProblem;
 
 class ProcessCheck extends AbstractIntegrityCheck
 {
-    public function run()
+    public function run(): ?ApiProblem
     {
-        if (function_exists('proc_open')
-            && function_exists('proc_close')
-            && function_exists('proc_get_status')
-            && function_exists('proc_terminate')
+        if (\function_exists('proc_open')
+            && \function_exists('proc_close')
+            && \function_exists('proc_get_status')
+            && \function_exists('proc_terminate')
         ) {
             return null;
         }

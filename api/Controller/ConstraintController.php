@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -21,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ConstraintController
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         if (!$request->request->has('constraint')) {
             return new Response('Missing constraint in POST data.', Response::HTTP_BAD_REQUEST);

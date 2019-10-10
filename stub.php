@@ -6,18 +6,15 @@ if (function_exists('ini_set')) {
     @ini_set('display_errors', 1);
     @ini_set('display_startup_errors', 1);
     @ini_set('opcache.enable', '0');
+    @ini_set('opcache.enable_cli', '0');
 }
 
 if (PHP_VERSION_ID < 50509) {
-    die('You are using PHP '.phpversion().' but you need least PHP 5.5.9 to run the Contao Manager.');
+    die('You are using PHP '.phpversion()." but you need least PHP 5.5.9 to run the Contao Manager.\n");
 }
 
 if (!extension_loaded('Phar')) {
     die('The PHP Phar extension is not enabled.');
-}
-
-if (function_exists('ioncube_loader_iversion') && ioncube_loader_iversion() < 40009) {
-    die('The PHP ionCube Loader extension prior to version 4.0.9 cannot handle .phar files.');
 }
 
 if (false !== ($suhosin = ini_get('suhosin.executor.include.whitelist'))) {
@@ -29,7 +26,7 @@ if (false !== ($suhosin = ini_get('suhosin.executor.include.whitelist'))) {
 }
 
 if (false !== ($multibyte = ini_get('zend.multibyte')) && '' !== $multibyte && 0 !== (int) $multibyte && 'Off' !== $multibyte) {
-    $unicode = ini_get(version_compare(phpversion(), '5.4', '<') ? 'detect_unicode' : 'zend.detect_unicode');
+    $unicode = ini_get('zend.detect_unicode');
 
     if ('' !== $unicode && 0 !== (int) $unicode && 'Off' !== $unicode) {
         die('The detect_unicode setting needs to be disabled in your php.ini.');
@@ -38,8 +35,11 @@ if (false !== ($multibyte = ini_get('zend.multibyte')) && '' !== $multibyte && 0
 
 unset($multibyte, $unicode);
 
-if ('cgi-fcgi' === php_sapi_name() && extension_loaded('eaccelerator') && ini_get('eaccelerator.enable')) {
-    die('The PHP eAccelerator extension cannot handle .phar files.');
+if (PHP_VERSION_ID < 70103) {
+    Phar::mapPhar('contao-manager.phar');
+    /** @noinspection PhpIncludeInspection */
+    @include 'phar://contao-manager.phar/downgrade.php';
+    die('<script>setTimeout(function() { window.location.reload(true) }, 1000)</script>');
 }
 
 if (function_exists('date_default_timezone_set') && function_exists('date_default_timezone_get')) {
@@ -48,8 +48,11 @@ if (function_exists('date_default_timezone_set') && function_exists('date_defaul
 }
 
 if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
+    if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] === 'test') {
+        die(json_encode(['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI]));
+    }
+
     Phar::mapPhar('contao-manager.phar');
-    /** @noinspection UntrustedInclusionInspection */
     /** @noinspection PhpIncludeInspection */
     require 'phar://contao-manager.phar/api/console';
 } else {

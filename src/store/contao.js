@@ -1,14 +1,16 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
-
 import accessKey from './contao/accessKey';
+import installTool from './contao/installTool';
+import jwtCookie from './contao/jwtCookie';
 
 export default {
     namespaced: true,
 
     modules: {
         'access-key': accessKey,
+        'install-tool': installTool,
+        'jwt-cookie': jwtCookie,
     },
 
     actions: {
@@ -22,16 +24,8 @@ export default {
                 },
             };
 
-            return Vue.http.patch(
-                'api/config/composer',
-                {
-                    'preferred-install': 'dist',
-                    'store-auths': false,
-                    'optimize-autoloader': true,
-                    'sort-packages': true,
-                    'discard-changes': true,
-                },
-            ).then(() => dispatch('tasks/execute', task, { root: true }));
+            return dispatch('config/composer/writeDefaults', null, { root: true })
+                .then(() => dispatch('tasks/execute', task, { root: true }));
         },
     },
 };

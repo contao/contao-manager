@@ -1,6 +1,6 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.php_cli.title')" :description="bootDescription" :detail="problem && problem.detail">
-        <a v-if="problem && problem.type" :href="problem.type" target="_blank">{{ 'ui.server.details' | translate }}</a>
+        <a v-if="problem && problem.type" :href="problem.type" target="_blank">{{ $t('ui.server.details') }}</a>
     </boot-check>
 </template>
 

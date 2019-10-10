@@ -2,40 +2,33 @@
     <article class="package">
 
         <transition name="package__hint">
-            <div class="package__hint" v-if="hint">
-                <a href="#" class="package__hint-close" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
-                <p>
-                    {{ hint }}
-                    <!--<a href="#">Help</a>-->
-                </p>
+            <div class="package__hint" v-if="hint || !!$slots.hint">
+                <slot name="hint">
+                    <a href="#" class="package__hint-close" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
+                    <p>
+                        {{ hint }}
+                        <!--<a href="#">Help</a>-->
+                    </p>
+                </slot>
             </div>
         </transition>
 
         <div class="package__inside">
-            <figure class="package__icon">
-                <slot name="logo">
-                    <img :src="logo" v-if="logo">
-                    <img src="../../../assets/images/placeholder.png" v-else>
-                </slot>
-            </figure>
+            <package-logo class="package__icon" :src="logo"/>
 
             <div class="package__about">
                 <h1 :class="{ package__headline: true, 'package__headline--badge': badge }">
-                    <span class="package__title" v-html="title || name"></span>
-                    <span class="package__name" v-if="title && name && title !== name">{{ name }}</span>
+                    <span class="package__title">{{ title }}</span>
                     <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
                 </h1>
 
-                <div class="package__description">
-                    <p v-html="description"></p>
-                    <slot name="more"/>
-                </div>
-                <p class="package__additional" v-if="!!$slots.additional">
+                <p class="package__description" v-html="description"></p>
+                <p class="package__additional">
                     <slot name="additional"/>
                 </p>
             </div>
 
-            <div :class="{package__release: true, 'package__release--validating': releaseValidating, 'package__release--error': releaseError, 'package__release--disabled': releaseDisabled }">
+            <div class="package__release">
                 <slot name="release">
                     <div></div>
                 </slot>
@@ -48,29 +41,30 @@
             </fieldset>
 
         </div>
+
+        <slot name="features"/>
     </article>
 </template>
 
 <script>
+    import PackageLogo from 'contao-package-list/src/components/fragments/Logo';
+
     export default {
+        components: { PackageLogo },
+
         props: {
             title: String,
-            name: String,
             logo: String,
             badge: Object,
             description: String,
             hint: String,
             hintClose: String,
-
-            releaseValidating: Boolean,
-            releaseError: Boolean,
-            releaseDisabled: Boolean,
         },
     };
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .package {
         margin-bottom: 14px;
@@ -81,7 +75,7 @@
         &__hint {
             position: relative;
             padding: 8px 20px 8px 20px;
-            background: #e8c8bc;
+            background: $hint-background;
             font-weight: $font-weight-medium;
             font-size: 12px;
             line-height: 1.8;
@@ -89,7 +83,7 @@
 
             @include screen(800) {
                 padding-left: 56px;
-                background: #e8c8bc url('../../../assets/images/hint.svg') 20px 5px no-repeat;
+                background: $hint-background url('../../../assets/images/hint.svg') 20px 5px no-repeat;
                 background-size: 28px 28px;
             }
 
@@ -111,7 +105,7 @@
         &__hint-close {
             float: right;
             padding-left: 18px;
-            color: #bd2e20;
+            color: $hint-link;
             background: url('../../../assets/images/close.svg') left center no-repeat;
             background-size: 14px 14px;
         }
@@ -179,27 +173,8 @@
             }
         }
 
-        &__title,
-        &__name {
+        &__title {
             margin-right: 10px;
-        }
-
-        &__name {
-            position: relative;
-            display: inline-block;
-            top: -3px;
-            padding: 0 8px;
-            background: $border-color;
-            border-radius: 2px;
-            font-size: 12px;
-            line-height: 19px;
-            white-space: nowrap;
-            color: #fff;
-
-            em {
-                background-color: $highlight-color;
-                font-style: normal;
-            }
         }
 
         &__badge {
@@ -223,11 +198,11 @@
         }
 
         &__description {
+            display: -webkit-box;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             margin-bottom: 1em;
-
-            p {
-                display: inline;
-            }
 
             em {
                 background-color: $highlight-color;
@@ -238,7 +213,7 @@
         &__additional {
             margin-top: -5px;
 
-            *:not(:last-child):after {
+            > *:not(:last-child):after {
                 margin: 0 10px;
                 font-weight: $font-weight-normal;
                 content: "|";
@@ -262,8 +237,6 @@
             }
 
             input[type=text] {
-                float: left;
-                width: calc(100% - 32px);
                 height: 30px;
                 margin-right: 2px;
                 background: #fff;
@@ -284,35 +257,45 @@
                     background: $orange-button;
                     -webkit-text-fill-color: #fff;
                 }
+
+                &.disabled {
+                    background: $border-color;
+                    border-color: $border-color;
+                }
+
+                &.error {
+                    animation: input-error .15s linear 3;
+                }
+            }
+
+            fieldset > input[type=text],
+            fieldset > input[type=text]:disabled {
+                float: left;
+                width: calc(100% - 32px);
             }
 
             button {
+                position: relative;
                 width: 30px;
                 height: 30px;
-                padding: 6px;
+                background: $orange-button;
                 line-height: 20px;
-                background: $orange-button url('../../../assets/images/settings.svg') center no-repeat;
-                background-size: 20px 20px;
                 text-indent: -999em;
-            }
 
-            /*&.validating button {
-                animation: release-validating 2s linear infinite;
-            }*/
+                &:hover {
+                    background: darken($orange-button, 5);
+                    border-color: darken($orange-button, 10);
+                }
 
-            &--error input {
-                animation: input-error .15s linear 3;
-            }
+                &:before {
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    margin: -10px 0 0 -10px;
+                }
 
-            &--disabled {
-                input[type=text],
-                input[type=text]:disabled {
-                    background: $border-color;
-                    border-color: $border-color;
-
-                    &::placeholder {
-                        text-decoration: line-through;
-                    }
+                &.rotate:before {
+                    animation: release-validating 2s linear infinite;
                 }
             }
         }
@@ -368,11 +351,17 @@
             }
         }
 
-        &__unavailable {
+        &__release-description {
+            margin-top: -10px;
             text-align: center;
+
+            @include screen(1024) {
+                margin-top: 0;
+            }
 
             img {
                 top: 6px;
+                margin: 0 5px 0 0;
                 position: relative;
 
                 @include screen(1024) {
@@ -381,14 +370,32 @@
                     margin: 0 auto;
                 }
             }
+
+            input + &,
+            fieldset + & {
+                margin: 0 0 20px;
+
+                @include screen(600) {
+                    margin: 15px 0 0;
+                }
+            }
+        }
+
+        &__features {
+            padding: 0 0 10px 0;
+            margin: -20px 0 0;
+
+            @include screen(1024) {
+                margin-top: -10px;
+            }
         }
     }
 
-    /*@keyframes release-validating {
+    @keyframes release-validating {
         100% {
             transform: rotate(360deg);
         }
-    }*/
+    }
 
     @include screen(960) {
         .package__hint {

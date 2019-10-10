@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -43,7 +45,7 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
         if (is_file($this->configFile)) {
             $this->data = json_decode(file_get_contents($this->configFile), true);
 
-            if (!is_array($this->data)) {
+            if (!\is_array($this->data)) {
                 throw new \InvalidArgumentException('The config file does not contain valid JSON data.');
             }
         }
@@ -51,30 +53,24 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
 
     /**
      * Returns the config.
-     *
-     * @return array
      */
-    public function all()
+    public function all(): array
     {
         return $this->data;
     }
 
     /**
      * Returns the config keys.
-     *
-     * @return array
      */
-    public function keys()
+    public function keys(): array
     {
         return array_keys($this->data);
     }
 
     /**
      * Replaces the current config by a new set.
-     *
-     * @param array $data
      */
-    public function replace(array $data = [])
+    public function replace(array $data = []): void
     {
         $this->data = $data;
 
@@ -83,10 +79,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
 
     /**
      * Adds config options.
-     *
-     * @param array $data
      */
-    public function add(array $data = [])
+    public function add(array $data = []): void
     {
         $this->data = array_replace($this->data, $data);
 
@@ -95,24 +89,16 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
 
     /**
      * Returns a config option by name.
-     *
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
-        return array_key_exists($key, $this->data) ? $this->data[$key] : $default;
+        return \array_key_exists($key, $this->data) ? $this->data[$key] : $default;
     }
 
     /**
      * Sets a config option by name.
-     *
-     * @param string $key
-     * @param mixed  $value
      */
-    public function set($key, $value)
+    public function set(string $key, $value): void
     {
         $this->data[$key] = $value;
 
@@ -121,22 +107,16 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
 
     /**
      * Returns true if the config option is defined.
-     *
-     * @param string $key The key
-     *
-     * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
-        return array_key_exists($key, $this->data);
+        return \array_key_exists($key, $this->data);
     }
 
     /**
      * Removes a config option.
-     *
-     * @param string $key The key
      */
-    public function remove($key)
+    public function remove(string $key): void
     {
         unset($this->data[$key]);
 
@@ -154,15 +134,15 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
     /**
      * {@inheritdoc}
      */
-    public function count()
+    public function count(): int
     {
-        return count($this->data);
+        return \count($this->data);
     }
 
     /**
      * Saves current data to the JSON config file.
      */
-    protected function save()
+    protected function save(): void
     {
         $this->filesystem->dumpFile(
             $this->configFile,

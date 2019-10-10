@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -18,12 +20,8 @@ class UserProviderFactory
 {
     /**
      * Creates an InMemory user provider from users in auth.json.
-     *
-     * @param UserConfig $config
-     *
-     * @return UserProviderInterface
      */
-    public static function createUserProvider(UserConfig $config)
+    public static function createUserProvider(UserConfig $config): UserProviderInterface
     {
         $provider = new InMemoryUserProvider();
 

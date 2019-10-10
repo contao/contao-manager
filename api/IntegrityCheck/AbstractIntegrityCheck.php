@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -19,11 +21,6 @@ abstract class AbstractIntegrityCheck implements IntegrityCheckInterface
      */
     private $translator;
 
-    /**
-     * Constructor.
-     *
-     * @param Translator $translator
-     */
     public function __construct(Translator $translator)
     {
         $this->translator = $translator;
@@ -31,13 +28,8 @@ abstract class AbstractIntegrityCheck implements IntegrityCheckInterface
 
     /**
      * Translates a string from the "integrity" domain.
-     *
-     * @param string $id
-     * @param array  $params
-     *
-     * @return string
      */
-    protected function trans($id, array $params = [])
+    protected function trans(string $id, array $params = []): string
     {
         return $this->translator->trans('integrity.'.$id, $params);
     }

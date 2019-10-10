@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -10,21 +12,20 @@
 
 namespace Contao\ManagerApi\Controller\Server;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/server/phpinfo", methods={"GET"})
  */
-class PhpinfoController extends Controller
+class PhpinfoController
 {
     /**
      * Gets response with phpinfo().
      *
      * @return Response
      */
-    public function __invoke()
+    public function __invoke(): Response
     {
         ob_start();
         phpinfo(INFO_GENERAL | INFO_CONFIGURATION | INFO_MODULES | INFO_ENVIRONMENT);

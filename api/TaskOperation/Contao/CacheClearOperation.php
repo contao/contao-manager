@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -25,10 +27,8 @@ class CacheClearOperation extends AbstractProcessOperation
     /**
      * Constructor.
      *
-     * @param ConsoleProcessFactory $processFactory
-     * @param Translator            $translator
-     * @param string                $environment
-     * @param string                $processId
+     * @param string $environment
+     * @param string $processId
      */
     public function __construct(ConsoleProcessFactory $processFactory, Translator $translator, $environment, $processId = 'cache-clear')
     {
@@ -41,7 +41,7 @@ class CacheClearOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         $status->setSummary($this->translator->trans('taskoperation.cache-clear.summary'));
 

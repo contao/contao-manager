@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -10,11 +12,11 @@
 
 namespace Contao\ManagerApi\TaskOperation;
 
+use Contao\ManagerApi\Process\ProcessController;
 use Contao\ManagerApi\Task\TaskStatus;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Process\Process;
-use Terminal42\BackgroundProcess\ProcessController;
 
 abstract class AbstractProcessOperation implements TaskOperationInterface, LoggerAwareInterface
 {
@@ -49,7 +51,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
     /**
      * {@inheritdoc}
      */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return $this->process->isStarted();
     }
@@ -57,7 +59,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
     /**
      * {@inheritdoc}
      */
-    public function isRunning()
+    public function isRunning(): bool
     {
         return $this->process->isRunning();
     }
@@ -65,12 +67,12 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
     /**
      * {@inheritdoc}
      */
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
         return $this->process->isSuccessful();
     }
 
-    public function hasError()
+    public function hasError(): bool
     {
         return $this->process->isTerminated() && $this->process->getExitCode() > 0;
     }
@@ -78,7 +80,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(): void
     {
         if (!$this->process->isStarted()) {
             $this->process->start();
@@ -88,27 +90,23 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
     /**
      * {@inheritdoc}
      */
-    public function abort()
+    public function abort(): void
     {
         $this->process->stop();
-
-        return $this->process->isRunning();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function delete()
+    public function delete(): void
     {
         $this->process->delete();
     }
 
     /**
      * Adds the console log to the status console.
-     *
-     * @param TaskStatus $status
      */
-    protected function addConsoleStatus(TaskStatus $status)
+    protected function addConsoleStatus(TaskStatus $status): void
     {
         if (!$this->process->isStarted()) {
             return;
@@ -123,7 +121,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
     /**
      * @return string
      */
-    protected function getProcessError()
+    protected function getProcessError(): string
     {
         $output = '';
 
@@ -152,7 +150,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
      *
      * @return string
      */
-    private function getSignalText($signal)
+    private function getSignalText($signal): string
     {
         if (isset(static::$signals[$signal])) {
             return sprintf(' [%s]', static::$signals[$signal]);

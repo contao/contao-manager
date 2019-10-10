@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -13,7 +15,6 @@ namespace Contao\ManagerApi\Controller\Server;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\System\SelfUpdate;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,14 +22,12 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/server/self-update", methods={"GET"})
  */
-class SelfUpdateController extends Controller
+class SelfUpdateController
 {
     /**
      * Gets response about update status of the Contao Manager.
-     *
-     * @return Response
      */
-    public function __invoke(SelfUpdate $updater)
+    public function __invoke(SelfUpdate $updater): Response
     {
         if (!$updater->canUpdate()) {
             return new ApiProblemResponse(

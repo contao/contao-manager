@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -24,9 +26,6 @@ class SymlinkCheck extends AbstractIntegrityCheck
 
     /**
      * Constructor.
-     *
-     * @param ApiKernel  $kernel
-     * @param Translator $translator
      */
     public function __construct(ApiKernel $kernel, Translator $translator)
     {
@@ -35,9 +34,9 @@ class SymlinkCheck extends AbstractIntegrityCheck
         $this->kernel = $kernel;
     }
 
-    public function run()
+    public function run(): ?ApiProblem
     {
-        if (($error = $this->canCreateSymlinks()) === null) {
+        if (null === ($error = $this->canCreateSymlinks())) {
             return null;
         }
 
@@ -47,9 +46,9 @@ class SymlinkCheck extends AbstractIntegrityCheck
         ))->setDetail($error);
     }
 
-    private function canCreateSymlinks()
+    private function canCreateSymlinks(): ?string
     {
-        if (!function_exists('symlink')) {
+        if (!\function_exists('symlink')) {
             return '';
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -15,15 +17,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ManagerConfig extends AbstractConfig
 {
-    /**
-     * Constructor.
-     *
-     * @param ApiKernel  $kernel
-     * @param Filesystem $filesystem
-     */
     public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $configFile = $kernel->getConfigDir().DIRECTORY_SEPARATOR.'manager.json';
+        $configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'manager.json';
 
         parent::__construct($configFile, $filesystem);
     }

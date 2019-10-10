@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -13,7 +15,7 @@ namespace Contao\ManagerApi\EventListener;
 use Contao\ManagerApi\Security\JwtAuthenticator;
 use Contao\ManagerApi\Security\JwtManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -36,10 +38,6 @@ class SecurityListener implements EventSubscriberInterface
 
     /**
      * Constructor.
-     *
-     * @param JwtManager                    $jwtManager
-     * @param TokenStorageInterface         $tokenStorage
-     * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         JwtManager $jwtManager,
@@ -53,10 +51,8 @@ class SecurityListener implements EventSubscriberInterface
 
     /**
      * Adds and/or renews the JWT token on kernel.response event.
-     *
-     * @param FilterResponseEvent $event
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event): void
     {
         if (!$event->isMasterRequest() || $this->jwtManager->hasResponseToken($event->getResponse())) {
             return;
@@ -66,7 +62,7 @@ class SecurityListener implements EventSubscriberInterface
 
         if (null !== $token
             && $token->hasAttribute('authenticator')
-            && $token->getAttribute('authenticator') === JwtAuthenticator::class
+            && JwtAuthenticator::class === $token->getAttribute('authenticator')
             && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')
         ) {
             $this->jwtManager->addToken($event->getRequest(), $event->getResponse(), $token->getUsername());
@@ -78,7 +74,7 @@ class SecurityListener implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return ['kernel.response' => 'onKernelResponse'];
     }

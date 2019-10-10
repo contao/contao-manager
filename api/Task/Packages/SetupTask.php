@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -35,16 +37,6 @@ class SetupTask extends AbstractPackagesTask
      */
     private $cloudResolver;
 
-    /**
-     * Constructor.
-     *
-     * @param ConsoleProcessFactory $processFactory
-     * @param CloudResolver         $cloudResolver
-     * @param Environment           $environment
-     * @param ServerInfo            $serverInfo
-     * @param Translator            $translator
-     * @param Filesystem            $filesystem
-     */
     public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $serverInfo, $filesystem, $translator);
@@ -56,12 +48,12 @@ class SetupTask extends AbstractPackagesTask
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'contao/install';
     }
 
-    protected function getTitle()
+    protected function getTitle(): string
     {
         return $this->translator->trans('task.setup_packages.title');
     }
@@ -69,7 +61,7 @@ class SetupTask extends AbstractPackagesTask
     /**
      * {@inheritdoc}
      */
-    protected function buildOperations(TaskConfig $config)
+    protected function buildOperations(TaskConfig $config): array
     {
         $operations = [new CreateProjectOperation($config, $this->environment, $this->translator, $this->filesystem)];
 
@@ -80,7 +72,7 @@ class SetupTask extends AbstractPackagesTask
         if ($this->environment->useCloudResolver()) {
             $operations[] = new CloudOperation(
                 $this->cloudResolver,
-                new CloudChanges($this->environment->getJsonFile()),
+                new CloudChanges(),
                 $config,
                 $this->environment,
                 $this->translator,
@@ -88,7 +80,7 @@ class SetupTask extends AbstractPackagesTask
             );
         }
 
-        $operations[] = new InstallOperation($this->processFactory, $config, $this->translator, false, $this->getInstallTimeout());
+        $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, false, $this->getInstallTimeout());
 
         return $operations;
     }
@@ -96,13 +88,13 @@ class SetupTask extends AbstractPackagesTask
     /**
      * {@inheritdoc}
      */
-    protected function updateStatus(TaskStatus $status)
+    protected function updateStatus(TaskStatus $status): void
     {
         if (TaskStatus::STATUS_COMPLETE === $status->getStatus()) {
             $status->setSummary($this->translator->trans('task.setup_packages.completeSummary'));
             $status->setDetail($this->translator->trans('task.setup_packages.completeDetail'));
         }
 
-        return parent::updateStatus($status);
+        parent::updateStatus($status);
     }
 }

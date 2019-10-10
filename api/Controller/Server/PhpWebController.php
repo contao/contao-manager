@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -13,7 +15,6 @@ namespace Contao\ManagerApi\Controller\Server;
 use Contao\ManagerApi\IntegrityCheck\IntegrityCheckFactory;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/server/php-web", methods={"GET"})
  */
-class PhpWebController extends Controller
+class PhpWebController
 {
     /**
      * @var IntegrityCheckFactory
@@ -35,15 +36,13 @@ class PhpWebController extends Controller
 
     /**
      * Gets response about PHP web process version and issues.
-     *
-     * @return Response
      */
-    public function __invoke(ServerInfo $serverInfo)
+    public function __invoke(ServerInfo $serverInfo): Response
     {
         return new JsonResponse(
             [
                 'version' => PHP_VERSION,
-                'version_id' => PHP_VERSION_ID,
+                'version_id' => \PHP_VERSION_ID,
                 'platform' => $serverInfo->getPlatform(),
                 'problem' => $this->runIntegrityChecks(),
             ]

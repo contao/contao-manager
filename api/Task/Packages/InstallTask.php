@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -34,16 +36,6 @@ class InstallTask extends AbstractPackagesTask
      */
     private $cloudResolver;
 
-    /**
-     * Constructor.
-     *
-     * @param ConsoleProcessFactory $processFactory
-     * @param ServerInfo            $serverInfo
-     * @param CloudResolver         $cloudResolver
-     * @param Environment           $environment
-     * @param Translator            $translator
-     * @param Filesystem            $filesystem
-     */
     public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $serverInfo, $filesystem, $translator);
@@ -55,12 +47,12 @@ class InstallTask extends AbstractPackagesTask
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'composer/install';
     }
 
-    protected function getTitle()
+    protected function getTitle(): string
     {
         return $this->translator->trans('task.install_packages.title');
     }
@@ -68,9 +60,9 @@ class InstallTask extends AbstractPackagesTask
     /**
      * {@inheritdoc}
      */
-    protected function buildOperations(TaskConfig $config)
+    protected function buildOperations(TaskConfig $config): array
     {
-        $changes = new CloudChanges($this->environment->getJsonFile());
+        $changes = new CloudChanges();
         $changes->setDryRun((bool) $config->getOption('dry_run', false));
 
         $operations = [];
@@ -90,7 +82,7 @@ class InstallTask extends AbstractPackagesTask
             );
         }
 
-        $operations[] = new InstallOperation($this->processFactory, $config, $this->translator, $changes->getDryRun(), $this->getInstallTimeout());
+        $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $changes->getDryRun(), $this->getInstallTimeout());
 
         return $operations;
     }

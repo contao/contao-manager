@@ -41,6 +41,7 @@
         <exec executable="tx" passthru="true">
             <arg value="pull" />
             <arg value="--all" />
+            <arg value="--force" />
             <arg value="--minimum-perc=50" />
         </exec>
     </target>
@@ -145,7 +146,7 @@
     <target name="version">
         <exec executable="php" checkreturn="true">
             <arg value="-r" />
-            <arg value="file_put_contents('contao-manager.version', json_encode(['version' => '${version}', 'sha1' => sha1_file('contao-manager.phar'), 'requires' => ['php' => '^5.5.9 || ^7']]));" />
+            <arg value="file_put_contents('contao-manager.version', json_encode(['version' => '${version}', 'sha1' => sha1_file('contao-manager.phar'), 'requires' => ['php' => '^7.1']]));" />
         </exec>
     </target>
 </project>

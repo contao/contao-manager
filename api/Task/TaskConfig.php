@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -20,7 +22,7 @@ class TaskConfig
     private $file;
 
     /**
-     * @var null|Filesystem
+     * @var Filesystem|null
      */
     private $filesystem;
 
@@ -32,12 +34,10 @@ class TaskConfig
     /**
      * Constructor.
      *
-     * @param string          $file
-     * @param null            $name
-     * @param array|null      $options
-     * @param Filesystem|null $filesystem
+     * @param string $file
+     * @param null   $name
      */
-    public function __construct($file, $name = null, array $options = null, Filesystem $filesystem = null)
+    public function __construct(string $file, string $name = null, array $options = null, Filesystem $filesystem = null)
     {
         $this->file = $file;
         $this->filesystem = $filesystem ?: new Filesystem();
@@ -52,69 +52,60 @@ class TaskConfig
         if (null === $name && null === $options) {
             $this->data = json_decode(file_get_contents($file), true);
 
-            if (!is_array($this->data)) {
+            if (!\is_array($this->data)) {
                 throw new \RuntimeException(sprintf('Invalid task data in file "%s"', $file));
             }
         }
     }
 
-    public function getName()
+    public function getName(): ?string
     {
         return $this->data['name'];
     }
 
-    public function getOptions()
+    public function getOptions(): ?array
     {
         return $this->data['options'];
     }
 
-    /**
-     * @param string $name
-     * @param mixed  $default
-     *
-     * @return mixed
-     */
-    public function getOption($name, $default = null)
+    public function getOption(string $name, $default = null)
     {
-        return array_key_exists($name, $this->data['options']) ? $this->data['options'][$name] : $default;
+        return \array_key_exists($name, $this->data['options']) ? $this->data['options'][$name] : $default;
     }
 
-    public function getState($name, $default = null)
+    public function getState(string $name, $default = null)
     {
-        return array_key_exists($name, $this->data['state']) ? $this->data['state'][$name] : $default;
+        return \array_key_exists($name, $this->data['state']) ? $this->data['state'][$name] : $default;
     }
 
-    public function setState($name, $value)
+    public function setState(string $name, $value): void
     {
         $this->data['state'][$name] = $value;
 
         $this->save();
     }
 
-    public function clearState($name)
+    public function clearState(string $name): void
     {
         unset($this->data['state'][$name]);
     }
 
-    /**
-     * @return bool
-     */
-    public function isCancelled()
+    public function isCancelled(): bool
     {
-        return $this->data['cancelled'];
+        return (bool) $this->data['cancelled'];
     }
 
     /**
      * Mark task as cancelled.
      */
-    public function setCancelled()
+    public function setCancelled(): void
     {
         $this->data['cancelled'] = true;
 
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         file_put_contents(
             $this->file,
@@ -123,7 +114,7 @@ class TaskConfig
         );
     }
 
-    public function delete()
+    public function delete(): void
     {
         $this->filesystem->remove($this->file);
     }

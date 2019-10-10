@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -10,6 +12,7 @@
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
+use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
@@ -31,13 +34,10 @@ class InstallOperation extends AbstractProcessOperation
     /**
      * Constructor.
      *
-     * @param ConsoleProcessFactory $processFactory
-     * @param TaskConfig            $taskConfig
-     * @param Translator            $translator
-     * @param bool                  $dryRun
-     * @param null                  $timeout
+     * @param bool $dryRun
+     * @param null $timeout
      */
-    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Translator $translator, $dryRun = false, $timeout = null)
+    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Environment $environment, Translator $translator, $dryRun = false, $timeout = null)
     {
         $this->taskConfig = $taskConfig;
         $this->translator = $translator;
@@ -70,6 +70,11 @@ class InstallOperation extends AbstractProcessOperation
                 $arguments[] = '--dry-run';
             }
 
+            if ($environment->isDebug()) {
+                $arguments[] = '--profile';
+                $arguments[] = '-vvv';
+            }
+
             $process = $processFactory->createManagerConsoleBackgroundProcess(
                 $arguments,
                 'composer-install'
@@ -83,7 +88,7 @@ class InstallOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         if (!$this->process->isStarted()) {
             return;

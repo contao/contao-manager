@@ -2,32 +2,32 @@
     <boxed-layout v-if="current" :wide="true" slotClass="config-check">
         <header class="config-check__header">
             <img src="../../assets/images/server-config.svg" width="80" height="80" class="config-check__icon" alt="">
-            <h1 class="config-check__headline">{{ 'ui.server.config.title' | translate }}</h1>
+            <h1 class="config-check__headline">{{ $t('ui.server.config.title') }}</h1>
             <p class="config-check__description" v-html="$t('ui.server.config.description')"></p>
         </header>
 
         <main class="config-check__form">
             <form @submit.prevent="save">
                 <fieldset class="config-check__fields">
-                    <legend class="config-check__fieldtitle">{{ 'ui.server.config.formTitle' | translate }}</legend>
-                    <p class="config-check__fielddesc">{{ 'ui.server.config.formText' | translate }}</p>
-                    <p class="config-check__detected" v-if="detected && server">{{ 'ui.server.config.detected' | translate }}</p>
+                    <legend class="config-check__fieldtitle">{{ $t('ui.server.config.formTitle') }}</legend>
+                    <p class="config-check__fielddesc">{{ $t('ui.server.config.formText') }}</p>
+                    <p class="config-check__detected" v-if="detected && server">{{ $t('ui.server.config.detected') }}</p>
                     <select-menu name="server" :label="$t('Configuration')" class="inline" :disabled="processing" :error="errors.server" :options="servers" v-model="server" @input="detected = false"/>
                 </fieldset>
 
                 <fieldset v-if="showCustom" class="config-check__fields">
-                    <legend class="config-check__fieldtitle">{{ 'ui.server.config.customTitle' | translate }}</legend>
-                    <p class="config-check__fielddesc">{{ 'ui.server.config.customText' | translate }}</p>
-                    <p class="config-check__detected" v-if="detected && php_cli">{{ 'ui.server.config.phpDetected' | translate }}</p>
+                    <legend class="config-check__fieldtitle">{{ $t('ui.server.config.customTitle') }}</legend>
+                    <p class="config-check__fielddesc">{{ $t('ui.server.config.customText') }}</p>
+                    <p class="config-check__detected" v-if="detected && php_cli">{{ $t('ui.server.config.phpDetected') }}</p>
                     <text-field name="php_cli" :label="$t('ui.server.config.cli')" :disabled="processing" :error="errors.php_cli" v-model="php_cli"/>
                 </fieldset>
 
                 <fieldset class="config-check__fields">
-                    <legend class="config-check__fieldtitle">{{ 'ui.server.config.cloudTitle' | translate }}</legend>
-                    <p class="config-check__fielddesc">{{ 'ui.server.config.cloudText' | translate }}</p>
+                    <legend class="config-check__fieldtitle">{{ $t('ui.server.config.cloudTitle') }}</legend>
+                    <p class="config-check__fielddesc">{{ $t('ui.server.config.cloudText') }}</p>
 
                     <div class="config-check__issues" v-if="cloudIssues && cloudIssues.length">
-                        <p>{{ 'ui.server.config.stateErrorCloud' | translate }}</p>
+                        <p>{{ $t('ui.server.config.stateErrorCloud') }}</p>
                         <ul>
                             <li v-for="(issue,k) in cloudIssues" :key="k">{{ issue }}</li>
                         </ul>
@@ -44,8 +44,8 @@
     </boxed-layout>
 
     <boot-check v-else :progress="bootState" :title="$t('ui.server.config.title')" :description="bootDescription">
-        <button class="widget-button widget-button--alert" v-if="bootState === 'error' || bootState === 'action'" @click="showConfiguration">{{ 'ui.server.config.setup' | translate }}</button>
-        <button class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" @click="showConfiguration">{{ 'ui.server.config.change' | translate }}</button>
+        <button class="widget-button widget-button--alert" v-if="bootState === 'error' || bootState === 'action'" @click="showConfiguration">{{ $t('ui.server.config.setup') }}</button>
+        <button class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" @click="showConfiguration">{{ $t('ui.server.config.change') }}</button>
     </boot-check>
 </template>
 
@@ -57,7 +57,7 @@
     import TextField from '../widgets/TextField';
     import SelectMenu from '../widgets/SelectMenu';
     import Checkbox from '../widgets/Checkbox';
-    import LoadingButton from '../widgets/LoadingButton';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
         mixins: [boot],
@@ -186,7 +186,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .config-check {
         &__header {

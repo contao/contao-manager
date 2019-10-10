@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import Loader from './Loader';
+    import Loader from 'contao-package-list/src/components/fragments/Loader';
 
     export default {
         components: { Loader },
@@ -36,7 +36,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .boot-check {
         padding: 10px;

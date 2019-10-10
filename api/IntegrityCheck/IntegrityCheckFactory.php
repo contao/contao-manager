@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -46,12 +48,12 @@ class IntegrityCheckFactory implements ServiceSubscriberInterface
         $this->container = $container;
     }
 
-    public function runWebChecks()
+    public function runWebChecks(): ?ApiProblem
     {
         return $this->runChecks(self::$webChecks);
     }
 
-    public function runCliCheck()
+    public function runCliCheck(): ?ApiProblem
     {
         return $this->runChecks(self::$cliChecks);
     }
@@ -59,12 +61,12 @@ class IntegrityCheckFactory implements ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_unique(array_merge(self::$cliChecks, self::$webChecks));
     }
 
-    private function runChecks(array $classes)
+    private function runChecks(array $classes): ?ApiProblem
     {
         foreach ($classes as $class) {
             /** @var IntegrityCheckInterface $check */

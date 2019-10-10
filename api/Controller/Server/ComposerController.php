@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -13,10 +15,13 @@ namespace Contao\ManagerApi\Controller\Server;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Exception\ValidationException;
+use JsonSchema\Validator;
 use Seld\JsonLint\ParsingException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,14 +29,26 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/server/composer", methods={"GET"})
  */
-class ComposerController extends Controller
+class ComposerController
 {
+
     /**
-     * Gets response about Composer configuration and file validation.
-     *
-     * @return Response
+     * @var Environment
      */
-    public function __invoke(Environment $environment, ManagerConfig $managerConfig, ServerInfo $serverInfo)
+    private $environment;
+
+    /**
+     * @var Translator
+     */
+    private $translator;
+
+    public function __construct(Environment $environment, Translator $translator)
+    {
+        $this->environment = $environment;
+        $this->translator = $translator;
+    }
+
+    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo): Response
     {
         if (!$managerConfig->has('server') || !$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
@@ -43,11 +60,46 @@ class ComposerController extends Controller
         $result = [
             'json' => ['found' => true, 'valid' => true, 'error' => null],
             'lock' => ['found' => false, 'fresh' => false],
-            'vendor' => ['found' => is_dir($environment->getVendorDir())],
+            'vendor' => ['found' => is_dir($this->environment->getVendorDir())],
         ];
 
+        if ($this->validateLockFile($result)) {
+            $this->validateSchema($result);
+        }
+
+        return new JsonResponse($result);
+    }
+
+    private function validateSchema(array &$result): bool
+    {
         try {
-            $locker = $environment->getComposer()->getLocker();
+            $schemaFile = __DIR__.'/../../../vendor/composer/composer/res/composer-schema.json';
+
+            // Prepend with file:// only when not using a special schema already (e.g. in the phar)
+            if (false === strpos($schemaFile, '://')) {
+                $schemaFile = 'file://'.$schemaFile;
+            }
+
+            $schema = (object) ['$ref' => $schemaFile];
+            $schema->required = [];
+
+            $value = json_decode(file_get_contents($this->environment->getJsonFile()), false);
+            $validator = new Validator();
+            $validator->validate($value, $schema, Constraint::CHECK_MODE_EXCEPTIONS);
+
+            return true;
+        } catch (ValidationException $e) {
+            $result['json']['valid'] = false;
+            $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage()]);
+
+            return false;
+        }
+    }
+
+    private function validateLockFile(array &$result): bool
+    {
+        try {
+            $locker = $this->environment->getComposer()->getLocker();
 
             if ($locker->isLocked()) {
                 $result['lock']['found'] = true;
@@ -56,17 +108,16 @@ class ComposerController extends Controller
                     $result['lock']['fresh'] = true;
                 }
             }
+
+            return true;
         } catch (\InvalidArgumentException $e) {
             $result['json']['found'] = false;
             $result['json']['valid'] = false;
         } catch (ParsingException $e) {
             $result['json']['valid'] = false;
-            $result['json']['error'] = [
-                'message' => $e->getMessage(),
-                'details' => $e->getDetails(),
-            ];
+            $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage().' '.$e->getDetails()]);
         }
 
-        return new JsonResponse($result);
+        return false;
     }
 }

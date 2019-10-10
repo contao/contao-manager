@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -32,21 +34,16 @@ class PhpExecutableFinder
      * Finds the best matching PHP executable on the system.
      * Contrary to symfony/process PhpExecutableFinder we actually test if the binary is
      * the same version as the currently running web process.
-     *
-     * @param array $paths
-     * @param bool  $discover
-     *
-     * @return null|string
      */
-    public function find(array $paths = [], $discover = true)
+    public function find(array $paths = [], bool $discover = true): ?string
     {
         if (!$discover) {
             return $this->findBestBinary($paths);
         }
 
-        if ($bin = constant('PHP_BINARY')) {
+        if ($bin = \constant('PHP_BINARY')) {
             if (false !== ($suffix = strrchr(basename($bin), '-'))) {
-                $php = substr($bin, 0, -strlen($suffix));
+                $php = substr($bin, 0, -\strlen($suffix));
                 $paths[] = $php.'-cli';
                 $paths[] = $php;
             }
@@ -54,7 +51,7 @@ class PhpExecutableFinder
             $paths[] = $bin.'-cli';
             $paths[] = $bin;
 
-            $this->includePath($paths, dirname($bin));
+            $this->includePath($paths, \dirname($bin));
         }
 
         if (PHP_BINDIR) {
@@ -79,31 +76,24 @@ class PhpExecutableFinder
         return $this->findBestBinary($paths);
     }
 
-    /**
-     * @param string $cli
-     *
-     * @return array|null
-     */
-    public function getServerInfo($cli)
+    public function getServerInfo(string $cli): ?array
     {
-        $arguments = ['-q'];
+        $arguments = [$cli, '-q'];
 
         if ('' !== ($phar = \Phar::running(false))) {
             $arguments[] = $phar;
         } else {
-            $arguments[] = dirname(__DIR__).'/console';
+            $arguments[] = \dirname(__DIR__).'/console';
         }
 
         $arguments[] = 'test';
 
-        $commandline = escapeshellcmd($cli).' '.implode(' ', array_map('escapeshellarg', $arguments));
-
         try {
-            $process = (new Process($commandline))->mustRun(null, array_map(function () { return false; }, $_ENV));
+            $process = (new Process($arguments))->mustRun(null, array_map(function () { return false; }, $_ENV));
             $output = @json_decode(trim($process->getOutput()), true);
 
             if (null === $output) {
-                throw new RuntimeException('Unexpected output from "'.$commandline.'": '.$process->getOutput());
+                throw new RuntimeException('Unexpected output from "'.implode(' ', $arguments).'": '.$process->getOutput());
             }
 
             return $output;
@@ -118,10 +108,8 @@ class PhpExecutableFinder
 
     /**
      * Finds PHP executables within open_basedir or PATH environment variable.
-     *
-     * @return array
      */
-    private function findExecutables()
+    private function findExecutables(): array
     {
         $results = [];
 
@@ -133,20 +121,20 @@ class PhpExecutableFinder
                 // Silencing against https://bugs.php.net/69240
                 if (@is_dir($path)) {
                     $dirs[] = $path;
-                } elseif (in_array(basename($path), $this->names, true) && @is_executable($path)) {
+                } elseif (\in_array(basename($path), $this->names, true) && @is_executable($path)) {
                     $results[] = $path;
                 }
             }
         } else {
             $dirs = explode(PATH_SEPARATOR, getenv('PATH') ?: getenv('Path'));
 
-            if ('\\' === DIRECTORY_SEPARATOR) {
+            if ('\\' === \DIRECTORY_SEPARATOR) {
                 $dirs[] = 'C:\xampp\php\\';
             }
         }
 
         $suffixes = [''];
-        if ('\\' === DIRECTORY_SEPARATOR) {
+        if ('\\' === \DIRECTORY_SEPARATOR) {
             $pathExt = getenv('PATHEXT');
             $suffixes = array_merge(
                 $suffixes,
@@ -157,8 +145,8 @@ class PhpExecutableFinder
         foreach ($this->names as $name) {
             foreach ($suffixes as $suffix) {
                 foreach ($dirs as $dir) {
-                    if (@is_file($file = $dir.DIRECTORY_SEPARATOR.$name.$suffix)
-                        && ('\\' === DIRECTORY_SEPARATOR || is_executable($file))
+                    if (@is_file($file = $dir.\DIRECTORY_SEPARATOR.$name.$suffix)
+                        && ('\\' === \DIRECTORY_SEPARATOR || is_executable($file))
                     ) {
                         $results[] = $file;
                     }
@@ -169,12 +157,7 @@ class PhpExecutableFinder
         return $results;
     }
 
-    /**
-     * @param array $paths
-     *
-     * @return string|null
-     */
-    private function findBestBinary(array $paths)
+    private function findBestBinary(array $paths): ?string
     {
         $fallback = null;
         $sapi = null;
@@ -194,7 +177,7 @@ class PhpExecutableFinder
 
             $info = $this->getServerInfo($path);
 
-            if (!is_array($info)) {
+            if (!\is_array($info)) {
                 continue;
             }
 
@@ -205,7 +188,7 @@ class PhpExecutableFinder
             $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
             $vCli = vsprintf('%s.%s', explode('.', $info['version']));
 
-            if ((null === $fallback || ('cli' !== $sapi && $info['sapi'] === 'cli'))
+            if ((null === $fallback || ('cli' !== $sapi && 'cli' === $info['sapi']))
                 && version_compare($vWeb, $vCli, 'eq')
             ) {
                 $fallback = $path;
@@ -218,13 +201,8 @@ class PhpExecutableFinder
 
     /**
      * Tests if the given path is within any of the given directories.
-     *
-     * @param string $path
-     * @param array  $dirs
-     *
-     * @return bool
      */
-    private function isAllowed($path, array $dirs)
+    private function isAllowed(string $path, array $dirs): bool
     {
         foreach ($dirs as $dir) {
             if (0 === strpos($path, $dir)) {
@@ -237,14 +215,11 @@ class PhpExecutableFinder
 
     /**
      * Adds the all binaries for given path to paths array.
-     *
-     * @param array  $paths
-     * @param string $path
      */
-    private function includePath(array &$paths, $path)
+    private function includePath(array &$paths, string $path): void
     {
         foreach ($this->names as $name) {
-            $paths[] = $path.DIRECTORY_SEPARATOR.$name;
+            $paths[] = $path.\DIRECTORY_SEPARATOR.$name;
         }
     }
 }

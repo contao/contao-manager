@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -18,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class JwtManager
 {
-    const COOKIE_AUTH = 'contao_manager_auth';
+    public const COOKIE_AUTH = 'contao_manager_auth';
 
     /**
      * @var UserConfig
@@ -27,8 +29,6 @@ class JwtManager
 
     /**
      * Constructor.
-     *
-     * @param UserConfig $users
      */
     public function __construct(UserConfig $users)
     {
@@ -37,8 +37,6 @@ class JwtManager
 
     /**
      * Gets payload data from JWT token cookie in the request.
-     *
-     * @param Request $request
      *
      * @return object|null
      */
@@ -61,36 +59,24 @@ class JwtManager
 
     /**
      * Checks if the request has a JWT cookie.
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
-    public function hasRequestToken(Request $request)
+    public function hasRequestToken(Request $request): bool
     {
         return $request->cookies->has(self::COOKIE_AUTH);
     }
 
     /**
      * Checks if the response has a JWT cookie.
-     *
-     * @param Response $response
-     *
-     * @return bool
      */
-    public function hasResponseToken(Response $response)
+    public function hasResponseToken(Response $response): bool
     {
         return $this->hasCookie($response, self::COOKIE_AUTH);
     }
 
     /**
      * Adds JWT auth cookies to the given response.
-     *
-     * @param Request  $request
-     * @param Response $response
-     * @param string   $username
      */
-    public function addToken(Request $request, Response $response, $username)
+    public function addToken(Request $request, Response $response, string $username): void
     {
         $payload = [
             'iat' => time(),
@@ -110,11 +96,8 @@ class JwtManager
 
     /**
      * Clears the JWT cookie in the response.
-     *
-     * @param Request  $request
-     * @param Response $response
      */
-    public function removeToken(Request $request, Response $response)
+    public function removeToken(Request $request, Response $response): void
     {
         if (!$request->cookies->has(self::COOKIE_AUTH)) {
             return;
@@ -131,13 +114,8 @@ class JwtManager
 
     /**
      * Returns whether the response has a cookie with that name.
-     *
-     * @param Response $response
-     * @param string   $cookieName
-     *
-     * @return bool
      */
-    private function hasCookie(Response $response, $cookieName)
+    private function hasCookie(Response $response, string $cookieName): bool
     {
         /** @var Cookie[] $cookies */
         $cookies = $response->headers->getCookies();
@@ -153,15 +131,8 @@ class JwtManager
 
     /**
      * Creates a cookie configured for Contao Manager.
-     *
-     * @param string  $name
-     * @param string  $value
-     * @param Request $request
-     * @param bool    $httpOnly
-     *
-     * @return Cookie
      */
-    private function createCookie($name, $value, Request $request, $httpOnly)
+    private function createCookie(string $name, string $value, Request $request, bool $httpOnly): Cookie
     {
         return new Cookie(
             $name,

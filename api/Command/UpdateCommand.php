@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -34,13 +36,13 @@ class UpdateCommand extends Command
      */
     public function isEnabled()
     {
-        return \Phar::running(false) !== '' && parent::isEnabled();
+        return '' !== \Phar::running(false) && parent::isEnabled();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->updater->supportsUpdate()) {
             throw new \RuntimeException('Your server does not meet the requirements of the next Contao Manager version.');
@@ -56,7 +58,7 @@ class UpdateCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('self-update')
@@ -64,14 +66,7 @@ class UpdateCommand extends Command
         ;
     }
 
-    /**
-     * Updates the .phar file.
-     *
-     * @param OutputInterface $output
-     *
-     * @return int
-     */
-    private function update(OutputInterface $output)
+    private function update(OutputInterface $output): int
     {
         $result = $this->updater->update();
 

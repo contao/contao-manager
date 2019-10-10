@@ -1,52 +1,68 @@
 <template>
     <package
-        :title="data.title"
-        :name="data.hideName ? '' : data.name"
+        :title="data.title || data.name"
         :logo="data.logo"
         :badge="badge"
         :description="data.description"
-        :hint="hint"
-        :hint-close="hintClose"
-
-        :release-validating="constraintValidating"
-        :release-error="constraintError"
-        :release-disabled="(willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired))"
-
+        :hint="packageHint"
+        :hint-close="packageHintClose"
         @close-hint="restore"
     >
-        <template slot="logo"><slot name="logo"/></template>
-
-        <more :name="data.name" :homepage="data.homepage" :support="Object.assign({}, data.support)" :hide-packagist="hidePackagist" slot="more"/>
-
-        <template slot="additional">
-            <strong class="package__version package__version--additional" v-if="data.version">{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
+        <template #additional>
+            <strong class="package__version package__version--additional" v-if="data.version">
+                {{ $t('ui.package.version', { version: data.version }) }}
+            </strong>
             <span v-for="(item,k) in additional" :key="k">{{ item }}</span>
         </template>
 
-        <template slot="release">
+        <template #release>
             <slot name="release">
                 <fieldset>
-                    <input ref="constraint" type="text" :placeholder="constraintPlaceholder" v-model="constraint" :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)" @keypress.enter.prevent="saveConstraint" @keypress.esc.prevent="resetConstraint" @blur="saveConstraint">
-                    <button class="widget-button" @click="editConstraint" :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)">{{ 'ui.package.editConstraint' | translate }}</button>
+                    <input
+                        ref="constraint"
+                        type="text"
+                        :placeholder="constraintPlaceholder"
+                        v-model="constraint"
+                        :class="{ disabled: willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired), error: constraintError }"
+                        :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
+                        @keypress.enter.prevent="saveConstraint"
+                        @keypress.esc.prevent="resetConstraint"
+                        @blur="saveConstraint"
+                    >
+                    <button
+                        :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
+                        @click="editConstraint"
+                        :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
+                    >{{ $t('ui.package.editConstraint') }}</button>
                 </fieldset>
                 <div class="package__version package__version--release" v-if="data.version">
-                    <strong>{{ 'ui.package.version' | translate({ version: data.version }) }}</strong>
-                    <time :dateTime="data.time">({{ released }})</time>
+                    <strong>{{ $t('ui.package.version', { version: data.version }) }}</strong>
+                    <time :dateTime="data.time" v-if="data.time">({{ data.time | datimFormat }})</time>
                 </div>
             </slot>
         </template>
 
-        <template slot="actions" v-if="updateOnly">
-            <button class="widget-button widget-button--update" :disabled="isModified" @click="update">{{ 'ui.package.updateButton' | translate }}</button>
+        <template #actions v-if="updateOnly">
+            <details-button :name="data.name" v-if="data.name"/>
+            <button class="widget-button widget-button--update" :disabled="isModified" v-if="!isRequired" @click="update">{{ $t('ui.package.updateButton') }}</button>
         </template>
-        <template slot="actions" v-else>
+        <template #actions v-else>
             <slot name="actions">
-                <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                <details-button :name="data.name" v-if="data.name"/>
+                <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
                 <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isInstalled" :disabled="isModified" @click="update">
-                    <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ 'ui.package.removeButton' | translate }}</button>
+                    <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
                 </button-group>
-                <button class="widget-button widget-button--primary widget-button--add" v-else @click="install" :disabled="isInstalled || willBeInstalled">{{ 'ui.package.installButton' | translate }}</button>
+                <install-button :data="data" v-else/>
             </slot>
+        </template>
+
+        <template #features v-if="data.features">
+            <section class="package__features">
+                <template v-for="name in data.features">
+                    <feature-package :key="name" :name="name"/>
+                </template>
+            </section>
         </template>
 
     </package>
@@ -57,19 +73,22 @@
     import { mapGetters } from 'vuex';
 
     import Package from './Package';
-    import More from './More';
     import ButtonGroup from '../../widgets/ButtonGroup';
+    import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
+    import InstallButton from '../../fragments/InstallButton';
+    import FeaturePackage from './FeaturePackage';
 
     export default {
-        components: { Package, More, ButtonGroup },
+        components: { Package, FeaturePackage, ButtonGroup, InstallButton, DetailsButton },
 
         props: {
             data: {
                 type: Object,
                 required: true,
             },
+            hint: String,
+            uncloseableHint: Boolean,
             updateOnly: Boolean,
-            hidePackagist: Boolean,
         },
 
         data: () => ({
@@ -81,6 +100,7 @@
 
         computed: {
             ...mapGetters('packages', [
+                'installed',
                 'packageInstalled',
                 'packageRequired',
                 'packageAdded',
@@ -97,34 +117,11 @@
             willBeInstalled: vm => vm.packageAdded(vm.data.name),
             isModified: vm => vm.isUpdated || vm.isChanged || vm.willBeRemoved || vm.willBeInstalled,
 
-            packageUpdates() {
-                return this.isInstalled && (
-                    Object.keys(this.$store.state.packages.add).length > 0
-                    || Object.keys(this.$store.state.packages.change).length > 0
-                    || this.$store.state.packages.update.length > 0
-                    || this.$store.state.packages.remove.length > 0
-                );
-            },
-
-            badge() {
-                if (this.isRequired) {
-                    return {
-                        title: this.$t('ui.package.requiredText'),
-                        text: this.$t('ui.package.requiredTitle'),
-                    };
+            packageHint() {
+                if (this.hint) {
+                    return this.hint;
                 }
 
-                if (this.data.abandoned) {
-                    return {
-                        title: this.data.replacement && this.$t('ui.package.replacement', { replacement: this.data.replacement }) || this.$t('ui.package.abandonedText'),
-                        text: this.$t('ui.package.abandonedTitle'),
-                    };
-                }
-
-                return null;
-            },
-
-            hint() {
                 if (this.willBeRemoved) {
                     return this.$t('ui.package.hintRemoved');
                 }
@@ -158,8 +155,8 @@
                 return null;
             },
 
-            hintClose() {
-                if (this.isRequired && !this.willBeRemoved && !this.isChanged) {
+            packageHintClose() {
+                if (this.uncloseableHint || (this.isRequired && !this.willBeRemoved && !this.isChanged)) {
                     return null;
                 }
 
@@ -168,6 +165,34 @@
                 }
 
                 return this.$t('ui.package.hintRevert');
+            },
+
+
+            packageUpdates() {
+                return this.isInstalled && (
+                    Object.keys(this.$store.state.packages.add).length > 0
+                    || Object.keys(this.$store.state.packages.change).length > 0
+                    || this.$store.state.packages.update.length > 0
+                    || this.$store.state.packages.remove.length > 0
+                );
+            },
+
+            badge() {
+                if (this.isRequired) {
+                    return {
+                        title: this.$t('ui.package.requiredText'),
+                        text: this.$t('ui.package.requiredTitle'),
+                    };
+                }
+
+                if (this.data.abandoned) {
+                    return {
+                        title: this.data.abandoned === true ? this.$t('ui.package.abandonedText') : this.$t('ui.package.abandonedReplace', { replacement: this.data.abandoned }),
+                        text: this.$t('ui.package.abandoned'),
+                    };
+                }
+
+                return null;
             },
 
             additional() {
@@ -182,7 +207,7 @@
                 }
 
                 if (this.data.downloads) {
-                    additionals.push(this.$t('ui.package.additionalDownloads', { count: this.data.downloads }, this.data.downloads));
+                    additionals.push(this.$t('ui.package.additionalDownloads', { count: Vue.filter('numberFormat')(this.data.downloads) }, this.data.downloads));
                 }
 
                 if (this.data.favers) {
@@ -190,14 +215,6 @@
                 }
 
                 return additionals;
-            },
-
-            released() {
-                if (this.data.time === undefined) {
-                    return '';
-                }
-
-                return new Date(this.data.time).toLocaleString();
             },
 
             constraintPlaceholder() {
@@ -213,7 +230,7 @@
                     return null;
                 }
 
-                return this.$store.state.packages.installed[this.data.name].constraint;
+                return this.installed[this.data.name].constraint;
             },
 
             constraintRequired() {
@@ -248,15 +265,12 @@
         methods: {
             restore() {
                 this.$store.commit('packages/restore', this.data.name);
+                this.$store.commit('packages/uploads/unconfirm', this.data.name);
                 this.resetConstraint();
             },
 
             install() {
-                /* eslint-disable no-underscore-dangle */
-                const data = Object.assign({}, this.data);
-                delete data._highlightResult;
-
-                this.$store.commit('packages/add', data);
+                this.$store.commit('packages/add', { name: this.data.name });
             },
 
             update() {
@@ -268,6 +282,7 @@
                     this.$store.commit('packages/restore', this.data.name);
                 } else {
                     this.$store.commit('packages/restore', this.data.name);
+                    this.$store.commit('packages/uploads/unconfirm', this.data.name);
                     this.$store.commit('packages/remove', this.data.name);
                 }
             },

@@ -1,59 +1,147 @@
 zh:
-  integrity:
-    allow_url_fopen:
-      title: '服务器未启用PHP设置"allow_url_fopen"'
-    openssl:
-      title: 'PHP扩展OpenSSL不可用'
-      detail: 'Contao Manager需要使用OpenSSL扩展来通过加密链接(https)下载文件。'
-    process:
-      title: '服务器中PHP函数"proc_open"  "proc_close" 不可用。'
-      detail: '"proc_open" and "proc_close" 函数是在后台运行命令行任务所必须的。请咨询您的主机提供商为什么函数无法运行；否则Contao管理器和Contao 4 都不会正常运行。'
-    intl:
-      title: 'PHP扩展Intl不可用'
-      detail: 'Contao 4 系统需要使用PHP Intl扩展来进行国际化'
-    session:
-      title: 'PHP session无法启动。'
-    web_root:
-      title: 'Phar文件必须位于/web文件夹下'
-    memory_limit:
-      title: 'PHP内存限制不足'
-      detail: '当前PHP配置仅允许 {limit} 内存 (在命令行中)。该内存设置无法满足运行Composer，该设置无法自动调整增加限制。请联系主机提供商提供相关支持。'
-    systempdir:
-      title: '系统临时目录无法写入'
-      detail: '很有可能是主机的配置问题。请确保open_basedir允许访问临时目录，或者sys_temp_dir已正确配置。'
-    contao_unknown:
-      title: '安装状态未知'
-      detail: "在当前服务器中找到一些文件，但是无法检测到Contao版本。\n您必须手动修复您的应用或者移除以下文件和目录来安装Contao：\n\n{files}"
-    contao_version:
-      title: '无法获知Contao版本'
-      detail: "当请求获取Contao版本时，Console控制台返回错误内容。请检查输出的内容来获取更多信息："
-  config:
-    php_cli:
-      not_found: '该路径没有包含有效的PHP二进制文件'
-      incompatible: 'PHP二进制文件版本 {cli} 但是当前服务器版本为 {web}'
-  taskstatus:
-    complete:
-      summary: '完成控制台任务!'
-      detail: '后台任务成功完成。通过控制台协议查看详情。'
-    stopped:
-      summary: '终止控制台任务!'
-    error:
-      summary: '终止控制台任务!'
-  task:
-    setup_packages:
-      completeSummary: '完成安装!'
-      completeDetail: '为了完成安装流程，请打开安装工具并输入正确的数据库认证配置。'
-    install_packages:
-      title: '正在安装Composer依赖'
-    update_packages:
-      title: '包更新中'
-      completeSummary: 'Contao 包已更新!'
-      completeDetail: '请打开安装工具来应用任何必要的数据库变更。'
-    dump_autoload:
-      title: '打印Composer Autoloader'
-    clear_cache:
-      title: '正在清理Composer缓存'
-    rebuild_cache:
-      title: 'Contao 缓存重建中'
-    self_update:
-      title: 'Contao 管理器更新中'
+    integrity:
+        allow_url_fopen:
+            title: '服务器未启用PHP设置"allow_url_fopen"'
+        process:
+            title: '服务器中PHP函数"proc_open"  "proc_close" 不可用。'
+            detail: '"proc_open" and "proc_close" 函数是在后台运行命令行任务所必须的。请咨询您的主机提供商为什么函数无法运行；否则Contao管理器和Contao 4 都不会正常运行。'
+        intl:
+            title: 'PHP扩展Intl不可用'
+            detail: 'Contao 4 系统需要使用PHP Intl扩展来进行国际化'
+        openssl:
+            title: 'PHP扩展OpenSSL不可用'
+            detail: 'Contao Manager需要使用OpenSSL扩展来通过加密链接(https)下载文件。'
+        dom:
+            title: 'PHP DOM扩展不可用。'
+            detail: 'Contao 4 需要 PHP DOM 扩展来解析XML文档。'
+        xmlreader:
+            title: 'The PHP XMLReader 扩展不可用。'
+            detail: 'Contao 4 需要 PHP DOM 扩展来解析XML文档。'
+        graphics_lib:
+            title: '没有有效的PHP图片处理库，'
+            detail: 'Contao 4 需要 GD, Imagick 或 Gmagick 扩展来处理图片。'
+        symlink:
+            title: 'PHP符号链接方法不可用或无法正常工作。'
+        session:
+            title: 'PHP session无法启动。'
+        web_root:
+            title: 'Phar文件必须位于/web文件夹下'
+        memory_limit:
+            title: 'PHP内存限制不足'
+            detail: '当前PHP配置仅允许 {limit} 内存 (在命令行中)。该内存设置无法满足运行Composer，该设置无法自动调整增加限制。请联系主机提供商提供相关支持。'
+        systempdir:
+            title: '系统临时目录无法写入'
+            detail: '很有可能是主机的配置问题。请确保open_basedir允许访问临时目录，或者sys_temp_dir已正确配置。'
+        contao_unknown:
+            title: '安装状态未知'
+            detail: "在当前服务器中找到一些文件，但是无法检测到Contao版本。\n您必须手动修复您的应用或者移除以下文件和目录来安装Contao：\n\n{files}"
+        contao_version:
+            title: '无法获知Contao版本'
+            detail: "当请求获取Contao版本时，Console控制台返回错误内容。请检查输出的内容来获取更多信息："
+
+    boot:
+        composer:
+            invalid: 'composer.json schema验证: {exception}'
+
+    config:
+        php_cli:
+            not_found: '该路径没有包含有效的PHP二进制文件'
+            incompatible: 'PHP二进制文件版本 {cli} 但是当前服务器版本为 {web}'
+        cloud:
+            platform: '不得在composer.json中配置平台。'
+            cache: '不得在composer.json中配置缓存属性。'
+
+    taskstatus:
+        created: '控制台任务已创建 …'
+        complete:
+            summary: '完成控制台任务!'
+            detail: '后台任务成功完成。通过控制台协议查看详情。'
+            console: '### 任务成功完成 ###'
+        aborting:
+            summary: '正在停止当前操作 …'
+            detail: '后台任务正在取消。'
+            console: '### 后台任务正在取消 ###'
+        stopped:
+            summary: '终止控制台任务!'
+            detail: '后台任务已取消。请检查控制台协议。'
+            console: '### 后台任务已取消 ###'
+        error:
+            summary: '终止控制台任务!'
+            detail: '后台任务已意外停止。请检查控制台协议。'
+            console: '### 后台任务已意外停止 ###'
+
+    task:
+        setup_packages:
+            title: '安装Contao应用'
+            completeSummary: '完成安装!'
+            completeDetail: '为了完成安装流程，请打开安装工具并输入正确的数据库认证配置。'
+        install_packages:
+            title: '正在安装Composer依赖'
+        update_packages:
+            title: '包更新中'
+            completeSummary: 'Contao 包已更新!'
+            completeDetail: '请打开安装工具来应用任何必要的数据库变更。'
+        dump_autoload:
+            title: '打印Composer Autoloader'
+        clear_cache:
+            title: '正在清理Composer缓存'
+        rebuild_cache:
+            title: 'Contao 缓存重建中'
+        install_tool:
+            title: 'Contao安装工具'
+        self_update:
+            title: 'Contao 管理器更新中'
+            completeSummary: 'Contao 管理器成功更新'
+            completeDetail: '已更新至版本 {current}'
+
+    taskoperation:
+        self-update:
+            summary: '正在安装Contao管理器 …'
+            detail: '从 {old} 更新到 {new}'
+        remove-cache:
+            summary: '删除缓存目录中 …'
+        remove-vendor:
+            summary: '删除vendor目录中 …'
+        cache-warmup:
+            summary: '应用缓存预热中 …'
+        cache-clear:
+            summary: '应用缓存清除中 …'
+        composer-update:
+            summary: 'Composer依赖更新中 …'
+        composer-require:
+            summary: 'Composer包添加中 …'
+        composer-remove:
+            summary: 'Composer包移除中 …'
+        install-uploads:
+            summary: '已上传包安装中 …'
+            console: '已安装的artifact类型 for {package} (版本 {version}) [to packages/{name}]'
+        remove-uploads:
+            summary: '上传文件移除中 …'
+        composer-install:
+            summary: 'Composer依赖安装中 …'
+            summaryRetry: 'Composer依赖 (重试中 {current}/{max})安装中 …'
+        dump-autoload:
+            summary: 'class autoloader打印中 …'
+        install-lock:
+            summary: 'Contao安装工具锁定中 …'
+        install-unlock:
+            summary: 'Contao安装工具解锁中 …'
+        create-project:
+            summary: '应用模版安装中 …'
+        cloud:
+            queuedSummary: 'Composer Cloud 中队列 {seconds} 秒'
+            queuedDetail: '大约开始。 {seconds} 秒 (当前 {jobs} jobs on {workers} workers)'
+            processingSummary: '使用Composer Cloud解决依赖关系'
+            processingDetail: 'Job ID {job} 运行中 {seconds} 秒'
+            errorSummary: '依赖解决失败 …'
+            finishedSummary: 'Composer Cloud job 完成，花费 {seconds} 秒'
+            finishedDetail: '内存使用: {memory} (peak: {peak}), 时间: {time}.'
+        clear-cache:
+            summary: '缓存文件删除中 …'
+
+    upload:
+        error:
+            file: '文件无效或者没有包含composer.json。'
+            json: 'composer.json没有包含有效的JSON数据。'
+            schema: 'composer.json schema验证失败。'
+            partial: '上传文件未完成。'

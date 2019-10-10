@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -26,8 +28,6 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
 
     /**
      * Constructor.
-     *
-     * @param TaskConfig $taskConfig
      */
     public function __construct(TaskConfig $taskConfig)
     {
@@ -37,7 +37,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
     /**
      * {@inheritdoc}
      */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return null !== $this->taskConfig->getState($this->getName());
     }
@@ -45,7 +45,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
     /**
      * {@inheritdoc}
      */
-    public function isRunning()
+    public function isRunning(): bool
     {
         return TaskStatus::STATUS_ACTIVE === $this->taskConfig->getState($this->getName());
     }
@@ -53,17 +53,17 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
     /**
      * {@inheritdoc}
      */
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
         return TaskStatus::STATUS_COMPLETE === $this->taskConfig->getState($this->getName());
     }
 
-    public function hasError()
+    public function hasError(): bool
     {
         return TaskStatus::STATUS_ERROR === $this->taskConfig->getState($this->getName());
     }
 
-    public function run()
+    public function run(): void
     {
         if ($this->isStarted()) {
             return;
@@ -72,11 +72,8 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
         $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ACTIVE);
 
         try {
-            $success = (bool) $this->doRun();
-        } catch (\Error $e) {
-            $this->taskConfig->setState($this->getName().'.error', $e->getMessage());
-            $success = false;
-        } catch (\Exception $e) {
+            $success = $this->doRun();
+        } catch (\Throwable $e) {
             $this->taskConfig->setState($this->getName().'.error', $e->getMessage());
             $success = false;
         }
@@ -91,7 +88,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
     /**
      * {@inheritdoc}
      */
-    public function abort()
+    public function abort(): void
     {
         $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ERROR);
     }
@@ -99,20 +96,18 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
     /**
      * {@inheritdoc}
      */
-    public function delete()
+    public function delete(): void
     {
         // Do nothing
     }
 
     /**
      * Adds the exception message to the status console.
-     *
-     * @param TaskStatus $status
      */
-    protected function addConsoleStatus(TaskStatus $status)
+    protected function addConsoleStatus(TaskStatus $status): void
     {
         if ($error = $this->taskConfig->getState($this->getName().'.error')) {
-            $status->addConsole($error);
+            $status->addConsole((string) $error);
         }
     }
 
@@ -121,7 +116,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
      *
      * @return string
      */
-    abstract protected function getName();
+    abstract protected function getName(): string;
 
     /**
      * Executes the operation and returns whether it was successful.
@@ -130,5 +125,5 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
      *
      * @return bool
      */
-    abstract protected function doRun();
+    abstract protected function doRun(): bool;
 }

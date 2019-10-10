@@ -22,7 +22,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .layout-boxed {
         display: table;
@@ -31,6 +31,7 @@
 
         &__cell {
             display: table-cell;
+            overflow: hidden;
             vertical-align: middle;
             padding: 10px 0;
         }

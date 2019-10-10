@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -28,8 +30,6 @@ class TaskUpdateCommand extends Command
 
     /**
      * Constructor.
-     *
-     * @param TaskManager $taskManager
      */
     public function __construct(TaskManager $taskManager)
     {
@@ -41,7 +41,7 @@ class TaskUpdateCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('task:update')

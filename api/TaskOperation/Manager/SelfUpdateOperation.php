@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -30,10 +32,6 @@ class SelfUpdateOperation extends AbstractInlineOperation
 
     /**
      * Constructor.
-     *
-     * @param SelfUpdate $updater
-     * @param TaskConfig $taskConfig
-     * @param Translator $translator
      */
     public function __construct(SelfUpdate $updater, TaskConfig $taskConfig, Translator $translator)
     {
@@ -46,7 +44,7 @@ class SelfUpdateOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    public function doRun()
+    public function doRun(): bool
     {
         return $this->updater->update();
     }
@@ -54,7 +52,7 @@ class SelfUpdateOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    public function updateStatus(TaskStatus $status)
+    public function updateStatus(TaskStatus $status): void
     {
         $status
             ->setSummary($this->translator->trans('taskoperation.self-update.summary'))
@@ -72,7 +70,7 @@ class SelfUpdateOperation extends AbstractInlineOperation
     /**
      * {@inheritdoc}
      */
-    protected function getName()
+    protected function getName(): string
     {
         return 'self-update';
     }

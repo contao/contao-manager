@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -14,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class SessionCheck extends AbstractIntegrityCheck
 {
-    public function run()
+    public function run(): ?ApiProblem
     {
         $detail = '';
 
@@ -27,7 +29,7 @@ class SessionCheck extends AbstractIntegrityCheck
             if (false !== session_start($options)) {
                 return null;
             }
-        } catch (\ErrorException $exception) {
+        } catch (\Exception $exception) {
             $detail = $exception->getMessage();
         }
 

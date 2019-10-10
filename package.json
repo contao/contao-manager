@@ -11,9 +11,12 @@
   },
   "dependencies": {
     "algoliasearch": "^3.35.0",
+    "contao-package-list": "git+https://github.com/contao/package-list.git",
+    "tiny-slider": "^2.9.2",
     "vue": "^2.6.10",
     "vue-resource": "^1.5.1",
     "vue-router": "^2.8.1",
+    "vue-upload-component": "^2.8.20",
     "vuex": "^2.5.0",
     "vuex-i18n": "^1.13.1"
   },

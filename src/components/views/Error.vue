@@ -5,7 +5,7 @@
                 <span>ERROR <a :href="'https://httpstatuses.com/'+error.status" target="_blank" v-if="error.status"> {{ error.status }}</a></span>
                 {{ error.title }}
             </h1>
-            <a :href="error.type" target="_blank" v-if="error.type !== 'about:blank'" class="view-error__link">{{ 'ui.error.moreLink' | translate }}</a>
+            <a :href="error.type" target="_blank" v-if="error.type !== 'about:blank'" class="view-error__link">{{ $t('ui.error.moreLink') }}</a>
             <div class="view-error__details" v-if="error.detail">{{ error.detail }}</div>
         </div>
     </div>
@@ -20,7 +20,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../assets/styles/defaults";
+    @import "~contao-package-list/src/assets/styles/defaults";
 
     .view-error {
         position: fixed;

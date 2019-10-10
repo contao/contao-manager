@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -16,8 +18,8 @@ use Contao\ManagerApi\Config\ManagerConfig;
 
 class SelfUpdate
 {
-    const DOWNLOAD_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.phar';
-    const VERSION_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.version';
+    private const DOWNLOAD_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.phar';
+    private const VERSION_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.version';
 
     /**
      * @var ApiKernel
@@ -41,12 +43,6 @@ class SelfUpdate
 
     private $checkedForUpdates = false;
 
-    /**
-     * Constructor.
-     *
-     * @param ApiKernel     $kernel
-     * @param ManagerConfig $managerConfig
-     */
     public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, Request $request)
     {
         $this->kernel = $kernel;
@@ -59,17 +55,15 @@ class SelfUpdate
      *
      * @return bool
      */
-    public function canUpdate()
+    public function canUpdate(): bool
     {
         return '' !== \Phar::running(false);
     }
 
     /**
      * Returns whether the current environments supports the new requirements.
-     *
-     * @return bool
      */
-    public function supportsUpdate()
+    public function supportsUpdate(): bool
     {
         $this->checkForUpdate();
 
@@ -87,73 +81,53 @@ class SelfUpdate
 
     /**
      * Returns whether this is a development build.
-     *
-     * @return bool
      */
-    public function isDev()
+    public function isDev(): bool
     {
         return $this->kernel->getVersion() === '@'.'package_version'.'@'
-            || $this->kernel->getEnvironment() !== 'prod'
+            || 'prod' !== $this->kernel->getEnvironment()
             || $this->kernel->isDebug()
         ;
     }
 
     /**
      * Gets the release channel for the current version.
-     *
-     * @return string
      */
-    public function getChannel()
+    public function getChannel(): string
     {
-        if ($this->isDev()) {
-            return 'dev';
-        }
-
-        if (PHP_MAJOR_VERSION === 5) {
-            return '1.1';
-        }
-
-        return 'stable';
+        return $this->isDev() ? 'dev' : 'stable';
     }
 
     /**
      * Returns whether there is an update available.
-     *
-     * @return bool
      */
-    public function hasUpdate()
+    public function hasUpdate(): bool
     {
         return $this->getOldVersion() !== $this->getNewVersion();
     }
 
     /**
      * Returns version of currently installed Phar.
-     *
-     * @return string
      */
-    public function getOldVersion()
+    public function getOldVersion(): string
     {
         return $this->kernel->getVersion();
     }
 
     /**
      * Returns version of remotely available Phar.
-     *
-     * @return string
      */
-    public function getNewVersion()
+    public function getNewVersion(): ?string
     {
         $this->checkForUpdate();
 
-        return $this->managerConfig->get('latest_version');
+        return $this->managerConfig->has('latest_version') ? (string) $this->managerConfig->get('latest_version') : null;
     }
 
     /**
      * Returns the requirements for the remotely available Phar.
-     *
-     * @return array
      */
-    public function getNewRequires()
+    public function getNewRequires(): array
     {
         $this->checkForUpdate();
 
@@ -164,10 +138,8 @@ class SelfUpdate
      * Updates the current Phar to the latest version available.
      *
      * @throws \Exception
-     *
-     * @return bool
      */
-    public function update()
+    public function update(): bool
     {
         if (!$this->hasUpdate() || !$this->canUpdate() || !$this->supportsUpdate()) {
             return false;
@@ -176,9 +148,9 @@ class SelfUpdate
         $remote = $this->getRemoteInfo();
 
         $phar = \Phar::running(false);
-        list($filename, $extension) = $this->splitFilename($phar);
+        [$filename, $extension] = $this->splitFilename($phar);
         $backupFile = $this->kernel->getConfigDir().'/'.$filename.'-old'.$extension;
-        $tempFile = dirname($phar).'/'.$filename.'.temp';
+        $tempFile = \dirname($phar).'/'.$filename.'.temp';
 
         $this->backup($phar, $backupFile);
 
@@ -202,7 +174,7 @@ class SelfUpdate
     /**
      * Loads latest information from the update server if the local cache has expired.
      */
-    private function checkForUpdate()
+    private function checkForUpdate(): void
     {
         if ($this->checkedForUpdates) {
             return;
@@ -226,15 +198,13 @@ class SelfUpdate
         $this->checkedForUpdates = true;
         $this->managerConfig->set('last_update', (new \DateTime())->format('c'));
         $this->managerConfig->set('latest_version', $remote['version']);
-        $this->managerConfig->set('latest_requires', isset($remote['requires']) ? $remote['requires'] : []);
+        $this->managerConfig->set('latest_requires', $remote['requires'] ?? []);
     }
 
     /**
      * Gets remote information about available updates.
-     *
-     * @return array
      */
-    private function getRemoteInfo()
+    private function getRemoteInfo(): array
     {
         if (null === $this->remote) {
             $url = sprintf(self::VERSION_URL, $this->getChannel());
@@ -256,25 +226,20 @@ class SelfUpdate
 
     /**
      * Creates a backup of the current Phar to the given target.
-     *
-     * @param string $current
-     * @param string $target
      */
-    private function backup($current, $target)
+    private function backup(string $current, string $target): void
     {
         $result = copy($current, $target);
 
-        if ($result === false) {
+        if (false === $result) {
             throw new \RuntimeException(sprintf('Unable to backup %s to %s.', $current, $target));
         }
     }
 
     /**
      * Downloads the latest remote version to the given target.
-     *
-     * @param string $target
      */
-    private function download($target)
+    private function download(string $target): void
     {
         $url = sprintf(self::DOWNLOAD_URL, $this->getChannel());
 
@@ -289,11 +254,8 @@ class SelfUpdate
 
     /**
      * Validates temporary file if it matches the given SHA1 hash.
-     *
-     * @param string $tempFile
-     * @param string $sha1
      */
-    private function validate($tempFile, $sha1)
+    private function validate(string $tempFile, string $sha1): void
     {
         $tmpVersion = sha1_file($tempFile);
         if ($tmpVersion !== $sha1) {
@@ -309,23 +271,16 @@ class SelfUpdate
 
     /**
      * Installs the temporary Phar to the target location.
-     *
-     * @param string $tempFile
-     * @param string $phar
      */
-    private function install($tempFile, $phar)
+    private function install(string $tempFile, string $phar): void
     {
         rename($tempFile, $phar);
     }
 
     /**
      * Gets filename and extension from current Phar file.
-     *
-     * @param string $phar
-     *
-     * @return array
      */
-    private function splitFilename($phar)
+    private function splitFilename(string $phar): array
     {
         $extension = '.phar.php';
         $filename = basename($phar, $extension);

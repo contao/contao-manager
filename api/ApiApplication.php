@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -12,17 +14,16 @@ namespace Contao\ManagerApi;
 
 use Contao\ManagerApi\Command\AboutCommand;
 use Contao\ManagerApi\Command\IntegrityCheckCommand;
+use Contao\ManagerApi\Command\ProcessRunnerCommand;
 use Contao\ManagerApi\Command\TaskAbortCommand;
 use Contao\ManagerApi\Command\TaskDeleteCommand;
 use Contao\ManagerApi\Command\TaskUpdateCommand;
 use Contao\ManagerApi\Command\UpdateCommand;
-use Symfony\Bundle\FrameworkBundle\Command\CacheWarmupCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Terminal42\BackgroundProcess\Command\ProcessRunnerCommand;
 
 class ApiApplication extends Application
 {
@@ -36,11 +37,6 @@ class ApiApplication extends Application
      */
     private $commandsRegistered = false;
 
-    /**
-     * Constructor.
-     *
-     * @param ApiKernel $kernel
-     */
     public function __construct(ApiKernel $kernel)
     {
         $this->kernel = $kernel;
@@ -55,7 +51,7 @@ class ApiApplication extends Application
      *
      * @return ApiKernel
      */
-    public function getKernel()
+    public function getKernel(): ApiKernel
     {
         return $this->kernel;
     }
@@ -63,7 +59,7 @@ class ApiApplication extends Application
     /**
      * {@inheritdoc}
      */
-    public function doRun(InputInterface $input, OutputInterface $output)
+    public function doRun(InputInterface $input, OutputInterface $output): int
     {
         $this->registerCommands();
 
@@ -73,13 +69,13 @@ class ApiApplication extends Application
             $this->setDispatcher($this->kernel->getContainer()->get('event_dispatcher'));
         }
 
-        return parent::doRun($input, $output);
+        return (int) parent::doRun($input, $output);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands(): array
     {
         $commands = parent::getDefaultCommands();
 
@@ -91,7 +87,7 @@ class ApiApplication extends Application
     /**
      * {@inheritdoc}
      */
-    private function registerCommands()
+    private function registerCommands(): void
     {
         if ($this->commandsRegistered) {
             return;
@@ -103,7 +99,7 @@ class ApiApplication extends Application
 
         $container = $this->kernel->getContainer();
 
-        $this->add((new ProcessRunnerCommand())->setName('run'));
+        $this->add($container->get(ProcessRunnerCommand::class)->setName('run'));
         $this->add($container->get(AboutCommand::class));
         $this->add($container->get(IntegrityCheckCommand::class));
         $this->add($container->get(TaskAbortCommand::class));
@@ -111,10 +107,8 @@ class ApiApplication extends Application
         $this->add($container->get(TaskUpdateCommand::class));
         $this->add($container->get(UpdateCommand::class));
 
-        if (!\Phar::running(false)) {
-            $command = new CacheWarmupCommand();
-            $command->setContainer($container);
-            $this->add($command);
+        if (!\Phar::running(false) && $container->has('console.command_loader')) {
+            $this->setCommandLoader($container->get('console.command_loader'));
         }
     }
 }

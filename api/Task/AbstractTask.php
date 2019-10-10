@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -14,7 +16,6 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
 
 abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
 {
@@ -30,12 +31,6 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
      */
     private $operations;
 
-    /**
-     * Constructor.
-     *
-     * @param Translator           $translator
-     * @param LoggerInterface|null $logger
-     */
     public function __construct(Translator $translator)
     {
         $this->translator = $translator;
@@ -44,16 +39,17 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function create(TaskConfig $config)
+    public function create(TaskConfig $config): TaskStatus
     {
         return (new TaskStatus($this->getTitle()))
-            ->setSummary($this->translator->trans('taskstatus.created'));
+            ->setSummary($this->translator->trans('taskstatus.created'))
+        ;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function update(TaskConfig $config)
+    public function update(TaskConfig $config): TaskStatus
     {
         if ($config->isCancelled()) {
             return $this->abort($config);
@@ -65,7 +61,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         foreach ($this->getOperations($config) as $operation) {
             if (!$operation->isStarted() || $operation->isRunning()) {
                 if (null !== $this->logger) {
-                    $this->logger->info('Current operation: '.get_class($operation));
+                    $this->logger->info('Current operation: '.\get_class($operation));
                 }
 
                 $operation->run();
@@ -74,7 +70,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
                     $status->setStatus(TaskStatus::STATUS_ERROR);
 
                     if (null !== $this->logger) {
-                        $this->logger->info('Failed operation: '.get_class($operation));
+                        $this->logger->info('Failed operation: '.\get_class($operation));
                     }
                 }
 
@@ -88,7 +84,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
 
             if ($operation->isSuccessful()) {
                 if (null !== $this->logger) {
-                    $this->logger->info('Completed operation: '.get_class($operation));
+                    $this->logger->info('Completed operation: '.\get_class($operation));
                 }
 
                 continue;
@@ -110,7 +106,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function abort(TaskConfig $config)
+    public function abort(TaskConfig $config): TaskStatus
     {
         $config->setCancelled();
 
@@ -125,7 +121,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
                 $status->setStatus(TaskStatus::STATUS_ABORTING);
 
                 if (null !== $this->logger) {
-                    $this->logger->info('Task operation is active, aborting', ['class' => get_class($operation)]);
+                    $this->logger->info('Task operation is active, aborting', ['class' => \get_class($operation)]);
                 }
                 break;
             }
@@ -139,14 +135,14 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function delete(TaskConfig $config)
+    public function delete(TaskConfig $config): bool
     {
         $operations = $this->getOperations($config);
 
         foreach ($operations as $operation) {
             if ($operation->isRunning()) {
                 if (null !== $this->logger) {
-                    $this->logger->info('Cannot delete active operation', ['class' => get_class($operation)]);
+                    $this->logger->info('Cannot delete active operation', ['class' => \get_class($operation)]);
                 }
 
                 return false;
@@ -157,7 +153,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
             $operation->delete();
 
             if (null !== $this->logger) {
-                $this->logger->info('Deleting operation', ['class' => get_class($operation)]);
+                $this->logger->info('Deleting operation', ['class' => \get_class($operation)]);
             }
         }
 
@@ -166,7 +162,10 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         return true;
     }
 
-    protected function getOperations(TaskConfig $config)
+    /**
+     * @return TaskOperationInterface[]
+     */
+    protected function getOperations(TaskConfig $config): array
     {
         if (null === $this->operations) {
             $this->operations = $this->buildOperations($config);
@@ -181,14 +180,11 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         return $this->operations;
     }
 
-    /**
-     * @param TaskStatus $status
-     */
-    protected function updateStatus(TaskStatus $status)
+    protected function updateStatus(TaskStatus $status): void
     {
         $result = $status->getStatus();
 
-        if ($result === TaskStatus::STATUS_ACTIVE) {
+        if (TaskStatus::STATUS_ACTIVE === $result) {
             return;
         }
 
@@ -197,15 +193,10 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         $status->addConsole($this->translator->trans(sprintf('taskstatus.%s.console', $result)), '---');
     }
 
-    /**
-     * @return string
-     */
-    abstract protected function getTitle();
+    abstract protected function getTitle(): string;
 
     /**
-     * @param TaskConfig $config
-     *
      * @return TaskOperationInterface[]
      */
-    abstract protected function buildOperations(TaskConfig $config);
+    abstract protected function buildOperations(TaskConfig $config): array;
 }
