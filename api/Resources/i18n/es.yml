@@ -1,59 +1,147 @@
 es:
-  integrity:
-    allow_url_fopen:
-      title: 'La configuración de PHP "allow_url_fopen" no está habilitada en el servidor.'
-    openssl:
-      title: 'La extensión PHP OpenSSL no está disponible.'
-      detail: 'El Contao Manager requiere la extensión OpenSSL para descargar archivos a través de una conexión cifrada (https).'
-    process:
-      title: 'La función PHP "proc_open" and/or "proc_close" no está disponible en el servidor.'
-      detail: 'Las funciones "proc_open" y "proc_close" son necesarias para ejecutar tareas de línea de comandos en segundo plano. Consulte con su proveedor de hosting por qué este método no está disponible; ni el Contao Manager ni Contao 4 se ejecutarán correctamente sin él.'
-    intl:
-      title: 'La extensión PHP Intl no está disponible.'
-      detail: 'Contao 4 requiere la extensión PHP Intl para fines de internacionalización.'
-    session:
-      title: 'La sesión de PHP no se pudo iniciar.'
-    web_root:
-      title: 'El archivo Phar debe estar ubicado en la carpeta /web.'
-    memory_limit:
-      title: 'Límite insuficiente de memoria de PHP'
-      detail: 'Su configuración PHP solo permite {limit} memoria (en la línea de comando). Esto no es suficiente para ejecutar Composer y no fue posible aumentar este límite automáticamente. Por favor, póngase en contacto con su proveedor de hosting para obtener asistencia.'
-    systempdir:
-      title: 'No se puede escribir en el directorio temporal del sistema.'
-      detail: 'Probablemente esto sea un problema con su configuración de alojamiento. Asegúrese de que open_basedir permita el acceso al directorio temporal o que el sys_temp_dir esté configurado correctamente.'
-    contao_unknown:
-      title: 'Estado de instalación desconocido'
-      detail: "Se encontraron algunos archivos en su servidor, pero no se pudo detectar ninguna versión conocida de Contao.\nDebe reparar manualmente su aplicación o eliminar los siguientes archivos y carpetas para instalar Contao:\n\n{files}"
-    contao_version:
-      title: 'No se pudo determinar la versión de Contao'
-      detail: "La consola devolvió contenido inesperado cuando se le solicitó la versión de Contao. Por favor, revise el resultado para más información:\n\n{output}"
-  config:
-    php_cli:
-      not_found: 'Esta ruta no contiene un binario PHP válido.'
-      incompatible: 'Este binario es una versión de PHP {cli}, pero su servidor web es la versión {web}.'
-  taskstatus:
-    complete:
-      summary: '¡Tarea de consola completa!'
-      detail: 'La tarea de fondo se completó con éxito. Verifique el protocolo de la consola para los detalles.'
-    stopped:
-      summary: 'Se terminó la tarea de la consola!'
-    error:
-      summary: 'Se terminó la tarea de la consola!'
-  task:
-    setup_packages:
-      completeSummary: '¡Instalación completa!'
-      completeDetail: 'Para completar el proceso de configuración, abra la herramienta de instalación e ingrese sus credenciales de base de datos.'
-    install_packages:
-      title: 'Instalando dependencias del Composer'
-    update_packages:
-      title: 'Actualizando paquetes'
-      completeSummary: 'Paquetes de Contao actualizados!'
-      completeDetail: 'Abra la herramienta de instalación para aplicar los cambios necesarios en la base de datos.'
-    dump_autoload:
-      title: 'Dumping Composer Autoloader'
-    clear_cache:
-      title: 'Limpiar el caché del Composer'
-    rebuild_cache:
-      title: 'Reconstruyendo de caché de Contao'
-    self_update:
-      title: 'Actualizando de Contao Manager'
+    integrity:
+        allow_url_fopen:
+            title: 'La configuración de PHP "allow_url_fopen" no está habilitada en el servidor.'
+        process:
+            title: 'La función PHP "proc_open" and/or "proc_close" no está disponible en el servidor.'
+            detail: 'Las funciones "proc_open" y "proc_close" son necesarias para ejecutar tareas de línea de comandos en segundo plano. Consulte con su proveedor de hosting por qué este método no está disponible; ni el Contao Manager ni Contao 4 se ejecutarán correctamente sin él.'
+        intl:
+            title: 'La extensión PHP Intl no está disponible.'
+            detail: 'Contao 4 requiere la extensión PHP Intl para fines de internacionalización.'
+        openssl:
+            title: 'La extensión PHP OpenSSL no está disponible.'
+            detail: 'El Contao Manager requiere la extensión OpenSSL para descargar archivos a través de una conexión cifrada (https).'
+        dom:
+            title: 'La extensión PHP DOM no está disponible. '
+            detail: 'Contao 4 requiere la extensión DOM de PHP para analizar documentos XML.'
+        xmlreader:
+            title: 'La extensión PHP XMLReader no está disponible.'
+            detail: 'Contao 4 requiere la extensión DOM de PHP para analizar documentos XML.'
+        graphics_lib:
+            title: 'No hay biblioteca de procesamiento de imágenes PHP disponible.'
+            detail: 'Contao 4 requiere la extensión GD, Imagick o Gmagick para procesar imágenes.'
+        symlink:
+            title: 'El método de enlace simbólico PHP no está disponible o no funciona correctamente.'
+        session:
+            title: 'La sesión de PHP no se pudo iniciar.'
+        web_root:
+            title: 'El archivo Phar debe estar ubicado en la carpeta /web.'
+        memory_limit:
+            title: 'Límite insuficiente de memoria de PHP'
+            detail: 'Su configuración PHP solo permite {limit} memoria (en la línea de comando). Esto no es suficiente para ejecutar Composer y no fue posible aumentar este límite automáticamente. Por favor, póngase en contacto con su proveedor de hosting para obtener asistencia.'
+        systempdir:
+            title: 'No se puede escribir en el directorio temporal del sistema.'
+            detail: 'Probablemente esto sea un problema con su configuración de alojamiento. Asegúrese de que open_basedir permita el acceso al directorio temporal o que el sys_temp_dir esté configurado correctamente.'
+        contao_unknown:
+            title: 'Estado de instalación desconocido'
+            detail: "Se encontraron algunos archivos en su servidor, pero no se pudo detectar ninguna versión conocida de Contao.\nDebe reparar manualmente su aplicación o eliminar los siguientes archivos y carpetas para instalar Contao:\n\n{files}"
+        contao_version:
+            title: 'No se pudo determinar la versión de Contao'
+            detail: "La consola devolvió contenido inesperado cuando se le solicitó la versión de Contao. Por favor, revise el resultado para más información:\n\n{output}"
+
+    boot:
+        composer:
+            invalid: 'validación del esquema composer.json: {exception}'
+
+    config:
+        php_cli:
+            not_found: 'Esta ruta no contiene un binario PHP válido.'
+            incompatible: 'Este binario es una versión de PHP {cli}, pero su servidor web es la versión {web}.'
+        cloud:
+            platform: 'La plataforma no debe configurarse en composer.json.'
+            cache: 'Las propiedades de caché no deben configurarse en composer.json.'
+
+    taskstatus:
+        created: 'La tarea de consola se ha creado ...'
+        complete:
+            summary: '¡Tarea de consola completa!'
+            detail: 'La tarea de fondo se completó con éxito. Verifique el protocolo de la consola para los detalles.'
+            console: '### Tarea completada con éxito ###'
+        aborting:
+            summary: 'Deteniendo la operación actual ...'
+            detail: 'La tarea en segundo plano se está cancelando.'
+            console: '### La tarea en segundo plano se está cancelando ###'
+        stopped:
+            summary: 'Se terminó la tarea de la consola!'
+            detail: 'La tarea en segundo plano fue cancelada. Por favor verifique el protocolo de la consola.'
+            console: '### La tarea en segundo plano se canceló ###'
+        error:
+            summary: 'Se terminó la tarea de la consola!'
+            detail: 'La tarea en segundo plano se ha detenido inesperadamente. Por favor verifique el protocolo de la consola.'
+            console: '### La tarea en segundo plano se ha detenido inesperadamente ###'
+
+    task:
+        setup_packages:
+            title: 'Instalación de la aplicación Contao'
+            completeSummary: '¡Instalación completa!'
+            completeDetail: 'Para completar el proceso de configuración, abra la herramienta de instalación e ingrese sus credenciales de base de datos.'
+        install_packages:
+            title: 'Instalando dependencias del Composer'
+        update_packages:
+            title: 'Actualizando paquetes'
+            completeSummary: 'Paquetes de Contao actualizados!'
+            completeDetail: 'Abra la herramienta de instalación para aplicar los cambios necesarios en la base de datos.'
+        dump_autoload:
+            title: 'Dumping Composer Autoloader'
+        clear_cache:
+            title: 'Limpiar el caché del Composer'
+        rebuild_cache:
+            title: 'Reconstruyendo de caché de Contao'
+        install_tool:
+            title: 'Herramienta de Instalación Contao'
+        self_update:
+            title: 'Actualizando de Contao Manager'
+            completeSummary: 'El Contao Manager se actualizó correctamente'
+            completeDetail: 'Actualizado a la versión {current}'
+
+    taskoperation:
+        self-update:
+            summary: 'Instalando el último Contao Manager ...'
+            detail: 'Actualización de {old} a {new}'
+        remove-cache:
+            summary: 'Eliminando el directorio de caché ...'
+        remove-vendor:
+            summary: 'Eliminando el directorio de proveedores ...'
+        cache-warmup:
+            summary: 'Calentando caché de aplicaciones ...'
+        cache-clear:
+            summary: 'Borrando el caché de la aplicación ...'
+        composer-update:
+            summary: 'Actualizando las dependencias de Composer ...'
+        composer-require:
+            summary: 'Añadiendo paquetes de Composer ...'
+        composer-remove:
+            summary: 'Eliminando paquetes de Composer ...'
+        install-uploads:
+            summary: 'Instalando paquetes cargados ...'
+            console: 'Artefacto instalado para {package} (versión {version}) [a paquetes / {name}]'
+        remove-uploads:
+            summary: 'Eliminando archivos subidos ...'
+        composer-install:
+            summary: 'Instalando dependencias de Composer ...'
+            summaryRetry: 'Instalando dependencias de Composer (reintentando {current} / {max}) ...'
+        dump-autoload:
+            summary: 'Volcado del autocargador de clases ...'
+        install-lock:
+            summary: 'Bloqueando herramienta de instalación de Contao ...'
+        install-unlock:
+            summary: 'Desbloqueando herramnienta de instalación de Contao ...'
+        create-project:
+            summary: 'Instalando plantilla de aplicación ...'
+        cloud:
+            queuedSummary: 'Trabajo en cola en Composer Cloud durante {seconds} segundos'
+            queuedDetail: 'A partir de aprox. {seconds} segundos (actualmente {jobs} trabajos en {workers} trabajadores)'
+            processingSummary: 'Resolver dependencias usando Composer Cloud'
+            processingDetail: 'El ID de trabajo {job} se ejecuta durante {seconds} segundos'
+            errorSummary: 'Error al resolver dependencias ...'
+            finishedSummary: 'El trabajo de Composer Cloud se completó en {seconds} segundos'
+            finishedDetail: 'Uso de memoria: {memory} (pico: {peak}), tiempo: {time}.'
+        clear-cache:
+            summary: 'Eliminando archivos de caché ...'
+
+    upload:
+        error:
+            file: 'El archivo no es válido o no contiene un composer.json.'
+            json: 'El composer.json no contiene datos JSON válidos.'
+            schema: 'La validación del esquema composer.json ha fallado.'
+            partial: 'La carga del archivo no se completó.'

@@ -39,6 +39,10 @@ pl:
             title: 'Wersja Contao nie mogła zostać określona.'
             detail: "Konsola zwróciła nieprawidłową treść przy pytaniu o wersje Contao. Sprawdź wyink po więcej informacji:\n\n{output}"
 
+    boot:
+        composer:
+            invalid: 'walidacja composer.json: {exception}'
+
     config:
         php_cli:
             not_found: 'Ta ścieżka nie zawiera prawidłowego PHP binary.'
@@ -72,7 +76,7 @@ pl:
             completeSummary: 'Instalacja zakończona!'
             completeDetail: 'Aby zakończyć proces instalacji, otwórz instalator i wprowadź dane dostępowe do bazy danych.'
         install_packages:
-            title: 'Instalowanie Paczek Composera'
+            title: 'Instalowanie Pakietów Composera'
         update_packages:
             title: 'Aktualizowanie pakietów'
             completeSummary: 'Pakiety Contao zaktualizowane!'
@@ -103,14 +107,19 @@ pl:
         cache-clear:
             summary: 'Czyszczenie cache aplikacji …'
         composer-update:
-            summary: 'Aktualizowanie paczek Composera …'
+            summary: 'Aktualizowanie pakietów Composera …'
         composer-require:
-            summary: 'Dodawanie paczek Composera …'
+            summary: 'Dodawanie pakietów Composera …'
         composer-remove:
-            summary: 'Usuwanie paczek Composera …'
+            summary: 'Usuwanie pakietów Composera …'
+        install-uploads:
+            summary: 'Instalowanie wgranych pakietów …'
+            console: 'Zainstalowano artifact dla {package} (wersja {version}) [w packages/{name}]'
+        remove-uploads:
+            summary: 'Usuwanie wgranych plików …'
         composer-install:
-            summary: 'Instalowanie paczek Composera …'
-            summaryRetry: 'Instalowanie paczek Composera (ponowna próba {current}/{max}) …'
+            summary: 'Instalowanie pakietów Composera …'
+            summaryRetry: 'Instalowanie pakietów Composera (ponowna próba {current}/{max}) …'
         dump-autoload:
             summary: 'Odświeżanie autoloadera klas …'
         install-lock:
@@ -122,10 +131,17 @@ pl:
         cloud:
             queuedSummary: 'Zadanie w kolejce w Composer Cloud przez {seconds} sekund'
             queuedDetail: 'Startowanie w około {seconds} sekund (aktualnie {jobs} zadań na {workers} jednostkach)'
-            processingSummary: 'Rozwiązywanie paczek używając Composer Cloud'
+            processingSummary: 'Rozwiązywanie pakietów używając Composer Cloud'
             processingDetail: 'Zadanie ID {job} jest wykonywane przez {seconds} sekund'
-            errorSummary: 'Niepowodzenie rozwiązywania paczek …'
+            errorSummary: 'Niepowodzenie rozwiązywania pakietów …'
             finishedSummary: 'Zadanie Composer Cloud zakończone w {seconds} sekund'
             finishedDetail: 'Użycie pamięci: {memory} (najwyższe: {peak}), czas: {time}.'
         clear-cache:
             summary: 'Usuwanie plików cache …'
+
+    upload:
+        error:
+            file: 'Plik jest nieprawidłowy lub nie zawiera composer.json.'
+            json: 'Plik composer.json nie zawiera poprawnych danych JSON.'
+            schema: 'Walidacja struktury composer.json nie powiodła się.'
+            partial: 'Wgrywanie pliku nie zostało zakończone.'
