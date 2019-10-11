@@ -101,13 +101,7 @@ class TaskController
         }
     }
 
-    /**
-     * @param TaskStatus $status
-     * @param int        $code
-     *
-     * @return Response
-     */
-    private function getResponse(TaskStatus $status = null, $code = Response::HTTP_OK): Response
+    private function getResponse(TaskStatus $status = null, int $code = Response::HTTP_OK): Response
     {
         if (!$status instanceof TaskStatus) {
             return new Response('', Response::HTTP_NO_CONTENT);

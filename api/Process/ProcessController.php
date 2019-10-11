@@ -58,7 +58,7 @@ class ProcessController extends AbstractProcess
         return (string) $this->config['id'];
     }
 
-    /**y
+    /**
      * Stores meta information about the process.
      */
     public function setMeta(array $meta): void

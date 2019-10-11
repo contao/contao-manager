@@ -48,8 +48,6 @@ class ApiApplication extends Application
 
     /**
      * Gets the Kernel associated with this Console.
-     *
-     * @return ApiKernel
      */
     public function getKernel(): ApiKernel
     {

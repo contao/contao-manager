@@ -31,12 +31,6 @@ class TaskConfig
      */
     private $data;
 
-    /**
-     * Constructor.
-     *
-     * @param string $file
-     * @param null   $name
-     */
     public function __construct(string $file, string $name = null, array $options = null, Filesystem $filesystem = null)
     {
         $this->file = $file;

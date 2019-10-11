@@ -113,8 +113,6 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
 
     /**
      * Gets the name to store this operation state in the config file.
-     *
-     * @return string
      */
     abstract protected function getName(): string;
 
@@ -122,8 +120,6 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
      * Executes the operation and returns whether it was successful.
      *
      * @throws \Exception
-     *
-     * @return bool
      */
     abstract protected function doRun(): bool;
 }

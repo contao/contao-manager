@@ -37,9 +37,6 @@ class InvalidJsonException extends \InvalidArgumentException
     /**
      * Constructor.
      *
-     * @param string     $filename
-     * @param string     $content
-     * @param int        $code
      * @param \Exception $previous
      */
     public function __construct(string $filename, string $content = '', int $code = 0, \Exception $previous = null)

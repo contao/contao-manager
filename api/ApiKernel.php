@@ -117,8 +117,6 @@ class ApiKernel extends Kernel
 
     /**
      * Gets the directory where to place manager files like config and logs.
-     *
-     * @return string
      */
     public function getConfigDir(): string
     {
@@ -166,8 +164,6 @@ CODE
 
     /**
      * Gets the current Contao Manager version.
-     *
-     * @return string
      */
     public function getVersion(): string
     {
@@ -176,6 +172,7 @@ CODE
 
     /**
      * {@inheritdoc}
+     *
      * @throws \Symfony\Component\Config\Exception\LoaderLoadException
      */
     protected function configureRoutes(RouteCollectionBuilder $routes): void
@@ -185,6 +182,7 @@ CODE
 
     /**
      * {@inheritdoc}
+     *
      * @throws \Exception
      */
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader): void
@@ -213,8 +211,6 @@ CODE
 
     /**
      * Finds the Contao installation directory depending on the Phar file or development mode.
-     *
-     * @return string
      */
     private function findProjectDir(): string
     {

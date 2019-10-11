@@ -58,12 +58,6 @@ class TaskStatus
      */
     private $status = self::STATUS_ACTIVE;
 
-    /**
-     * Constructor.
-     *
-     * @param string $title
-     * @param bool   $audit
-     */
     public function __construct(string $title, bool $audit = false)
     {
         $this->title = $title;
@@ -102,11 +96,6 @@ class TaskStatus
         return $this->detail;
     }
 
-    /**
-     * @param string $detail
-     *
-     * @return TaskStatus
-     */
     public function setDetail(string $detail): self
     {
         $this->detail = $detail;
@@ -131,9 +120,6 @@ class TaskStatus
 
     /**
      * Adds output to the console log.
-     *
-     * @param string      $console
-     * @param string|null $title
      */
     public function addConsole(string $console, string $title = null): void
     {

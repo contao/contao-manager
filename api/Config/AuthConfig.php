@@ -26,8 +26,6 @@ class AuthConfig extends AbstractConfig
 
     /**
      * Returns the GitHub OAuth token from the config file.
-     *
-     * @return string|null
      */
     public function getGithubToken(): ?string
     {

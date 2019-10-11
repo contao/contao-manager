@@ -52,8 +52,6 @@ class SelfUpdate
 
     /**
      * Returns whether the current application can be updated.
-     *
-     * @return bool
      */
     public function canUpdate(): bool
     {

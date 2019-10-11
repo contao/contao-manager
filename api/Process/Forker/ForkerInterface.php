@@ -21,7 +21,7 @@ interface ForkerInterface
     /**
      * Sets the command to use for the background process.
      */
-    public function setCommand(array $command): ForkerInterface;
+    public function setCommand(array $command): self;
 
     /**
      * Gets the command to use for the background process.
@@ -31,7 +31,7 @@ interface ForkerInterface
     /**
      * Sets the timeout in milliseconds to wait after starting a process.
      */
-    public function setTimeout(int $timeout): ForkerInterface;
+    public function setTimeout(int $timeout): self;
 
     /**
      * Gets the timeout in milliseconds to wait after starting a process.
@@ -45,8 +45,6 @@ interface ForkerInterface
 
     /**
      * Returns whether this forker is supported on the current platform.
-     *
-     * @return bool
      */
     public function isSupported(): bool;
 }

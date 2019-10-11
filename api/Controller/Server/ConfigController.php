@@ -125,8 +125,6 @@ class ConfigController
      *
      * @param string $server
      * @param string $phpCli
-     *
-     * @return ApiProblem|null
      */
     private function validateHostingConfig($server, $phpCli): ?ApiProblem
     {

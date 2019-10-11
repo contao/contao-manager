@@ -22,8 +22,6 @@ class PhpinfoController
 {
     /**
      * Gets response with phpinfo().
-     *
-     * @return Response
      */
     public function __invoke(): Response
     {

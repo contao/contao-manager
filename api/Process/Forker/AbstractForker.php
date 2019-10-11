@@ -121,6 +121,7 @@ abstract class AbstractForker implements ForkerInterface
 
     /**
      * Escapes a string to be used as a shell argument.
+     *
      * @see Process::escapeArgument()
      */
     protected function escapeArgument(?string $argument): string

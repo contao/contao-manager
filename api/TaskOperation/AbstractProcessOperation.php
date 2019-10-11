@@ -118,9 +118,6 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getProcessError(): string
     {
         $output = '';
@@ -147,8 +144,6 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
 
     /**
      * @param int $signal
-     *
-     * @return string
      */
     private function getSignalText($signal): string
     {

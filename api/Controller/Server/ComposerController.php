@@ -31,7 +31,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ComposerController
 {
-
     /**
      * @var Environment
      */

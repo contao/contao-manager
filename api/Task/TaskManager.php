@@ -63,11 +63,6 @@ class TaskManager implements LoggerAwareInterface, ServiceAnnotationInterface
         }
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function supportsTask(string $name): bool
     {
         return isset($this->tasks[$name]);
@@ -98,9 +93,6 @@ class TaskManager implements LoggerAwareInterface, ServiceAnnotationInterface
         return $task->create($config);
     }
 
-    /**
-     * @return TaskStatus|null
-     */
     public function updateTask(): ?TaskStatus
     {
         $config = $this->getTaskConfig();

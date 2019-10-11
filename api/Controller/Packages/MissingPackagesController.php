@@ -42,13 +42,11 @@ class MissingPackagesController
 
         $this->localRepository = $composer->getRepositoryManager()->getLocalRepository();
 
-        $this->compositeRepository = new CompositeRepository(
-            array(
-                new ArrayRepository(array($composer->getPackage())),
-                $this->localRepository,
-                new PlatformRepository(array(), $composer->getConfig()->get('platform') ?: array()),
-            )
-        );
+        $this->compositeRepository = new CompositeRepository([
+            new ArrayRepository([$composer->getPackage()]),
+            $this->localRepository,
+            new PlatformRepository([], $composer->getConfig()->get('platform') ?: []),
+        ]);
     }
 
     public function __invoke(): Response
