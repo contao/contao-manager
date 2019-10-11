@@ -15,6 +15,7 @@ export default {
             'installed',
             'packageInstalled',
             'packageRequired',
+            'packageMissing',
             'packageAdded',
             'packageUpdated',
             'packageChanged',
@@ -23,6 +24,7 @@ export default {
 
         isInstalled: vm => vm.packageInstalled(vm.data.name),
         isRequired: vm => vm.packageRequired(vm.data.name),
+        isMissing: vm => vm.packageMissing(vm.data.name),
         isChanged: vm => vm.packageChanged(vm.data.name),
         isUpdated: vm => vm.packageUpdated(vm.data.name),
         willBeRemoved: vm => vm.packageRemoved(vm.data.name),

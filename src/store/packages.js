@@ -30,11 +30,12 @@ export default {
     },
 
     getters: {
-        hasAdded: (s, g) => g.visibleInstalled.length > 0 && (g.visibleAdded.length > 0 || g.visibleRequired.length > 0),
+        hasAdded: (s, g) => (g.visibleInstalled.length > 0 || s.installed.hasOwnProperty('contao/manager-bundle')) && (g.visibleAdded.length > 0 || g.visibleRequired.length > 0),
 
-        packageInstalled: state => name => Object.keys(state.installed).includes(name),
+        packageInstalled: (state, g) => name => Object.keys(state.installed).includes(name) && !g.packageMissing(name),
         versionInstalled: state => (name, version) => Object.keys(state.installed).includes(name) && state.installed[name].version === version,
-        packageRequired: state => name => Object.keys(state.required).includes(name),
+        packageRequired: state => name => Object.keys(state.required).includes(name) && state.required[name].constraint,
+        packageMissing: state => name => Object.keys(state.required).includes(name) && !state.required[name].constraint,
         packageAdded: state => name => Object.keys(state.add).includes(name),
         packageChanged: state => name => Object.keys(state.change).includes(name),
         packageUpdated: state => name => state.update.includes(name),
@@ -45,10 +46,12 @@ export default {
             + Object.keys(state.change).length
             + state.update.length
             + state.remove.length
+            - Object.values(state.add).filter(p => Object.keys(state.required).includes(p.name)).length
             - Object.values(state.change).filter(p => Object.keys(state.required).includes(p.name)).length
             - state.remove.filter(p => Object.keys(state.required).includes(p)).length,
 
         totalRequired: state => Object.keys(state.required).length
+            - Object.values(state.add).filter(pkg => Object.keys(state.required).includes(pkg.name)).length
             - Object.values(state.change).filter(pkg => Object.keys(state.required).includes(pkg.name)).length
             - state.remove.filter(pkg => Object.keys(state.required).includes(pkg)).length,
 
@@ -89,7 +92,7 @@ export default {
     },
 
     mutations: {
-        setInstalled(state, { root, local: packages }) {
+        setInstalled(state, { root, local: packages, missing }) {
             const installed = {};
             const required = {};
 
@@ -110,6 +113,12 @@ export default {
                     required[name] = { name, constraint: root.require[name] };
                 }
             });
+
+            if (missing) {
+                missing.forEach((name) => {
+                    required[name] = { name, constraint: null };
+                });
+            }
 
             state.root = root;
             state.local = packages;
@@ -189,11 +198,14 @@ export default {
             const load = [
                 Vue.http.get('api/packages/root'),
                 Vue.http.get('api/packages/local'),
+                Vue.http.get('api/packages/missing'),
             ];
-            const root = (await load[0]).body;
-            const local = (await load[1]).body;
 
-            commit('setInstalled', { root, local });
+            commit('setInstalled', {
+                root: (await load[0]).body,
+                local: (await load[1]).body,
+                missing: (await load[2]).body
+            });
 
             return packages;
         },

@@ -1,8 +1,9 @@
 <template>
-    <article class="feature-package" v-if="isRequired || isInstalled || willBeInstalled">
+    <article class="feature-package" v-if="isRequired || isMissing || isInstalled || willBeInstalled">
         <p class="feature-package__text" :class="{ 'feature-package__text--hint': this.packageHint }">
             <strong class="feature-package__name">{{ packageTitle }}</strong>
             <span class="feature-package__hint" v-if="this.packageHint">{{ packageHint }}</span>
+            <span class="feature-package__badge" :title="$t('ui.package.removedText')" v-else-if="isMissing">{{ $t('ui.package.removedTitle') }}</span>
             <span class="feature-package__badge" :title="$t('ui.package.requiredText')" v-else-if="isRequired">{{ $t('ui.package.requiredTitle') }}</span>
             <template v-else>{{ metadata.description }}</template>
         </p>

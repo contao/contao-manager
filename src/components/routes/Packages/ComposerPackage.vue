@@ -49,7 +49,8 @@
         <template #actions v-else>
             <slot name="actions">
                 <details-button :name="data.name" v-if="data.name"/>
-                <button class="widget-button widget-button--alert widget-button--trash" v-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
+                <button class="widget-button widget-button--primary widget-button--add" v-if="isMissing" @click="install" :disabled="willBeInstalled">{{ $t('ui.package.installButton') }}</button>
+                <button class="widget-button widget-button--alert widget-button--trash" v-else-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
                 <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isInstalled" :disabled="isModified" @click="update">
                     <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
                 </button-group>
@@ -77,8 +78,10 @@
     import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
     import InstallButton from '../../fragments/InstallButton';
     import FeaturePackage from './FeaturePackage';
+    import packageStatus from '../../../mixins/packageStatus';
 
     export default {
+        mixins: [packageStatus],
         components: { Package, FeaturePackage, ButtonGroup, InstallButton, DetailsButton },
 
         props: {
@@ -99,30 +102,13 @@
         }),
 
         computed: {
-            ...mapGetters('packages', [
-                'installed',
-                'packageInstalled',
-                'packageRequired',
-                'packageAdded',
-                'packageUpdated',
-                'packageChanged',
-                'packageRemoved'
-            ]),
-
-            isInstalled: vm => vm.packageInstalled(vm.data.name),
-            isRequired: vm => vm.packageRequired(vm.data.name),
-            isChanged: vm => vm.packageChanged(vm.data.name),
-            isUpdated: vm => vm.packageUpdated(vm.data.name),
-            willBeRemoved: vm => vm.packageRemoved(vm.data.name),
-            willBeInstalled: vm => vm.packageAdded(vm.data.name),
-            isModified: vm => vm.isUpdated || vm.isChanged || vm.willBeRemoved || vm.willBeInstalled,
 
             packageHint() {
                 if (this.hint) {
                     return this.hint;
                 }
 
-                if (this.willBeRemoved) {
+                if (this.willBeRemoved || (this.isMissing && !this.willBeInstalled)) {
                     return this.$t('ui.package.hintRemoved');
                 }
 
@@ -156,7 +142,7 @@
             },
 
             packageHintClose() {
-                if (this.uncloseableHint || (this.isRequired && !this.willBeRemoved && !this.isChanged)) {
+                if (this.uncloseableHint || (this.isRequired && !this.willBeRemoved && !this.isChanged) || (this.isMissing && !this.willBeInstalled)) {
                     return null;
                 }
 
@@ -182,6 +168,13 @@
                     return {
                         title: this.$t('ui.package.requiredText'),
                         text: this.$t('ui.package.requiredTitle'),
+                    };
+                }
+
+                if (this.isMissing) {
+                    return {
+                        title: this.$t('ui.package.removedText'),
+                        text: this.$t('ui.package.removedTitle'),
                     };
                 }
 
@@ -218,47 +211,11 @@
             },
 
             constraintPlaceholder() {
-                if (!Object.keys(this.$store.state.packages.installed).includes(this.data.name)) {
+                if (!Object.keys(this.$store.state.packages.root.require).includes(this.data.name)) {
                     return this.$t('ui.package.latestConstraint');
                 }
 
                 return '';
-            },
-
-            constraintInstalled() {
-                if (!this.isInstalled) {
-                    return null;
-                }
-
-                return this.installed[this.data.name].constraint;
-            },
-
-            constraintRequired() {
-                if (!this.isRequired) {
-                    return null;
-                }
-
-                if (this.isChanged) {
-                    return this.constraintChanged;
-                }
-
-                return this.$store.state.packages.required[this.data.name].constraint;
-            },
-
-            constraintAdded() {
-                if (!this.willBeInstalled) {
-                    return null;
-                }
-
-                return this.$store.state.packages.add[this.data.name].constraint;
-            },
-
-            constraintChanged() {
-                if (!this.isChanged) {
-                    return null;
-                }
-
-                return this.$store.state.packages.change[this.data.name];
             },
         },
 
@@ -267,24 +224,6 @@
                 this.$store.commit('packages/restore', this.data.name);
                 this.$store.commit('packages/uploads/unconfirm', this.data.name);
                 this.resetConstraint();
-            },
-
-            install() {
-                this.$store.commit('packages/add', { name: this.data.name });
-            },
-
-            update() {
-                this.$store.commit('packages/update', this.data.name);
-            },
-
-            uninstall() {
-                if (this.willBeInstalled && !this.isInstalled) {
-                    this.$store.commit('packages/restore', this.data.name);
-                } else {
-                    this.$store.commit('packages/restore', this.data.name);
-                    this.$store.commit('packages/uploads/unconfirm', this.data.name);
-                    this.$store.commit('packages/remove', this.data.name);
-                }
             },
 
             editConstraint() {
