@@ -212,6 +212,8 @@
     "ui.package.hintRemoved": "Este paquete se eliminará cuando aplique los cambios.",
     "ui.package.requiredTitle": "agregado manualmente",
     "ui.package.requiredText": "Este paquete es obligatorio en su composer.json pero no está instalado.",
+    "ui.package.removedTitle": "manually removed",
+    "ui.package.removedText": "This package was removed from your composer.json.",
     "ui.package.installed": "Actualmente instalado:",
     "ui.package.version": "Versión {version}",
     "ui.package.additionalDownloads": "{count} Descarga ::: {count} Descargas",

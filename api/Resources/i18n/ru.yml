@@ -52,10 +52,10 @@ ru:
             cache: 'Свойства кеша не должны быть настроены в composer.json.'
 
     taskstatus:
-        created: 'Консольная задача создана...'
+        created: 'Создана консольная задача...'
         complete:
             summary: 'Консольная задача завершена!'
-            detail: 'Фоновая задача была успешно завершена. Проверьте протокол консоли.'
+            detail: 'Фоновая задача успешно завершена. Проверьте протокол консоли.'
             console: '### Задание успешно завершено ###'
         aborting:
             summary: 'Остановка текущей операции...'
@@ -63,8 +63,8 @@ ru:
             console: '### Фоновая задача отменяется ###'
         stopped:
             summary: 'Консольная задача завершена!'
-            detail: 'Фоновая задача была отменена. Проверьте протокол консоли.'
-            console: '### Фоновая задача была отменена ###'
+            detail: 'Фоновая задача отменена. Проверьте протокол консоли.'
+            console: '### Фоновая задача отменена ###'
         error:
             summary: 'Консольная задача завершена!'
             detail: 'Фоновая задача неожиданно прекращена. Проверьте протокол консоли.'
@@ -91,7 +91,7 @@ ru:
             title: 'Мастер установки Contao'
         self_update:
             title: 'Обновление Contao Manager'
-            completeSummary: 'Contao Manager был успешно обновлен'
+            completeSummary: 'Contao Manager успешно обновлен'
             completeDetail: 'Обновлено до версии {current}'
 
     taskoperation:
@@ -131,7 +131,7 @@ ru:
         cloud:
             queuedSummary: 'Работа очереди в Composer Cloud за {seconds} сек.'
             queuedDetail: 'Начиная с прибл. {seconds} сек. (в данный момент {jobs} рабочих {workers} задач)'
-            processingSummary: 'Разрешение зависимостей с помощью Composer Cloud'
+            processingSummary: 'Урегулирование зависимостей с помощью Composer Cloud'
             processingDetail: 'Задание ID {job} работает {seconds} сек.'
             errorSummary: 'Ошибка разрешения зависимостей...'
             finishedSummary: 'Задание Composer Cloud выполнено за {seconds} сек.'

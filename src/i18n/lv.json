@@ -212,6 +212,8 @@
     "ui.package.hintRemoved": "Šī pakotne tiks noņemta, kad piemērosiet izmaiņas.",
     "ui.package.requiredTitle": "manuāli pievienots",
     "ui.package.requiredText": "This package is required in your composer.json but not installed.",
+    "ui.package.removedTitle": "manually removed",
+    "ui.package.removedText": "This package was removed from your composer.json.",
     "ui.package.installed": "Currently installed:",
     "ui.package.version": "Versija {version}",
     "ui.package.additionalDownloads": "{count} lejupielāde ::: {count} lejupielādes",

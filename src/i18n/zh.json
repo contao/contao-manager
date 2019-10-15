@@ -212,6 +212,8 @@
     "ui.package.hintRemoved": "应用更改时，该程序包将被移除。",
     "ui.package.requiredTitle": "手动添加",
     "ui.package.requiredText": "composer.json中需要此包，但是没有安装",
+    "ui.package.removedTitle": "manually removed",
+    "ui.package.removedText": "This package was removed from your composer.json.",
     "ui.package.installed": "Currently installed:",
     "ui.package.version": "版本 {version}",
     "ui.package.additionalDownloads": "{count} 下载 :::  共 {count} 次下载",

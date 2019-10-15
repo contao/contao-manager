@@ -212,6 +212,8 @@
     "ui.package.hintRemoved": "変更を適用すると、このパッケージを削除します。",
     "ui.package.requiredTitle": "手作業による追加",
     "ui.package.requiredText": "このパッケージはcomposer.jsonで必要としていますが、インストールされていません。",
+    "ui.package.removedTitle": "manually removed",
+    "ui.package.removedText": "This package was removed from your composer.json.",
     "ui.package.installed": "インストール済み:",
     "ui.package.version": "バージョン{version}",
     "ui.package.additionalDownloads": "{count}回のダウンロード ::: {count}回のダウンロード",

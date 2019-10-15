@@ -212,6 +212,8 @@
     "ui.package.hintRemoved": "Када сачувате измене, овај пакет ће бити уклоњен.",
     "ui.package.requiredTitle": "ручно додати",
     "ui.package.requiredText": "Овај пакет је захтеван у Вашем composer.json али није инсталиран.",
+    "ui.package.removedTitle": "manually removed",
+    "ui.package.removedText": "This package was removed from your composer.json.",
     "ui.package.installed": "Currently installed:",
     "ui.package.version": "Верзија {version}",
     "ui.package.additionalDownloads": "{count} Преузимање ::: {count} Преузимања",

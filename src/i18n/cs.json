@@ -212,6 +212,8 @@
     "ui.package.hintRemoved": "Tento balíček bude smazaný, pokud provedete změny.",
     "ui.package.requiredTitle": "přidáno manuálně",
     "ui.package.requiredText": "Tento balíček je už sice uvedený ve Vašem souboru composer.json, ale ještě není nainstalovaný.",
+    "ui.package.removedTitle": "manually removed",
+    "ui.package.removedText": "This package was removed from your composer.json.",
     "ui.package.installed": "Currently installed:",
     "ui.package.version": "Verze {version}",
     "ui.package.additionalDownloads": "{count} Stažení ::: {count} staženo",
