@@ -128,7 +128,7 @@ configs:
         name: ETES GmbH
         website: www.etes.de
         php:
-            /bin/php{major}{minor}: []
+            /bin/php{major}{minor}: ['-d', 'memory_limit=-1']
 
     exigo:
         name: exigo AG
