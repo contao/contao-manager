@@ -126,7 +126,11 @@ class PhpExecutableFinder
                 }
             }
         } else {
-            $dirs = explode(PATH_SEPARATOR, getenv('PATH') ?: getenv('Path'));
+            $dirs = [];
+
+            if ($path = (getenv('PATH') ?: getenv('Path'))) {
+                $dirs = explode(PATH_SEPARATOR, $path);
+            }
 
             if ('\\' === \DIRECTORY_SEPARATOR) {
                 $dirs[] = 'C:\xampp\php\\';
