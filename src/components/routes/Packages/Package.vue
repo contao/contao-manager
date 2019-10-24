@@ -346,7 +346,7 @@
                 padding-left: 0;
             }
 
-            button:not(:last-child) {
+            .widget-button:not(:last-child) {
                 margin-bottom: 5px;
             }
         }
