@@ -118,8 +118,18 @@ class CloudOperation implements TaskOperationInterface
             $job = $this->getCurrentJob();
 
             if (!$job instanceof CloudJob) {
-                $this->taskConfig->setState('cloud-job-queued', time());
+                // Retry to create Cloud job, the first request always fails on XAMPP for unknown reason
+                $attempts = $this->taskConfig->getState('cloud-job-attempts', 0);
+
+                if ($attempts >= 2) {
+                    $this->taskConfig->setState('cloud-job-successful', false);
+                    return;
+                }
+
+                $this->taskConfig->setState('cloud-job-attempts', $attempts + 1);
+
                 $this->job = $job = $this->cloud->createJob($this->changes, $this->environment);
+                $this->taskConfig->setState('cloud-job-queued', time());
                 $this->taskConfig->setState('cloud-job', $this->job->getId());
             }
 
@@ -247,7 +257,7 @@ class CloudOperation implements TaskOperationInterface
                 $seconds = $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing');
 
                 $profile = $this->getFinalProfile($this->cloud->getOutput($job));
-                preg_match('{Memory usage: ([^ ]+) \(peak: ([^\)]+)\), time: ([0-9\.]+s)\.}', $profile, $match);
+                preg_match('{Memory usage: ([^ ]+) \(peak: ([^)]+)\), time: ([0-9.]+s)\.}', $profile, $match);
 
                 $detail = $this->translator->trans(
                     'taskoperation.cloud.finishedDetail',
@@ -302,7 +312,7 @@ class CloudOperation implements TaskOperationInterface
         $lines = array_reverse(explode("\n", $output));
 
         foreach ($lines as $line) {
-            if (preg_match('{^\[([\d\.]+MiB)/[\d\.]+s\]}', $line, $match)) {
+            if (preg_match('{^\[([\d.]+MiB)/[\d.]+s]}', $line, $match)) {
                 return $match[0];
             }
         }
