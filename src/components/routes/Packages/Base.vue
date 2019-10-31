@@ -3,7 +3,7 @@
 
         <section class="package-tools">
             <slot name="search">
-                <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updatePackages">{{ $t('ui.packages.updateButton') }}</button>
+                <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updateAll">{{ $t('ui.packages.updateButton') }}</button>
                 <button class="package-tools__button widget-button widget-button--upload" :disabled="!uploads || uploading" :title="uploadError" @click.prevent="$emit('start-upload')">{{ $t('ui.packages.uploadButton') }}</button>
             </slot>
         </section>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import { mapState, mapGetters, mapActions } from 'vuex';
 
     import MainLayout from '../../layouts/Main';
 
@@ -33,9 +33,7 @@
         },
 
         methods: {
-            updatePackages() {
-                this.$store.commit('packages/updateAll');
-            },
+            ...mapActions('packages', ['updateAll']),
         },
     };
 </script>
