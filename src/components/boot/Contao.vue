@@ -54,12 +54,10 @@
         }),
 
         computed: {
-            versions() {
-                return {
-                    '4.8': 'Contao 4.8 (Latest)',
-                    '4.4': 'Contao 4.4 (Long Term Support)',
-                };
-            },
+            versions: vm =>({
+                '4.8': `Contao 4.8 (${vm.$t('ui.server.contao.latestTitle')})`,
+                '4.4': `Contao 4.4 (${vm.$t('ui.server.contao.ltsTitle')})`,
+            }),
 
             packages: vm => ({
                 'no': vm.$t('ui.server.contao.coreOnlyNo'),
