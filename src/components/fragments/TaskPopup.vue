@@ -236,7 +236,7 @@
                         break;
 
                     default:
-                        setTimeout(replaceIcon.bind(this, 'icons'), 5000);
+                        setTimeout(replaceIcon.bind(this, 'icons'), 2000);
                         return;
                 }
 
@@ -278,6 +278,7 @@
         beforeDestroy() {
             this.$store.commit('tasks/setStatus', null);
             this.$store.commit('tasks/setCurrent', null);
+            this.updateFavicon();
         },
     };
 </script>

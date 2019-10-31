@@ -2,12 +2,6 @@
 
 import Vue from 'vue';
 
-// const STATUS_ACTIVE = 'active';
-// const STATUS_COMPLETE = 'complete';
-// const STATUS_ERROR = 'error';
-// const STATUS_ABORTING = 'aborting';
-// const STATUS_STOPPED = 'stopped';
-
 let handleTask;
 let failTask;
 let pending = 0;
@@ -149,23 +143,23 @@ export default {
             return Vue.http.patch('api/task', { status: 'aborting' });
         },
 
-        deleteCurrent(store, retry = 2) {
-            store.commit('setDeleting', true);
+        deleteCurrent({ commit, dispatch }, retry = 2) {
+            commit('setDeleting', true);
             return Vue.http.delete('api/task').then(
                 () => {
-                    store.commit('setCurrent', null);
+                    commit('setCurrent', null);
                 },
                 (response) => {
                     // Bad request, there are no tasks
                     if (response.status === 400) {
-                        store.commit('setCurrent', null);
+                        commit('setCurrent', null);
                         return;
                     }
 
                     if (response.status === 403 && retry > 0) {
                         return new Promise((resolve) => {
                             setTimeout(() => {
-                                resolve(store.dispatch('deleteCurrent', retry - 1));
+                                resolve(dispatch('deleteCurrent', retry - 1));
                             }, 1000);
                         });
                     }
