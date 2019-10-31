@@ -5,9 +5,7 @@ import Vue from 'vue';
 import details from 'contao-package-list/src/store/packages/details';
 import uploads from './packages/uploads';
 
-const filterInvisiblePackages = (packages, getters) => Object.values(packages).filter(
-    (pkg) => pkg.name !== 'contao/manager-bundle' && pkg.name !== 'contao/conflicts' && !getters.isFeature(pkg.name),
-);
+const isVisible = (name, getters) => name.includes('/') && name !== 'contao/manager-bundle' && name !== 'contao/conflicts' && !getters.isFeature(name);
 
 export default {
     namespaced: true,
@@ -60,9 +58,9 @@ export default {
         isSuggested: state => name => !!Object.values(state.local).find(pkg => (pkg.type.substr(0, 7) === 'contao-' && pkg.suggest && pkg.suggest.hasOwnProperty(name))),
         isFeature: (s, g) => (name) => !!Object.keys(s.features).find((pkg) => s.features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
 
-        visibleRequired: (s, g) => filterInvisiblePackages(s.required, g),
-        visibleInstalled: (s, g) => filterInvisiblePackages(g.installed, g),
-        visibleAdded: (s, g) => filterInvisiblePackages(s.add, g),
+        visibleRequired: (s, g) => Object.values(s.required).filter(pkg => isVisible(pkg.name, g)),
+        visibleInstalled: (s, g) => Object.values(g.installed).filter(pkg => isVisible(pkg.name, g)),
+        visibleAdded: (s, g) => Object.values(s.add).filter(pkg => isVisible(pkg.name, g)),
 
         installed: (state) => {
             if (!state.root || !state.installed) {
@@ -145,16 +143,6 @@ export default {
         update(state, name) {
             this.commit('packages/restore', name);
             state.update.push(name);
-        },
-
-        updateAll(state) {
-            Object.keys(state.root.require).forEach((name) => {
-                if (!name.includes('/')) {
-                    return;
-                }
-
-                state.update.push(name);
-            });
         },
 
         remove(state, name) {
@@ -257,6 +245,16 @@ export default {
             };
 
             return dispatch('tasks/execute', task, { root: true });
+        },
+
+        updateAll({ state, getters, commit }) {
+            Object.keys(state.root.require).forEach((name) => {
+                if (name !== 'contao/manager-bundle' && !isVisible(name, getters)) {
+                    return;
+                }
+
+                commit('update', name);
+            });
         },
     },
 };
