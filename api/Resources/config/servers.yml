@@ -312,6 +312,12 @@ configs:
         php:
             /usr/bin/php{major}{minor}: []
 
+    schwarzkuenstler:
+        name: schwarzkünstler oHG
+        website: www.schwarzkuenstler.com
+        php:
+            /opt/plesk/php/{major}.{minor}/bin/php: []
+
     serverprofis:
         name: Serverprofis GmbH
         website: www.serverprofis.de
