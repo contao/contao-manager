@@ -13,6 +13,12 @@ const merge = async (...files) => {
     return data;
 };
 
+const setLocale = (locale) => {
+    Vue.i18n.set(locale);
+    store.commit('algolia/setLanguage', locale);
+    document.querySelector('html').setAttribute('lang', locale);
+};
+
 const locales = {
     en: () => merge(import('contao-package-list/src/i18n/en.json'), import('./en.json')),
     de: () => merge(import('contao-package-list/src/i18n/de.json'), import('./de.json')),
@@ -64,8 +70,7 @@ const i18n = {
 
     async load(locale) {
         if (Vue.i18n.localeExists(locale)) {
-            Vue.i18n.set(locale);
-            store.commit('algolia/setLanguage', locale);
+            setLocale(locale);
             return;
         }
 
@@ -78,8 +83,7 @@ const i18n = {
         }
 
         Vue.i18n.add(locale, Object.assign({}, await locales[locale]()));
-        Vue.i18n.set(locale);
-        store.commit('algolia/setLanguage', locale);
+        setLocale(locale);
     },
 };
 
