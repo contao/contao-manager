@@ -30,6 +30,7 @@
 
     .layout-main {
         overflow: hidden;
+        min-height:100vh;
 
         &__header {
             height: 56px;
