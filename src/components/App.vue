@@ -88,10 +88,6 @@
         },
 
         watch: {
-            hasPopup(state) {
-                document.body.style.overflow = state ? 'hidden' : 'scroll';
-            },
-
             async isReady(ready) {
                 if (ready) {
                     try {
@@ -219,9 +215,6 @@
     }
 
     .blur-in {
-        position: absolute;
-        height: 100%;
-        width: 100%;
         z-index: -1;
         opacity: 0.5;
         filter: blur(4px);
