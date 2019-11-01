@@ -47,7 +47,6 @@
             ...mapGetters('packages', [
                 'installed',
                 'totalChanges',
-                'hasAdded',
                 'packageMissing',
                 'canResetChanges',
                 'visibleRequired',
@@ -56,11 +55,12 @@
             ]),
             ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
 
+            addedPackages: vm => vm.visibleRequired.concat(vm.visibleAdded).filter(pkg => !vm.packageMissing(pkg.name)),
+            installedPackages: vm => vm.visibleRequired.filter(pkg => vm.packageMissing(pkg.name)).concat(vm.visibleInstalled),
+
             removingUploads: vm => vm.removing.length > 0,
             showHeadline: vm => vm.hasAdded || vm.hasUploads || vm.files.length,
-
-            addedPackages: vm => vm.visibleRequired.concat(vm.visibleAdded).filter(pkg => !vm.packageMissing(pkg.name)),
-            installedPackages: vm => vm.visibleRequired.filter(pkg => !vm.packageMissing(pkg.name)).concat(vm.visibleInstalled),
+            hasAdded: vm => vm.addedPackages.length || 'contao/manager-bundle' in vm.requiredPackages,
         },
 
         methods: {

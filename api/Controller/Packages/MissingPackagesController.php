@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Controller\Packages;
 
+use Composer\Package\Link;
 use Composer\Repository\ArrayRepository;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\PlatformRepository;
@@ -76,6 +77,17 @@ class MissingPackagesController
 
     private function hasDependents(array $names): bool
     {
-        return 0 !== \count($this->compositeRepository->getDependents($names, null, false, false));
+        $dependents = $this->compositeRepository->getDependents($names, null, false, false);
+
+        foreach ($dependents as $dependent) {
+            /** @var Link $link */
+            [, $link] = $dependent;
+
+            if ($link->getDescription() === 'requires') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
