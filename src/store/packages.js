@@ -28,8 +28,6 @@ export default {
     },
 
     getters: {
-        hasAdded: (s, g) => (g.visibleInstalled.length > 0 || s.installed.hasOwnProperty('contao/manager-bundle')) && (g.visibleAdded.length > 0 || g.visibleRequired.length > 0),
-
         packageInstalled: (state, g) => name => Object.keys(state.installed).includes(name) && !g.packageMissing(name),
         versionInstalled: state => (name, version) => Object.keys(state.installed).includes(name) && state.installed[name].version === version,
         packageRequired: state => name => Object.keys(state.required).includes(name) && state.required[name].constraint,
