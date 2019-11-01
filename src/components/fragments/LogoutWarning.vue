@@ -7,8 +7,8 @@
                 <p class="logout-warning__text">{{$t('ui.logout.warning')}}</p>
                 <p class="logout-warning__countdown">{{minutes}}:{{seconds}}</p>
 
-                <loading-button color="primary" :loading="loading" @click="keepAlive">{{$t('ui.logout.renew')}}</loading-button>
-                <loading-button @click="logout" :loading="loading">{{$t('ui.logout.logout')}}</loading-button>
+                <loading-button color="primary" :loading="renew" :disabled="logout" @click="keepAlive">{{$t('ui.logout.renew')}}</loading-button>
+                <loading-button @click="logout" :loading="logout" :disabled="renew">{{$t('ui.logout.logout')}}</loading-button>
             </template>
             <template v-else>
                 <p class="logout-warning__text">{{$t('ui.logout.expired')}}</p>
@@ -27,7 +27,8 @@
         components: { LoadingButton },
 
         data: () => ({
-            loading: false,
+            renew: false,
+            logout: false,
         }),
 
         computed: {
@@ -64,16 +65,16 @@
 
         methods: {
             async keepAlive() {
-                this.loading = true;
+                this.renew = true;
                 await this.$store.dispatch('auth/status');
-                this.loading = false;
+                this.renew = false;
             },
 
             async logout() {
-                this.loading = true;
+                this.logout = true;
                 await this.$store.dispatch('auth/logout');
                 this.$store.commit('auth/resetCountdown');
-                this.loading = false;
+                this.logout = false;
             },
 
             close() {
