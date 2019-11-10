@@ -109,7 +109,7 @@ class SelfUpdate
             return 'dev';
         }
 
-        if (PHP_MAJOR_VERSION === 5) {
+        if (PHP_VERSION_ID < 70103) {
             return '1.1';
         }
 
