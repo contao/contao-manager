@@ -236,6 +236,13 @@ configs:
         php:
             /opt/plesk/php/{major}.{minor}/bin/php: []
 
+    laragon:
+        name: Laragon (Windows)
+        website: laragon.org
+        php:
+            C:\laragon\bin\php\php-{major}.{minor}.{release}-Win32-VC15-x64\php.EXE: []
+            D:\laragon\bin\php\php-{major}.{minor}.{release}-Win32-VC15-x64\php.EXE: []
+
     mamp_mac:
         name: MAMP (macOS)
         website: www.mamp.info
