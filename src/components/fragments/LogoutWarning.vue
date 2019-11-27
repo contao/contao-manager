@@ -8,7 +8,7 @@
                 <p class="logout-warning__countdown">{{minutes}}:{{seconds}}</p>
 
                 <loading-button color="primary" :loading="renew" :disabled="logout" @click="keepAlive">{{$t('ui.logout.renew')}}</loading-button>
-                <loading-button @click="logout" :loading="logout" :disabled="renew">{{$t('ui.logout.logout')}}</loading-button>
+                <loading-button @click="doLogout" :loading="logout" :disabled="renew">{{$t('ui.logout.logout')}}</loading-button>
             </template>
             <template v-else>
                 <p class="logout-warning__text">{{$t('ui.logout.expired')}}</p>
@@ -70,7 +70,7 @@
                 this.renew = false;
             },
 
-            async logout() {
+            async doLogout() {
                 this.logout = true;
                 await this.$store.dispatch('auth/logout');
                 this.$store.commit('auth/resetCountdown');
