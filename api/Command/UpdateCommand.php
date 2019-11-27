@@ -48,7 +48,7 @@ class UpdateCommand extends Command
             throw new \RuntimeException('Your server does not meet the requirements of the next Contao Manager version.');
         }
 
-        if ($this->updater->canUpdate()) {
+        if (!$this->updater->canUpdate()) {
             throw new \RuntimeException('This build of Contao Manager cannot be automatically updated.');
         }
 
