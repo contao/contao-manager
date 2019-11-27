@@ -98,6 +98,7 @@
         transition: transform 0.4s cubic-bezier(0.55, 0, 0.1, 1);
 
         .nav-active & {
+            overflow-y: visible;
             transform: translateX(-$nav-offset);
 
             @include screen(1024) {
