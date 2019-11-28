@@ -33,6 +33,7 @@ export default {
                             latest_version: null,
                             channel: 'dev',
                             supported: false,
+                            error: null,
                         };
                     }
 
@@ -43,6 +44,12 @@ export default {
 
                 return result;
             });
+        },
+
+        async latest() {
+            const response = await Vue.http.get('https://download.contao.org/contao-manager/stable/contao-manager.version');
+
+            return response.body.version;
         },
     },
 };

@@ -59,6 +59,8 @@
     "ui.server.prerequisite": "Check cancelled due to a missing prerequisite.",
     "ui.server.selfUpdate.title": "Updates of Contao Manager",
     "ui.server.selfUpdate.update": "A new Contao Manager version {latest} is available.",
+    "ui.server.selfUpdate.manualUpdate": "A new Contao Manager version {latest} is available. Your server does not support automatic updates, please download the new version from {download}.",
+    "ui.server.selfUpdate.manualUpdateUrl": "https://contao.org/en/download.html",
     "ui.server.selfUpdate.latest": "You are using the latest version {current}.",
     "ui.server.selfUpdate.dev": "Development builds do not support automatic updates.",
     "ui.server.selfUpdate.unsupported": "A new version is available but it does not support your PHP version.",

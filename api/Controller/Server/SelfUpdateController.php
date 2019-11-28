@@ -36,9 +36,12 @@ class SelfUpdateController
             );
         }
 
+        $error = null;
+
         try {
             $latestVersion = $updater->getNewVersion();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            $error = $e->getMessage();
             $latestVersion = $updater->getOldVersion();
         }
 
@@ -48,6 +51,7 @@ class SelfUpdateController
                 'latest_version' => $latestVersion,
                 'channel' => $updater->getChannel(),
                 'supported' => $updater->supportsUpdate(),
+                'error' => $error,
             ]
         );
     }
