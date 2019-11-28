@@ -40,6 +40,11 @@
                 }
 
                 if (result.error) {
+                    if (result.channel === 'dev') {
+                        this.emitState('warning', result.error);
+                        return;
+                    }
+
                     try {
                         const latest = await this.$store.dispatch('server/self-update/latest');
 
