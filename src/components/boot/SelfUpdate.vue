@@ -21,37 +21,61 @@
         }),
 
         methods: {
-            boot() {
+            async boot() {
                 this.bootDescription = this.$t('ui.server.running');
+                let result;
 
-                this.$store.dispatch('server/self-update/get').then((result) => {
-                    const context = { current: result.current_version, latest: result.latest_version };
+                try {
+                    result = await this.$store.dispatch('server/self-update/get');
+                } catch (err) {
+                    this.emitState('error', this.$t('ui.server.error'));
+                    return;
+                }
 
-                    if (result.latest_version === null) {
-                        this.bootState = 'info';
-                        this.bootDescription = this.$t('ui.server.selfUpdate.dev');
-                    } else if (result.current_version === result.latest_version) {
-                        this.bootState = 'success';
-                        this.bootDescription = this.$t('ui.server.selfUpdate.latest', context);
-                    } else if (!result.supported) {
-                        this.bootState = 'action';
-                        this.bootDescription = this.$t('ui.server.selfUpdate.unsupported', context);
-                        this.isSupported = false;
-                    } else if (result.channel === 'dev') {
-                        this.bootState = 'warning';
-                        this.bootDescription = this.$t('ui.server.selfUpdate.update', context);
-                        this.hasUpdate = true;
-                    } else {
-                        this.bootState = 'error';
-                        this.bootDescription = this.$t('ui.server.selfUpdate.update', context);
-                        this.hasUpdate = true;
+                const context = { current: result.current_version, latest: result.latest_version };
+
+                if (result.latest_version === null) {
+                    this.emitState('info', this.$t('ui.server.selfUpdate.dev'));
+                    return;
+                }
+
+                if (result.error) {
+                    try {
+                        const latest = await this.$store.dispatch('server/self-update/latest');
+
+                        if (latest === result.current_version) {
+                            this.emitState('success', this.$t('ui.server.selfUpdate.latest', context));
+                        } else {
+                            this.emitState('error', this.$t('ui.server.selfUpdate.manualUpdate', {
+                                latest,
+                                download: `<a href="${this.$t('ui.server.selfUpdate.manualUpdateUrl')}" target="_blank" rel="noreferrer noopener">${this.$t('ui.server.selfUpdate.manualUpdateUrl')}</a>`
+                            }));
+                        }
+                    } catch (err) {
+                        this.emitState('warning', result.error);
                     }
-                }).catch(() => {
-                    this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.server.error');
-                }).then(() => {
-                    this.$emit('result', 'SelfUpdate', this.bootState);
-                });
+                    return;
+                }
+
+                if (result.current_version === result.latest_version) {
+                    this.emitState('success', this.$t('ui.server.selfUpdate.latest', context));
+                    return;
+                }
+
+                if (!result.supported) {
+                    this.isSupported = false;
+                    this.emitState('action', this.$t('ui.server.selfUpdate.unsupported', context));
+                    return;
+                }
+
+                if (result.channel === 'dev') {
+                    this.hasUpdate = true;
+                    this.emitState('warning', this.$t('ui.server.selfUpdate.update', context));
+                    return;
+                }
+
+                this.hasUpdate = true;
+                this.emitState('error', this.$t('ui.server.selfUpdate.update', context));
             },
 
             update() {
@@ -68,6 +92,12 @@
             next() {
                 this.bootState = 'info';
                 this.$emit('result', 'SelfUpdate', this.bootState);
+            },
+
+            emitState(state, description) {
+                this.bootState = state;
+                this.bootDescription = description;
+                this.$emit('result', 'SelfUpdate', state);
             },
         },
     };
