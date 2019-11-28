@@ -27,7 +27,7 @@
             <loader horizontal :class="statusClass" v-else>
                 <p class="task-popup__progress-text" v-if="currentTask && currentTask.progress">{{ currentTask.progress }}%</p>
             </loader>
-            <div class="task-popup__summary" v-if="taskStatus === 'failed'">
+            <div class="task-popup__summary" v-if="taskStatus === 'failed' && !awaitTask">
                 <h2 class="task-popup__text">{{ $t('ui.taskpopup.failedHeadline') }}</h2>
                 <p class="task-popup__text" v-html="$t('ui.taskpopup.failedDescription')"></p>
                 <p class="task-popup__text"><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ $t('ui.taskpopup.reportProblem') }}</a></p>
@@ -73,7 +73,7 @@
         }),
 
         computed: {
-            ...mapState('tasks', { taskStatus: 'status', currentTask: 'current', deletingTask: 'deleting' }),
+            ...mapState('tasks', { taskStatus: 'status', currentTask: 'current', deletingTask: 'deleting', awaitTask: 'await' }),
 
             popupClass() {
                 return {

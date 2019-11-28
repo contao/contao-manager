@@ -71,7 +71,6 @@ failTask = (response, store, resolve, reject) => {
         }
     }
 
-    // store.commit('setCurrent', null);
     store.commit('setStatus', 'failed');
     reject();
 };
@@ -85,6 +84,7 @@ export default {
         consoleOutput: '',
         current: null,
 
+        await: false,
         deleting: false,
     },
 
@@ -101,6 +101,10 @@ export default {
 
         setDeleting(state, value) {
             state.deleting = !!value;
+        },
+
+        setAwait(state, value) {
+            state.await = !!value;
         },
     },
 
@@ -120,6 +124,9 @@ export default {
                 if (store.state.status !== null) {
                     reject();
                 }
+
+                store.commit('setAwait', task.await);
+                delete task.await;
 
                 store.commit('setCurrent', task);
                 store.commit('setStatus', 'created');

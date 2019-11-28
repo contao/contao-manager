@@ -61,11 +61,9 @@
 
         computed: {
             ...mapState(['view', 'error']),
-            ...mapState(['auth', 'username']),
-            ...mapState('tasks', { taskStatus: 'status' }),
+            ...mapState('tasks', { taskStatus: 'status', awaitTask: 'await' }),
             ...mapState('packages', ['installed']),
             ...mapGetters('auth', ['warnForLogout']),
-
 
             ...mapGetters('packages', [
                 'packageInstalled',
@@ -82,7 +80,7 @@
             showPackage: vm => vm.currentPackageName && !vm.isInitializing && !vm.currentView && vm.loaded,
             taskRunning: vm => vm.taskStatus !== null,
             hasPopup: vm => vm.warnForLogout || vm.taskRunning || !!vm.showPackage,
-            hasError: vm => vm.error !== null,
+            hasError: vm => vm.error !== null && !vm.awaitTask,
 
             currentView: vm => vm.views[vm.view] || null,
         },
