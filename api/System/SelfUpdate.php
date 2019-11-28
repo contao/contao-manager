@@ -243,7 +243,7 @@ class SelfUpdate
 
         $result = $this->request->getStream($url);
 
-        if (false === $result) {
+        if (null === $result) {
             throw new \RuntimeException(sprintf('Request to URL failed: %s', $url));
         }
 
