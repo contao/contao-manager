@@ -1,7 +1,7 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.selfUpdate.title')" :description="bootDescription">
-        <button class="widget-button widget-button--warning" v-if="!isSupported && bootState === 'action'" @click="next" :disabled="processing">{{ $t('ui.server.selfUpdate.continue') }}</button>
-        <button class="widget-button widget-button--alert" v-else-if="hasUpdate" @click="update" :disabled="processing">{{ $t('ui.server.selfUpdate.button') }}</button>
+        <button class="widget-button widget-button--warning" v-if="!isSupported && bootState === 'action'" @click="next">{{ $t('ui.server.selfUpdate.continue') }}</button>
+        <button class="widget-button widget-button--alert" v-else-if="hasUpdate" @click="update">{{ $t('ui.server.selfUpdate.button') }}</button>
     </boot-check>
 </template>
 
@@ -15,7 +15,6 @@
         components: { BootCheck },
 
         data: () => ({
-            processing: false,
             hasUpdate: false,
             isSupported: true,
         }),
@@ -54,15 +53,16 @@
                 });
             },
 
-            update() {
-                const reload = () => {
-                    this.$store.dispatch('tasks/setDeleting', true);
-                    setTimeout(() => {
-                        window.location.reload(true);
-                    }, 3000);
-                };
+            async update() {
+                try {
+                    await this.$store.dispatch('tasks/execute', { name: 'manager/self-update', await: true });
+                } catch (err) {
+                    // ignore error and reload
+                }
 
-                this.$store.dispatch('tasks/execute', { name: 'manager/self-update' }).then(reload, reload);
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 3000);
             },
 
             next() {
