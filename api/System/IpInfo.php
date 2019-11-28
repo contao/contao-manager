@@ -48,7 +48,7 @@ class IpInfo
         }
 
         if (empty($template['ip'])) {
-            $template['ip'] = (string) $this->request->get('https://api.ipify.org', $status, true);
+            $template['ip'] = $this->request->get('https://api.ipify.org', $status, true);
         }
 
         if (empty($template['ip'])) {

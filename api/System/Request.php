@@ -16,6 +16,7 @@ use Composer\CaBundle\CaBundle;
 use Composer\Util\RemoteFilesystem;
 use Composer\Util\StreamContextFactory;
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Exception\RequestException;
 use Psr\Log\LoggerInterface;
 
 class Request
@@ -36,83 +37,38 @@ class Request
         $this->logger = $logger;
     }
 
-    /**
-     * @param mixed|null $statusCode
-     *
-     * @throws \ErrorException
-     */
-    public function get($url, &$statusCode = null, $catch = false)
+    public function get(string $url, int &$statusCode = null, bool $catch = false): ?string
     {
-        $context = $this->createStreamContext($url);
-
-        try {
-            $content = file_get_contents($url, false, $context);
-            $statusCode = $this->getLastStatusCode($http_response_header);
-        } catch (\Throwable $e) {
-            if ($catch) {
-                return false;
-            }
-
-            throw $e;
-        }
-
-        return $content;
+        return $this->getContent($url, $statusCode, [], $catch);
     }
 
-    /**
-     * @param mixed|null $statusCode
-     *
-     * @throws \ErrorException
-     */
-    public function getStream($url, &$statusCode = null, $catch = false)
+    public function getStream(string $url, int &$statusCode = null, bool $catch = false)
     {
         $context = $this->createStreamContext($url);
 
         try {
             $stream = fopen($url, 'rb', false, $context);
-            $statusCode = $this->getLastStatusCode($http_response_header);
+            /** @noinspection IssetArgumentExistenceInspection */
+            $statusCode = $this->getLastStatusCode($http_response_header ?? null);
         } catch (\Throwable $e) {
             if ($catch) {
                 return false;
             }
 
-            throw $e;
+            throw new RequestException($url, $this->getLastStatusCode($http_response_header ?? null), $e);
         }
 
         return $stream;
     }
 
-    /**
-     * @param mixed|null $statusCode
-     *
-     * @throws \ErrorException
-     */
-    public function getJson($url, array $headers = [], &$statusCode = null, $catch = false)
+    public function getJson(string $url, array $headers = [], int &$statusCode = null, bool $catch = false): ?string
     {
         $headers[] = 'Accept: application/json';
 
-        $context = $this->createStreamContext($url, ['http' => ['header' => $headers]]);
-
-        try {
-            $content = file_get_contents($url, false, $context);
-            $statusCode = $this->getLastStatusCode($http_response_header);
-        } catch (\Throwable $e) {
-            if ($catch) {
-                return false;
-            }
-
-            throw $e;
-        }
-
-        return $content;
+        return $this->getContent($url, $statusCode, ['http' => ['header' => $headers]], $catch);
     }
 
-    /**
-     * @param mixed|null $statusCode
-     *
-     * @throws \ErrorException
-     */
-    public function postJson($url, $content, array $headers = [], &$statusCode = null, $catch = false)
+    public function postJson(string $url, string $content, array $headers = [], int &$statusCode = null, bool $catch = false): ?string
     {
         $headers[] = 'Accept: application/json';
         $headers[] = 'Content-Type: application/json';
@@ -122,28 +78,10 @@ class Request
             'content' => $content,
         ]];
 
-        $context = $this->createStreamContext($url, $options);
-
-        try {
-            $content = file_get_contents($url, false, $context);
-            $statusCode = $this->getLastStatusCode($http_response_header);
-        } catch (\Throwable $e) {
-            if ($catch) {
-                return false;
-            }
-
-            throw $e;
-        }
-
-        return $content;
+        return $this->getContent($url, $statusCode, $options, $catch);
     }
 
-    /**
-     * @param mixed|null $statusCode
-     *
-     * @throws \ErrorException
-     */
-    public function deleteJson($url, array $headers = [], &$statusCode = null, $catch = false)
+    public function deleteJson(string $url, array $headers = [], int &$statusCode = null, bool $catch = false): ?string
     {
         $headers[] = 'Accept: application/json';
         $options = ['http' => [
@@ -151,23 +89,29 @@ class Request
             'header' => $headers,
         ]];
 
+        return $this->getContent($url, $statusCode, $options, $catch);
+    }
+
+    private function getContent(string $url, ?int &$statusCode, array $options, bool $catch): ?string
+    {
         $context = $this->createStreamContext($url, $options);
 
         try {
             $content = file_get_contents($url, false, $context);
-            $statusCode = $this->getLastStatusCode($http_response_header);
+            /** @noinspection IssetArgumentExistenceInspection */
+            $statusCode = $this->getLastStatusCode($http_response_header ?? null);
         } catch (\Throwable $e) {
             if ($catch) {
-                return false;
+                return null;
             }
 
-            throw $e;
+            throw new RequestException($url, $this->getLastStatusCode($http_response_header ?? null), $e);
         }
 
         return $content;
     }
 
-    private function createStreamContext($url, array $options = [])
+    private function createStreamContext(string $url, array $options = [])
     {
         $tlsDefaults = $this->getTlsDefaults($options);
         $options = array_replace_recursive($tlsDefaults, $options);
@@ -191,7 +135,7 @@ class Request
     /**
      * @see RemoteFilesystem::getTlsDefaults()
      */
-    private function getTlsDefaults(array $options)
+    private function getTlsDefaults(array $options): array
     {
         $ciphers = implode(':', [
             'ECDHE-RSA-AES128-GCM-SHA256',
@@ -278,7 +222,7 @@ class Request
         return $defaults;
     }
 
-    private function getLastStatusCode($http_response_header)
+    private function getLastStatusCode($http_response_header): int
     {
         if (!\is_array($http_response_header)) {
             return 500;
@@ -289,7 +233,7 @@ class Request
         $http_response_header = array_reverse($http_response_header);
 
         foreach ($http_response_header as $header) {
-            if (preg_match('{^HTTP/.+ ([0-9]{3}) }i', $header, $matches)) {
+            if (preg_match('{^HTTP/.+ (\d{3}) }i', $header, $matches)) {
                 return (int) $matches[1];
             }
         }
