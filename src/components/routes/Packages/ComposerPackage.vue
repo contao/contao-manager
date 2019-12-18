@@ -22,6 +22,7 @@
                         ref="constraint"
                         type="text"
                         :placeholder="constraintPlaceholder"
+                        :title="constraint"
                         v-model="constraint"
                         :class="{ disabled: willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired), error: constraintError }"
                         :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
@@ -71,7 +72,6 @@
 
 <script>
     import Vue from 'vue';
-    import { mapGetters } from 'vuex';
 
     import Package from './Package';
     import ButtonGroup from '../../widgets/ButtonGroup';
