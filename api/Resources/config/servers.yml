@@ -266,8 +266,8 @@ configs:
         name: METANET AG
         website: www.metanet.ch
         php:
-            /opt/php{major}{minor}/bin/php: []
-            /usr/bin/php: []
+            /opt/php{major}{minor}/bin/php: ['-d', 'memory_limit=-1']
+            /usr/bin/php: ['-d', 'memory_limit=-1']
 
     mittwald:
         name: Mittwald CM Service GmbH & Co. KG
