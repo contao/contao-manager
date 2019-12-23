@@ -183,7 +183,9 @@ class Environment
         $repositories = $this->getComposer()->getConfig()->getRepositories();
         unset($repositories['packagist.org']);
 
-        $json['repositories'] = array_values($repositories);
+        if (!empty($repositories) || !empty($json['repositories'])) {
+            $json['repositories'] = array_values($repositories);
+        }
 
         return $json;
     }
