@@ -9,7 +9,7 @@ services:
 
     Contao\ManagerApi\:
         resource: '../../*'
-        exclude: '../../{Resources}'
+        exclude: '../../{Command,Controller,Resources,Tests}'
 
     Contao\ManagerApi\Command\:
         resource: '../../Command'

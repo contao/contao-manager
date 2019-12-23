@@ -53,9 +53,6 @@ class CloudJob implements \JsonSerializable
         return $this->result['sponsoredBy']['name'];
     }
 
-    /**
-     * @return int
-     */
     public function getWaitingTime()
     {
         if (self::STATUS_QUEUED !== $this->result['status']) {
