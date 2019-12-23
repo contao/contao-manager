@@ -59,9 +59,9 @@
             </slot>
         </template>
 
-        <template #features v-if="data.features">
+        <template #features v-if="features">
             <section class="package__features">
-                <template v-for="name in data.features">
+                <template v-for="name in features">
                     <feature-package :key="name" :name="name"/>
                 </template>
             </section>
@@ -102,6 +102,7 @@
         }),
 
         computed: {
+            features: vm => vm.$store.getters['packages/packageFeatures'](vm.data.name),
 
             packageHint() {
                 if (this.hint) {

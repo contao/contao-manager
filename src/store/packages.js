@@ -46,6 +46,7 @@ export default {
         packageChanged: state => name => Object.keys(state.change).includes(name),
         packageUpdated: state => name => state.update.includes(name),
         packageRemoved: state => name => state.remove.includes(name),
+        packageFeatures: () => name => features[name] ? features[name] : [],
 
         totalChanges: state => Object.keys(state.add).length
             + Object.keys(state.required).length
