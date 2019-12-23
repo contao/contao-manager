@@ -97,7 +97,10 @@ class Request
         $context = $this->createStreamContext($url, $options);
 
         try {
-            $content = file_get_contents($url, false, $context);
+            if (false === ($content = file_get_contents($url, false, $context))) {
+                throw new \RuntimeException();
+            }
+
             /** @noinspection IssetArgumentExistenceInspection */
             $statusCode = $this->getLastStatusCode($http_response_header ?? null);
         } catch (\Throwable $e) {
