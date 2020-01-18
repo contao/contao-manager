@@ -17,20 +17,15 @@ export default {
 
     actions: {
 
-        get({ state, commit }, cache = true) {
+        async get({ state, commit }, cache = true) {
             if (cache && state.cache) {
-                return new Promise((resolve) => {
-                    resolve(state.cache);
-                });
+                return state.cache;
             }
 
-            return Vue.http.get('api/server/phpinfo').then(
-                response => response.body,
-            ).then((result) => {
-                commit('setCache', result);
+            const content = (await Vue.http.get('api/server/phpinfo')).bodyText;
+            commit('setCache', content);
 
-                return result;
-            });
+            return content;
         },
 
     },
