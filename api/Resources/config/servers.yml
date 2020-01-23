@@ -224,6 +224,12 @@ configs:
         php:
             /opt/phpfarm/inst/php-{major}.{minor}/bin/php-cgi: []
 
+    jeff:
+        name: jeff webservices
+        website: www.jeff.at
+        php:
+            /usr/bin/php{major}{minor}: []
+
     jweiland:
         name: jweiland.net
         website: jweiland.net
@@ -242,6 +248,12 @@ configs:
         php:
             C:\laragon\bin\php\php-{major}.{minor}.{release}-Win32-VC15-x64\php.EXE: []
             D:\laragon\bin\php\php-{major}.{minor}.{release}-Win32-VC15-x64\php.EXE: []
+
+    linevast:
+        name: Droptop GmbH (linevast.de)
+        website: linevast.de
+        php:
+            /opt/alt/php{major}{minor}/usr/bin/php: []
 
     mamp_mac:
         name: MAMP (macOS)
@@ -294,6 +306,12 @@ configs:
         website: www.novatrend.ch
         php:
             /usr/local/bin/php: []
+
+    oja:
+        name: Oja.at GmbH
+        website: www.oja.at
+        php:
+            /usr/bin/php: []
 
     profihost:
         name: Profihost AG
