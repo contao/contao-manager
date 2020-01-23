@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -43,21 +42,11 @@ class SessionController
      */
     private $jwtManager;
 
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
-
-    public function __construct(
-        UserConfig $config,
-        Security $security,
-        JwtManager $jwtManager,
-        UserPasswordEncoderInterface $passwordEncoder
-    ) {
+    public function __construct(UserConfig $config, Security $security, JwtManager $jwtManager)
+    {
         $this->config = $config;
         $this->security = $security;
         $this->jwtManager = $jwtManager;
-        $this->passwordEncoder = $passwordEncoder;
     }
 
     public function __invoke(Request $request): Response
@@ -67,7 +56,8 @@ class SessionController
                 return $this->getStatus();
 
             case 'POST':
-                return $this->handleLogin($request);
+                // Login should have been handled by the firewall
+                return new Response('Bad Request', Response::HTTP_BAD_REQUEST);
 
             case 'DELETE':
                 return $this->handleLogout($request);
@@ -90,39 +80,6 @@ class SessionController
         }
 
         return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
-    }
-
-    /**
-     * Logs the user in from request data. If no user exist, the first user is created from this data.
-     */
-    private function handleLogin(Request $request): Response
-    {
-        if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new ApiProblemResponse(
-                (new ApiProblem('User is already logged in'))->setStatus(Response::HTTP_BAD_REQUEST)
-            );
-        }
-
-        $username = $request->request->get('username');
-        $password = $request->request->get('password');
-
-        if (0 === $this->config->countUsers()) {
-            $this->config->addUser(
-                $this->config->createUser($username, $password)
-            );
-        }
-
-        if (!$this->config->hasUser($username)
-            || !$this->passwordEncoder->isPasswordValid($this->config->getUser($username), $password)
-        ) {
-            return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
-        }
-
-        $response = new JsonResponse(['username' => $username]);
-
-        $this->jwtManager->addToken($request, $response, $username);
-
-        return $response;
     }
 
     /**

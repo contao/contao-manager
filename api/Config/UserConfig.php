@@ -13,12 +13,12 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Config;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Security\User;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 {
@@ -86,7 +86,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     /**
      * Gets all users.
      *
-     * @return UserInterface[]
+     * @return User[]
      */
     public function getUsers(): array
     {
@@ -117,7 +117,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     /**
      * Gets the user by username or null if it does not exist.
      */
-    public function getUser(string $username): ?UserInterface
+    public function getUser(string $username): ?User
     {
         if (!isset($this->data['users'][$username])) {
             return null;
@@ -132,7 +132,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     /**
      * Creates user from given username and plaintext password but does not add it.
      */
-    public function createUser(string $username, string $password): UserInterface
+    public function createUser(string $username, string $password): User
     {
         $password = $this->container->get(UserPasswordEncoderInterface::class)->encodePassword(
             new User($username, null),

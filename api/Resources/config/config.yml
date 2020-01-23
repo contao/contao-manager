@@ -9,16 +9,17 @@ framework:
 security:
     providers:
         contao_manager_user_provider:
-            id: contao_manager.security.user_provider
+            id: Contao\ManagerApi\Security\UserProvider
 
     encoders:
-        Symfony\Component\Security\Core\User\UserInterface: auto
+        Contao\ManagerApi\Security\User: auto
 
     firewalls:
         api:
             stateless: true
             guard:
                 authenticators:
+                    - Contao\ManagerApi\Security\LoginAuthenticator
                     - Contao\ManagerApi\Security\JwtAuthenticator
                     - Contao\ManagerApi\Security\TokenAuthenticator
                 entry_point: Contao\ManagerApi\Security\JwtAuthenticator
