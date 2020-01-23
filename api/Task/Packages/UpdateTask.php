@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Task\Packages;
 
+use Composer\Semver\VersionParser;
 use Contao\ManagerApi\Composer\CloudChanges;
 use Contao\ManagerApi\Composer\CloudResolver;
 use Contao\ManagerApi\Composer\Environment;
@@ -143,6 +144,8 @@ class UpdateTask extends AbstractPackagesTask
     protected function getComposerDefinition(TaskConfig $config): CloudChanges
     {
         $definition = new CloudChanges();
+        $definition->setUpdates($config->getOption('update', []));
+        $definition->setDryRun($config->getOption('dry_run', false));
 
         foreach ($config->getOption('require', []) as $name => $version) {
             $definition->requirePackage($name, $version);
@@ -153,8 +156,7 @@ class UpdateTask extends AbstractPackagesTask
         }
 
         $this->addContaoConflictsRequirement($definition);
-        $definition->setUpdates($config->getOption('update', []));
-        $definition->setDryRun($config->getOption('dry_run', false));
+        $this->handleContaoStability($definition);
 
         return $definition;
     }
@@ -183,5 +185,31 @@ class UpdateTask extends AbstractPackagesTask
         }
 
         $definition->requirePackage('contao/conflicts', '*@dev');
+    }
+
+    private function handleContaoStability(CloudChanges $definition): void
+    {
+        foreach ($definition->getRequiredPackages() as $require) {
+            [$packageName, $version] = explode('=', $require);
+
+            if ($packageName === 'contao/manager-bundle') {
+                if ($version && 'stable' !== VersionParser::parseStability($version)) {
+                    $definition->requirePackage('contao/core-bundle', $version);
+                    $definition->requirePackage('contao/installation-bundle', $version);
+                } else {
+                    $definition->removePackage('contao/core-bundle');
+                    $definition->removePackage('contao/installation-bundle');
+                }
+
+                return;
+            }
+        }
+
+        foreach ($definition->getUpdates() as $packageName) {
+            if ($packageName === 'contao/manager-bundle') {
+                $definition->addUpdate('contao/core-bundle');
+                $definition->addUpdate('contao/installation-bundle');
+            }
+        }
     }
 }

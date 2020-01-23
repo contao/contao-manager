@@ -34,13 +34,17 @@ class CloudChanges
      */
     private $dryRun = false;
 
-    public function requirePackage($packageName, $version = null): void
+    public function requirePackage(string $packageName, string $version = null): void
     {
+        unset($this->remove[$packageName]);
+
         if ($version) {
-            $this->require[] = $packageName.'='.$version;
+            $this->require[$packageName] = $packageName.'='.$version;
         } else {
-            $this->require[] = $packageName;
+            $this->require[$packageName] = $packageName;
         }
+
+        $this->addUpdate($packageName);
     }
 
     public function getRequiredPackages()
@@ -48,9 +52,13 @@ class CloudChanges
         return $this->require;
     }
 
-    public function removePackage($packageName): void
+    public function removePackage(string $packageName): void
     {
-        $this->remove[] = $packageName;
+        unset($this->require[$packageName]);
+
+        $this->remove[$packageName] = $packageName;
+
+        $this->addUpdate($packageName);
     }
 
     public function getRemovedPackages()
@@ -60,12 +68,21 @@ class CloudChanges
 
     public function setUpdates(array $updates): void
     {
-        $this->updates = $updates;
+        $this->updates = [];
+
+        foreach ($updates as $packageName) {
+            $this->updates[$packageName] = $packageName;
+        }
+    }
+
+    public function addUpdate(string $packageName): void
+    {
+        $this->updates[$packageName] = $packageName;
     }
 
     public function getUpdates()
     {
-        return $this->updates;
+        return array_values($this->updates);
     }
 
     public function setDryRun($dryRun): void
