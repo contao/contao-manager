@@ -14,15 +14,19 @@ export default {
         ...mapGetters('packages', [
             'installed',
             'packageInstalled',
+            'packageRoot',
             'packageRequired',
             'packageMissing',
             'packageAdded',
             'packageUpdated',
             'packageChanged',
-            'packageRemoved'
+            'packageRemoved',
+            'packageFeature',
+            'isSuggested',
         ]),
 
         isInstalled: vm => vm.packageInstalled(vm.data.name),
+        isRootInstalled: vm => vm.isInstalled && vm.packageRoot(vm.data.name),
         isRequired: vm => vm.packageRequired(vm.data.name),
         isMissing: vm => vm.packageMissing(vm.data.name),
         isChanged: vm => vm.packageChanged(vm.data.name),
@@ -33,6 +37,7 @@ export default {
 
         isPrivate: vm => vm.metadata && !!vm.metadata.private,
         isDependency: vm => vm.metadata && !!vm.metadata.dependency,
+        isFeature: vm => vm.packageFeature(vm.data.name),
 
         installedVersion: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].version : null,
         installedTime: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].time : null,
@@ -40,7 +45,7 @@ export default {
         canBeInstalled: vm => !vm.isPrivate && (!vm.isDependency || vm.isSuggested(vm.data.name)),
 
         constraintInstalled() {
-            if (!this.isInstalled) {
+            if (!this.isRootInstalled) {
                 return null;
             }
 

@@ -2,10 +2,12 @@
     <package-details>
         <template #package-actions>
             <template v-if="isInstalled">
+                <install-button small :data="data" v-if="isFeature"/>
+                <package-constraint :data="data" v-else/>
                 <p class="package-popup__installed">
                     <strong>{{ $t('ui.package.installed') }}</strong>
-                    {{ $t('ui.package.version', { version: installedVersion }) }}
-                    <time :dateTime="installedTime" v-if="installedTime">({{ installedTime | datimFormat }})</time>
+                    <time :dateTime="installedTime" v-if="installedTime" :title="installedTime | datimFormat">{{ $t('ui.package.version', { version: installedVersion }) }}</time>
+                    <template v-else>{{ $t('ui.package.version', { version: installedVersion }) }}</template>
                 </p>
             </template>
             <install-button :data="data" v-else-if="canBeInstalled || isRequired"/>
@@ -16,7 +18,7 @@
             <install-button inline small :data="{ name }" v-if="isSuggested(name)"/>
         </template>
         <template #features-actions="{ name }">
-            <install-button inline small :data="{ name }"/>
+            <install-button inline small :data="{ name }" v-if="!packageInstalled(name)"/>
         </template>
     </package-details>
 </template>
@@ -27,10 +29,11 @@
 
     import PackageDetails from 'contao-package-list/src/components/fragments/PackageDetails';
     import InstallButton from './InstallButton';
+    import PackageConstraint from './PackageConstraint';
 
     export default {
         mixins: [packageStatus],
-        components: { PackageDetails, InstallButton },
+        components: { PackageConstraint, PackageDetails, InstallButton },
 
         computed: {
             ...mapState('packages', ['installed']),
@@ -51,8 +54,10 @@
 
     .package-popup {
         &__installed {
+            margin-top: 1em;
+
             strong {
-                display: block;
+                margin-right: 5px;
             }
 
             @include screen(600) {
@@ -60,6 +65,11 @@
                 flex-direction: column;
                 justify-content: flex-end;
                 text-align: center;
+
+                strong {
+                    display: block;
+                    margin: 0;
+                }
             }
         }
     }

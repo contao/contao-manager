@@ -28,9 +28,11 @@
         },
 
         computed: {
-            ...mapGetters('packages', ['packageInstalled', 'packageAdded', 'packageRequired']),
+            ...mapGetters('packages', ['packageInstalled', 'packageRoot', 'packageAdded', 'packageRequired']),
 
-            isInstalled: vm => vm.packageInstalled(vm.data.name) || vm.packageAdded(vm.data.name) || vm.packageRequired(vm.data.name),
+            isInstalled: vm => (vm.packageInstalled(vm.data.name) && vm.packageRoot(vm.data.name))
+                || vm.packageAdded(vm.data.name)
+                || vm.packageRequired(vm.data.name),
         },
 
         methods: {

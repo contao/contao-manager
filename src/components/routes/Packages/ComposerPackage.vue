@@ -17,25 +17,7 @@
 
         <template #release>
             <slot name="release">
-                <fieldset>
-                    <input
-                        ref="constraint"
-                        type="text"
-                        :placeholder="constraintPlaceholder"
-                        :title="constraint"
-                        v-model="constraint"
-                        :class="{ disabled: willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired), error: constraintError }"
-                        :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
-                        @keypress.enter.prevent="saveConstraint"
-                        @keypress.esc.prevent="resetConstraint"
-                        @blur="saveConstraint"
-                    >
-                    <button
-                        :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
-                        @click="editConstraint"
-                        :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
-                    >{{ $t('ui.package.editConstraint') }}</button>
-                </fieldset>
+                <package-constraint class="package__constraint" :data="data" />
                 <div class="package__version package__version--release" v-if="data.version">
                     <strong>{{ $t('ui.package.version', { version: data.version }) }}</strong>
                     <time :dateTime="data.time" v-if="data.time">({{ data.time | datimFormat }})</time>
@@ -52,17 +34,17 @@
                 <details-button :name="data.name" v-if="data.name"/>
                 <button class="widget-button widget-button--primary widget-button--add" v-if="isMissing" @click="install" :disabled="willBeInstalled">{{ $t('ui.package.installButton') }}</button>
                 <button class="widget-button widget-button--alert widget-button--trash" v-else-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
-                <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isInstalled" :disabled="isModified" @click="update">
+                <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isRootInstalled" :disabled="isModified" @click="update">
                     <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
                 </button-group>
                 <install-button :data="data" v-else/>
             </slot>
         </template>
 
-        <template #features v-if="features">
+        <template #features v-if="packageFeatures(data.name)">
             <section class="package__features">
-                <template v-for="name in features">
-                    <feature-package :key="name" :name="name"/>
+                <template v-for="name in packageFeatures(data.name)">
+                    <feature-package :key="name" :name="name" />
                 </template>
             </section>
         </template>
@@ -72,17 +54,20 @@
 
 <script>
     import Vue from 'vue';
+    import { mapGetters } from 'vuex';
+
+    import packageStatus from '../../../mixins/packageStatus';
 
     import Package from './Package';
+    import FeaturePackage from './FeaturePackage';
+    import PackageConstraint from '../../fragments/PackageConstraint';
     import ButtonGroup from '../../widgets/ButtonGroup';
     import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
     import InstallButton from '../../fragments/InstallButton';
-    import FeaturePackage from './FeaturePackage';
-    import packageStatus from '../../../mixins/packageStatus';
 
     export default {
         mixins: [packageStatus],
-        components: { Package, FeaturePackage, ButtonGroup, InstallButton, DetailsButton },
+        components: { Package, FeaturePackage, PackageConstraint, ButtonGroup, InstallButton, DetailsButton },
 
         props: {
             data: {
@@ -94,15 +79,8 @@
             updateOnly: Boolean,
         },
 
-        data: () => ({
-            constraint: '',
-            constraintEditable: false,
-            constraintValidating: false,
-            constraintError: false,
-        }),
-
         computed: {
-            features: vm => vm.$store.getters['packages/packageFeatures'](vm.data.name),
+            ...mapGetters('packages', ['packageFeatures']),
 
             packageHint() {
                 if (this.hint) {
@@ -210,115 +188,13 @@
 
                 return additionals;
             },
-
-            constraintPlaceholder() {
-                if (!Object.keys(this.$store.state.packages.root.require).includes(this.data.name)) {
-                    return this.$t('ui.package.latestConstraint');
-                }
-
-                return '';
-            },
         },
 
         methods: {
             restore() {
                 this.$store.commit('packages/restore', this.data.name);
                 this.$store.commit('packages/uploads/unconfirm', this.data.name);
-                this.resetConstraint();
             },
-
-            editConstraint() {
-                if (this.constraintValidating) {
-                    return;
-                }
-
-                this.constraintEditable = true;
-
-                this.$nextTick(() => {
-                    this.$refs.constraint.focus();
-                });
-            },
-
-            saveConstraint() {
-                if (!this.constraintEditable) {
-                    return;
-                }
-
-                this.constraintEditable = false;
-                this.constraintError = false;
-
-                if ((this.isInstalled && (!this.constraint || this.constraintInstalled === this.constraint))
-                    || (this.isRequired && (!this.constraint || this.constraintRequired === this.constraint))
-                ) {
-                    this.restore();
-                    return;
-                }
-
-                if (!this.isRequired && this.willBeInstalled && !this.constraint) {
-                    this.$store.commit(
-                        'packages/add',
-                        Object.assign({}, this.data, { constraint: null }),
-                    );
-                    this.resetConstraint();
-                    return;
-                }
-
-                this.$refs.constraint.blur();
-                this.constraintValidating = true;
-
-                Vue.http.post('api/constraint', { constraint: this.constraint }).then(
-                    (response) => {
-                        this.constraintValidating = false;
-                        if (response.body.valid) {
-                            if (this.isInstalled || this.isRequired) {
-                                this.$store.commit('packages/change', { name: this.data.name, version: this.constraint });
-                            } else {
-                                this.$store.commit(
-                                    'packages/add',
-                                    Object.assign({}, this.data, { constraint: this.constraint }),
-                                );
-                            }
-                        } else {
-                            this.constraintError = true;
-                            this.$nextTick(() => this.editConstraint());
-                        }
-                    },
-                );
-            },
-
-            resetConstraint() {
-                if (this.willBeInstalled) {
-                    this.constraint = this.constraintAdded;
-                } else if (this.isChanged) {
-                    this.constraint = this.constraintChanged;
-                } else if (this.isInstalled) {
-                    this.constraint = this.constraintInstalled;
-                } else if (this.isRequired) {
-                    this.constraint = this.constraintRequired;
-                }
-
-                if (!this.constraintEditable) {
-                    return;
-                }
-
-                this.constraintEditable = false;
-                this.constraintError = false;
-                this.constraintValidating = false;
-            },
-        },
-
-        watch: {
-            constraintAdded(value) {
-                this.constraint = value;
-            },
-
-            constraintChanged(value) {
-                this.constraint = value || this.constraintInstalled || this.constraintRequired;
-            },
-        },
-
-        mounted() {
-            this.resetConstraint();
         },
     };
 </script>

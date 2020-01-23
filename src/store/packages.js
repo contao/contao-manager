@@ -31,6 +31,7 @@ export default {
     getters: {
         packageInstalled: (state, g) => name => Object.keys(state.installed).includes(name) && !g.packageMissing(name),
         versionInstalled: state => (name, version) => Object.keys(state.installed).includes(name) && state.installed[name].version === version,
+        packageRoot: state => name => Object.keys(state.root.require).includes(name),
         packageRequired: state => name => Object.keys(state.required).includes(name) && state.required[name].constraint,
         packageMissing: state => name => Object.keys(state.required).includes(name) && !state.required[name].constraint,
         packageAdded: state => name => Object.keys(state.add).includes(name),
@@ -208,7 +209,7 @@ export default {
 
             Object.keys(features).forEach((pkg) => {
                 features[pkg].forEach((feature) => {
-                    if (Object.keys(state.root.require).includes(feature)) {
+                    if (Object.keys(state.root.require).includes(feature) || Object.keys(state.installed).includes(feature)) {
                         if (update.includes(pkg)) {
                             update.push(feature);
                         }
@@ -218,11 +219,23 @@ export default {
                         } else if (remove.includes(pkg)) {
                             remove.push(feature);
                         }
+
+                        return;
+                    }
+
+                    if (!require.hasOwnProperty(feature)) {
+                        return;
+                    }
+
+                    if (!update.includes(feature)) {
+                        update.push(feature);
                     }
 
                     // Feature was added, make sure it's the same version as the parent
-                    if (require.hasOwnProperty(feature) && !require.hasOwnProperty(pkg) && state.root.require[pkg]) {
+                    if (!require.hasOwnProperty(pkg) && state.root.require[pkg]) {
                         require[feature] = state.root.require[pkg];
+                    } else if (require.hasOwnProperty(pkg)) {
+                        require[feature] = require[pkg];
                     }
                 });
             });

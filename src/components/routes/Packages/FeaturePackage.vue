@@ -1,5 +1,5 @@
 <template>
-    <article class="feature-package" v-if="isRequired || isMissing || isInstalled || willBeInstalled">
+    <article class="feature-package" v-if="isRequired || isMissing || isRootInstalled || willBeInstalled">
         <p class="feature-package__text" :class="{ 'feature-package__text--hint': this.packageHint }">
             <strong class="feature-package__name">{{ packageTitle }}</strong>
             <span class="feature-package__hint" v-if="this.packageHint">{{ packageHint }}</span>
@@ -10,7 +10,7 @@
 
         <div class="feature-package__actions">
             <button class="feature-package__restore" @click="restore" v-if="packageHint">{{ $t('ui.package.hintRevert') }}</button>
-            <button class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isInstalled) && !willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
+            <button class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isRootInstalled) && !willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
             <details-button small :name="name"/>
         </div>
     </article>

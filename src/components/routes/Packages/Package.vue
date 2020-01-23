@@ -117,7 +117,7 @@
                 content: "";
             }
 
-            padding: 10px 20px 20px;
+            padding: 10px 20px 25px;
 
             @include screen(1024) {
                 padding: 25px 20px;
@@ -222,10 +222,12 @@
 
         // Fixes CSS override with basic input styling
         .package__release {
+            display: none;
             text-align: right;
             margin-bottom: 10px;
 
             @include screen(600) {
+                display: block;
                 float: left;
                 width: 50%;
             }
@@ -234,69 +236,6 @@
                 width: 180px;
                 margin-left: 40px;
                 margin-bottom: 0;
-            }
-
-            input[type=text] {
-                height: 30px;
-                margin-right: 2px;
-                background: #fff;
-                border: 2px solid $orange-button;
-                color: #000;
-                font-weight: $font-weight-bold;
-                text-align: center;
-                line-height: 30px;
-
-                &::placeholder {
-                    color: #fff;
-                    opacity: 1;
-                }
-
-                &:disabled {
-                    color: #fff;
-                    opacity: 1;
-                    background: $orange-button;
-                    -webkit-text-fill-color: #fff;
-                }
-
-                &.disabled {
-                    background: $border-color;
-                    border-color: $border-color;
-                }
-
-                &.error {
-                    animation: input-error .15s linear 3;
-                }
-            }
-
-            fieldset > input[type=text],
-            fieldset > input[type=text]:disabled {
-                float: left;
-                width: calc(100% - 32px);
-            }
-
-            button {
-                position: relative;
-                width: 30px;
-                height: 30px;
-                background: $orange-button;
-                line-height: 20px;
-                text-indent: -999em;
-
-                &:hover {
-                    background: darken($orange-button, 5);
-                    border-color: darken($orange-button, 10);
-                }
-
-                &:before {
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    margin: -10px 0 0 -10px;
-                }
-
-                &.rotate:before {
-                    animation: release-validating 2s linear infinite;
-                }
             }
         }
 
@@ -346,38 +285,13 @@
                 padding-left: 0;
             }
 
-            .widget-button:not(:last-child) {
+            .widget-button:not(:last-child),
+            .button-group:not(:last-child) {
                 margin-bottom: 5px;
             }
-        }
 
-        &__release-description {
-            margin-top: -10px;
-            text-align: center;
-
-            @include screen(1024) {
-                margin-top: 0;
-            }
-
-            img {
-                top: 6px;
-                margin: 0 5px 0 0;
-                position: relative;
-
-                @include screen(1024) {
-                    display: block;
-                    top: 0;
-                    margin: 0 auto;
-                }
-            }
-
-            input + &,
-            fieldset + & {
-                margin: 0 0 20px;
-
-                @include screen(600) {
-                    margin: 15px 0 0;
-                }
+            .button-group button {
+                margin-bottom: 0 !important;
             }
         }
 
@@ -388,12 +302,6 @@
             @include screen(1024) {
                 margin-top: -10px;
             }
-        }
-    }
-
-    @keyframes release-validating {
-        100% {
-            transform: rotate(360deg);
         }
     }
 
