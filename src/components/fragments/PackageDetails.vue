@@ -2,15 +2,15 @@
     <package-details :filter-features="filterFeatures" :dependents="dependents">
         <template #package-actions>
             <template v-if="isInstalled">
-                <install-button small :data="data" v-if="isFeature"/>
-                <package-constraint :data="data" v-else/>
+                <package-constraint :data="data" v-if="!isFeature && isVisible"/>
                 <p class="package-popup__installed">
                     <strong>{{ $t('ui.package.installed') }}</strong>
                     <time :dateTime="installedTime" v-if="installedTime" :title="installedTime | datimFormat">{{ $t('ui.package.version', { version: installedVersion }) }}</time>
                     <template v-else>{{ $t('ui.package.version', { version: installedVersion }) }}</template>
                 </p>
             </template>
-            <install-button :data="data" v-else-if="canBeInstalled || isRequired"/>
+            <package-constraint :data="data" v-else-if="isAdded || isRequired"/>
+            <install-button :data="data" v-else-if="canBeInstalled"/>
             <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">{{ $t('ui.package.homepage') }}</a>
             <div v-else></div>
         </template>

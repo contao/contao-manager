@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="package-constraint">
+    <fieldset class="package-constraint" v-if="!isFeature && isVisible">
         <input
             ref="constraint"
             type="text"

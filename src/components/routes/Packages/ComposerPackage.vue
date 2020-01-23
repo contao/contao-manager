@@ -38,7 +38,6 @@
                 <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isRootInstalled" :disabled="isModified" @click="update">
                     <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
                 </button-group>
-                <install-button :data="data" v-else/>
             </slot>
         </template>
 

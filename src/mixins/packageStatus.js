@@ -29,6 +29,7 @@ export default {
         isInstalled: vm => vm.packageInstalled(vm.data.name),
         isRootInstalled: vm => vm.isInstalled && vm.packageRoot(vm.data.name),
         isRequired: vm => vm.packageRequired(vm.data.name),
+        isAdded: vm => vm.packageAdded(vm.data.name),
         isMissing: vm => vm.packageMissing(vm.data.name),
         isChanged: vm => vm.packageChanged(vm.data.name),
         isUpdated: vm => vm.packageUpdated(vm.data.name),
