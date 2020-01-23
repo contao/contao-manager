@@ -1,5 +1,5 @@
 <template>
-    <package-details>
+    <package-details :filter-features="filterFeatures">
         <template #package-actions>
             <template v-if="isInstalled">
                 <install-button small :data="data" v-if="isFeature"/>
@@ -45,6 +45,12 @@
             ]),
 
             data: vm => ({ name: vm.$route.query.p }),
+        },
+
+        methods: {
+            filterFeatures(features) {
+                return features.filter(name => !this.packageInstalled(name));
+            }
         },
     };
 </script>
