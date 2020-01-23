@@ -3,20 +3,11 @@
 import Vue from 'vue';
 
 import details from 'contao-package-list/src/store/packages/details';
+import features from 'contao-package-list/src/store/packages/features';
 import uploads from './packages/uploads';
 
-const isVisible = (name, getters) => name.includes('/') && name !== 'contao/manager-bundle' && name !== 'contao/conflicts' && !getters.isFeature(name);
+const isVisible = (name, getters) => name.includes('/') && name !== 'contao/manager-bundle' && name !== 'contao/conflicts' && !getters.packageFeature(name);
 
-const features = {
-    'contao/manager-bundle': [
-        'contao/news-bundle',
-        'contao/calendar-bundle',
-        'contao/faq-bundle',
-        'contao/comments-bundle',
-        'contao/newsletter-bundle',
-        'contao/listing-bundle',
-    ],
-};
 
 export default {
     namespaced: true,
@@ -47,6 +38,7 @@ export default {
         packageUpdated: state => name => state.update.includes(name),
         packageRemoved: state => name => state.remove.includes(name),
         packageFeatures: () => name => features[name] ? features[name] : [],
+        packageFeature: (s, g) => name => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
 
         totalChanges: state => Object.keys(state.add).length
             + Object.keys(state.required).length
@@ -65,7 +57,6 @@ export default {
         canResetChanges: (s, get) => get.totalChanges > get.totalRequired,
 
         isSuggested: state => name => !!Object.values(state.local).find(pkg => (pkg.type.substr(0, 7) === 'contao-' && pkg.suggest && pkg.suggest.hasOwnProperty(name))),
-        isFeature: (s, g) => (name) => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
 
         visibleRequired: (s, g) => Object.values(s.required).filter(pkg => isVisible(pkg.name, g)),
         visibleInstalled: (s, g) => Object.values(g.installed).filter(pkg => isVisible(pkg.name, g)),
