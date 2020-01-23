@@ -4,11 +4,9 @@
             <package-uploads ref="uploader" v-if="uploads !== false"/>
 
             <h2 class="package-list__headline" v-if="hasAdded">{{ $t('ui.packagelist.added') }}</h2>
-            <local-package update-only class="package-list__root" :data="requiredPackages['contao/manager-bundle']" v-if="requiredPackages['contao/manager-bundle']"/>
             <local-package v-for="item in addedPackages" :data="item" :key="item.name"/>
 
             <h2 class="package-list__headline" v-if="showHeadline">{{ $t('ui.packagelist.installed') }}</h2>
-            <local-package update-only class="package-list__root" :data="installed['contao/manager-bundle']" v-if="installed['contao/manager-bundle']"/>
             <local-package v-for="item in installedPackages" :data="item" :key="item.name"/>
         </div>
 
@@ -60,7 +58,7 @@
 
             removingUploads: vm => vm.removing.length > 0,
             showHeadline: vm => vm.hasAdded || vm.hasUploads || vm.files.length,
-            hasAdded: vm => vm.addedPackages.length || 'contao/manager-bundle' in vm.requiredPackages,
+            hasAdded: vm => vm.addedPackages.length,
         },
 
         methods: {
@@ -119,10 +117,6 @@
             font-size: 18px;
             font-weight: $font-weight-normal;
             margin: 30px 0 10px;
-        }
-
-        &__root {
-            border-bottom-color: $contao-color;
         }
     }
 </style>

@@ -6,8 +6,8 @@ import details from 'contao-package-list/src/store/packages/details';
 import features from 'contao-package-list/src/store/packages/features';
 import uploads from './packages/uploads';
 
-const isVisible = (name, getters) => name.includes('/') && name !== 'contao/manager-bundle' && name !== 'contao/conflicts' && !getters.packageFeature(name);
-
+const hiddenPackages = ['contao/core-bundle', 'contao/installation-bundle', 'contao/conflicts'];
+const isVisible = (name, getters) => name.includes('/') && !hiddenPackages.includes(name) && !getters.packageFeature(name);
 
 export default {
     namespaced: true,
@@ -40,6 +40,7 @@ export default {
         packageRemoved: state => name => state.remove.includes(name),
         packageFeatures: () => name => features[name] ? features[name] : [],
         packageFeature: (s, g) => name => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
+        packageVisible: (s, g) => name => isVisible(name, g),
 
         totalChanges: state => Object.keys(state.add).length
             + Object.keys(state.required).length
@@ -256,7 +257,7 @@ export default {
 
         updateAll({ state, getters, commit }) {
             Object.keys(state.root.require).forEach((name) => {
-                if (name !== 'contao/manager-bundle' && !isVisible(name, getters)) {
+                if (!isVisible(name, getters)) {
                     return;
                 }
 

@@ -1,5 +1,6 @@
 <template>
     <package
+        :class="{ 'package--contao': isContao }"
         :title="data.title || data.name"
         :logo="data.logo"
         :badge="badge"
@@ -25,7 +26,7 @@
             </slot>
         </template>
 
-        <template #actions v-if="updateOnly">
+        <template #actions v-if="isContao">
             <details-button :name="data.name" v-if="data.name"/>
             <button class="widget-button widget-button--update" :disabled="isModified" v-if="!isRequired" @click="update">{{ $t('ui.package.updateButton') }}</button>
         </template>
@@ -76,7 +77,6 @@
             },
             hint: String,
             uncloseableHint: Boolean,
-            updateOnly: Boolean,
         },
 
         computed: {

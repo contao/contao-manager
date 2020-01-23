@@ -22,6 +22,7 @@ export default {
             'packageChanged',
             'packageRemoved',
             'packageFeature',
+            'packageVisible',
             'isSuggested',
         ]),
 
@@ -38,6 +39,8 @@ export default {
         isPrivate: vm => vm.metadata && !!vm.metadata.private,
         isDependency: vm => vm.metadata && !!vm.metadata.dependency,
         isFeature: vm => vm.packageFeature(vm.data.name),
+        isVisible: vm => vm.packageVisible(vm.data.name),
+        isContao: vm => vm.data.name === 'contao/manager-bundle',
 
         installedVersion: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].version : null,
         installedTime: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].time : null,

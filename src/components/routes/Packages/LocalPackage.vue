@@ -3,7 +3,6 @@
         :data="packageData"
         :hint="hint"
         :uncloseable-hint="uncloseableHint"
-        :update-only="updateOnly"
     >
         <template #release v-if="isUpload">
             <fieldset>
@@ -37,7 +36,6 @@
             },
             hint: String,
             uncloseableHint: Boolean,
-            updateOnly: Boolean,
         },
 
         computed: {

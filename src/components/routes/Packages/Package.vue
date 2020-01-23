@@ -73,6 +73,10 @@
         border-bottom: 3px solid #ddd3bc;
         border-radius: 2px;
 
+        &--contao {
+            border-bottom-color: $contao-color;
+        }
+
         &__hint {
             position: relative;
             padding: 8px 20px 8px 20px;
