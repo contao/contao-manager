@@ -134,7 +134,7 @@ ja:
             processingSummary: 'Composer Cloudを使用して依存関係を解決中'
             processingDetail: 'ジョブID {job}は{seconds}秒間動作中'
             errorSummary: '依存関係の解決に失敗...'
-            finishedSummary: 'Composer Cloudのジョブは{seconds}で完了しました。'
+            finishedSummary: 'Composer Cloudのジョブは{seconds}秒で完了しました。'
             finishedDetail: 'メモリの使用: {memory} (最大: {peak}), 時間: {time}.'
         clear-cache:
             summary: 'キャッシュファイルを削除中...'

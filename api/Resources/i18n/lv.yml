@@ -31,6 +31,10 @@ lv:
         contao_version:
             title: 'Nevarēja noteikt Contao versiju'
 
+    boot:
+        composer:
+            invalid: 'composer.json shēmas validācija: {exception}'
+
     config:
         php_cli:
             not_found: 'Šis ceļš nesatur derīgu PHP bināru.'
@@ -51,6 +55,7 @@ lv:
             console: '### Fona uzdevums tiek atcelts ###'
         stopped:
             summary: 'Konsoles uzdevums ir pārtraukts!'
+            detail: 'Fona uzdevums tika atcelts. Lūdzu, pārbaudiet konsoles protokolu.'
             console: '### Fona uzdevums tika atcelts ###'
         error:
             summary: 'Konsoles uzdevums ir pārtraukts!'
@@ -88,6 +93,8 @@ lv:
             summary: 'Pievieno Composer pakotnes ...'
         composer-remove:
             summary: 'Noņem Composer pakotnes ...'
+        remove-uploads:
+            summary: 'Notiek augšupielādes failu noņemšana ...'
         install-lock:
             summary: 'Bloķē Contao instalēšanas rīku ...'
         install-unlock:
