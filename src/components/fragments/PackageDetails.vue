@@ -1,5 +1,5 @@
 <template>
-    <package-details :filter-features="filterFeatures">
+    <package-details :filter-features="filterFeatures" :dependents="dependents">
         <template #package-actions>
             <template v-if="isInstalled">
                 <install-button small :data="data" v-if="isFeature"/>
@@ -45,6 +45,35 @@
             ]),
 
             data: vm => ({ name: vm.$route.query.p }),
+
+            dependents() {
+                if (!this.installed[this.data.name]) {
+                    return null;
+                }
+
+                const deps = {};
+                const conditions = ['requires', 'replaces', 'provides', 'conflicts'];
+
+                Object.values(this.installed[this.data.name].dependents).forEach(dep => {
+                    if (dep.source === '__root__'
+                        || !conditions.includes(dep.description)
+                        || (dep.source === this.data.name && dep.description === 'replaces')
+                    ) {
+                        return;
+                    }
+
+                    const description = this.$t(`ui.package-details.link${dep.description[0].toUpperCase()}${dep.description.slice(1)}`);
+                    let target = dep.target;
+
+                    if (target === this.data.name && this.metadata && this.metadata.title) {
+                        target = this.metadata.title;
+                    }
+
+                    deps[dep.source] = `${description} ${target} ${dep.constraint}`;
+                });
+
+                return deps;
+            },
         },
 
         methods: {

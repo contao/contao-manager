@@ -13,6 +13,12 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller\Packages;
 
 use Composer\Package\Dumper\ArrayDumper;
+use Composer\Package\Link;
+use Composer\Package\PackageInterface;
+use Composer\Repository\ArrayRepository;
+use Composer\Repository\CompositeRepository;
+use Composer\Repository\PlatformRepository;
+use Composer\Repository\RepositoryInterface;
 use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,44 +32,96 @@ use Symfony\Component\Routing\Annotation\Route;
 class LocalPackagesController
 {
     /**
-     * @var Environment
+     * @var RepositoryInterface
      */
-    private $environment;
+    private $localRepository;
+
+    /**
+     * @var CompositeRepository
+     */
+    private $compositeRepository;
+
 
     public function __construct(Environment $environment)
     {
-        $this->environment = $environment;
+        $composer = $environment->getComposer();
+
+        $this->localRepository = $composer->getRepositoryManager()->getLocalRepository();
+
+        $this->compositeRepository = new CompositeRepository([
+            new ArrayRepository([$composer->getPackage()]),
+            $this->localRepository,
+            new PlatformRepository([], $composer->getConfig()->get('platform') ?: []),
+        ]);
     }
 
     public function __invoke(string $name = null): Response
     {
-        $packages = $this->getLocalPackages();
-
-        if (empty($name)) {
-            return new JsonResponse($packages);
+        if (null !== $name) {
+            return $this->getOnePackage($name);
         }
 
-        if (!isset($packages[$name])) {
-            throw new NotFoundHttpException('Package "'.$name.'" does not exist');
+        $dumper = new ArrayDumper();
+        $packages = [];
+
+        foreach ($this->localRepository->getPackages() as $package) {
+            $packages[$package->getName()] = $dumper->dump($package);
+            $packages[$package->getName()]['dependents'] = $this->getDependents($package);
         }
 
-        return new JsonResponse($packages[$name]);
+        return new JsonResponse($packages);
     }
 
-    private function getLocalPackages(): array
+    private function getOnePackage(string $name): Response
     {
-        $packages = [];
-        $dumper = new ArrayDumper();
-        $repository = $this->environment
-            ->getComposer()
-            ->getRepositoryManager()
-            ->getLocalRepository()
-        ;
+        [$package] = array_values($this->localRepository->findPackages($name));
 
-        foreach ($repository->getPackages() as $package) {
-            $packages[$package->getName()] = $dumper->dump($package);
+        if (!$package instanceof PackageInterface) {
+            throw new NotFoundHttpException('Package "'.$name.'" is not installed');
         }
 
-        return $packages;
+        $dumper = new ArrayDumper();
+
+        $data = $dumper->dump($package);
+        $data['dependents'] = $this->getDependents($package);
+
+        return new JsonResponse($data);
+    }
+
+    private function getDependents(PackageInterface $package): array
+    {
+        $dependents = $this->parseDependents([$package->getName()]);
+
+        if (empty($dependents) && 0 !== \count($replaces = array_keys($package->getReplaces()))) {
+            $dependents = $this->parseDependents($replaces, true);
+        }
+
+        return $dependents;
+    }
+
+    private function parseDependents(array $packageNames, bool $withReplaces = false): array
+    {
+        $links = [];
+        $dependents = $this->compositeRepository->getDependents($packageNames, null, false, false);
+
+        foreach ($dependents as $dependent) {
+            /** @var Link $link */
+            [, $link] = $dependent;
+
+            if (!$withReplaces && $link->getDescription() === 'replaces') {
+                continue;
+            }
+
+            $constraint = $link->getConstraint();
+
+            $links[] = [
+                'description' => $link->getDescription(),
+                'source' => $link->getSource(),
+                'target' => $link->getTarget(),
+                'constraint' => $constraint ? $constraint->getPrettyString() : null,
+            ];
+        }
+
+        return $links;
     }
 }
