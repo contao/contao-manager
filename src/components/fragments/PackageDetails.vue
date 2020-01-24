@@ -9,8 +9,10 @@
                     <template v-else>{{ $t('ui.package.version', { version: installedVersion }) }}</template>
                 </p>
             </template>
-            <package-constraint :data="data" v-else-if="isAdded || isRequired"/>
-            <install-button :data="data" v-else-if="canBeInstalled"/>
+            <template v-else-if="canBeInstalled || isRequired">
+                <install-button :data="data"/>
+                <package-constraint :data="data" v-if="isAdded || isRequired"/>
+            </template>
             <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">{{ $t('ui.package.homepage') }}</a>
             <div v-else></div>
         </template>
