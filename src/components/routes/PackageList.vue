@@ -82,8 +82,9 @@
                 this.$store.dispatch('packages/apply', true);
             },
 
-            applyChanges() {
-                this.$store.dispatch('packages/apply').then(() => this.$store.dispatch('packages/load', true));
+            async applyChanges() {
+                await this.$store.dispatch('packages/apply');
+                await this.$store.dispatch('packages/load');
             },
 
             resetChanges() {

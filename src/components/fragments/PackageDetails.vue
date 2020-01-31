@@ -91,8 +91,6 @@
 
     .package-popup {
         &__installed {
-            margin-top: 1em;
-
             strong {
                 margin-right: 5px;
             }
