@@ -174,6 +174,39 @@ export default {
     },
 
     actions: {
+        async metadata({ state, dispatch }, name) {
+            const metadata = await dispatch('algolia/getPackage', name, { root: true });
+            const local = state.installed[name];
+
+            if (!local) {
+                return metadata;
+            }
+
+            if (!metadata) {
+                return local;
+            }
+
+            const data = Object.assign(
+                {},
+                metadata,
+                {
+                    dependents: local.dependents,
+                    conflict: local.conflict,
+                    require: local.require,
+                    'require-dev': local['require-dev'],
+                    suggest: {},
+                },
+            );
+
+            if (local.suggest) {
+                Object.keys(local.suggest).forEach(k => {
+                    data.suggest[k] = metadata.suggest && metadata.suggest[k] || local.suggest[k];
+                });
+            }
+
+            return data;
+        },
+
         async load({ commit }) {
             commit('clearInstalled');
             commit('reset');
