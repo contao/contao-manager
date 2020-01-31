@@ -190,7 +190,9 @@ class UpdateTask extends AbstractPackagesTask
     private function handleContaoStability(CloudChanges $definition): void
     {
         foreach ($definition->getRequiredPackages() as $require) {
-            [$packageName, $version] = explode('=', $require);
+            $require = explode('=', $require, 2);
+            $packageName = $require[0];
+            $version = $require[1] ?? null;
 
             if ($packageName === 'contao/manager-bundle') {
                 if ($version && 'stable' !== VersionParser::parseStability($version)) {
