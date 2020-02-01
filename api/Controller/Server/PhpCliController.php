@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Controller\Server;
 
-use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\System\ServerInfo;
@@ -26,9 +25,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PhpCliController
 {
-    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo, ConsoleProcessFactory $processFactory): Response
+    public function __invoke(ServerInfo $serverInfo, ConsoleProcessFactory $processFactory): Response
     {
-        if (!$managerConfig->has('server') || !$serverInfo->getPhpExecutable()) {
+        if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
                     ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE)

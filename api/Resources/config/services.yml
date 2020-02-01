@@ -5,7 +5,6 @@ services:
         public: false
         bind:
             $debug: '%kernel.debug%'
-            $serverConfigFile: '%kernel.root_dir%/Resources/config/servers.yml'
 
     Contao\ManagerApi\:
         resource: '../../*'

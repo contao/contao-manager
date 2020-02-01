@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller\Server;
 
 use Contao\ManagerApi\ApiKernel;
-use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Exception\ProcessOutputException;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\I18n\Translator;
@@ -80,9 +79,9 @@ class ContaoController
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    public function __invoke(ManagerConfig $managerConfig, ServerInfo $serverInfo, Translator $translator): Response
+    public function __invoke(ServerInfo $serverInfo, Translator $translator): Response
     {
-        if (!$managerConfig->has('server') || !$serverInfo->getPhpExecutable()) {
+        if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
                     ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE)

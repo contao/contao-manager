@@ -60,22 +60,16 @@ class ConfigController
     public function __invoke(Request $request): Response
     {
         if ($request->isMethod('PUT')) {
-            $server = $request->request->get('server');
             $phpCli = $request->request->get('php_cli');
 
-            $problem = $this->validateHostingConfig($server, $phpCli);
+            if (null !== ($error = $this->validatePhpCli($phpCli))) {
+                $problem = (new ApiProblem('Bad Request'))->setStatus(400);
+                $problem['error'] = $error;
 
-            if ($problem instanceof ApiProblem) {
                 return new ApiProblemResponse($problem);
             }
 
-            $this->config->set('server', $server);
-
-            if (null === $phpCli) {
-                $this->config->remove('php_cli');
-            } else {
-                $this->config->set('php_cli', $phpCli);
-            }
+            $this->config->set('php_cli', $phpCli);
 
             if ($request->request->get('cloud', true)) {
                 $this->config->remove('disable_cloud');
@@ -89,107 +83,33 @@ class ConfigController
 
     private function getTestResult(): Response
     {
-        $detected = false;
-        $server = '';
-
-        if ($this->config->has('server')) {
-            $server = $this->config->get('server');
-            $cli = $this->serverInfo->getPhpExecutable();
-        } elseif ($this->config->has('php_cli')) {
-            $detected = true;
-            $cli = $this->config->get('php_cli');
-        } else {
-            $detected = true;
-            $server = $this->serverInfo->detect();
-
-            if ($server) {
-                $cli = $this->serverInfo->getPhpExecutable();
-            } else {
-                $cli = $this->serverInfo->getPhpExecutableFinder()->find();
-            }
-        }
-
         return new JsonResponse(
             [
-                'server' => (string) $server,
-                'php_cli' => (string) $cli,
-                'detected' => $detected,
+                'php_cli' => (string) $this->serverInfo->getPhpExecutable(),
                 'cloud' => $this->getCloudConfig(),
-                'configs' => $this->serverInfo->getConfigs(),
             ]
         );
     }
 
-    /**
-     * Validates the server config and PHP cli.
-     *
-     * @param string $server
-     * @param string $phpCli
-     */
-    private function validateHostingConfig($server, $phpCli): ?ApiProblem
-    {
-        $errors = [];
-
-        if ('custom' !== $server && !\array_key_exists($server, $this->serverInfo->getConfigs())) {
-            $errors[] = [
-                'source' => 'server',
-                'message' => sprintf('Unknown server configuration "%s"', $server),
-            ];
-        }
-
-        if ('custom' === $server && null === $phpCli) {
-            $errors[] = [
-                'source' => 'php_cli',
-                'message' => 'Please set the PHP CLI path for custom configuration.',
-            ];
-        }
-
-        if ('custom' !== $server && null !== $phpCli) {
-            $errors[] = [
-                'source' => 'php_cli',
-                'message' => 'Cannot set PHP CLI path when config is not "custom".',
-            ];
-        }
-
-        if (null !== $phpCli) {
-            $this->validatePhpCli($phpCli, $errors);
-        }
-
-        if (empty($errors)) {
-            return null;
-        }
-
-        $problem = (new ApiProblem('Bad Request'))->setStatus(400);
-        $problem['validation'] = $errors;
-
-        return $problem;
-    }
-
-    private function validatePhpCli($phpCli, array &$errors): void
+    private function validatePhpCli($phpCli): ?string
     {
         $info = $this->serverInfo->getPhpExecutableFinder()->getServerInfo($phpCli);
 
         if (null === $info) {
-            $errors[] = [
-                'source' => 'php_cli',
-                'message' => $this->translator->trans('config.php_cli.not_found'),
-            ];
-
-            return;
+            return  $this->translator->trans('config.php_cli.not_found');
         }
 
         $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
         $vCli = vsprintf('%s.%s', explode('.', $info['version']));
 
         if (version_compare($vWeb, $vCli, '<>')) {
-            $errors[] = [
-                'source' => 'php_cli',
-                'message' => $this->translator->trans(
-                    'config.php_cli.incompatible',
-                    ['cli' => $vCli, 'web' => $vWeb]
-                ),
-            ];
+            return $this->translator->trans(
+                'config.php_cli.incompatible',
+                ['cli' => $vCli, 'web' => $vWeb]
+            );
         }
+
+        return null;
     }
 
     private function getCloudConfig(): array

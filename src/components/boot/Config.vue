@@ -3,7 +3,7 @@
         <header class="config-check__header">
             <img src="../../assets/images/server-config.svg" width="80" height="80" class="config-check__icon" alt="">
             <h1 class="config-check__headline">{{ $t('ui.server.config.title') }}</h1>
-            <p class="config-check__description" v-html="$t('ui.server.config.description')"></p>
+            <p class="config-check__description" v-html="$t('ui.server.config.description')"/>
         </header>
 
         <main class="config-check__form">
@@ -11,15 +11,7 @@
                 <fieldset class="config-check__fields">
                     <legend class="config-check__fieldtitle">{{ $t('ui.server.config.formTitle') }}</legend>
                     <p class="config-check__fielddesc">{{ $t('ui.server.config.formText') }}</p>
-                    <p class="config-check__detected" v-if="detected && server">{{ $t('ui.server.config.detected') }}</p>
-                    <select-menu name="server" :label="$t('Configuration')" class="inline" :disabled="processing" :error="errors.server" :options="servers" v-model="server" @input="detected = false"/>
-                </fieldset>
-
-                <fieldset v-if="showCustom" class="config-check__fields">
-                    <legend class="config-check__fieldtitle">{{ $t('ui.server.config.customTitle') }}</legend>
-                    <p class="config-check__fielddesc">{{ $t('ui.server.config.customText') }}</p>
-                    <p class="config-check__detected" v-if="detected && php_cli">{{ $t('ui.server.config.phpDetected') }}</p>
-                    <text-field name="php_cli" :label="$t('ui.server.config.cli')" :disabled="processing" :error="errors.php_cli" v-model="php_cli"/>
+                    <text-field name="php_cli" :label="$t('ui.server.config.cli')" :disabled="processing" :error="error" v-model="php_cli" />
                 </fieldset>
 
                 <fieldset class="config-check__fields">
@@ -37,7 +29,7 @@
                 </fieldset>
 
                 <fieldset class="config-check__fields">
-                    <loading-button submit color="primary" :disabled="!inputValid" :loading="processing">{{ $t('ui.server.config.save') }}</loading-button>
+                    <loading-button submit color="primary" :disabled="!php_cli" :loading="processing">{{ $t('ui.server.config.save') }}</loading-button>
                 </fieldset>
             </form>
         </main>
@@ -55,65 +47,37 @@
     import BootCheck from '../fragments/BootCheck';
     import BoxedLayout from '../layouts/Boxed';
     import TextField from '../widgets/TextField';
-    import SelectMenu from '../widgets/SelectMenu';
     import Checkbox from '../widgets/Checkbox';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
         mixins: [boot],
-        components: { BootCheck, BoxedLayout, TextField, SelectMenu, Checkbox, LoadingButton },
+        components: { BootCheck, BoxedLayout, TextField, Checkbox, LoadingButton },
 
 
         data: () => ({
             processing: false,
-            detected: false,
-            errors: {
-                server: '',
-                php_cli: '',
-            },
+            error: '',
 
-            servers: {},
-            server: '',
             php_cli: '',
             cloud: true,
             cloudIssues: [],
         }),
-
-        computed: {
-            showCustom() {
-                return this.server === 'custom';
-            },
-
-            inputValid() {
-                return this.server && (this.server !== 'custom' || this.php_cli);
-            },
-        },
 
         methods: {
             boot() {
                 this.bootDescription = this.$t('ui.server.running');
 
                 this.$store.dispatch('server/config/get').then((result) => {
-                    if (!result.server || result.detected) {
-                        this.bootState = 'action';
-                        this.bootDescription = this.$t('ui.server.config.stateError');
-                    } else if (!result.php_cli) {
+                    if (!result.php_cli) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.config.stateErrorCli');
                     } else if (result.cloud.enabled && result.cloud.issues.length > 0) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.config.stateErrorCloud');
-                    } else if (result.server === 'custom') {
-                        this.bootState = 'info';
-                        this.bootDescription = this.$t('ui.server.config.stateCustom', result);
                     } else {
-                        const labels = Object.create({
-                            server: result.configs[result.server].name,
-                            php_cli: result.php_cli,
-                        });
-
                         this.bootState = 'success';
-                        this.bootDescription = this.$t('ui.server.config.stateSuccess', labels);
+                        this.bootDescription = this.$t('ui.server.config.stateSuccess', { php_cli: result.php_cli });
                     }
                 }).catch(() => {
                     this.bootState = 'error';
@@ -129,30 +93,19 @@
 
             save() {
                 this.processing = true;
-                this.errors.server = '';
-                this.errors.php_cli = '';
+                this.error = '';
 
                 const config = {
-                    server: this.server,
+                    php_cli: this.php_cli,
                     cloud: this.cloud,
                 };
-
-                if (this.server === 'custom') {
-                    config.php_cli = this.php_cli;
-                }
 
                 this.$store.dispatch('server/config/set', config).then(() => {
                     this.$emit('view', null);
                     this.processing = false;
                 }).catch((problem) => {
-                    if (problem.status === 400 && problem.validation) {
-                        problem.validation.forEach((error) => {
-                            if (error.source === 'server' && !this.errors.server) {
-                                this.errors.server = error.message;
-                            } else if (error.source === 'php_cli' && !this.errors.php_cli) {
-                                this.errors.php_cli = error.message;
-                            }
-                        });
+                    if (problem.status === 400 && problem.error) {
+                        this.error = problem.error;
                     }
 
                     this.processing = false;
@@ -163,20 +116,7 @@
         mounted() {
             if (this.current) {
                 this.$store.dispatch('server/config/get').then((result) => {
-                    const servers = {
-                        '': this.$t('ui.server.config.blankOption'),
-                    };
-
-                    Object.keys(result.configs).forEach((key) => {
-                        servers[key] = result.configs[key].name;
-                    });
-
-                    servers.custom = this.$t('ui.server.config.customOption');
-
-                    this.servers = servers;
-                    this.server = result.server;
                     this.php_cli = result.php_cli;
-                    this.detected = result.detected;
                     this.cloud = result.cloud.enabled;
                     this.cloudIssues = result.cloud.issues;
                 });
@@ -230,11 +170,6 @@
                     font-weight: $font-weight-medium;
                 }
             }
-        }
-
-        &__detected {
-            margin-bottom: 1em;
-            color: $green-button;
         }
 
         &__fields {

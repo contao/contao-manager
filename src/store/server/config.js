@@ -16,32 +16,22 @@ export default {
     },
 
     actions: {
-
-        get({ state, commit }, cache = true) {
+        async get({ state, commit }, cache = true) {
             if (cache && state.cache) {
-                return new Promise((resolve) => {
-                    resolve(state.cache);
-                });
+                return state.cache;
             }
 
-            return Vue.http.get('api/server/config').then(
-                response => response.body,
-            ).then((result) => {
-                commit('setCache', result);
+            const result = (await Vue.http.get('api/server/config')).body;
+            commit('setCache', result);
 
-                return result;
-            });
+            return result;
         },
 
-        set({ commit }, config) {
-            return Vue.http.put('api/server/config', config).then(
-                response => response.body,
-            ).then((result) => {
-                commit('setCache', result);
+        async set({ commit }, config) {
+            const result = (await Vue.http.put('api/server/config', config)).body;
+            commit('setCache', result);
 
-                return result;
-            });
+            return result;
         },
-
     },
 };

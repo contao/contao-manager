@@ -226,6 +226,21 @@ class ConsoleProcessFactory implements LoggerAwareInterface, ServiceAnnotationIn
             $defaultArgs[] = $this->kernel->getConfigDir().'/php.ini';
         }
 
-        return array_merge($defaultArgs, $this->serverInfo->getPhpArguments(), $arguments);
+        $defaultArgs[] = '-d';
+        $defaultArgs[] = 'max_execution_time=0';
+
+        $defaultArgs[] = '-d';
+        $defaultArgs[] = 'memory_limit=-1';
+
+        $defaultArgs[] = '-d';
+        $defaultArgs[] = 'allow_url_fopen=1';
+
+        $defaultArgs[] = '-d';
+        $defaultArgs[] = 'suhosin.executor.include.whitelist="phar://,http://,https://"';
+
+        $defaultArgs[] = '-d';
+        $defaultArgs[] = 'date.timezone='.@date_default_timezone_get();
+
+        return array_merge($defaultArgs, $arguments);
     }
 }

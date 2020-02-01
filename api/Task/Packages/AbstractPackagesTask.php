@@ -87,22 +87,6 @@ abstract class AbstractPackagesTask extends AbstractTask
         return $status;
     }
 
-    protected function getInstallTimeout(): ?int
-    {
-        $timeout = null;
-        $serverConfig = $this->serverInfo->getServerConfig();
-
-        if (isset($serverConfig['timeout']) && $serverConfig['timeout'] > 0) {
-            $timeout = (int) $serverConfig['timeout'];
-
-            if (null !== $this->logger) {
-                $this->logger->info(sprintf('Configured install timeout of %s seconds for server "%s".', $timeout, $serverConfig['name']));
-            }
-        }
-
-        return $timeout;
-    }
-
     /**
      * Creates a backup of the composer.json and composer.lock file and stores the currently installed artifacts.
      */
