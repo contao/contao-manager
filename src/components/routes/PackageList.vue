@@ -34,6 +34,18 @@
     import PackageUploads from './Packages/Uploads';
     import LocalPackage from './Packages/LocalPackage';
 
+    const sortPackages = (a, b) => {
+        if (a.name === 'contao/manager-bundle') {
+            return -1;
+        }
+
+        if (b.name === 'contao/manager-bundle') {
+            return 1;
+        }
+
+        return 0;
+    };
+
     export default {
         components: { PackageBase, PackageUploads, LocalPackage, LoadingButton },
 
@@ -43,7 +55,6 @@
             }),
             ...mapState('packages/uploads', ['uploads', 'uploading', 'files', 'removing', 'confirmed']),
             ...mapGetters('packages', [
-                'installed',
                 'totalChanges',
                 'packageMissing',
                 'canResetChanges',
@@ -53,8 +64,8 @@
             ]),
             ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
 
-            addedPackages: vm => vm.visibleRequired.concat(vm.visibleAdded).filter(pkg => !vm.packageMissing(pkg.name)),
-            installedPackages: vm => vm.visibleRequired.filter(pkg => vm.packageMissing(pkg.name)).concat(vm.visibleInstalled),
+            addedPackages: vm => vm.visibleRequired.concat(vm.visibleAdded).filter(pkg => !vm.packageMissing(pkg.name)).sort(sortPackages),
+            installedPackages: vm => vm.visibleRequired.filter(pkg => vm.packageMissing(pkg.name)).concat(vm.visibleInstalled).sort(sortPackages),
 
             removingUploads: vm => vm.removing.length > 0,
             showHeadline: vm => vm.hasAdded || vm.hasUploads || vm.files.length,
