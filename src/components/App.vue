@@ -6,7 +6,7 @@
             <a :href="$t('ui.app.httpsHref')" target="_blank" class="https-warning__link">{{ $t('ui.app.httpsLink') }}</a>
         </div>
 
-        <error v-if="hasError"></error>
+        <error v-if="hasError"/>
 
         <transition name="fade" mode="out-in" style="height:100%">
 
@@ -20,7 +20,7 @@
             <component :is="currentView" :class="hasPopup ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
 
             <div v-else>
-                <router-view :class="hasPopup ? 'blur-in' : 'blur-out'"></router-view>
+                <router-view :class="hasPopup ? 'blur-in' : 'blur-out'"/>
             </div>
 
         </transition>
@@ -148,6 +148,7 @@
     $icons: (
         'add',
         'check',
+        'cloud',
         'edit',
         'gear',
         'hide',

@@ -227,5 +227,15 @@
     "ui.packagesearch.start": "Enter a keyword to start searching …",
     "ui.packagesearch.searching": "Searching for Contao packages matching <i>{query}</i> …",
     "ui.packagesearch.empty": "No results for <i>{query}</i>",
-    "ui.packagesearch.more": "More Results"
+    "ui.packagesearch.more": "More Results",
+
+    "ui.cloudStatus.headline": "Composer Resolver Cloud",
+    "ui.cloudStatus.version": "Version {version}",
+    "ui.cloudStatus.waitingTime": "Waiting Time",
+    "ui.cloudStatus.jobs": "Current Jobs",
+    "ui.cloudStatus.workers": "Workers",
+    "ui.cloudStatus.approx": "{minutes} min",
+    "ui.cloudStatus.none": "none",
+    "ui.cloudStatus.short": "ca. {minutes} min",
+    "ui.cloudStatus.long": "ca. {minutes} min {seconds} sec"
 }

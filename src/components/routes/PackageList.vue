@@ -17,6 +17,7 @@
                 <loading-button class="package-actions__button" color="alert" :loading="removingUploads" @click="removeUploads">{{ $t('ui.packages.uploadReset') }}</loading-button>
             </div>
             <div class="package-actions__inner" v-else-if="totalChanges && !uploading">
+                <cloud-status button-class="package-actions__button"/>
                 <p class="package-actions__text">{{ $t('ui.packages.changesMessage', { total: totalChanges }, totalChanges) }}</p>
                 <button class="package-actions__button widget-button" @click="dryrunChanges">{{ $t('ui.packages.changesDryrun') }}</button>
                 <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ $t('ui.packages.changesApply') }}</button>
@@ -33,6 +34,7 @@
     import PackageBase from './Packages/Base';
     import PackageUploads from './Packages/Uploads';
     import LocalPackage from './Packages/LocalPackage';
+    import CloudStatus from '../fragments/CloudStatus';
 
     const sortPackages = (a, b) => {
         if (a.name === 'contao/manager-bundle') {
@@ -47,7 +49,7 @@
     };
 
     export default {
-        components: { PackageBase, PackageUploads, LocalPackage, LoadingButton },
+        components: { PackageBase, PackageUploads, LocalPackage, LoadingButton, CloudStatus },
 
         computed: {
             ...mapState('packages', {

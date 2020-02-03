@@ -67,7 +67,6 @@
 
     .package-actions {
         position: fixed;
-        overflow: hidden;
         left: 0;
         right: 0;
         bottom: 0;
@@ -108,7 +107,8 @@
             display: none;
 
             @include screen(600) {
-                display: inline;
+                flex-grow: 1;
+                display: initial;
                 margin: 0 8px;
                 font-weight: $font-weight-bold;
             }
