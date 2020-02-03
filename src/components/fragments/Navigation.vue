@@ -259,7 +259,7 @@
 
                     &:before {
                         left: auto;
-                        right: 22px;
+                        right: 18px;
                     }
                 }
             }
