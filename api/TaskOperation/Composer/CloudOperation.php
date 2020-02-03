@@ -214,7 +214,7 @@ class CloudOperation implements TaskOperationInterface
                         'taskoperation.cloud.queuedDetail',
                         [
                             'seconds' => $job->getWaitingTime(),
-                            'jobs' => $job->getJobsInQueue(),
+                            'jobs' => $job->getJobsInQueue() + $job->getWorkers(),
                             'workers' => $job->getWorkers(),
                         ]
                     )
