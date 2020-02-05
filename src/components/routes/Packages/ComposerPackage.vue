@@ -63,11 +63,10 @@
     import PackageConstraint from '../../fragments/PackageConstraint';
     import ButtonGroup from '../../widgets/ButtonGroup';
     import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
-    import InstallButton from '../../fragments/InstallButton';
 
     export default {
         mixins: [packageStatus],
-        components: { Package, FeaturePackage, PackageConstraint, ButtonGroup, InstallButton, DetailsButton },
+        components: { Package, FeaturePackage, PackageConstraint, ButtonGroup, DetailsButton },
 
         props: {
             data: {
