@@ -1,5 +1,3 @@
-const SriPlugin = require('webpack-subresource-integrity');
-
 module.exports = {
     productionSourceMap: false,
     baseUrl: '',
@@ -27,12 +25,6 @@ module.exports = {
                 crossOriginLoading: 'anonymous',
             },
 
-            plugins: [
-                new SriPlugin({
-                    hashFuncNames: ['sha384'],
-                    enabled: process.env.NODE_ENV === 'production',
-                }),
-            ],
             module: {
                 rules: [
                     {
