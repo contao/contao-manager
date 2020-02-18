@@ -77,7 +77,7 @@
     "ui.server.config.formText": "利用しているサーバーやホスティングプロバイダーに合致した構成を選択してください。独自の構成をする場合は「その他…」を選択してください。",
     "ui.server.config.customTitle": "独自の構成",
     "ui.server.config.customText": "PHPの実行ファイルのパスを入力してください。Webのプロセスと同じバージョンのPHPであることを忘れずに確認してください。",
-    "ui.server.config.cloudTitle": "ComposerリゾルバークラウドCloud",
+    "ui.server.config.cloudTitle": "Composerリゾルバークラウド",
     "ui.server.config.cloudText": "Composerリゾルバークラウドによって、サーバーが十分なローカルのメモリを提供しない場合でもComposerの依存関係のインストールが可能になります。パッケージの情報がContao Associationが運用するクラウドに送信されることに注意してください。",
     "ui.server.config.cloud": "Composerリゾルバークラウドを使用",
     "ui.server.config.detected": "サーバーを自動的に検出しました。",

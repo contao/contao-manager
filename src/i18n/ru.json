@@ -59,6 +59,8 @@
     "ui.server.prerequisite": "Проверка отменена из-за отсутствия необходимых условий.",
     "ui.server.selfUpdate.title": "Обновления Contao Manager",
     "ui.server.selfUpdate.update": "Доступна новая версия Contao Manager {latest}.",
+    "ui.server.selfUpdate.manualUpdate": "Доступна новая версия Contao Manager {latest}. Ваш сервер не поддерживает автоматическое обновление, загрузите новую версию из {download}.",
+    "ui.server.selfUpdate.manualUpdateUrl": "https://contao.org/en/download.html",
     "ui.server.selfUpdate.latest": "Вы используете последнюю версию {current}.",
     "ui.server.selfUpdate.dev": "Тестовые сборки не поддерживает автоматическое обновление.",
     "ui.server.selfUpdate.unsupported": "Доступна новая версия, но она не поддерживает вашу версию PHP.",
