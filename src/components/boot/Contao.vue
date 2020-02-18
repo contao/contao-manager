@@ -6,7 +6,7 @@
             <p class="contao-check__description">{{ $t('ui.server.contao.description') }}</p>
             <p class="contao-check__version"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
             <p class="contao-check__version"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
-            <p class="contao-check__version" v-html="$t('ui.server.contao.releaseplan')"></p>
+            <p class="contao-check__version" v-html="$t('ui.server.contao.releaseplan')"/>
         </header>
 
         <section class="contao-check__form">
@@ -55,7 +55,7 @@
 
         computed: {
             versions: vm =>({
-                '4.8': `Contao 4.8 (${vm.$t('ui.server.contao.latestTitle')})`,
+                '4.9': `Contao 4.9 (${vm.$t('ui.server.contao.latestTitle')})`,
                 '4.4': `Contao 4.4 (${vm.$t('ui.server.contao.ltsTitle')})`,
             }),
 
