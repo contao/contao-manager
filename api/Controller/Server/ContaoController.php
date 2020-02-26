@@ -146,6 +146,8 @@ class ContaoController
             [
                 '.',
                 '..',
+                '.env',
+                '.env.local',
                 '.git',
                 '.idea',
                 'cgi-bin',
