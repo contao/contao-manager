@@ -107,6 +107,7 @@
     "ui.server.contao.ltsText": "LTS верзија има продужен период подршке до 4 године.",
     "ui.server.contao.latestTitle": "Последња верзија",
     "ui.server.contao.latestText": "Нова верзија се објављује сваких шест месеци, у фебруару и августу.",
+    "ui.server.contao.noLatest": "Тражена је минимална верзија PHP {version}.",
     "ui.server.contao.releaseplan": "За више информација проверите <a href=\"https://contao.org/en/release-plan.html\" target=\"_blank\">Contao План пуштања</a>.",
     "ui.server.contao.formTitle": "Инсталација Contao",
     "ui.server.contao.formText": "Изаберите верзију Contao коју желите инсталирати.",

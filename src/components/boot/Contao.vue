@@ -5,7 +5,8 @@
             <h1 class="contao-check__headline">{{ $t('ui.server.contao.headline') }}</h1>
             <p class="contao-check__description">{{ $t('ui.server.contao.description') }}</p>
             <p class="contao-check__version"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
-            <p class="contao-check__version"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
+            <p class="contao-check__version" v-if="supportsLatest"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
+            <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.2' }) }}</span></p>
             <p class="contao-check__version" v-html="$t('ui.server.contao.releaseplan')"/>
         </header>
 
@@ -48,16 +49,25 @@
 
         data: () => ({
             processing: false,
+            supportsLatest: true,
             version: '',
             coreOnly: 'no',
             noUpdate: false,
         }),
 
         computed: {
-            versions: vm =>({
-                '4.9': `Contao 4.9 (${vm.$t('ui.server.contao.latestTitle')})`,
-                '4.4': `Contao 4.4 (${vm.$t('ui.server.contao.ltsTitle')})`,
-            }),
+            versions() {
+                if (!this.supportsLatest) {
+                    return {
+                        '4.4': `Contao 4.4 (${this.$t('ui.server.contao.ltsTitle')})`,
+                    };
+                }
+
+                return {
+                    '4.9': `Contao 4.9 (${this.$t('ui.server.contao.latestTitle')} / ${this.$t('ui.server.contao.ltsTitle')})`,
+                    '4.4': `Contao 4.4 (${this.$t('ui.server.contao.ltsTitle')})`,
+                };
+            },
 
             packages: vm => ({
                 'no': vm.$t('ui.server.contao.coreOnlyNo'),
@@ -90,6 +100,7 @@
 
                         this.$store.commit('setVersions', result);
                     }
+
                 } catch (response) {
                     if (response.status === 503) {
                         this.bootState = 'error';
@@ -129,6 +140,16 @@
                 window.location.reload();
             },
         },
+
+        async mounted() {
+            if (this.current) {
+                const phpWeb = await this.$store.dispatch('server/php-web/get');
+
+                if (phpWeb.version_id < 70200) {
+                    this.supportsLatest = false;
+                }
+            }
+        }
     };
 </script>
 

@@ -109,6 +109,7 @@
     "ui.server.contao.ltsText": "LTS版は最大で4年の延長したサポート期間があります。",
     "ui.server.contao.latestTitle": "最新",
     "ui.server.contao.latestText": "最新のバージョンは6か月毎に8月と2月にリリースされます。",
+    "ui.server.contao.noLatest": "最低でもPHP {version}が必要です。",
     "ui.server.contao.releaseplan": "より詳しい情報は<a href=\"https://contao.org/en/release-plan.html\" target=\"_blank\">Contao Release Plan</a>を参照してください。",
     "ui.server.contao.formTitle": "Contaoのインストール",
     "ui.server.contao.formText": "インストールするContaoのバージョンを選択してください。",

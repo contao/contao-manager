@@ -107,6 +107,7 @@
     "ui.server.contao.ltsText": "LTS versijai ir pagarināts atbalsta periods līdz pat četriem gadiem.",
     "ui.server.contao.latestTitle": "Jaunākais",
     "ui.server.contao.latestText": "Jauna jaunākā versija tiek izlaista ik pēc sešiem mēnešiem februārī un augustā.",
+    "ui.server.contao.noLatest": "Nepieciešams vismaz PHP {version}.",
     "ui.server.contao.releaseplan": "See the <a href=\"https://contao.org/en/release-plan.html\" target=\"_blank\">Contao Release Plan</a> for detailed information.",
     "ui.server.contao.formTitle": "Contao instalācija",
     "ui.server.contao.formText": "Izvēlieties Contao versiju instalācijai.",

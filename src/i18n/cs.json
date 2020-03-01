@@ -107,6 +107,7 @@
     "ui.server.contao.ltsText": "Pro verzi LTS vychází po několik let další opravy, ale žádné nové funkce.",
     "ui.server.contao.latestTitle": "Poslední",
     "ui.server.contao.latestText": "Nová verze vychází každý půlrok v únoru a srpnu.",
+    "ui.server.contao.noLatest": "Vyžaduje přinejmenším PHP {version}.",
     "ui.server.contao.releaseplan": "Více informací získáte v <a href=\"https://contao.org/en/release-plan.html\" target=\"_blank\">realizačním plánu</a>",
     "ui.server.contao.formTitle": "Instalace Contaa",
     "ui.server.contao.formText": "Vyberte verzi Contaa, kterou chcete nainstalovat.",

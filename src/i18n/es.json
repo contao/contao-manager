@@ -107,6 +107,7 @@
     "ui.server.contao.ltsText": "La versión a largo plazo (LTS) tiene un período de soporte extendido de hasta cuatro años.",
     "ui.server.contao.latestTitle": "Última",
     "ui.server.contao.latestText": "Una nueva versión más reciente se lanza cada seis meses en febrero y agosto.",
+    "ui.server.contao.noLatest": "Requiere al menos PHP {version}.",
     "ui.server.contao.releaseplan": "Consulte el <a href=\"https://contao.org/en/release-plan.html\" target=\"_blank\">Plan de publicación de Contao</a> para obtener información detallada.",
     "ui.server.contao.formTitle": "Instalación de Contao",
     "ui.server.contao.formText": "Seleccione la versión de Contao para instalar.",

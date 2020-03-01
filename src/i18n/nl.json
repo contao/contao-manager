@@ -107,6 +107,7 @@
     "ui.server.contao.ltsText": "De LTS-versie heeft een verlengde ondersteuningsperiode van maximaal vier jaar.",
     "ui.server.contao.latestTitle": "Nieuwste",
     "ui.server.contao.latestText": "De laatste nieuwe versie verschijnt elke zes maanden, in februari en augustus.",
+    "ui.server.contao.noLatest": "Vereist tenminste PHP {version}.",
     "ui.server.contao.releaseplan": "Zie het <a href=\"https://contao.org/en/release-plan.html\" target=\"_blank\">Contao Release Plan</a> voor gedetailleerde informatie.",
     "ui.server.contao.formTitle": "Contao Installatie",
     "ui.server.contao.formText": "Selecteer de Contao versie om te installeren.",
