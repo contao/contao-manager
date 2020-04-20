@@ -7,7 +7,8 @@ import features from 'contao-package-list/src/store/packages/features';
 import uploads from './packages/uploads';
 
 const hiddenPackages = ['contao/core-bundle', 'contao/installation-bundle', 'contao/conflicts'];
-const isVisible = (name, getters) => name.includes('/') && !hiddenPackages.includes(name) && !getters.packageFeature(name);
+const isCountable = (name) => name.includes('/') && !hiddenPackages.includes(name);
+const isVisible = (name, getters) => isCountable(name) && !getters.packageFeature(name);
 
 export default {
     namespaced: true,
@@ -42,9 +43,9 @@ export default {
         packageFeature: (s, g) => name => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
         packageVisible: (s, g) => name => isVisible(name, g),
 
-        totalChanges: state => Object.keys(state.add).length
-            + Object.keys(state.required).length
-            + Object.keys(state.change).length
+        totalChanges: state => Object.keys(state.add).filter(isCountable).length
+            + Object.keys(state.required).filter(isCountable).length
+            + Object.keys(state.change).filter(isCountable).length
             + state.update.length
             + state.remove.length
             - Object.values(state.add).filter(p => Object.keys(state.required).includes(p.name)).length
