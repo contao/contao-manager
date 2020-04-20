@@ -32,7 +32,7 @@ export default {
         packageInstalled: (state, g) => name => Object.keys(state.installed).includes(name) && !g.packageMissing(name),
         versionInstalled: state => (name, version) => Object.keys(state.installed).includes(name) && state.installed[name].version === version,
         packageRoot: state => name => Object.keys(state.root.require).includes(name),
-        packageRequired: state => name => Object.keys(state.required).includes(name) && state.required[name].constraint,
+        packageRequired: state => name => Object.keys(state.required).includes(name) && !!state.required[name].constraint,
         packageMissing: state => name => Object.keys(state.required).includes(name) && !state.required[name].constraint,
         packageAdded: state => name => Object.keys(state.add).includes(name),
         packageChanged: state => name => Object.keys(state.change).includes(name),
