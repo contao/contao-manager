@@ -5,10 +5,14 @@
         :uncloseable-hint="uncloseableHint"
     >
         <template #release v-if="isUpload">
-            <fieldset>
-                <input type="text" class="disabled" :title="$t('ui.package.privateTitle')" :value="$t('ui.package.private')" disabled>
-                <button class="widget-button widget-button--gear" :title="$t('ui.package.uploadConstraint')" disabled>{{ $t('ui.package.private') }}</button>
-            </fieldset>
+            <package-constraint
+                disabled
+                :data="data"
+                :input-title="$t('ui.package.privateTitle')"
+                :input-value="$t('ui.package.private')"
+                :button-title="$t('ui.package.uploadConstraint')"
+                :button-value="$t('ui.package.private')"
+            />
             <div class="package__version package__version--release" v-if="data.version">
                 <strong>{{ $t('ui.package.version', { version: data.version }) }}</strong>
                 <time :dateTime="data.time" v-if="data.time">({{ data.time | datimFormat }})</time>
@@ -24,10 +28,11 @@
 
     import metadata from 'contao-package-list/src/mixins/metadata';
     import ComposerPackage from './ComposerPackage';
+    import PackageConstraint from "../../fragments/PackageConstraint";
 
     export default {
         mixins: [metadata],
-        components: { ComposerPackage },
+        components: {PackageConstraint, ComposerPackage },
 
         props: {
             data: {

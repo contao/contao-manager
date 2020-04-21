@@ -4,19 +4,20 @@
             ref="constraint"
             type="text"
             :placeholder="constraintPlaceholder"
-            :title="constraint"
+            :title="inputTitle || constraint"
             v-model="constraint"
-            :class="{ disabled: willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired), error: constraintError }"
-            :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
+            :class="{ disabled: disabled || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired), error: constraintError }"
+            :disabled="disabled || !constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
             @keypress.enter.prevent="saveConstraint"
             @keypress.esc.prevent="resetConstraint"
             @blur="saveConstraint"
         >
         <button
             :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
+            :title="buttonTitle"
             @click="editConstraint"
-            :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
-        >{{ $t('ui.package.editConstraint') }}</button>
+            :disabled="disabled || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
+        >{{ buttonValue || $t('ui.package.editConstraint') }}</button>
     </fieldset>
 </template>
 
@@ -33,6 +34,11 @@
                 type: Object,
                 required: true,
             },
+            disabled: Boolean,
+            inputTitle: String,
+            inputValue: String,
+            buttonTitle: String,
+            buttonValue: String,
         },
 
         data: () => ({
@@ -44,6 +50,10 @@
 
         computed: {
             constraintPlaceholder() {
+                if (this.inputValue) {
+                    return '';
+                }
+
                 if (!Object.keys(this.$store.state.packages.root.require).includes(this.data.name)) {
                     return this.$t('ui.package.latestConstraint');
                 }
@@ -115,6 +125,11 @@
             },
 
             resetConstraint() {
+                if (this.inputValue) {
+                    this.constraint = this.inputValue;
+                    return;
+                }
+
                 if (this.willBeInstalled) {
                     this.constraint = this.constraintAdded;
                 } else if (this.isChanged) {
@@ -136,6 +151,10 @@
         },
 
         watch: {
+            inputValue() {
+                this.resetConstraint();
+            },
+
             constraintAdded(value) {
                 this.constraint = value;
             },
