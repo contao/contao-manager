@@ -153,6 +153,7 @@ class ContaoController
                 'cgi-bin',
                 'contao-manager',
                 'web',
+                'plesk-stat',
                 '.bash_profile',
                 '.bash_logout',
                 '.bashrc',
