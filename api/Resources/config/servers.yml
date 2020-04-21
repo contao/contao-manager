@@ -330,6 +330,7 @@ configs:
         website: timmehosting.de
         php:
             /opt/php-{major}.{minor}.{release}/bin/php: []
+            /opt/php-{major}.{minor}/bin/php: []
 
     tobiasbauer:
         name: Tobias Bauer
