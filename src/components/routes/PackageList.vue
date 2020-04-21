@@ -70,7 +70,7 @@
             installedPackages: vm => vm.visibleRequired.filter(pkg => vm.packageMissing(pkg.name)).concat(vm.visibleInstalled).sort(sortPackages),
 
             removingUploads: vm => vm.removing.length > 0,
-            showHeadline: vm => vm.hasAdded || vm.hasUploads || vm.files.length,
+            showHeadline: vm => vm.installedPackages.length > 0 && (vm.hasAdded || vm.hasUploads || vm.files.length),
             hasAdded: vm => vm.addedPackages.length,
         },
 

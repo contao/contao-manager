@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 
+import bootstrap from 'contao-package-list/src/bootstrap';
 import router from './router';
 import views from './router/views';
 import store from './store';
@@ -43,15 +44,4 @@ Vue.http.interceptors.push((request, next) => {
     });
 });
 
-i18n.init().then(() => {
-    /* eslint-disable no-new */
-    const $vue = new Vue({
-        router,
-        store,
-        render: h => h(App),
-    });
-
-    $vue.$store.commit('packages/details/setRouter', router);
-
-    $vue.$mount('#app');
-});
+bootstrap(Vue, App, router, store, i18n);

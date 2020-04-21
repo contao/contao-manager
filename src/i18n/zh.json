@@ -107,6 +107,7 @@
     "ui.server.contao.ltsText": "LTS版本将会延长支持长达四年。",
     "ui.server.contao.latestTitle": "最新",
     "ui.server.contao.latestText": "每六个月在二月和八月发布一个最新版本。",
+    "ui.server.contao.noLatest": "不低于 PHP {version}。",
     "ui.server.contao.releaseplan": "查看 <a href=\"https://contao.org/en/release-plan.html\" target=\"_blank\">Contao 发布计划</a> 以获取详细信息。",
     "ui.server.contao.formTitle": "Contao 安装",
     "ui.server.contao.formText": "选择要安装的Contao版本。",
