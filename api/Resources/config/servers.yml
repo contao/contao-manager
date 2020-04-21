@@ -97,7 +97,7 @@ configs:
         name: cyon GmbH
         website: www.cyon.ch
         php:
-            /opt/alt/php{major}{minor}/usr/bin/php: []
+            /opt/alt/php{major}{minor}/usr/bin/php: ['-d', 'memory_limit=-1']
 
     dmservices:
         name: DM Solutions e.K.
