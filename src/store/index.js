@@ -8,6 +8,7 @@ import views from '../router/views';
 import auth from './auth';
 import algolia from 'contao-package-list/src/store/algolia';
 import config from './config';
+import modals from 'contao-package-list/src/store/modals';
 import packages from './packages';
 import contao from './contao';
 import server from './server';
@@ -16,7 +17,7 @@ import tasks from './tasks';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    modules: { auth, algolia, config, packages, contao, server, tasks },
+    modules: { auth, algolia, config, modals, packages, contao, server, tasks },
 
     state: {
         view: views.INIT,

@@ -1,10 +1,12 @@
 /* eslint-disable no-param-reassign */
 
 import Vue from 'vue';
+import TaskPopup from "../components/fragments/TaskPopup";
 
 let handleTask;
 let failTask;
 let pending = 0;
+let ignoreErrors = false;
 
 const pollTask = (store, resolve, reject, delay = 1000, attempt = 1) => {
     setTimeout(() => {
@@ -26,13 +28,16 @@ handleTask = (response, store, resolve, reject) => {
     }
 
     if (!(response.body instanceof Object)) {
-        store.commit('apiError', response, { root: true });
+        if (!ignoreErrors) {
+            store.commit('apiError', response, {root: true});
+        }
         reject();
         return;
     }
 
     const task = response.body;
 
+    store.commit('modals/open', { id: 'current-task', component: TaskPopup, priority: 10 }, { root: true });
     store.commit('setCurrent', task);
 
     switch (task.status) {
@@ -43,7 +48,7 @@ handleTask = (response, store, resolve, reject) => {
 
         case 'terminated': // BC
         case 'complete':
-            if (window.localStorage.getItem('contao_manager_autoclose') === '1' && task.autoclose) {
+            if (task.autoclose && window.localStorage.getItem('contao_manager_autoclose') === '1') {
                 store.dispatch('deleteCurrent');
             }
             resolve(task);
@@ -84,8 +89,8 @@ export default {
         consoleOutput: '',
         current: null,
 
-        await: false,
         deleting: false,
+        initialized: false,
     },
 
     mutations: {
@@ -103,20 +108,17 @@ export default {
             state.deleting = !!value;
         },
 
-        setAwait(state, value) {
-            state.await = !!value;
+        setInitialized(state, value) {
+            state.initialized = value;
         },
     },
 
     actions: {
-        reload(store) {
-            return new Promise((resolve, reject) => {
-                if (store.state.status !== null) {
-                    reject();
-                }
-
-                pollTask(store, resolve, reject, 0);
-            });
+        init(store) {
+            const init = () => {
+                store.commit('setInitialized', true);
+            };
+            pollTask(store, init, init);
         },
 
         execute(store, task) {
@@ -125,11 +127,12 @@ export default {
                     reject();
                 }
 
-                store.commit('setAwait', task.await);
-                delete task.await;
+                ignoreErrors = !!task.ignoreErrors;
+                delete task.ignoreErrors;
 
                 store.commit('setCurrent', task);
                 store.commit('setStatus', 'created');
+                store.commit('modals/open', {id: 'current-task', component: TaskPopup, priority: 10 }, { root: true });
 
                 Vue.http.put('api/task', task).then(
                     response => handleTask(response, store, resolve, reject),
@@ -155,11 +158,13 @@ export default {
             return Vue.http.delete('api/task').then(
                 () => {
                     commit('setCurrent', null);
+                    commit('modals/close', 'current-task', { root: true });
                 },
                 (response) => {
                     // Bad request, there are no tasks
                     if (response.status === 400) {
                         commit('setCurrent', null);
+                        commit('modals/close', 'current-task', { root: true });
                         return;
                     }
 

@@ -84,7 +84,7 @@
 
             async update() {
                 try {
-                    await this.$store.dispatch('tasks/execute', { name: 'manager/self-update', await: true });
+                    await this.$store.dispatch('tasks/execute', { name: 'manager/self-update', ignoreErrors: true });
                 } catch (err) {
                     // ignore error and reload
                 }

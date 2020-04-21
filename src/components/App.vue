@@ -6,7 +6,7 @@
             <a :href="$t('ui.app.httpsHref')" target="_blank" class="https-warning__link">{{ $t('ui.app.httpsLink') }}</a>
         </div>
 
-        <error v-if="hasError"/>
+        <error v-if="error"/>
 
         <transition name="fade" mode="out-in" style="height:100%">
 
@@ -17,17 +17,15 @@
                 </div>
             </div>
 
-            <component :is="currentView" :class="hasPopup ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
+            <component :is="currentView" :class="hasModal ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
 
             <div v-else>
-                <router-view :class="hasPopup ? 'blur-in' : 'blur-out'"/>
+                <router-view :class="hasModal ? 'blur-in' : 'blur-out'"/>
             </div>
 
         </transition>
 
-        <logout-warning v-if="warnForLogout"/>
-        <task-popup v-else-if="taskRunning"/>
-        <package-details v-else-if="showPackage"/>
+        <component :is="currentModal" v-if="hasModal"/>
     </div>
 </template>
 
@@ -35,9 +33,7 @@
     import { mapState, mapGetters } from 'vuex';
     import views from '../router/views';
 
-    import TaskPopup from './fragments/TaskPopup';
     import PackageDetails from './fragments/PackageDetails';
-    import LogoutWarning from './fragments/LogoutWarning';
     import Loader from 'contao-package-list/src/components/fragments/Loader';
 
     import Error from './views/Error';
@@ -47,7 +43,7 @@
     import Recovery from './views/Recovery';
 
     export default {
-        components: { Loader, TaskPopup, PackageDetails, LogoutWarning, Error },
+        components: { Loader, Error },
 
         data: () => ({
             views: {
@@ -61,26 +57,11 @@
 
         computed: {
             ...mapState(['view', 'error']),
-            ...mapState('tasks', { taskStatus: 'status', awaitTask: 'await' }),
-            ...mapState('packages', ['installed']),
-            ...mapGetters('auth', ['warnForLogout']),
-
-            ...mapGetters('packages', [
-                'packageInstalled',
-                'packageRequired',
-                'packageAdded',
-                'isSuggested',
-            ]),
-
-            currentPackageName: vm => vm.$route.query.p,
+            ...mapGetters('modals', ['hasModal', 'currentModal']),
 
             isInitializing: vm => vm.view === views.INIT,
             isReady: vm => !vm.isInitializing && !vm.currentView && !vm.loaded,
             isInsecure: () => location.protocol !== 'https:' && location.hostname !== 'localhost',
-            showPackage: vm => vm.currentPackageName && !vm.isInitializing && !vm.currentView && vm.loaded,
-            taskRunning: vm => vm.taskStatus !== null,
-            hasPopup: vm => vm.warnForLogout || vm.taskRunning || !!vm.showPackage,
-            hasError: vm => vm.error !== null && !vm.awaitTask,
 
             currentView: vm => vm.views[vm.view] || null,
         },
@@ -95,9 +76,20 @@
                     } catch (err) {
                         // do nothing
                     }
+
                     this.loaded = true;
+                    this.$store.dispatch('packages/details/init', { vue: this, component: PackageDetails });
                 }
-            }
+            },
+
+            '$store.state.auth.username': function (username) {
+                if (username === null) {
+                    this.$store.commit('tasks/setCurrent', null);
+                    this.$store.commit('tasks/setInitialized', false);
+                } else {
+                    this.$store.dispatch('tasks/init');
+                }
+            },
         },
 
         async mounted() {

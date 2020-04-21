@@ -39,6 +39,7 @@
 
         computed: {
             ...mapState('packages', ['installed']),
+            ...mapState('packages/details', ['current']),
 
             ...mapGetters('packages', [
                 'packageInstalled',
@@ -46,7 +47,7 @@
                 'isSuggested',
             ]),
 
-            data: vm => ({ name: vm.$route.query.p }),
+            data: vm => ({ name: vm.current }),
 
             dependents() {
                 if (!this.installed[this.data.name]) {

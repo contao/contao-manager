@@ -5,7 +5,7 @@
             <h1 class="view-boot__headline">{{ $t('ui.boot.headline') }}</h1>
             <p class="view-boot__description">{{ $t('ui.boot.description') }}</p>
         </header>
-        <main v-if="boot" class="view-boot__checks">
+        <main v-if="tasksInitialized" class="view-boot__checks">
 
             <component v-for="(component, name) in views" :is="component" :current="false" :ready="canShow(name)" :key="name" @result="result" @view="setView"/>
 
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     import views from '../../router/views';
     import routes from '../../router/routes';
 
@@ -45,11 +47,12 @@
 
         data: () => ({
             currentView: null,
-            boot: false,
             status: {},
         }),
 
         computed: {
+            ...mapState('tasks', { tasksInitialized: 'initialized' }),
+
             hasError: vm => Object.values(vm.status).indexOf('error') !== -1,
             autoContinue: vm => (window.localStorage.getItem('contao_manager_booted') === '1'
                     && Object.values(vm.status).indexOf('error') === -1
@@ -143,9 +146,6 @@
 
         created() {
             this.$store.dispatch('server/purgeCache');
-            this.$store.dispatch('tasks/reload').then(() => {
-                this.boot = true;
-            });
             this.setStatus(this.views);
         },
     };

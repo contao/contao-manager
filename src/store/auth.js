@@ -2,26 +2,57 @@
 
 import Vue from 'vue';
 import views from '../router/views';
+import LogoutWarning from "../components/fragments/LogoutWarning";
 
+let timer;
 let countdown;
+let expires;
+let $store;
+
+const startCountdown = function () {
+    clearTimeout(timer);
+
+    expires = (Date.now() + 30 * 60 * 1000);
+    countdown = 30 * 60;
+
+    timer = setInterval(runCountdown, 1000);
+
+    $store.commit('setCountdown', countdown);
+};
+
+const stopCountdown = function () {
+    expires = null;
+    countdown = null;
+    clearInterval(timer);
+    timer = undefined;
+
+    $store.commit('setCountdown', countdown);
+    $store.commit('modals/close', 'logout-warning', { root: true });
+};
+
+const runCountdown = function () {
+    if (countdown > 0) {
+        countdown = Math.floor(Math.max(expires - Date.now(), 0) / 1000);
+    }
+
+    if (countdown <= (5 * 60)) {
+        $store.commit('modals/open', { id: 'logout-warning', component: LogoutWarning, priority: 255 }, { root: true });
+    }
+
+    if (countdown === 0) {
+        $store.dispatch('logout');
+        clearInterval(timer);
+    }
+
+    $store.commit('setCountdown', countdown);
+};
 
 export default {
     namespaced: true,
 
     state: {
         username: null,
-        expires: null,
         countdown: null,
-    },
-
-    getters: {
-        warnForLogout(state) {
-            return state.countdown !== null && state.countdown <= (5 * 60);
-        },
-
-        isExpired(state) {
-            return state.countdown !== null && state.countdown <= 0;
-        }
     },
 
     mutations: {
@@ -29,56 +60,55 @@ export default {
             state.username = username;
         },
 
-        renewCountdown(state) {
-            state.expires = (Date.now() + 30 * 60 * 1000);
-            state.countdown = 30 * 60;
+        setCountdown(state, value) {
+            state.countdown = value;
+        },
 
-            if (!countdown) {
-                countdown = setInterval(() => {
-                    this.commit('auth/countdown');
-                }, 1000);
+        renewCountdown() {
+            if ($store) {
+                startCountdown();
             }
         },
 
-        resetCountdown(state) {
-            state.expires = null;
-            state.countdown = null;
-            clearInterval(countdown);
-            countdown = undefined;
-        },
-
-        countdown(state) {
-            if (state.countdown > 0) {
-                state.countdown = Math.floor(Math.max(state.expires - Date.now(), 0) / 1000);
-            }
-
-            if (state.countdown === 0) {
-                this.dispatch('auth/logout');
+        resetCountdown() {
+            if ($store) {
+                stopCountdown();
             }
         },
     },
 
     actions: {
+        status(store) {
+            $store = store;
 
-        status({ commit }) {
             return Vue.http.get('api/session').then(
                 (response) => {
-                    commit('setUsername', (response.body && response.body.username) ? response.body.username : null);
+                    if (response.body && response.body.username) {
+                        store.commit('setUsername', response.body.username);
+                        startCountdown();
+                    } else {
+                        store.commit('setUsername', null);
+                        stopCountdown();
+                    }
 
                     return response.status;
                 },
                 (response) => {
-                    commit('setUsername', null);
+                    store.commit('setUsername', null);
+                    stopCountdown();
 
                     return response.status;
                 },
             );
         },
 
-        login({ commit }, { username, password }) {
+        login(store, { username, password }) {
+            $store = store;
+
             return Vue.http.post('api/session', { username, password }).then(
                 (response) => {
-                    commit('setUsername', response.body.username);
+                    store.commit('setUsername', response.body.username);
+                    startCountdown();
 
                     return true;
                 },
@@ -94,8 +124,7 @@ export default {
                 if (result) {
                     commit('setUsername', null);
                     commit('setView', views.LOGIN, { root: true });
-                    clearInterval(countdown);
-                    countdown = undefined;
+                    stopCountdown();
                 }
 
                 return result;

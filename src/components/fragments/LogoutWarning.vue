@@ -1,30 +1,29 @@
 <template>
-    <div class="popup-overlay">
-        <div ref="popup" :class="popupClass">
-            <h1 :class="headlineClass">{{$t('ui.logout.headline')}}</h1>
+    <popup :popup-class="popupClass">
+        <h1 :class="headlineClass">{{$t('ui.logout.headline')}}</h1>
 
-            <template v-if="countdown > 0">
-                <p class="logout-warning__text">{{$t('ui.logout.warning')}}</p>
-                <p class="logout-warning__countdown">{{minutes}}:{{seconds}}</p>
+        <template v-if="countdown > 0">
+            <p class="logout-warning__text">{{$t('ui.logout.warning')}}</p>
+            <p class="logout-warning__countdown">{{minutes}}:{{seconds}}</p>
 
-                <loading-button color="primary" :loading="renew" :disabled="logout" @click="keepAlive">{{$t('ui.logout.renew')}}</loading-button>
-                <loading-button @click="doLogout" :loading="logout" :disabled="renew">{{$t('ui.logout.logout')}}</loading-button>
-            </template>
-            <template v-else>
-                <p class="logout-warning__text">{{$t('ui.logout.expired')}}</p>
-                <loading-button @click="close">{{$t('ui.logout.login')}}</loading-button>
-            </template>
-        </div>
-    </div>
+            <loading-button color="primary" :loading="renew" :disabled="logout" @click="keepAlive">{{$t('ui.logout.renew')}}</loading-button>
+            <loading-button @click="doLogout" :loading="logout" :disabled="renew">{{$t('ui.logout.logout')}}</loading-button>
+        </template>
+        <template v-else>
+            <p class="logout-warning__text">{{$t('ui.logout.expired')}}</p>
+            <loading-button @click="close">{{$t('ui.logout.login')}}</loading-button>
+        </template>
+    </popup>
 </template>
 
 <script>
     import { mapState } from 'vuex';
 
+    import Popup from 'contao-package-list/src/components/fragments/Popup';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
-        components: { LoadingButton },
+        components: { Popup, LoadingButton },
 
         data: () => ({
             renew: false,
@@ -73,7 +72,6 @@
             async doLogout() {
                 this.logout = true;
                 await this.$store.dispatch('auth/logout');
-                this.$store.commit('auth/resetCountdown');
                 this.logout = false;
             },
 

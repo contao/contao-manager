@@ -73,7 +73,6 @@
 
         mounted() {
             this.$refs.username.focus();
-            this.$store.commit('tasks/setCurrent', null);
         },
     };
 </script>
