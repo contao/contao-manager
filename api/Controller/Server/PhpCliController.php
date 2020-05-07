@@ -49,6 +49,21 @@ class PhpCliController
 
         $process->run();
 
-        return json_decode($process->getOutput(), true);
+        $output = $process->getOutput();
+        $result = json_decode($output, true);
+
+        if (!\is_array($result)) {
+            return [
+                'version' => PHP_VERSION,
+                'version_id' => \PHP_VERSION_ID,
+                'problem' => [
+                    'title' => 'Received invalid JSON output from the command line',
+                    'type' => 'https://php.net/json_decode',
+                    'detail' => $output
+                ],
+            ];
+        }
+
+        return $result;
     }
 }
