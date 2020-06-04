@@ -3,11 +3,11 @@
         <input
             ref="constraint"
             type="text"
-            :placeholder="constraintPlaceholder"
-            :title="inputTitle || constraint"
-            v-model="constraint"
-            :class="{ disabled: disabled || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired), error: constraintError }"
-            :disabled="disabled || !constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
+            :placeholder="inputPlaceholder"
+            :title="inputTitle"
+            v-model="inputValue"
+            :class="{ disabled: willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload, error: constraintError }"
+            :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload"
             @keypress.enter.prevent="saveConstraint"
             @keypress.esc.prevent="resetConstraint"
             @blur="saveConstraint"
@@ -16,8 +16,8 @@
             :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
             :title="buttonTitle"
             @click="editConstraint"
-            :disabled="disabled || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
-        >{{ buttonValue || $t('ui.package.editConstraint') }}</button>
+            :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload"
+        >{{ buttonValue }}</button>
     </fieldset>
 </template>
 
@@ -34,11 +34,6 @@
                 type: Object,
                 required: true,
             },
-            disabled: Boolean,
-            inputTitle: String,
-            inputValue: String,
-            buttonTitle: String,
-            buttonValue: String,
         },
 
         data: () => ({
@@ -49,16 +44,18 @@
         }),
 
         computed: {
-            constraintPlaceholder() {
-                if (this.inputValue) {
-                    return '';
-                }
+            buttonTitle: vm => vm.isUpload ? vm.$t('ui.package.uploadConstraint') : '',
+            buttonValue: vm => vm.isUpload ? vm.$t('ui.package.editConstraint') : vm.$t('ui.package.private'),
+            inputTitle: vm => vm.isUpload ? vm.$t('ui.package.privateTitle') : vm.constraint,
+            inputPlaceholder: vm => (!vm.isUpload && !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name)) ? this.$t('ui.package.latestConstraint') : '',
 
-                if (!Object.keys(this.$store.state.packages.root.require).includes(this.data.name)) {
-                    return this.$t('ui.package.latestConstraint');
-                }
-
-                return '';
+            inputValue: {
+                get: vm => vm.isUpload ? vm.$t('ui.package.private') : vm.constraint,
+                set(value) {
+                    if (!this.isUpload) {
+                        this.constraint = value;
+                    }
+                },
             },
         },
 
@@ -125,11 +122,6 @@
             },
 
             resetConstraint() {
-                if (this.inputValue) {
-                    this.constraint = this.inputValue;
-                    return;
-                }
-
                 if (this.willBeInstalled) {
                     this.constraint = this.constraintAdded;
                 } else if (this.isChanged) {
@@ -151,10 +143,6 @@
         },
 
         watch: {
-            inputValue() {
-                this.resetConstraint();
-            },
-
             constraintAdded(value) {
                 this.constraint = value;
             },

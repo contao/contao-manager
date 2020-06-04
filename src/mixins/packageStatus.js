@@ -44,6 +44,11 @@ export default {
         isVisible: vm => vm.packageVisible(vm.data.name),
         isContao: vm => vm.data.name === 'contao/manager-bundle',
 
+        isUpload: vm => {
+            return vm.metadata && vm.metadata['installation-source'] === 'dist'
+            && vm.metadata.dist && (new RegExp('/contao-manager/packages/[^/]+.zip$', 'i')).test(vm.metadata.dist.url)
+        },
+
         installedVersion: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].version : null,
         installedTime: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].time : null,
 
