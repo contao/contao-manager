@@ -93,6 +93,12 @@ configs:
         php:
             /opt/plesk/php/{major}.{minor}/bin/php: []
 
+    computech:
+        name: CompuTech Informatik AG
+        website: computech.ch
+        php:
+            /opt/alt/php{major}{minor}/usr/bin/php: []
+
     cyon:
         name: cyon GmbH
         website: www.cyon.ch
@@ -116,6 +122,13 @@ configs:
         website: www.df.eu
         php:
             /usr/local/bin/php{major}-{major}{minor}LATEST-CLI: []
+
+    easyname:
+        name: easyname GmbH
+        website: www.easyname.at
+        php:
+            /usr/bin/php{major}{minor}: []
+            /usr/bin/php{major}: []
 
     edis:
         name: EDIS GmbH
