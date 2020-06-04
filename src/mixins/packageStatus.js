@@ -23,7 +23,7 @@ export default {
             'packageRemoved',
             'packageFeature',
             'packageVisible',
-            'isSuggested',
+            'packageSuggested',
         ]),
 
         isInstalled: vm => vm.packageInstalled(vm.data.name),
@@ -36,6 +36,7 @@ export default {
         willBeRemoved: vm => vm.packageRemoved(vm.data.name),
         willBeInstalled: vm => vm.packageAdded(vm.data.name),
         isModified: vm => vm.isUpdated || vm.isChanged || vm.willBeRemoved || vm.willBeInstalled,
+        isSuggested: vm => vm.packageSuggested(vm.data.name),
 
         isPrivate: vm => vm.metadata && !!vm.metadata.private,
         isDependency: vm => vm.metadata && !!vm.metadata.dependency,
@@ -46,7 +47,7 @@ export default {
         installedVersion: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].version : null,
         installedTime: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].time : null,
 
-        canBeInstalled: vm => !vm.isPrivate && (!vm.isDependency || vm.isSuggested(vm.data.name)),
+        canBeInstalled: vm => !vm.isPrivate && (!vm.isDependency || vm.isSuggested),
 
         constraintInstalled() {
             if (!this.isRootInstalled) {

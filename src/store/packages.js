@@ -42,6 +42,9 @@ export default {
         packageFeatures: () => name => features[name] ? features[name] : [],
         packageFeature: (s, g) => name => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
         packageVisible: (s, g) => name => isVisible(name, g),
+        packageSuggested: state => name => !!Object.values(state.local).find(
+            pkg => ((pkg.type.substr(0, 7) === 'contao-' || pkg.name.substr(0, 7) === 'contao/') && pkg.suggest && pkg.suggest.hasOwnProperty(name))
+        ),
 
         totalChanges: state => Object.keys(state.add).filter(isCountable).length
             + Object.keys(state.required).filter(isCountable).length
@@ -58,8 +61,6 @@ export default {
             - state.remove.filter(pkg => Object.keys(state.required).includes(pkg)).length,
 
         canResetChanges: (s, get) => get.totalChanges > get.totalRequired,
-
-        isSuggested: state => name => !!Object.values(state.local).find(pkg => (pkg.type.substr(0, 7) === 'contao-' && pkg.suggest && pkg.suggest.hasOwnProperty(name))),
 
         visibleRequired: (s, g) => Object.values(s.required).filter(pkg => isVisible(pkg.name, g)),
         visibleInstalled: (s, g) => Object.values(g.installed).filter(pkg => isVisible(pkg.name, g)),

@@ -17,7 +17,7 @@
             <div v-else></div>
         </template>
         <template #suggest-actions="{ name }">
-            <install-button inline small :data="{ name }" v-if="isSuggested(name)"/>
+            <install-button inline small :data="{ name }" v-if="packageSuggested(name)"/>
         </template>
         <template #features-actions="{ name }">
             <install-button inline small :data="{ name }" v-if="!packageInstalled(name)"/>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import { mapState } from 'vuex';
     import packageStatus from '../../mixins/packageStatus';
 
     import PackageDetails from 'contao-package-list/src/components/fragments/PackageDetails';
@@ -39,12 +39,6 @@
 
         computed: {
             ...mapState('packages', ['installed']),
-
-            ...mapGetters('packages', [
-                'packageInstalled',
-                'packageAdded',
-                'isSuggested',
-            ]),
 
             data: vm => ({ name: vm.$route.query.p }),
 

@@ -65,13 +65,6 @@
             ...mapState('packages', ['installed']),
             ...mapGetters('auth', ['warnForLogout']),
 
-            ...mapGetters('packages', [
-                'packageInstalled',
-                'packageRequired',
-                'packageAdded',
-                'isSuggested',
-            ]),
-
             currentPackageName: vm => vm.$route.query.p,
 
             isInitializing: vm => vm.view === views.INIT,
