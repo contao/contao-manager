@@ -124,7 +124,7 @@
 
     <target name="box-prod">
         <echo message="Creating the .phar file" />
-        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://github.com/humbug/box/releases/download/3.5.1/box.phar > box.phar" />
+        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://github.com/humbug/box/releases/download/3.8.4/box.phar > box.phar" />
         <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
             <arg value="box.phar" />
             <arg value="compile" />
