@@ -49,8 +49,8 @@ it:
     taskstatus:
         created: 'Console Task è stato creato ....'
         complete:
-            summary: 'Console compito completo!'
-            detail: 'Il compito di base è stato completato con successo. Controllare il protocollo della console per i dettagli.'
+            summary: 'Attività console completata!'
+            detail: 'L''attività in background è stata completata con successo. Controlla i log della console per maggiori dettagli.'
             console: '### Compito completato con successo ###'
         aborting:
             summary: 'Arresto del funzionamento in corrente ....'

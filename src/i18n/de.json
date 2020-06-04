@@ -60,7 +60,6 @@
     "ui.server.selfUpdate.title": "Updates für den Contao Manager",
     "ui.server.selfUpdate.update": "Die neue Version {latest} des Contao Managers ist verfügbar.",
     "ui.server.selfUpdate.manualUpdate": "Eine neue Version {latest} des Contao Manager ist verfügbar. Dein Server unterstützt keine automatischen Updates, bitte lade die neue Version von {download} herunter.",
-    "ui.server.selfUpdate.manualUpdateUrl": "https://contao.org/de/download.html",
     "ui.server.selfUpdate.latest": "Sie verwenden die aktuelle Version {current}.",
     "ui.server.selfUpdate.dev": "Entwicklungs-Versionen können nicht automatisch aktualisiert werden.",
     "ui.server.selfUpdate.unsupported": "Eine neue Version ist verfügbar, aber diese funktioniert nicht mit Ihrer PHP-Version.",

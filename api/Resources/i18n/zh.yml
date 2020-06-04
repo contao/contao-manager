@@ -4,7 +4,7 @@ zh:
             title: '服务器未启用PHP设置"allow_url_fopen"'
         process:
             title: '服务器中PHP函数"proc_open"  "proc_close" 不可用。'
-            detail: '"proc_open" and "proc_close" 函数是在后台运行命令行任务所必须的。请咨询您的主机提供商为什么函数无法运行；否则Contao管理器和Contao 4 都不会正常运行。'
+            detail: ''
         intl:
             title: 'PHP扩展Intl不可用'
             detail: 'Contao 4 系统需要使用PHP Intl扩展来进行国际化'

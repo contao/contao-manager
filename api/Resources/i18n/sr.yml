@@ -39,6 +39,10 @@ sr:
             title: 'Није могуће одредити верзију Contao.'
             detail: "Конзола је вратила неочекиван одговор приликом провере верзије Contao. Проверите одговор за више информација:\n\n{output}"
 
+    boot:
+        composer:
+            invalid: 'composer.json schema validation: {exception}'
+
     config:
         php_cli:
             not_found: 'Ова путања не садржи валидан PHP binary.'
@@ -83,6 +87,8 @@ sr:
             title: 'Пражњење Композер Cache-а'
         rebuild_cache:
             title: 'Поновно креирање кеша'
+        install_tool:
+            title: 'Инсталациони алат за Contao'
         self_update:
             title: 'Ажурирам Contao Менаџер'
             completeSummary: 'Contao Manager је успешно надограђен'
@@ -106,11 +112,20 @@ sr:
             summary: 'Додавање Композер пакета...'
         composer-remove:
             summary: 'Уклањање Композер пакета...'
+        install-uploads:
+            summary: 'Инсталирам преузете пакете ...'
+            console: 'Инсталисани артифакти за {package} (верзија {version}) [to packages/{name}]'
+        remove-uploads:
+            summary: 'Уклањам преузете фајлове ...'
         composer-install:
             summary: 'Инсталирање Композер зависности...'
             summaryRetry: 'Инсталирање Композер зависности (поново покушавам {current}/{max}) …'
         dump-autoload:
             summary: 'Пражњење class autoloader-а…'
+        install-lock:
+            summary: 'Закључавам инсталациони алат за Contao ...'
+        install-unlock:
+            summary: 'Откључавам инсталациони алат за Contao ...'
         create-project:
             summary: 'Инсталирање апликативног шаблона...'
         cloud:
@@ -119,5 +134,14 @@ sr:
             processingSummary: 'Разрешавање зависности помоћу Composer Cloud-а'
             processingDetail: 'Посао ID {job} је покренут {seconds} секунди'
             errorSummary: 'Неуспешно разрешавање зависности...'
+            finishedSummary: 'Задатак у Composer Cloud је завршен за {seconds} секунди'
+            finishedDetail: 'Употреба меморије: {memory} (peak: {peak}), time: {time}.'
         clear-cache:
             summary: 'Брисање кешираних фајлова...'
+
+    upload:
+        error:
+            file: 'Фајл је неисправан или не садржи composer.json.'
+            json: 'Composer.json не садржи исправне JSON податке.'
+            schema: 'Валидација composer.json schema није успела.'
+            partial: 'Преузимање фајла није завршено.'

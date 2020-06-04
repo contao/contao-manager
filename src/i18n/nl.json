@@ -59,6 +59,7 @@
     "ui.server.prerequisite": "Controle geannuleerd als gevolg van een ontbrekende voorwaarde.",
     "ui.server.selfUpdate.title": "Updates van de Contao Manager",
     "ui.server.selfUpdate.update": "Een nieuwe versie van Contao Manager {latest} is beschikbaar.",
+    "ui.server.selfUpdate.manualUpdate": "Er is een nieuwe Contao Manager-versie {latest} beschikbaar. Uw server ondersteunt geen automatische updates, download de nieuwe versie van {download}.",
     "ui.server.selfUpdate.latest": "U gebruikt de laatste versie {huidige}.",
     "ui.server.selfUpdate.dev": "Ontwikkelingsversies ondersteunen geen automatische updates.",
     "ui.server.selfUpdate.unsupported": "Een nieuwe versie is beschikbaar, maar deze ondersteunt uw PHP-versie niet.",
