@@ -24,10 +24,7 @@ class CloudException extends \RuntimeException
      */
     private $requestBody;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct($message, $code, $responseBody, $requestBody = null)
+    public function __construct(string $message, int $code, string $responseBody, string $requestBody = null)
     {
         parent::__construct($message, $code);
 
@@ -37,20 +34,16 @@ class CloudException extends \RuntimeException
 
     /**
      * Returns the response status code or general error 500.
-     *
-     * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->getCode();
     }
 
     /**
      * Returns the Cloud error message or the exception message as fallback.
-     *
-     * @return string
      */
-    public function getErrorMessage()
+    public function getErrorMessage(): string
     {
         $message = $this->getMessage()."\n\nResponse:\n".$this->responseBody;
 
