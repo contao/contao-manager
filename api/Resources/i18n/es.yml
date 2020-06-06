@@ -4,7 +4,7 @@ es:
             title: 'La configuración de PHP "allow_url_fopen" no está habilitada en el servidor.'
         process:
             title: 'La función PHP "proc_open" and/or "proc_close" no está disponible en el servidor.'
-            detail: 'Las funciones "proc_open" y "proc_close" son necesarias para ejecutar tareas de línea de comandos en segundo plano. Consulte con su proveedor de hosting por qué este método no está disponible; ni el Contao Manager ni Contao 4 se ejecutarán correctamente sin él.'
+            detail: ''
         intl:
             title: 'La extensión PHP Intl no está disponible.'
             detail: 'Contao 4 requiere la extensión PHP Intl para fines de internacionalización.'

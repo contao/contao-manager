@@ -4,7 +4,7 @@ cs:
             title: 'Služba PHP "allow_url_fopen" není na tomto serveru spuštěna.'
         process:
             title: 'Funkce PHP "proc_open" a/nebo "proc_close" není na serveru povolena.'
-            detail: 'Funkce "proc_open" a "proc_close" jsou nezbytné pro spouštění příkazů na pozadí. Dotázejte se Vašeho poskytovatele, proč dané funkce neběží a zda je může spustit. Jinak nebude Správce Contaa  4 fungovat správně.'
+            detail: ''
         intl:
             title: 'Rozšíření PHP Intl není na tomto serveru spuštěno.'
             detail: 'Contao 4 vyžaduje rozšíření PHP Intl pro mezinárodní záležitosti.'
@@ -38,6 +38,10 @@ cs:
         contao_version:
             title: 'Nelze zjistit verzi Contaa.'
             detail: "Konzola při dotazu na verzi Contaa odpověděla neočekávaným obsahem. Prosím přečtěte si protokol, abyste se dozvěděli více.\n\n{output}"
+
+    boot:
+        composer:
+            invalid: ''
 
     config:
         php_cli:
@@ -110,6 +114,9 @@ cs:
             summary: 'Odstraňování balíčků Composeru…'
         install-uploads:
             summary: 'Instalují se nahrané balíčky...'
+            console: ''
+        remove-uploads:
+            summary: ''
         composer-install:
             summary: 'Instalování na Composeru závislých věcí…'
             summaryRetry: 'Instalování na Composeru závislých věc (opětovný pokus {current}/{max}) …'
@@ -131,3 +138,10 @@ cs:
             finishedDetail: 'Využití paměti: {memory} (výše: {peak}), doba: {time}.'
         clear-cache:
             summary: 'Mazání meziúložiště souborů…'
+
+    upload:
+        error:
+            file: ''
+            json: ''
+            schema: ''
+            partial: ''

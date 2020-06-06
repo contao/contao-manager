@@ -4,15 +4,19 @@ lv:
             title: 'PHP iestatījums "allow_url_fopen" serverī nav iespējots.'
         process:
             title: 'PHP funkcija "proc_open" un / vai "proc_close" serverī nav pieejama.'
+            detail: ''
         intl:
             title: 'PHP Intl paplašinājums nav pieejams.'
             detail: 'Contao 4 ir nepieciešams PHP Intl paplašinājums internacionalizācijas vajadzībām.'
         openssl:
             title: 'PHP OpenSSL paplašinājums nav pieejams.'
+            detail: ''
         dom:
             title: 'PHP DOM paplašinājums nav pieejams.'
+            detail: ''
         xmlreader:
             title: 'PHP XMLReader paplašinājums nav pieejams.'
+            detail: ''
         graphics_lib:
             title: 'Nav pieejama neviena PHP attēlu apstrādes bibliotēka.'
             detail: 'Lai apstrādātu attēlus, Contao 4 nepieciešams paplašinājums GD, Imagick vai Gmagick.'
@@ -24,12 +28,16 @@ lv:
             title: 'Phar datnei jāatrod mapē /web.'
         memory_limit:
             title: 'Nepietiekams PHP atmiņas ierobežojums'
+            detail: ''
         systempdir:
             title: 'Nevar rakstīt sistēmas pagaidu direktorijā.'
+            detail: ''
         contao_unknown:
             title: 'Nezināms instalācijas statuss'
+            detail: ""
         contao_version:
             title: 'Nevarēja noteikt Contao versiju'
+            detail: ""
 
     boot:
         composer:
@@ -59,6 +67,7 @@ lv:
             console: '### Fona uzdevums tika atcelts ###'
         error:
             summary: 'Konsoles uzdevums ir pārtraukts!'
+            detail: ''
             console: '### Fona uzdevums negaidīti ir apturēts ###'
 
     task:
@@ -66,10 +75,14 @@ lv:
             title: 'Instalē Contao lietotni'
             completeSummary: 'Uzstādīšana ir pabeigta!'
             completeDetail: 'Lai pabeigtu iestatīšanas procesu, lūdzu, atveriet instalēšanas rīku un ievadiet datubāzes akreditācijas datus.'
+        install_packages:
+            title: ''
         update_packages:
             title: 'Atjaunina pakotnes'
             completeSummary: 'Contao pakotnes ir atjauninātas!'
             completeDetail: 'Lūdzu, atveriet instalēšanas rīku, lai piemērotu nepieciešamās datu bāzes izmaiņas.'
+        dump_autoload:
+            title: ''
         clear_cache:
             title: 'Iztīra Composer kešatmiņu'
         rebuild_cache:
@@ -87,19 +100,48 @@ lv:
             detail: 'Atjaunina no {old} uz {new}'
         remove-cache:
             summary: 'Dzēš kešatmiņas direktoriju ...'
+        remove-vendor:
+            summary: ''
+        cache-warmup:
+            summary: ''
         cache-clear:
             summary: 'Iztīra lietojumprogrammas kešatmiņu ...'
+        composer-update:
+            summary: ''
         composer-require:
             summary: 'Pievieno Composer pakotnes ...'
         composer-remove:
             summary: 'Noņem Composer pakotnes ...'
+        install-uploads:
+            summary: ''
+            console: ''
         remove-uploads:
             summary: 'Notiek augšupielādes failu noņemšana ...'
+        composer-install:
+            summary: ''
+            summaryRetry: ''
+        dump-autoload:
+            summary: ''
         install-lock:
             summary: 'Bloķē Contao instalēšanas rīku ...'
         install-unlock:
             summary: 'Atbloķē Contao instalēšanas rīku ...'
+        create-project:
+            summary: ''
         cloud:
+            queuedSummary: ''
+            queuedDetail: ''
+            processingSummary: ''
             processingDetail: 'Darbs ID {job} darbojas {seconds} sekundes'
+            errorSummary: ''
+            finishedSummary: ''
+            finishedDetail: ''
         clear-cache:
             summary: 'Dzēš kešatmiņas datnes ...'
+
+    upload:
+        error:
+            file: ''
+            json: ''
+            schema: ''
+            partial: ''
