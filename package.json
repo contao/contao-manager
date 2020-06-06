@@ -13,12 +13,12 @@
     "algoliasearch": "^3.35.1",
     "contao-package-list": "git+https://github.com/contao/package-list.git",
     "vue": "^2.6.11",
+    "vue-i18n": "^8.18.1",
     "vue-resource": "^1.5.1",
     "vue-router": "^2.8.1",
     "vue-upload-component": "^2.8.20",
     "vueperslides": "^2.8.6",
-    "vuex": "^2.5.0",
-    "vuex-i18n": "^1.13.1"
+    "vuex": "^2.5.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",

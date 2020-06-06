@@ -31,7 +31,7 @@
 
         computed: {
             currentLanguage() {
-                return this.$i18n.locale();
+                return this.$i18n.locale;
             },
 
             languageOptions() {

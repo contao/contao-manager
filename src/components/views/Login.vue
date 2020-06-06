@@ -46,7 +46,7 @@
             },
 
             forgotPassword() {
-                switch (this.$i18n.locale()) {
+                switch (this.$i18n.locale) {
                     case 'de':
                         return 'https://docs.contao.org/manual/de/installation/contao-manager/#hast-du-die-zugangsdaten-vom-contao-manager-vergessen';
 

@@ -21,7 +21,7 @@
 
         computed: {
             manualUpdateUrl() {
-                switch (this.$i18n.locale()) {
+                switch (this.$i18n.locale) {
                     case 'de':
                         return 'https://contao.org/de/download.html';
 

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import vuexI18n from 'vuex-i18n';
+import VueI18n from 'vue-i18n';
 
 import store from '../store';
 
@@ -11,12 +11,6 @@ const merge = async (...files) => {
     }
 
     return data;
-};
-
-const setLocale = (locale) => {
-    Vue.i18n.set(locale);
-    store.commit('algolia/setLanguage', locale);
-    document.querySelector('html').setAttribute('lang', locale);
 };
 
 const locales = {
@@ -38,9 +32,21 @@ const locales = {
     zh: () => merge(import('contao-package-list/src/i18n/zh.json'), import('./zh.json')),
 };
 
-const i18n = {
+Vue.use(VueI18n);
+
+const i18n = new VueI18n();
+
+const setLocale = (locale) => {
+    i18n.locale = locale;
+    store.commit('algolia/setLanguage', locale);
+    document.querySelector('html').setAttribute('lang', locale);
+};
+
+export default {
+    plugin: i18n,
+
     async init() {
-        Vue.i18n.fallback('en');
+        i18n.fallbackLocale = 'en';
         await this.load('en');
 
         const userLang = localStorage.getItem('contao_manager_locale');
@@ -56,8 +62,6 @@ const i18n = {
                 return this.load(languages[i]);
             }
         }
-
-        return null;
     },
 
     async switch(locale) {
@@ -69,7 +73,7 @@ const i18n = {
     },
 
     async load(locale) {
-        if (Vue.i18n.localeExists(locale)) {
+        if (i18n.availableLocales.includes(locale)) {
             setLocale(locale);
             return;
         }
@@ -82,11 +86,7 @@ const i18n = {
             throw `Locale ${locale} does not exist.`;
         }
 
-        Vue.i18n.add(locale, Object.assign({}, await locales[locale]()));
+        i18n.setLocaleMessage(locale, Object.assign({}, await locales[locale]()));
         setLocale(locale);
     },
 };
-
-Vue.use(vuexI18n.plugin, store);
-
-export default i18n;
