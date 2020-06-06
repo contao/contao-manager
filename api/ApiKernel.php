@@ -49,10 +49,17 @@ class ApiKernel extends Kernel
     private $configDir;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct($environment)
     {
+        $this->filesystem = new Filesystem();
+
         $debug = 'dev' === $environment;
 
         ErrorHandler::register();
@@ -104,7 +111,11 @@ class ApiKernel extends Kernel
      */
     public function getCacheDir(): string
     {
-        return $this->debug ? $this->getConfigDir().'/appcache' : __DIR__.'/Resources/cache';
+        $cacheDir = $this->debug ? $this->getConfigDir().'/appcache' : __DIR__.'/Resources/cache';
+
+        $this->filesystem->mkdir($cacheDir);
+
+        return $cacheDir;
     }
 
     /**
@@ -112,7 +123,11 @@ class ApiKernel extends Kernel
      */
     public function getLogDir(): string
     {
-        return $this->getConfigDir().'/logs';
+        $logDir = $this->getConfigDir().'/logs';
+
+        $this->filesystem->mkdir($logDir);
+
+        return $logDir;
     }
 
     /**
@@ -130,24 +145,22 @@ class ApiKernel extends Kernel
             return $this->configDir;
         }
 
-        $filesystem = new Filesystem();
-
         // Try to find a config directory in the parent from previous version
-        if (!$filesystem->exists($this->configDir)) {
+        if (!$this->filesystem->exists($this->configDir)) {
             if ('web' !== basename(\dirname($phar))) {
                 $parentDir = \dirname($this->getProjectDir()).\DIRECTORY_SEPARATOR.'contao-manager';
 
-                if ($filesystem->exists($parentDir)) {
-                    $filesystem->mirror($parentDir, $this->configDir);
+                if ($this->filesystem->exists($parentDir)) {
+                    $this->filesystem->mirror($parentDir, $this->configDir);
                 }
             }
 
-            $filesystem->mkdir($this->configDir);
+            $this->filesystem->mkdir($this->configDir);
         }
 
         // Make sure the config directory contains a .htaccess file
-        if (!$filesystem->exists($this->configDir.\DIRECTORY_SEPARATOR.'.htaccess')) {
-            $filesystem->dumpFile($this->configDir.\DIRECTORY_SEPARATOR.'.htaccess', <<<'CODE'
+        if (!$this->filesystem->exists($this->configDir.\DIRECTORY_SEPARATOR.'.htaccess')) {
+            $this->filesystem->dumpFile($this->configDir.\DIRECTORY_SEPARATOR.'.htaccess', <<<'CODE'
 <IfModule !mod_authz_core.c>
     Order deny,allow
     Deny from all
@@ -238,7 +251,7 @@ CODE
         }
 
         $testDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'test-dir';
-        (new Filesystem())->mkdir($testDir);
+        $this->filesystem->mkdir($testDir);
 
         return $testDir;
     }

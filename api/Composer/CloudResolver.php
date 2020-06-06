@@ -80,6 +80,7 @@ class CloudResolver implements LoggerAwareInterface
         $content = $this->request->postJson(self::API_URL.'/jobs', $body, $headers, $statusCode);
 
         switch ($statusCode) {
+            case 200:
             case 201:
             case 202: // Location redirect to fetch the job content
                 return new CloudJob(JsonFile::parseJson($content));

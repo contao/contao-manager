@@ -196,6 +196,8 @@ class UpdateTask extends AbstractPackagesTask
             $packageName = $require[0];
             $version = $require[1] ?? null;
 
+            // Automatically require core-bundle and installation-bundle if the manager-bundle is not stable
+            // otherwise the dependency would not be resolved because we don't set minimum-stability
             if ($packageName === 'contao/manager-bundle') {
                 if ($version && 'stable' !== VersionParser::parseStability($version)) {
                     $definition->requirePackage('contao/core-bundle', $version);
@@ -209,10 +211,19 @@ class UpdateTask extends AbstractPackagesTask
             }
         }
 
+        // Automatically update the core-bundle and installation-bundle when updating Contao
+        // (but only if they are actually installed, like not on the initial installation)
         foreach ($definition->getUpdates() as $packageName) {
             if ($packageName === 'contao/manager-bundle') {
-                $definition->addUpdate('contao/core-bundle');
-                $definition->addUpdate('contao/installation-bundle');
+                $localRepository = $this->environment->getComposer()->getRepositoryManager()->getLocalRepository();
+
+                if (!empty($localRepository->findPackages('contao/core-bundle'))) {
+                    $definition->addUpdate('contao/core-bundle');
+                }
+
+                if (!empty($localRepository->findPackages('contao/installation-bundle'))) {
+                    $definition->addUpdate('contao/installation-bundle');
+                }
             }
         }
     }

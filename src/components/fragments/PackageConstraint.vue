@@ -3,20 +3,21 @@
         <input
             ref="constraint"
             type="text"
-            :placeholder="constraintPlaceholder"
-            :title="constraint"
-            v-model="constraint"
-            :class="{ disabled: willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired), error: constraintError }"
-            :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
+            :placeholder="inputPlaceholder"
+            :title="inputTitle"
+            v-model="inputValue"
+            :class="{ disabled: willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload, error: constraintError }"
+            :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload"
             @keypress.enter.prevent="saveConstraint"
             @keypress.esc.prevent="resetConstraint"
             @blur="saveConstraint"
         >
         <button
             :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
+            :title="buttonTitle"
             @click="editConstraint"
-            :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired)"
-        >{{ $t('ui.package.editConstraint') }}</button>
+            :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload"
+        >{{ buttonValue }}</button>
     </fieldset>
 </template>
 
@@ -43,12 +44,18 @@
         }),
 
         computed: {
-            constraintPlaceholder() {
-                if (!Object.keys(this.$store.state.packages.root.require).includes(this.data.name)) {
-                    return this.$t('ui.package.latestConstraint');
-                }
+            buttonTitle: vm => vm.isUpload ? vm.$t('ui.package.uploadConstraint') : '',
+            buttonValue: vm => vm.isUpload ? vm.$t('ui.package.editConstraint') : vm.$t('ui.package.private'),
+            inputTitle: vm => vm.isUpload ? vm.$t('ui.package.privateTitle') : vm.constraint,
+            inputPlaceholder: vm => (!vm.isUpload && !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name)) ? this.$t('ui.package.latestConstraint') : '',
 
-                return '';
+            inputValue: {
+                get: vm => vm.isUpload ? vm.$t('ui.package.private') : vm.constraint,
+                set(value) {
+                    if (!this.isUpload) {
+                        this.constraint = value;
+                    }
+                },
             },
         },
 

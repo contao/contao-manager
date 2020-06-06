@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class JwtCookieController
 {
-    public const COOKIE_NAME = '_contao_preview';
+    public const COOKIE_NAME = 'contao_settings';
 
     /**
      * @var ContaoApi

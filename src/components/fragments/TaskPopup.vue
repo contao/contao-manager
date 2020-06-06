@@ -17,10 +17,10 @@
             </span>
         </h1>
 
-        <div class="task-popup__status task-popup__status--complete" v-if="taskStatus === 'complete'">
+        <div class="task-popup__status task-popup__status--complete" v-if="isComplete">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" /></svg>
         </div>
-        <div class="task-popup__status task-popup__status--error" v-else-if="taskStatus === 'error' || taskStatus === 'stopped' || taskStatus === 'failed'">
+        <div class="task-popup__status task-popup__status--error" v-else-if="isError">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2 12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z" /></svg>
         </div>
         <loader horizontal :class="statusClass" v-else>
@@ -84,8 +84,8 @@
             headlineClass() {
                 return {
                     'task-popup__headline': true,
-                    'task-popup__headline--complete': (this.taskStatus === 'complete'),
-                    'task-popup__headline--error': (this.taskStatus === 'error' || this.taskStatus === 'stopped' || this.taskStatus === 'failed'),
+                    'task-popup__headline--complete': this.isComplete,
+                    'task-popup__headline--error': this.isError,
                 };
             },
 
@@ -153,8 +153,16 @@
                 return !this.currentTask || !this.currentTask.status || this.taskStatus === 'active';
             },
 
+            isComplete() {
+                return this.taskStatus === 'complete';
+            },
+
             isAborting() {
                 return this.taskStatus === 'aborting';
+            },
+
+            isError() {
+                return this.taskStatus === 'error' || this.taskStatus === 'stopped' || this.taskStatus === 'failed';
             },
         },
 
@@ -261,6 +269,10 @@
 
             taskStatus() {
                 this.updateFavicon();
+
+                if (this.isError && !this.showConsole) {
+                    this.toggleConsole();
+                }
             }
         },
 

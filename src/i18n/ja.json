@@ -60,7 +60,6 @@
     "ui.server.selfUpdate.title": "Contao Managerを更新",
     "ui.server.selfUpdate.update": "新しいContao Managerのバージョン {latest} を利用できます。",
     "ui.server.selfUpdate.manualUpdate": "新しいContao Managerバージョン{latest}を利用できます。使用しているサーバーは自動的な更新をサポートしていません、新しいバージョンを{download}からダウンロードしてください。",
-    "ui.server.selfUpdate.manualUpdateUrl": "https://contao.org/en/download.html",
     "ui.server.selfUpdate.latest": "最新のバージョン: {current}を使用しています。",
     "ui.server.selfUpdate.dev": "開発版は自動的な更新をサポートしていません。",
     "ui.server.selfUpdate.unsupported": "新しいバージョンを利用できますが、使用しているPHPのバージョンをサポートしていません。",

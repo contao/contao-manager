@@ -19,6 +19,24 @@
             isSupported: true,
         }),
 
+        computed: {
+            manualUpdateUrl() {
+                switch (this.$i18n.locale()) {
+                    case 'de':
+                        return 'https://contao.org/de/download.html';
+
+                    case 'fr':
+                        return 'https://contao.org/fr/telechargements.html';
+
+                    case 'es':
+                        return 'https://contao.org/es/download.html';
+
+                    default:
+                        return 'https://contao.org/en/download.html';
+                }
+            }
+        },
+
         methods: {
             async boot() {
                 this.bootDescription = this.$t('ui.server.running');
