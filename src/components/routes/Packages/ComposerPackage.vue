@@ -177,11 +177,11 @@
                 }
 
                 if (this.data.downloads) {
-                    additionals.push(this.$t('ui.package.additionalDownloads', { count: Vue.filter('numberFormat')(this.data.downloads) }, this.data.downloads));
+                    additionals.push(this.$tc('ui.package.additionalDownloads', this.data.downloads, { count: Vue.filter('numberFormat')(this.data.downloads) }));
                 }
 
                 if (this.data.favers) {
-                    additionals.push(this.$t('ui.package.additionalStars', { count: this.data.favers }, this.data.favers));
+                    additionals.push(this.$tc('ui.package.additionalStars', this.data.favers));
                 }
 
                 return additionals;

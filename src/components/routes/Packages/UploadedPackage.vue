@@ -137,11 +137,11 @@
                 }
 
                 if (this.pkg.downloads) {
-                    additionals.push(this.$t('ui.package.additionalDownloads', { count: this.pkg.downloads }, this.pkg.downloads));
+                    additionals.push(this.$tc('ui.package.additionalDownloads', this.pkg.downloads));
                 }
 
                 if (this.pkg.favers) {
-                    additionals.push(this.$t('ui.package.additionalStars', { count: this.pkg.favers }, this.pkg.favers));
+                    additionals.push(this.$tc('ui.package.additionalStars', this.pkg.favers));
                 }
 
                 return additionals;
