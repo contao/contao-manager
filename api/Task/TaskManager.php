@@ -16,6 +16,7 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use studio24\Rotate\Rotate;
 use Symfony\Component\Filesystem\Filesystem;
 use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
 use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
@@ -43,6 +44,11 @@ class TaskManager implements LoggerAwareInterface, ServiceAnnotationInterface
     private $configFile;
 
     /**
+     * @var string
+     */
+    private $logFile;
+
+    /**
      * @var TaskInterface[]
      */
     private $tasks = [];
@@ -57,6 +63,7 @@ class TaskManager implements LoggerAwareInterface, ServiceAnnotationInterface
         $this->filesystem = $filesystem;
         $this->processFactory = $processFactory;
         $this->configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'task.json';
+        $this->logFile = $kernel->getLogDir().'/task-output.log';
 
         foreach ($tasks as $task) {
             $this->tasks[$task->getName()] = $task;
@@ -159,6 +166,8 @@ class TaskManager implements LoggerAwareInterface, ServiceAnnotationInterface
             throw new \RuntimeException('Active task cannot be deleted');
         }
 
+        $this->saveConsoleOutput($status->getConsole());
+
         return $status;
     }
 
@@ -198,5 +207,14 @@ class TaskManager implements LoggerAwareInterface, ServiceAnnotationInterface
         }
 
         return null;
+    }
+
+    private function saveConsoleOutput(string $output): void
+    {
+        $rotate = new Rotate($this->logFile);
+        $rotate->keep(50);
+        $rotate->run();
+
+        $this->filesystem->dumpFile($this->logFile, $output);
     }
 }

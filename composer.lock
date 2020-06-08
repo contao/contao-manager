@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac4017b9ac1e643db0d745f4c0b60635",
+    "content-hash": "51114a2eb99363b90e15146275756b60",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -975,6 +975,53 @@
                 "phar"
             ],
             "time": "2020-02-14T15:25:33+00:00"
+        },
+        {
+            "name": "studio24/rotate",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/studio24/rotate.git",
+                "reference": "9d99d364bcf619bd9dd48f09ccf292f077c492e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/studio24/rotate/zipball/9d99d364bcf619bd9dd48f09ccf292f077c492e8",
+                "reference": "9d99d364bcf619bd9dd48f09ccf292f077c492e8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "studio24\\Rotate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simon R Jones",
+                    "email": "hello@studio24.net",
+                    "homepage": "http://simonrjones.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "File rotation utility which rotates and removes old files",
+            "homepage": "https://github.com/studio24/rotate",
+            "keywords": [
+                "delete files",
+                "logrotate",
+                "rotate"
+            ],
+            "time": "2019-02-02T13:04:46+00:00"
         },
         {
             "name": "symfony/cache",
