@@ -1,6 +1,6 @@
 <template>
     <footer :class="'fragment-footer' + (display ? (' fragment-footer--'+display) : '')">
-        <strong class="fragment-footer__product">Contao Manager @package_version@</strong>
+        <strong class="fragment-footer__product" v-if="!isLogin">Contao Manager @package_version@</strong>
         <ul class="fragment-footer__links">
             <li><a :href="$t('ui.footer.helpHref')" target="_blank">{{ $t('ui.footer.help') }}</a></li>
             <li><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ $t('ui.footer.reportProblem') }}</a></li>
@@ -19,6 +19,7 @@
 <script>
     import i18n from '../../i18n';
     import locales from '../../i18n/locales';
+    import views from "../../router/views";
 
     export default {
         props: {
@@ -30,6 +31,8 @@
         }),
 
         computed: {
+            isLogin: vm => vm.$store.state.view === views.LOGIN,
+
             currentLanguage() {
                 return this.$i18n.locale;
             },
