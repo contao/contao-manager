@@ -3,7 +3,7 @@
         <header class="config-check__header">
             <img src="../../assets/images/server-config.svg" width="80" height="80" class="config-check__icon" alt="">
             <h1 class="config-check__headline">{{ $t('ui.server.config.title') }}</h1>
-            <p class="config-check__description" v-html="$t('ui.server.config.description')"/>
+            <p class="config-check__description">{{ $t('ui.server.config.description') }}</p>
         </header>
 
         <main class="config-check__form">

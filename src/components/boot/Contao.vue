@@ -7,7 +7,9 @@
             <p class="contao-check__version"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
             <p class="contao-check__version" v-if="supportsLatest"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
             <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.2' }) }}</span></p>
-            <p class="contao-check__version" v-html="$t('ui.server.contao.releaseplan')"/>
+            <i18n tag="p" path="ui.server.contao.releaseplan">
+                <a href="https://contao.org/en/release-plan.html" target="_blank">{{ $t('ui.server.contao.releaseplanLink') }}</a>
+            </i18n>
         </header>
 
         <section class="contao-check__form">
@@ -73,6 +75,22 @@
                 'no': vm.$t('ui.server.contao.coreOnlyNo'),
                 'yes': vm.$t('ui.server.contao.coreOnlyYes'),
             }),
+
+            releasePlan() {
+                switch (this.$i18n.locale) {
+                    case 'de':
+                        return 'https://contao.org/de/release-plan.html';
+
+                    case 'es':
+                        return 'https://contao.org/es/plan-de-publicacion.html';
+
+                    case 'fr':
+                        return 'https://contao.org/fr/plan-de-publication.html';
+
+                    default:
+                        return 'https://contao.org/en/release-plan.html';
+                }
+            }
         },
 
         methods: {

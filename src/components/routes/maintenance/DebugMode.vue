@@ -6,7 +6,9 @@
                 <div class="maintenance__about">
                     <h1>{{ $t('ui.maintenance.debugMode.title') }}</h1>
                     <p v-if="supportsJwtCookie">{{ $t('ui.maintenance.debugMode.descriptionJwt') }}</p>
-                    <p v-else-if="supportsAccessKey" v-html="$t('ui.maintenance.debugMode.description')"></p>
+                    <i18n tag="p" path="ui.maintenance.debugMode.description" v-else-if="supportsAccessKey">
+                        <template #appDevPhp><code>app_dev.php</code></template>
+                    </i18n>
                 </div>
                 <fieldset class="maintenance__actions" v-if="loading && !supportsJwtCookie && !supportsAccessKey">
                     <loader class="maintenance__loader"/>

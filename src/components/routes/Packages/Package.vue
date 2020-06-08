@@ -23,7 +23,7 @@
                     <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
                 </h1>
 
-                <p class="package__description" v-html="description"/>
+                <p class="package__description">{{ description }}</p>
                 <p class="package__additional">
                     <slot name="additional"/>
                 </p>

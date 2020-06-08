@@ -6,7 +6,19 @@
                 <strong>{{ $t('ui.account.welcome') }}</strong>
                 Contao Manager @package_version@
             </p>
-            <p class="view-account__intro" v-html="$t('ui.account.intro')"></p>
+            <p>
+                <i18n :tag="false" path="ui.account.intro1">
+                    <template #readTheManualToGetStarted>
+                        <i18n tag="strong" path="ui.account.introGetStarted">
+                            <template #readTheManual><a href="https://docs.contao.org/manual/de/installation/contao-manager/" target="_blank">{{ $t('ui.account.introManual') }}</a></template>
+                        </i18n>
+                    </template>
+                </i18n>
+                <br><br>
+                <i18n :tag="false" path="ui.account.intro2">
+                    <template #ourGithubIssues><a href="https://github.com/contao/contao-manager/issues" target="_blank">{{ $t('ui.account.introIssues') }}</a></template>
+                </i18n>
+            </p>
         </header>
 
         <main class="view-account__form">
@@ -28,7 +40,12 @@
 
         <div class="clearfix"></div>
         <aside class="view-account__contribute">
-            <p v-html="$t('ui.account.contribute')"></p>
+            <p>
+                {{ $t('ui.account.contribute1') }}<br>
+                <i18n :tag="false" path="ui.account.contribute2">
+                    <template #becomingAMember><a href="https://association.contao.org/mitglied-werden.html" target="_blank">{{ $t('ui.account.contributeMember') }}</a></template>
+                </i18n>
+            </p>
         </aside>
     </boxed-layout>
 </template>

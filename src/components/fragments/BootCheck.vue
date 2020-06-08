@@ -8,7 +8,7 @@
 
         <div class="boot-check__label">
             <h2 class="boot-check__title">{{ title }}</h2>
-            <p class="boot-check__description" v-html="description">{{ description }}</p>
+            <p class="boot-check__description">{{ description }}</p>
             <p class="boot-check__detail" v-if="detail">{{ detail }}</p>
         </div>
         <div class="boot-check__action">

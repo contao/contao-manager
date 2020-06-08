@@ -5,7 +5,7 @@
 
             <div class="maintenance__about">
                 <h1>{{ $t('ui.maintenance.composerCache.title') }}</h1>
-                <p v-html="$t('ui.maintenance.composerCache.description')"></p>
+                <p>{{ $t('ui.maintenance.composerCache.description') }}</p>
             </div>
 
             <fieldset class="maintenance__actions">

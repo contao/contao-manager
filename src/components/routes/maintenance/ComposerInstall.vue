@@ -5,7 +5,10 @@
 
             <div class="maintenance__about">
                 <h1>{{ $t('ui.maintenance.composerInstall.title') }}</h1>
-                <p v-html="$t('ui.maintenance.composerInstall.description')"></p>
+                <i18n tag="p" path="ui.maintenance.composerInstall.description">
+                    <template #vendor><code>/vendor</code></template>
+                    <template #composerLock><code>composer.lock</code></template>
+                </i18n>
             </div>
 
             <fieldset class="maintenance__actions">
