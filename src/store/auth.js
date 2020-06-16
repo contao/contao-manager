@@ -18,6 +18,7 @@ const startCountdown = function () {
     timer = setInterval(runCountdown, 1000);
 
     $store.commit('setCountdown', countdown);
+    $store.commit('modals/close', 'logout-warning', { root: true });
 };
 
 const stopCountdown = function () {
