@@ -166,6 +166,9 @@ class CloudOperation implements TaskOperationInterface
 //        $title .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
 
         switch ($job->getStatus()) {
+            case CloudJob::STATUS_QUEUED:
+                break;
+
             case CloudJob::STATUS_PROCESSING:
                 $console->add($this->cloud->getOutput($job), $title);
                 break;
