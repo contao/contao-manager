@@ -70,9 +70,6 @@ class ExceptionListener implements EventSubscriberInterface
         $event->setResponse($response);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return ['kernel.exception' => ['onKernelException', 10]];

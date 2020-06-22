@@ -17,9 +17,6 @@ use Symfony\Component\Process\Process;
 
 class WindowsStartForker extends AbstractForker
 {
-    /**
-     * {@inheritdoc}
-     */
     public function run(string $configFile): void
     {
         $commandline = sprintf(
@@ -31,9 +28,6 @@ class WindowsStartForker extends AbstractForker
         $this->startCommand($commandline);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSupported(): bool
     {
         if ('\\' !== \DIRECTORY_SEPARATOR) {

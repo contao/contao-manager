@@ -48,9 +48,6 @@ class RemoveCacheOperation extends AbstractInlineOperation
         return 'rm -rf var/cache/'.$this->environment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function doRun(): bool
     {
         $this->filesystem->remove($this->getCacheDir());
@@ -65,10 +62,8 @@ class RemoveCacheOperation extends AbstractInlineOperation
 
     /**
      * Gets the Contao cache directory for current environment.
-     *
-     * @return string
      */
-    private function getCacheDir()
+    private function getCacheDir(): string
     {
         return $this->kernel->getProjectDir().'/var/cache/'.$this->environment;
     }

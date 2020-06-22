@@ -20,9 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ProcessRunnerCommand extends Command
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this
@@ -32,10 +29,7 @@ class ProcessRunnerCommand extends Command
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         set_time_limit(0);
         ignore_user_abort(true);
@@ -47,6 +41,10 @@ class ProcessRunnerCommand extends Command
         } catch (\Exception $e) {
             $process->addErrorOutput((string) $e);
             $process->stop();
+
+            return 1;
         }
+
+        return 0;
     }
 }

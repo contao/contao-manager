@@ -33,17 +33,11 @@ class ClearCacheTask extends AbstractTask
         parent::__construct($translator);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'composer/clear-cache';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(TaskConfig $config): TaskStatus
     {
         return parent::create($config)->setAutoClose(true);
@@ -54,9 +48,6 @@ class ClearCacheTask extends AbstractTask
         return $this->translator->trans('task.clear_cache.title');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function buildOperations(TaskConfig $config): array
     {
         return [

@@ -36,17 +36,11 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(TaskConfig $config): TaskStatus
     {
         return new TaskStatus($this->getTitle(), $this->getOperations($config));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(TaskConfig $config): TaskStatus
     {
         if ($config->isCancelled()) {
@@ -84,9 +78,6 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         return $status;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function abort(TaskConfig $config): TaskStatus
     {
         $config->setCancelled();
@@ -106,9 +97,6 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         return $status;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(TaskConfig $config): bool
     {
         $operations = $this->getOperations($config);

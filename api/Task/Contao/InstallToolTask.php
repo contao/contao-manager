@@ -52,17 +52,11 @@ class InstallToolTask extends AbstractTask
         parent::__construct($translator);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'contao/install-tool';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(TaskConfig $config): TaskStatus
     {
         return parent::create($config)->setAutoClose(true);
@@ -73,9 +67,6 @@ class InstallToolTask extends AbstractTask
         return $this->translator->trans('task.install_tool.title');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function buildOperations(TaskConfig $config): array
     {
         if (true === $config->getOption('lock')) {

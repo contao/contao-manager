@@ -58,9 +58,6 @@ class IntegrityCheckFactory implements ServiceSubscriberInterface
         return $this->runChecks(self::$cliChecks);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedServices(): array
     {
         return array_unique(array_merge(self::$cliChecks, self::$webChecks));

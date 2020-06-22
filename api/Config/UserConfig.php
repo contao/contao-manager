@@ -268,9 +268,6 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
         $this->save();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedServices(): array
     {
         return [

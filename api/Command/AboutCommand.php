@@ -41,9 +41,6 @@ class AboutCommand extends Command
         $this->serverInfo = $serverInfo;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this
@@ -52,9 +49,6 @@ class AboutCommand extends Command
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $data = $this->collectData();

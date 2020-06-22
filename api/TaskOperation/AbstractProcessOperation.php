@@ -68,25 +68,16 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
         return $console;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStarted(): bool
     {
         return $this->process->isStarted();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isRunning(): bool
     {
         return $this->process->isRunning();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSuccessful(): bool
     {
         return $this->process->isSuccessful();
@@ -97,9 +88,6 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
         return $this->process->isTerminated() && $this->process->getExitCode() > 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function run(): void
     {
         if (!$this->process->isStarted()) {
@@ -107,17 +95,11 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function abort(): void
     {
         $this->process->stop();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(): void
     {
         $this->process->delete();

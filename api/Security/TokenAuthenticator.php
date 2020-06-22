@@ -38,10 +38,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         $this->config = $config;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supports(Request $request)
+    public function supports(Request $request): bool
     {
         if ($request->headers->has('Contao-Manager-Auth')) {
             return true;
@@ -52,17 +49,11 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return \is_string($authentication) && 0 === stripos($authentication, 'bearer ');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function start(Request $request, AuthenticationException $authException = null)
+    public function start(Request $request, AuthenticationException $authException = null): Response
     {
         return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCredentials(Request $request)
     {
         if ($request->headers->has('Contao-Manager-Auth')) {
@@ -78,10 +69,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
     {
         $token = $this->config->findToken($credentials);
 
@@ -92,46 +80,32 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return $userProvider->loadUserByUsername($token['username']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function checkCredentials($credentials, UserInterface $user)
+    public function checkCredentials($credentials, UserInterface $user): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
     {
         $token->setAttribute('authenticator', \get_called_class());
 
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsRememberMe()
+    public function supportsRememberMe(): bool
     {
         return false;
     }
 
     /**
      * Gets the authentication header from request or HTTP headers.
-     *
-     * @return string|null
      */
-    private function getAuthenticationHeader(Request $request)
+    private function getAuthenticationHeader(Request $request): ?string
     {
         if ($request->server->has('HTTP_AUTHORIZATION')) {
             return $request->server->get('HTTP_AUTHORIZATION');

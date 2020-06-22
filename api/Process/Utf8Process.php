@@ -16,23 +16,17 @@ use Symfony\Component\Process\Process;
 
 class Utf8Process extends Process
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getOutput()
+    public function getOutput(): string
     {
         return $this->convertEncoding(parent::getOutput());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getErrorOutput()
+    public function getErrorOutput(): string
     {
         return $this->convertEncoding(parent::getErrorOutput());
     }
 
-    private function convertEncoding(string $data)
+    private function convertEncoding(string $data): string
     {
         if (false !== @json_encode($data)) {
             return $data;

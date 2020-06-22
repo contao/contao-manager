@@ -44,9 +44,6 @@ class SetupTask extends AbstractPackagesTask
         $this->cloudResolver = $cloudResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'contao/install';
@@ -57,9 +54,6 @@ class SetupTask extends AbstractPackagesTask
         return $this->translator->trans('task.setup_packages.title');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function buildOperations(TaskConfig $config): array
     {
         $operations = [new CreateProjectOperation($config, $this->environment, $this->filesystem)];

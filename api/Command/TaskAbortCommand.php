@@ -23,9 +23,6 @@ class TaskAbortCommand extends TaskUpdateCommand
         parent::__construct($taskManager);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         parent::configure();
@@ -36,10 +33,7 @@ class TaskAbortCommand extends TaskUpdateCommand
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->taskManager->hasTask()) {
             $output->writeln('No task is currently active.');

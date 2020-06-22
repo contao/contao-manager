@@ -33,9 +33,6 @@ class SelfUpdateTask extends AbstractTask
         parent::__construct($translator);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'manager/self-update';

@@ -112,9 +112,6 @@ class CloudJob implements \JsonSerializable
         return self::STATUS_ERROR === $this->getStatus();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function jsonSerialize()
     {
         return $this->result;

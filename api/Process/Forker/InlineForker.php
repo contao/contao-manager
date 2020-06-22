@@ -14,9 +14,6 @@ namespace Contao\ManagerApi\Process\Forker;
 
 class InlineForker extends AbstractForker
 {
-    /**
-     * {@inheritdoc}
-     */
     public function run(string $configFile): void
     {
         $arguments = $this->command;
@@ -33,9 +30,6 @@ class InlineForker extends AbstractForker
         $process->wait();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSupported(): bool
     {
         return true;

@@ -44,9 +44,6 @@ abstract class AbstractForker implements ForkerInterface
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setCommand(array $command): ForkerInterface
     {
         $this->command = $command;
@@ -54,17 +51,11 @@ abstract class AbstractForker implements ForkerInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCommand(): array
     {
         return $this->command;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setTimeout(int $timeout): ForkerInterface
     {
         $this->timeout = $timeout;
@@ -72,9 +63,6 @@ abstract class AbstractForker implements ForkerInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTimeout(): int
     {
         return $this->timeout;

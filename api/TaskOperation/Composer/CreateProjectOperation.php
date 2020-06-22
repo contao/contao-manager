@@ -66,17 +66,11 @@ class CreateProjectOperation extends AbstractInlineOperation
         return $this->addConsoleOutput(new ConsoleOutput());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getName(): string
     {
         return 'create-project';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function doRun(): bool
     {
         $protected = [

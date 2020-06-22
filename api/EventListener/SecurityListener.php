@@ -71,9 +71,6 @@ class SecurityListener implements EventSubscriberInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return ['kernel.response' => 'onKernelResponse'];

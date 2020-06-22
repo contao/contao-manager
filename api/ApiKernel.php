@@ -53,9 +53,6 @@ class ApiKernel extends Kernel
      */
     private $filesystem;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct($environment)
     {
         $this->filesystem = new Filesystem();
@@ -73,9 +70,6 @@ class ApiKernel extends Kernel
         $this->configureComposerEnvironment();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function registerBundles(): array
     {
         return [
@@ -86,17 +80,11 @@ class ApiKernel extends Kernel
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRootDir(): string
     {
         return __DIR__;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getProjectDir(): string
     {
         if (null === $this->projectDir) {
@@ -106,9 +94,6 @@ class ApiKernel extends Kernel
         return $this->projectDir;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheDir(): string
     {
         $cacheDir = $this->debug ? $this->getConfigDir().'/appcache' : __DIR__.'/Resources/cache';
@@ -118,9 +103,6 @@ class ApiKernel extends Kernel
         return $cacheDir;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLogDir(): string
     {
         $logDir = $this->getConfigDir().'/logs';
@@ -183,21 +165,11 @@ CODE
         return $this->version;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \Symfony\Component\Config\Exception\LoaderLoadException
-     */
     protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
         $routes->import(__DIR__.'/Controller', '/api', 'annotation');
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \Exception
-     */
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader): void
     {
         $loader->load(__DIR__.'/Resources/config/config_'.$c->getParameter('kernel.environment').'.yml');

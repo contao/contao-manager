@@ -57,17 +57,11 @@ class UpdateTask extends AbstractPackagesTask
         $this->uploads = $uploads;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'composer/update';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(TaskConfig $config): TaskStatus
     {
         $status = parent::update($config);
@@ -84,9 +78,6 @@ class UpdateTask extends AbstractPackagesTask
         return $this->translator->trans('task.update_packages.title');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function buildOperations(TaskConfig $config): array
     {
         $changes = $this->getComposerDefinition($config);

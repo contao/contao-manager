@@ -72,9 +72,6 @@ class RemoveUploadsOperation extends AbstractInlineOperation
         return implode(', ', $files);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function doRun(): bool
     {
         foreach ($this->uploads as $config) {
@@ -90,9 +87,6 @@ class RemoveUploadsOperation extends AbstractInlineOperation
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getName(): string
     {
         return 'remove-uploads';

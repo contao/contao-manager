@@ -58,9 +58,6 @@ class SelfUpdateOperation extends AbstractInlineOperation
         return $this->updater->update();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getName(): string
     {
         return 'self-update';

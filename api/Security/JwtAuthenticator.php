@@ -34,68 +34,44 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
         $this->jwtManager = $jwtManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supports(Request $request)
+    public function supports(Request $request): bool
     {
         return $this->jwtManager->hasRequestToken($request) && null !== $this->jwtManager->getPayload($request);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function start(Request $request, AuthenticationException $authException = null)
+    public function start(Request $request, AuthenticationException $authException = null): Response
     {
         return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCredentials(Request $request)
     {
         return $this->jwtManager->getPayload($request);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials, UserProviderInterface $userProvider): UserInterface
     {
         return $userProvider->loadUserByUsername($credentials->username);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function checkCredentials($credentials, UserInterface $user)
+    public function checkCredentials($credentials, UserInterface $user): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
     {
-        $token->setAttribute('authenticator', \get_called_class());
+        $token->setAttribute('authenticator', static::class);
 
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsRememberMe()
+    public function supportsRememberMe(): bool
     {
         return false;
     }

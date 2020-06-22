@@ -89,9 +89,6 @@ class InstallUploadsOperation extends AbstractInlineOperation
         return $this->addConsoleOutput($console);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function doRun(): bool
     {
         $installed = [];
@@ -121,9 +118,6 @@ class InstallUploadsOperation extends AbstractInlineOperation
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getName(): string
     {
         return 'install-uploads';

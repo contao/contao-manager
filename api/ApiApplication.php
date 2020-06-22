@@ -54,9 +54,6 @@ class ApiApplication extends Application
         return $this->kernel;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
         $this->registerCommands();
@@ -70,9 +67,6 @@ class ApiApplication extends Application
         return (int) parent::doRun($input, $output);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultCommands(): array
     {
         $commands = parent::getDefaultCommands();
@@ -82,9 +76,6 @@ class ApiApplication extends Application
         return $commands;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     private function registerCommands(): void
     {
         if ($this->commandsRegistered) {

@@ -16,9 +16,6 @@ use Crell\ApiProblem\ApiProblem;
 
 class MemoryLimitCheck extends AbstractIntegrityCheck
 {
-    /**
-     * {@inheritdoc}
-     */
     public function run(): ?ApiProblem
     {
         if (\PHP_SAPI !== 'cli' || $this->hasEnoughMemory()) {

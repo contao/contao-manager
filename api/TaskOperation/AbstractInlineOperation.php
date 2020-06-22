@@ -44,25 +44,16 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
         return $this->addConsoleOutput(new ConsoleOutput());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStarted(): bool
     {
         return null !== $this->taskConfig->getState($this->getName());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isRunning(): bool
     {
         return TaskStatus::STATUS_ACTIVE === $this->taskConfig->getState($this->getName());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSuccessful(): bool
     {
         return TaskStatus::STATUS_COMPLETE === $this->taskConfig->getState($this->getName());
@@ -95,17 +86,11 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function abort(): void
     {
         $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ERROR);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete(): void
     {
         // Do nothing

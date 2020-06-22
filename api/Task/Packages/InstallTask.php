@@ -44,9 +44,6 @@ class InstallTask extends AbstractPackagesTask
         $this->cloudResolver = $cloudResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'composer/install';
@@ -57,9 +54,6 @@ class InstallTask extends AbstractPackagesTask
         return $this->translator->trans('task.install_packages.title');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function buildOperations(TaskConfig $config): array
     {
         $changes = new CloudChanges();

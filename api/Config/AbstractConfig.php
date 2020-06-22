@@ -123,17 +123,11 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
         $this->save();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function count(): int
     {
         return \count($this->data);

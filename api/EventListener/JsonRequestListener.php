@@ -51,9 +51,6 @@ class JsonRequestListener implements EventSubscriberInterface
         $request->request->replace($data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         // Priority must be lower than the router (defaults to 32)

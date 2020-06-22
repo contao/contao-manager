@@ -31,9 +31,6 @@ class TaskDeleteCommand extends Command
         $this->taskManager = $taskManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this
@@ -42,10 +39,7 @@ class TaskDeleteCommand extends Command
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->taskManager->hasTask()) {
             $output->writeln('No task is currently active.');

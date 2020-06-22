@@ -33,9 +33,6 @@ class IntegrityCheckCommand extends Command
         $this->integrity = $integrity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this
@@ -45,10 +42,7 @@ class IntegrityCheckCommand extends Command
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $problem = $this->integrity->runCliCheck();
         $format = $input->getOption('format');

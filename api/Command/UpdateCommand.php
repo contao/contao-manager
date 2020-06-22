@@ -31,17 +31,11 @@ class UpdateCommand extends Command
         $this->updater = $selfUpdate;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return '' !== \Phar::running(false) && parent::isEnabled();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->updater->supportsUpdate()) {
@@ -55,9 +49,6 @@ class UpdateCommand extends Command
         return $this->update($output);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure(): void
     {
         $this

@@ -49,17 +49,11 @@ abstract class AbstractPackagesTask extends AbstractTask
         parent::__construct($translator);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(TaskConfig $config): TaskStatus
     {
         return parent::create($config)->setAudit(!$config->getOption('dry_run', false))->setCancellable(true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(TaskConfig $config): TaskStatus
     {
         $this->createBackup($config);
@@ -73,9 +67,6 @@ abstract class AbstractPackagesTask extends AbstractTask
         return $status;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function abort(TaskConfig $config): TaskStatus
     {
         $status = parent::abort($config);
