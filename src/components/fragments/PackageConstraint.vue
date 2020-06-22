@@ -47,7 +47,7 @@
             buttonTitle: vm => vm.isUpload ? vm.$t('ui.package.uploadConstraint') : '',
             buttonValue: vm => vm.isUpload ? vm.$t('ui.package.editConstraint') : vm.$t('ui.package.private'),
             inputTitle: vm => vm.isUpload ? vm.$t('ui.package.privateTitle') : vm.constraint,
-            inputPlaceholder: vm => (!vm.isUpload && !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name)) ? this.$t('ui.package.latestConstraint') : '',
+            inputPlaceholder: vm => (!vm.isUpload && !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name)) ? vm.$t('ui.package.latestConstraint') : '',
 
             inputValue: {
                 get: vm => vm.isUpload ? vm.$t('ui.package.private') : vm.constraint,

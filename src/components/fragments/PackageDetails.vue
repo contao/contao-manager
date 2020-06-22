@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
     import packageStatus from '../../mixins/packageStatus';
 
     import PackageDetails from 'contao-package-list/src/components/fragments/PackageDetails';
@@ -39,6 +39,11 @@
 
         computed: {
             ...mapState('packages', ['installed']),
+
+            ...mapGetters('packages', [
+                'packageInstalled',
+                'packageSuggested',
+            ]),
 
             data: vm => ({ name: vm.$route.query.p }),
 
