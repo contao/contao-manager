@@ -64,8 +64,6 @@ en:
             title: 'Clearing Composer Cache'
         rebuild_cache:
             title: 'Rebuilding Contao Cache'
-        install_tool:
-            title: 'Contao Install Tool'
         self_update:
             title: 'Updating Contao Manager'
 
