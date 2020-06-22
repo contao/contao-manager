@@ -15,7 +15,6 @@ namespace Contao\ManagerApi\TaskOperation\Manager;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\System\SelfUpdate;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 
 class SelfUpdateOperation extends AbstractInlineOperation
@@ -41,30 +40,22 @@ class SelfUpdateOperation extends AbstractInlineOperation
         parent::__construct($taskConfig);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function doRun(): bool
+    public function getSummary(): string
     {
-        return $this->updater->update();
+        return basename(\Phar::running()).' self-update';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function updateStatus(TaskStatus $status): void
+    public function getDetails(): ?string
     {
-        $status
-            ->setSummary($this->translator->trans('taskoperation.self-update.summary'))
-            ->setDetail(
-                $this->translator->trans(
-                    'taskoperation.self-update.detail',
-                    ['old' => $this->updater->getOldVersion(), 'new' => $this->updater->getNewVersion()]
-                )
-            )
-        ;
+        return $this->translator->trans(
+            'taskoperation.self-update.detail',
+            ['old' => $this->updater->getOldVersion(), 'new' => $this->updater->getNewVersion()]
+        );
+    }
 
-        $this->addConsoleStatus($status);
+    protected function doRun(): bool
+    {
+        return $this->updater->update();
     }
 
     /**

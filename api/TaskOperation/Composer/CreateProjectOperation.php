@@ -13,10 +13,9 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
 use Contao\ManagerApi\Composer\Environment;
-use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
+use Contao\ManagerApi\TaskOperation\ConsoleOutput;
 use Symfony\Component\Filesystem\Filesystem;
 
 class CreateProjectOperation extends AbstractInlineOperation
@@ -32,11 +31,6 @@ class CreateProjectOperation extends AbstractInlineOperation
     private $environment;
 
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -49,12 +43,11 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * Constructor.
      */
-    public function __construct(TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem)
+    public function __construct(TaskConfig $taskConfig, Environment $environment, Filesystem $filesystem)
     {
         parent::__construct($taskConfig);
 
         $this->environment = $environment;
-        $this->translator = $translator;
         $this->filesystem = $filesystem;
         $this->version = $taskConfig->getOption('version');
 
@@ -63,29 +56,14 @@ class CreateProjectOperation extends AbstractInlineOperation
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        $status->setSummary($this->translator->trans('taskoperation.create-project.summary'));
-        $status->setDetail('contao/managed-edition '.$this->version);
-
-        $this->addConsoleStatus($status);
+        return 'composer create-project contao/managed-edition:'.$this->version;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function addConsoleStatus(TaskStatus $status): void
+    public function getConsole(): ConsoleOutput
     {
-        $status->addConsole('> Installing contao/managed-edition '.$this->version);
-
-        if ($console = $this->taskConfig->getState($this->getName().'.console')) {
-            $status->addConsole((string) $console);
-        }
-
-        parent::addConsoleStatus($status);
+        return $this->addConsoleOutput(new ConsoleOutput());
     }
 
     /**

@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 
 import Vue from 'vue';
-import TaskPopup from "../components/fragments/TaskPopup";
 
 let handleTask;
 let failTask;
+let initP;
 let pending = 0;
 let ignoreErrors = false;
 
@@ -37,7 +37,6 @@ handleTask = (response, store, resolve, reject) => {
 
     const task = response.body;
 
-    store.commit('modals/open', { id: 'current-task', component: TaskPopup, priority: 10 }, { root: true });
     store.commit('setCurrent', task);
 
     switch (task.status) {
@@ -85,8 +84,6 @@ export default {
 
     state: {
         status: null,
-        type: null,
-        consoleOutput: '',
         current: null,
 
         deleting: false,
@@ -114,11 +111,19 @@ export default {
     },
 
     actions: {
-        init(store) {
-            const init = () => {
-                store.commit('setInitialized', true);
-            };
-            pollTask(store, init, init);
+        async init(store) {
+            if (!initP) {
+                initP = new Promise((resolve) => {
+                    const init = () => {
+                        store.commit('setInitialized', true);
+                        resolve();
+                    };
+
+                    pollTask(store, init, init)
+                })
+            }
+
+            return initP;
         },
 
         execute(store, task) {
@@ -132,7 +137,6 @@ export default {
 
                 store.commit('setCurrent', task);
                 store.commit('setStatus', 'created');
-                store.commit('modals/open', {id: 'current-task', component: TaskPopup, priority: 10 }, { root: true });
 
                 Vue.http.put('api/task', task).then(
                     response => handleTask(response, store, resolve, reject),
@@ -158,13 +162,11 @@ export default {
             return Vue.http.delete('api/task').then(
                 () => {
                     commit('setCurrent', null);
-                    commit('modals/close', 'current-task', { root: true });
                 },
                 (response) => {
                     // Bad request, there are no tasks
                     if (response.status === 400) {
                         commit('setCurrent', null);
-                        commit('modals/close', 'current-task', { root: true });
                         return;
                     }
 
@@ -175,6 +177,8 @@ export default {
                             }, 1000);
                         });
                     }
+
+                    commit('setDeleting', false);
 
                     throw response;
                 },

@@ -12,10 +12,14 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation;
 
-use Contao\ManagerApi\Task\TaskStatus;
-
 interface TaskOperationInterface
 {
+    public function getSummary(): string;
+
+    public function getDetails(): ?string;
+
+    public function getConsole(): ConsoleOutput;
+
     public function isStarted(): bool;
 
     public function isRunning(): bool;
@@ -29,6 +33,4 @@ interface TaskOperationInterface
     public function abort(): void;
 
     public function delete(): void;
-
-    public function updateStatus(TaskStatus $status): void;
 }

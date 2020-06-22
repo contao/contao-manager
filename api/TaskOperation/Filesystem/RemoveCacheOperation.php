@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\TaskOperation\Filesystem;
 
 use Contao\ManagerApi\ApiKernel;
-use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -32,28 +30,22 @@ class RemoveCacheOperation extends AbstractInlineOperation
     private $kernel;
 
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * @var Filesystem
      */
     private $filesystem;
 
-    /**
-     * Constructor.
-     *
-     * @param string $environment
-     */
-    public function __construct($environment, ApiKernel $kernel, TaskConfig $taskConfig, Translator $translator, Filesystem $filesystem)
+    public function __construct(string $environment, ApiKernel $kernel, TaskConfig $taskConfig, Filesystem $filesystem)
     {
         $this->environment = $environment;
         $this->kernel = $kernel;
-        $this->translator = $translator;
         $this->filesystem = $filesystem;
 
         parent::__construct($taskConfig);
+    }
+
+    public function getSummary(): string
+    {
+        return 'rm -rf var/cache/'.$this->environment;
     }
 
     /**
@@ -64,17 +56,6 @@ class RemoveCacheOperation extends AbstractInlineOperation
         $this->filesystem->remove($this->getCacheDir());
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateStatus(TaskStatus $status): void
-    {
-        $status->setSummary($this->translator->trans('taskoperation.remove-cache.summary'));
-        $status->setDetail($this->getCacheDir());
-
-        $this->addConsoleStatus($status);
     }
 
     protected function getName(): string

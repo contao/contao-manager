@@ -15,8 +15,8 @@ namespace Contao\ManagerApi\TaskOperation\Filesystem;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
+use Contao\ManagerApi\TaskOperation\ConsoleOutput;
 use Symfony\Component\Filesystem\Filesystem;
 
 class InstallUploadsOperation extends AbstractInlineOperation
@@ -51,14 +51,32 @@ class InstallUploadsOperation extends AbstractInlineOperation
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        $status->setSummary($this->translator->trans('taskoperation.install-uploads.summary'));
+        return $this->translator->trans('taskoperation.install-uploads.summary');
+    }
+
+    public function getDetails(): ?string
+    {
+        $files = array_map(function ($config) {
+            return $config['name'];
+        }, $this->uploads);
+
+        return implode(', ', $files);
+    }
+
+    public function getConsole(): ConsoleOutput
+    {
+        $console = new ConsoleOutput();
+
+        if (!$this->isSuccessful()) {
+            return $console;
+        }
 
         $installed = $this->taskConfig->getState($this->getName().'.files');
 
         if (!empty($installed)) {
-            $status->addConsole(
+            $console->add(
                 implode('', array_map(
                     function ($upload) {
                         return '- '.$this->translator->trans('taskoperation.install-uploads.console', $upload);
@@ -68,7 +86,7 @@ class InstallUploadsOperation extends AbstractInlineOperation
             );
         }
 
-        $this->addConsoleStatus($status);
+        return $this->addConsoleOutput($console);
     }
 
     /**

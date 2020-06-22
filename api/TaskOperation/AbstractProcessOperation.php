@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\TaskOperation;
 
 use Contao\ManagerApi\Process\ProcessController;
-use Contao\ManagerApi\Task\TaskStatus;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Process\Process;
@@ -46,6 +45,27 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
     public function __construct($process)
     {
         $this->process = $process;
+    }
+
+    public function getDetails(): ?string
+    {
+        return '';
+    }
+
+    public function getConsole(): ConsoleOutput
+    {
+        $console = new ConsoleOutput();
+
+        if (!$this->process->isStarted()) {
+            return $console;
+        }
+
+        $console->add(
+            $this->process->getOutput().$this->process->getErrorOutput().$this->getProcessError(),
+            '$ '.$this->process->getCommandLine()
+        );
+
+        return $console;
     }
 
     /**
@@ -101,21 +121,6 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
     public function delete(): void
     {
         $this->process->delete();
-    }
-
-    /**
-     * Adds the console log to the status console.
-     */
-    protected function addConsoleStatus(TaskStatus $status): void
-    {
-        if (!$this->process->isStarted()) {
-            return;
-        }
-
-        $status->addConsole(
-            $this->process->getOutput().$this->process->getErrorOutput().$this->getProcessError(),
-            '$ '.$this->process->getCommandLine()
-        );
     }
 
     protected function getProcessError(): string

@@ -161,19 +161,6 @@ class UpdateTask extends AbstractPackagesTask
         return $definition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function updateStatus(TaskStatus $status): void
-    {
-        if (TaskStatus::STATUS_COMPLETE === $status->getStatus()) {
-            $status->setSummary($this->translator->trans('task.update_packages.completeSummary'));
-            $status->setDetail($this->translator->trans('task.update_packages.completeDetail'));
-        }
-
-        parent::updateStatus($status);
-    }
-
     private function addContaoConflictsRequirement(CloudChanges $definition): void
     {
         $definition->addUpdate('contao/conflicts');

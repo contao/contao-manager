@@ -51,38 +51,15 @@ en:
             platform: 'Platform must not be configured in composer.json.'
             cache: 'Cache properties must not be configured in composer.json.'
 
-    taskstatus:
-        created: 'Console Task has been created …'
-        complete:
-            summary: 'Console task complete!'
-            detail: 'The background task was completed successfully. Check the console protocol for the details.'
-            console: '### Task completed successfully ###'
-        aborting:
-            summary: 'Stopping current operation …'
-            detail: 'The background task is being cancelled.'
-            console: '### The background task is being cancelled ###'
-        stopped:
-            summary: 'Console task terminated!'
-            detail: 'The background task was cancelled. Please check the console protocol.'
-            console: '### The background task was cancelled ###'
-        error:
-            summary: 'Console task terminated!'
-            detail: 'The background task has stopped unexpectedly. Please check the console protocol.'
-            console: '### The background task has stopped unexpectedly ###'
-
     task:
         setup_packages:
             title: 'Installing Contao Application'
-            completeSummary: 'Installation complete!'
-            completeDetail: 'To complete the setup process, please open the install tool and enter your database credentials.'
         install_packages:
             title: 'Installing Composer Dependencies'
         update_packages:
             title: 'Updating Packages'
-            completeSummary: 'Contao packages updated!'
-            completeDetail: 'Please open the install tool to apply any necessary database changes.'
         dump_autoload:
-            title: 'Dumping Composer Autoloader'
+            title: 'Dumping Composer Class Autoloader'
         clear_cache:
             title: 'Clearing Composer Cache'
         rebuild_cache:
@@ -91,53 +68,27 @@ en:
             title: 'Contao Install Tool'
         self_update:
             title: 'Updating Contao Manager'
-            completeSummary: 'Contao Manager was successfully updated'
-            completeDetail: 'Updated to version {current}'
 
     taskoperation:
         self-update:
-            summary: 'Installing latest Contao Manager …'
             detail: 'Updating from {old} to {new}'
-        remove-cache:
-            summary: 'Deleting cache directory …'
-        remove-vendor:
-            summary: 'Deleting vendor directory …'
-        cache-warmup:
-            summary: 'Warming application cache …'
-        cache-clear:
-            summary: 'Clearing application cache …'
-        composer-update:
-            summary: 'Updating Composer dependencies …'
-        composer-require:
-            summary: 'Adding Composer packages …'
-        composer-remove:
-            summary: 'Removing Composer packages …'
         install-uploads:
-            summary: 'Installing uploaded packages …'
+            summary: 'Installing uploads'
             console: 'Installed artifact for {package} (version {version}) [to packages/{name}]'
         remove-uploads:
-            summary: 'Removing upload files …'
+            summary: 'Removing uploads'
         composer-install:
-            summary: 'Installing Composer dependencies …'
-            summaryRetry: 'Installing Composer dependencies (retrying {current}/{max}) …'
+            retry: 'retrying {current}/{max}'
+            nothing: 'Nothing to install or update'
+            result: '{installs} installed, {updates} updated, {removals} removed'
         dump-autoload:
-            summary: 'Dumping class autoloader …'
-        install-lock:
-            summary: 'Locking Contao Install Tool …'
-        install-unlock:
-            summary: 'Unlocking Contao Install Tool …'
-        create-project:
-            summary: 'Installing application template …'
+            result: 'Generated optimized autoload files containing {count} classes'
         cloud:
-            queuedSummary: 'Job queued in Composer Cloud for {seconds} seconds'
-            queuedDetail: 'Starting in approx. {seconds} seconds (currently {jobs} jobs on {workers} workers)'
-            processingSummary: 'Resolving dependencies using Composer Cloud'
-            processingDetail: 'Job ID {job} is running for {seconds} seconds'
-            errorSummary: 'Failed resolving dependencies …'
-            finishedSummary: 'Composer Cloud job completed in {seconds} seconds'
-            finishedDetail: 'Memory usage: {memory} (peak: {peak}), time: {time}.'
-        clear-cache:
-            summary: 'Deleting cache files …'
+            summary: 'composer update (using Resolver Cloud)'
+            queued: 'Queued, starting in approx. {seconds} seconds (currently {jobs} jobs on {workers} workers)'
+            processing: 'Active for {seconds} seconds. Memory usage: {memory}.'
+            error: 'Failed resolving dependencies'
+            finished: 'Completed in {seconds} seconds. Memory usage: {memory} (peak: {peak}), time: {time}.'
 
     upload:
         error:

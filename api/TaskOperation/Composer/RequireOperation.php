@@ -14,7 +14,6 @@ namespace Contao\ManagerApi\TaskOperation\Composer;
 
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class RequireOperation extends AbstractProcessOperation
@@ -68,12 +67,8 @@ class RequireOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        $status->setSummary($this->translator->trans('taskoperation.composer-require.summary'));
-
-        $status->setDetail(implode(', ', $this->required));
-
-        $this->addConsoleStatus($status);
+        return 'composer require '.implode(' ', $this->required);
     }
 }

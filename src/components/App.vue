@@ -17,6 +17,7 @@
                 </div>
             </div>
 
+            <task :class="hasModal ? 'blur-in' : 'blur-out'" v-else-if="username && taskStatus"/>
             <component :is="currentView" :class="hasModal ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
 
             <div v-else>
@@ -39,11 +40,12 @@
     import Error from './views/Error';
     import Account from './views/Account';
     import Login from './views/Login';
+    import Task from './views/Task';
     import Boot from './views/Boot';
     import Recovery from './views/Recovery';
 
     export default {
-        components: { Loader, Error },
+        components: { Loader, Error, Task },
 
         data: () => ({
             views: {
@@ -57,6 +59,8 @@
 
         computed: {
             ...mapState(['view', 'error']),
+            ...mapState('auth', ['username']),
+            ...mapState('tasks', { taskStatus: 'status' }),
             ...mapGetters('modals', ['hasModal', 'currentModal']),
 
             isInitializing: vm => vm.view === views.INIT,
@@ -82,12 +86,10 @@
                 }
             },
 
-            '$store.state.auth.username': function (username) {
+            username(username) {
                 if (username === null) {
                     this.$store.commit('tasks/setCurrent', null);
                     this.$store.commit('tasks/setInitialized', false);
-                } else {
-                    this.$store.dispatch('tasks/init');
                 }
             },
         },
@@ -141,12 +143,14 @@
         'add',
         'check',
         'cloud',
+        'console',
         'edit',
         'gear',
         'hide',
         'details',
         'link',
         'lock',
+        'more',
         'power',
         'run',
         'save',

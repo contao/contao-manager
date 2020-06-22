@@ -16,7 +16,6 @@ use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Config\UploadsConfig;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -59,11 +58,18 @@ class RemoveUploadsOperation extends AbstractInlineOperation
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        $status->setSummary($this->translator->trans('taskoperation.remove-uploads.summary'));
+        return $this->translator->trans('taskoperation.remove-uploads.summary');
+    }
 
-        $this->addConsoleStatus($status);
+    public function getDetails(): ?string
+    {
+        $files = array_map(function ($config) {
+            return $config['name'];
+        }, $this->uploads);
+
+        return implode(', ', $files);
     }
 
     /**

@@ -12,25 +12,13 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
-use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class ClearCacheOperation extends AbstractProcessOperation
 {
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * Constructor.
-     */
-    public function __construct(ConsoleProcessFactory $processFactory, Translator $translator)
+    public function __construct(ConsoleProcessFactory $processFactory)
     {
-        $this->translator = $translator;
-
         try {
             parent::__construct($processFactory->restoreBackgroundProcess('clear-cache'));
         } catch (\Exception $e) {
@@ -47,13 +35,8 @@ class ClearCacheOperation extends AbstractProcessOperation
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        $status->setSummary($this->translator->trans('taskoperation.clear-cache.summary'));
-
-        $this->addConsoleStatus($status);
+        return 'composer clear-cache';
     }
 }

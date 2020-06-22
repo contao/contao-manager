@@ -15,7 +15,6 @@ namespace Contao\ManagerApi\TaskOperation\Composer;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class UpdateOperation extends AbstractProcessOperation
@@ -26,6 +25,11 @@ class UpdateOperation extends AbstractProcessOperation
     private $translator;
 
     /**
+     * @var array
+     */
+    private $packages;
+
+    /**
      * Constructor.
      *
      * @param bool $dryRun
@@ -33,6 +37,7 @@ class UpdateOperation extends AbstractProcessOperation
     public function __construct(ConsoleProcessFactory $processFactory, Environment $environment, Translator $translator, array $packages = [], $dryRun = false)
     {
         $this->translator = $translator;
+        $this->packages = $packages;
 
         try {
             parent::__construct($processFactory->restoreBackgroundProcess('composer-update'));
@@ -73,11 +78,8 @@ class UpdateOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        $status->setSummary($this->translator->trans('taskoperation.composer-update.summary'));
-        $status->setDetail($this->process->getCommandLine());
-
-        $this->addConsoleStatus($status);
+        return 'composer update '.implode(' ', $this->packages);
     }
 }

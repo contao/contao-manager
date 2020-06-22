@@ -107,30 +107,6 @@ class TaskController
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
-        if (!$status->getDetail()) {
-            switch ($status->getStatus()) {
-                case TaskStatus::STATUS_COMPLETE:
-                    $status->setDetail('The background task was completed successfully. Check the console protocol for the details.');
-                    break;
-
-                case TaskStatus::STATUS_ERROR:
-                    $status->setDetail('The background task has stopped unexpectedly. Please check the console protocol.');
-                    break;
-            }
-        }
-
-        return new JsonResponse(
-            [
-                'title' => $status->getTitle(),
-                'summary' => $status->getSummary(),
-                'detail' => $status->getDetail(),
-                'console' => $status->getConsole(),
-                'cancellable' => $status->isCancellable(),
-                'autoclose' => $status->canAutoClose(),
-                'audit' => $status->hasAudit(),
-                'status' => $status->getStatus(),
-            ],
-            $code
-        );
+        return new JsonResponse($status, $code);
     }
 }

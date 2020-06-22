@@ -14,7 +14,6 @@ namespace Contao\ManagerApi\TaskOperation\Composer;
 
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class DumpAutoloadOperation extends AbstractProcessOperation
@@ -47,10 +46,32 @@ class DumpAutoloadOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        $status->setSummary($this->translator->trans('taskoperation.dump-autoload.summary'));
+        return 'composer dump-autoload';
+    }
 
-        $this->addConsoleStatus($status);
+    public function getDetails(): ?string
+    {
+        $total = $this->getTotalClasses($this->process->getOutput().$this->process->getErrorOutput());
+
+        if (null !== $total) {
+            return $this->translator->trans('taskoperation.dump-autoload.result', ['count' => $total]);
+        }
+
+        return '';
+    }
+
+    private function getTotalClasses(string $output)
+    {
+        $lines = explode("\n", $output);
+
+        foreach ($lines as $line) {
+            if (preg_match('{Generated optimized autoload files containing ([\d.]+) classes}', $line, $match)) {
+                return $match[1];
+            }
+        }
+
+        return null;
     }
 }

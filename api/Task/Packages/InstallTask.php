@@ -68,7 +68,7 @@ class InstallTask extends AbstractPackagesTask
         $operations = [];
 
         if ($config->getOption('remove-vendor', false)) {
-            $operations[] = new RemoveVendorOperation($config, $this->environment, $this->translator, $this->filesystem);
+            $operations[] = new RemoveVendorOperation($config, $this->environment, $this->filesystem);
         }
 
         if ($this->environment->useCloudResolver() && !$this->filesystem->exists($this->environment->getLockFile())) {

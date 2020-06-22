@@ -19,7 +19,6 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Composer\CloudOperation;
 use Contao\ManagerApi\TaskOperation\Composer\CreateProjectOperation;
 use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
@@ -63,7 +62,7 @@ class SetupTask extends AbstractPackagesTask
      */
     protected function buildOperations(TaskConfig $config): array
     {
-        $operations = [new CreateProjectOperation($config, $this->environment, $this->translator, $this->filesystem)];
+        $operations = [new CreateProjectOperation($config, $this->environment, $this->filesystem)];
 
         if ($config->getOption('no-update')) {
             return $operations;
@@ -83,18 +82,5 @@ class SetupTask extends AbstractPackagesTask
         $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, false);
 
         return $operations;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function updateStatus(TaskStatus $status): void
-    {
-        if (TaskStatus::STATUS_COMPLETE === $status->getStatus()) {
-            $status->setSummary($this->translator->trans('task.setup_packages.completeSummary'));
-            $status->setDetail($this->translator->trans('task.setup_packages.completeDetail'));
-        }
-
-        parent::updateStatus($status);
     }
 }

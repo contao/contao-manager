@@ -12,28 +12,13 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation\Contao;
 
-use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class CacheClearOperation extends AbstractProcessOperation
 {
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * Constructor.
-     *
-     * @param string $environment
-     * @param string $processId
-     */
-    public function __construct(ConsoleProcessFactory $processFactory, Translator $translator, $environment, $processId = 'cache-clear')
+    public function __construct(ConsoleProcessFactory $processFactory, string $environment, $processId = 'cache-clear')
     {
-        $this->translator = $translator;
-
         try {
             parent::__construct($processFactory->restoreBackgroundProcess($processId));
         } catch (\Exception $e) {
@@ -41,10 +26,8 @@ class CacheClearOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        $status->setSummary($this->translator->trans('taskoperation.cache-clear.summary'));
-
-        $this->addConsoleStatus($status);
+        return 'vendor/bin/contao-concole cache:clear --no-warmup';
     }
 }

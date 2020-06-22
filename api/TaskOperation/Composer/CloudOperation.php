@@ -17,9 +17,10 @@ use Contao\ManagerApi\Composer\CloudException;
 use Contao\ManagerApi\Composer\CloudJob;
 use Contao\ManagerApi\Composer\CloudResolver;
 use Contao\ManagerApi\Composer\Environment;
+use Contao\ManagerApi\Exception\RequestException;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
+use Contao\ManagerApi\TaskOperation\ConsoleOutput;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -77,6 +78,123 @@ class CloudOperation implements TaskOperationInterface
         $this->translator = $translator;
         $this->filesystem = $filesystem;
     }
+
+    public function getSummary(): string
+    {
+        return $this->translator->trans('taskoperation.cloud.summary');
+    }
+
+    public function getDetails(): ?string
+    {
+        $job = $this->getCurrentJob();
+
+        if (!$job instanceof CloudJob) {
+            return '';
+        }
+
+        switch ($job->getStatus()) {
+            case CloudJob::STATUS_QUEUED:
+                return $this->translator->trans(
+                    'taskoperation.cloud.queued',
+                    [
+                        'seconds' => $job->getWaitingTime(),
+                        'jobs' => $job->getJobsInQueue() + $job->getWorkers(),
+                        'workers' => $job->getWorkers(),
+                    ]
+                );
+
+            case CloudJob::STATUS_PROCESSING:
+                $profile = $this->getCurrentProfile($this->cloud->getOutput($job));
+                $seconds = time() - $this->taskConfig->getState('cloud-job-processing');
+
+                return $this->translator->trans(
+                    'taskoperation.cloud.processing',
+                    ['seconds' => $seconds, 'memory' => $profile]
+                );
+
+            case CloudJob::STATUS_ERROR:
+                return '';
+
+            case CloudJob::STATUS_FINISHED:
+                $seconds = $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing');
+                $profile = $this->getFinalProfile($this->cloud->getOutput($job));
+                preg_match('{Memory usage: ([^ ]+) \(peak: ([^)]+)\), time: ([0-9.]+s)\.}', $profile, $match);
+
+                return $this->translator->trans(
+                    'taskoperation.cloud.finished',
+                    [
+                        'job' => $job->getId(),
+                        'memory' => $match[1],
+                        'peak' => $match[2],
+                        'time' => $match[3],
+                        'seconds' => $seconds,
+                    ]
+                );
+        }
+
+        return '';
+    }
+
+    public function getConsole(): ConsoleOutput
+    {
+        $job = $this->getCurrentJob();
+
+        if ($this->exception instanceof CloudException) {
+            return (new ConsoleOutput())->add(
+                sprintf(
+                    "> The Composer Resolver Cloud failed with status code %s\n\n  %s",
+                    $this->exception->getStatusCode(),
+                    $this->exception->getErrorMessage()
+                )
+            );
+        }
+
+        if ($this->exception instanceof RequestException && $this->exception->getStatusCode() === 404) {
+            return (new ConsoleOutput())->add("Could not retrieve job details from Composer Resolver Cloud.\nThis usually happens because completed jobs are deleted after one hour.");
+        }
+
+        if ($this->exception instanceof \Exception) {
+            return (new ConsoleOutput())->add($this->exception->getMessage());
+        }
+
+        if (!$job instanceof CloudJob) {
+            return new ConsoleOutput();
+        }
+
+        $console = new ConsoleOutput();
+        $title = '> Resolving dependencies using Composer Cloud '.$job->getVersion();
+//        $title .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
+
+        switch ($job->getStatus()) {
+            case CloudJob::STATUS_PROCESSING:
+                $console->add($this->cloud->getOutput($job), $title);
+                break;
+
+            case CloudJob::STATUS_ERROR:
+                $console->add(
+                    sprintf("%s\n\n# Cloud Job ID %s failed", $this->cloud->getOutput($job), $job->getId()),
+                    $title
+                );
+                break;
+
+            case CloudJob::STATUS_FINISHED:
+                $output = $this->cloud->getOutput($job);
+                $seconds = $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing');
+
+                $profile = $this->getFinalProfile($output);
+                preg_match('{Memory usage: ([^ ]+) \(peak: ([^)]+)\), time: ([0-9.]+s)\.}', $profile, $match);
+
+                $console->add($output, $title);
+                $console->add("# Job ID {$job->getId()} completed in $seconds seconds\n# ".$profile);
+                break;
+
+            default:
+                throw new \RuntimeException(sprintf('Unknown cloud status "%s"', $job->getStatus()));
+        }
+
+        return $console;
+    }
+
 
     public function isStarted(): bool
     {
@@ -165,147 +283,36 @@ class CloudOperation implements TaskOperationInterface
         }
     }
 
-    public function updateStatus(TaskStatus $status): void
-    {
-        if ($this->exception instanceof CloudException) {
-            $status->addConsole(
-                sprintf(
-                    "> The Composer Cloud failed with status code %s\n\n  %s",
-                    $this->exception->getStatusCode(),
-                    $this->exception->getErrorMessage()
-                )
-            );
-
-            return;
-        }
-
-        if ($this->exception instanceof \Exception) {
-            $status->addConsole($this->exception->getMessage());
-
-            return;
-        }
-
-        try {
-            $job = $this->getCurrentJob();
-        } catch (\Exception $e) {
-            $this->exception = $e;
-            $status->addConsole($this->exception->getMessage());
-
-            return;
-        }
-
-        if (!$job instanceof CloudJob) {
-            return;
-        }
-
-        $console = '> Resolving dependencies using Composer Cloud '.$job->getVersion();
-//        $console .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
-
-        switch ($job->getStatus()) {
-            case CloudJob::STATUS_QUEUED:
-                $status->setSummary(
-                    $this->translator->trans(
-                        'taskoperation.cloud.queuedSummary',
-                        ['seconds' => time() - $this->taskConfig->getState('cloud-job-queued')]
-                    )
-                );
-                $status->setDetail(
-                    $this->translator->trans(
-                        'taskoperation.cloud.queuedDetail',
-                        [
-                            'seconds' => $job->getWaitingTime(),
-                            'jobs' => $job->getJobsInQueue() + $job->getWorkers(),
-                            'workers' => $job->getWorkers(),
-                        ]
-                    )
-                );
-                break;
-
-            case CloudJob::STATUS_PROCESSING:
-                $profile = $this->getCurrentProfile($this->cloud->getOutput($job));
-                $seconds = time() - $this->taskConfig->getState('cloud-job-processing');
-
-                $status->setSummary($this->translator->trans('taskoperation.cloud.processingSummary'));
-
-                $status->setDetail(
-                    $this->translator->trans(
-                           'taskoperation.cloud.processingDetail',
-                           ['job' => '['.substr($job->getId(), 0, 8).'…]', 'seconds' => $seconds]
-                    ).' '.$profile
-                );
-
-                $status->addConsole(
-                    $console."\n\n ".$this->translator->trans(
-                        'taskoperation.cloud.processingDetail',
-                        ['job' => $job->getId(), 'seconds' => $seconds]
-                    ).' '.$profile
-                );
-
-                if ($this->environment->isDebug()) {
-                    $status->addConsole($this->cloud->getOutput($job));
-                }
-                break;
-
-            case CloudJob::STATUS_ERROR:
-                $output = sprintf("%s\n\n# Cloud Job ID %s failed", $this->cloud->getOutput($job), $job->getId());
-                $status->setSummary($this->translator->trans('taskoperation.cloud.errorSummary'));
-                $status->addConsole($output, $console);
-                $status->setStatus(TaskStatus::STATUS_ERROR);
-                break;
-
-            case CloudJob::STATUS_FINISHED:
-                $seconds = $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing');
-
-                $profile = $this->getFinalProfile($this->cloud->getOutput($job));
-                preg_match('{Memory usage: ([^ ]+) \(peak: ([^)]+)\), time: ([0-9.]+s)\.}', $profile, $match);
-
-                $detail = $this->translator->trans(
-                    'taskoperation.cloud.finishedDetail',
-                    [
-                        'job' => $job->getId(),
-                        'memory' => $match[1],
-                        'peak' => $match[2],
-                        'time' => $match[3],
-                    ]
-                );
-
-                $status->setSummary($this->translator->trans('taskoperation.cloud.finishedSummary', ['seconds' => $seconds]));
-                $status->setDetail($detail);
-                $status->addConsole("# Job ID {$job->getId()} completed in $seconds seconds\n# ".$profile, $console);
-                break;
-
-            default:
-                throw new \RuntimeException(sprintf('Unknown cloud status "%s"', $job->getStatus()));
-        }
-    }
-
-    /**
-     * @return CloudJob|null
-     */
-    private function getCurrentJob()
+    private function getCurrentJob(): ?CloudJob
     {
         if (null === $this->job) {
-            $this->job = $this->cloud->getJob((string) $this->taskConfig->getState('cloud-job'));
-        }
+            try {
+                $this->job = $this->cloud->getJob((string)$this->taskConfig->getState('cloud-job'));
+            } catch (\Exception $e) {
+                $this->exception = $e;
 
-        if ($this->job instanceof CloudJob
-            && $this->job->isProcessing()
-            && !$this->taskConfig->getState('cloud-job-processing')
-        ) {
-            $this->taskConfig->setState('cloud-job-processing', time());
-        }
+                return null;
+            }
 
-        if ($this->job instanceof CloudJob
-            && ($this->job->isSuccessful() || $this->job->isFailed())
-            && !$this->taskConfig->getState('cloud-job-finished')
-        ) {
-            $this->taskConfig->setState('cloud-job-finished', time());
+            if ($this->job instanceof CloudJob
+                && $this->job->isProcessing()
+                && !$this->taskConfig->getState('cloud-job-processing')
+            ) {
+                $this->taskConfig->setState('cloud-job-processing', time());
+            }
+
+            if ($this->job instanceof CloudJob
+                && ($this->job->isSuccessful() || $this->job->isFailed())
+                && !$this->taskConfig->getState('cloud-job-finished')
+            ) {
+                $this->taskConfig->setState('cloud-job-finished', time());
+            }
         }
 
         return $this->job;
     }
 
-    private function getCurrentProfile($output)
+    private function getCurrentProfile(string $output): string
     {
         // [351.1MiB/0.21s]
 
@@ -320,7 +327,7 @@ class CloudOperation implements TaskOperationInterface
         return '';
     }
 
-    private function getFinalProfile($output)
+    private function getFinalProfile(string $output): string
     {
         // Memory usage: 353.94MB (peak: 1327.09MB), time: 160.17s
 

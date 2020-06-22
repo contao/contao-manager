@@ -203,8 +203,8 @@ CODE
         $loader->load(__DIR__.'/Resources/config/config_'.$c->getParameter('kernel.environment').'.yml');
 
         $c->registerForAutoconfiguration(TaskInterface::class)
-            ->addTag('monolog.logger', ['channel' => 'tasks'])
             ->addTag('app.task')
+            ->addTag('monolog.logger', ['channel' => 'tasks'])
         ;
     }
 

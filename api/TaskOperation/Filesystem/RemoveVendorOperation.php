@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\TaskOperation\Filesystem;
 
 use Contao\ManagerApi\Composer\Environment;
-use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -27,46 +25,28 @@ class RemoveVendorOperation extends AbstractInlineOperation
     private $environment;
 
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * @var Filesystem
      */
     private $filesystem;
 
-    /**
-     * Constructor.
-     */
-    public function __construct(TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem)
+    public function __construct(TaskConfig $taskConfig, Environment $environment, Filesystem $filesystem)
     {
         parent::__construct($taskConfig);
 
         $this->environment = $environment;
-        $this->translator = $translator;
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function getSummary(): string
+    {
+        return 'rm -rf vendor';
+    }
+
     public function doRun(): bool
     {
         $this->filesystem->remove($this->environment->getVendorDir());
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateStatus(TaskStatus $status): void
-    {
-        $status->setSummary($this->translator->trans('taskoperation.remove-vendor.summary'));
-        $status->setDetail($this->environment->getVendorDir());
-
-        $this->addConsoleStatus($status);
     }
 
     protected function getName(): string

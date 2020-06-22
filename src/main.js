@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource';
+import VueClipboard from 'v-clipboard';
 
 import bootstrap from 'contao-package-list/src/bootstrap';
 import router from './router';
@@ -11,6 +12,7 @@ import './filters';
 import App from './components/App';
 
 Vue.use(VueResource);
+Vue.use(VueClipboard);
 
 Vue.http.options.emulateHTTP = true;
 

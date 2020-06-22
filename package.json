@@ -12,6 +12,8 @@
   "dependencies": {
     "algoliasearch": "^3.35.1",
     "contao-package-list": "git+https://github.com/contao/package-list.git",
+    "details-element-polyfill": "^2.4.0",
+    "v-clipboard": "^2.2.3",
     "vue": "^2.6.11",
     "vue-i18n": "^8.18.1",
     "vue-resource": "^1.5.1",

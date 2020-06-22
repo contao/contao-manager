@@ -79,11 +79,11 @@ class InstallToolTask extends AbstractTask
     protected function buildOperations(TaskConfig $config): array
     {
         if (true === $config->getOption('lock')) {
-            return [new InstallLockOperation($this->processFactory, $this->translator)];
+            return [new InstallLockOperation($this->processFactory)];
         }
 
         if (false === $config->getOption('lock')) {
-            return [new InstallUnlockOperation($this->processFactory, $this->translator)];
+            return [new InstallUnlockOperation($this->processFactory)];
         }
 
         throw new \RuntimeException('Missing lock config argument.');

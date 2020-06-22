@@ -34,6 +34,16 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
         $this->taskConfig = $taskConfig;
     }
 
+    public function getDetails(): ?string
+    {
+        return '';
+    }
+
+    public function getConsole(): ConsoleOutput
+    {
+        return $this->addConsoleOutput(new ConsoleOutput());
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -102,13 +112,15 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
     }
 
     /**
-     * Adds the exception message to the status console.
+     * Adds the exception message to the console output.
      */
-    protected function addConsoleStatus(TaskStatus $status): void
+    protected function addConsoleOutput(ConsoleOutput $console): ConsoleOutput
     {
         if ($error = $this->taskConfig->getState($this->getName().'.error')) {
-            $status->addConsole((string) $error);
+            $console->add((string) $error);
         }
+
+        return $console;
     }
 
     /**

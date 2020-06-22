@@ -144,8 +144,9 @@
             },
         },
 
-        created() {
+        async created() {
             this.$store.dispatch('server/purgeCache');
+            await this.$store.dispatch('tasks/init');
             this.setStatus(this.views);
         },
     };

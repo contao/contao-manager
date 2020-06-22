@@ -12,7 +12,10 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Task;
 
-class TaskStatus
+use Contao\ManagerApi\TaskOperation\ConsoleOutput;
+use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
+
+final class TaskStatus implements \JsonSerializable
 {
     public const STATUS_ACTIVE = 'active';
     public const STATUS_COMPLETE = 'complete';
@@ -26,19 +29,9 @@ class TaskStatus
     private $title;
 
     /**
-     * @var string
+     * @var TaskOperationInterface[]
      */
-    private $summary = '';
-
-    /**
-     * @var string
-     */
-    private $detail = '';
-
-    /**
-     * @var string|false|null
-     */
-    private $console;
+    private $operations;
 
     /**
      * @var bool
@@ -51,17 +44,17 @@ class TaskStatus
     /**
      * @var bool
      */
-    private $audit;
+    private $audit = false;
 
     /**
-     * @var string
+     * @var bool
      */
-    private $status = self::STATUS_ACTIVE;
+    private $abort = false;
 
-    public function __construct(string $title, bool $audit = false)
+    public function __construct(string $title, array $operations)
     {
         $this->title = $title;
-        $this->audit = $audit;
+        $this->operations = $operations;
     }
 
     public function getTitle(): string
@@ -69,73 +62,15 @@ class TaskStatus
         return $this->title;
     }
 
-    /**
-     * @return TaskStatus
-     */
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getSummary(): string
-    {
-        return $this->summary;
-    }
-
-    public function setSummary(string $summary): self
-    {
-        $this->summary = $summary;
-
-        return $this;
-    }
-
-    public function getDetail(): string
-    {
-        return $this->detail;
-    }
-
-    public function setDetail(string $detail): self
-    {
-        $this->detail = $detail;
-
-        return $this;
-    }
-
     public function getConsole()
     {
-        return $this->console;
-    }
+        $console = new ConsoleOutput();
 
-    /**
-     * @param string|false|null $console
-     */
-    public function setConsole($console): self
-    {
-        $this->console = $console;
-
-        return $this;
-    }
-
-    /**
-     * Adds output to the console log.
-     */
-    public function addConsole(string $console, string $title = null): void
-    {
-        if (null !== $title) {
-            $console = sprintf("%s\n\n%s", $title, $console);
+        foreach ($this->operations as $operation) {
+            $console->add((string) $operation->getConsole());
         }
 
-        if (!$console) {
-            return;
-        }
-
-        if ($this->console) {
-            $console = $this->console."\n\n".$console;
-        }
-
-        $this->console = $console;
+        return (string) $console;
     }
 
     public function isCancellable(): bool
@@ -176,38 +111,105 @@ class TaskStatus
 
     public function getStatus(): string
     {
-        return $this->status;
+        foreach ($this->operations as $operation) {
+            if ($this->abort) {
+                if ($operation->isRunning()) {
+                    return self::STATUS_ABORTING;
+                }
+
+                continue;
+            }
+
+            if (!$operation->isStarted() || $operation->isRunning()) {
+                return self::STATUS_ACTIVE;
+            }
+
+            if ($operation->hasError()) {
+                return self::STATUS_ERROR;
+            }
+        }
+
+        if ($this->abort) {
+            return self::STATUS_STOPPED;
+        }
+
+        return self::STATUS_COMPLETE;
     }
 
-    /**
-     * @param string $status
-     *
-     * @return TaskStatus
-     */
-    public function setStatus($status): self
+    public function setAborted(): self
     {
-        $this->status = $status;
+        $this->abort = true;
 
         return $this;
     }
 
     public function isActive(): bool
     {
-        return self::STATUS_ACTIVE === $this->status;
+        return self::STATUS_ACTIVE === $this->getStatus();
     }
 
     public function isComplete(): bool
     {
-        return self::STATUS_COMPLETE === $this->status;
+        return self::STATUS_COMPLETE === $this->getStatus();
     }
 
     public function isStopped(): bool
     {
-        return self::STATUS_STOPPED === $this->status;
+        return self::STATUS_STOPPED === $this->getStatus();
     }
 
     public function hasError(): bool
     {
-        return self::STATUS_ERROR === $this->status;
+        return self::STATUS_ERROR === $this->getStatus();
+    }
+
+    public function jsonSerialize()
+    {
+        $operations = [];
+
+        $isNext = true;
+        $hasError = false;
+
+        foreach ($this->operations as $operation) {
+            $operations[] = [
+                'summary' => $operation->getSummary(),
+                'details' => $operation->getDetails(),
+                'console' => (string) $operation->getConsole(),
+                'status' => $hasError ? self::STATUS_STOPPED : $this->getOperationStatus($operation, $isNext),
+            ];
+
+            $isNext = $operation->isSuccessful();
+            $hasError = $hasError || $operation->hasError();
+        }
+
+        return [
+            'title' => $this->getTitle(),
+            'console' => $this->getConsole(),
+            'cancellable' => $this->isCancellable(),
+            'autoclose' => $this->canAutoClose(),
+            'audit' => $this->hasAudit(),
+            'status' => $this->getStatus(),
+            'operations' => $operations,
+        ];
+    }
+
+    private function getOperationStatus(TaskOperationInterface $operation, bool $isNext = false): string
+    {
+        switch (true) {
+            case $operation->isRunning():
+                return TaskStatus::STATUS_ACTIVE;
+
+            case $operation->isSuccessful():
+                return TaskStatus::STATUS_COMPLETE;
+
+            case $operation->hasError():
+                return TaskStatus::STATUS_ERROR;
+        }
+
+        if ($operation->isStarted() || $isNext) {
+            return TaskStatus::STATUS_ACTIVE;
+        }
+
+        return 'pending';
     }
 }

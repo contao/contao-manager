@@ -16,7 +16,6 @@ use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class InstallOperation extends AbstractProcessOperation
@@ -88,24 +87,61 @@ class InstallOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        if (!$this->process->isStarted()) {
-            return;
+        return 'composer install';
+    }
+
+    public function getDetails(): ?string
+    {
+        if (!$this->isStarted()) {
+            return null;
         }
 
-        if (($attempt = $this->taskConfig->getState('install-retry', 0)) > 0) {
-            $status->setSummary(
-                $this->translator->trans(
-                    'taskoperation.composer-install.summaryRetry',
-                    ['current' => $attempt + 1, 'max' => 5])
+        if ($this->isRunning() && ($attempt = $this->taskConfig->getState('install-retry', 0)) > 0) {
+            return $this->translator->trans(
+                'taskoperation.composer-install.retry',
+                ['current' => $attempt + 1, 'max' => 5]
             );
-        } else {
-            $status->setSummary($this->translator->trans('taskoperation.composer-install.summary'));
         }
 
-        $status->setDetail($this->process->getCommandLine());
+        if ($this->isSuccessful()) {
+            $output = $this->process->getOutput().$this->process->getErrorOutput();
 
-        $this->addConsoleStatus($status);
+            if (false !== strpos($output, 'Nothing to install or update')) {
+                return $this->translator->trans('taskoperation.composer-install.nothing');
+            }
+
+            $operations = $this->getPackageOperations($output);
+
+            if (null !== $operations) {
+                return $this->translator->trans('taskoperation.composer-install.result', $operations);
+            }
+        }
+
+        return '';
+    }
+
+    private function getPackageOperations(string $output): ?array
+    {
+        // Package operations: 6 installs, 85 updates, 0 removals
+
+        $lines = explode("\n", $output);
+
+        foreach ($lines as $line) {
+            if (false !== ($pos = strpos($line, 'Package operations:'))) {
+                $operations = substr($line, $pos);
+
+                if (preg_match('{Package operations: (\d+) installs, (\d+) updates, (\d+) removals}', $operations, $match)) {
+                    return [
+                        'installs' => $match[1],
+                        'updates' => $match[2],
+                        'removals' => $match[3],
+                    ];
+                }
+            }
+        }
+
+        return null;
     }
 }

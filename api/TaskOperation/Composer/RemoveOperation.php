@@ -14,7 +14,6 @@ namespace Contao\ManagerApi\TaskOperation\Composer;
 
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class RemoveOperation extends AbstractProcessOperation
@@ -65,12 +64,8 @@ class RemoveOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        $status->setSummary($this->translator->trans('taskoperation.composer-remove.summary'));
-
-        $status->setDetail(implode(', ', $this->removed));
-
-        $this->addConsoleStatus($status);
+        return 'composer remove '.implode(' ', $this->removed);
     }
 }

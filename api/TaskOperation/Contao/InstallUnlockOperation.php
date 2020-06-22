@@ -12,27 +12,13 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation\Contao;
 
-use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
-use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class InstallUnlockOperation extends AbstractProcessOperation
 {
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * Constructor.
-     *
-     * @param string $processId
-     */
-    public function __construct(ConsoleProcessFactory $processFactory, Translator $translator, $processId = 'install-unlock')
+    public function __construct(ConsoleProcessFactory $processFactory, string $processId = 'install-unlock')
     {
-        $this->translator = $translator;
-
         try {
             parent::__construct($processFactory->restoreBackgroundProcess($processId));
         } catch (\Exception $e) {
@@ -40,10 +26,8 @@ class InstallUnlockOperation extends AbstractProcessOperation
         }
     }
 
-    public function updateStatus(TaskStatus $status): void
+    public function getSummary(): string
     {
-        $status->setSummary($this->translator->trans('taskoperation.install-unlock.summary'));
-
-        $this->addConsoleStatus($status);
+        return 'vendor/bin/contao-console contao:install:unlock';
     }
 }

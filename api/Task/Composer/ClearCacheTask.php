@@ -60,7 +60,7 @@ class ClearCacheTask extends AbstractTask
     protected function buildOperations(TaskConfig $config): array
     {
         return [
-            new ClearCacheOperation($this->processFactory, $this->translator),
+            new ClearCacheOperation($this->processFactory),
         ];
     }
 }
