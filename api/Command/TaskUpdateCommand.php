@@ -14,10 +14,13 @@ namespace Contao\ManagerApi\Command;
 
 use Contao\ManagerApi\Task\TaskManager;
 use Contao\ManagerApi\Task\TaskStatus;
+use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressIndicator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -62,17 +65,30 @@ class TaskUpdateCommand extends Command
             return 1;
         }
 
+        if (!$output instanceof ConsoleOutput) {
+            return 1;
+        }
+
         $style = new SymfonyStyle($input, $output);
         $style->title($status->getTitle());
 
-        if (!$input->getOption('poll')) {
-            $style->text($status->getSummary());
-        } else {
-            $progress = new ProgressIndicator($output);
-            $progress->start($status->getSummary());
+        $sections = [];
+        $progresses = [];
+        $operations = $status->getOperations();
 
+        foreach ($operations as $i => $operation) {
+            $section = $output->section();
+            $section->writeln(($operation->isRunning() ? ' > ' : ' - ').$operation->getSummary());
+            $section->writeln('');
+
+            $sections[$i] = $section;
+        }
+
+        $this->updateOperations($status->getOperations(), $sections, $progresses);
+
+        if ($input->getOption('poll')) {
             while ($status->isActive()) {
-                sleep((int) $input->getOption('interval'));
+                sleep((int)$input->getOption('interval'));
 
                 $newStatus = $this->taskManager->updateTask();
 
@@ -80,22 +96,15 @@ class TaskUpdateCommand extends Command
                     return 1;
                 }
 
-                $progress->advance();
-
-                if ($status->getSummary() !== $newStatus->getSummary()) {
-                    $progress->setMessage($newStatus->getSummary());
+                if ($this->updateOperations($newStatus->getOperations(), $sections, $progresses)) {
+                    break;
                 }
-
-                $status = $newStatus;
             }
-
-            $progress->finish($status->getSummary());
-            $output->writeln('');
         }
 
         switch ($status->getStatus()) {
             case TaskStatus::STATUS_COMPLETE:
-                $style->success('Task completed sucessfully');
+                $style->success('Operations completed successfully');
                 break;
 
             case TaskStatus::STATUS_ERROR:
@@ -108,5 +117,71 @@ class TaskUpdateCommand extends Command
         }
 
         return 0;
+    }
+
+    /**
+     * @param TaskOperationInterface[] $operations
+     * @param ConsoleSectionOutput[] $sections
+     * @param ProgressIndicator[] $progresses
+     */
+    private function updateOperations(array $operations, array $sections, array &$progresses): bool
+    {
+        foreach ($operations as $i => $operation) {
+            $section = $sections[$i];
+            $progress = $progresses[$i] ?? null;
+
+            $this->updateOperation($operation, $section, $progress);
+
+            $progresses[$i] = $progress;
+
+            if (!$operation->isStarted() || $operation->isRunning()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function updateOperation(TaskOperationInterface $operation, ConsoleSectionOutput $section, ?ProgressIndicator &$progress): void
+    {
+        if (!$operation->isStarted()) {
+            return;
+        }
+
+        $section->clear();
+
+        if ($operation->isRunning()) {
+            if (!$progress) {
+                $progress = new ProgressIndicator($section);
+                $progress->start($operation->getSummary());
+            }
+
+            $progress->advance();
+            $section->writeln('   '.$operation->getDetails());
+            $section->writeln('');
+            return;
+        }
+
+        if ($progress) {
+            $progress->finish($operation->getSummary());
+            $section->clear();
+            $progress = null;
+        }
+
+        if ($operation->isSuccessful()) {
+            $icon = sprintf(
+                '<fg=green;options=bold>%s</>',
+                '\\' === \DIRECTORY_SEPARATOR ? 'OK' : "\xE2\x9C\x94" // HEAVY CHECK MARK (U+2714)
+            );
+        } elseif ($operation->hasError()) {
+            $icon = sprintf(
+                '<fg=red;options=bold>%s</>',
+                '\\' === \DIRECTORY_SEPARATOR ? 'ERROR' : "\xE2\x9C\x98" // HEAVY BALLOT X (U+2718)
+            );
+        }
+
+        $section->writeln(' '.$icon.' '.$operation->getSummary());
+        $section->writeln('   '.$operation->getDetails());
+        $section->writeln('');
     }
 }

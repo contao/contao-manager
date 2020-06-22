@@ -73,6 +73,14 @@ final class TaskStatus implements \JsonSerializable
         return (string) $console;
     }
 
+    /**
+     * @return TaskOperationInterface[]
+     */
+    public function getOperations(): array
+    {
+        return $this->operations;
+    }
+
     public function isCancellable(): bool
     {
         return $this->cancellable;
@@ -120,12 +128,12 @@ final class TaskStatus implements \JsonSerializable
                 continue;
             }
 
-            if (!$operation->isStarted() || $operation->isRunning()) {
-                return self::STATUS_ACTIVE;
-            }
-
             if ($operation->hasError()) {
                 return self::STATUS_ERROR;
+            }
+
+            if (!$operation->isStarted() || $operation->isRunning()) {
+                return self::STATUS_ACTIVE;
             }
         }
 

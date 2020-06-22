@@ -32,11 +32,6 @@ class CloudResolver implements LoggerAwareInterface
      */
     private $request;
 
-    /**
-     * @var array
-     */
-    private $output = [];
-
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -170,11 +165,7 @@ class CloudResolver implements LoggerAwareInterface
             return null;
         }
 
-        if (!isset($this->output[$job->getId()])) {
-            $this->output[$job->getId()] = $this->getContent($job->getLink(CloudJob::LINK_OUTPUT));
-        }
-
-        return $this->output[$job->getId()];
+        return $this->getContent($job->getLink(CloudJob::LINK_OUTPUT));
     }
 
     private function getContent($link): string

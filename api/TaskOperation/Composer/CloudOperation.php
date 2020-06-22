@@ -67,6 +67,11 @@ class CloudOperation implements TaskOperationInterface
     private $exception;
 
     /**
+     * @var string
+     */
+    private $output;
+
+    /**
      * Constructor.
      */
     public function __construct(CloudResolver $cloud, CloudChanges $changes, TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem)
@@ -104,7 +109,7 @@ class CloudOperation implements TaskOperationInterface
                 );
 
             case CloudJob::STATUS_PROCESSING:
-                $profile = $this->getCurrentProfile($this->cloud->getOutput($job));
+                $profile = $this->getCurrentProfile($this->getOutput());
                 $seconds = time() - $this->taskConfig->getState('cloud-job-processing');
 
                 return $this->translator->trans(
@@ -117,7 +122,7 @@ class CloudOperation implements TaskOperationInterface
 
             case CloudJob::STATUS_FINISHED:
                 $seconds = $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing');
-                $profile = $this->getFinalProfile($this->cloud->getOutput($job));
+                $profile = $this->getFinalProfile($this->getOutput());
                 preg_match('{Memory usage: ([^ ]+) \(peak: ([^)]+)\), time: ([0-9.]+s)\.}', $profile, $match);
 
                 return $this->translator->trans(
@@ -170,18 +175,18 @@ class CloudOperation implements TaskOperationInterface
                 break;
 
             case CloudJob::STATUS_PROCESSING:
-                $console->add($this->cloud->getOutput($job), $title);
+                $console->add($this->getOutput(), $title);
                 break;
 
             case CloudJob::STATUS_ERROR:
                 $console->add(
-                    sprintf("%s\n\n# Cloud Job ID %s failed", $this->cloud->getOutput($job), $job->getId()),
+                    sprintf("%s\n\n# Cloud Job ID %s failed", $this->getOutput(), $job->getId()),
                     $title
                 );
                 break;
 
             case CloudJob::STATUS_FINISHED:
-                $output = $this->cloud->getOutput($job);
+                $output = $this->getOutput();
                 $seconds = $this->taskConfig->getState('cloud-job-finished') - $this->taskConfig->getState('cloud-job-processing');
 
                 $profile = $this->getFinalProfile($output);
@@ -343,5 +348,14 @@ class CloudOperation implements TaskOperationInterface
         }
 
         return '';
+    }
+
+    private function getOutput(): string
+    {
+        if (null === $this->output) {
+            $this->output = $this->cloud->getOutput($this->getCurrentJob());
+        }
+
+        return $this->output;
     }
 }
