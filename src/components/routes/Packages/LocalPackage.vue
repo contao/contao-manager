@@ -12,11 +12,10 @@
     import metadata from 'contao-package-list/src/mixins/metadata';
     import packageStatus from "../../../mixins/packageStatus";
     import ComposerPackage from './ComposerPackage';
-    import PackageConstraint from "../../fragments/PackageConstraint";
 
     export default {
         mixins: [metadata, packageStatus],
-        components: {PackageConstraint, ComposerPackage },
+        components: { ComposerPackage },
 
         props: {
             data: {
