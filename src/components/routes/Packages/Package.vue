@@ -217,12 +217,6 @@
 
         &__additional {
             margin-top: -5px;
-
-            > *:not(:last-child):after {
-                margin: 0 10px;
-                font-weight: $font-weight-normal;
-                content: "|";
-            }
         }
 
         // Fixes CSS override with basic input styling

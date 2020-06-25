@@ -13,7 +13,11 @@
             <strong class="package__version package__version--additional" v-if="data.version">
                 {{ $t('ui.package.version', { version: data.version }) }}
             </strong>
-            <span v-for="(item,k) in additional" :key="k">{{ item }}</span>
+
+            <span class="composer-package__stats composer-package__stats--license">{{ license }}</span>
+            <span class="composer-package__stats composer-package__stats--downloads" v-if="data.downloads">{{ data.downloads | numberFormat }}</span>
+            <span class="composer-package__stats composer-package__stats--favers" v-if="data.favers">{{ data.favers | numberFormat }}</span>
+            <router-link class="composer-package__stats composer-package__stats--funding" :to="{ query: { p: data.name } }" v-if="data.funding">&nbsp;</router-link>
         </template>
 
         <template #release>
@@ -53,8 +57,7 @@
 </template>
 
 <script>
-    import Vue from 'vue';
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapMutations } from 'vuex';
 
     import packageStatus from '../../../mixins/packageStatus';
 
@@ -79,6 +82,8 @@
 
         computed: {
             ...mapGetters('packages', ['packageFeatures']),
+
+            license: vm => vm.data.license instanceof Array ? vm.data.license.join('/') : vm.data.license,
 
             packageHint() {
                 if (this.hint) {
@@ -164,28 +169,6 @@
 
                 return null;
             },
-
-            additional() {
-                const additionals = [];
-
-                if (this.data.license) {
-                    if (this.data.license instanceof Array) {
-                        additionals.push(this.data.license.join('/'));
-                    } else {
-                        additionals.push(this.data.license);
-                    }
-                }
-
-                if (this.data.downloads) {
-                    additionals.push(this.$tc('ui.package.additionalDownloads', this.data.downloads, { count: Vue.filter('numberFormat')(this.data.downloads) }));
-                }
-
-                if (this.data.favers) {
-                    additionals.push(this.$tc('ui.package.additionalStars', this.data.favers));
-                }
-
-                return additionals;
-            },
         },
 
         methods: {
@@ -193,6 +176,48 @@
                 this.$store.commit('packages/restore', this.data.name);
                 this.$store.commit('packages/uploads/unconfirm', this.data.name);
             },
+
+            methods: {
+                ...mapMutations('packages/details', ['setCurrent']),
+            },
         },
     };
 </script>
+
+<style lang="scss">
+    @import "~contao-package-list/src/assets/styles/defaults";
+
+    .composer-package {
+        &__stats {
+            display: inline-block;
+            margin-right: 15px;
+            padding-left: 18px;
+            font-size: 13px;
+            background-position: 0 50%;
+            background-repeat: no-repeat;
+            background-size: 13px 13px;
+
+            &--license {
+                @include screen(1024) {
+                    padding-left: 0;
+                }
+            }
+
+            &--downloads {
+                background-image: url("~contao-package-list/src/assets/images/downloads.svg");
+            }
+
+            &--favers {
+                background-image: url("~contao-package-list/src/assets/images/favers.svg");
+            }
+
+            &--funding {
+                width: 48px;
+                background-image: url("~contao-package-list/src/assets/images/funding.svg");
+                background-size: 16px 16px;
+                background-repeat: repeat-x;
+                text-decoration: none !important;
+            }
+        }
+    }
+</style>
