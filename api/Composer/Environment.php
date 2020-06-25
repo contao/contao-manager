@@ -184,7 +184,16 @@ class Environment
         unset($repositories['packagist.org']);
 
         if (!empty($repositories) || !empty($json['repositories'])) {
-            $json['repositories'] = array_values($repositories);
+            $filesystem = new \Composer\Util\Filesystem();
+            $json['repositories'] = [];
+
+            foreach ($repositories as $repository) {
+                if (isset($repository['url'])) {
+                    $repository['url'] = $filesystem->normalizePath($repository['url']);
+                }
+
+                $json['repositories'][] = $repository;
+            }
         }
 
         return $json;
