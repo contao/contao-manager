@@ -19,8 +19,6 @@ class ComposerConfig extends AbstractConfig
 {
     public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'config.json';
-
-        parent::__construct($configFile, $filesystem);
+        parent::__construct('config.json', $kernel, $filesystem);
     }
 }

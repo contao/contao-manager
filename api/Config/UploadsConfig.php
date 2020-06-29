@@ -19,8 +19,6 @@ class UploadsConfig extends AbstractConfig
 {
     public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'uploads.json';
-
-        parent::__construct($configFile, $filesystem);
+        parent::__construct('uploads.json', $kernel, $filesystem);
     }
 }

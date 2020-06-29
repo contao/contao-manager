@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Config;
 
+use Contao\ManagerApi\ApiKernel;
 use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractConfig implements \IteratorAggregate, \Countable
@@ -24,7 +25,12 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
     /**
      * @var string
      */
-    private $configFile;
+    private $fileName;
+
+    /**
+     * @var ApiKernel
+     */
+    private $kernel;
 
     /**
      * @var Filesystem
@@ -32,23 +38,15 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
     private $filesystem;
 
     /**
-     * Constructor.
-     *
-     * @param string     $configFile
-     * @param Filesystem $filesystem
+     * @var bool
      */
-    public function __construct($configFile, Filesystem $filesystem = null)
+    private $initialized = false;
+
+    public function __construct(string $fileName, ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $this->configFile = $configFile;
+        $this->fileName = $fileName;
+        $this->kernel = $kernel;
         $this->filesystem = $filesystem ?: new Filesystem();
-
-        if (is_file($this->configFile)) {
-            $this->data = json_decode(file_get_contents($this->configFile), true);
-
-            if (!\is_array($this->data)) {
-                throw new \InvalidArgumentException('The config file does not contain valid JSON data.');
-            }
-        }
     }
 
     /**
@@ -56,6 +54,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      */
     public function all(): array
     {
+        $this->initialize();
+
         return $this->data;
     }
 
@@ -64,6 +64,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      */
     public function keys(): array
     {
+        $this->initialize();
+
         return array_keys($this->data);
     }
 
@@ -72,6 +74,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      */
     public function replace(array $data = []): void
     {
+        $this->initialize();
+
         $this->data = $data;
 
         $this->save();
@@ -82,6 +86,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      */
     public function add(array $data = []): void
     {
+        $this->initialize();
+
         $this->data = array_replace($this->data, $data);
 
         $this->save();
@@ -92,6 +98,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      */
     public function get(string $key, $default = null)
     {
+        $this->initialize();
+
         return \array_key_exists($key, $this->data) ? $this->data[$key] : $default;
     }
 
@@ -100,6 +108,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      */
     public function set(string $key, $value): void
     {
+        $this->initialize();
+
         $this->data[$key] = $value;
 
         $this->save();
@@ -110,6 +120,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      */
     public function has(string $key): bool
     {
+        $this->initialize();
+
         return \array_key_exists($key, $this->data);
     }
 
@@ -118,6 +130,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      */
     public function remove(string $key): void
     {
+        $this->initialize();
+
         unset($this->data[$key]);
 
         $this->save();
@@ -125,11 +139,15 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
 
     public function getIterator(): \ArrayIterator
     {
+        $this->initialize();
+
         return new \ArrayIterator($this->data);
     }
 
     public function count(): int
     {
+        $this->initialize();
+
         return \count($this->data);
     }
 
@@ -138,9 +156,34 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      */
     protected function save(): void
     {
+        if (!$this->initialized) {
+            return;
+        }
+
+        $file = $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.$this->fileName;
+
         $this->filesystem->dumpFile(
-            $this->configFile,
+            $file,
             json_encode($this->data, JSON_PRETTY_PRINT)
         );
+    }
+
+    protected function initialize(): void
+    {
+        if ($this->initialized) {
+            return;
+        }
+
+        $this->initialized = true;
+
+        $file = $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.$this->fileName;
+
+        if (is_file($file)) {
+            $this->data = json_decode(file_get_contents($file), true);
+
+            if (!\is_array($this->data)) {
+                throw new \InvalidArgumentException('The config file does not contain valid JSON data.');
+            }
+        }
     }
 }

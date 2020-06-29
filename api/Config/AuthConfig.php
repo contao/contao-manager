@@ -19,9 +19,7 @@ class AuthConfig extends AbstractConfig
 {
     public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'auth.json';
-
-        parent::__construct($configFile, $filesystem);
+        parent::__construct('auth.json', $kernel, $filesystem);
     }
 
     /**
@@ -29,6 +27,8 @@ class AuthConfig extends AbstractConfig
      */
     public function getGithubToken(): ?string
     {
+        $this->initialize();
+
         if (!isset($this->data['github-oauth']['github.com'])) {
             return null;
         }
@@ -41,6 +41,8 @@ class AuthConfig extends AbstractConfig
      */
     public function setGithubToken(string $token): void
     {
+        $this->initialize();
+
         $this->data['github-oauth'] = [
             'github.com' => $token,
         ];
@@ -53,6 +55,8 @@ class AuthConfig extends AbstractConfig
      */
     public function setBasicAuth(string $domain, string $username, string $password): void
     {
+        $this->initialize();
+
         $this->data['http-basic'][$domain] = [
             'username' => $username,
             'password' => $password,
@@ -66,6 +70,8 @@ class AuthConfig extends AbstractConfig
      */
     public function deleteBasicAuth(string $domain): void
     {
+        $this->initialize();
+
         if (!isset($this->data['http-basic'][$domain])) {
             return;
         }

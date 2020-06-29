@@ -29,18 +29,9 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     public function __construct(ContainerInterface $container, ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'users.json';
-
-        parent::__construct($configFile, $filesystem);
+        parent::__construct('user.json', $kernel, $filesystem);
 
         $this->container = $container;
-
-        if (!isset($this->data['version']) || $this->data['version'] < 2) {
-            $this->migrateSecret();
-            $this->hashTokens();
-            $this->data['version'] = 2;
-            $this->save();
-        }
     }
 
     /**
@@ -48,6 +39,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function getSecret(): string
     {
+        $this->initialize();
+
         if (!isset($this->data['secret'])) {
             $this->setSecret(bin2hex(random_bytes(40)));
         }
@@ -62,6 +55,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function setSecret($secret): void
     {
+        $this->initialize();
+
         if (empty($secret)) {
             throw new \InvalidArgumentException('Secret cannot be empty.');
         }
@@ -76,6 +71,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function countUsers(): int
     {
+        $this->initialize();
+
         if (!isset($this->data['users'])) {
             return 0;
         }
@@ -90,6 +87,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function getUsers(): array
     {
+        $this->initialize();
+
         if (0 === $this->countUsers()) {
             return [];
         }
@@ -111,6 +110,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function hasUser(string $username): bool
     {
+        $this->initialize();
+
         return isset($this->data['users'][$username]);
     }
 
@@ -119,6 +120,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function getUser(string $username): ?User
     {
+        $this->initialize();
+
         if (!isset($this->data['users'][$username])) {
             return null;
         }
@@ -134,6 +137,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function createUser(string $username, string $password): User
     {
+        $this->initialize();
+
         $password = $this->container->get(UserPasswordEncoderInterface::class)->encodePassword(
             new User($username, null),
             $password
@@ -147,6 +152,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function addUser(UserInterface $user): void
     {
+        $this->initialize();
+
         $username = $user->getUsername();
 
         if (isset($this->data['users'][$username])) {
@@ -166,6 +173,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function updateUser(UserInterface $user): void
     {
+        $this->initialize();
+
         unset($this->data['users'][$user->getUsername()]);
 
         $this->addUser($user);
@@ -176,6 +185,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function deleteUser(string $username): void
     {
+        $this->initialize();
+
         unset($this->data['users'][$username]);
 
         $this->save();
@@ -186,6 +197,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function getTokens(): array
     {
+        $this->initialize();
+
         if (!isset($this->data['tokens']) || !\is_array($this->data['tokens'])) {
             return [];
         }
@@ -207,6 +220,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function getToken(string $id): ?array
     {
+        $this->initialize();
+
         if (!isset($this->data['tokens'][$id])) {
             return null;
         }
@@ -222,6 +237,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function findToken(string $token): ?array
     {
+        $this->initialize();
+
         return $this->getToken(hash('sha256', $token));
     }
 
@@ -230,6 +247,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function createToken(string $username, string $clientId, string $scope = 'admin'): array
     {
+        $this->initialize();
+
         if (!$this->hasUser($username)) {
             throw new \RuntimeException(sprintf('Username "%s" does not exist.', $username));
         }
@@ -263,6 +282,8 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
      */
     public function deleteToken(string $id): void
     {
+        $this->initialize();
+
         unset($this->data['tokens'][$id]);
 
         $this->save();
@@ -276,6 +297,21 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
         ];
     }
 
+    protected function initialize(): void
+    {
+        parent::initialize();
+
+        if (!isset($this->data['version']) || $this->data['version'] < 2) {
+            $this->migrateSecret();
+            $this->hashTokens();
+
+            if (!empty($this->data)) {
+                $this->data['version'] = 2;
+                $this->save();
+            }
+        }
+    }
+
     /**
      * Migrates the secret from manager config to user config.
      */
@@ -284,7 +320,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
         if (!isset($this->data['secret'])) {
             $config = $this->container->get(ManagerConfig::class);
 
-            if (!isset($this->data['users'])) {
+            if (!empty($this->data) && !isset($this->data['users'])) {
                 $this->data = ['users' => $this->data];
             }
 
