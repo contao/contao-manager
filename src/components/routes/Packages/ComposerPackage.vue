@@ -57,7 +57,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex';
+    import { mapGetters } from 'vuex';
 
     import packageStatus from '../../../mixins/packageStatus';
 
@@ -175,10 +175,6 @@
             restore() {
                 this.$store.commit('packages/restore', this.data.name);
                 this.$store.commit('packages/uploads/unconfirm', this.data.name);
-            },
-
-            methods: {
-                ...mapMutations('packages/details', ['setCurrent']),
             },
         },
     };
