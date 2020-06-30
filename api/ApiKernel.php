@@ -13,7 +13,10 @@ declare(strict_types=1);
 namespace Contao\ManagerApi;
 
 use Composer\Util\ErrorHandler;
+use Contao\ManagerApi\Exception\ApiProblemException;
+use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskInterface;
+use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\MonologBundle\MonologBundle;
@@ -21,7 +24,10 @@ use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 use Terminal42\ServiceAnnotationBundle\Terminal42ServiceAnnotationBundle;
@@ -98,7 +104,7 @@ class ApiKernel extends Kernel
     {
         $cacheDir = $this->debug ? $this->getConfigDir().'/appcache' : __DIR__.'/Resources/cache';
 
-        $this->filesystem->mkdir($cacheDir);
+        $this->ensureDirectoryExists($cacheDir);
 
         return $cacheDir;
     }
@@ -107,7 +113,7 @@ class ApiKernel extends Kernel
     {
         $logDir = $this->getConfigDir().'/logs';
 
-        $this->filesystem->mkdir($logDir);
+        $this->ensureDirectoryExists($logDir);
 
         return $logDir;
     }
@@ -137,7 +143,7 @@ class ApiKernel extends Kernel
                 }
             }
 
-            $this->filesystem->mkdir($this->configDir);
+            $this->ensureDirectoryExists($this->configDir);
         }
 
         // Make sure the config directory contains a .htaccess file
@@ -163,6 +169,19 @@ CODE
     public function getVersion(): string
     {
         return $this->version;
+    }
+
+    public function getTranslator(): Translator
+    {
+        if ($this->container) {
+            return $this->container->get(Translator::class);
+        }
+
+        // The kernel has not been bootet successfully, manually create a translator
+        $requestStack = new RequestStack();
+        $requestStack->push(Request::createFromGlobals());
+
+        return new Translator($requestStack);
     }
 
     protected function configureRoutes(RouteCollectionBuilder $routes): void
@@ -215,7 +234,7 @@ CODE
                 $current = \dirname($phar);
             }
 
-            if ('web' === basename($current)) {
+            if ('web' === basename($current) && \is_writable(\dirname($current))) {
                 return \dirname($current);
             }
 
@@ -223,8 +242,21 @@ CODE
         }
 
         $testDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'test-dir';
-        $this->filesystem->mkdir($testDir);
+        $this->ensureDirectoryExists($testDir);
 
         return $testDir;
+    }
+
+    private function ensureDirectoryExists(string $directory): void
+    {
+        try {
+            $this->filesystem->mkdir($directory);
+        } catch (IOException $exception) {
+            $translator = $this->getTranslator();
+            $problem = new ApiProblem($translator->trans('error.writable.directory', ['path' => $exception->getPath()]));
+            $problem->setDetail($translator->trans('error.writable.detail'));
+
+            throw new ApiProblemException($problem, $exception);
+        }
     }
 }

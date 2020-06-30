@@ -51,7 +51,7 @@ class ApiProblemResponse extends Response
     /**
      * Creates a ApiProblemResponse from exception.
      */
-    public static function createFromException(\Exception $exception, bool $debug = false): self
+    public static function createFromException(\Throwable $exception, bool $debug = false): self
     {
         $headers = [];
 
@@ -65,7 +65,7 @@ class ApiProblemResponse extends Response
             }
 
             if ($debug) {
-                $problem->setDetail($exception->getTraceAsString());
+                $problem['debug'] = $exception->getTraceAsString();
             }
         }
 

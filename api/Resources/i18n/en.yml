@@ -94,3 +94,9 @@ en:
             json: 'The composer.json does not contain valid JSON data.'
             schema: 'The composer.json schema validation failed.'
             partial: 'The file upload was not completed.'
+
+    error:
+        writable:
+            directory: 'The Contao Manager could not create the directory "{path}".'
+            config-file: 'The Contao Manager could not write a config file to "{file}".'
+            detail: 'It looks like your server is not configured correctly. If you are about to install Contao, please setup the DocumentRoot of your web server. Otherwise make sure the file access permissions are correct. If you are unsure how to fix this, contact your hosting provider for support.'

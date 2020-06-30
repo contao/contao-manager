@@ -38,6 +38,17 @@ Vue.http.interceptors.push((request, next) => {
             throw response.data;
         }
 
+        if (response.headers.get('Content-Type') !== 'application/json' && response.status >= 500 && response.status <= 599) {
+            store.commit('setError', {
+                type: 'about:blank',
+                status: response.status,
+                request,
+                response,
+            });
+
+            throw response.data;
+        }
+
         if (url === 'api/session' && response.status !== 200) {
             return;
         }

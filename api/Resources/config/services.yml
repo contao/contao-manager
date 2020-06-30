@@ -26,6 +26,9 @@ services:
 
     Contao\ManagerApi\ApiKernel: '@kernel'
 
+    Contao\ManagerApi\I18n\Translator:
+        public: true
+
     locale_listener:
         class: Contao\ManagerApi\EventListener\LocaleListener
 

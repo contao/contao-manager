@@ -13,6 +13,9 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Config;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Exception\ApiProblemException;
+use Crell\ApiProblem\ApiProblem;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractConfig implements \IteratorAggregate, \Countable
@@ -162,10 +165,20 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
 
         $file = $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.$this->fileName;
 
-        $this->filesystem->dumpFile(
-            $file,
-            json_encode($this->data, JSON_PRETTY_PRINT)
-        );
+        try {
+            $this->filesystem->dumpFile(
+                $file,
+                json_encode($this->data, JSON_PRETTY_PRINT)
+            );
+        } catch (IOException $exception) {
+            $translator = $this->kernel->getTranslator();
+            $problem = (new ApiProblem(
+                $translator->trans('error.writable.config-file', ['file' => $file]),
+                'https://php.net/is_writable'
+            ))->setDetail($translator->trans('error.writable.detail'));
+
+            throw new ApiProblemException($problem, $exception);
+        }
     }
 
     protected function initialize(): void
