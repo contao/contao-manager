@@ -55,7 +55,7 @@
     export default {
         name: 'TaskView',
         mixins: [task],
-        components: {Checkbox, BoxedLayout, Loader, LoadingButton, TaskHeader, TaskOperation },
+        components: { BoxedLayout, Loader, LoadingButton, TaskHeader, TaskOperation, Checkbox },
 
         data: () => ({
             audit: true,

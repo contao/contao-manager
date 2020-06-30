@@ -1,7 +1,7 @@
 <template>
     <boxed-layout :wide="true" slotClass="view-recovery">
         <header class="view-recovery__header">
-            <img src="../../assets/images/recovery.svg" width="80" height="80" alt="Contao Logo" class="view-recovery__icon">
+            <img src="../../assets/images/recovery.svg" width="80" height="80" alt="" class="view-recovery__icon">
             <h1 class="view-recovery__headline">{{ $t('ui.recovery.headline') }}</h1>
         </header>
 
