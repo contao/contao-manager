@@ -52,22 +52,22 @@
                 position: absolute;
                 display: block;
                 width: 100px;
-                top: 40px;
-                bottom: 60px;
+                top: 0;
+                bottom: 0;
                 left: -100px;
                 content: "";
-                box-shadow: 15px 0 60px 25px #ebe6db inset, -5px 0 10px -4px rgba(0, 0, 0, .8) inset;
+                box-shadow: 15px 0 60px 25px #ebe6db inset, -8px 0 8px -8px rgba(0, 0, 0, .8) inset;
             }
 
             &:after {
                 position: absolute;
                 display: block;
                 width: 100px;
-                top: 40px;
-                bottom: 60px;
+                top: 0;
+                bottom: 0;
                 right: -100px;
                 content: "";
-                box-shadow: -15px 0 60px 25px #ebe6db inset, 5px 0 10px -4px rgba(0, 0, 0, .8) inset;
+                box-shadow: -15px 0 60px 25px #ebe6db inset, 8px 0 8px -8px rgba(0, 0, 0, .8) inset;
             }
         }
 
