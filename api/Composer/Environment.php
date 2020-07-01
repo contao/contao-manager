@@ -238,4 +238,15 @@ class Environment
 
         return $packages;
     }
+
+    public function hasPackage(string $packageName): bool
+    {
+        try {
+            $json = $this->getComposerJson();
+
+            return isset($json['require'][$packageName]);
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }
 }

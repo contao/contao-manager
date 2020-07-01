@@ -1,33 +1,84 @@
 <template>
     <boxed-layout v-if="current" :wide="true" slotClass="contao-check">
-        <header class="contao-check__header">
-            <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="contao-check__icon" />
-            <h1 class="contao-check__headline">{{ $t('ui.server.contao.headline') }}</h1>
-            <p class="contao-check__description">{{ $t('ui.server.contao.description') }}</p>
-            <p class="contao-check__version"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
-            <p class="contao-check__version" v-if="supportsLatest"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
-            <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.2' }) }}</span></p>
-            <i18n tag="p" path="ui.server.contao.releaseplan">
-                <a href="https://contao.org/en/release-plan.html" target="_blank">{{ $t('ui.server.contao.releaseplanLink') }}</a>
-            </i18n>
-        </header>
 
-        <section class="contao-check__form">
+        <template v-if="!isEmpty || !isWeb">
+            <header class="contao-check__header">
+                <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="contao-check__icon" />
+                <h1 class="contao-check__headline">{{ $t('ui.server.docroot.headline') }}</h1>
+                <p class="contao-check__warning">{{ $t('ui.server.docroot.warning') }}</p>
+                <p class="contao-check__description">{{ $t('ui.server.docroot.description1') }}</p>
+                <p class="contao-check__description">{{ $t('ui.server.docroot.description2') }}</p>
+                <a class="widget-button widget-button--inline widget-button--info widget-button--link" href="#" target="_blank">{{ $t('ui.server.docroot.documentation') }}</a>
+            </header>
 
-            <fieldset class="contao-check__fields">
-                <legend class="contao-check__fieldtitle">{{ $t('ui.server.contao.formTitle') }}</legend>
-                <p class="contao-check__fielddesc">{{ $t('ui.server.contao.formText') }}</p>
-                <select-menu name="version" :label="$t('ui.server.contao.version')" :options="versions" :disabled="processing" v-model="version"/>
-                <select-menu name="coreOnly" :label="$t('ui.server.contao.coreOnly')" :options="packages" :disabled="processing" v-model="coreOnly"/>
-                <checkbox name="noUpdate" :label="$t('ui.server.contao.noUpdate')" :disabled="processing" v-model="noUpdate"/>
-            </fieldset>
+            <transition name="animate-flip" type="transition" mode="out-in">
+                <section class="contao-check__form contao-check__form--center" v-if="directoryUpdated" v-bind:key="'front'">
+                    <div class="contao-check__fields">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" /></svg>
+                        <p class="contao-check__fielddesc">{{ $t('ui.server.docroot.confirmation') }}</p>
+                        <dl class="contao-check__directories">
+                            <dt>{{ $t('ui.server.docroot.currentRoot') }}</dt>
+                            <dd>{{ projectDir }}</dd>
+                            <dt>{{ $t('ui.server.docroot.newRoot') }}</dt>
+                            <dd v-if="isEmpty">{{ projectDir }}<span>/web</span></dd>
+                            <dd v-else>{{ projectDir }}<span>/{{ directory }}/web</span></dd>
+                        </dl>
+                    </div>
+                    <div class="contao-check__fields contao-check__fields--center">
+                        <loading-button inline :href="currentHref" :loading="processing" color="primary" icon="update" @click="reload">{{ $t('ui.server.docroot.reload') }}</loading-button>
+                    </div>
+                </section>
+                <section class="contao-check__form contao-check__form--center" v-else v-bind:key="'back'">
+                    <img src="../../assets/images/button-update.svg" class="invisible" alt=""> <!-- prefetch the update icon for the confirmation page -->
+                    <div class="contao-check__fields">
+                        <h2 class="contao-check__fieldtitle">{{ $t('ui.server.docroot.formTitle') }}</h2>
+                        <p class="contao-check__fielddesc">{{ $t('ui.server.docroot.formText1') }} <u>{{ $t('ui.server.docroot.formText2') }}</u></p>
+                        <text-field ref="directory" name="directory" :label="$t('ui.server.docroot.directory')" v-model="directory" :error="directoryError" v-if="!isEmpty"/>
+                        <dl class="contao-check__directories">
+                            <dt>{{ $t('ui.server.docroot.currentRoot') }}</dt>
+                            <dd>{{ projectDir }}</dd>
+                            <dt>{{ $t('ui.server.docroot.newRoot') }}</dt>
+                            <dd v-if="isEmpty">{{ projectDir }}<span>/web</span></dd>
+                            <dd v-else>{{ projectDir }}<span>/{{ directory }}/web</span></dd>
+                        </dl>
+                        <checkbox name="autoconfig" :label="$t('ui.server.docroot.autoconfig')" :disabled="processing" v-model="autoconfig"/>
+                    </div>
+                    <div class="contao-check__fields contao-check__fields--center">
+                        <loading-button inline color="primary" icon="run" :loading="processing" :disabled="!autoconfig || !!directoryError" @click="setupDocroot">{{ $t('ui.server.docroot.finish') }}</loading-button>
+                    </div>
+                </section>
+            </transition>
+        </template>
 
-            <fieldset class="contao-check__fields">
-                <loading-button color="primary" icon="run" :loading="processing" @click="install">{{ $t('ui.server.contao.install') }}</loading-button>
-            </fieldset>
+        <template v-else>
+            <header class="contao-check__header">
+                <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="contao-check__icon" />
+                <h1 class="contao-check__headline">{{ $t('ui.server.contao.headline') }}</h1>
+                <p class="contao-check__description">{{ $t('ui.server.contao.description') }}</p>
+                <p class="contao-check__version"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
+                <p class="contao-check__version" v-if="supportsLatest"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
+                <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.2' }) }}</span></p>
+                <i18n tag="p" path="ui.server.contao.releaseplan">
+                    <template #contaoReleasePlan><a href="https://contao.org/en/release-plan.html" target="_blank">{{ $t('ui.server.contao.releaseplanLink') }}</a></template>
+                </i18n>
+            </header>
 
-        </section>
+            <section class="contao-check__form">
 
+                <div class="contao-check__fields">
+                    <h2 class="contao-check__fieldtitle">{{ $t('ui.server.contao.formTitle') }}</h2>
+                    <p class="contao-check__fielddesc">{{ $t('ui.server.contao.formText') }}</p>
+                    <select-menu name="version" :label="$t('ui.server.contao.version')" :options="versions" :disabled="processing" v-model="version"/>
+                    <select-menu name="coreOnly" :label="$t('ui.server.contao.coreOnly')" :options="packages" :disabled="processing" v-model="coreOnly"/>
+                    <checkbox name="noUpdate" :label="$t('ui.server.contao.noUpdate')" :disabled="processing" v-model="noUpdate"/>
+                </div>
+
+                <div class="contao-check__fields">
+                    <loading-button color="primary" icon="run" :loading="processing" @click="install">{{ $t('ui.server.contao.install') }}</loading-button>
+                </div>
+
+            </section>
+        </template>
     </boxed-layout>
 
     <boot-check v-else :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription">
@@ -44,10 +95,13 @@
     import SelectMenu from '../widgets/SelectMenu';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import Checkbox from '../widgets/Checkbox';
+    import TextField from '../widgets/TextField';
+
+    let result;
 
     export default {
         mixins: [boot],
-        components: { Checkbox, BootCheck, BoxedLayout, SelectMenu, LoadingButton },
+        components: { Checkbox, BootCheck, BoxedLayout, SelectMenu, TextField, LoadingButton },
 
         data: () => ({
             processing: false,
@@ -55,9 +109,20 @@
             version: '',
             coreOnly: 'no',
             noUpdate: false,
+
+            isEmpty: true,
+            isWeb: true,
+            projectDir: null,
+            autoconfig: false,
+            directory: '',
+            directoryExists: false,
+            directoryUpdated: false,
         }),
 
         computed: {
+            directoryError: vm => vm.directoryExists ? vm.$t('ui.server.docroot.directoryExists') : (vm.directory ? '' : vm.$t('ui.server.docroot.directoryInvalid')),
+            currentHref: () => window.location.href,
+
             versions() {
                 if (!this.supportsLatest) {
                     return {
@@ -94,11 +159,16 @@
         },
 
         methods: {
+            reload() {
+                this.processing = true;
+                window.location.reload()
+            },
+
             async boot() {
                 this.bootDescription = this.$t('ui.server.running');
 
                 try {
-                    const result = await this.$store.dispatch('server/contao/get');
+                    result = await this.$store.dispatch('server/contao/get');
 
                     if (!result.version) {
                         this.bootState = 'action';
@@ -157,6 +227,28 @@
 
                 window.location.reload();
             },
+
+            async setupDocroot() {
+                this.processing = true;
+                const response = await this.$store.dispatch('server/contao/documentRoot', this.directory);
+
+                // The target directory exists
+                if (response.status === 403) {
+                    this.directoryExists = true;
+                    this.processing = false;
+                    this.$refs.directory.focus();
+                    return;
+                }
+
+                this.processing = false;
+                this.directoryUpdated = true;
+            },
+        },
+
+        watch: {
+            directory() {
+                this.directoryExists = false;
+            },
         },
 
         async mounted() {
@@ -167,6 +259,14 @@
                     this.supportsLatest = false;
                 }
             }
+
+            if (result) {
+                this.projectDir = result.project_dir;
+                this.isEmpty = result.is_empty;
+                this.isWeb = result.is_web;
+            }
+
+            this.directory = location.hostname;
         }
     };
 </script>
@@ -181,6 +281,10 @@
             margin-right: auto;
             padding: 40px 0;
             text-align: center;
+
+            .widget-button {
+                margin-top: 1em;
+            }
         }
 
         &__headline {
@@ -191,8 +295,15 @@
             line-height: 1;
         }
 
+        &__warning,
         &__description {
+            margin: 1em 0;
             text-align: justify;
+        }
+
+        &__warning {
+            color: $red-button;
+            font-weight: $font-weight-bold;
         }
 
         &__version {
@@ -212,8 +323,18 @@
             position: relative;
             max-width: 280px;
             margin: 0 auto 50px;
+            opacity: 1;
 
-            .widget-select {
+            svg {
+                display: block;
+                width: 100px;
+                height: 100px;
+                margin: 0 auto 2em;
+                fill: $green-button;
+            }
+
+            .widget-select,
+            .widget-text {
                 margin-top: 20px;
 
                 label {
@@ -231,6 +352,10 @@
 
         &__fields {
             margin-bottom: 2em;
+
+            &--center {
+                text-align: center;
+            }
         }
 
         &__fieldtitle {
@@ -242,6 +367,26 @@
 
         &__fielddesc {
             margin-bottom: 1em;
+            text-align: justify;
+        }
+
+        &__directories {
+            margin-top: 2em;
+
+            > dt {
+                margin-top: 1em;
+                font-weight: $font-weight-bold;
+            }
+
+            > dd {
+                margin: 0;
+                word-break: break-all;
+
+                span {
+                    background-color: $highlight-color;
+                    font-weight: $font-weight-medium;
+                }
+            }
         }
 
         @include screen(960) {
@@ -258,10 +403,11 @@
                 float: left;
                 width: 370px;
                 max-width: none;
-                margin: 60px 50px 0;
-                padding-bottom: 100px;
+                margin: 0 50px;
+                padding-bottom: 50px;
 
-                .widget-select {
+                .widget-select,
+                .widget-text {
                     label {
                         display: block;
                         float: left;
@@ -270,8 +416,9 @@
                         font-weight: $font-weight-medium;
                     }
 
-                    select {
-                        width: 250px;
+                    select,
+                    input {
+                        width: 250px !important;
                     }
                 }
 
@@ -282,6 +429,13 @@
                 .widget-button {
                     width: 250px;
                     margin-left: 120px;
+                }
+
+                &--center {
+                    .widget-checkbox,
+                    .widget-button {
+                        margin-left: 0;
+                    }
                 }
             }
         }

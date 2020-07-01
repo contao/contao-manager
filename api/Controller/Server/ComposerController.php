@@ -56,13 +56,19 @@ class ComposerController
         }
 
         $result = [
-            'json' => ['found' => true, 'valid' => true, 'error' => null],
+            'json' => ['found' => false, 'valid' => false, 'error' => null],
             'lock' => ['found' => false, 'fresh' => false],
-            'vendor' => ['found' => is_dir($this->environment->getVendorDir())],
+            'vendor' => ['found' => false],
         ];
 
-        if ($this->validateLockFile($result)) {
-            $this->validateSchema($result);
+        if ($this->environment->hasPackage('contao/manager-bundle')) {
+            $result['json']['found'] = true;
+            $result['json']['valid'] = true;
+            $result['vendor']['found'] = \is_dir($this->environment->getVendorDir());
+
+            if ($this->validateLockFile($result)) {
+                $this->validateSchema($result);
+            }
         }
 
         return new JsonResponse($result);

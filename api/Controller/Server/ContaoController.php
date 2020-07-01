@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller\Server;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Exception\ProcessOutputException;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
-use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Process\ContaoApi;
 use Contao\ManagerApi\Process\ContaoConsole;
@@ -24,12 +24,13 @@ use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/server/contao", methods={"GET"})
+ * @Route("/server/contao", methods={"GET", "POST"})
  */
 class ContaoController
 {
@@ -54,6 +55,11 @@ class ContaoController
     private $processFactory;
 
     /**
+     * @var Environment
+     */
+    private $environment;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -68,6 +74,7 @@ class ContaoController
         ContaoApi $contaoApi,
         ContaoConsole $contaoConsole,
         ConsoleProcessFactory $processFactory,
+        Environment $environment,
         LoggerInterface $logger = null,
         Filesystem $filesystem = null
     ) {
@@ -75,11 +82,12 @@ class ContaoController
         $this->contaoApi = $contaoApi;
         $this->contaoConsole = $contaoConsole;
         $this->processFactory = $processFactory;
+        $this->environment = $environment;
         $this->logger = $logger;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    public function __invoke(ServerInfo $serverInfo, Translator $translator): Response
+    public function __invoke(Request $request, ServerInfo $serverInfo): Response
     {
         if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
@@ -91,13 +99,18 @@ class ContaoController
         try {
             $contaoVersion = $this->getContaoVersion();
         } catch (\RuntimeException $e) {
+            if ($request->isMethod('POST')) {
+                return new Response('', Response::HTTP_BAD_REQUEST);
+            }
+
             if ($e instanceof ProcessOutputException || $e instanceof ProcessFailedException) {
-                return new ApiProblemResponse(
-                    (new ApiProblem(
-                        $translator->trans('integrity.contao_version.title')
-                    ))->setDetail(
-                        $translator->trans('integrity.contao_version.detail', ['output' => $e->getProcess()->getOutput()])
-                    )->setStatus(Response::HTTP_BAD_GATEWAY)
+                return new JsonResponse(
+                    [
+                        'version' => null,
+                        'api' => 0,
+                        'supported' => false,
+                    ],
+                    Response::HTTP_BAD_GATEWAY
                 );
             }
 
@@ -105,22 +118,22 @@ class ContaoController
         }
 
         if (null === $contaoVersion) {
-            if (0 === \count($files = $this->getProjectFiles())) {
-                return new JsonResponse(
-                    [
-                        'version' => null,
-                        'api' => 0,
-                        'supported' => false,
-                    ]
-                );
+            $files = $this->getProjectFiles();
+            $isEmpty = 0 === \count($files);
+
+            if ($request->isMethod('POST')) {
+                return $this->createDirectories($isEmpty ? null : $request->request->get('directory'));
             }
 
-            return new ApiProblemResponse(
-                (new ApiProblem(
-                    $translator->trans('integrity.contao_unknown.title')
-                ))->setDetail(
-                    $translator->trans('integrity.contao_unknown.detail', ['files' => ' - '.implode("\n - ", $files)])
-                )
+            return new JsonResponse(
+                [
+                    'version' => null,
+                    'api' => 0,
+                    'supported' => false,
+                    'project_dir' => $this->kernel->getProjectDir(),
+                    'is_empty' => $isEmpty,
+                    'is_web' => $this->kernel->isWebDir(),
+                ]
             );
         }
 
@@ -131,6 +144,48 @@ class ContaoController
                 'supported' => version_compare($contaoVersion, '4.0.0', '>=') || 0 === strpos($contaoVersion, 'dev-'),
             ]
         );
+    }
+
+    private function createDirectories(?string $directory): Response
+    {
+        if ('' === \Phar::running()) {
+            return new Response('', Response::HTTP_SERVICE_UNAVAILABLE);
+        }
+
+        $currentRoot = $this->kernel->getProjectDir();
+        $targetRoot = $currentRoot;
+        $webDir = $currentRoot.'/web';
+
+        if (null !== $directory) {
+            if ($this->filesystem->exists($currentRoot.'/'.$directory)) {
+                return new JsonResponse([
+                    'error' => 'Target directory exists',
+                ], Response::HTTP_FORBIDDEN);
+            }
+
+            $targetRoot = $currentRoot.'/'.$directory;
+            $webDir = $targetRoot.'/web';
+            $this->filesystem->mkdir($targetRoot);
+            $this->filesystem->mirror($this->kernel->getConfigDir(), $targetRoot.'/contao-manager');
+            $this->filesystem->remove($this->kernel->getConfigDir());
+        }
+
+        $this->filesystem->mkdir($webDir);
+
+        // Create response before moving Phar, otherwise the JsonResponse class cannot be autoloaded
+        $response = new JsonResponse([
+            'version' => null,
+            'api' => 0,
+            'supported' => false,
+            'project_dir' => $targetRoot,
+            'is_empty' => true,
+            'is_web' => true,
+        ], Response::HTTP_CREATED);
+
+        $phar = \Phar::running(false);
+        \rename($phar, $webDir.'/'.\basename($phar));
+
+        return $response;
     }
 
     /**
@@ -160,6 +215,7 @@ class ContaoController
                 '.ftpquota',
                 '.htaccess',
                 'user.ini',
+                \basename(\Phar::running()),
             ]
         );
     }
@@ -181,7 +237,7 @@ class ContaoController
      */
     private function getContaoVersion(): ?string
     {
-        if ($this->filesystem->exists($this->processFactory->getContaoConsolePath())) {
+        if ($this->environment->hasPackage('contao/manager-bundle') || $this->filesystem->exists($this->processFactory->getContaoConsolePath())) {
             return $this->contaoConsole->getVersion();
         }
 

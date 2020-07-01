@@ -33,5 +33,10 @@ export default {
             });
         },
 
+        documentRoot(store, directory) {
+            return Vue.http.post('api/server/contao', {
+                directory,
+            }).catch(response => response);
+        }
     },
 };

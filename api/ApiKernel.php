@@ -59,6 +59,11 @@ class ApiKernel extends Kernel
      */
     private $filesystem;
 
+    /**
+     * @var bool
+     */
+    private $isWebDir;
+
     public function __construct($environment)
     {
         $this->filesystem = new Filesystem();
@@ -84,6 +89,15 @@ class ApiKernel extends Kernel
             new MonologBundle(),
             new Terminal42ServiceAnnotationBundle(),
         ];
+    }
+
+    public function isWebDir()
+    {
+        if (null === $this->isWebDir) {
+            $this->getProjectDir();
+        }
+
+        return $this->isWebDir;
     }
 
     public function getRootDir(): string
@@ -218,6 +232,8 @@ CODE
      */
     private function findProjectDir(): string
     {
+        $this->isWebDir = true;
+
         // @see https://getcomposer.org/doc/03-cli.md#composer
         if (false !== ($composer = getenv('COMPOSER'))) {
             return \dirname($composer);
@@ -234,11 +250,12 @@ CODE
                 $current = \dirname($phar);
             }
 
-            if ('web' === basename($current) && \is_writable(\dirname($current))) {
-                return \dirname($current);
+            if ('web' !== basename($current) || !\is_writable(\dirname($current))) {
+                $this->isWebDir = false;
+                return $current;
             }
 
-            return $current;
+            return \dirname($current);
         }
 
         $testDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'test-dir';
