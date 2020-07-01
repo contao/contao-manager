@@ -8,16 +8,16 @@
 
         <error v-if="error"/>
 
-        <transition name="fade" mode="out-in" style="height:100%">
+        <transition name="animate-fade" mode="out-in" style="height:100%">
 
             <div v-if="isInitializing || isReady" class="view-init">
-                <div class="view-init__cell">
+                <div class="view-init__cell animate-initializing">
                     <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo">
                     <p class="view-init__message">{{ $t('ui.app.loading') }}</p>
                 </div>
             </div>
 
-            <task :class="hasModal ? 'blur-in' : 'blur-out'" v-else-if="username && taskStatus"/>
+            <task :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="username && taskStatus"/>
             <component :is="currentView" :class="hasModal ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
 
             <div v-else>
@@ -164,6 +164,7 @@
 
     @import "~contao-package-list/src/assets/styles/defaults";
     @import "~contao-package-list/src/assets/styles/layout";
+    @import "~contao-package-list/src/assets/styles/animations";
 
     .https-warning {
         position: absolute;
@@ -205,45 +206,6 @@
             font-size: 1.5em;
             text-align: center;
             vertical-align: middle;
-            animation: initializing 1s linear infinite;
         }
-    }
-
-    .blur-in {
-        z-index: -1;
-        opacity: 0.5;
-        filter: blur(4px);
-        transition: opacity .5s, filter .5s;
-    }
-
-    .blur-out {
-        opacity: 1;
-        transition: opacity .5s;
-    }
-
-    @keyframes initializing {
-        0% {
-            opacity: 0.5;
-        }
-        50% {
-            opacity: 1;
-        }
-        100% {
-            opacity: 0.5;
-        }
-    }
-</style>
-
-<style lang="scss" scoped>
-    .fade-enter-active,
-    .fade-leave-active {
-        transition-duration: 0.2s;
-        transition-property: opacity;
-        transition-timing-function: ease;
-    }
-
-    .fade-enter,
-    .fade-leave-active {
-        opacity: 0
     }
 </style>
