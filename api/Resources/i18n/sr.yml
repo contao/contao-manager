@@ -32,12 +32,6 @@ sr:
         systempdir:
             title: 'Неуспешан упис у привремени системски директоријум.'
             detail: 'Ово је вероватно узроковано конфигурацијом хостинга. Проверите да ли open_basedir  дозвољава приступ привременом директоријуму, и да ли је sys_temp_dir исправно конфигурисан.'
-        contao_unknown:
-            title: 'Статус инсталације није познат.'
-            detail: "На вашем серверу су пронађени извесни фајлови, али није препозната верзија Contao. Како бисте инсталирали Contao, мораћете или ручно да поправите вашу апликацију или да уклоните следеће фајлове и фолдере:\n\n{files}"
-        contao_version:
-            title: 'Није могуће одредити верзију Contao.'
-            detail: "Конзола је вратила неочекиван одговор приликом провере верзије Contao. Проверите одговор за више информација:\n\n{output}"
 
     boot:
         composer:
@@ -51,93 +45,42 @@ sr:
             platform: 'Платформа не сме бити конфигурисана у composer.json.'
             cache: 'Подешавања Cache-а не смеју бити конфигурисана у composer.json.'
 
-    taskstatus:
-        created: 'Конзолни задатак је креиран...'
-        complete:
-            summary: 'Конзолни задатак је завршен!'
-            detail: 'Позадински задатак је завршен. За више детаља проверите протокол конзоле.'
-            console: '### Задатак успешно завршен ###'
-        aborting:
-            summary: 'Заустављање текуће операције...'
-            detail: 'Позадински задатак се зауставља.'
-            console: '### Позадински задатак је отказан ###'
-        stopped:
-            summary: 'Задатак унутар конзоле је прекинут!'
-            detail: 'Позадински задатак је отказан. Проверите конзолни протокол.'
-            console: '### Позадински задатак је отказан###'
-        error:
-            summary: 'Задатак унутар конзоле је прекинут!'
-            detail: 'Позадински задатак је неочекивано заустављен. Проверите конзолни протокол.'
-            console: '### Конзолни задатак се неочекивано зауставио ###'
-
     task:
         setup_packages:
             title: 'Инсталирање Contao апликације'
-            completeSummary: 'Инсталација је завршена!'
-            completeDetail: 'Да бисте завршили процес инсталације, отворите Алат за инсталацију и унесите ваше креденцијале за базу података.'
         install_packages:
             title: 'Инсталирање Композер зависности'
         update_packages:
             title: 'Ажурирање Пакета'
-            completeSummary: 'Пакети Contao су ажурирани!'
-            completeDetail: 'Отворите Алат за инсталацију да извршите било које неопходне промене података о бази.'
         dump_autoload:
-            title: 'Пражњење Composer Autoloader-а'
+            title: ''
         clear_cache:
             title: 'Пражњење Композер Cache-а'
         rebuild_cache:
             title: 'Поновно креирање кеша'
-        install_tool:
-            title: 'Инсталациони алат за Contao'
         self_update:
             title: 'Ажурирам Contao Менаџер'
-            completeSummary: 'Contao Manager је успешно надограђен'
-            completeDetail: 'Надограђен на верзију {current}'
 
     taskoperation:
         self-update:
-            summary: 'Инсталирање последње верзије Contao Manager-а …'
             detail: 'Надоградња са  {old} на {new}'
-        remove-cache:
-            summary: 'Брисање cache директоријума'
-        remove-vendor:
-            summary: 'Брисање vendor директоријума...'
-        cache-warmup:
-            summary: 'Загревање апликативног cache-а …'
-        cache-clear:
-            summary: 'Брисање апликативног cache-а …'
-        composer-update:
-            summary: 'Ажурирање Композер зависности...'
-        composer-require:
-            summary: 'Додавање Композер пакета...'
-        composer-remove:
-            summary: 'Уклањање Композер пакета...'
         install-uploads:
-            summary: 'Инсталирам преузете пакете ...'
+            summary: ''
             console: 'Инсталисани артифакти за {package} (верзија {version}) [to packages/{name}]'
         remove-uploads:
-            summary: 'Уклањам преузете фајлове ...'
+            summary: ''
         composer-install:
-            summary: 'Инсталирање Композер зависности...'
-            summaryRetry: 'Инсталирање Композер зависности (поново покушавам {current}/{max}) …'
+            retry: ''
+            nothing: ''
+            result: ''
         dump-autoload:
-            summary: 'Пражњење class autoloader-а…'
-        install-lock:
-            summary: 'Закључавам инсталациони алат за Contao ...'
-        install-unlock:
-            summary: 'Откључавам инсталациони алат за Contao ...'
-        create-project:
-            summary: 'Инсталирање апликативног шаблона...'
+            result: ''
         cloud:
-            queuedSummary: 'Задатак на чекању у Composer Cloud {seconds} секунди'
-            queuedDetail: 'Почетак, отприлике, за {seconds} секунди (тренутно {jobs} послова распоређених на {workers} радника)'
-            processingSummary: 'Разрешавање зависности помоћу Composer Cloud-а'
-            processingDetail: 'Посао ID {job} је покренут {seconds} секунди'
-            errorSummary: 'Неуспешно разрешавање зависности...'
-            finishedSummary: 'Задатак у Composer Cloud је завршен за {seconds} секунди'
-            finishedDetail: 'Употреба меморије: {memory} (peak: {peak}), time: {time}.'
-        clear-cache:
-            summary: 'Брисање кешираних фајлова...'
+            summary: ''
+            queued: ''
+            processing: ''
+            error: ''
+            finished: ''
 
     upload:
         error:
@@ -145,3 +88,9 @@ sr:
             json: 'Composer.json не садржи исправне JSON податке.'
             schema: 'Валидација composer.json schema није успела.'
             partial: 'Преузимање фајла није завршено.'
+
+    error:
+        writable:
+            directory: ''
+            config-file: ''
+            detail: ''

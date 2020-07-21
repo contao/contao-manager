@@ -32,12 +32,6 @@ ru:
         systempdir:
             title: 'Не удается записать во временный системный каталог.'
             detail: 'Вероятно, это проблема с настройкой вашего хостинга. Убедитесь, что open_basedir разрешает доступ к временному каталогу или sys_temp_dir настроен правильно.'
-        contao_unknown:
-            title: 'Неизвестный статус установки'
-            detail: "Некоторые файлы были найдены на сервере, но известная версия Contao не обнаружена.\nНеобходимо вручную восстановить приложение или удалить следующие файлы и каталоги установки Contao:\n\n{files}"
-        contao_version:
-            title: 'Не удалось определить версию Contao'
-            detail: "Консоль вернула неожиданный ответ при запросе версии Contao. Пожалуйста, проверьте выходные данные для получения дополнительной информации:\n\n{output}"
 
     boot:
         composer:
@@ -51,93 +45,42 @@ ru:
             platform: 'Платформа не должна быть настроена в composer.json.'
             cache: 'Свойства кеша не должны быть настроены в composer.json.'
 
-    taskstatus:
-        created: 'Создана консольная задача...'
-        complete:
-            summary: 'Консольная задача завершена!'
-            detail: 'Фоновая задача успешно завершена. Проверьте протокол консоли.'
-            console: '### Задание успешно завершено ###'
-        aborting:
-            summary: 'Остановка текущей операции...'
-            detail: 'Фоновая задача отменяется.'
-            console: '### Фоновая задача отменяется ###'
-        stopped:
-            summary: 'Консольная задача завершена!'
-            detail: 'Фоновая задача отменена. Проверьте протокол консоли.'
-            console: '### Фоновая задача отменена ###'
-        error:
-            summary: 'Консольная задача завершена!'
-            detail: 'Фоновая задача неожиданно прекращена. Проверьте протокол консоли.'
-            console: '# # # Фоновая задача неожиданно остановилась ###'
-
     task:
         setup_packages:
             title: 'Установка приложения Contao'
-            completeSummary: 'Установка завершена!'
-            completeDetail: 'Для завершения процесса установки, откройте мастер установки и введите учетные данные своей базы данных.'
         install_packages:
             title: 'Установка зависимостей Composer'
         update_packages:
             title: 'Обновление пакетов'
-            completeSummary: 'Обновлены пакеты Contao!'
-            completeDetail: 'Откройте мастер установки для применения необходимых изменений к базе данных.'
         dump_autoload:
-            title: 'Дамп автозагрузчика Composer'
+            title: ''
         clear_cache:
             title: 'Очистка кеша Composer'
         rebuild_cache:
             title: 'Перестроение кеша Contao'
-        install_tool:
-            title: 'Мастер установки Contao'
         self_update:
             title: 'Обновление Contao Manager'
-            completeSummary: 'Contao Manager успешно обновлен'
-            completeDetail: 'Обновлено до версии {current}'
 
     taskoperation:
         self-update:
-            summary: 'Установка последнего Contao Manager...'
             detail: 'Обновление с {old} до {new}'
-        remove-cache:
-            summary: 'Удаление каталога кеша...'
-        remove-vendor:
-            summary: 'Удаление каталога vendor...'
-        cache-warmup:
-            summary: '"Подогреть" кеш приложений...'
-        cache-clear:
-            summary: 'Очистка кеша приложений...'
-        composer-update:
-            summary: 'Обновление зависимостей Composer...'
-        composer-require:
-            summary: 'Добавление пакетов Composer...'
-        composer-remove:
-            summary: 'Удаление пакетов Composer...'
         install-uploads:
-            summary: 'Установка загруженных пакетов…'
+            summary: ''
             console: 'Установлен артефакт для {package} (версии {version}) [к пакетам/{name}]'
         remove-uploads:
-            summary: 'Удаление загруженных файлов…'
+            summary: ''
         composer-install:
-            summary: 'Установка зависимостей Composer...'
-            summaryRetry: 'Установка зависимостей Composer (повтор: {current}/{max}) …'
+            retry: ''
+            nothing: ''
+            result: ''
         dump-autoload:
-            summary: 'Дамп автозагрузчика классов...'
-        install-lock:
-            summary: 'Блокировка мастера установки Contao...'
-        install-unlock:
-            summary: 'Разблокировка мастера установки Contao...'
-        create-project:
-            summary: 'Установка шаблона приложения...'
+            result: ''
         cloud:
-            queuedSummary: 'Работа очереди в Composer Cloud за {seconds} сек.'
-            queuedDetail: 'Начиная с прибл. {seconds} сек. (в данный момент {jobs} рабочих {workers} задач)'
-            processingSummary: 'Урегулирование зависимостей с помощью Composer Cloud'
-            processingDetail: 'Задание ID {job} работает {seconds} сек.'
-            errorSummary: 'Ошибка разрешения зависимостей...'
-            finishedSummary: 'Задание Composer Cloud выполнено за {seconds} сек.'
-            finishedDetail: 'Использование памяти: {memory} (пик: {peak}), время: {time}.'
-        clear-cache:
-            summary: 'Удаление файлов кеша...'
+            summary: ''
+            queued: ''
+            processing: ''
+            error: ''
+            finished: ''
 
     upload:
         error:
@@ -145,3 +88,9 @@ ru:
             json: 'Файл composer.json не содержит допустимых данных JSON.'
             schema: 'Ошибка проверки схемы composer.json.'
             partial: 'Загрузка файла не была завершена.'
+
+    error:
+        writable:
+            directory: ''
+            config-file: ''
+            detail: ''

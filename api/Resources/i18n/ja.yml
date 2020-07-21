@@ -32,12 +32,6 @@ ja:
         systempdir:
             title: 'システムの一時ディレクトリに書き込みできませんでした。'
             detail: 'ホスティングの設定に問題の可能性がもっとも高いです。open_basedirが一時ディクトリへのアクセスを許可しているか、sys_temp_dirが正しく設定されているか確認してください。'
-        contao_unknown:
-            title: 'インストールの状態が不明'
-            detail: "サーバーにファイルがいくつかありますが、Contaoのバージョンを検出できませんでした。\n手作業でアプリケーションを修復するか、Contaoをインストールするために以下のファイルとフォルダーを削除しなければなりません:\n\n{files}"
-        contao_version:
-            title: 'Contaoのバージョンを決定不可能'
-            detail: "Contaoのバージョンを問い合わせた時にコンソールが予期しない内容を返しました。さらに詳しい情報は出力を確認してください。\n\n{output}"
 
     boot:
         composer:
@@ -51,93 +45,42 @@ ja:
             platform: 'プラットフォームはcomposer.jsonに構成してはなりません。'
             cache: 'キャッシュの属性をcomposer.jsonに構成してはなりません。'
 
-    taskstatus:
-        created: 'コンソールタスクを作成しました...'
-        complete:
-            summary: 'コンソールタスクが完了しました!'
-            detail: 'バックグランドのタスクは正常に完了しました。詳細はコンソールのログを調べてください。'
-            console: '### タスクは正常に終了 ###'
-        aborting:
-            summary: '現在の操作を停止中...'
-            detail: 'バックグラウンドのタスクを取り止め中です。'
-            console: '### バックグランドのタスクを取り止め中 ###'
-        stopped:
-            summary: 'コンソールタスクが終了しました!'
-            detail: 'バックグラウンドのタスクを取り止めました。コンソールのプロトコルを確認してください。'
-            console: '### バックグラウンドのタスクを取り止めました。 ###'
-        error:
-            summary: 'コンソールタスクが終了しました!'
-            detail: 'バックグラウンドのタスクが予想外の停止をしました。コンソールのプロトコルを確認してください。'
-            console: '### バックグラウンドのタスクは予想外に停止しました。 ###'
-
     task:
         setup_packages:
             title: 'Contaoアプリケーションをインストール中'
-            completeSummary: 'インストールを完了!'
-            completeDetail: '設定の処理を完了するには、インストールツールを開いてデータベースの認証情報を入力してください。'
         install_packages:
             title: 'Composerの依存関係をインストール中'
         update_packages:
             title: 'パッケージを更新'
-            completeSummary: 'Contaoのパッケージを更新しました!'
-            completeDetail: 'インストールツールを開いて必要な変更をデータベースに適用してください。'
         dump_autoload:
-            title: 'Composerのオートローダーを書き出し中'
+            title: ''
         clear_cache:
             title: 'Composerのキャッシュを消去中'
         rebuild_cache:
             title: 'Contaoのキャッシュを再作成'
-        install_tool:
-            title: 'Contaoインストールツール'
         self_update:
             title: 'Contao Managerを更新'
-            completeSummary: 'Contao Managerを更新しました'
-            completeDetail: 'バージョン{current}に更新しました'
 
     taskoperation:
         self-update:
-            summary: '最新のContao Managerをインストール中...'
             detail: '{old}から{new}に更新中'
-        remove-cache:
-            summary: 'キャッシュのディレクトリを削除中...'
-        remove-vendor:
-            summary: 'ベンダーのディレクトリを削除中...'
-        cache-warmup:
-            summary: 'アプリケーションキャッシュを準備中...'
-        cache-clear:
-            summary: 'アプリケーションキャッシュを消去中...'
-        composer-update:
-            summary: 'Composerの依存関係を更新中...'
-        composer-require:
-            summary: 'Composerのパッケージを追加中...'
-        composer-remove:
-            summary: 'Composerのパッケージを削除中...'
         install-uploads:
-            summary: 'アップロードしたパッケージをインストール中...'
+            summary: ''
             console: '{package} (バージョン {version})のインストール過程[packages/{name}に存在]'
         remove-uploads:
-            summary: 'アップロードしたファイルを削除中...'
+            summary: ''
         composer-install:
-            summary: 'Composerの依存関係をインストール中...'
-            summaryRetry: 'Composerの依存関係をインストール中(再試行中: {current}/{max})...'
+            retry: ''
+            nothing: ''
+            result: ''
         dump-autoload:
-            summary: 'クラスのオートローダーを書きだし中...'
-        install-lock:
-            summary: 'Contaoインストールツールをロックを実行中...'
-        install-unlock:
-            summary: 'Contaoインストールツールのロックを解除中...'
-        create-project:
-            summary: 'アプリケーションのテンプレートをインストール中...'
+            result: ''
         cloud:
-            queuedSummary: 'ジョブはComposer Cloudのキューに{seconds}秒間待機中'
-            queuedDetail: '約{seconds}秒で開始 (現在{workers}のワーカーに{jobs}のジョブ)'
-            processingSummary: 'Composer Cloudを使用して依存関係を解決中'
-            processingDetail: 'ジョブID {job}は{seconds}秒間動作中'
-            errorSummary: '依存関係の解決に失敗...'
-            finishedSummary: 'Composer Cloudのジョブは{seconds}秒で完了しました。'
-            finishedDetail: 'メモリの使用: {memory} (最大: {peak}), 時間: {time}.'
-        clear-cache:
-            summary: 'キャッシュファイルを削除中...'
+            summary: ''
+            queued: ''
+            processing: ''
+            error: ''
+            finished: ''
 
     upload:
         error:
@@ -145,3 +88,9 @@ ja:
             json: 'composer.jsonが正しいJSONのデータを含んでいません。'
             schema: 'composer.jsonスキーマの検証に失敗しました。'
             partial: 'アップロードしたファイルは完全ではありませんでした。'
+
+    error:
+        writable:
+            directory: ''
+            config-file: ''
+            detail: ''

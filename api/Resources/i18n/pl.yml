@@ -32,12 +32,6 @@ pl:
         systempdir:
             title: 'Nie udało się zapisać do tymczasowego katalogu systemowego.'
             detail: 'To jest prawdopodobnie problem z konfiguracją hostingu. Upewnij się, że open_basedir pozwala na dostęp do tymczasowego katalogu lub, że sys_temp_dir jest poprawnie skonfigurowane.'
-        contao_unknown:
-            title: 'Nieznany status instalacji'
-            detail: "Na serwerze znaleziono niektóre pliki, ale żadna wersja Contao nie mogła być określona. \nMusisz albo ręcznie naprawić aplikację lub usunąć poniższe pliki i foldery, aby zainstalować Contao:\n\n{files}"
-        contao_version:
-            title: 'Wersja Contao nie mogła zostać określona.'
-            detail: "Konsola zwróciła nieprawidłową treść przy pytaniu o wersje Contao. Sprawdź wyink po więcej informacji:\n\n{output}"
 
     boot:
         composer:
@@ -51,93 +45,42 @@ pl:
             platform: 'Platforma nie może być skonfigurowana w composer.json.'
             cache: 'Właściwości cache nie mogą być skonfigurowane w composer.json.'
 
-    taskstatus:
-        created: 'Zadanie Konsoli zostało utworzone …'
-        complete:
-            summary: 'Zadanie konsoli zakończone!'
-            detail: 'Zadanie w tle zostało zakończone powodzeniem. Szczegóły możesz sprawdzić w protokole konsoli.'
-            console: '### Zadanie zakończone sukcesem ###'
-        aborting:
-            summary: 'Zatrzymywanie bieżącej operacji …'
-            detail: 'Zadanie w tle zostało anulowane.'
-            console: '### Zadanie w tle jest zatrzymywane ###'
-        stopped:
-            summary: 'Zadanie konsoli przerwane!'
-            detail: 'Zadanie w tle zostało anulowane. Sprawdź protokół konsoli.'
-            console: '### Zadanie w tle zostało anulowane ###'
-        error:
-            summary: 'Zadanie konsoli przerwane!'
-            detail: 'Zadanie w tle zakończyło się niepowodzeniem. Sprawdź protokół konsoli.'
-            console: '### Zadanie w tle zakończone niepowodzeniem ###'
-
     task:
         setup_packages:
             title: 'Instalowanie Aplikacji Contao'
-            completeSummary: 'Instalacja zakończona!'
-            completeDetail: 'Aby zakończyć proces instalacji, otwórz instalator i wprowadź dane dostępowe do bazy danych.'
         install_packages:
             title: 'Instalowanie Pakietów Composera'
         update_packages:
             title: 'Aktualizowanie pakietów'
-            completeSummary: 'Pakiety Contao zaktualizowane!'
-            completeDetail: 'Otwórz instalator w celu zaktualizowania bazy danych.'
         dump_autoload:
-            title: 'Odświeżanie Autolaodera Composera'
+            title: ''
         clear_cache:
             title: 'Czyszczenie Cache Composera'
         rebuild_cache:
             title: 'Przebudowywanie Contao cache'
-        install_tool:
-            title: 'Instalator Contao'
         self_update:
             title: 'Aktualizowanie Contao Manager'
-            completeSummary: 'Contao Manager został zaktualizowany poprawnie'
-            completeDetail: 'Zaktualizowano do wersji {current}'
 
     taskoperation:
         self-update:
-            summary: 'Instalowanie najnowszego Contao Managera …'
             detail: 'Aktualizowanie z {old} do {new}'
-        remove-cache:
-            summary: 'Usuwanie katalogu cache …'
-        remove-vendor:
-            summary: 'Usuwanie katalogu vendor …'
-        cache-warmup:
-            summary: 'Budowanie cache aplikacji …'
-        cache-clear:
-            summary: 'Czyszczenie cache aplikacji …'
-        composer-update:
-            summary: 'Aktualizowanie pakietów Composera …'
-        composer-require:
-            summary: 'Dodawanie pakietów Composera …'
-        composer-remove:
-            summary: 'Usuwanie pakietów Composera …'
         install-uploads:
-            summary: 'Instalowanie wgranych pakietów …'
+            summary: ''
             console: 'Zainstalowano artifact dla {package} (wersja {version}) [w packages/{name}]'
         remove-uploads:
-            summary: 'Usuwanie wgranych plików …'
+            summary: ''
         composer-install:
-            summary: 'Instalowanie pakietów Composera …'
-            summaryRetry: 'Instalowanie pakietów Composera (ponowna próba {current}/{max}) …'
+            retry: ''
+            nothing: ''
+            result: ''
         dump-autoload:
-            summary: 'Odświeżanie autoloadera klas …'
-        install-lock:
-            summary: 'Blokowanie Instalatora Contao …'
-        install-unlock:
-            summary: 'Odblokowywanie Instalatora Contao …'
-        create-project:
-            summary: 'Instalowanie szablonu aplikacji …'
+            result: ''
         cloud:
-            queuedSummary: 'Zadanie w kolejce w Composer Cloud przez {seconds} sekund'
-            queuedDetail: 'Startowanie w około {seconds} sekund (aktualnie {jobs} zadań na {workers} jednostkach)'
-            processingSummary: 'Rozwiązywanie pakietów używając Composer Cloud'
-            processingDetail: 'Zadanie ID {job} jest wykonywane przez {seconds} sekund'
-            errorSummary: 'Niepowodzenie rozwiązywania pakietów …'
-            finishedSummary: 'Zadanie Composer Cloud zakończone w {seconds} sekund'
-            finishedDetail: 'Użycie pamięci: {memory} (najwyższe: {peak}), czas: {time}.'
-        clear-cache:
-            summary: 'Usuwanie plików cache …'
+            summary: ''
+            queued: ''
+            processing: ''
+            error: ''
+            finished: ''
 
     upload:
         error:
@@ -145,3 +88,9 @@ pl:
             json: 'Plik composer.json nie zawiera poprawnych danych JSON.'
             schema: 'Walidacja struktury composer.json nie powiodła się.'
             partial: 'Wgrywanie pliku nie zostało zakończone.'
+
+    error:
+        writable:
+            directory: ''
+            config-file: ''
+            detail: ''

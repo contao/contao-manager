@@ -4,7 +4,7 @@ it:
             title: 'L''impostazione PHP "allow_url_fopen" non è abilitata sul server.'
         process:
             title: 'La funzione PHP "proc_open" e/o "proc_close" non sono disponibili sul server.'
-            detail: ''
+            detail: 'Le funzioni "proc_open" e "proc_close" sono necessarie per eseguire compiti a riga di comando in background. Verifica perché il vostro web server non ha questi metodi disponibili; né Contao Manager né Contao 4 funzioneranno correttamente senza di queste estensioni PHP.'
         intl:
             title: 'L''estensione PHP Intl non è disponibile.'
             detail: 'Contao 4 richiede l''estensione PHP Intl per l''internazionalizzazione.'
@@ -32,16 +32,10 @@ it:
         systempdir:
             title: 'Impossibile scrivere sulla cartella temporanea di sistema.'
             detail: 'Questo è molto probabilmente un problema con la vostra configurazione di hosting. Assicurarsi che open_basedir permetta l''accesso alla directory temporanea o che sys_temp_dir sia configurato correttamente.'
-        contao_unknown:
-            title: 'Stato dell''installazione sconosciuto'
-            detail: "Alcuni file sono stati trovati sul vostro server ma non è stata rilevata alcuna versione di Contao nota.\nPer installare Contao è necessario riparare manualmente l'applicazione o rimuovere i seguenti file e cartelle:\n{files}"
-        contao_version:
-            title: 'Non è stato possibile determinare la versione di Contao'
-            detail: "La console ha restituito contenuti inaspettati quando è stata richiesta la versione di Contao. Si prega di controllare l'output per ulteriori informazioni:\n\n{output}"
 
     boot:
         composer:
-            invalid: ''
+            invalid: 'Convalida dello schema composer.json: {exception}'
 
     config:
         php_cli:
@@ -51,97 +45,52 @@ it:
             platform: 'La piattaforma non deve essere configurata in composer.json.'
             cache: 'Le proprietà della cache non devono essere configurate in composer.json.'
 
-    taskstatus:
-        created: 'Console Task è stato creato ....'
-        complete:
-            summary: 'Attività console completata!'
-            detail: 'L''attività in background è stata completata con successo. Controlla i log della console per maggiori dettagli.'
-            console: '### Compito completato con successo ###'
-        aborting:
-            summary: 'Arresto del funzionamento in corrente ....'
-            detail: 'L''attività in background viene annullata.'
-            console: '### L''attività in background viene annullata. ###'
-        stopped:
-            summary: 'Console task terminato!'
-            detail: 'Il compito in background è stato annullato. Controllare il protocollo della console.'
-            console: '### L''attività in background è stata annullata. ###'
-        error:
-            summary: 'Console task terminato!'
-            detail: 'Il compito in background si è fermato inaspettatamente. Controllare il protocollo della console.'
-            console: '### L''attività in background si è interrotta inaspettatamente ###'
-
     task:
         setup_packages:
             title: 'Installazione dell''applicazione Contao'
-            completeSummary: 'Installazione completata'
-            completeDetail: 'Per completare il processo di installazione, aprire lo install tool e inserire le credenziali del database.'
         install_packages:
             title: 'Installazione delle dipendenze del composer'
         update_packages:
             title: 'Aggiornamento pacchetti'
-            completeSummary: 'Pacchetti Contao aggiornati!'
-            completeDetail: 'Aprire il install tool per applicare tutte le modifiche al database necessarie.'
         dump_autoload:
-            title: 'Dumping autocaricatore Composer'
+            title: ''
         clear_cache:
             title: 'Cancellazione della cache del compositore'
         rebuild_cache:
             title: 'Ricostruzione di Contao Cache'
-        install_tool:
-            title: 'Contao Install Tool'
         self_update:
             title: 'Aggiornare Contao Manager'
-            completeSummary: 'Contao Manager è stato aggiornato con successo'
-            completeDetail: 'Aggiornato alla versione {current}'
 
     taskoperation:
         self-update:
-            summary: 'Installazione del più recente Contao Manager ....'
             detail: 'Aggiornamento da {old} a {new}'
-        remove-cache:
-            summary: 'Cancellazione della directory cache ....'
-        remove-vendor:
-            summary: 'Cancellazione dell''elenco vendor ....'
-        cache-warmup:
-            summary: 'Warming applicazione cache ...'
-        cache-clear:
-            summary: 'Cancellazione della cache dell''applicazione ....'
-        composer-update:
-            summary: 'Aggiornamento delle dipendenze del Composer ....'
-        composer-require:
-            summary: 'Aggiungere pacchetti Composer ....'
-        composer-remove:
-            summary: 'Rimozione pacchetti Composer ....'
         install-uploads:
             summary: ''
-            console: ''
+            console: 'Installate modifiche per {package} (versione {version}) [su pacchetti / {name}]'
         remove-uploads:
             summary: ''
         composer-install:
-            summary: 'Installazione delle dipendenze Composer ....'
-            summaryRetry: 'Installazione delle dipendenze del Composer (riprovare {current}/{max}) ....'
+            retry: ''
+            nothing: ''
+            result: ''
         dump-autoload:
-            summary: 'Dumping classe autocaricatore'
-        install-lock:
-            summary: 'Blocco Install Tool Contao ....'
-        install-unlock:
-            summary: 'Sblocco Install Tool Contao ....'
-        create-project:
-            summary: 'Installazione applicazione template ....'
+            result: ''
         cloud:
-            queuedSummary: 'Job in coda nel Composer Cloud per {secondi} secondi'
-            queuedDetail: 'A partire da circa {secondi} secondi (attualmente {jobs} job su {workers} workers)'
-            processingSummary: 'Risolvere le dipendenze utilizzando Composer Cloud'
-            processingDetail: 'L''ID job {job} è in esecuzione per {seconds} secondi'
-            errorSummary: 'Errata risoluzione delle dipendenze ....'
-            finishedSummary: 'Job Composer Cloud completato in {secondi} secondi'
-            finishedDetail: 'Uso della memoria: {memory} (peak: {peak}), tempo: {time}.'
-        clear-cache:
-            summary: 'Eliminazione dei file della cache ....'
+            summary: ''
+            queued: ''
+            processing: ''
+            error: ''
+            finished: ''
 
     upload:
         error:
-            file: ''
-            json: ''
-            schema: ''
-            partial: ''
+            file: 'Il file non è valido o non contiene un composer.json.'
+            json: 'Composer.json non contiene dati JSON validi.'
+            schema: 'La convalida dello schema composer.json non è riuscita.'
+            partial: 'Il caricamento del file non è stato completato.'
+
+    error:
+        writable:
+            directory: ''
+            config-file: ''
+            detail: ''

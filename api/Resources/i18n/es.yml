@@ -32,12 +32,6 @@ es:
         systempdir:
             title: 'No se puede escribir en el directorio temporal del sistema.'
             detail: 'Probablemente esto sea un problema con su configuración de alojamiento. Asegúrese de que open_basedir permita el acceso al directorio temporal o que el sys_temp_dir esté configurado correctamente.'
-        contao_unknown:
-            title: 'Estado de instalación desconocido'
-            detail: "Se encontraron algunos archivos en su servidor, pero no se pudo detectar ninguna versión conocida de Contao.\nDebe reparar manualmente su aplicación o eliminar los siguientes archivos y carpetas para instalar Contao:\n\n{files}"
-        contao_version:
-            title: 'No se pudo determinar la versión de Contao'
-            detail: "La consola devolvió contenido inesperado cuando se le solicitó la versión de Contao. Por favor, revise el resultado para más información:\n\n{output}"
 
     boot:
         composer:
@@ -51,93 +45,42 @@ es:
             platform: 'La plataforma no debe configurarse en composer.json.'
             cache: 'Las propiedades de caché no deben configurarse en composer.json.'
 
-    taskstatus:
-        created: 'La tarea de consola se ha creado ...'
-        complete:
-            summary: '¡Tarea de consola completa!'
-            detail: 'La tarea de fondo se completó con éxito. Verifique el protocolo de la consola para los detalles.'
-            console: '### Tarea completada con éxito ###'
-        aborting:
-            summary: 'Deteniendo la operación actual ...'
-            detail: 'La tarea en segundo plano se está cancelando.'
-            console: '### La tarea en segundo plano se está cancelando ###'
-        stopped:
-            summary: 'Se terminó la tarea de la consola!'
-            detail: 'La tarea en segundo plano fue cancelada. Por favor verifique el protocolo de la consola.'
-            console: '### La tarea en segundo plano se canceló ###'
-        error:
-            summary: 'Se terminó la tarea de la consola!'
-            detail: 'La tarea en segundo plano se ha detenido inesperadamente. Por favor verifique el protocolo de la consola.'
-            console: '### La tarea en segundo plano se ha detenido inesperadamente ###'
-
     task:
         setup_packages:
             title: 'Instalación de la aplicación Contao'
-            completeSummary: '¡Instalación completa!'
-            completeDetail: 'Para completar el proceso de configuración, abra la herramienta de instalación e ingrese sus credenciales de base de datos.'
         install_packages:
             title: 'Instalando dependencias del Composer'
         update_packages:
             title: 'Actualizando paquetes'
-            completeSummary: 'Paquetes de Contao actualizados!'
-            completeDetail: 'Abra la herramienta de instalación para aplicar los cambios necesarios en la base de datos.'
         dump_autoload:
-            title: 'Dumping Composer Autoloader'
+            title: ''
         clear_cache:
             title: 'Limpiar el caché del Composer'
         rebuild_cache:
             title: 'Reconstruyendo de caché de Contao'
-        install_tool:
-            title: 'Herramienta de Instalación Contao'
         self_update:
             title: 'Actualizando de Contao Manager'
-            completeSummary: 'El Contao Manager se actualizó correctamente'
-            completeDetail: 'Actualizado a la versión {current}'
 
     taskoperation:
         self-update:
-            summary: 'Instalando el último Contao Manager ...'
             detail: 'Actualización de {old} a {new}'
-        remove-cache:
-            summary: 'Eliminando el directorio de caché ...'
-        remove-vendor:
-            summary: 'Eliminando el directorio de proveedores ...'
-        cache-warmup:
-            summary: 'Calentando caché de aplicaciones ...'
-        cache-clear:
-            summary: 'Borrando el caché de la aplicación ...'
-        composer-update:
-            summary: 'Actualizando las dependencias de Composer ...'
-        composer-require:
-            summary: 'Añadiendo paquetes de Composer ...'
-        composer-remove:
-            summary: 'Eliminando paquetes de Composer ...'
         install-uploads:
-            summary: 'Instalando paquetes cargados ...'
+            summary: ''
             console: 'Artefacto instalado para {package} (versión {version}) [a paquetes / {name}]'
         remove-uploads:
-            summary: 'Eliminando archivos subidos ...'
+            summary: ''
         composer-install:
-            summary: 'Instalando dependencias de Composer ...'
-            summaryRetry: 'Instalando dependencias de Composer (reintentando {current} / {max}) ...'
+            retry: ''
+            nothing: ''
+            result: ''
         dump-autoload:
-            summary: 'Volcado del autocargador de clases ...'
-        install-lock:
-            summary: 'Bloqueando herramienta de instalación de Contao ...'
-        install-unlock:
-            summary: 'Desbloqueando herramnienta de instalación de Contao ...'
-        create-project:
-            summary: 'Instalando plantilla de aplicación ...'
+            result: ''
         cloud:
-            queuedSummary: 'Trabajo en cola en Composer Cloud durante {seconds} segundos'
-            queuedDetail: 'A partir de aprox. {seconds} segundos (actualmente {jobs} trabajos en {workers} trabajadores)'
-            processingSummary: 'Resolver dependencias usando Composer Cloud'
-            processingDetail: 'El ID de trabajo {job} se ejecuta durante {seconds} segundos'
-            errorSummary: 'Error al resolver dependencias ...'
-            finishedSummary: 'El trabajo de Composer Cloud se completó en {seconds} segundos'
-            finishedDetail: 'Uso de memoria: {memory} (pico: {peak}), tiempo: {time}.'
-        clear-cache:
-            summary: 'Eliminando archivos de caché ...'
+            summary: ''
+            queued: ''
+            processing: ''
+            error: ''
+            finished: ''
 
     upload:
         error:
@@ -145,3 +88,9 @@ es:
             json: 'El composer.json no contiene datos JSON válidos.'
             schema: 'La validación del esquema composer.json ha fallado.'
             partial: 'La carga del archivo no se completó.'
+
+    error:
+        writable:
+            directory: ''
+            config-file: ''
+            detail: ''

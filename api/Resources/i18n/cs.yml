@@ -4,7 +4,7 @@ cs:
             title: 'Služba PHP "allow_url_fopen" není na tomto serveru spuštěna.'
         process:
             title: 'Funkce PHP "proc_open" a/nebo "proc_close" není na serveru povolena.'
-            detail: ''
+            detail: 'Funkce "proc_open" a "proc_close" jsou nezbytné pro spouštění příkazů na pozadí. Dotázejte se Vašeho poskytovatele, proč není daná k dispozici. Správce Contaa nebude moct bez toho fungovat správně.'
         intl:
             title: 'Rozšíření PHP Intl není na tomto serveru spuštěno.'
             detail: 'Contao 4 vyžaduje rozšíření PHP Intl pro mezinárodní záležitosti.'
@@ -32,16 +32,10 @@ cs:
         systempdir:
             title: 'Nelze zapisovat do dočasné složky systému.'
             detail: 'Nejspíš jde o problém s Vaším nastavením služeb. Ujistěte se, že open_basedir dovoluje přístup k dočasné složce nebo zda je sys_temp_dir správně nastavená.'
-        contao_unknown:
-            title: 'Neznámý status instalace'
-            detail: "Bylo nalezeno několik souborů, ale nebyla rozpoznaná žádná verze Contaa.\nNejspíš musíte opravit instalaci aplikace manuálně nebo smazat následující soubory a složky, abyste mohli nainstalovat Contao.\n\n{files}"
-        contao_version:
-            title: 'Nelze zjistit verzi Contaa.'
-            detail: "Konzola při dotazu na verzi Contaa odpověděla neočekávaným obsahem. Prosím přečtěte si protokol, abyste se dozvěděli více.\n\n{output}"
 
     boot:
         composer:
-            invalid: ''
+            invalid: 'Schéma ověření composer.json: {exception}'
 
     config:
         php_cli:
@@ -51,97 +45,52 @@ cs:
             platform: 'Platforma nemusí být nastavená v composer.json.'
             cache: 'Položky meziúložiště nemusí být nastavené v composer.json.'
 
-    taskstatus:
-        created: 'Byl spuštěn příkaz…'
-        complete:
-            summary: 'Příkaz konzoly byl dokončen!'
-            detail: 'Příkaz na pozadí byl úspěšně proveden. Podívejte se na podrobnosti v zápisu konzoly.'
-            console: '### Úloha byla úspěšně dokončená ###'
-        aborting:
-            summary: 'Zastavování probíhající operace…'
-            detail: 'Proces na pozadí byl zastaven.'
-            console: '### Úloha na pozadí se pozastavuje ###'
-        stopped:
-            summary: 'Úloha konzoly nebyla dokončená!'
-            detail: 'Příkaz na pozadí byl zastaven. Zkontrolujte prosím protokol konzoly.'
-            console: '### Úloha na pozadí byla zrušena ###'
-        error:
-            summary: 'Úloha konzoly nebyla dokončená!'
-            detail: 'Příkaz na pozadí byl znenadání zastaven. Zkontrolujte prosím protokol konzoly.'
-            console: '### Úloha na pozadí byla nečekaně pozastavená ###'
-
     task:
         setup_packages:
             title: 'Instalování aplikací Contaa'
-            completeSummary: 'Instalace je kompletní!'
-            completeDetail: 'Pro dokončení instalace, spusťte prosím instalační nástroj a zadejte přístupové údaje k databance.'
         install_packages:
             title: 'Nainstalovat věci závislé na Composerovi'
         update_packages:
             title: 'Aktualizují se balíčky'
-            completeSummary: 'Balíčky Contaa byly zaktualizovány!'
-            completeDetail: 'Otevřete prosím instalační nástroj, abyste mohli provést potřebné změny v databázi.'
         dump_autoload:
-            title: 'Spustit Autoloadera Composeru'
+            title: ''
         clear_cache:
             title: 'Vyprazdňování meziúložiště Composeru'
         rebuild_cache:
             title: 'Přetváří se meziúložiště Contaa.'
-        install_tool:
-            title: 'Instalační nástroj Contaa'
         self_update:
             title: 'Aktualizuje se Správce Contaa'
-            completeSummary: 'Správce Contaa byl úspěšně zaktualizovaný'
-            completeDetail: 'Aktualizovat na verzi {current}'
 
     taskoperation:
         self-update:
-            summary: 'Instalování poslední verze Správce Contaa'
             detail: 'Aktualizování {old} na {new}'
-        remove-cache:
-            summary: 'Mazání složky meziúložiště'
-        remove-vendor:
-            summary: 'Mazání složky vendor ...'
-        cache-warmup:
-            summary: 'Vytváření meziúložiště aplikace…'
-        cache-clear:
-            summary: 'Mazání meziúložiště aplikace… '
-        composer-update:
-            summary: 'Aktualizování na Composeru závislých věcí…'
-        composer-require:
-            summary: 'Přidávání balíčků Composeru…'
-        composer-remove:
-            summary: 'Odstraňování balíčků Composeru…'
         install-uploads:
-            summary: 'Instalují se nahrané balíčky...'
-            console: ''
+            summary: ''
+            console: 'Nainstalovaný artefakt pro {package} (verze {version}) [do balíčků/{name}]'
         remove-uploads:
             summary: ''
         composer-install:
-            summary: 'Instalování na Composeru závislých věcí…'
-            summaryRetry: 'Instalování na Composeru závislých věc (opětovný pokus {current}/{max}) …'
+            retry: ''
+            nothing: ''
+            result: ''
         dump-autoload:
-            summary: 'Spustit autloadera class'
-        install-lock:
-            summary: 'Zamykání Instalačního nástroje Contaa ...'
-        install-unlock:
-            summary: 'Odemykání Instalačního nástroje Contaa ...'
-        create-project:
-            summary: 'Instalování předlohy aplikace ...'
+            result: ''
         cloud:
-            queuedSummary: 'Příkaz je prováděný v Cloudu Composeru: {seconds} s'
-            queuedDetail: 'Proces začne za {seconds} s. (současný {jobs} proces - počet uživatelů: {workers})'
-            processingSummary: 'Řešení závislostí použitím Cloudu Composera'
-            processingDetail: 'Úkol {job} běží  {seconds} s.'
-            errorSummary: 'Vyřešení závislostí nevyšlo…'
-            finishedSummary: 'Úloha Composer Cloudu bude dokončená za {seconds} s'
-            finishedDetail: 'Využití paměti: {memory} (výše: {peak}), doba: {time}.'
-        clear-cache:
-            summary: 'Mazání meziúložiště souborů…'
+            summary: ''
+            queued: ''
+            processing: ''
+            error: ''
+            finished: ''
 
     upload:
         error:
-            file: ''
-            json: ''
-            schema: ''
-            partial: ''
+            file: 'Tento soubor není platný nebo neobsahuje žádnou composer.json.'
+            json: 'Soubor composer.json neobsahuje žádná platná data JSON,'
+            schema: 'Ověření schématu composer.json selhalo,'
+            partial: 'Nahrání souborů nebylo dokončeno.'
+
+    error:
+        writable:
+            directory: ''
+            config-file: ''
+            detail: ''
