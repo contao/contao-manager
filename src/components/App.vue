@@ -18,10 +18,10 @@
             </div>
 
             <task :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="username && taskStatus"/>
-            <component :is="currentView" :class="hasModal ? 'blur-in' : 'blur-out'" v-else-if="currentView"/>
+            <component :is="currentView" :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="currentView"/>
 
             <div v-else>
-                <router-view :class="hasModal ? 'blur-in' : 'blur-out'"/>
+                <router-view :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'"/>
             </div>
 
         </transition>

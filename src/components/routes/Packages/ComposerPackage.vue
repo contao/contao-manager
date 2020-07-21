@@ -208,10 +208,10 @@
             }
 
             &--funding {
-                width: 48px;
+                width: 16px;
                 background-image: url("~contao-package-list/src/assets/images/funding.svg");
                 background-size: 16px 16px;
-                background-repeat: repeat-x;
+                background-repeat: no-repeat;
                 text-decoration: none !important;
             }
         }
