@@ -254,7 +254,13 @@ class CloudOperation implements TaskOperationInterface
 
                 $this->taskConfig->setState('cloud-job-attempts', $attempts + 1);
 
-                $this->job = $job = $this->cloud->createJob($this->changes, $this->environment);
+                $this->job = $job = $this->cloud->createJob(
+                    $this->changes,
+                    $this->environment,
+                    $this->taskConfig->getOption('cloud_client', 'contao'),
+                    $this->taskConfig->getOption('cloud_auth', null)
+                );
+
                 $this->taskConfig->setState('cloud-job-queued', time());
                 $this->taskConfig->setState('cloud-job', $this->job->getId());
             }
