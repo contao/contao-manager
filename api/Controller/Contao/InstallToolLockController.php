@@ -63,7 +63,7 @@ class InstallToolLockController
             || version_compare((new VersionParser())->normalize($contaoVersion), '4.4.9', '<')
         ) {
             return new ApiProblemResponse(
-                (new ApiProblem('Contao does not support the install tool commands.'))
+                (new ApiProblem('Contao does not support locking the install tool.'))
                     ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
             );
         }

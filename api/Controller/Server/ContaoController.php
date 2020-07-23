@@ -158,9 +158,10 @@ class ContaoController
 
         if (null !== $directory) {
             if ($this->filesystem->exists($currentRoot.'/'.$directory)) {
-                return new JsonResponse([
-                    'error' => 'Target directory exists',
-                ], Response::HTTP_FORBIDDEN);
+                return new ApiProblemResponse(
+                    (new ApiProblem('Target directory exists'))
+                        ->setStatus(Response::HTTP_FORBIDDEN)
+                );
             }
 
             $targetRoot = $currentRoot.'/'.$directory;

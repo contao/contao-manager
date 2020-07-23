@@ -104,8 +104,8 @@
                     this.$emit('view', null);
                     this.processing = false;
                 }).catch((problem) => {
-                    if (problem.status === 400 && problem.error) {
-                        this.error = problem.error;
+                    if (problem.status === 400 && problem.detail) {
+                        this.error = problem.detail;
                     }
 
                     this.processing = false;

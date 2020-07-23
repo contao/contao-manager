@@ -64,7 +64,7 @@ class ConfigController
 
             if (null !== ($error = $this->validatePhpCli($phpCli))) {
                 $problem = (new ApiProblem('Bad Request'))->setStatus(400);
-                $problem['error'] = $error;
+                $problem->setDetail($error);
 
                 return new ApiProblemResponse($problem);
             }
