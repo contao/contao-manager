@@ -25,7 +25,7 @@ class OpcacheController
     public function __invoke(Request $request): Response
     {
         if (!\function_exists('opcache_get_status') || !\function_exists('opcache_reset')) {
-            return new Response(null, Response::HTTP_NOT_IMPLEMENTED);
+            return new JsonResponse(null, Response::HTTP_NOT_IMPLEMENTED);
         }
 
         switch ($request->getMethod()) {
