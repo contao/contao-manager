@@ -30,7 +30,7 @@
                 }
 
                 if (this.request) {
-                    return `HTTP request for "${this.request.method} ${this.request.url}" failed.`
+                    return `HTTP request for "${this.request.headers.get('X-HTTP-Method-Override') || this.request.method} ${this.request.url}" failed.`
                 }
 
                 return this.$t('ui.app.apiError');
