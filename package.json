@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "algoliasearch": "^3.35.1",
-    "contao-package-list": "git+https://github.com/contao/package-list.git",
+    "contao-package-list": "git+https://github.com/contao/package-list.git#2d5584ff774012184b9a3f94083e69e3c9a51544",
     "vue": "^2.6.11",
     "vue-resource": "^1.5.1",
     "vue-router": "^2.8.1",
