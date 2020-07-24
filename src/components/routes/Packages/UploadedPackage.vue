@@ -24,7 +24,7 @@
         </template>
     </package>
 
-    <local-package
+    <composer-package
         uncloseable-hint
         :data="pkg"
         :hint="$t('ui.packages.uploadDuplicate')"
@@ -34,9 +34,9 @@
             <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
-    </local-package>
+    </composer-package>
 
-    <local-package
+    <composer-package
         uncloseable-hint
         :data="pkg"
         :hint="$t('ui.packages.uploadInstalled')"
@@ -46,9 +46,9 @@
             <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
-    </local-package>
+    </composer-package>
 
-    <local-package
+    <composer-package
         :data="pkg"
         v-else
     >
@@ -56,7 +56,7 @@
             <button class="widget-button widget-button--primary widget-button--add" :disabled="!canBeAdded" @click="addPackage">{{ $t('ui.package.installButton') }}</button>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
-    </local-package>
+    </composer-package>
 
 </template>
 
@@ -65,13 +65,13 @@
 
     import metadata from 'contao-package-list/src/mixins/metadata';
     import Package from './Package';
-    import LocalPackage from './LocalPackage';
+    import ComposerPackage from './ComposerPackage';
     import ProgressBar from '../../fragments/ProgressBar';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
         mixins: [metadata],
-        components: { ProgressBar, Package, LocalPackage, LoadingButton },
+        components: { ProgressBar, Package, ComposerPackage, LoadingButton },
 
         props: {
             upload: {

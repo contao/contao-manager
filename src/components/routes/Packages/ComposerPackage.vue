@@ -1,47 +1,48 @@
 <template>
     <package
         :class="{ 'package--contao': isContao }"
-        :title="data.title || data.name"
-        :logo="data.logo"
+        :title="packageData.title || data.name"
+        :logo="packageData.logo"
         :badge="badge"
-        :description="data.description"
+        :description="packageData.description"
         :hint="packageHint"
         :hint-close="packageHintClose"
         @close-hint="restore"
     >
         <template #additional>
-            <strong class="package__version package__version--additional" v-if="data.version">
-                {{ $t('ui.package.version', { version: data.version }) }}
+            <strong class="package__version package__version--additional" v-if="packageData.version">
+                {{ $t('ui.package.version', { version: packageData.version }) }}
             </strong>
 
             <span class="composer-package__stats composer-package__stats--license">{{ license }}</span>
-            <span class="composer-package__stats composer-package__stats--downloads" v-if="data.downloads">{{ data.downloads | numberFormat }}</span>
-            <span class="composer-package__stats composer-package__stats--favers" v-if="data.favers">{{ data.favers | numberFormat }}</span>
-            <router-link class="composer-package__stats composer-package__stats--funding" :to="{ query: { p: data.name } }" v-if="data.funding">&nbsp;</router-link>
+            <span class="composer-package__stats composer-package__stats--downloads" v-if="packageData.downloads">{{ packageData.downloads | numberFormat }}</span>
+            <span class="composer-package__stats composer-package__stats--favers" v-if="packageData.favers">{{ packageData.favers | numberFormat }}</span>
+            <router-link class="composer-package__stats composer-package__stats--funding" :to="{ query: { p: data.name } }" v-if="packageData.funding">&nbsp;</router-link>
         </template>
 
         <template #release>
             <slot name="release">
                 <package-constraint class="package__constraint" :data="data" />
-                <div class="package__version package__version--release" v-if="data.version">
-                    <strong>{{ $t('ui.package.version', { version: data.version }) }}</strong>
-                    <time :dateTime="data.time" v-if="data.time">({{ data.time | datimFormat }})</time>
+                <div class="package__version package__version--release" v-if="packageData.version">
+                    <strong>{{ $t('ui.package.version', { version: packageData.version }) }}</strong>
+                    <time :dateTime="packageData.time" v-if="packageData.time">({{ packageData.time | datimFormat }})</time>
                 </div>
             </slot>
         </template>
 
-        <template #actions v-if="isContao">
-            <details-button :name="data.name" v-if="data.name"/>
-            <button class="widget-button widget-button--update" :disabled="isModified" v-if="!isRequired" @click="update">{{ $t('ui.package.updateButton') }}</button>
-        </template>
-        <template #actions v-else>
+        <template #actions>
             <slot name="actions">
                 <details-button :name="data.name" v-if="data.name"/>
-                <button class="widget-button widget-button--primary widget-button--add" v-if="isMissing" @click="install" :disabled="willBeInstalled">{{ $t('ui.package.installButton') }}</button>
-                <button class="widget-button widget-button--alert widget-button--trash" v-else-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
-                <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isRootInstalled" :disabled="isModified" @click="update">
-                    <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
-                </button-group>
+                <template v-if="isContao">
+                    <button class="widget-button widget-button--update" :disabled="isModified" v-if="!isRequired" @click="update">{{ $t('ui.package.updateButton') }}</button>
+                </template>
+                <template v-else>
+                    <button class="widget-button widget-button--primary widget-button--add" v-if="isMissing" @click="install" :disabled="willBeInstalled">{{ $t('ui.package.installButton') }}</button>
+                    <button class="widget-button widget-button--alert widget-button--trash" v-else-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
+                    <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isRootInstalled" :disabled="isModified" @click="update">
+                        <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
+                    </button-group>
+                </template>
             </slot>
         </template>
 
@@ -59,6 +60,7 @@
 <script>
     import { mapGetters } from 'vuex';
 
+    import metadata from 'contao-package-list/src/mixins/metadata';
     import packageStatus from '../../../mixins/packageStatus';
 
     import Package from './Package';
@@ -68,7 +70,7 @@
     import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
 
     export default {
-        mixins: [packageStatus],
+        mixins: [metadata, packageStatus],
         components: { Package, FeaturePackage, PackageConstraint, ButtonGroup, DetailsButton },
 
         props: {
@@ -83,7 +85,14 @@
         computed: {
             ...mapGetters('packages', ['packageFeatures']),
 
-            license: vm => vm.data.license instanceof Array ? vm.data.license.join('/') : vm.data.license,
+            packageData: vm => Object.assign(
+                {},
+                vm.installed[vm.data.name] || {},
+                vm.metadata || {},
+                vm.data
+            ),
+
+            license: vm => vm.packageData.license instanceof Array ? vm.packageData.license.join('/') : vm.packageData.license,
 
             packageHint() {
                 if (this.hint) {
@@ -160,9 +169,9 @@
                     };
                 }
 
-                if (this.data.abandoned) {
+                if (this.packageData.abandoned) {
                     return {
-                        title: this.data.abandoned === true ? this.$t('ui.package.abandonedText') : this.$t('ui.package.abandonedReplace', { replacement: this.data.abandoned }),
+                        title: this.packageData.abandoned === true ? this.$t('ui.package.abandonedText') : this.$t('ui.package.abandonedReplace', { replacement: this.packageData.abandoned }),
                         text: this.$t('ui.package.abandoned'),
                     };
                 }

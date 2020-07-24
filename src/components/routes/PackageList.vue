@@ -4,10 +4,10 @@
             <package-uploads ref="uploader" v-if="uploads !== false"/>
 
             <h2 class="package-list__headline" v-if="hasAdded">{{ $t('ui.packagelist.added') }}</h2>
-            <local-package v-for="item in addedPackages" :data="item" :key="item.name"/>
+            <composer-package v-for="item in addedPackages" :data="item" :key="item.name"/>
 
             <h2 class="package-list__headline" v-if="showHeadline">{{ $t('ui.packagelist.installed') }}</h2>
-            <local-package v-for="item in installedPackages" :data="item" :key="item.name"/>
+            <composer-package v-for="item in installedPackages" :data="item" :key="item.name"/>
         </div>
 
         <template #actions>
@@ -33,7 +33,7 @@
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import PackageBase from './Packages/Base';
     import PackageUploads from './Packages/Uploads';
-    import LocalPackage from './Packages/LocalPackage';
+    import ComposerPackage from './Packages/ComposerPackage';
     import CloudStatus from '../fragments/CloudStatus';
 
     const sortPackages = (a, b) => {
@@ -49,7 +49,7 @@
     };
 
     export default {
-        components: { PackageBase, PackageUploads, LocalPackage, LoadingButton, CloudStatus },
+        components: { PackageBase, PackageUploads, ComposerPackage, LoadingButton, CloudStatus },
 
         computed: {
             ...mapState('packages', {
