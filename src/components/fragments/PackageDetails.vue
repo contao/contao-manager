@@ -1,5 +1,5 @@
 <template>
-    <package-details :filter-features="filterFeatures" :dependents="dependents">
+    <package-details :dependents="dependents">
         <template #package-actions>
             <template v-if="isInstalled">
                 <package-constraint :data="data" v-if="!isFeature && isVisible"/>
@@ -20,7 +20,7 @@
             <install-button inline small :data="{ name }" v-if="packageSuggested(name)"/>
         </template>
         <template #features-actions="{ name }">
-            <install-button inline small :data="{ name }" v-if="!packageInstalled(name)"/>
+            <install-button inline small :data="{ name }" v-if="!packageInstalled(name) || !packageRoot(name)"/>
         </template>
     </package-details>
 </template>
@@ -44,6 +44,7 @@
             ...mapGetters('packages', [
                 'packageInstalled',
                 'packageSuggested',
+                'packageRoot',
             ]),
 
             data: vm => ({ name: vm.current }),
@@ -76,12 +77,6 @@
 
                 return deps;
             },
-        },
-
-        methods: {
-            filterFeatures(features) {
-                return features.filter(name => !this.packageInstalled(name));
-            }
         },
     };
 </script>
