@@ -154,7 +154,7 @@
         @include screen(1024) {
             &__hint {
                 padding: 8px 10px 8px 36px;
-                background: #e8c8bc url('../../../assets/images/hint.svg') 10px 5px no-repeat;
+                background: $hint-background url('~contao-package-list/src/assets/images/hint.svg') 10px 5px no-repeat;
                 background-size: 20px 20px;
             }
 

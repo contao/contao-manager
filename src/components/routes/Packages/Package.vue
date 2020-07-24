@@ -88,7 +88,7 @@
 
             @include screen(800) {
                 padding-left: 56px;
-                background: $hint-background url('../../../assets/images/hint.svg') 20px 5px no-repeat;
+                background: $hint-background url('~contao-package-list/src/assets/images/hint.svg') 20px 5px no-repeat;
                 background-size: 28px 28px;
             }
 
