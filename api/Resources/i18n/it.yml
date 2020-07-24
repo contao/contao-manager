@@ -4,7 +4,7 @@ it:
             title: 'L''impostazione PHP "allow_url_fopen" non è abilitata sul server.'
         process:
             title: 'La funzione PHP "proc_open" e/o "proc_close" non sono disponibili sul server.'
-            detail: 'Le funzioni "proc_open" e "proc_close" sono necessarie per eseguire compiti a riga di comando in sottofondo. Verificate perché il vostro webhosting non ha questi metodi disponibili; né Contao Manager né Contao 4 funzioneranno correttamente senza di esso.'
+            detail: 'Le funzioni "proc_open" e "proc_close" sono necessarie per eseguire compiti a riga di comando in background. Verifica perché il vostro web server non ha questi metodi disponibili; né Contao Manager né Contao 4 funzioneranno correttamente senza di queste estensioni PHP.'
         intl:
             title: 'L''estensione PHP Intl non è disponibile.'
             detail: 'Contao 4 richiede l''estensione PHP Intl per l''internazionalizzazione.'
@@ -39,6 +39,11 @@ it:
             title: 'Non è stato possibile determinare la versione di Contao'
             detail: "La console ha restituito contenuti inaspettati quando è stata richiesta la versione di Contao. Si prega di controllare l'output per ulteriori informazioni:\n\n{output}"
 
+    boot:
+        composer:
+            invalid: 'Convalida dello schema composer.json: {exception}'
+
+    config:
         php_cli:
             not_found: 'Questo percorso non contiene un PHP valido.'
             incompatible: 'Il PHP è una versione {cli} ma il tuo server web è una versione {web}.'
@@ -107,6 +112,11 @@ it:
             summary: 'Aggiungere pacchetti Composer ....'
         composer-remove:
             summary: 'Rimozione pacchetti Composer ....'
+        install-uploads:
+            summary: 'Installazione dei pacchetti caricati ...'
+            console: 'Installate modifiche per {package} (versione {version}) [su pacchetti / {name}]'
+        remove-uploads:
+            summary: 'Rimozione dei file caricati ...'
         composer-install:
             summary: 'Installazione delle dipendenze Composer ....'
             summaryRetry: 'Installazione delle dipendenze del Composer (riprovare {current}/{max}) ....'
@@ -128,3 +138,10 @@ it:
             finishedDetail: 'Uso della memoria: {memory} (peak: {peak}), tempo: {time}.'
         clear-cache:
             summary: 'Eliminazione dei file della cache ....'
+
+    upload:
+        error:
+            file: 'Il file non è valido o non contiene un composer.json.'
+            json: 'Composer.json non contiene dati JSON validi.'
+            schema: 'La convalida dello schema composer.json non è riuscita.'
+            partial: 'Il caricamento del file non è stato completato.'

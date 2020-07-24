@@ -77,7 +77,7 @@
     "ui.server.config.customTitle": "Individuelle Konfiguration",
     "ui.server.config.customText": "Bitte geben Sie den Pfad zu Ihrem PHP-Binary ein. Das Binary muss dieselbe PHP-Version sein wie der Webprozess.",
     "ui.server.config.cloudTitle": "Composer Resolver Cloud",
-    "ui.server.config.cloudText": "Der Composer Resolver Cloud erlaubt die Installation von Composer-Abhängigkeiten, selbst wenn der lokale Server nicht über genug Arbeitsspeicher verfügt. Beachten Sie, dass Ihre Paketinformationen an einen Cloud-Dienst der Contao Association übermittelt werden.",
+    "ui.server.config.cloudText": "Die Composer Resolver Cloud erlaubt die Installation von Composer-Abhängigkeiten, selbst wenn der lokale Server nicht über genug Arbeitsspeicher verfügt. Beachten Sie, dass Ihre Paketinformationen an einen Cloud-Dienst der Contao Association übermittelt werden.",
     "ui.server.config.cloud": "Die Composer Resolver Cloud verwenden",
     "ui.server.config.detected": "Ihr Server wurde automatisch erkannt.",
     "ui.server.config.phpDetected": "Ihr Server ist unbekannt, aber es wurde ein gültiger PHP-Pfad erkannt.",
