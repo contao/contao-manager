@@ -63,7 +63,7 @@ class Translator
         foreach ($locales as $locale) {
             $this->load($locale);
 
-            if (isset($this->labels[$locale][$id])) {
+            if (isset($this->labels[$locale][$id]) && ('' !== $this->labels[$locale][$id] || 'en' === $locale)) {
                 return $this->labels[$locale][$id];
             }
         }
