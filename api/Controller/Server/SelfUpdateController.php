@@ -36,12 +36,13 @@ class SelfUpdateController
             );
         }
 
-        $error = null;
-
         try {
+            $error = null;
+            $supportsUpdate = $updater->supportsUpdate();
             $latestVersion = $updater->getNewVersion();
         } catch (\Throwable $e) {
             $error = $e->getMessage();
+            $supportsUpdate = true;
             $latestVersion = $updater->getOldVersion();
         }
 
@@ -50,7 +51,7 @@ class SelfUpdateController
                 'current_version' => $updater->getOldVersion(),
                 'latest_version' => $latestVersion,
                 'channel' => $updater->getChannel(),
-                'supported' => $updater->supportsUpdate(),
+                'supported' => $supportsUpdate,
                 'error' => $error,
             ]
         );

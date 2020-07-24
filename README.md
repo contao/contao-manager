@@ -16,9 +16,6 @@ with this repository if you want to help with development of the app.
 - *allow_url_fopen* must be enabled in PHP
 - *proc_open* and *proc_close* PHP functions
 
-**Contao Manager does currently not work on Windows, support for
-Windows will be added in a later version (see [issue #66])
-
 
 ## Installation
 

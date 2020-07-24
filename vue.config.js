@@ -11,7 +11,6 @@ module.exports = {
         },
     },
 
-
     pluginOptions: {
         webpackBundleAnalyzer: {
             analyzerMode: 'disabled',
@@ -31,18 +30,15 @@ module.exports = {
                         test: /(site\.webmanifest|browserconfig\.xml)$/,
                         use: [
                             {
-                                loader: "file-loader",
-                                options: {
-                                    name: "icons/[name].[hash:8].[ext]",
-                                },
+                                loader: "file-loader"
                             },
                             {
-                                loader: "app-manifest-loader",
-                            },
+                                loader: "app-manifest-loader"
+                            }
                         ]
                     },
                     {
-                        test: /icons\/[^/]+.(png|jpe?g|gif|webp|svg|ico)(\?.*)?$/,
+                        test: /icons[\\/][^\\/]+\.(png|jpe?g|gif|webp|svg|ico)(\?.*)?$/,
                         use: [
                             {
                                 loader: "file-loader",
@@ -63,7 +59,7 @@ module.exports = {
     chainWebpack: config => {
         config.module
             .rule('images')
-            .test(/images\/[^/]+.(png|jpe?g|gif|webp)(\?.*)?$/)
+            .test(/images[\\/][^\\/]+\.(png|jpe?g|gif|webp)(\?.*)?$/)
             .use('image-webpack-loader')
             .loader('image-webpack-loader')
         ;
