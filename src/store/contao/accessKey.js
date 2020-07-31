@@ -44,7 +44,7 @@ export default {
 
             if (store.rootState.safeMode
                 || store.rootState.contaoApi.version < 1
-                || !store.rootState.contaoApi.features?.['contao/manager-plugin']?.['dot-env']?.includes('APP_DEV_ACCESSKEY')
+                || !store.rootState.contaoApi.features?.['contao/manager-bundle']?.['dot-env']?.includes('APP_DEV_ACCESSKEY')
             ) {
                 return Promise.reject();
             }
