@@ -42,7 +42,10 @@ export default {
                 return Promise.resolve(store.state.cache);
             }
 
-            if (store.rootState.safeMode) {
+            if (store.rootState.safeMode
+                || store.rootState.contaoApi.version < 2
+                || !store.rootState.contaoApi.features?.['contao/manager-bundle']?.['jwt-cookie']?.includes('debug')
+            ) {
                 return Promise.reject();
             }
 

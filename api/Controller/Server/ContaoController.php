@@ -128,7 +128,11 @@ class ContaoController
             return new JsonResponse(
                 [
                     'version' => null,
-                    'api' => 0,
+                    'api' => [
+                        'version' => 0,
+                        'features' => [],
+                        'commands' => [],
+                    ],
                     'supported' => false,
                     'project_dir' => $this->kernel->getProjectDir(),
                     'is_empty' => $isEmpty,
@@ -140,7 +144,11 @@ class ContaoController
         return new JsonResponse(
             [
                 'version' => $contaoVersion,
-                'api' => $this->getApiVersion(),
+                'api' => [
+                    'version' => $this->contaoApi->getVersion(),
+                    'features' => $this->contaoApi->getFeatures(),
+                    'commands' => $this->contaoApi->getCommands(),
+                ],
                 'supported' => version_compare($contaoVersion, '4.0.0', '>=') || 0 === strpos($contaoVersion, 'dev-'),
             ]
         );
@@ -176,7 +184,11 @@ class ContaoController
         // Create response before moving Phar, otherwise the JsonResponse class cannot be autoloaded
         $response = new JsonResponse([
             'version' => null,
-            'api' => 0,
+            'api' => [
+                'version' => 0,
+                'features' => [],
+                'commands' => [],
+            ],
             'supported' => false,
             'project_dir' => $targetRoot,
             'is_empty' => true,
@@ -219,18 +231,6 @@ class ContaoController
                 \basename(\Phar::running()),
             ]
         );
-    }
-
-    /**
-     * Gets the Contao API version.
-     */
-    private function getApiVersion(): ?int
-    {
-        try {
-            return $this->contaoApi->getVersion();
-        } catch (\Exception $e) {
-            return null;
-        }
     }
 
     /**

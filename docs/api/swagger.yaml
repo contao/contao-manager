@@ -1058,8 +1058,15 @@ components:
                         description: The Contao version number.
                         type: string|null
                     api:
-                        description: The Contao API version number.
-                        type: integer
+                        type: object
+                        properties:
+                            version:
+                                type: integer
+                                description: The Contao API version number.
+                            features:
+                                type: array
+                            commands:
+                                type: array
                     supported:
                         type: boolean
                     project_dir:

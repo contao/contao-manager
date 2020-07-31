@@ -15,6 +15,7 @@ namespace Contao\ManagerApi\Process;
 use Seld\JsonLint\JsonParser;
 use Seld\JsonLint\ParsingException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Exception\ExceptionInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ContaoApi
@@ -116,8 +117,12 @@ class ContaoApi
             return $this->apiInfo = $default;
         }
 
-        $process = $this->processFactory->createContaoApiProcess(['version']);
-        $process->mustRun();
+        try {
+            $process = $this->processFactory->createContaoApiProcess(['version']);
+            $process->mustRun();
+        } catch (ExceptionInterface $exception) {
+            return $default;
+        }
 
         $version = trim($process->getOutput());
 

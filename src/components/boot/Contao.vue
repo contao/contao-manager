@@ -184,7 +184,7 @@
                         }
 
                         this.bootState = 'success';
-                        this.bootDescription = this.$t('ui.server.contao.found', result);
+                        this.bootDescription = this.$t('ui.server.contao.found', { version: result.version, api: result.api.version });
 
                         this.$store.commit('setVersions', result);
                     }

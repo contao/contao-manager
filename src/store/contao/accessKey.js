@@ -42,7 +42,10 @@ export default {
                 return Promise.resolve(store.state.cache);
             }
 
-            if (store.rootState.safeMode || store.rootState.apiVersion < 1) {
+            if (store.rootState.safeMode
+                || store.rootState.contaoApi.version < 1
+                || !store.rootState.contaoApi.features?.['contao/manager-plugin']?.['dot-env']?.includes('APP_DEV_ACCESSKEY')
+            ) {
                 return Promise.reject();
             }
 

@@ -24,7 +24,7 @@ const store = new Vuex.Store({
         error: null,
         safeMode: false,
         contaoVersion: null,
-        apiVersion: null,
+        contaoApi: null,
     },
 
     mutations: {
@@ -46,7 +46,7 @@ const store = new Vuex.Store({
 
         setVersions(state, result) {
             state.contaoVersion = result.version;
-            state.apiVersion = result.api;
+            state.contaoApi = result.api;
         },
 
         apiError: (state, response, request = null) => {
