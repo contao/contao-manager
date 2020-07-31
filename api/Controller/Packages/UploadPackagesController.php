@@ -310,10 +310,7 @@ class UploadPackagesController
     private function validateUploadSupport(): void
     {
         if (!\extension_loaded('zip')) {
-            throw new ApiProblemException(
-                (new ApiProblem('The artifact repository requires PHP\'s zip extension'))
-                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
-            );
+            throw new ApiProblemException((new ApiProblem('The artifact repository requires PHP\'s zip extension'))->setStatus(Response::HTTP_NOT_IMPLEMENTED));
         }
 
         $packages = $this->environment
@@ -336,9 +333,6 @@ class UploadPackagesController
             }
         }
 
-        throw new ApiProblemException(
-            (new ApiProblem('Must install contao/manager-plugin 2.7 or later to support artifacts.'))
-                ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
-        );
+        throw new ApiProblemException((new ApiProblem('Must install contao/manager-plugin 2.7 or later to support artifacts.'))->setStatus(Response::HTTP_NOT_IMPLEMENTED));
     }
 }

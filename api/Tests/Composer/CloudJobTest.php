@@ -1,5 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao Manager.
+ *
+ * (c) Contao Association
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace Contao\ManagerApi\Tests\Composer;
 
 use Contao\ManagerApi\Composer\CloudJob;
@@ -10,7 +20,7 @@ class CloudJobTest extends TestCase
     /**
      * @dataProvider waitingTime
      */
-    public function testCalculatesTheWaitingTime(int $queuePosition, int $avgTime, int $workers, $expected)
+    public function testCalculatesTheWaitingTime(int $queuePosition, int $avgTime, int $workers, $expected): void
     {
         $job = new CloudJob([
             'status' => CloudJob::STATUS_QUEUED,

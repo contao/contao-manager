@@ -32,9 +32,7 @@ abstract class AbstractProcess
         $workDir = realpath(rtrim($workDir, '/'));
 
         if (false === $workDir) {
-            throw new \InvalidArgumentException(
-                sprintf('Working directory "%s" does not exist.', $workDir)
-            );
+            throw new \InvalidArgumentException(sprintf('Working directory "%s" does not exist.', $workDir));
         }
 
         $this->setFile = $workDir.'/'.$id.'.set.json';

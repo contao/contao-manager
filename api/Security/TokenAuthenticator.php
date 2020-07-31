@@ -92,7 +92,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
     {
-        $token->setAttribute('authenticator', \get_called_class());
+        $token->setAttribute('authenticator', static::class);
 
         return null;
     }

@@ -98,6 +98,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
 
     /**
      * Returns a config option by name.
+     *
+     * @param mixed|null $default
      */
     public function get(string $key, $default = null)
     {

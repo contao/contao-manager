@@ -83,7 +83,7 @@ class MissingPackagesController
             /** @var Link $link */
             [, $link] = $dependent;
 
-            if ($link->getDescription() === 'requires') {
+            if ('requires' === $link->getDescription()) {
                 return true;
             }
         }

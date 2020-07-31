@@ -64,7 +64,7 @@ class ComposerController
         if ($this->environment->hasPackage('contao/manager-bundle')) {
             $result['json']['found'] = true;
             $result['json']['valid'] = true;
-            $result['vendor']['found'] = \is_dir($this->environment->getVendorDir());
+            $result['vendor']['found'] = is_dir($this->environment->getVendorDir());
 
             if ($this->validateLockFile($result)) {
                 $this->validateSchema($result);

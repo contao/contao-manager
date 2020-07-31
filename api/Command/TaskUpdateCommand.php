@@ -88,7 +88,7 @@ class TaskUpdateCommand extends Command
 
         if ($input->getOption('poll')) {
             while ($status->isActive()) {
-                sleep((int)$input->getOption('interval'));
+                sleep((int) $input->getOption('interval'));
 
                 $newStatus = $this->taskManager->updateTask();
 
@@ -121,8 +121,8 @@ class TaskUpdateCommand extends Command
 
     /**
      * @param TaskOperationInterface[] $operations
-     * @param ConsoleSectionOutput[] $sections
-     * @param ProgressIndicator[] $progresses
+     * @param ConsoleSectionOutput[]   $sections
+     * @param ProgressIndicator[]      $progresses
      */
     private function updateOperations(array $operations, array $sections, array &$progresses): bool
     {
@@ -159,6 +159,7 @@ class TaskUpdateCommand extends Command
             $progress->advance();
             $section->writeln('   '.$operation->getDetails());
             $section->writeln('');
+
             return;
         }
 

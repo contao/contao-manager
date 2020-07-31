@@ -58,7 +58,7 @@ class PhpCliController
                 'problem' => [
                     'title' => 'Received invalid JSON output from the command line',
                     'type' => 'https://php.net/json_decode',
-                    'detail' => $output
+                    'detail' => $output,
                 ],
             ];
         }

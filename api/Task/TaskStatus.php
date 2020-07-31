@@ -205,17 +205,17 @@ final class TaskStatus implements \JsonSerializable
     {
         switch (true) {
             case $operation->isRunning():
-                return TaskStatus::STATUS_ACTIVE;
+                return self::STATUS_ACTIVE;
 
             case $operation->isSuccessful():
-                return TaskStatus::STATUS_COMPLETE;
+                return self::STATUS_COMPLETE;
 
             case $operation->hasError():
-                return TaskStatus::STATUS_ERROR;
+                return self::STATUS_ERROR;
         }
 
         if ($operation->isStarted() || $isNext) {
-            return TaskStatus::STATUS_ACTIVE;
+            return self::STATUS_ACTIVE;
         }
 
         return 'pending';

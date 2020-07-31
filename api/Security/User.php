@@ -63,7 +63,7 @@ class User implements UserInterface
         return $this->username;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         $this->password = null;
     }

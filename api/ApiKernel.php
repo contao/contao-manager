@@ -250,8 +250,9 @@ CODE
                 $current = \dirname($phar);
             }
 
-            if ('web' !== basename($current) || !\is_writable(\dirname($current))) {
+            if ('web' !== basename($current) || !is_writable(\dirname($current))) {
                 $this->isWebDir = false;
+
                 return $current;
             }
 

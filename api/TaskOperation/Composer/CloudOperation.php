@@ -154,7 +154,7 @@ class CloudOperation implements TaskOperationInterface
             );
         }
 
-        if ($this->exception instanceof RequestException && $this->exception->getStatusCode() === 404) {
+        if ($this->exception instanceof RequestException && 404 === $this->exception->getStatusCode()) {
             return (new ConsoleOutput())->add("Could not retrieve job details from Composer Resolver Cloud.\nThis usually happens because completed jobs are deleted after one hour.");
         }
 
@@ -203,7 +203,6 @@ class CloudOperation implements TaskOperationInterface
         return $console;
     }
 
-
     public function isStarted(): bool
     {
         try {
@@ -249,6 +248,7 @@ class CloudOperation implements TaskOperationInterface
 
                 if ($attempts >= 2) {
                     $this->taskConfig->setState('cloud-job-successful', false);
+
                     return;
                 }
 
@@ -304,7 +304,7 @@ class CloudOperation implements TaskOperationInterface
     {
         if (null === $this->job) {
             try {
-                $this->job = $this->cloud->getJob((string)$this->taskConfig->getState('cloud-job'));
+                $this->job = $this->cloud->getJob((string) $this->taskConfig->getState('cloud-job'));
             } catch (\Exception $e) {
                 $this->exception = $e;
 

@@ -189,7 +189,7 @@ class CloudResolver implements LoggerAwareInterface
         }
     }
 
-    private function createUnknownResponseException($statusCode, $responseBody, $requestBody = null)
+    private function createUnknownResponseException($statusCode, $responseBody, $requestBody = null): CloudException
     {
         return new CloudException('Composer Resolver returned an unexpected status code', $statusCode, $responseBody, $requestBody);
     }

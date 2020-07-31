@@ -46,7 +46,7 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
 
     public function supports(Request $request)
     {
-        return $request->getPathInfo() === '/api/session'
+        return '/api/session' === $request->getPathInfo()
             && $request->isMethod(Request::METHOD_POST)
             && $request->request->has('username')
             && $request->request->has('password');
@@ -89,7 +89,7 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        $token->setAttribute('authenticator', \get_called_class());
+        $token->setAttribute('authenticator', static::class);
 
         $response = new JsonResponse(['username' => $token->getUsername()]);
 

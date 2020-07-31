@@ -185,9 +185,7 @@ class TaskManager implements LoggerAwareInterface, ServiceAnnotationInterface
         $task = $this->tasks[$name];
 
         if (!$task instanceof TaskInterface) {
-            throw new \RuntimeException(
-                sprintf('"%s" is not an instance of "%s"', \get_class($task), TaskInterface::class)
-            );
+            throw new \RuntimeException(sprintf('"%s" is not an instance of "%s"', \get_class($task), TaskInterface::class));
         }
 
         return $task;

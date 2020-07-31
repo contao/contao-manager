@@ -196,7 +196,7 @@ class ContaoController
         ], Response::HTTP_CREATED);
 
         $phar = \Phar::running(false);
-        \rename($phar, $webDir.'/'.\basename($phar));
+        rename($phar, $webDir.'/'.basename($phar));
 
         return $response;
     }
@@ -228,7 +228,7 @@ class ContaoController
                 '.ftpquota',
                 '.htaccess',
                 'user.ini',
-                \basename(\Phar::running()),
+                basename(\Phar::running()),
             ]
         );
     }

@@ -257,13 +257,7 @@ class SelfUpdate
     {
         $tmpVersion = sha1_file($tempFile);
         if ($tmpVersion !== $sha1) {
-            throw new \RuntimeException(
-                sprintf(
-                    'Download file appears to be corrupted or outdated. The file '
-                    .'received does not have the expected SHA-1 hash: %s.',
-                    $sha1
-                )
-            );
+            throw new \RuntimeException(sprintf('Download file appears to be corrupted or outdated. The file '.'received does not have the expected SHA-1 hash: %s.', $sha1));
         }
     }
 

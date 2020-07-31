@@ -41,7 +41,6 @@ class LocalPackagesController
      */
     private $compositeRepository;
 
-
     public function __construct(Environment $environment)
     {
         $composer = $environment->getComposer();
@@ -108,7 +107,7 @@ class LocalPackagesController
             /** @var Link $link */
             [, $link] = $dependent;
 
-            if (!$withReplaces && $link->getDescription() === 'replaces') {
+            if (!$withReplaces && 'replaces' === $link->getDescription()) {
                 continue;
             }
 

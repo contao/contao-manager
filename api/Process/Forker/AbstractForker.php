@@ -75,7 +75,7 @@ abstract class AbstractForker implements ForkerInterface
                 'Starting "{commandline}" with {forker_class}',
                 [
                     'commandline' => $commandline,
-                    'forker_class' => \get_called_class(),
+                    'forker_class' => static::class,
                 ]
             );
         }
@@ -93,7 +93,7 @@ abstract class AbstractForker implements ForkerInterface
                 'Process did not start correctly',
                 [
                     'commandline' => $commandline,
-                    'forker_class' => \get_called_class(),
+                    'forker_class' => static::class,
                     'exit_code' => $process->getExitCode(),
                     'exit_text' => $process->getExitCodeText(),
                     'stopped' => $process->hasBeenStopped(),
