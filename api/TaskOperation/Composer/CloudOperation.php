@@ -131,9 +131,9 @@ class CloudOperation implements TaskOperationInterface
                     'taskoperation.cloud.finished',
                     [
                         'job' => $job->getId(),
-                        'memory' => $match[1],
-                        'peak' => $match[2],
-                        'time' => $match[3],
+                        'memory' => $match[1] ?? '',
+                        'peak' => $match[2] ?? '',
+                        'time' => $match[3] ?? '',
                         'seconds' => $seconds,
                     ]
                 );
