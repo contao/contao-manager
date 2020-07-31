@@ -291,6 +291,9 @@ class CloudOperation implements TaskOperationInterface
     public function delete(): void
     {
         try {
+            // Download output so it can be processed after the task is deleted in the cloud
+            $this->getOutput();
+
             $this->cloud->deleteJob((string) $this->taskConfig->getState('cloud-job'));
         } catch (\Exception $e) {
             $this->exception = $e;
@@ -359,7 +362,13 @@ class CloudOperation implements TaskOperationInterface
     private function getOutput(): string
     {
         if (null === $this->output) {
-            $this->output = $this->cloud->getOutput($this->getCurrentJob());
+            $job = $this->getCurrentJob();
+
+            if (null === $job) {
+                return '';
+            }
+
+            $this->output = $this->cloud->getOutput($job);
         }
 
         return $this->output;
