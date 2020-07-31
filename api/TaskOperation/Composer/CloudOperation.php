@@ -26,6 +26,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class CloudOperation implements TaskOperationInterface
 {
+    private const CLOUD_ERROR = "Could not retrieve job details from Composer Resolver Cloud.\nThis usually happens because completed jobs are deleted after one hour.";
+
     /**
      * @var CloudResolver
      */
@@ -155,7 +157,7 @@ class CloudOperation implements TaskOperationInterface
         }
 
         if ($this->exception instanceof RequestException && 404 === $this->exception->getStatusCode()) {
-            return (new ConsoleOutput())->add("Could not retrieve job details from Composer Resolver Cloud.\nThis usually happens because completed jobs are deleted after one hour.");
+            return (new ConsoleOutput())->add(self::CLOUD_ERROR);
         }
 
         if ($this->exception instanceof \Exception) {
@@ -365,10 +367,14 @@ class CloudOperation implements TaskOperationInterface
             $job = $this->getCurrentJob();
 
             if (null === $job) {
-                return '';
+                return self::CLOUD_ERROR;
             }
 
-            $this->output = $this->cloud->getOutput($job);
+            try {
+                $this->output = $this->cloud->getOutput($job);
+            } catch (\Exception $exception) {
+                return self::CLOUD_ERROR;
+            }
         }
 
         return $this->output;
