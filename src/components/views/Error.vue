@@ -30,7 +30,10 @@
                 }
 
                 if (this.request) {
-                    return `HTTP request for "${this.request.headers.get('X-HTTP-Method-Override') || this.request.method} ${this.request.url}" failed.`
+                    return this.$t('ui.error.title', {
+                        method: this.request.headers.get('X-HTTP-Method-Override') || this.request.method,
+                        url: this.request.url,
+                    })
                 }
 
                 return this.$t('ui.app.apiError');
@@ -46,11 +49,11 @@
                 }
 
                 if (this.error.status === 500) {
-                    return 'Looks like an unexpected error happened on your server. Please check the log files of your web server (Apache/Nginx) and the Contao Manager logs at "contao-manager/logs".';
+                    return this.$t('ui.error.server500');
                 }
 
                 if (this.request) {
-                    return `The server returned an empty response with status code ${this.error.status}.`;
+                    return this.$t('ui.error.response', this.error);
                 }
 
                 return '';
