@@ -177,7 +177,8 @@ class CloudResolver implements LoggerAwareInterface
         $content = $this->request->getJson(
             self::API_URL.$link,
             ['Composer-Resolver-Client: contao'],
-            $statusCode
+            $statusCode,
+            true
         );
 
         switch ($statusCode) {
