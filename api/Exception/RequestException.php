@@ -26,9 +26,13 @@ class RequestException extends \RuntimeException
      */
     private $statusCode;
 
-    public function __construct(string $url, int $statusCode, Throwable $previous = null)
+    public function __construct(string $url, ?int $statusCode, Throwable $previous = null)
     {
-        $message = "HTTP request to $url failed with status code $statusCode";
+        $message = "HTTP request to $url failed ";
+
+        if (null !== $statusCode) {
+            $message .= "with status code $statusCode";
+        }
 
         if ($previous) {
             $message .= ' ('.$previous->getMessage().')';

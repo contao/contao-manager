@@ -38,10 +38,10 @@ Vue.http.interceptors.push((request, next) => {
             throw response.data;
         }
 
-        if (response.headers.get('Content-Type') !== 'application/json'
+        if (request.url.substring(0, 4) === 'api/'
+            && response.headers.get('Content-Type') !== 'application/json'
             && response.status >= 400
             && response.status <= 599
-            && response.status !== 404
         ) {
             store.commit('setError', {
                 type: 'about:blank',

@@ -61,7 +61,7 @@ class Request
         return $stream;
     }
 
-    public function getJson(string $url, array $headers = [], int &$statusCode = null, bool $catch = false): ?string
+    public function getJson(string $url, array $headers = [], ?int &$statusCode = null, bool $catch = false): ?string
     {
         $headers[] = 'Accept: application/json';
 
