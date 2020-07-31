@@ -30,7 +30,7 @@
         "symfony/process": "^4.4",
         "symfony/yaml": "^4.4",
         "doctrine/annotations": "~1.0",
-        "terminal42/service-annotation-bundle": "^1.0",
+        "terminal42/service-annotation-bundle": "^1.1.1",
 
         "symfony/monolog-bundle": "^3.3",
         "firebase/php-jwt": "^4.0",

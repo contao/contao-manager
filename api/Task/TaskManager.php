@@ -19,12 +19,11 @@ use Psr\Log\LoggerAwareTrait;
 use studio24\Rotate\Rotate;
 use Symfony\Component\Filesystem\Filesystem;
 use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
-use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
 
 /**
  * @ServiceTag("monolog.logger", channel="tasks")
  */
-class TaskManager implements LoggerAwareInterface, ServiceAnnotationInterface
+class TaskManager implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
