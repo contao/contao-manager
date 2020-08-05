@@ -160,10 +160,12 @@
     "ui.task.copyLog": "Copy log to clipboard",
 
     "ui.widget.mandatory": "Este campo não pode estar vazio.",
+    "ui.error.title": "HTTP request for \"{method} {url}\" failed.",
+    "ui.error.server500": "Looks like an unexpected error happened on your server. Please check the log files of your web server (Apache/Nginx) and the Contao Manager logs at \"contao-manager/logs\".",
+    "ui.error.response": "The server returned a response with status code ${status}.",
     "ui.error.moreLink": "Mais informação ",
     "ui.error.support": "Contao Support",
     "ui.footer.help": "Ajuda",
-    "ui.footer.helpHref": "https://docs.contao.org",
     "ui.footer.reportProblem": "Reportar um Problema",
     "ui.navigation.discover": "Descubra",
     "ui.navigation.packages": "Pacotes",

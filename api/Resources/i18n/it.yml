@@ -53,7 +53,7 @@ it:
         update_packages:
             title: 'Aggiornamento pacchetti'
         dump_autoload:
-            title: ''
+            title: 'Dumping Composer Class Autoloader'
         clear_cache:
             title: 'Cancellazione della cache del compositore'
         rebuild_cache:
@@ -65,22 +65,22 @@ it:
         self-update:
             detail: 'Aggiornamento da {old} a {new}'
         install-uploads:
-            summary: ''
+            summary: 'Installazione uploads'
             console: 'Installate modifiche per {package} (versione {version}) [su pacchetti / {name}]'
         remove-uploads:
-            summary: ''
+            summary: 'Rimuovi uploads'
         composer-install:
-            retry: ''
-            nothing: ''
-            result: ''
+            retry: 'riprova {current}/{max}'
+            nothing: 'Niente da installare o aggiornare'
+            result: '{installs} installato, {updates} aggiornato, {removals} rimosso'
         dump-autoload:
-            result: ''
+            result: 'Generati file di caricamento automatico ottimizzati contenenti {count} classi'
         cloud:
-            summary: ''
-            queued: ''
-            processing: ''
-            error: ''
-            finished: ''
+            summary: 'aggiornamento di composer (usando Resolver Cloud)'
+            queued: 'In coda, a partire da circa {seconds} secondi (attualmente {jobs} jobs  {workers} attivi)'
+            processing: 'Attivo per {seconds} secondi. Utilizzo della memoria: {memory}.'
+            error: 'Verifica delle dipendenze non riuscita'
+            finished: 'Completatio in {seconds} secondi. Utilizzo della memoria: {memory} (peak: {peak}), tempo: {time}.'
 
     upload:
         error:
@@ -91,6 +91,6 @@ it:
 
     error:
         writable:
-            directory: ''
-            config-file: ''
-            detail: ''
+            directory: 'Contao Manager non è stato in grado di creare la directory "{path}".'
+            config-file: 'Contao Manager non ha potuto scrivere un file di configurazione "{file}".'
+            detail: 'Sembra che il tuo server non sia configurato correttamente. Se stai per installare Contao, configura la document root del tuo server web. In caso contrario, assicurarsi che le autorizzazioni di accesso al file siano corrette. Se non sei sicuro di come risolvere questo problema, contatta il tuo provider di hosting per supporto.'

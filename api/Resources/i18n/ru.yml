@@ -53,7 +53,7 @@ ru:
         update_packages:
             title: 'Обновление пакетов'
         dump_autoload:
-            title: ''
+            title: 'Дампинг автозагрузчика класса Composer'
         clear_cache:
             title: 'Очистка кеша Composer'
         rebuild_cache:
@@ -65,22 +65,22 @@ ru:
         self-update:
             detail: 'Обновление с {old} до {new}'
         install-uploads:
-            summary: ''
+            summary: 'Установка загрузок'
             console: 'Установлен артефакт для {package} (версии {version}) [к пакетам/{name}]'
         remove-uploads:
-            summary: ''
+            summary: 'Удаление загрузок'
         composer-install:
-            retry: ''
-            nothing: ''
-            result: ''
+            retry: 'повторная попытка {current}/{max}'
+            nothing: 'Нечего устанавливать или обновлять'
+            result: '{installs} установлено, {updates} обновлено, {removals} удалено'
         dump-autoload:
-            result: ''
+            result: 'Созданы оптимизированные файлы автозагрузки, содержащие классы {count}'
         cloud:
-            summary: ''
-            queued: ''
-            processing: ''
-            error: ''
-            finished: ''
+            summary: 'обновление Composer (с помощью Resolver Cloud)'
+            queued: 'В очереди, начиная приблизительно с {seconds} сек. (сейчас {jobs} задач в {workers} воркерах (workers))'
+            processing: 'Активен в течение {seconds} сек. Использование памяти: {memory}.'
+            error: 'Ошибка разрешения зависимостей'
+            finished: 'Завершено за {seconds} сек. Использование памяти: {memory} (пик: {peak}), время: {time}.'
 
     upload:
         error:
@@ -91,6 +91,6 @@ ru:
 
     error:
         writable:
-            directory: ''
-            config-file: ''
-            detail: ''
+            directory: 'Contao Manager не смог создать каталог "{path}".'
+            config-file: 'Contao Manager не смог записать файл конфигурации "{file}".'
+            detail: 'Вероятно, сервер настроен неправильно. Если вы собираетесь установить Contao, установите корневой каталог документов веб-сервера. В противном случае убедитесь, что права доступа к файлам указаны правильно. Если вы не знаете, как это исправить, обратитесь за помощью к своему хостинг-провайдеру.'

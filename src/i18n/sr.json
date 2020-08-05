@@ -160,10 +160,12 @@
     "ui.task.copyLog": "Copy log to clipboard",
 
     "ui.widget.mandatory": "Ово поље не сме бити празно.",
+    "ui.error.title": "HTTP request for \"{method} {url}\" failed.",
+    "ui.error.server500": "Looks like an unexpected error happened on your server. Please check the log files of your web server (Apache/Nginx) and the Contao Manager logs at \"contao-manager/logs\".",
+    "ui.error.response": "The server returned a response with status code ${status}.",
     "ui.error.moreLink": "Више информација",
     "ui.error.support": "Contao Support",
     "ui.footer.help": "Помоћ",
-    "ui.footer.helpHref": "https://docs.contao.org",
     "ui.footer.reportProblem": "Пријави проблем",
     "ui.navigation.discover": "Истражи",
     "ui.navigation.packages": "Пакети",

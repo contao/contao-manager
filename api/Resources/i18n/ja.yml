@@ -53,7 +53,7 @@ ja:
         update_packages:
             title: 'パッケージを更新'
         dump_autoload:
-            title: ''
+            title: 'Composerのクラスのオートローダーを書き出し中'
         clear_cache:
             title: 'Composerのキャッシュを消去中'
         rebuild_cache:
@@ -65,22 +65,22 @@ ja:
         self-update:
             detail: '{old}から{new}に更新中'
         install-uploads:
-            summary: ''
+            summary: 'アップロードしたファイルをインストール中'
             console: '{package} (バージョン {version})のインストール過程[packages/{name}に存在]'
         remove-uploads:
-            summary: ''
+            summary: 'アップロードしたファイルを削除中'
         composer-install:
-            retry: ''
-            nothing: ''
-            result: ''
+            retry: '再試行中 {current}/{max}'
+            nothing: 'インストールやアップデートはなし'
+            result: '{installs}個をインストール、{updates}個をアップデート、{removals}個を削除'
         dump-autoload:
-            result: ''
+            result: '{count}個のクラスを含む最適化した自動読み込みのファイルを生成'
         cloud:
-            summary: ''
-            queued: ''
-            processing: ''
-            error: ''
-            finished: ''
+            summary: 'composer update (リゾルバークラウドを使用)'
+            queued: 'キューに追加、約{seconds}秒で開始。{seconds}秒経過(現在{workers}個のワーカーに{jobs}個のジョブ)'
+            processing: '{seconds}秒間の動作中。メモリの使用: {memory}。'
+            error: '依存関係の解決に失敗'
+            finished: '{seconds}秒で完了。メモリの使用: {memory} (最大: {peak})、時間: {time}。'
 
     upload:
         error:
@@ -91,6 +91,6 @@ ja:
 
     error:
         writable:
-            directory: ''
-            config-file: ''
-            detail: ''
+            directory: 'Contao Managerは"{path}"のディレクトリを作成できませんでした。'
+            config-file: 'Contao Managerは構成ファイルを"{file}"に書き込めませんでした。'
+            detail: 'サーバーを正しく構成できていない様です。Contaoをインストールしようとしている場合は、WebサーバーのDocumentRootを設定してください。そうでない場合はファイルのアクセス権限が正しいことを確認してください。これを修正する方法がわからない場合は、ホスティング提供者に連絡してサポートを求めてください。'

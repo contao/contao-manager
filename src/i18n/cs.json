@@ -160,10 +160,12 @@
     "ui.task.copyLog": "Copy log to clipboard",
 
     "ui.widget.mandatory": "Toto pole nesmí být prázdné.",
+    "ui.error.title": "HTTP request for \"{method} {url}\" failed.",
+    "ui.error.server500": "Looks like an unexpected error happened on your server. Please check the log files of your web server (Apache/Nginx) and the Contao Manager logs at \"contao-manager/logs\".",
+    "ui.error.response": "The server returned a response with status code ${status}.",
     "ui.error.moreLink": "Více informací",
     "ui.error.support": "Contao Support",
     "ui.footer.help": "Nápověda",
-    "ui.footer.helpHref": "https://docs.contao.org",
     "ui.footer.reportProblem": "Oznámit problém",
     "ui.navigation.discover": "Objevit",
     "ui.navigation.packages": "Balíčky",

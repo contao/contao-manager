@@ -160,10 +160,12 @@
     "ui.task.copyLog": "Copy log to clipboard",
 
     "ui.widget.mandatory": "该字段不能为空。",
+    "ui.error.title": "HTTP request for \"{method} {url}\" failed.",
+    "ui.error.server500": "Looks like an unexpected error happened on your server. Please check the log files of your web server (Apache/Nginx) and the Contao Manager logs at \"contao-manager/logs\".",
+    "ui.error.response": "The server returned a response with status code ${status}.",
     "ui.error.moreLink": "更多信息",
     "ui.error.support": "Contao Support",
     "ui.footer.help": "帮助",
-    "ui.footer.helpHref": "https://docs.contao.org",
     "ui.footer.reportProblem": "报告问题",
     "ui.navigation.discover": "发现",
     "ui.navigation.packages": "包",
