@@ -8,7 +8,7 @@
             <div class="view-error__debug" v-if="debug">{{ debug }}</div>
             <div class="view-error__actions">
                 <a :href="error.type" target="_blank" v-if="error.type !== 'about:blank'" class="view-error__link">{{ $t('ui.error.moreLink') }}</a>
-                <a :href="support" target="_blank" class="view-error__link view-error__link--support">{{ $t('ui.error.support') }}</a>
+                <a :href="`https://to.contao.org/support?lang=${$i18n.locale}`" target="_blank" class="view-error__link view-error__link--support">{{ $t('ui.error.support') }}</a>
             </div>
         </div>
     </div>
@@ -69,22 +69,6 @@
                 }
 
                 return '';
-            },
-
-            support() {
-                switch (this.$i18n.locale) {
-                    case 'de':
-                        return 'https://contao.org/de/support.html';
-
-                    case 'fr':
-                        return 'https://contao.org/fr/support.html';
-
-                    case 'es':
-                        return 'https://contao.org/es/soporte.html';
-
-                    default:
-                        return 'https://contao.org/en/support.html';
-                }
             },
         },
     };

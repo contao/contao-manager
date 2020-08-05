@@ -2,7 +2,7 @@
     <footer :class="'fragment-footer' + (display ? (' fragment-footer--'+display) : '')">
         <strong class="fragment-footer__product" v-if="!isLogin">Contao Manager @package_version@</strong>
         <ul class="fragment-footer__links">
-            <li><a :href="$t('ui.footer.helpHref')" target="_blank">{{ $t('ui.footer.help') }}</a></li>
+            <li><a href="https://docs.contao.org" target="_blank">{{ $t('ui.footer.help') }}</a></li>
             <li><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ $t('ui.footer.reportProblem') }}</a></li>
         </ul>
         <div class="fragment-footer__language">

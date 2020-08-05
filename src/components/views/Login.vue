@@ -12,7 +12,7 @@
                 <text-field ref="username" name="username" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
                 <text-field type="password" name="password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
 
-                <a :href="forgotPassword" target="_blank" class="view-login__link">{{ $t('ui.login.forgotPassword') }}</a>
+                <a :href="`https://to.contao.org/manager-password?lang=${$i18n.locale}`" target="_blank" class="view-login__link">{{ $t('ui.login.forgotPassword') }}</a>
 
                 <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in">
                     {{ $t('ui.login.button') }}
@@ -44,16 +44,6 @@
             inputValid() {
                 return this.username !== '' && this.password !== '' && this.password.length >= 8;
             },
-
-            forgotPassword() {
-                switch (this.$i18n.locale) {
-                    case 'de':
-                        return 'https://docs.contao.org/manual/de/installation/contao-manager/#hast-du-die-zugangsdaten-vom-contao-manager-vergessen';
-
-                    default:
-                        return 'https://github.com/contao/contao-manager/issues/14';
-                }
-            }
         },
 
         methods: {

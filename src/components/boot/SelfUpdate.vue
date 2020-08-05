@@ -19,24 +19,6 @@
             isSupported: true,
         }),
 
-        computed: {
-            manualUpdateUrl() {
-                switch (this.$i18n.locale) {
-                    case 'de':
-                        return 'https://contao.org/de/download.html';
-
-                    case 'fr':
-                        return 'https://contao.org/fr/telechargements.html';
-
-                    case 'es':
-                        return 'https://contao.org/es/download.html';
-
-                    default:
-                        return 'https://contao.org/en/download.html';
-                }
-            }
-        },
-
         methods: {
             async boot() {
                 this.bootDescription = this.$t('ui.server.running');
@@ -70,7 +52,7 @@
                         } else {
                             this.emitState('error', this.$t('ui.server.selfUpdate.manualUpdate', {
                                 latest,
-                                download: `<a href="${this.$t('ui.server.selfUpdate.manualUpdateUrl')}" target="_blank" rel="noreferrer noopener">${this.$t('ui.server.selfUpdate.manualUpdateUrl')}</a>`
+                                download: `<a href="https://to.contao.org/download?lang=${this.$i18n.locale}" target="_blank" rel="noreferrer noopener">https://to.contao.org/download</a>`
                             }));
                         }
                     } catch (err) {
