@@ -29,7 +29,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
     public function __construct(ContainerInterface $container, ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        parent::__construct('user.json', $kernel, $filesystem);
+        parent::__construct('users.json', $kernel, $filesystem);
 
         $this->container = $container;
     }
