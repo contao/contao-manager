@@ -64,7 +64,8 @@
                 }
 
                 return {
-                    '4.9': `Contao 4.9 (${this.$t('ui.server.contao.latestTitle')} / ${this.$t('ui.server.contao.ltsTitle')})`,
+                    '4.10': `Contao 4.10 (${this.$t('ui.server.contao.latestTitle')})`,
+                    '4.9': `Contao 4.9 (${this.$t('ui.server.contao.ltsTitle')})`,
                     '4.4': `Contao 4.4 (${this.$t('ui.server.contao.ltsTitle')})`,
                 };
             },
