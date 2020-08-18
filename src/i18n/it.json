@@ -145,7 +145,7 @@
     "ui.taskpopup.buttonConfirm": "Conferma e chiudi",
     "ui.taskpopup.buttonCancel": "Annulla",
     "ui.taskpopup.console": "Visualizza/nasconde l'uscita console",
-    "ui.taskpopup.noconsole": "Aspettando l'uscita console ...",
+    "ui.taskpopup.noconsole": "In attesa dell'esecuzione del processo della console",
     "ui.taskpopup.autoclose": "Chiudere l'operazione quando l'operazione ha avuto successo",
     "ui.taskpopup.confirmCancel": "Sei sicuro di annullare questo compito? Questo potrebbe lasciare l'installazione di Contao in uno stato danneggiato!",
 

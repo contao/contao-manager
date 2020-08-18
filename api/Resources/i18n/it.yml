@@ -130,7 +130,7 @@ it:
             summary: 'Installazione applicazione template ....'
         cloud:
             queuedSummary: 'Job in coda nel Composer Cloud per {secondi} secondi'
-            queuedDetail: 'A partire da circa {secondi} secondi (attualmente {jobs} job su {workers} workers)'
+            queuedDetail: 'A partire da circa {secondi} secondi (attualmente {jobs} job su {workers} attivi)'
             processingSummary: 'Risolvere le dipendenze utilizzando Composer Cloud'
             processingDetail: 'L''ID job {job} è in esecuzione per {seconds} secondi'
             errorSummary: 'Errata risoluzione delle dipendenze ....'
