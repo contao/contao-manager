@@ -40,7 +40,7 @@ class CloudResolver implements LoggerAwareInterface
     /**
      * Creates a Cloud job for given composer changes.
      */
-    public function createJob(CloudChanges $changes, Environment $environment, string $client = 'contao', string $authorization = null): CloudJob
+    public function createJob(CloudChanges $changes, Environment $environment): CloudJob
     {
         $environment->reset();
 
@@ -61,13 +61,9 @@ class CloudResolver implements LoggerAwareInterface
 
         $body = json_encode($data);
         $headers = [
-            'Composer-Resolver-Client: '.$client,
+            'Composer-Resolver-Client: contao',
             'Composer-Resolver-Command: '.implode(' ', $command),
         ];
-
-        if (null !== $authorization) {
-            $headers[] = 'Authorization: '.$authorization;
-        }
 
         if (null !== $this->logger) {
             $this->logger->info('Creating Composer Cloud job', [
