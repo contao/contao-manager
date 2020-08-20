@@ -199,6 +199,12 @@ class Environment
         return $json;
     }
 
+    public function getComposerLockFile(): JsonFile
+    {
+        return new JsonFile($this->getLockFile());
+    }
+
+
     public function getComposerLock(): array
     {
         $locker = $this->getComposer()->getLocker();

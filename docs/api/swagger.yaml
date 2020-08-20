@@ -934,6 +934,50 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Package'
 
+    /api/packages/cloud:
+        get:
+            summary: Gets data for a Composer Cloud job
+            tags: [Packages]
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    composerJson:
+                                        type: object
+                                    composerLock:
+                                        type: object
+                                    platform:
+                                        type: object
+                                    localPackages:
+                                        type: object
+
+
+        put:
+            summary: Writes `composer.lock` and optional `composer.json` and runs a `composer install`
+            tags: [Packages]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [composerLock]
+                            properties:
+                                composerLock:
+                                    type: object
+                                    description: New content of the `composer.lock` file
+                                composerJson:
+                                    type: object
+                                    description: Optional content of the `composer.json` file
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TaskStatus'
+
     /api/constraint:
         post:
             summary: Validates a Composer version constraint

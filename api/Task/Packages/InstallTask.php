@@ -56,16 +56,17 @@ class InstallTask extends AbstractPackagesTask
 
     protected function buildOperations(TaskConfig $config): array
     {
-        $changes = new CloudChanges();
-        $changes->setDryRun((bool) $config->getOption('dry_run', false));
-
         $operations = [];
+        $dryRun = (bool)$config->getOption('dry_run', false);
 
         if ($config->getOption('remove-vendor', false)) {
             $operations[] = new RemoveVendorOperation($config, $this->environment, $this->filesystem);
         }
 
         if ($this->environment->useCloudResolver() && !$this->filesystem->exists($this->environment->getLockFile())) {
+            $changes = new CloudChanges();
+            $changes->setDryRun($dryRun);
+
             $operations[] = new CloudOperation(
                 $this->cloudResolver,
                 $changes,
@@ -76,7 +77,7 @@ class InstallTask extends AbstractPackagesTask
             );
         }
 
-        $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $changes->getDryRun());
+        $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $dryRun);
 
         return $operations;
     }
