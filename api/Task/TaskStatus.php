@@ -26,6 +26,11 @@ final class TaskStatus implements \JsonSerializable
     /**
      * @var string
      */
+    private $id;
+
+    /**
+     * @var string
+     */
     private $title;
 
     /**
@@ -51,8 +56,9 @@ final class TaskStatus implements \JsonSerializable
      */
     private $abort = false;
 
-    public function __construct(string $title, array $operations)
+    public function __construct(string $id, string $title, array $operations)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->operations = $operations;
     }
@@ -191,6 +197,7 @@ final class TaskStatus implements \JsonSerializable
         }
 
         return [
+            'id' => $this->id,
             'title' => $this->getTitle(),
             'console' => $this->getConsole(),
             'cancellable' => $this->isCancellable(),

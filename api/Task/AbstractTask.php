@@ -41,7 +41,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
             }
         }
 
-        return new TaskStatus($this->getTitle(), $operations);
+        return new TaskStatus($config->getId(), $this->getTitle(), $operations);
     }
 
     public function update(TaskConfig $config): TaskStatus

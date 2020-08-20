@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Task;
 
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Filesystem\Filesystem;
 
 class TaskConfig
@@ -36,20 +37,28 @@ class TaskConfig
         $this->file = $file;
         $this->filesystem = $filesystem ?: new Filesystem();
 
-        $this->data = [
-            'name' => $name,
-            'options' => $options,
-            'state' => [],
-            'cancelled' => false,
-        ];
-
         if (null === $name && null === $options) {
             $this->data = json_decode(file_get_contents($file), true);
 
             if (!\is_array($this->data)) {
                 throw new \RuntimeException(sprintf('Invalid task data in file "%s"', $file));
             }
+
+            return;
         }
+
+        $this->data = [
+            'id' => Uuid::uuid4()->toString(),
+            'name' => $name,
+            'options' => $options,
+            'state' => [],
+            'cancelled' => false,
+        ];
+    }
+
+    public function getId(): ?string
+    {
+        return $this->data['id'] ?? '--unknown--';
     }
 
     public function getName(): ?string

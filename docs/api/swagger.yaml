@@ -1267,6 +1267,9 @@ components:
         TaskStatus:
             type: object
             properties:
+                id:
+                    type: string
+                    description: A unique UUIDv4 for the current task.
                 title:
                     type: string
                 console:
