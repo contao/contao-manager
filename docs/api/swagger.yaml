@@ -1204,7 +1204,6 @@ components:
                                 type: boolean
                                 default: false
                                 description: Only create the `composer.json` but do not run a `composer update`.
-                    -   $ref: '#/components/schemas/Task/CloudOperation'
 
             PackagesInstall:
                 allOf:
@@ -1221,8 +1220,7 @@ components:
                             remove-vendor:
                                 type: boolean
                                 default: false
-                                string: Removes the `vendor` folder before installation (clean install).
-                    -   $ref: '#/components/schemas/Task/CloudOperation'
+                                description: Removes the `vendor` folder before installation (clean install).
 
             PackagesUpdate:
                 allOf:
@@ -1251,18 +1249,6 @@ components:
                                 description: List of package names to include in the update. If not set, all packages will be updated.
                                 items:
                                     type: string
-                    -   $ref: '#/components/schemas/Task/CloudOperation'
-
-            CloudOperation:
-                type: object
-                properties:
-                    cloud_client:
-                        type: string
-                        default: contao
-                        description: To override the `Composer-Resolver-Client`.
-                    cloud_auth:
-                        type: string
-                        description: Optional authentication header for the Composer Resolver Cloud.
 
         TaskStatus:
             type: object
