@@ -954,6 +954,12 @@ paths:
                                     localPackages:
                                         type: object
 
+                404:
+                    description: 'Composer Resolver Cloud is disabled'
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
 
         put:
             summary: Writes `composer.lock` and optional `composer.json` and runs a `composer install`
@@ -977,6 +983,13 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/TaskStatus'
+
+                404:
+                    description: 'Composer Resolver Cloud is disabled'
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
 
     /api/constraint:
         post:

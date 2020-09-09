@@ -6,6 +6,7 @@ use Composer\Json\JsonFile;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Task\TaskManager;
+use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +36,13 @@ class CloudController
 
     public function __invoke(Request $request): Response
     {
+        if (!$this->environment->useCloudResolver()) {
+            return new ApiProblemResponse(
+                (new ApiProblem('Composer Resolver Cloud is disabled'))
+                    ->setStatus(Response::HTTP_NOT_FOUND)
+            );
+        }
+
         switch ($request->getMethod()) {
             case 'GET':
                 return $this->getCloudData();
