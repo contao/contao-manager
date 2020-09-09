@@ -5,8 +5,20 @@ error_reporting(-1);
 if (function_exists('ini_set')) {
     @ini_set('display_errors', 1);
     @ini_set('display_startup_errors', 1);
-    @ini_set('opcache.enable', '0');
     @ini_set('opcache.enable_cli', '0');
+
+    if (isset($_GET['opcache_reset']) && function_exists('opcache_get_status')) {
+        /** @noinspection PhpComposerExtensionStubsInspection */
+        $stats = opcache_get_status(false);
+        if ($stats && (int) ($stats['opcache_statistics']['start_time'] ?? 0) === (int) $_GET['opcache_reset']) {
+            $opcacheEnabled = @ini_get('opcache.enable');
+        } else {
+            $opcacheEnabled = @ini_set('opcache.enable', '0');
+        }
+        unset($stats);
+    } else {
+        $opcacheEnabled = @ini_set('opcache.enable', '0');
+    }
 }
 
 if (PHP_VERSION_ID < 50509) {
@@ -17,33 +29,13 @@ if (!extension_loaded('Phar')) {
     die('The PHP Phar extension is not enabled.');
 }
 
-if (false !== ($suhosin = ini_get('suhosin.executor.include.whitelist'))) {
-    $allowed = array_map('trim', explode(',', $suhosin));
-
-    if (!in_array('phar', $allowed) && !in_array('phar://', $allowed)) {
-        die('The Suhosin extension does not allow to run .phar files.');
-    }
-}
-
-if (false !== ($multibyte = ini_get('zend.multibyte')) && '' !== $multibyte && 0 !== (int) $multibyte && 'Off' !== $multibyte) {
-    $unicode = ini_get('zend.detect_unicode');
-
-    if ('' !== $unicode && 0 !== (int) $unicode && 'Off' !== $unicode) {
-        die('The detect_unicode setting needs to be disabled in your php.ini.');
-    }
-}
-
-unset($multibyte, $unicode);
-
 if (PHP_VERSION_ID < 70103) {
     Phar::mapPhar('contao-manager.phar');
-    /** @noinspection PhpIncludeInspection */
     @include 'phar://contao-manager.phar/downgrade.php';
     die('<script>setTimeout(function() { window.location.reload(true) }, 1000)</script>');
 }
 
 if (function_exists('date_default_timezone_set') && function_exists('date_default_timezone_get')) {
-    /** @noinspection UsageOfSilenceOperatorInspection */
     date_default_timezone_set(@date_default_timezone_get());
 }
 
@@ -53,7 +45,6 @@ if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
     }
 
     Phar::mapPhar('contao-manager.phar');
-    /** @noinspection PhpIncludeInspection */
     require 'phar://contao-manager.phar/api/console';
 } else {
     function rewrites() {

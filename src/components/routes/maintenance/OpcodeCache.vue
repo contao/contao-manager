@@ -1,5 +1,5 @@
 <template>
-    <section class="maintenance" v-if="opcodeEnabled">
+    <section class="maintenance" v-if="status.opcache_enabled">
         <div class="maintenance__inside">
             <figure class="maintenance__image"><img src="../../../assets/images/php-logo.svg" alt="" /></figure>
 
@@ -25,15 +25,16 @@
         data: () => ({
             opcodeEnabled: false,
             loading: false,
+            status: { opcache_enabled: false },
         }),
 
         methods: {
             execute() {
                 this.loading = true;
 
-                this.$store.dispatch('server/opcache/delete').then((status) => {
+                this.$store.dispatch('server/opcache/delete', this.status).then((status) => {
                     this.loading = false;
-                    this.opcodeEnabled = status.opcache_enabled;
+                    this.status = status;
                 });
             },
         },
@@ -41,10 +42,10 @@
         mounted() {
             this.$store.dispatch('server/opcache/get').then(
                 (status) => {
-                    this.opcodeEnabled = status.opcache_enabled;
+                    this.status = status;
                 },
                 () => {
-                    this.opcodeEnabled = false;
+                    this.status = { opcache_enabled: false };
                 },
             );
         },

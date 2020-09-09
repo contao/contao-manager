@@ -41,6 +41,8 @@ class OpcacheController
 
     private function getOpcache(): Response
     {
+        global $opcacheEnabled;
+
         /** @noinspection PhpComposerExtensionStubsInspection */
         $status = opcache_get_status(false);
 
@@ -54,6 +56,8 @@ class OpcacheController
                 'interned_strings_usage' => [],
                 'opcache_statistics' => [],
             ];
+        } elseif ($opcacheEnabled) {
+            $status['opcache_enabled'] = true;
         }
 
         return new JsonResponse($status);
