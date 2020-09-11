@@ -106,7 +106,11 @@ export default {
         },
 
         setInitialized(state, value) {
-            state.initialized = value;
+            state.initialized = !!value;
+
+            if (!value) {
+                initP = null;
+            }
         },
     },
 

@@ -22,17 +22,4 @@ export default {
         'php-web': phpWeb,
         'self-update': selfUpdate,
     },
-
-    actions: {
-        purgeCache({ commit }) {
-            commit('server/composer/setCache', null, { root: true });
-            commit('server/config/setCache', null, { root: true });
-            commit('server/contao/setCache', null, { root: true });
-            commit('server/opcache/setCache', null, { root: true });
-            commit('server/phpinfo/setCache', null, { root: true });
-            commit('server/php-cli/setCache', null, { root: true });
-            commit('server/php-web/setCache', null, { root: true });
-            commit('server/self-update/setCache', null, { root: true });
-        },
-    },
 };

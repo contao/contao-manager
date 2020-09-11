@@ -81,7 +81,7 @@
         methods: {
             setView(view) {
                 if (view === null) {
-                    this.$store.dispatch('server/purgeCache');
+                    this.$store.dispatch('reset');
                     this.setStatus(this.views);
                 }
 
@@ -145,7 +145,7 @@
         },
 
         async created() {
-            this.$store.dispatch('server/purgeCache');
+            await this.$store.dispatch('reset');
             await this.$store.dispatch('tasks/init');
             this.setStatus(this.views);
         },

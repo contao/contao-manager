@@ -62,6 +62,20 @@ const store = new Vuex.Store({
             };
         },
     },
+
+    actions: {
+        reset({ commit }) {
+            commit('server/composer/setCache');
+            commit('server/config/setCache');
+            commit('server/contao/setCache');
+            commit('server/opcache/setCache');
+            commit('server/phpinfo/setCache');
+            commit('server/php-cli/setCache');
+            commit('server/php-web/setCache');
+            commit('server/self-update/setCache');
+            commit('tasks/setInitialized', false);
+        },
+    },
 });
 
 export default store;
