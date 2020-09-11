@@ -160,9 +160,9 @@
     "ui.task.copyLog": "ログをクリップボードにコピー",
 
     "ui.widget.mandatory": "この欄の入力は必須です。",
-    "ui.error.title": "HTTP request for \"{method} {url}\" failed.",
-    "ui.error.server500": "Looks like an unexpected error happened on your server. Please check the log files of your web server (Apache/Nginx) and the Contao Manager logs at \"contao-manager/logs\".",
-    "ui.error.response": "The server returned a response with status code ${status}.",
+    "ui.error.title": "\"{method} {url}\"というHTTPの要求に失敗しました。",
+    "ui.error.server500": "予期しないエラーがサーバーで発生したようです。Webサーバー(Apache/Nginx)のログファイルと、Contao Managerの\"contao-manager/logs\"へのログを確認してください。",
+    "ui.error.response": "The server returned a response with status code {status}.",
     "ui.error.moreLink": "詳細な情報",
     "ui.error.support": "Contaoサポート",
     "ui.footer.help": "ヘルプ",

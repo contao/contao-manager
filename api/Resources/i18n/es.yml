@@ -4,7 +4,7 @@ es:
             title: 'La configuración de PHP "allow_url_fopen" no está habilitada en el servidor.'
         process:
             title: 'La función PHP "proc_open" and/or "proc_close" no está disponible en el servidor.'
-            detail: ''
+            detail: 'Las funciones "proc_open" y "proc_close" son necesarias para ejecutar tareas de línea de comandos en segundo plano. Consulte con su proveedor de alojamiento por qué este método no está disponible; Contao Manager no se ejecutará correctamente sin él.'
         intl:
             title: 'La extensión PHP Intl no está disponible.'
             detail: 'Contao 4 requiere la extensión PHP Intl para fines de internacionalización.'
@@ -53,7 +53,7 @@ es:
         update_packages:
             title: 'Actualizando paquetes'
         dump_autoload:
-            title: ''
+            title: 'Autocargador de clases de dumping Composer'
         clear_cache:
             title: 'Limpiar el caché del Composer'
         rebuild_cache:
@@ -65,22 +65,22 @@ es:
         self-update:
             detail: 'Actualización de {old} a {new}'
         install-uploads:
-            summary: ''
+            summary: 'Instalación de cargas'
             console: 'Artefacto instalado para {package} (versión {version}) [a paquetes / {name}]'
         remove-uploads:
-            summary: ''
+            summary: 'Eliminando cargas'
         composer-install:
-            retry: ''
-            nothing: ''
-            result: ''
+            retry: 'volviendo a intentar {current}/{max}'
+            nothing: 'Nada que instalar o actualizar'
+            result: '{installs} instalado, {updates} actualizado, {removals} eliminado'
         dump-autoload:
-            result: ''
+            result: 'Archivos de carga automática optimizados generados que contienen {count} clases'
         cloud:
-            summary: ''
-            queued: ''
-            processing: ''
-            error: ''
-            finished: ''
+            summary: 'actualización del compositor (usando Resolver Cloud)'
+            queued: 'En cola, comenzando en aprox. {seconds} segundos (actualmente {jobs} trabajos en {workers} trabajadores)'
+            processing: 'Activo durante {seconds} segundos. Uso de memoria: {memory}.'
+            error: 'No se pudieron resolver las dependencias'
+            finished: 'Completado en {seconds} segundos. Uso de memoria: {memory} (pico: {peak}), tiempo: {time}.'
 
     upload:
         error:
@@ -91,6 +91,6 @@ es:
 
     error:
         writable:
-            directory: ''
-            config-file: ''
-            detail: ''
+            directory: 'Contao Manager no pudo crear el directorio "{path}".'
+            config-file: 'Contao Manager no pudo escribir un archivo de configuración en "{file}".'
+            detail: 'Parece que su servidor no está configurado correctamente. Si está a punto de instalar Contao, configure el DocumentRoot de su servidor web. De lo contrario, asegúrese de que los permisos de acceso a archivos sean correctos. Si no está seguro de cómo solucionar este problema, comuníquese con su proveedor de alojamiento para obtener asistencia.'

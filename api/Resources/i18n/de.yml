@@ -53,7 +53,7 @@ de:
         update_packages:
             title: 'Pakete werden aktualisiert'
         dump_autoload:
-            title: ''
+            title: 'Composer-Autoloader schreiben'
         clear_cache:
             title: 'Leere den Composer-Cache'
         rebuild_cache:
@@ -65,18 +65,18 @@ de:
         self-update:
             detail: 'Aktualisiere von {old} nach {new}'
         install-uploads:
-            summary: ''
+            summary: 'Installiere hochgeladene Pakete'
             console: 'Artefakt für {package} (Version {version}) [nach packages/{name}] installiert'
         remove-uploads:
-            summary: ''
+            summary: 'Entferne hochgeladene Dateien'
         composer-install:
-            retry: ''
+            retry: 'Versuch {current}/{max}'
             nothing: ''
-            result: ''
+            result: '{installs} installiert, {updates} aktualisiert, {removals} entfernt'
         dump-autoload:
             result: ''
         cloud:
-            summary: ''
+            summary: 'composer update (mittels Resolver Cloud)'
             queued: ''
             processing: ''
             error: ''

@@ -160,9 +160,9 @@
     "ui.task.copyLog": "Copia il registro negli appunti",
 
     "ui.widget.mandatory": "Questo campo non deve essere vuoto.",
-    "ui.error.title": "HTTP request for \"{method} {url}\" failed.",
-    "ui.error.server500": "Looks like an unexpected error happened on your server. Please check the log files of your web server (Apache/Nginx) and the Contao Manager logs at \"contao-manager/logs\".",
-    "ui.error.response": "The server returned a response with status code ${status}.",
+    "ui.error.title": "Richiesta HTTP per \"{metodo} {url}\" fallita.",
+    "ui.error.server500": "Sembra che si sia verificato un errore imprevisto sul server. Controllare i file di log del proprio server web (Apache/Nginx) e i log di Contao Manager in \"contao-manager/logs\".",
+    "ui.error.response": "The server returned a response with status code {status}.",
     "ui.error.moreLink": "Maggiori informazioni",
     "ui.error.support": "Supporto Contao ",
     "ui.footer.help": "Supporto",

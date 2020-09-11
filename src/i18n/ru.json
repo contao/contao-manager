@@ -160,9 +160,9 @@
     "ui.task.copyLog": "Скопировать журнал в буфер обмена",
 
     "ui.widget.mandatory": "Поле не должно быть пустым.",
-    "ui.error.title": "HTTP request for \"{method} {url}\" failed.",
-    "ui.error.server500": "Looks like an unexpected error happened on your server. Please check the log files of your web server (Apache/Nginx) and the Contao Manager logs at \"contao-manager/logs\".",
-    "ui.error.response": "The server returned a response with status code ${status}.",
+    "ui.error.title": "HTTP запрос для \"{method} {url}\" не выполнен.",
+    "ui.error.server500": "Вероятно, на сервере произошла непредвиденная ошибка. Проверьте файлы журнала вашего веб-сервера (Apache/Nginx) и журналы Contao Manager по адресу \"contao-manager/logs\".",
+    "ui.error.response": "The server returned a response with status code {status}.",
     "ui.error.moreLink": "Больше информации",
     "ui.error.support": "Поддержка Contao",
     "ui.footer.help": "Справка",
