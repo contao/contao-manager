@@ -53,8 +53,8 @@
 
         data: () => ({
             openConsole: true,
-            isScrolledTop: false,
-            isScrolledBottom: false,
+            isScrolledTop: true,
+            isScrolledBottom: true,
             autoScroll: true,
             swallowScroll: true,
         }),
@@ -93,8 +93,8 @@
                 const el = this.$refs.console;
                 const height = (el.scrollTop + el.clientHeight);
                 this.autoScroll = height === el.scrollHeight;
-                this.isScrolledTop = el.clientHeight < 250 || (el.scrollHeight > 250 && el.scrollTop < 10);
-                this.isScrolledBottom = el.clientHeight < 250 || (el.scrollHeight > 250 && height >= el.scrollHeight - 10);
+                this.isScrolledTop = el.clientHeight <= 250 || (el.scrollHeight > 250 && el.scrollTop < 16);
+                this.isScrolledBottom = el.clientHeight <= 250 || (el.scrollHeight > 250 && height >= el.scrollHeight - 16);
             },
 
             scrollToTop() {
