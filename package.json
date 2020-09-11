@@ -14,12 +14,12 @@
     "contao-package-list": "git+https://github.com/contao/package-list.git",
     "details-element-polyfill": "^2.4.0",
     "v-clipboard": "^2.2.3",
-    "vue": "^2.6.11",
-    "vue-i18n": "^8.20.0",
+    "vue": "^2.6.12",
+    "vue-i18n": "^8.21.1",
     "vue-resource": "^1.5.1",
     "vue-router": "^2.8.1",
     "vue-upload-component": "^2.8.20",
-    "vueperslides": "^2.10.2",
+    "vueperslides": "^2.10.7",
     "vuex": "^2.5.0"
   },
   "devDependencies": {
@@ -34,7 +34,7 @@
     "image-webpack-loader": "^6.0.0",
     "node-sass": "^4.14.1",
     "sass-loader": "^7.3.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.12"
   },
   "eslintConfig": {
     "root": true,
