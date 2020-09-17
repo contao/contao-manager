@@ -33,8 +33,8 @@ export default {
             });
         },
 
-        delete({ commit }, status) {
-            return Vue.http.delete(`api/server/opcache?opcache_reset=${status.opcache_statistics.start_time}`).then(
+        delete({ commit }, token) {
+            return Vue.http.delete(`api/server/opcache?opcache_reset=${token}`).then(
                 response => response.body,
             ).then((result) => {
                 commit('setCache', result);

@@ -24,7 +24,7 @@ class OpcacheController
 {
     public function __invoke(Request $request): Response
     {
-        if (!\function_exists('opcache_get_status') || !\function_exists('opcache_reset')) {
+        if (!\function_exists('opcache_reset')) {
             return new JsonResponse(null, Response::HTTP_NOT_IMPLEMENTED);
         }
 
@@ -43,22 +43,10 @@ class OpcacheController
     {
         global $opcacheEnabled;
 
-        /** @noinspection PhpComposerExtensionStubsInspection */
-        $status = opcache_get_status(false);
-
-        if (false === $status) {
-            $status = [
-                'opcache_enabled' => false,
-                'cache_full' => false,
-                'restart_pending' => false,
-                'restart_in_progress' => false,
-                'memory_usage' => [],
-                'interned_strings_usage' => [],
-                'opcache_statistics' => [],
-            ];
-        } elseif ($opcacheEnabled) {
-            $status['opcache_enabled'] = true;
-        }
+        $status = [
+            'opcache_enabled' => $opcacheEnabled,
+            'reset_token' => md5(\Phar::running(false)),
+        ];
 
         return new JsonResponse($status);
     }

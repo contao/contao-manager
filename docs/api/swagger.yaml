@@ -1095,18 +1095,8 @@ components:
                 properties:
                     opcache_enabled:
                         type: boolean
-                    cache_full:
-                        type: boolean
-                    restart_pending:
-                        type: boolean
-                    restart_in_progress:
-                        type: boolean
-                    memory_usage:
-                        type: object
-                    interned_strings_usage:
-                        type: object
-                    opcache_statistics:
-                        type: object
+                    reset_token:
+                        type: string
 
             Contao:
                 type: object

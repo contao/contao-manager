@@ -32,7 +32,7 @@
             execute() {
                 this.loading = true;
 
-                this.$store.dispatch('server/opcache/delete', this.status).then((status) => {
+                this.$store.dispatch('server/opcache/delete', this.status.reset_token).then((status) => {
                     this.loading = false;
                     this.status = status;
                 });

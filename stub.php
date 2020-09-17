@@ -7,15 +7,8 @@ if (function_exists('ini_set')) {
     @ini_set('display_startup_errors', 1);
     @ini_set('opcache.enable_cli', '0');
 
-    if (isset($_GET['opcache_reset']) && function_exists('opcache_get_status')) {
-        /** @noinspection PhpComposerExtensionStubsInspection */
-        $stats = opcache_get_status(false);
-        if ($stats && (int) ($stats['opcache_statistics']['start_time'] ?? 0) === (int) $_GET['opcache_reset']) {
-            $opcacheEnabled = @ini_get('opcache.enable');
-        } else {
-            $opcacheEnabled = @ini_set('opcache.enable', '0');
-        }
-        unset($stats);
+    if (isset($_GET['opcache_reset']) && $_GET['opcache_reset'] === md5(Phar::running(false))) {
+        $opcacheEnabled = @ini_get('opcache.enable');
     } else {
         $opcacheEnabled = @ini_set('opcache.enable', '0');
     }
