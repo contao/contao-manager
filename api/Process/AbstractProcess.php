@@ -50,11 +50,12 @@ abstract class AbstractProcess
         // Make sure new process files are found (see https://github.com/contao/contao-manager/issues/438)
         clearstatcache();
 
-        if (!is_file($filename)) {
-            throw new \InvalidArgumentException(sprintf('Config file "%s" does not exist.', $filename));
+        $content = @file_get_contents($filename);
+
+        if (false === $content) {
+            throw new \InvalidArgumentException(sprintf('Config file "%s" is not readable or does not exist.', $filename));
         }
 
-        $content = file_get_contents($filename);
         $config = json_decode($content, true);
 
         if (!\is_array($config)) {
