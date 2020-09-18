@@ -8,7 +8,7 @@
                 <p class="contao-check__warning">{{ $t('ui.server.docroot.warning') }}</p>
                 <p class="contao-check__description">{{ $t('ui.server.docroot.description1') }}</p>
                 <p class="contao-check__description">{{ $t('ui.server.docroot.description2') }}</p>
-                <a class="widget-button widget-button--inline widget-button--info widget-button--link" href="#" target="_blank">{{ $t('ui.server.docroot.documentation') }}</a>
+                <a class="widget-button widget-button--inline widget-button--info widget-button--link" href="https://to.contao.org/webroot" target="_blank">{{ $t('ui.server.docroot.documentation') }}</a>
             </header>
 
             <transition name="animate-flip" type="transition" mode="out-in">
