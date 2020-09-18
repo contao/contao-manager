@@ -18,7 +18,8 @@
                         <p class="contao-check__fielddesc">{{ $t('ui.server.docroot.confirmation') }}</p>
                         <dl class="contao-check__directories">
                             <dt>{{ $t('ui.server.docroot.currentRoot') }}</dt>
-                            <dd>{{ projectDir }}</dd>
+                            <dd v-if="isWeb">{{ projectDir }}/web</dd>
+                            <dd v-else>{{ projectDir }}</dd>
                             <dt>{{ $t('ui.server.docroot.newRoot') }}</dt>
                             <dd v-if="isEmpty">{{ projectDir }}<span>/web</span></dd>
                             <dd v-else>{{ projectDir }}<span>/{{ directory }}/web</span></dd>
@@ -36,7 +37,8 @@
                         <text-field ref="directory" name="directory" :label="$t('ui.server.docroot.directory')" v-model="directory" :error="directoryError" v-if="!isEmpty"/>
                         <dl class="contao-check__directories">
                             <dt>{{ $t('ui.server.docroot.currentRoot') }}</dt>
-                            <dd>{{ projectDir }}</dd>
+                            <dd v-if="isWeb">{{ projectDir }}/web</dd>
+                            <dd v-else>{{ projectDir }}</dd>
                             <dt>{{ $t('ui.server.docroot.newRoot') }}</dt>
                             <dd v-if="isEmpty">{{ projectDir }}<span>/web</span></dd>
                             <dd v-else>{{ projectDir }}<span>/{{ directory }}/web</span></dd>
