@@ -4,7 +4,7 @@ de:
             title: 'Die PHP-Einstellung "allow_url_fopen" ist auf dem Server deaktiviert.'
         process:
             title: 'Die PHP-Funktion "proc_open" und/oder "proc_close" ist auf dem Server nicht verfügbar.'
-            detail: 'Die Funktionen "proc_open" und "proc_close" sind notwendig, um Kommandozeilentasks im Hintergrund auszuführen. Bitte fragen Sie bei Ihrem Hosting-Anbieter nach, warum die Funktionen nicht verfügbar sind; der Contao Manager läuft nicht ohne sie.'
+            detail: 'Die Funktionen "proc_open" und "proc_close" sind notwendig, um Kommandozeilentasks im Hintergrund auszuführen. Bitte frage bei deinem Hosting-Anbieter nach, warum die Funktionen nicht verfügbar sind; der Contao Manager läuft nicht ohne sie.'
         intl:
             title: 'Die PHP Intl-Erweiterung ist nicht verfügbar.'
             detail: 'Contao 4 benötigt die PHP Intl-Erweiterung für die Internationalisierung der Anwendung.'
@@ -28,10 +28,10 @@ de:
             title: 'Die Phar-Datei muss sich im /web-Ordner befinden.'
         memory_limit:
             title: 'Ungenügendes PHP Memory-Limit'
-            detail: 'Ihre PHP-Konfiguration erlaubt nur {limit} RAM (auf der Kommandozeile). Das ist nicht genug, um Composer auszuführen, und das Limit konnte auch nicht automatisch erhöht werden. Bitte kontaktieren Sie Ihren Hosting-Anbieter.'
+            detail: 'Deine PHP-Konfiguration erlaubt nur {limit} RAM (auf der Kommandozeile). Das ist nicht genug, um Composer auszuführen, und das Limit konnte auch nicht automatisch erhöht werden. Bitte kontaktiere deinen Hosting-Anbieter.'
         systempdir:
             title: 'Konnte nicht in den temporären Systemordner schreiben.'
-            detail: 'Dies ist höchstwahrscheinlich ein Problem mit Ihrer Serverkonfiguration. Stellen Sie sicher, dass entweder open_basedir den Zugriff auf den temporären Ordner erlaubt oder dass sys_temp_dir korrekt gesetzt ist.'
+            detail: 'Dies ist höchstwahrscheinlich ein Problem mit deiner Serverkonfiguration. Stelle sicher, dass entweder open_basedir den Zugriff auf den temporären Ordner erlaubt oder dass sys_temp_dir korrekt gesetzt ist.'
 
     boot:
         composer:
@@ -71,16 +71,16 @@ de:
             summary: 'Entferne hochgeladene Dateien'
         composer-install:
             retry: 'Versuch {current}/{max}'
-            nothing: ''
+            nothing: 'Keine Aktualisierungen'
             result: '{installs} installiert, {updates} aktualisiert, {removals} entfernt'
         dump-autoload:
-            result: ''
+            result: 'Autoload-Dateien für {count} Klassen generiert'
         cloud:
             summary: 'composer update (mittels Resolver Cloud)'
-            queued: ''
-            processing: ''
-            error: ''
-            finished: ''
+            queued: 'Berechnung startet in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'
+            processing: 'Aktiv seit {seconds} Sekunden. RAM-Verbrauch: {memory}'
+            error: 'Abhängigkeits-Auflösung fehlgeschlagen'
+            finished: 'Erfolgreich nach {seconds} Sekunden. RAM-Verbrauch: {memory} (Spitze: {peak}), Dauer: {time}.'
 
     upload:
         error:
@@ -91,6 +91,6 @@ de:
 
     error:
         writable:
-            directory: ''
-            config-file: ''
-            detail: ''
+            directory: 'Das Verzeichnis "{path}" konnte nicht angelegt werden.'
+            config-file: 'Die Konfigurations-Datei unter "{file}" konnte nicht geschrieben werden.'
+            detail: 'Es scheint als wäre dein Webserver nicht korrekt konfiguriert. Falls du gerade Contao installiert, stelle sicher dass der DocumentRoot richtig konfiguriert ist. Andernfalls stelle sicher dass dass die Dateiberechtigungen korrekt sind. Falls du dies nicht selber reparieren kannst, frage am besten bei deinem Hosting-Anbieter.'
