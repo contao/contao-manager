@@ -225,17 +225,11 @@ class ConsoleProcessFactory implements LoggerAwareInterface
             $defaultArgs[] = $this->kernel->getConfigDir().'/php.ini';
         }
 
-        $defaultArgs[] = '-d';
-        $defaultArgs[] = 'max_execution_time=0';
-
-        $defaultArgs[] = '-d';
-        $defaultArgs[] = 'memory_limit=-1';
-
-        $defaultArgs[] = '-d';
-        $defaultArgs[] = 'allow_url_fopen=1';
-
-        $defaultArgs[] = '-d';
-        $defaultArgs[] = 'date.timezone='.@date_default_timezone_get();
+        $defaultArgs[] = '-dmax_execution_time=0';
+        $defaultArgs[] = '-dmemory_limit=-1';
+        $defaultArgs[] = '-dallow_url_fopen=1';
+        $defaultArgs[] = '-ddisable_functions=';
+        $defaultArgs[] = '-ddate.timezone='.@date_default_timezone_get();
 
         return array_merge($defaultArgs, $arguments);
     }
