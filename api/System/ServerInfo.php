@@ -54,6 +54,7 @@ class ServerInfo
         '/usr/local/php{major}{minor}/bin/php',
         '/opt/phpbrew/php/php-{major}.{minor}/bin/php',
         '/opt/phpfarm/inst/php-{major}.{minor}/bin/php-cgi',
+        '/vrmd/webserver/php{major}{minor}/bin/php',
         '/package/host/localhost/php-{major}.{minor}/bin/php',
         '/Applications/MAMP/bin/php/php{major}.{minor}.{release}/bin/php',
         'C:\XAMPP\php\php.exe',
