@@ -61,7 +61,7 @@
                 <p class="contao-check__version" v-if="supportsLatest"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
                 <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.2' }) }}</span></p>
                 <i18n tag="p" path="ui.server.contao.releaseplan">
-                    <template #contaoReleasePlan><a :href="`https://to.contao.org/release-plan?lang=${$i18n.locale}`" target="_blank">{{ $t('ui.server.contao.releaseplanLink') }}</a></template>
+                    <template #contaoReleasePlan><a :href="`https://to.contao.org/release-plan?lang=${$i18n.locale}`" target="_blank" rel="noreferrer noopener">{{ $t('ui.server.contao.releaseplanLink') }}</a></template>
                 </i18n>
             </header>
 
@@ -72,6 +72,7 @@
                     <p class="contao-check__fielddesc">{{ $t('ui.server.contao.formText') }}</p>
                     <select-menu name="version" :label="$t('ui.server.contao.version')" :options="versions" :disabled="processing" v-model="version"/>
                     <select-menu name="coreOnly" :label="$t('ui.server.contao.coreOnly')" :options="packages" :disabled="processing" v-model="coreOnly"/>
+                    <p class="contao-check__core-features"><a :href="`https://to.contao.org/core-extensions?lang=${$i18n.locale}`" target="_blank" rel="noreferrer noopener">{{ $t('ui.server.contao.coreOnlyFeatures') }}</a></p>
                     <checkbox name="noUpdate" :label="$t('ui.server.contao.noUpdate')" :disabled="processing" v-model="noUpdate"/>
                 </div>
 
@@ -358,6 +359,11 @@
             text-align: justify;
         }
 
+        &__core-features {
+            margin: 5px 0 0 15px;
+            font-size: 12px;
+        }
+
         &__directories {
             margin-top: 2em;
 
@@ -425,6 +431,10 @@
                         margin-left: 0;
                     }
                 }
+            }
+
+            &__core-features {
+                margin-left: 135px;
             }
         }
     }
