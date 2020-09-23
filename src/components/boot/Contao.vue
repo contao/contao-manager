@@ -229,6 +229,7 @@
 
                 this.processing = false;
                 this.directoryUpdated = true;
+                this.$store.commit('auth/resetCountdown');
             },
         },
 
