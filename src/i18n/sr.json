@@ -117,6 +117,7 @@
     "ui.server.contao.coreOnly": "Иницијална подешавања",
     "ui.server.contao.coreOnlyNo": "Пуна инсталација (Вести, Календар, итд.)",
     "ui.server.contao.coreOnlyYes": "Минимална инсталација (само основни модули)",
+    "ui.server.contao.coreOnlyFeatures": "What's the difference?",
     "ui.server.contao.noUpdate": "Прескочи инсталацију (само за експерте!)",
     "ui.server.contao.install": "Крај",
     "ui.server.docroot.headline": "Webserver Setup",

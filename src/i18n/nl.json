@@ -117,6 +117,7 @@
     "ui.server.contao.coreOnly": "Initiële Set-up",
     "ui.server.contao.coreOnlyNo": "Volledige installatie (Nieuws, Kalender, etc.)",
     "ui.server.contao.coreOnlyYes": "Minimale installatie (alleen de kern)",
+    "ui.server.contao.coreOnlyFeatures": "What's the difference?",
     "ui.server.contao.noUpdate": "Installatie overslaan (alleen expert!)",
     "ui.server.contao.install": "Einde",
     "ui.server.docroot.headline": "Webserver Setup",

@@ -117,6 +117,7 @@
     "ui.server.contao.coreOnly": "初始化安装",
     "ui.server.contao.coreOnlyNo": "全部安装 (新闻, 日历, 等.)",
     "ui.server.contao.coreOnlyYes": "最小化安装 (仅核心)",
+    "ui.server.contao.coreOnlyFeatures": "What's the difference?",
     "ui.server.contao.noUpdate": "跳过安装 (仅限专家!)",
     "ui.server.contao.install": "完成",
     "ui.server.docroot.headline": "Webserver Setup",

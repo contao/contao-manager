@@ -117,6 +117,7 @@
     "ui.server.contao.coreOnly": "初期設定",
     "ui.server.contao.coreOnlyNo": "完全なインストール(ニュースやカレンダーなど)",
     "ui.server.contao.coreOnlyYes": "最小のインストール(コアだけ)",
+    "ui.server.contao.coreOnlyFeatures": "What's the difference?",
     "ui.server.contao.noUpdate": "インストールを省く(専門家だけ!)",
     "ui.server.contao.install": "完了",
     "ui.server.docroot.headline": "Webサーバーの設定",

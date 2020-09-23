@@ -117,6 +117,7 @@
     "ui.server.contao.coreOnly": "Sākotnējā iestatīšana",
     "ui.server.contao.coreOnlyNo": "Pilna instalācija (ziņas, kalendārs uc)",
     "ui.server.contao.coreOnlyYes": "Minimāla instalācija (tikai Core)",
+    "ui.server.contao.coreOnlyFeatures": "What's the difference?",
     "ui.server.contao.noUpdate": "Izlaist instalāciju (tikai eksperts!)",
     "ui.server.contao.install": "Pabeigt",
     "ui.server.docroot.headline": "Webserver Setup",

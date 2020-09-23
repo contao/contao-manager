@@ -117,6 +117,7 @@
     "ui.server.contao.coreOnly": "Úvodní nastavení",
     "ui.server.contao.coreOnlyNo": "Plná instalace (Novinky, Události, atd.)",
     "ui.server.contao.coreOnlyYes": "Minimální instalace (pouze jádro)",
+    "ui.server.contao.coreOnlyFeatures": "What's the difference?",
     "ui.server.contao.noUpdate": "Přeskočit instalaci (pouze pro pokročilé!)",
     "ui.server.contao.install": "Dokončit",
     "ui.server.docroot.headline": "Webserver Setup",
