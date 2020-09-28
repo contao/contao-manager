@@ -8,7 +8,7 @@ let initP;
 let pending = 0;
 let ignoreErrors = false;
 
-const pollTask = (store, resolve, reject, delay = 1000, attempt = 1) => {
+const pollTask = (store, resolve, reject, delay = 5000, attempt = 1) => {
     setTimeout(() => {
         Vue.http.get('api/task', {
             timeout: 5000 * attempt,
@@ -70,7 +70,7 @@ failTask = (response, store, resolve, reject) => {
         pending += 1;
 
         if (pending <= 5) {
-            pollTask(store, resolve, reject, 1000, pending + 1);
+            pollTask(store, resolve, reject, 5000, pending + 1);
             return;
         }
     }
@@ -178,7 +178,7 @@ export default {
                         return new Promise((resolve) => {
                             setTimeout(() => {
                                 resolve(dispatch('deleteCurrent', retry - 1));
-                            }, 1000);
+                            }, 5000);
                         });
                     }
 
