@@ -48,7 +48,6 @@ class Request
 
         try {
             $stream = fopen($url, 'rb', false, $context);
-            /** @noinspection IssetArgumentExistenceInspection */
             $statusCode = $this->getLastStatusCode($http_response_header ?? null);
         } catch (\Throwable $e) {
             if ($catch) {
@@ -101,7 +100,6 @@ class Request
                 throw new \RuntimeException();
             }
 
-            /** @noinspection IssetArgumentExistenceInspection */
             $statusCode = $this->getLastStatusCode($http_response_header ?? null);
         } catch (\Throwable $e) {
             if ($catch) {
@@ -118,6 +116,9 @@ class Request
     {
         $tlsDefaults = $this->getTlsDefaults($options);
         $options = array_replace_recursive($tlsDefaults, $options);
+
+        $options['http']['timeout'] = $options['http']['timeout'] ?? 2.0;
+        $options['http']['ignore_errors'] = $options['http']['ignore_errors'] ?? true;
 
         if (isset($options['http']['header']) && !\is_array($options['http']['header'])) {
             $options['http']['header'] = [$options['http']['header']];
