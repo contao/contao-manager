@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 
 class Request
 {
-    private const DEFAULT_TIMEOUT = 2.0;
+    private const DEFAULT_TIMEOUT = 2;
 
     /**
      * @var ApiKernel
