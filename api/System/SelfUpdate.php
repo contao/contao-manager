@@ -206,7 +206,7 @@ class SelfUpdate
     {
         if (null === $this->remote) {
             $url = sprintf(self::VERSION_URL, $this->getChannel());
-            $content = trim($this->request->get($url));
+            $content = trim($this->request->get($url, $statusCode, false, 0));
             $data = json_decode($content, true);
 
             if (!isset($data['version'], $data['sha1'])

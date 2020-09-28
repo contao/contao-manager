@@ -21,6 +21,8 @@ use Psr\Log\LoggerInterface;
 
 class Request
 {
+    private const DEFAULT_TIMEOUT = 2.0;
+
     /**
      * @var ApiKernel
      */
@@ -37,14 +39,14 @@ class Request
         $this->logger = $logger;
     }
 
-    public function get(string $url, int &$statusCode = null, bool $catch = false): ?string
+    public function get(string $url, int &$statusCode = null, bool $catch = false, int $timeout = self::DEFAULT_TIMEOUT): ?string
     {
-        return $this->getContent($url, $statusCode, [], $catch);
+        return $this->getContent($url, $statusCode, [], $catch, $timeout);
     }
 
     public function getStream(string $url, int &$statusCode = null, bool $catch = false)
     {
-        $context = $this->createStreamContext($url);
+        $context = $this->createStreamContext($url, 0);
 
         try {
             $stream = fopen($url, 'rb', false, $context);
@@ -91,9 +93,9 @@ class Request
         return $this->getContent($url, $statusCode, $options, $catch);
     }
 
-    private function getContent(string $url, ?int &$statusCode, array $options, bool $catch): ?string
+    private function getContent(string $url, ?int &$statusCode, array $options, bool $catch, int $timeout = self::DEFAULT_TIMEOUT): ?string
     {
-        $context = $this->createStreamContext($url, $options);
+        $context = $this->createStreamContext($url, $timeout, $options);
 
         try {
             if (false === ($content = file_get_contents($url, false, $context))) {
@@ -112,12 +114,15 @@ class Request
         return $content;
     }
 
-    private function createStreamContext(string $url, array $options = [])
+    private function createStreamContext(string $url, int $timeout = self::DEFAULT_TIMEOUT, array $options = [])
     {
         $tlsDefaults = $this->getTlsDefaults($options);
         $options = array_replace_recursive($tlsDefaults, $options);
 
-        $options['http']['timeout'] = $options['http']['timeout'] ?? 2.0;
+        if ($timeout > 0) {
+            $options['http']['timeout'] = $options['http']['timeout'] ?? $timeout;
+        }
+
         $options['http']['ignore_errors'] = $options['http']['ignore_errors'] ?? true;
 
         if (isset($options['http']['header']) && !\is_array($options['http']['header'])) {
