@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
+use Composer\Json\JsonFile;
 use Contao\ManagerApi\Composer\CloudChanges;
 use Contao\ManagerApi\Composer\CloudException;
 use Contao\ManagerApi\Composer\CloudJob;
@@ -298,28 +299,58 @@ class CloudOperation implements TaskOperationInterface
 
     private function getCurrentJob(): ?CloudJob
     {
-        if (null === $this->job) {
-            try {
-                $this->job = $this->cloud->getJob((string) $this->taskConfig->getState('cloud-job'));
-            } catch (\Exception $e) {
-                $this->exception = $e;
+        if (null !== $this->job) {
+            return $this->job;
+        }
 
-                return null;
-            }
+        try {
+            if ($content = $this->taskConfig->getState('cloud-job-status')) {
+                $this->job = new CloudJob(JsonFile::parseJson($content));
 
-            if ($this->job instanceof CloudJob
-                && $this->job->isProcessing()
-                && !$this->taskConfig->getState('cloud-job-processing')
-            ) {
-                $this->taskConfig->setState('cloud-job-processing', time());
-            }
+                if (null !== $this->taskConfig->getState('cloud-job-finished')) {
+                    $this->output = $this->taskConfig->getState('cloud-job-output');
 
-            if ($this->job instanceof CloudJob
-                && ($this->job->isSuccessful() || $this->job->isFailed())
-                && !$this->taskConfig->getState('cloud-job-finished')
-            ) {
-                $this->taskConfig->setState('cloud-job-finished', time());
+                    return $this->job;
+                }
+
+                $lastUpdated = time() - $this->taskConfig->getState('cloud-job-updated', time());
+                $isProcessing = $this->taskConfig->getState('cloud-job-processing', 0) > 0;
+
+                if (($isProcessing && $lastUpdated >= 5) || $lastUpdated >= 10) {
+                    $this->output = $this->taskConfig->getState('cloud-job-output');
+
+                    return $this->job;
+                }
             }
+        } catch (\Exception $e) {
+            // do nothing
+        }
+
+        try {
+            $this->job = $this->cloud->getJob((string) $this->taskConfig->getState('cloud-job'));
+        } catch (\Exception $e) {
+            $this->exception = $e;
+
+            return null;
+        }
+
+        if (!$this->job instanceof CloudJob) {
+            return null;
+        }
+
+        $this->taskConfig->setState('cloud-job-status', $this->job->jsonSerialize());
+        $this->taskConfig->setState('cloud-job-updated', time());
+
+        if ($this->job->isProcessing()
+            && !$this->taskConfig->getState('cloud-job-processing')
+        ) {
+            $this->taskConfig->setState('cloud-job-processing', time());
+        }
+
+        if (($this->job->isSuccessful() || $this->job->isFailed())
+            && !$this->taskConfig->getState('cloud-job-finished')
+        ) {
+            $this->taskConfig->setState('cloud-job-finished', time());
         }
 
         return $this->job;
@@ -357,18 +388,21 @@ class CloudOperation implements TaskOperationInterface
 
     private function getOutput(): string
     {
-        if (null === $this->output) {
-            $job = $this->getCurrentJob();
+        if (null !== $this->output) {
+            return $this->output;
+        }
 
-            if (null === $job) {
-                return self::CLOUD_ERROR;
-            }
+        $job = $this->getCurrentJob();
 
-            try {
-                $this->output = $this->cloud->getOutput($job);
-            } catch (\Exception $exception) {
-                return self::CLOUD_ERROR;
-            }
+        if (null === $job) {
+            return self::CLOUD_ERROR;
+        }
+
+        try {
+            $this->output = $this->cloud->getOutput($job);
+            $this->taskConfig->setState('cloud-job-output', $this->output);
+        } catch (\Exception $exception) {
+            return self::CLOUD_ERROR;
         }
 
         return $this->output;

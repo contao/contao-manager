@@ -107,7 +107,7 @@ class CloudResolver implements LoggerAwareInterface
         switch ($statusCode) {
             case 200:
             case 202:
-                return new CloudJob(JsonFile::parseJson($content, true));
+                return new CloudJob(JsonFile::parseJson($content));
 
             default:
                 throw $this->createUnknownResponseException($statusCode, $content);
