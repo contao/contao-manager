@@ -78,7 +78,7 @@ en:
         cloud:
             summary: 'composer update (using Resolver Cloud)'
             queued: 'Queued, starting in approx. {seconds} seconds (currently {jobs} jobs on {workers} workers)'
-            processing: 'Active for {seconds} seconds. Memory usage: {memory}.'
+            processing: 'Active for {seconds} seconds.'
             error: 'Failed resolving dependencies'
             finished: 'Completed in {seconds} seconds. Memory usage: {memory} (peak: {peak}), time: {time}.'
 

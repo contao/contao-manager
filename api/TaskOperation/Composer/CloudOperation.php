@@ -112,12 +112,11 @@ class CloudOperation implements TaskOperationInterface
                 );
 
             case CloudJob::STATUS_PROCESSING:
-                $profile = $this->getCurrentProfile($this->getOutput());
                 $seconds = time() - $this->taskConfig->getState('cloud-job-processing');
 
                 return $this->translator->trans(
                     'taskoperation.cloud.processing',
-                    ['seconds' => $seconds, 'memory' => $profile]
+                    ['seconds' => $seconds]
                 );
 
             case CloudJob::STATUS_ERROR:
@@ -178,7 +177,11 @@ class CloudOperation implements TaskOperationInterface
                 break;
 
             case CloudJob::STATUS_PROCESSING:
-                $console->add($this->getOutput(), $title);
+                if ($this->environment->isDebug()) {
+                    $console->add($this->getOutput(), $title);
+                } else {
+                    $console->add('Processing …');
+                }
                 break;
 
             case CloudJob::STATUS_ERROR:
@@ -352,21 +355,6 @@ class CloudOperation implements TaskOperationInterface
         }
 
         return $this->job;
-    }
-
-    private function getCurrentProfile(string $output): string
-    {
-        // [351.1MiB/0.21s]
-
-        $lines = array_reverse(explode("\n", $output));
-
-        foreach ($lines as $line) {
-            if (preg_match('{^\[([\d.]+MiB)/[\d.]+s]}', $line, $match)) {
-                return $match[0];
-            }
-        }
-
-        return '';
     }
 
     private function getFinalProfile(string $output): string
