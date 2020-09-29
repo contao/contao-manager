@@ -15,6 +15,7 @@ Vue.use(VueResource);
 Vue.use(VueClipboard);
 
 Vue.http.options.emulateHTTP = true;
+Vue.http.headers.common['Accept'] = 'application/json';
 
 Vue.http.interceptors.push((request, next) => {
     const url = request.url;
