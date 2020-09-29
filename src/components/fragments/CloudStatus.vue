@@ -6,7 +6,6 @@
         <div class="cloud-status__popup" tabindex="-1" @blur="close" @mouseover="open" @mouseout="close" @click="open" v-show="visible">
             <h2 class="cloud-status__headline">{{ $t('ui.cloudStatus.headline') }}</h2>
             <p class="cloud-status__version">{{ $t('ui.cloudStatus.version', { version: cloudStatus.appVersion }) }}</p>
-            <count-down ref="countdown" :seconds="60" :loading="loading"/>
             <table>
                 <tr>
                     <th>{{ $t('ui.cloudStatus.waitingTime') }}:</th>
@@ -27,10 +26,9 @@
 
 <script>
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import CountDown from './CountDown';
 
     export default {
-        components: { LoadingButton ,CountDown },
+        components: { LoadingButton },
 
         props: {
             buttonClass: String,
