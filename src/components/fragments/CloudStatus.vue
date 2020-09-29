@@ -1,7 +1,7 @@
 <template>
     <div class="cloud-status" v-if="enabled">
         <loading-button :class="`cloud-status__button ${buttonClass}`" color="info" icon="cloud" :loading="loading" @mouseover="open" @mouseout="close" @click="open">
-            {{ $t('ui.cloudStatus.approx', { minutes: waitingMinutes }) }}
+            {{ $t('ui.cloudStatus.approx', { minutes: approxMinutes }) }}
         </loading-button>
         <div class="cloud-status__popup" tabindex="-1" @blur="close" @mouseover="open" @mouseout="close" @click="open" v-show="visible">
             <h2 class="cloud-status__headline">{{ $t('ui.cloudStatus.headline') }}</h2>
@@ -56,6 +56,7 @@
             waitingTime: vm => Math.round(vm.cloudStatus.numberOfJobsInQueue * (vm.cloudStatus.averageProcessingTimeInMs / 1000) / Math.max(vm.cloudStatus.numberOfWorkers, 1)),
             waitingMinutes: vm => Math.floor(vm.waitingTime / 60),
             waitingSeconds: vm => vm.waitingTime - (60 * vm.waitingMinutes),
+            approxMinutes: vm => Math.round(vm.waitingTime / 60),
 
             waitingLabel() {
                 if (!this.waitingTime) {
