@@ -77,8 +77,8 @@ ja:
             result: '{count}個のクラスを含む最適化した自動読み込みのファイルを生成'
         cloud:
             summary: 'composer update (リゾルバークラウドを使用)'
-            queued: 'キューに追加、約{seconds}秒で開始。{seconds}秒経過(現在{workers}個のワーカーに{jobs}個のジョブ)'
-            processing: '{seconds}秒間の動作中。メモリの使用: {memory}。'
+            queued: 'キューに追加し約{seconds}秒で開始予定 (現在{workers}個のワーカーに{jobs}個のジョブ)'
+            processing: ''
             error: '依存関係の解決に失敗'
             finished: '{seconds}秒で完了。メモリの使用: {memory} (最大: {peak})、時間: {time}。'
 

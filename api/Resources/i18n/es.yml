@@ -78,7 +78,7 @@ es:
         cloud:
             summary: 'actualización del compositor (usando Resolver Cloud)'
             queued: 'En cola, comenzando en aprox. {seconds} segundos (actualmente {jobs} trabajos en {workers} trabajadores)'
-            processing: 'Activo durante {seconds} segundos. Uso de memoria: {memory}.'
+            processing: 'Activo durante {seconds} segundos.'
             error: 'No se pudieron resolver las dependencias'
             finished: 'Completado en {seconds} segundos. Uso de memoria: {memory} (pico: {peak}), tiempo: {time}.'
 

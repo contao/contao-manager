@@ -78,7 +78,7 @@ it:
         cloud:
             summary: 'aggiornamento di composer (usando Resolver Cloud)'
             queued: 'In coda, a partire da circa {seconds} secondi (attualmente {jobs} jobs  {workers} attivi)'
-            processing: 'Attivo per {seconds} secondi. Utilizzo della memoria: {memory}.'
+            processing: 'Attivo per {seconds} secondi.'
             error: 'Verifica delle dipendenze non riuscita'
             finished: 'Completatio in {seconds} secondi. Utilizzo della memoria: {memory} (peak: {peak}), tempo: {time}.'
 

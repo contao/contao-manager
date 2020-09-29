@@ -117,7 +117,7 @@
     "ui.server.contao.coreOnly": "Начальная настройка",
     "ui.server.contao.coreOnlyNo": "Полная установка (Новости, Календарь и т.д.)",
     "ui.server.contao.coreOnlyYes": "Минимальная установка (Только ядро)",
-    "ui.server.contao.coreOnlyFeatures": "What's the difference?",
+    "ui.server.contao.coreOnlyFeatures": "В чем разница?",
     "ui.server.contao.noUpdate": "Пропустить установку (Только для экспертов!)",
     "ui.server.contao.install": "Завершить",
     "ui.server.docroot.headline": "Настройка веб-сервера",

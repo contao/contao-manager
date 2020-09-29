@@ -78,7 +78,7 @@ ru:
         cloud:
             summary: 'обновление Composer (с помощью Resolver Cloud)'
             queued: 'В очереди, начиная приблизительно с {seconds} сек. (сейчас {jobs} задач в {workers} воркерах (workers))'
-            processing: 'Активен в течение {seconds} сек. Использование памяти: {memory}.'
+            processing: 'Активен в течение {seconds} сек.'
             error: 'Ошибка разрешения зависимостей'
             finished: 'Завершено за {seconds} сек. Использование памяти: {memory} (пик: {peak}), время: {time}.'
 
