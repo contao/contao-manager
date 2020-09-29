@@ -317,8 +317,8 @@ class CloudOperation implements TaskOperationInterface
         }
 
         try {
-            if ($content = $this->taskConfig->getState('cloud-job-status')) {
-                $this->job = new CloudJob(JsonFile::parseJson($content));
+            if (\is_array($content = $this->taskConfig->getState('cloud-job-status'))) {
+                $this->job = new CloudJob($content);
 
                 if (null !== $this->taskConfig->getState('cloud-job-successful')) {
                     $this->output = $this->taskConfig->getState('cloud-job-output');
