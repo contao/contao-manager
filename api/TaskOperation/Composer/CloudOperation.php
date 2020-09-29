@@ -27,7 +27,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class CloudOperation implements TaskOperationInterface
 {
-    private const CLOUD_ERROR = "Could not retrieve job details from Composer Resolver Cloud.\nThis usually happens because completed jobs are deleted after one hour.";
+    private const CLOUD_ERROR = 'Error handling the Composer Resolver Cloud. Please try again later.';
 
     /**
      * @var CloudResolver
@@ -212,7 +212,7 @@ class CloudOperation implements TaskOperationInterface
     public function isStarted(): bool
     {
         try {
-            return (bool) $this->taskConfig->getState('cloud-job-queued');
+            return null !== $this->taskConfig->getState('cloud-job');
         } catch (\Exception $e) {
             $this->exception = $e;
 
@@ -223,9 +223,7 @@ class CloudOperation implements TaskOperationInterface
     public function isRunning(): bool
     {
         try {
-            $job = $this->getCurrentJob();
-
-            return $job instanceof CloudJob && null === $this->taskConfig->getState('cloud-job-successful');
+            return $this->isStarted() && null === $this->taskConfig->getState('cloud-job-successful');
         } catch (\Exception $e) {
             $this->exception = $e;
 
@@ -246,23 +244,29 @@ class CloudOperation implements TaskOperationInterface
     public function run(): void
     {
         try {
-            $job = $this->getCurrentJob();
-
-            if (!$job instanceof CloudJob) {
+            if (null === $this->taskConfig->getState('cloud-job')) {
                 // Retry to create Cloud job, the first request always fails on XAMPP for unknown reason
                 $attempts = $this->taskConfig->getState('cloud-job-attempts', 0);
 
                 if ($attempts >= 2) {
                     $this->taskConfig->setState('cloud-job-successful', false);
+                    $this->output = self::CLOUD_ERROR;
 
                     return;
                 }
 
                 $this->taskConfig->setState('cloud-job-attempts', $attempts + 1);
 
-                $this->job = $job = $this->cloud->createJob($this->changes, $this->environment);
-                $this->taskConfig->setState('cloud-job-queued', time());
+                $this->job = $this->cloud->createJob($this->changes, $this->environment);
                 $this->taskConfig->setState('cloud-job', $this->job->getId());
+
+                return;
+            }
+
+            $job = $this->getCurrentJob();
+
+            if (!$job instanceof CloudJob) {
+                return;
             }
 
             if ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-successful', false)) {
@@ -279,6 +283,7 @@ class CloudOperation implements TaskOperationInterface
             }
         } catch (\Exception $e) {
             $this->exception = $e;
+            $this->output = self::CLOUD_ERROR;
         }
     }
 
@@ -299,7 +304,7 @@ class CloudOperation implements TaskOperationInterface
 
     private function getCurrentJob(): ?CloudJob
     {
-        if (null !== $this->job) {
+        if ($this->job instanceof CloudJob) {
             return $this->job;
         }
 
@@ -335,7 +340,7 @@ class CloudOperation implements TaskOperationInterface
                 $this->taskConfig->setState('cloud-job-successful', false);
             }
 
-            return null;
+            return $this->job;
         }
 
         if (!$this->job instanceof CloudJob) {
@@ -384,21 +389,22 @@ class CloudOperation implements TaskOperationInterface
         $job = $this->getCurrentJob();
 
         if (null === $job) {
-            return self::CLOUD_ERROR;
+            return $this->output = self::CLOUD_ERROR;
         }
 
         try {
             $this->output = $this->cloud->getOutput($job);
 
             if (null === $this->output) {
-                $this->output = $this->taskConfig->getState('cloud-job-output', self::CLOUD_ERROR);
+                $this->output = self::CLOUD_ERROR;
             } else {
                 $this->taskConfig->setState('cloud-job-output', $this->output);
             }
-        } catch (\Exception $exception) {
-            return self::CLOUD_ERROR;
-        }
 
-        return $this->output;
+            return $this->output;
+
+        } catch (\Exception $exception) {
+            return $this->output = self::CLOUD_ERROR;
+        }
     }
 }
