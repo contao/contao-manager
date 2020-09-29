@@ -88,7 +88,7 @@
 
                 try {
                     this.cloudStatus = (await this.$http.get(
-                        'https://composer-resolver.cloud/',
+                        'https://www.composer-resolver.cloud/',
                         { responseType: 'json', headers: { 'Composer-Resolver-Client': 'contao' } },
                     )).body;
                     this.enabled = true;
