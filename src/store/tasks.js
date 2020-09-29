@@ -158,7 +158,12 @@ export default {
 
             store.commit('setStatus', 'aborting');
 
-            return Vue.http.patch('api/task', { status: 'aborting' });
+            return new Promise((resolve, reject) => {
+                Vue.http.patch('api/task', {status: 'aborting'}).then(
+                    response => handleTask(response, store, resolve, reject),
+                    response => failTask(response, store, resolve, reject),
+                );
+            });
         },
 
         deleteCurrent({ commit, dispatch }, retry = 2) {
