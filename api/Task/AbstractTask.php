@@ -116,11 +116,11 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         }
 
         foreach ($operations as $operation) {
-            $operation->delete();
-
             if (null !== $this->logger) {
                 $this->logger->info('Deleting operation', ['class' => \get_class($operation)]);
             }
+
+            $operation->delete();
         }
 
         $config->delete();

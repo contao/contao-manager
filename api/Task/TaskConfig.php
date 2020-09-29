@@ -32,6 +32,8 @@ class TaskConfig
      */
     private $data;
 
+    private $isDeleted = false;
+
     public function __construct(string $file, string $name = null, array $options = null, Filesystem $filesystem = null)
     {
         $this->file = $file;
@@ -108,17 +110,24 @@ class TaskConfig
         $this->save();
     }
 
-    public function save(): void
+    public function save(): bool
     {
+        if ($this->isDeleted) {
+            return false;
+        }
+
         file_put_contents(
             $this->file,
             json_encode($this->data),
             LOCK_EX
         );
+
+        return true;
     }
 
     public function delete(): void
     {
+        $this->isDeleted = true;
         $this->filesystem->remove($this->file);
     }
 }
