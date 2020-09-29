@@ -84,8 +84,6 @@
             },
 
             async fetchCloud() {
-                this.loading = true;
-
                 try {
                     this.cloudStatus = (await this.$http.get(
                         'https://www.composer-resolver.cloud/',
