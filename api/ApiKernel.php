@@ -74,7 +74,7 @@ class ApiKernel extends Kernel
 
         error_reporting($debug ? E_ALL : E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR);
         ini_set('display_errors', $debug ? '1' : '0');
-        ini_set('error_log', $this->getLogDir().\DIRECTORY_SEPARATOR.'error.log');
+        ini_set('error_log', $this->getLogDir().\DIRECTORY_SEPARATOR.'error-'.date('Y-m-d').'.log');
 
         parent::__construct($environment, $debug);
 
