@@ -25,7 +25,7 @@ class CloudResolver implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private const API_URL = 'https://composer-resolver.cloud';
+    private const API_URL = 'https://www.composer-resolver.cloud';
 
     /**
      * @var Request
