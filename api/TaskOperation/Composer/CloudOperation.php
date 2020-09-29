@@ -174,7 +174,7 @@ class CloudOperation implements TaskOperationInterface
         }
 
         $title = '> Resolving dependencies using Composer Cloud '.$job->getVersion();
-//        $title .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
+        $title .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
 
         switch ($job->getStatus()) {
             case CloudJob::STATUS_QUEUED:
