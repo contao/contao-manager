@@ -180,7 +180,7 @@ class CloudOperation implements TaskOperationInterface
                 if ($this->environment->isDebug()) {
                     $console->add($this->getOutput(), $title);
                 } else {
-                    $console->add('Processing …');
+                    $console->add($title);
                 }
                 break;
 
@@ -279,7 +279,6 @@ class CloudOperation implements TaskOperationInterface
             }
         } catch (\Exception $e) {
             $this->exception = $e;
-            $this->taskConfig->setState('cloud-job-successful', false);
         }
     }
 
