@@ -144,10 +144,11 @@ class CloudOperation implements TaskOperationInterface
 
     public function getConsole(): ConsoleOutput
     {
+        $console = new ConsoleOutput();
         $job = $this->getCurrentJob();
 
         if ($this->exception instanceof CloudException) {
-            return (new ConsoleOutput())->add(
+            return $console->add(
                 sprintf(
                     "> The Composer Resolver Cloud failed with status code %s\n\n  %s",
                     $this->exception->getStatusCode(),
@@ -157,18 +158,21 @@ class CloudOperation implements TaskOperationInterface
         }
 
         if ($this->exception instanceof RequestException && 404 === $this->exception->getStatusCode()) {
-            return (new ConsoleOutput())->add(self::CLOUD_ERROR);
+            return $console->add(self::CLOUD_ERROR);
         }
 
         if ($this->exception instanceof \Exception) {
-            return (new ConsoleOutput())->add($this->exception->getMessage());
+            return $console->add($this->exception->getMessage());
         }
 
         if (!$job instanceof CloudJob) {
-            return new ConsoleOutput();
+            if ($this->hasError()) {
+                $console->add(self::CLOUD_ERROR);
+            }
+
+            return $console;
         }
 
-        $console = new ConsoleOutput();
         $title = '> Resolving dependencies using Composer Cloud '.$job->getVersion();
 //        $title .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
 
@@ -248,7 +252,7 @@ class CloudOperation implements TaskOperationInterface
                 // Retry to create Cloud job, the first request always fails on XAMPP for unknown reason
                 $attempts = $this->taskConfig->getState('cloud-job-attempts', 0);
 
-                if ($attempts >= 2) {
+                if ($attempts >= 5) {
                     $this->taskConfig->setState('cloud-job-successful', false);
                     $this->output = self::CLOUD_ERROR;
 
@@ -306,6 +310,10 @@ class CloudOperation implements TaskOperationInterface
     {
         if ($this->job instanceof CloudJob) {
             return $this->job;
+        }
+
+        if (null === $this->taskConfig->getState('cloud-job')) {
+            return null;
         }
 
         try {
