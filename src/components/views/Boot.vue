@@ -79,12 +79,7 @@
         },
 
         methods: {
-            setView(view) {
-                if (view === null) {
-                    this.$store.dispatch('reset');
-                    this.setStatus(this.views);
-                }
-
+            async setView(view) {
                 this.currentView = view;
             },
 

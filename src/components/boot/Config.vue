@@ -101,8 +101,7 @@
                 };
 
                 this.$store.dispatch('server/config/set', config).then(() => {
-                    this.$emit('view', null);
-                    this.processing = false;
+                    window.location.reload(true);
                 }).catch((problem) => {
                     if (problem.status === 400 && problem.detail) {
                         this.error = problem.detail;
