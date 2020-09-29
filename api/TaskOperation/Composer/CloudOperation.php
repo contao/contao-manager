@@ -332,6 +332,10 @@ class CloudOperation implements TaskOperationInterface
         } catch (\Exception $e) {
             $this->exception = $e;
 
+            if ($e instanceof CloudException && $e->isClientError()) {
+                $this->taskConfig->setState('cloud-job-successful', false);
+            }
+
             return null;
         }
 

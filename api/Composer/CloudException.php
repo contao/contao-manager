@@ -53,4 +53,34 @@ class CloudException extends \RuntimeException
 
         return $message;
     }
+
+    public function isInvalid(): bool
+    {
+        return $this->getStatusCode() < 100 || $this->getStatusCode() >= 600;
+    }
+
+    public function isInformational(): bool
+    {
+        return $this->getStatusCode() >= 100 && $this->getStatusCode() < 200;
+    }
+
+    public function isSuccessful(): bool
+    {
+        return $this->getStatusCode() >= 200 && $this->getStatusCode() < 300;
+    }
+
+    public function isRedirection(): bool
+    {
+        return $this->getStatusCode() >= 300 && $this->getStatusCode() < 400;
+    }
+
+    public function isClientError(): bool
+    {
+        return $this->getStatusCode() >= 400 && $this->getStatusCode() < 500;
+    }
+
+    public function isServerError(): bool
+    {
+        return $this->getStatusCode() >= 500 && $this->getStatusCode() < 600;
+    }
 }
