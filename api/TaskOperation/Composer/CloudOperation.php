@@ -329,7 +329,7 @@ class CloudOperation implements TaskOperationInterface
                 $lastUpdated = time() - $this->taskConfig->getState('cloud-job-updated', time());
                 $isProcessing = $this->taskConfig->getState('cloud-job-processing', 0) > 0;
 
-                if (($isProcessing && $lastUpdated >= 5) || $lastUpdated >= 10) {
+                if (($isProcessing && $lastUpdated <= 5) || $lastUpdated <= 10) {
                     $this->output = $this->taskConfig->getState('cloud-job-output');
 
                     return $this->job;
