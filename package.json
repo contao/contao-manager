@@ -19,7 +19,7 @@
     "vue-resource": "^1.5.1",
     "vue-router": "^2.8.1",
     "vue-upload-component": "^2.8.20",
-    "vueperslides": "^2.10.7",
+    "vueperslides": "^2.10.8",
     "vuex": "^2.5.0"
   },
   "devDependencies": {
