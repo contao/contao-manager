@@ -91,6 +91,7 @@ de:
 
     error:
         writable:
+            root: 'Der Contao Manager kann das Wurzelverzeichnis unter "{path}" nicht beschreiben.'
             directory: 'Das Verzeichnis "{path}" konnte nicht angelegt werden.'
             config-file: 'Die Konfigurations-Datei unter "{file}" konnte nicht geschrieben werden.'
             detail: 'Es scheint als wäre dein Webserver nicht korrekt konfiguriert. Falls du gerade Contao installiert, stelle sicher dass der DocumentRoot richtig konfiguriert ist. Andernfalls stelle sicher dass dass die Dateiberechtigungen korrekt sind. Falls du dies nicht selber reparieren kannst, frage am besten bei deinem Hosting-Anbieter.'
