@@ -250,10 +250,31 @@ CODE
                 $current = \dirname($phar);
             }
 
-            if ('web' !== basename($current) || !is_writable(\dirname($current))) {
+            if ('web' !== basename($current)) {
                 $this->isWebDir = false;
 
                 return $current;
+            }
+
+            if (!is_writable(\dirname($current))) {
+                // Test if the parent folder looks like Contao
+                $files = [
+                    \dirname($current).'/vendor/contao/manager-bundle/bin/contao-console',
+                    \dirname($current).'/system/constants.php',
+                    \dirname($current).'/system/config/constants.php',
+                ];
+
+                foreach ($files as $file) {
+                    if ($this->filesystem->exists($file)) {
+                        $translator = $this->getTranslator();
+                        $problem = (new ApiProblem(
+                            $translator->trans('error.writable.root', ['path' => \dirname($current)]),
+                            'https://php.net/is_writable'
+                        ))->setDetail($translator->trans('error.writable.detail'));
+
+                        throw new ApiProblemException($problem);
+                    }
+                }
             }
 
             return \dirname($current);
