@@ -28,6 +28,6 @@ class CacheClearOperation extends AbstractProcessOperation
 
     public function getSummary(): string
     {
-        return 'vendor/bin/contao-concole cache:clear --no-warmup';
+        return 'vendor/bin/contao-console cache:clear --no-warmup';
     }
 }
