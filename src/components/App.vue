@@ -68,6 +68,8 @@
             isInsecure: () => location.protocol !== 'https:' && location.hostname !== 'localhost',
 
             currentView: vm => vm.views[vm.view] || null,
+
+            isLogin: vm => vm.$store.state.view === views.LOGIN,
         },
 
         watch: {
@@ -133,7 +135,7 @@
         },
 
         created() {
-            document.title = `Contao Manager @package_version@ | ${location.hostname}`;
+            document.title = `Contao Manager` + ((!isLogin) ? ` ` + @package_version@ : ``) + ` | ${location.hostname}`;
         },
     };
 </script>
