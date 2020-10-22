@@ -15,7 +15,7 @@
     "details-element-polyfill": "^2.4.0",
     "v-clipboard": "^2.2.3",
     "vue": "^2.6.12",
-    "vue-i18n": "^8.21.1",
+    "vue-i18n": "^8.22.1",
     "vue-resource": "^1.5.1",
     "vue-router": "^2.8.1",
     "vue-upload-component": "^2.8.20",
@@ -23,7 +23,7 @@
     "vuex": "^2.5.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.1",
     "@vue/cli-plugin-babel": "^3.12.1",
     "@vue/cli-plugin-eslint": "^3.12.1",
     "@vue/cli-service": "^3.12.1",
