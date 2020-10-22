@@ -1,73 +1,97 @@
 fr:
-  integrity:
-    allow_url_fopen:
-      title: 'Le paramètre PHP "allow_url_fopen" n''est pas activé sur le serveur.'
-    process:
-      title: 'La fonction PHP "proc_open" et/ou "proc_close" n''est pas disponible sur le serveur.'
-      detail: 'Les fonctions "proc_open" et "proc_close" sont nécessaires pour exécuter les tâches en ligne de commande en arrière-plan. Vérifiez auprès de votre hébergeur web pourquoi cette méthode n''est pas disponible; ni Contao Manager ni Contao 4 ne fonctionneront correctement sans cela.'
-    intl:
-      title: 'L''extension PHP Intl n''est pas disponible.'
-      detail: 'Contao 4 nécessite l''extension PHP Intl à des fins d''internationalisation.'
-    openssl:
-      title: 'L''extension PHP OpenSSL n''est pas disponible.'
-      detail: 'Contao Manager requiert l''extension OpenSSL pour télécharger des fichiers via une connexion cryptée (https).'
-    dom:
-      title: 'L''extension PHP DOM n''est pas disponible.'
-      detail: 'Contao 4 nécessite l''extension PHP DOM pour analyser les documents XML.'
-    xmlreader:
-      title: 'L''extension PHP XMLReader n''est pas disponible.'
-      detail: 'Contao 4 nécessite l''extension PHP DOM pour analyser les documents XML.'
-    session:
-      title: 'La session PHP n''a pas pu être démarrée.'
-    web_root:
-      title: 'Le fichier Phar doit être situé dans le dossier /web.'
-    memory_limit:
-      title: 'Limite de mémoire PHP insuffisante'
-      detail: 'Votre configuration PHP permet uniquement {limit} de mémoire (en ligne de commande). Ce n''est pas suffisant pour exécuter Composer et il n''a pas été possible d''augmenter automatiquement cette limite. Veuillez contacter votre hébergeur web pour obtenir de l''aide.'
-    systempdir:
-      title: 'Impossible d''écrire sur le répertoire temporaire du système.'
-      detail: 'C''est probablement un problème avec votre configuration d''hébergement. Assurez-vous que open_basedir permet d''accéder au répertoire temporaire ou que sys_temp_dir est correctement configuré.'
-    contao_unknown:
-      title: 'Statut d''installation inconnu'
-      detail: "Certains fichiers ont été trouvés sur votre serveur mais aucune version connue de Contao n'a pu être détectée.\nVous devez réparer manuellement votre application ou supprimer les fichiers et dossiers suivants pour installer Contao :\n\n{files}"
-    contao_version:
-      title: 'La version de Contao n''a pas pu être déterminée'
-      detail: "La console a renvoyé un contenu inattendu lorsqu'on lui a demandé la version de Contao. Veuillez vérifier les données de sortie pour plus d'informations :\n\n{output}"
-  config:
-    php_cli:
-      not_found: 'Ce chemin ne contient pas de binaire PHP valide.'
-      incompatible: 'Ce binaire est une version PHP {cli} mais votre serveur web est en version {web}.'
-  taskstatus:
-    complete:
-      summary: 'Tâche en arrière-plan terminée avec succès !'
-      detail: 'La tâche en arrière-plan s''est terminée avec succès ! Merci de vérifier les détails du protocole sur la console.'
-    aborting:
-      summary: 'Arrêt de l''opération en cours…'
-    stopped:
-      summary: 'Tâche en arrière-plan terminée avec un erreur !'
+    integrity:
+        allow_url_fopen:
+            title: 'Le paramètre PHP "allow_url_fopen" n''est pas activé sur le serveur.'
+        process:
+            title: 'La fonction PHP "proc_open" et/ou "proc_close" n''est pas disponible sur le serveur.'
+            detail: 'Les fonctions "proc_open" et "proc_close" sont nécessaires pour exécuter des tâches de fond en ligne de commande. Vérifiez auprès de votre hébergeur pourquoi cette méthode n''est pas disponible; le Contao Manager ne fonctionnera pas correctement sans lui.'
+        intl:
+            title: 'L''extension PHP Intl n''est pas disponible.'
+            detail: 'Contao 4 nécessite l''extension PHP Intl à des fins d''internationalisation.'
+        openssl:
+            title: 'L''extension PHP OpenSSL n''est pas disponible.'
+            detail: 'Contao Manager requiert l''extension OpenSSL pour télécharger des fichiers via une connexion cryptée (https).'
+        dom:
+            title: 'L''extension PHP DOM n''est pas disponible.'
+            detail: 'Contao 4 nécessite l''extension PHP DOM pour analyser les documents XML.'
+        xmlreader:
+            title: 'L''extension PHP XMLReader n''est pas disponible.'
+            detail: 'Contao 4 nécessite l''extension PHP DOM pour analyser les documents XML.'
+        graphics_lib:
+            title: 'No PHP image processing library is available.'
+            detail: 'Contao 4 requires either the GD, Imagick or Gmagick extension to process images.'
+        symlink:
+            title: 'La méthode PHP symlink n''est pas disponible ou ne fonctionne pas correctement.'
+        session:
+            title: 'La session PHP n''a pas pu être démarrée.'
+        web_root:
+            title: 'Le fichier Phar doit être situé dans le dossier /web.'
+        memory_limit:
+            title: 'Limite de mémoire PHP insuffisante'
+            detail: 'Votre configuration PHP permet uniquement {limit} de mémoire (en ligne de commande). Ce n''est pas suffisant pour exécuter Composer et il n''a pas été possible d''augmenter automatiquement cette limite. Veuillez contacter votre hébergeur web pour obtenir de l''aide.'
+        systempdir:
+            title: 'Impossible d''écrire sur le répertoire temporaire du système.'
+            detail: 'C''est probablement un problème avec votre configuration d''hébergement. Assurez-vous que open_basedir permet d''accéder au répertoire temporaire ou que sys_temp_dir est correctement configuré.'
+
+    boot:
+        composer:
+            invalid: 'composer.json schema validation: {exception}'
+
+    config:
+        php_cli:
+            not_found: 'Ce chemin ne contient pas de binaire PHP valide.'
+            incompatible: 'Ce binaire est une version PHP {cli} mais votre serveur web est en version {web}.'
+        cloud:
+            platform: 'Platform ne doit pas être configurée dans composer.json.'
+            cache: 'Les propriétés du cache ne doivent pas être configurées dans composer.json.'
+
+    task:
+        setup_packages:
+            title: 'Installation de l''application Contao'
+        install_packages:
+            title: 'Installation des dépendances de Composer'
+        update_packages:
+            title: 'Mise à jour des packages'
+        dump_autoload:
+            title: 'Vidage de l''autoloader de Composer'
+        clear_cache:
+            title: 'Effacer le cache de Composer'
+        rebuild_cache:
+            title: 'Reconstruction du cache de Contao'
+        self_update:
+            title: 'Mise à jour de Contao Manager'
+
+    taskoperation:
+        self-update:
+            detail: 'Mise à jour de {old} vers {new}'
+        install-uploads:
+            summary: 'Installation des uploads'
+            console: 'Artifact installé pour {package} (version {version}) [to packages/{name}]'
+        remove-uploads:
+            summary: 'Suppression des uploads'
+        composer-install:
+            retry: 'réessayer {current}/{max}'
+            nothing: 'Rien à installer ou à mettre à jour'
+            result: '{installs} installés, {updates} mis à jour, {removals} supprimés'
+        dump-autoload:
+            result: 'Fichiers d''autoload optimisés générés contenant {count} classes'
+        cloud:
+            summary: 'composer update (avec Resolver Cloud)'
+            queued: 'En attente, débute dans environ {seconds} secondes (actuellement {jobs} jobs sur {workers} workers)'
+            processing: 'En cours depuis {seconds} secondes.'
+            error: 'La résolution des dépendances a echoué.'
+            finished: 'Terminé en {seconds} secondes. Usage mémoire: {memory} (Pic: {peak}), Temps: {time}.'
+
+    upload:
+        error:
+            file: 'Le fichier n''est pas valide ou ne contient pas de fichier composer.json.'
+            json: 'Le fichier composer.json ne contient pas de données JSON valides.'
+            schema: 'Le schéma du fichier composer.json n''est pas valide.'
+            partial: 'L''upload du fichier a échoué'
+
     error:
-      summary: 'Tâche en arrière-plan terminée avec un erreur !'
-  task:
-    setup_packages:
-      completeSummary: 'Installation complète !'
-      completeDetail: 'Pour compléter le processus d''installation, ouvrez l''outil d''installation et saisissez les informations d''identification de votre base de données.'
-    install_packages:
-      title: 'Installation des dépendances de Composer'
-    update_packages:
-      title: 'Mise à jour des paquets'
-      completeSummary: 'Les paquets de Contao ont été mis à jour !'
-      completeDetail: 'Veuillez ouvrir l''outil d''installation pour appliquer les modifications nécessaires à la mise à jour de la base de données.'
-    dump_autoload:
-      title: 'Dumping de l''Autoloader de Composer'
-    clear_cache:
-      title: 'Effacer le cache de Composer'
-    rebuild_cache:
-      title: 'Reconstruction du cache de Contao'
-    self_update:
-      title: 'Mise à jour de Contao Manager'
-      completeSummary: 'Contao Manager a été mis à jour avec succès'
-  taskoperation:
-    self-update:
-      summary: 'Installation de la dernière version de Contao Manager…'
-    composer-update:
-      summary: 'Mise à jour des dépendances de Composer…'
+        writable:
+            root: 'Le Contao Manager n''a pas pu écrire dans le répertoire racine "{path}".'
+            directory: 'Le Contao Manager n''a pas pu créer le répertoire "{path}".'
+            config-file: 'The Contao Manager n''a pas pu créer un fichier de configuration dans "{file}".'
+            detail: 'Il semble que votre serveur n''est pas configuré correctement. Si vous êtes sur le point d''installer Contao, veuillez configurer la racine du site sur votre serveur Web. Sinon, assurez-vous que les autorisations d''accès aux fichiers sont correctes. Si vous ne savez pas comment résoudre ce problème, contactez votre fournisseur d''hébergement pour obtenir de l''aide'

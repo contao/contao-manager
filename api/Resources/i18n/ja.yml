@@ -91,6 +91,7 @@ ja:
 
     error:
         writable:
+            root: 'Contao Managerは"{path}"のルートディレクトリに書き込みできませんでした。'
             directory: 'Contao Managerは"{path}"のディレクトリを作成できませんでした。'
             config-file: 'Contao Managerは構成ファイルを"{file}"に書き込めませんでした。'
             detail: 'サーバーを正しく構成できていない様です。Contaoをインストールしようとしている場合は、WebサーバーのDocumentRootを設定してください。そうでない場合はファイルのアクセス権限が正しいことを確認してください。これを修正する方法がわからない場合は、ホスティング提供者に連絡してサポートを求めてください。'

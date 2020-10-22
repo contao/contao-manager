@@ -91,6 +91,7 @@ es:
 
     error:
         writable:
+            root: ''
             directory: 'Contao Manager no pudo crear el directorio "{path}".'
             config-file: 'Contao Manager no pudo escribir un archivo de configuración en "{file}".'
             detail: 'Parece que su servidor no está configurado correctamente. Si está a punto de instalar Contao, configure el DocumentRoot de su servidor web. De lo contrario, asegúrese de que los permisos de acceso a archivos sean correctos. Si no está seguro de cómo solucionar este problema, comuníquese con su proveedor de alojamiento para obtener asistencia.'

@@ -268,5 +268,8 @@
     "ui.cloudStatus.approx": "{minutes} мин",
     "ui.cloudStatus.none": "ни один",
     "ui.cloudStatus.short": "прим. {minutes} мин",
-    "ui.cloudStatus.long": "прим. {minutes} мин {seconds} сек"
+    "ui.cloudStatus.long": "прим. {minutes} мин {seconds} сек",
+    "ui.cloudStatus.error": "Не удалось получить статус облака Resolver Composer. Вероятно, он не работает из-за проблем с обслуживанием или неполадок.",
+    "ui.cloudStatus.button": "Статус облака",
+    "ui.cloudStatus.refresh": "Обновить статус облака"
 }

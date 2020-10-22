@@ -91,6 +91,7 @@ pl:
 
     error:
         writable:
+            root: ''
             directory: ''
             config-file: ''
             detail: ''

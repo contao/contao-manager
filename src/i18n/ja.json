@@ -268,5 +268,8 @@
     "ui.cloudStatus.approx": "{minutes}分",
     "ui.cloudStatus.none": "なし",
     "ui.cloudStatus.short": "ca. {minutes}分",
-    "ui.cloudStatus.long": "ca. {minutes}分{seconds}秒"
+    "ui.cloudStatus.long": "ca. {minutes}分{seconds}秒",
+    "ui.cloudStatus.error": "Composerリゾルバークラウドの状態を取得できません。保守または技術的な問題のため停止しているかもしれません。",
+    "ui.cloudStatus.button": "クラウドの状態",
+    "ui.cloudStatus.refresh": "クラウドの状態を更新"
 }

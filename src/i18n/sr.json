@@ -268,5 +268,8 @@
     "ui.cloudStatus.approx": "{minutes} min",
     "ui.cloudStatus.none": "нема",
     "ui.cloudStatus.short": "ca. {minutes} min",
-    "ui.cloudStatus.long": "ca. {minutes} min {seconds} sec"
+    "ui.cloudStatus.long": "ca. {minutes} min {seconds} sec",
+    "ui.cloudStatus.error": "Unable to fetch the status of the Composer Resolver Cloud. It might be down for maintenance or experience issues.",
+    "ui.cloudStatus.button": "Cloud Status",
+    "ui.cloudStatus.refresh": "Refresh Cloud Status"
 }
