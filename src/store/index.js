@@ -7,6 +7,7 @@ import views from '../router/views';
 
 import auth from './auth';
 import algolia from 'contao-package-list/src/store/algolia';
+import cloud from './cloud';
 import config from './config';
 import modals from 'contao-package-list/src/store/modals';
 import packages from './packages';
@@ -17,7 +18,7 @@ import tasks from './tasks';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    modules: { auth, algolia, config, modals, packages, contao, server, tasks },
+    modules: { auth, algolia, cloud, config, modals, packages, contao, server, tasks },
 
     state: {
         view: views.INIT,
@@ -74,6 +75,7 @@ const store = new Vuex.Store({
             commit('server/php-web/setCache');
             commit('server/self-update/setCache');
             commit('tasks/setInitialized', false);
+            commit('cloud/setStatus', null);
         },
     },
 });

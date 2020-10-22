@@ -17,10 +17,10 @@
                 <loading-button class="package-actions__button" color="alert" :loading="removingUploads" @click="removeUploads">{{ $t('ui.packages.uploadReset') }}</loading-button>
             </div>
             <div class="package-actions__inner" v-else-if="totalChanges && !uploading">
-                <cloud-status button-class="package-actions__button"/>
+                <cloud-status button-class="package-actions__button package-actions__button--cloud"/>
                 <p class="package-actions__text">{{ $tc('ui.packages.changesMessage', totalChanges) }}</p>
-                <button class="package-actions__button widget-button" @click="dryrunChanges">{{ $t('ui.packages.changesDryrun') }}</button>
-                <button class="package-actions__button widget-button widget-button--primary" @click="applyChanges">{{ $t('ui.packages.changesApply') }}</button>
+                <loading-button class="package-actions__button package-actions__button--dryRun widget-button" :loading="cloudLoading" :disabled="cloudError" @click="dryrunChanges">{{ $t('ui.packages.changesDryrun') }}</loading-button>
+                <loading-button class="package-actions__button widget-button widget-button--primary" :loading="cloudLoading" :disabled="cloudError" @click="applyChanges">{{ $t('ui.packages.changesApply') }}</loading-button>
                 <button class="package-actions__button widget-button widget-button--alert" :disabled="!canResetChanges && !confirmed.length" @click="resetChanges">{{ $t('ui.packages.changesReset') }}</button>
             </div>
         </template>
@@ -52,6 +52,7 @@
         components: { PackageBase, PackageUploads, ComposerPackage, LoadingButton, CloudStatus },
 
         computed: {
+            ...mapGetters('cloud', { cloudLoading: 'isLoading', cloudError: 'hasError' }),
             ...mapState('packages', {
                 'requiredPackages': 'required',
             }),

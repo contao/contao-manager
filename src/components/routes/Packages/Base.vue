@@ -119,8 +119,17 @@
             padding: 0 15px !important;
             margin: 8px;
 
+            &--dryRun {
+                width: auto !important;
+                flex-grow: 1;
+            }
+
             @include screen(600) {
                 width: auto !important;
+
+                &--dryRun {
+                    flex-grow: 0;
+                }
             }
         }
     }

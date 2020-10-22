@@ -143,6 +143,7 @@
         'add',
         'check',
         'cloud',
+        'cloud-off',
         'console',
         'edit',
         'gear',
