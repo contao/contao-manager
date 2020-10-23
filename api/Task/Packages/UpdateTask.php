@@ -156,12 +156,12 @@ class UpdateTask extends AbstractPackagesTask
     {
         $definition->addUpdate('contao/conflicts');
 
-        $rootPackage = $this->environment->getComposer()->getPackage();
+        $rootRequires = $this->environment->getComposer()->getPackage()->getRequires();
 
-        foreach ($rootPackage->getRequires() as $package => $constraint) {
-            if ('contao/conflicts' === $package && '*@dev' === $constraint->getPrettyConstraint()) {
-                return;
-            }
+        if (isset($rootRequires['contao/conflict'])
+            && '*@dev' === $rootRequires['contao/conflict']->getPrettyConstraint()
+        ) {
+            return;
         }
 
         $definition->requirePackage('contao/conflicts', '*@dev');
@@ -177,12 +177,22 @@ class UpdateTask extends AbstractPackagesTask
             // Automatically require core-bundle and installation-bundle if the manager-bundle is not stable
             // otherwise the dependency would not be resolved because we don't set minimum-stability
             if ('contao/manager-bundle' === $packageName) {
+                $rootRequires = $this->environment->getComposer()->getPackage()->getRequires();
+
                 if ($version && 'stable' !== VersionParser::parseStability($version)) {
-                    $definition->requirePackage('contao/core-bundle', $version);
-                    $definition->requirePackage('contao/installation-bundle', $version);
+                    if (!isset($rootRequires['contao/core-bundle'])) {
+                        $definition->requirePackage('contao/core-bundle', $version);
+                    }
+                    if (!isset($rootRequires['contao/installation-bundle'])) {
+                        $definition->requirePackage('contao/installation-bundle', $version);
+                    }
                 } else {
-                    $definition->removePackage('contao/core-bundle');
-                    $definition->removePackage('contao/installation-bundle');
+                    if (isset($rootRequires['contao/core-bundle'])) {
+                        $definition->removePackage('contao/core-bundle');
+                    }
+                    if (isset($rootRequires['contao/installation-bundle'])) {
+                        $definition->removePackage('contao/installation-bundle');
+                    }
                 }
 
                 return;
