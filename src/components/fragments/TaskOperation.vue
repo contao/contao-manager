@@ -216,7 +216,7 @@
         &__label {
             display: inline-block;
             overflow: hidden;
-            max-width: 755px;
+            max-width: 750px;
             vertical-align: top;
         }
 
