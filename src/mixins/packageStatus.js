@@ -89,6 +89,9 @@ export default {
 
             return this.change[this.data.name];
         },
+
+        targetConstraint: vm => vm.$store.state.packages.change[vm.data.name]
+            || vm.$store.state.packages.root.require[vm.data.name],
     },
 
     methods: {
@@ -108,6 +111,13 @@ export default {
                 this.$store.commit('packages/uploads/unconfirm', this.data.name);
                 this.$store.commit('packages/remove', this.data.name);
             }
+        },
+    },
+
+    watch: {
+        targetConstraint() {
+            this.$store.commit('algolia/uncache', this.data.name);
+            this.loadMetadata();
         },
     },
 }

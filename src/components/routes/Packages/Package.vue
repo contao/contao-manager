@@ -240,6 +240,10 @@
 
         &__version {
             &--additional {
+                strong {
+                    margin-right: 10px;
+                }
+
                 @include screen(1024) {
                     display: none;
                 }
@@ -265,6 +269,29 @@
                 border-radius: 2px;
                 color: #fff;
                 font-weight: bold;
+            }
+        }
+
+        &__version-update {
+            display: inline-block;
+            margin: 0 0 2px;
+            padding: 1px 8px;
+            color: #fff;
+
+            &--available {
+                background: $green-button;
+            }
+
+            &--error {
+                background: $red-button;
+            }
+
+            &--none {
+                background: $border-color;
+            }
+
+            @include screen(1024) {
+                margin: 2px 0 0;
             }
         }
 

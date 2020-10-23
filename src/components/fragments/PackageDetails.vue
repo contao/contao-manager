@@ -16,6 +16,9 @@
             <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">{{ $t('ui.package.homepage') }}</a>
             <div v-else></div>
         </template>
+        <template #package-update v-if="metadata.update && metadata.update.valid && !metadata.update.latest">
+            <p class="package-popup__update"><strong>{{ $t('ui.package.update') }}:</strong> {{ $t('ui.package.version', { version: metadata.update.version}) }} ({{ $t('ui.package-details.released') }} {{ metadata.update.time | datimFormat('short', 'long') }})</p>
+        </template>
         <template #suggest-actions="{ name }">
             <install-button inline small :data="{ name }" v-if="packageSuggested(name)"/>
         </template>
@@ -101,6 +104,13 @@
                     margin: 0;
                 }
             }
+        }
+
+        &__update {
+            margin: 0 0 8px;
+            padding: 4px 8px;
+            color: #fff;
+            background: $green-button;
         }
     }
 </style>

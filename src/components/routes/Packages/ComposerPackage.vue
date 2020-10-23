@@ -10,10 +10,14 @@
         @close-hint="restore"
     >
         <template #additional>
-            <strong class="package__version package__version--additional" v-if="packageData.version">
-                {{ $t('ui.package.version', { version: packageData.version }) }}
-            </strong>
-
+            <div class="package__version package__version--additional" v-if="packageData.version">
+                <strong :title="packageData.time ? datimFormat(packageData.time) : ''">{{ $t('ui.package.version', { version: packageData.version }) }}</strong>
+                <template v-if="packageData.update">
+                    <div class="package__version-update package__version-update--error" v-if="!packageData.update.valid">{{ $t('ui.package.updateUnknown') }}</div>
+                    <div class="package__version-update package__version-update--available" v-else-if="!packageData.update.latest">{{ $t('ui.package.updateAvailable', { version: packageData.update.version }) }}</div>
+                    <div class="package__version-update package__version-update--none" v-else>{{ $t('ui.package.updateLatest') }}</div>
+                </template>
+            </div>
             <span class="composer-package__stats composer-package__stats--license">{{ license }}</span>
             <span class="composer-package__stats composer-package__stats--downloads" v-if="packageData.downloads">{{ packageData.downloads | numberFormat }}</span>
             <span class="composer-package__stats composer-package__stats--favers" v-if="packageData.favers">{{ packageData.favers | numberFormat }}</span>
@@ -24,8 +28,12 @@
             <slot name="release">
                 <package-constraint class="package__constraint" :data="data" />
                 <div class="package__version package__version--release" v-if="packageData.version">
-                    <strong>{{ $t('ui.package.version', { version: packageData.version }) }}</strong>
-                    <time :dateTime="packageData.time" v-if="packageData.time">({{ packageData.time | datimFormat }})</time>
+                    <strong :title="packageData.time ? datimFormat(packageData.time) : ''">{{ $t('ui.package.version', { version: packageData.version }) }}</strong>
+                    <template v-if="packageData.update">
+                        <div class="package__version-update package__version-update--error" v-if="!packageData.update.valid">{{ $t('ui.package.updateUnknown') }}</div>
+                        <div class="package__version-update package__version-update--available" v-else-if="!packageData.update.latest">{{ $t('ui.package.updateAvailable', { version: packageData.update.version }) }}</div>
+                        <div class="package__version-update package__version-update--none" v-else>{{ $t('ui.package.updateLatest') }}</div>
+                    </template>
                 </div>
             </slot>
         </template>
@@ -60,7 +68,7 @@
 <script>
     import { mapGetters } from 'vuex';
 
-    import metadata from 'contao-package-list/src/mixins/metadata';
+    import datimFormat from 'contao-package-list/src/filters/datimFormat'
     import packageStatus from '../../../mixins/packageStatus';
 
     import Package from './Package';
@@ -70,7 +78,7 @@
     import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
 
     export default {
-        mixins: [metadata, packageStatus],
+        mixins: [packageStatus],
         components: { Package, FeaturePackage, PackageConstraint, ButtonGroup, DetailsButton },
 
         props: {
@@ -185,6 +193,8 @@
                 this.$store.commit('packages/restore', this.data.name);
                 this.$store.commit('packages/uploads/unconfirm', this.data.name);
             },
+
+            datimFormat: (value) => datimFormat(value),
         },
     };
 </script>
@@ -203,9 +213,7 @@
             background-size: 13px 13px;
 
             &--license {
-                @include screen(1024) {
-                    padding-left: 0;
-                }
+                padding-left: 0;
             }
 
             &--downloads {

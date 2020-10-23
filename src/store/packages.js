@@ -1,6 +1,5 @@
-/* eslint-disable no-param-reassign */
-
 import Vue from 'vue';
+import semver from 'semver';
 
 import details from 'contao-package-list/src/store/packages/details';
 import features from 'contao-package-list/src/store/packages/features';
@@ -188,6 +187,33 @@ export default {
                 return local;
             }
 
+            const rootConstraint = state.change[name] || state.root.require[name];
+            const rootVersion = state.installed[name]?.version_normalized && semver.coerce(state.installed[name].version_normalized, { loose: true });
+
+            metadata.update = null;
+            if (metadata.versions && rootConstraint && rootConstraint.substr(0, 4) !== 'dev-' && rootConstraint.substr(-4) !== '-dev') {
+                let update;
+                metadata.update = {valid: true, latest: true, version: null, time: null};
+
+                if (rootConstraint && rootVersion) {
+                    update = metadata.versions.filter(pkg => {
+                        const pkgVersion = semver.coerce(pkg.version_normalized, {loose: true});
+                        return semver.satisfies(pkgVersion, rootConstraint);
+                    }).pop();
+
+                    if (!update) {
+                        metadata.update.valid = false;
+                    } else {
+                        metadata.update.version = update.version;
+                        metadata.update.time = update.time;
+                        metadata.update.latest = semver.eq(
+                            semver.coerce(update.version_normalized, {loose: true}),
+                            rootVersion
+                        );
+                    }
+                }
+            }
+
             const data = Object.assign(
                 {},
                 metadata,
@@ -212,6 +238,7 @@ export default {
         async load({ commit }) {
             commit('clearInstalled');
             commit('reset');
+            commit('algolia/reset', null, { root: true });
 
             const packages = {};
             const load = [
