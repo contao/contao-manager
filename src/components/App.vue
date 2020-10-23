@@ -133,7 +133,7 @@
         },
 
         created() {
-            document.title = `Contao Manager @package_version@ | ${location.hostname}`;
+            document.title = `Contao Manager | ${location.hostname}`;
         },
     };
 </script>
