@@ -259,6 +259,10 @@
     "ui.package.installButtonShort": "Додавање",
     "ui.package.detailsButton": "Детаљи",
     "ui.package.latestConstraint": "последња верзија",
+    "ui.package.update": "Update available",
+    "ui.package.updateLatest": "последња верзија",
+    "ui.package.updateAvailable": "{version} available",
+    "ui.package.updateUnknown": "unknown version",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Верзија {version}",

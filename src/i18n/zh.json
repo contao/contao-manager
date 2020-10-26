@@ -259,6 +259,10 @@
     "ui.package.installButtonShort": "添加",
     "ui.package.detailsButton": "详情",
     "ui.package.latestConstraint": "最新版",
+    "ui.package.update": "Update available",
+    "ui.package.updateLatest": "最新版",
+    "ui.package.updateAvailable": "{version} available",
+    "ui.package.updateUnknown": "unknown version",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "版本 {version}",

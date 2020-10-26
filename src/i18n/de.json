@@ -258,7 +258,11 @@
     "ui.package.installButton": "Paket hinzufügen",
     "ui.package.installButtonShort": "Hinzufügen",
     "ui.package.detailsButton": "Details",
-    "ui.package.latestConstraint": "neueste Version",
+    "ui.package.latestConstraint": "neuste Version",
+    "ui.package.update": "Update verfügbar",
+    "ui.package.updateLatest": "neuste Version",
+    "ui.package.updateAvailable": "{version} verfügbar",
+    "ui.package.updateUnknown": "unbekannte Version",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Version {version}",
@@ -269,7 +273,7 @@
     "ui.cloudStatus.none": "keine",
     "ui.cloudStatus.short": "ca. {minutes} min",
     "ui.cloudStatus.long": "ca. {minutes} min {seconds} sek",
-    "ui.cloudStatus.error": "Unable to fetch the status of the Composer Resolver Cloud. It might be down for maintenance or experience issues.",
-    "ui.cloudStatus.button": "Cloud Status",
-    "ui.cloudStatus.refresh": "Refresh Cloud Status"
+    "ui.cloudStatus.error": "Status der Composer Resolver Cloud konnte nicht abgerufen werden. Möglicherweise gibt es ein Wartungsfenster oder Systemprobleme.",
+    "ui.cloudStatus.button": "Cloud-Status",
+    "ui.cloudStatus.refresh": "Cloud-Status aktualisieren"
 }

@@ -259,6 +259,10 @@
     "ui.package.installButtonShort": "Přidat",
     "ui.package.detailsButton": "Podrobnosti",
     "ui.package.latestConstraint": "poslední verze",
+    "ui.package.update": "Update available",
+    "ui.package.updateLatest": "poslední verze",
+    "ui.package.updateAvailable": "{version} available",
+    "ui.package.updateUnknown": "unknown version",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Verze {version}",

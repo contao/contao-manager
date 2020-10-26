@@ -259,6 +259,10 @@
     "ui.package.installButtonShort": "Aggiungi",
     "ui.package.detailsButton": "Dettagli",
     "ui.package.latestConstraint": "ultima versione",
+    "ui.package.update": "Update available",
+    "ui.package.updateLatest": "ultima versione",
+    "ui.package.updateAvailable": "{version} available",
+    "ui.package.updateUnknown": "unknown version",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Versione {version}",

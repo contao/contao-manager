@@ -259,7 +259,7 @@
     "ui.package.installButtonShort": "Add",
     "ui.package.detailsButton": "Details",
     "ui.package.latestConstraint": "latest version",
-    "ui.package.update": "Update verfügbar",
+    "ui.package.update": "Update available",
     "ui.package.updateLatest": "latest version",
     "ui.package.updateAvailable": "{version} available",
     "ui.package.updateUnknown": "unknown version",

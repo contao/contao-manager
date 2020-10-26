@@ -259,6 +259,10 @@
     "ui.package.installButtonShort": "Pievienot",
     "ui.package.detailsButton": "Sīkāka informācija",
     "ui.package.latestConstraint": "jaunākā versija",
+    "ui.package.update": "Update available",
+    "ui.package.updateLatest": "jaunākā versija",
+    "ui.package.updateAvailable": "{version} available",
+    "ui.package.updateUnknown": "unknown version",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Versija {version}",
