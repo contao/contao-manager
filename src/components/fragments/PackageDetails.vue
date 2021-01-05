@@ -107,10 +107,11 @@
         }
 
         &__update {
-            margin: 0 0 8px;
-            padding: 4px 8px;
+            margin: 0 0 20px;
+            padding: 10px 20px 10px 50px;
             color: #fff;
-            background: $green-button;
+            background: $green-button url('../../assets/images/button-update.svg') 15px 50% no-repeat;
+            background-size: 23px 23px;
         }
     }
 </style>
