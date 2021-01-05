@@ -59,7 +59,6 @@ class InstallOperation extends AbstractProcessOperation
                 '--prefer-dist',
                 '--no-dev',
                 '--no-progress',
-                '--no-suggest',
                 '--no-ansi',
                 '--no-interaction',
                 '--optimize-autoloader',

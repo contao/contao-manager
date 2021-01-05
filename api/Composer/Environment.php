@@ -222,7 +222,7 @@ class Environment
         $platform = [];
 
         foreach ((new PlatformRepository([], $platformOverrides))->getPackages() as $package) {
-            if ('composer-plugin-api' === $package->getName()) {
+            if (\in_array($package->getName(), ['composer-plugin-api', 'composer-runtime-api'], true)) {
                 continue;
             }
 

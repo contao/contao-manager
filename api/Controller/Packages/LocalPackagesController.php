@@ -15,10 +15,10 @@ namespace Contao\ManagerApi\Controller\Packages;
 use Composer\Package\Dumper\ArrayDumper;
 use Composer\Package\Link;
 use Composer\Package\PackageInterface;
-use Composer\Repository\ArrayRepository;
-use Composer\Repository\CompositeRepository;
+use Composer\Repository\InstalledRepository;
 use Composer\Repository\PlatformRepository;
 use Composer\Repository\RepositoryInterface;
+use Composer\Repository\RootPackageRepository;
 use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +37,7 @@ class LocalPackagesController
     private $localRepository;
 
     /**
-     * @var CompositeRepository
+     * @var InstalledRepository
      */
     private $compositeRepository;
 
@@ -47,8 +47,8 @@ class LocalPackagesController
 
         $this->localRepository = $composer->getRepositoryManager()->getLocalRepository();
 
-        $this->compositeRepository = new CompositeRepository([
-            new ArrayRepository([$composer->getPackage()]),
+        $this->compositeRepository = new InstalledRepository([
+            new RootPackageRepository($composer->getPackage()),
             $this->localRepository,
             new PlatformRepository([], $composer->getConfig()->get('platform') ?: []),
         ]);
