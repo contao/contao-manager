@@ -154,13 +154,15 @@ class UpdateTask extends AbstractPackagesTask
 
     private function addContaoConflictsRequirement(CloudChanges $definition): void
     {
-        $definition->addUpdate('contao/conflicts');
-
         $rootRequires = $this->environment->getComposer()->getPackage()->getRequires();
 
-        if (isset($rootRequires['contao/conflict'])
-            && '*@dev' === $rootRequires['contao/conflict']->getPrettyConstraint()
+        if (isset($rootRequires['contao/conflicts'])
+            && '*@dev' === $rootRequires['contao/conflicts']->getPrettyConstraint()
         ) {
+            if (!empty($definition->getUpdates())) {
+                $definition->addUpdate('contao/conflicts');
+            }
+
             return;
         }
 
