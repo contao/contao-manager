@@ -259,7 +259,7 @@
     "ui.package.installButtonShort": "追加",
     "ui.package.detailsButton": "詳細",
     "ui.package.latestConstraint": "最新のバージョン",
-    "ui.package.update": "Update available",
+    "ui.package.update": "更新を利用可能",
     "ui.package.updateLatest": "最新のバージョン",
     "ui.package.updateAvailable": "バージョン{version}を利用可能",
     "ui.package.updateUnknown": "不明なバージョン",

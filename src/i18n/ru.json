@@ -259,7 +259,7 @@
     "ui.package.installButtonShort": "Добавить",
     "ui.package.detailsButton": "Сведения",
     "ui.package.latestConstraint": "последняя версия",
-    "ui.package.update": "Update available",
+    "ui.package.update": "Доступно обновление",
     "ui.package.updateLatest": "последняя версия",
     "ui.package.updateAvailable": "{version} доступна",
     "ui.package.updateUnknown": "неизвестная версия",

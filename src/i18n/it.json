@@ -117,7 +117,7 @@
     "ui.server.contao.coreOnly": "Installazione iniziale",
     "ui.server.contao.coreOnlyNo": "Installazione completa (notizie, calendario, ecc.)",
     "ui.server.contao.coreOnlyYes": "Installazione minima (solo core)",
-    "ui.server.contao.coreOnlyFeatures": "What's the difference?",
+    "ui.server.contao.coreOnlyFeatures": "Qual è la differenza?",
     "ui.server.contao.noUpdate": "Salta l'installazione (soltanto per esperti!)",
     "ui.server.contao.install": "Conclusione",
     "ui.server.docroot.headline": "Setup Webserver ",
@@ -163,7 +163,7 @@
     "ui.widget.mandatory": "Questo campo non deve essere vuoto.",
     "ui.error.title": "Richiesta HTTP per \"{metodo} {url}\" fallita.",
     "ui.error.server500": "Sembra che si sia verificato un errore imprevisto sul server. Controllare i file di log del proprio server web (Apache/Nginx) e i log di Contao Manager in \"contao-manager/logs\".",
-    "ui.error.response": "The server returned a response with status code {status}.",
+    "ui.error.response": "Il server ha restituito una risposta con il codice di stato {status}.",
     "ui.error.moreLink": "Maggiori informazioni",
     "ui.error.support": "Supporto Contao ",
     "ui.footer.help": "Supporto",
@@ -259,10 +259,10 @@
     "ui.package.installButtonShort": "Aggiungi",
     "ui.package.detailsButton": "Dettagli",
     "ui.package.latestConstraint": "ultima versione",
-    "ui.package.update": "Update available",
+    "ui.package.update": "Aggiornamento disponibile",
     "ui.package.updateLatest": "ultima versione",
-    "ui.package.updateAvailable": "{version} available",
-    "ui.package.updateUnknown": "unknown version",
+    "ui.package.updateAvailable": "{versione} disponibile",
+    "ui.package.updateUnknown": "versione sconosciuta",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Versione {version}",
@@ -273,7 +273,7 @@
     "ui.cloudStatus.none": "nessuna",
     "ui.cloudStatus.short": "circa {minutes} min",
     "ui.cloudStatus.long": "circa {minutes} min {seconds} sec",
-    "ui.cloudStatus.error": "Unable to fetch the status of the Composer Resolver Cloud. It might be down for maintenance or experience issues.",
-    "ui.cloudStatus.button": "Cloud Status",
-    "ui.cloudStatus.refresh": "Refresh Cloud Status"
+    "ui.cloudStatus.error": "Impossibile ottenere lo stato del Composer Resolver Cloud. Potrebbe essere inattivo per problemi di manutenzione o di esercizio.",
+    "ui.cloudStatus.button": "Stato Cloud",
+    "ui.cloudStatus.refresh": "Aggiorna lo stato del cloud"
 }
