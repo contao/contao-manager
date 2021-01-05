@@ -89,7 +89,8 @@ class PhpExecutableFinder
         $arguments[] = 'test';
 
         try {
-            $process = (new Process($arguments))->mustRun(null, array_map(function () { return false; }, $_ENV));
+            $process = new Process($arguments);
+            $process->mustRun(null, array_map(function () { return false; }, $_ENV));
             $output = @json_decode(trim($process->getOutput()), true);
 
             if (null === $output) {
@@ -98,7 +99,8 @@ class PhpExecutableFinder
 
             return $output;
         } catch (RuntimeException $e) {
-            if (null !== $this->logger) {
+            // Do not log every attempt to find a PHP binary (exit code 127 = Command not found)
+            if (null !== $this->logger && 127 !== $process->getExitCode()) {
                 $this->logger->error($e->getMessage(), ['exception' => $e]);
             }
 
