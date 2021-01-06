@@ -53,7 +53,7 @@ nl:
         update_packages:
             title: 'Pakketten bijwerken'
         dump_autoload:
-            title: ''
+            title: 'Dumping Composer Class Autoloader'
         clear_cache:
             title: 'Composer Cache Wissen'
         rebuild_cache:
@@ -65,22 +65,22 @@ nl:
         self-update:
             detail: 'Bijwerken van {old} naar {new}'
         install-uploads:
-            summary: ''
+            summary: 'Uploads installeren'
             console: 'Artefact geïnstalleerd voor {package} (version {version}) [to packages/{name}]'
         remove-uploads:
-            summary: ''
+            summary: 'Uploads verwijderen'
         composer-install:
-            retry: ''
-            nothing: ''
-            result: ''
+            retry: '{current} / {max} opnieuw proberen'
+            nothing: 'Niets om te installeren of bij te werken'
+            result: '{installs} geïnstalleerd, {updates} bijgewerkt, {removals} verwijderd'
         dump-autoload:
-            result: ''
+            result: 'Gegenereerde geoptimaliseerde autoload-bestanden met {count} classes'
         cloud:
-            summary: ''
-            queued: ''
-            processing: ''
-            error: ''
-            finished: ''
+            summary: 'composer update (met behulp van Resolver Cloud)'
+            queued: 'In de wachtrij, beginnend over ca. {seconds} seconden (momenteel {jobs} banen voor {workers} workers)'
+            processing: 'Actief gedurende {seconds} seconden.'
+            error: 'Het oplossen van afhankelijkheden is mislukt'
+            finished: 'Voltooid in {seconds} seconden. Geheugengebruik: {memory} (piek: {peak}), tijd: {time}.'
 
     upload:
         error:
@@ -91,7 +91,7 @@ nl:
 
     error:
         writable:
-            root: ''
-            directory: ''
-            config-file: ''
-            detail: ''
+            root: 'Contao Manager kon niet schrijven naar de hoofdmap op "{path}".'
+            directory: 'Contao Manager kon de directory "{path}" niet aanmaken.'
+            config-file: 'Contao Manager kon geen configuratiebestand naar "{file}" schrijven.'
+            detail: 'Het lijkt erop dat uw server niet correct is geconfigureerd. Als u op het punt staat Contao te installeren, stel dan de DocumentRoot van uw webserver in. Zorg er anders voor dat de toegangsrechten voor bestanden correct zijn. Als u niet zeker weet hoe dit op te lossen neem dan contact op met uw hostingprovider voor ondersteuning.'
