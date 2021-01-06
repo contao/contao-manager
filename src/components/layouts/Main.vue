@@ -53,7 +53,11 @@
 
             img {
                 float: left;
-                margin-right: 10px;
+                margin: 0 10px 0 12px;
+
+                @include screen(1024) {
+                    margin-left: 0;
+                }
             }
         }
 
