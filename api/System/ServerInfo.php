@@ -14,6 +14,7 @@ namespace Contao\ManagerApi\System;
 
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Process\Forker\DisownForker;
+use Contao\ManagerApi\Process\Forker\InlineForker;
 use Contao\ManagerApi\Process\Forker\NohupForker;
 use Contao\ManagerApi\Process\Forker\WindowsStartForker;
 use Contao\ManagerApi\Process\PhpExecutableFinder;
@@ -81,20 +82,15 @@ class ServerInfo
         $this->managerConfig = $managerConfig;
     }
 
-    /**
-     * @return PhpExecutableFinder
-     */
-    public function getPhpExecutableFinder()
+    public function getPhpExecutableFinder(): PhpExecutableFinder
     {
         return $this->phpExecutableFinder;
     }
 
     /**
      * Gets PHP executable by detecting known server paths.
-     *
-     * @return string|null
      */
-    public function getPhpExecutable()
+    public function getPhpExecutable(): ?string
     {
         $paths = [];
 
@@ -117,10 +113,8 @@ class ServerInfo
 
     /**
      * Gets environment variables for the PHP command line process.
-     *
-     * @return array
      */
-    public function getPhpEnv()
+    public function getPhpEnv(): array
     {
         $env = array_map(function () { return false; }, $_ENV);
         $env['PATH'] = $_ENV['PATH'] ?? false;
@@ -131,36 +125,28 @@ class ServerInfo
 
     /**
      * Returns the background process forker classes for the current server.
-     *
-     * @return array
      */
-    public function getProcessForkers()
+    public function getProcessForkers(): array
     {
         if (self::PLATFORM_WINDOWS === $this->getPlatform()) {
-            return [WindowsStartForker::class];
+            return [WindowsStartForker::class, InlineForker::class];
         }
 
-        return [DisownForker::class, NohupForker::class];
+        return [DisownForker::class, NohupForker::class, InlineForker::class];
     }
 
     /**
      * Returns the server platform (Windows or UNIX).
-     *
-     * @return string
      */
-    public function getPlatform()
+    public function getPlatform(): string
     {
         return '\\' === \DIRECTORY_SEPARATOR ? self::PLATFORM_WINDOWS : self::PLATFORM_UNIX;
     }
 
     /**
      * Gets versionised path to PHP binary.
-     *
-     * @param string $path
-     *
-     * @return string
      */
-    private function getPhpVersionPath($path)
+    private function getPhpVersionPath(string $path): string
     {
         return str_replace(
             [

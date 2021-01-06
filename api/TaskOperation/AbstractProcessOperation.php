@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation;
 
+use Contao\ManagerApi\Process\Forker\InlineForker;
 use Contao\ManagerApi\Process\ProcessController;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -116,6 +117,16 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
                 $signal = $this->getSignalText($this->process->getTermSignal());
             } elseif ($this->process->hasBeenStopped()) {
                 $signal = $this->getSignalText($this->process->getStopSignal());
+            }
+
+            if ($this->process instanceof ProcessController && $this->process->getForker() instanceof InlineForker) {
+                $output = <<<'OUTPUT'
+
+# WARNING: INLINE PROCESS EXECUTION
+# Background processes are not support by your server/shell.
+# The operation might have be affected by script runtime (e.g. stop after 30 seconds).
+#
+OUTPUT;
             }
 
             $output .= sprintf(

@@ -80,11 +80,12 @@ class ProcessController extends AbstractProcess
             return;
         }
 
+        $forker = $this->getForker();
         $this->saveConfig(true);
 
         $this->config['status'] = Process::STATUS_STARTED;
 
-        $this->getForker()->run($this->setFile);
+        $forker->run($this->setFile);
     }
 
     public function getPid(): ?int
@@ -224,6 +225,23 @@ class ProcessController extends AbstractProcess
         $this->saveConfig();
     }
 
+    public function getForker(): ForkerInterface
+    {
+        $class = $this->config['forker'] ?? null;
+
+        foreach ($this->forkers as $forker) {
+            if ((null === $class && $forker->isSupported())
+                || (null !== $class && is_a($forker, $class))
+            ) {
+                $this->config['forker'] = get_class($forker);
+
+                return $forker;
+            }
+        }
+
+        throw new \RuntimeException('No forker found for your current platform.');
+    }
+
     public static function create(string $workDir, array $commandline, string $cwd = null, string $id = null)
     {
         return new static(
@@ -245,17 +263,6 @@ class ProcessController extends AbstractProcess
         }
 
         return new static($config, $workDir);
-    }
-
-    private function getForker(): ForkerInterface
-    {
-        foreach ($this->forkers as $forker) {
-            if ($forker->isSupported()) {
-                return $forker;
-            }
-        }
-
-        throw new \RuntimeException('No forker found for your current platform.');
     }
 
     private function saveConfig(bool $always = false): void
