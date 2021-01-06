@@ -53,7 +53,7 @@ class DumpAutoloadOperation extends AbstractProcessOperation
 
     public function getDetails(): ?string
     {
-        $total = $this->getTotalClasses($this->process->getOutput().$this->process->getErrorOutput());
+        $total = $this->getTotalClasses($this->process->getOutput());
 
         if (null !== $total) {
             return $this->translator->trans('taskoperation.dump-autoload.result', ['count' => $total]);

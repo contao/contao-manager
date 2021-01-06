@@ -33,7 +33,6 @@ class ProcessRunner extends AbstractProcess
 
     private $stdin;
     private $stdout;
-    private $stderr;
 
     public function __construct(string $configFile)
     {
@@ -89,11 +88,7 @@ class ProcessRunner extends AbstractProcess
 
         $this->process->start(
             function ($type, $data): void {
-                if (Process::OUT === $type) {
-                    $this->addOutput($data);
-                } else {
-                    $this->addErrorOutput($data);
-                }
+                $this->addOutput($data);
             }
         );
 
@@ -150,15 +145,6 @@ class ProcessRunner extends AbstractProcess
         fwrite($this->stdout, $line);
     }
 
-    public function addErrorOutput(string $line): void
-    {
-        if (!\is_resource($this->stderr)) {
-            $this->stderr = fopen($this->errorOutputFile, 'wb');
-        }
-
-        fwrite($this->stderr, $line);
-    }
-
     private function close(): void
     {
         if (\is_resource($this->stdin)) {
@@ -167,10 +153,6 @@ class ProcessRunner extends AbstractProcess
 
         if (\is_resource($this->stdout)) {
             fclose($this->stdout);
-        }
-
-        if (\is_resource($this->stderr)) {
-            fclose($this->stderr);
         }
     }
 

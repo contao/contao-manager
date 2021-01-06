@@ -22,7 +22,6 @@ abstract class AbstractProcess
     protected $getFile;
     protected $inputFile;
     protected $outputFile;
-    protected $errorOutputFile;
 
     /**
      * @throws \InvalidArgumentException If the working directory does not exist
@@ -39,7 +38,6 @@ abstract class AbstractProcess
         $this->getFile = $workDir.'/'.$id.'.get.json';
         $this->inputFile = $workDir.'/'.$id.'.in.log';
         $this->outputFile = $workDir.'/'.$id.'.out.log';
-        $this->errorOutputFile = $workDir.'/'.$id.'.err.log';
     }
 
     /**

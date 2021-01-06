@@ -105,7 +105,7 @@ class InstallOperation extends AbstractProcessOperation
         }
 
         if ($this->isSuccessful()) {
-            $output = $this->process->getOutput().$this->process->getErrorOutput();
+            $output = $this->process->getOutput();
 
             if (false !== strpos($output, 'Nothing to install or update')) {
                 return $this->translator->trans('taskoperation.composer-install.nothing');

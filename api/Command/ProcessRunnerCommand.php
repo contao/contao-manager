@@ -39,7 +39,7 @@ class ProcessRunnerCommand extends Command
         try {
             $process->run();
         } catch (\Exception $e) {
-            $process->addErrorOutput((string) $e);
+            $process->addOutput((string) $e);
             $process->stop();
 
             return 1;

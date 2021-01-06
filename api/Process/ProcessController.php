@@ -210,15 +210,6 @@ class ProcessController extends AbstractProcess
         return file_get_contents($this->outputFile);
     }
 
-    public function getErrorOutput(): string
-    {
-        if (!is_file($this->errorOutputFile)) {
-            return '';
-        }
-
-        return file_get_contents($this->errorOutputFile);
-    }
-
     public function setTimeout(int $timeout): void
     {
         $this->config['timeout'] = $timeout;
@@ -291,6 +282,5 @@ class ProcessController extends AbstractProcess
         @unlink($this->getFile);
         @unlink($this->inputFile);
         @unlink($this->outputFile);
-        @unlink($this->errorOutputFile);
     }
 }

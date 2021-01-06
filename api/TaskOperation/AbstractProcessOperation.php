@@ -61,7 +61,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
         }
 
         $console->add(
-            $this->process->getOutput().$this->process->getErrorOutput().$this->getProcessError(),
+            $this->process->getOutput().$this->getProcessError(),
             '$ '.$this->process->getCommandLine()
         );
 
