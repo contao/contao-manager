@@ -18,12 +18,31 @@ class Utf8Process extends Process
 {
     public function getOutput(): string
     {
-        return $this->convertEncoding(parent::getOutput());
+        return $this->normalizeOutput(parent::getOutput());
     }
 
     public function getErrorOutput(): string
     {
-        return $this->convertEncoding(parent::getErrorOutput());
+        return $this->normalizeOutput(parent::getErrorOutput());
+    }
+
+    /**
+     * Normalize encoding and try to fix PHP error level issues.
+     */
+    private function normalizeOutput(string $output): string
+    {
+        $output = $this->convertEncoding($output);
+
+        return implode("\n", array_filter(
+            preg_split('/\r\n|\r|\n/', $output),
+            static function ($line) {
+                return 0 !== strpos($line, 'PHP Warning:')
+                    && 0 !== strpos($line, 'Warning:')
+                    && 0 !== strpos($line, 'Deprecated:')
+                    && 0 !== strpos($line, 'Runtime Notice:')
+                    && 0 !== strpos($line, 'Failed loading ');
+            }
+        ));
     }
 
     private function convertEncoding(string $data): string
