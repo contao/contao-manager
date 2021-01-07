@@ -40,14 +40,20 @@ export default {
             }
 
             if (!enabled) {
+                commit('setStatus', {});
                 return;
             }
 
             try {
                 const response = (await Vue.http.get(
                     'https://www.composer-resolver.cloud/',
-                    { responseType: 'json', headers: {'Composer-Resolver-Client': 'contao'} },
+                    { timeout: 2500, responseType: 'json', headers: {'Composer-Resolver-Client': 'contao'} },
                 ));
+
+                if (!response.body?.appVersion) {
+                    commit('setStatus', {});
+                    return;
+                }
 
                 commit('setStatus', response.body);
             } catch (err) {
