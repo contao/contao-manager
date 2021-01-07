@@ -149,12 +149,10 @@ class ApiKernel extends Kernel
 
         // Try to find a config directory in the parent from previous version
         if (!$this->filesystem->exists($this->configDir)) {
-            if ('web' !== basename(\dirname($phar))) {
-                $parentDir = \dirname($this->getProjectDir()).\DIRECTORY_SEPARATOR.'contao-manager';
+            $parentDir = \dirname($this->getProjectDir()).\DIRECTORY_SEPARATOR.'contao-manager';
 
-                if ($this->filesystem->exists($parentDir)) {
-                    $this->filesystem->mirror($parentDir, $this->configDir);
-                }
+            if ($this->filesystem->exists($parentDir)) {
+                $this->filesystem->mirror($parentDir, $this->configDir);
             }
 
             $this->ensureDirectoryExists($this->configDir);
@@ -239,51 +237,69 @@ CODE
             return \dirname($composer);
         }
 
-        if ('' !== ($phar = \Phar::running(false))) {
-            if (('cli' === \PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && !empty($_SERVER['PWD'])) {
-                return $_SERVER['PWD'];
-            }
+        $phar = \Phar::running(false);
 
-            $current = getcwd();
+        // Not a phar file, use test directory in local development
+        if ('' === $phar) {
+            $testDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'test-dir';
+            $this->ensureDirectoryExists($testDir);
 
-            if (!$current) {
-                $current = \dirname($phar);
-            }
-
-            if ('web' !== basename($current)) {
-                $this->isWebDir = false;
-
-                return $current;
-            }
-
-            if (!is_writable(\dirname($current))) {
-                // Test if the parent folder looks like Contao
-                $files = [
-                    \dirname($current).'/vendor/contao/manager-bundle/bin/contao-console',
-                    \dirname($current).'/system/constants.php',
-                    \dirname($current).'/system/config/constants.php',
-                ];
-
-                foreach ($files as $file) {
-                    if ($this->filesystem->exists($file)) {
-                        $translator = $this->getTranslator();
-                        $problem = (new ApiProblem(
-                            $translator->trans('error.writable.root', ['path' => \dirname($current)]),
-                            'https://php.net/is_writable'
-                        ))->setDetail($translator->trans('error.writable.detail'));
-
-                        throw new ApiProblemException($problem);
-                    }
-                }
-            }
-
-            return \dirname($current);
+            return $testDir;
         }
 
-        $testDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'test-dir';
-        $this->ensureDirectoryExists($testDir);
+        // Use the current working directory in CLI mode
+        if (('cli' === \PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && !empty($_SERVER['PWD'])) {
+            return $_SERVER['PWD'];
+        }
 
-        return $testDir;
+        $current = getcwd();
+
+        if (!$current) {
+            $current = \dirname($phar);
+        }
+
+        // Always use current folder if it is not named "web"
+        if ('web' !== basename($current)) {
+            $this->isWebDir = false;
+
+            return $current;
+        }
+
+        $contaoFiles = [
+            '/vendor/contao/manager-bundle/bin/contao-console',
+            '/system/constants.php',
+            '/system/config/constants.php',
+        ];
+
+        // Use current folder if it looks like Contao, even when named "web"
+        foreach ($contaoFiles as $file) {
+            if ($this->filesystem->exists($current.$file)) {
+                return $current;
+            }
+        }
+
+        // Throw exception if parent folder looks like Contao but is not writeable
+        if (!is_writable(\dirname($current))) {
+            $files = [
+                \dirname($current).'/vendor/contao/manager-bundle/bin/contao-console',
+                \dirname($current).'/system/constants.php',
+                \dirname($current).'/system/config/constants.php',
+            ];
+
+            foreach ($files as $file) {
+                if ($this->filesystem->exists($file)) {
+                    $translator = $this->getTranslator();
+                    $problem = (new ApiProblem(
+                        $translator->trans('error.writable.root', ['path' => \dirname($current)]),
+                        'https://php.net/is_writable'
+                    ))->setDetail($translator->trans('error.writable.detail'));
+
+                    throw new ApiProblemException($problem);
+                }
+            }
+        }
+
+        return \dirname($current);
     }
 
     private function ensureDirectoryExists(string $directory): void
