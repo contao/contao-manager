@@ -261,6 +261,12 @@
                 time {
                     display: block;
                 }
+                
+                strong {
+                    @include screen(1024) {
+                        display: block;
+                    }
+                }
             }
 
             &--missing {
