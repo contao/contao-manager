@@ -76,7 +76,6 @@ zh:
         dump-autoload:
             result: ''
         cloud:
-            summary: ''
             queued: ''
             processing: ''
             error: ''

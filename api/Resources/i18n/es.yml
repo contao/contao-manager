@@ -76,7 +76,6 @@ es:
         dump-autoload:
             result: 'Archivos de carga automática optimizados generados que contienen {count} clases'
         cloud:
-            summary: 'actualización del compositor (usando Resolver Cloud)'
             queued: 'En cola, comenzando en aprox. {seconds} segundos (actualmente {jobs} trabajos en {workers} trabajadores)'
             processing: ''
             error: 'No se pudieron resolver las dependencias'

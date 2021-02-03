@@ -76,7 +76,6 @@ de:
         dump-autoload:
             result: 'Autoload-Dateien für {count} Klassen generiert'
         cloud:
-            summary: 'composer update (mittels Resolver Cloud)'
             queued: 'Berechnung startet in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'
             processing: 'Aktiv seit {seconds} Sekunden.'
             error: 'Abhängigkeits-Auflösung fehlgeschlagen'

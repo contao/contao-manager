@@ -76,7 +76,6 @@ en:
         dump-autoload:
             result: 'Generated optimized autoload files containing {count} classes'
         cloud:
-            summary: 'composer update (using Resolver Cloud)'
             queued: 'Queued, starting in approx. {seconds} seconds (currently {jobs} jobs on {workers} workers)'
             processing: 'Active for {seconds} seconds.'
             error: 'Failed resolving dependencies'

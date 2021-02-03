@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
-use Composer\Json\JsonFile;
 use Contao\ManagerApi\Composer\CloudChanges;
 use Contao\ManagerApi\Composer\CloudException;
 use Contao\ManagerApi\Composer\CloudJob;
@@ -89,7 +88,7 @@ class CloudOperation implements TaskOperationInterface
 
     public function getSummary(): string
     {
-        return $this->translator->trans('taskoperation.cloud.summary');
+        return 'composer update '.implode(' ', $this->changes->getUpdates());
     }
 
     public function getDetails(): ?string

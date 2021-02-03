@@ -76,7 +76,6 @@ ja:
         dump-autoload:
             result: '{count}個のクラスを含む最適化した自動読み込みのファイルを生成'
         cloud:
-            summary: 'composer update (リゾルバークラウドを使用)'
             queued: 'キューに追加し約{seconds}秒で開始予定 (現在{workers}個のワーカーに{jobs}個のジョブ)'
             processing: '{seconds}秒動作中'
             error: '依存関係の解決に失敗'

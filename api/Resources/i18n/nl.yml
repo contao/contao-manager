@@ -76,7 +76,6 @@ nl:
         dump-autoload:
             result: 'Gegenereerde geoptimaliseerde autoload-bestanden met {count} classes'
         cloud:
-            summary: 'composer update (met behulp van Resolver Cloud)'
             queued: 'In de wachtrij, beginnend over ca. {seconds} seconden (momenteel {jobs} banen voor {workers} workers)'
             processing: 'Actief gedurende {seconds} seconden.'
             error: 'Het oplossen van afhankelijkheden is mislukt'

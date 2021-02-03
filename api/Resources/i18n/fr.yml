@@ -76,7 +76,6 @@ fr:
         dump-autoload:
             result: 'Fichiers d''autoload optimisés générés contenant {count} classes'
         cloud:
-            summary: 'composer update (avec Resolver Cloud)'
             queued: 'En attente, débute dans environ {seconds} secondes (actuellement {jobs} jobs sur {workers} workers)'
             processing: 'En cours depuis {seconds} secondes.'
             error: 'La résolution des dépendances a echoué.'

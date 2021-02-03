@@ -76,7 +76,6 @@ it:
         dump-autoload:
             result: 'Generati file di caricamento automatico ottimizzati contenenti {count} classi'
         cloud:
-            summary: 'aggiornamento di composer (usando Resolver Cloud)'
             queued: 'In coda, a partire da circa {seconds} secondi (attualmente {jobs} jobs  {workers} attivi)'
             processing: 'Attivo per {secondi} secondi.'
             error: 'Verifica delle dipendenze non riuscita'
