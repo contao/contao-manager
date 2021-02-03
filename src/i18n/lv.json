@@ -154,7 +154,7 @@
     "ui.task.buttonClose": "Aizvērt",
     "ui.task.buttonConfirm": "Apstiprināt & aizvērt",
     "ui.task.buttonCancel": "Atcelt",
-    "ui.task.confirmCancel": "Are you sure to cancel this task? This might leave your Contao installation in an broken state!",
+    "ui.task.confirmCancel": "Are you sure to cancel this task? This might leave your Contao installation in a broken state!",
     "ui.task.autoclose": "Close task details on success",
     "ui.task.toggleConsole": "Rādīt/slēpt konsoles izvadi",
     "ui.task.showLog": "Show full task log",
