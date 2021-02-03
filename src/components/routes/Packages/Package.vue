@@ -291,6 +291,7 @@
             }
 
             @include screen(1024) {
+                display: block;
                 margin: 2px 0 0;
             }
         }
