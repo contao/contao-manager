@@ -19,7 +19,7 @@
         "docs": "https://docs.contao.org"
     },
     "require": {
-        "php": "^7.1.3",
+        "php": "^7.1.3 || ^8.0",
         "ext-json": "*",
         "ext-zip": "*",
         "symfony/framework-bundle": "^4.4",
