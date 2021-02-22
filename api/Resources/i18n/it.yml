@@ -64,6 +64,7 @@ it:
     taskoperation:
         self-update:
             detail: 'Aggiornamento da {old} a {new}'
+            success: 'Aggiornamento a {new}'
         install-uploads:
             summary: 'Installazione uploads'
             console: 'Installate modifiche per {package} (versione {version}) [su pacchetti / {name}]'

@@ -64,6 +64,7 @@ nl:
     taskoperation:
         self-update:
             detail: 'Bijwerken van {old} naar {new}'
+            success: ''
         install-uploads:
             summary: 'Uploads installeren'
             console: 'Artefact geïnstalleerd voor {package} (version {version}) [to packages/{name}]'

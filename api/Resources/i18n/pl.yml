@@ -64,6 +64,7 @@ pl:
     taskoperation:
         self-update:
             detail: 'Aktualizowanie z {old} do {new}'
+            success: ''
         install-uploads:
             summary: ''
             console: 'Zainstalowano artifact dla {package} (wersja {version}) [w packages/{name}]'

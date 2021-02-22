@@ -64,6 +64,7 @@ cs:
     taskoperation:
         self-update:
             detail: 'Aktualizování {old} na {new}'
+            success: 'Aktualizování na {new}'
         install-uploads:
             summary: ''
             console: 'Nainstalovaný artefakt pro {package} (verze {version}) [do balíčků/{name}]'

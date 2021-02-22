@@ -64,6 +64,7 @@ zh:
     taskoperation:
         self-update:
             detail: '从 {old} 更新到 {new}'
+            success: ''
         install-uploads:
             summary: ''
             console: '已安装的artifact类型 for {package} (版本 {version}) [to packages/{name}]'

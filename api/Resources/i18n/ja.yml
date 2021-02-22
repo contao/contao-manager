@@ -64,6 +64,7 @@ ja:
     taskoperation:
         self-update:
             detail: '{old}から{new}に更新中'
+            success: ''
         install-uploads:
             summary: 'アップロードしたファイルをインストール中'
             console: '{package} (バージョン {version})のインストール過程[packages/{name}に存在]'

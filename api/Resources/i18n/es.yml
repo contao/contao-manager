@@ -64,6 +64,7 @@ es:
     taskoperation:
         self-update:
             detail: 'Actualización de {old} a {new}'
+            success: 'Actualización a {new}'
         install-uploads:
             summary: 'Instalación de cargas'
             console: 'Artefacto instalado para {package} (versión {version}) [a paquetes / {name}]'

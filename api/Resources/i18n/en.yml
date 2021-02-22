@@ -59,11 +59,12 @@ en:
         rebuild_cache:
             title: 'Rebuilding Contao Cache'
         self_update:
-            title: 'Updating Contao Manager'
+            title: 'Contao Manager Self-Update'
 
     taskoperation:
         self-update:
             detail: 'Updating from {old} to {new}'
+            success: 'Updated to {new}'
         install-uploads:
             summary: 'Installing uploads'
             console: 'Installed artifact for {package} (version {version}) [to packages/{name}]'

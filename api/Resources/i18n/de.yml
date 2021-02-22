@@ -59,11 +59,12 @@ de:
         rebuild_cache:
             title: 'Contao-Cache neu erstellen'
         self_update:
-            title: 'Der Contao Manager wird aktualisiert'
+            title: 'Contao Manager aktualisieren'
 
     taskoperation:
         self-update:
             detail: 'Aktualisiere von {old} nach {new}'
+            success: 'Aktualisiert auf {new}'
         install-uploads:
             summary: 'Installiere hochgeladene Pakete'
             console: 'Artefakt für {package} (Version {version}) [nach packages/{name}] installiert'

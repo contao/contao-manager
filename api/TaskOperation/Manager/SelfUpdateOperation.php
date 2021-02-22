@@ -47,6 +47,13 @@ class SelfUpdateOperation extends AbstractInlineOperation
 
     public function getDetails(): ?string
     {
+        if ($this->isSuccessful()) {
+            return $this->translator->trans(
+                'taskoperation.self-update.success',
+                ['new' => $this->updater->getOldVersion()]
+            );
+        }
+
         return $this->translator->trans(
             'taskoperation.self-update.detail',
             ['old' => $this->updater->getOldVersion(), 'new' => $this->updater->getNewVersion()]

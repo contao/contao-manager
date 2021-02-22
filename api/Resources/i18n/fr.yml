@@ -64,6 +64,7 @@ fr:
     taskoperation:
         self-update:
             detail: 'Mise à jour de {old} vers {new}'
+            success: 'Mise à jour vers {new}'
         install-uploads:
             summary: 'Installation des uploads'
             console: 'Artifact installé pour {package} (version {version}) [to packages/{name}]'

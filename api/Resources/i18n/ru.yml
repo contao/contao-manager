@@ -64,6 +64,7 @@ ru:
     taskoperation:
         self-update:
             detail: 'Обновление с {old} до {new}'
+            success: ''
         install-uploads:
             summary: 'Установка загрузок'
             console: 'Установлен артефакт для {package} (версии {version}) [к пакетам/{name}]'

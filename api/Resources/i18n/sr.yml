@@ -64,6 +64,7 @@ sr:
     taskoperation:
         self-update:
             detail: 'Надоградња са  {old} на {new}'
+            success: ''
         install-uploads:
             summary: ''
             console: 'Инсталисани артифакти за {package} (верзија {version}) [to packages/{name}]'
