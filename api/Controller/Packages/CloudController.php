@@ -36,13 +36,6 @@ class CloudController
 
     public function __invoke(Request $request): Response
     {
-        if (!$this->environment->useCloudResolver()) {
-            return new ApiProblemResponse(
-                (new ApiProblem('Composer Resolver Cloud is disabled'))
-                    ->setStatus(Response::HTTP_NOT_FOUND)
-            );
-        }
-
         switch ($request->getMethod()) {
             case 'GET':
                 return $this->getCloudData();
@@ -66,6 +59,13 @@ class CloudController
 
     private function writeAndInstall(Request $request): Response
     {
+        if (!$this->environment->useCloudResolver()) {
+            return new ApiProblemResponse(
+                (new ApiProblem('Composer Resolver Cloud is disabled'))
+                    ->setStatus(Response::HTTP_NOT_FOUND)
+            );
+        }
+
         if ($this->taskManager->hasTask()) {
             throw new BadRequestHttpException('A task is already active');
         }
