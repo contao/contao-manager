@@ -38,6 +38,7 @@
     "ui.logout.logout": "Logout",
     "ui.logout.login": "Torna al login",
     "ui.oauth.error": "Tentativo di OAuth non valido. Controllare i parametri della richiesta.",
+    "ui.oauth.https": "The redirect URI MUST use a secure protocol (https:) to prevent the authentication token from being transmitted in clear-text.",
     "ui.oauth.headline": "Autenticazione OAuth",
     "ui.oauth.description": "La seguente applicazione o servizio richiede l'accesso remoto all'istanza di Contao Manager.",
     "ui.oauth.allow": "Consenti accesso",

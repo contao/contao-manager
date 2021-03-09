@@ -38,6 +38,7 @@
     "ui.logout.logout": "Terminar Sessão",
     "ui.logout.login": "Voltar para inicio de sessão",
     "ui.oauth.error": "Tentativa OAuth inválida. Verifique os parâmetros pedidos.",
+    "ui.oauth.https": "The redirect URI MUST use a secure protocol (https:) to prevent the authentication token from being transmitted in clear-text.",
     "ui.oauth.headline": "Autenticação OAuth",
     "ui.oauth.description": "A seguinte aplicação ou serviço está a solicitar acesso remoto ao Contao Manager.",
     "ui.oauth.allow": "Permitir Acesso",

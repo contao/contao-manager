@@ -38,6 +38,7 @@
     "ui.logout.logout": "Izrakstīties",
     "ui.logout.login": "Atpakaļ uz pieteikšanos",
     "ui.oauth.error": "Nederīgs OAuth mēģinājums. Pārbaudiet pieprasījuma parametrus.",
+    "ui.oauth.https": "The redirect URI MUST use a secure protocol (https:) to prevent the authentication token from being transmitted in clear-text.",
     "ui.oauth.headline": "OAuth autentifikācija",
     "ui.oauth.description": "Šāda lietojumprogramma vai pakalpojums pieprasa attālo piekļuvi jūsu Contao Manager instancei.",
     "ui.oauth.allow": "Atļaut piekļuvi",

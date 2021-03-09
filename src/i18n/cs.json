@@ -38,6 +38,7 @@
     "ui.logout.logout": "Odhlásit",
     "ui.logout.login": "Zpátky k přihlášení",
     "ui.oauth.error": "Neplatný pokus o ověření totožnosti. Zkontrolujte požadované parametry.",
+    "ui.oauth.https": "The redirect URI MUST use a secure protocol (https:) to prevent the authentication token from being transmitted in clear-text.",
     "ui.oauth.headline": "Ověření totožnosti",
     "ui.oauth.description": "Následující aplikace nebo servis požadují vzdálený přístup k Vašemu Správci Contaa. ",
     "ui.oauth.allow": "Povolit přístup",

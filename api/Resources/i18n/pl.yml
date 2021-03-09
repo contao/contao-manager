@@ -4,7 +4,7 @@ pl:
             title: 'Ustawienie PHP "allow_url_fopen" nie jest włączone na serwerze.'
         process:
             title: 'Funkcje PHP "proc_open" i/lub "proc_close" nie są dostępne na serwerze.'
-            detail: ''
+            detail: 'Funkcje "proc_open" i "proc_close" są niezbędne do wykonywania zadań linii komend w tle. Sprawdź u administratora serwera, dlaczego te funkcje są niedostępne; Contao Manager nie może bez nich poprawnie działać.'
         intl:
             title: 'Rozszerzenie PHP Intl jest niedostępne.'
             detail: 'Contao 4 wymaga rozszerzenia PHP Intl w celach umiędzynarodowienia.'
@@ -53,34 +53,34 @@ pl:
         update_packages:
             title: 'Aktualizowanie pakietów'
         dump_autoload:
-            title: ''
+            title: 'Generowanie Klas Autoloader Composer''a'
         clear_cache:
             title: 'Czyszczenie Cache Composera'
         rebuild_cache:
             title: 'Przebudowywanie Contao cache'
         self_update:
-            title: 'Aktualizowanie Contao Manager'
+            title: 'Auto-Aktualizacja Contao Manager'
 
     taskoperation:
         self-update:
             detail: 'Aktualizowanie z {old} do {new}'
-            success: ''
+            success: 'Aktualizuj do {new}'
         install-uploads:
-            summary: ''
+            summary: 'Instalowanie załadowanych plików'
             console: 'Zainstalowano artifact dla {package} (wersja {version}) [w packages/{name}]'
         remove-uploads:
-            summary: ''
+            summary: 'Usuwanie załadowanych plików'
         composer-install:
-            retry: ''
-            nothing: ''
-            result: ''
+            retry: 'ponawianie {current}/{max}'
+            nothing: 'Nic od instalacji lub aktualizacji'
+            result: '{installs} zainstalowane, {updates} zaktualizowane, {removals} usunięte'
         dump-autoload:
-            result: ''
+            result: 'Wygenerowano zoptymalizowane pliki autoload zawierające {count} klas'
         cloud:
-            queued: ''
-            processing: ''
-            error: ''
-            finished: ''
+            queued: 'Dodane do kolejki, startuje za około {seconds} sekund (aktualnie {jobs} zadań w {workers} kolejkach)'
+            processing: 'Aktywne od {seconds} sekund.'
+            error: 'Nie udało się rozwiązać zależności'
+            finished: 'Ukończone w {seconds} sekund. Użycie pamięci: {memory} (szczyt: {peak}), czas:{time}.'
 
     upload:
         error:
@@ -91,7 +91,7 @@ pl:
 
     error:
         writable:
-            root: ''
-            directory: ''
-            config-file: ''
-            detail: ''
+            root: 'Contao Manager nie mógł wykonać zapisu w głównym katalogu w "{path}".'
+            directory: 'Contao Manager nie mógł stworzyć katalogu "{path}".'
+            config-file: 'Contao Manager nie mógł zapisać pliku konfiguracyjnego w "{file}".'
+            detail: 'Wygląda na to, że twój serwer nie jest poprawnie skonfigurowany. Jeśli zamierzasz teraz instalować Contao, skonfiguruj katalog główny serwera www - document root. Sprawdź również, czy uprawnienia do zapisu plików są prawidłowe. Jeśli nie wiesz jak to naprawić, skontaktuj się z administratorem serwera, aby uzyskać wsparcie.'

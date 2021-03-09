@@ -38,6 +38,7 @@
     "ui.logout.logout": "ログアウト",
     "ui.logout.login": "ログイン画面に戻る",
     "ui.oauth.error": "不正なOAuthの試みです。リクエストのパラメーターを確認してください。",
+    "ui.oauth.https": "The redirect URI MUST use a secure protocol (https:) to prevent the authentication token from being transmitted in clear-text.",
     "ui.oauth.headline": "OAuth認証",
     "ui.oauth.description": "以下のアプリケーションやサービスが、このContao Managerへのリモートアクセスを要求しています。",
     "ui.oauth.allow": "アクセスを許可",

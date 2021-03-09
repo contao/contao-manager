@@ -4,7 +4,7 @@ sr:
             title: 'Опција PHP "allow_url_fopen" није омогућена на серверу.'
         process:
             title: 'Функције PHP "proc_open" и/или "proc_close" нису доступне на серверу.'
-            detail: ''
+            detail: 'Функције "proc_open" и "proc_close"су непоходне за извршавање командних задатака у позадини. Проверите са Вашим хостинг провајдером зашто овај метод није доступам; Contao Manager не може да ради без њега.'
         intl:
             title: 'Екстензија PHP Intl није доступна.'
             detail: 'Contao 4 захтева Intl екстензију ради потреба интернационализације.'
@@ -53,34 +53,34 @@ sr:
         update_packages:
             title: 'Ажурирање Пакета'
         dump_autoload:
-            title: ''
+            title: 'Пражњење Composer Class Autoloader-а'
         clear_cache:
             title: 'Пражњење Композер Cache-а'
         rebuild_cache:
             title: 'Поновно креирање кеша'
         self_update:
-            title: 'Ажурирам Contao Менаџер'
+            title: 'Contao Manager аутоматско ажурирање'
 
     taskoperation:
         self-update:
             detail: 'Надоградња са  {old} на {new}'
-            success: ''
+            success: 'Ажурирано на {new}'
         install-uploads:
-            summary: ''
+            summary: 'Инсталирање преузетих фајлова'
             console: 'Инсталисани артифакти за {package} (верзија {version}) [to packages/{name}]'
         remove-uploads:
-            summary: ''
+            summary: 'Уклањање преузетих фајлова'
         composer-install:
-            retry: ''
-            nothing: ''
-            result: ''
+            retry: 'покушај {current}/{max}'
+            nothing: 'Нема ништа за инсталацију или преузимање'
+            result: '{installs} инсталирано, {updates} ажурирано, {removals} уклоњено'
         dump-autoload:
-            result: ''
+            result: 'Generated optimized autoload files containing {count} classes'
         cloud:
-            queued: ''
-            processing: ''
-            error: ''
-            finished: ''
+            queued: 'Убачено у редослед, почиње за око  {seconds} секунди (тренутно {jobs} задатака у {workers} послова)'
+            processing: 'Активно {seconds} секунди.'
+            error: 'Неуспешно разрешавање зависности'
+            finished: 'Завршено за {seconds} секунди. Употреба меморије: {memory} (peak: {peak}), time: {time}.'
 
     upload:
         error:
@@ -91,7 +91,7 @@ sr:
 
     error:
         writable:
-            root: ''
-            directory: ''
-            config-file: ''
-            detail: ''
+            root: 'Contao Manager не може да пише у root directory на путањи "{path}".'
+            directory: 'Contao Manager не може да креира директоријум "{path}".'
+            config-file: 'Contao Manager не може да пише у конфигурациони фајл "{file}".'
+            detail: 'Чини се да Ваш сервер није исправно конфигурисан. Ако планирате да инсталирате Contao, подесите DocumentRoot на Вашем мрежном серверу. У супротном будите сигурни да су дозволе за приступ фајловима исправне. Ако нисте сигурни како то да урадите, контактирајте Вашег хостинг провајдера.'

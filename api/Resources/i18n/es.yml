@@ -59,12 +59,12 @@ es:
         rebuild_cache:
             title: 'Reconstruyendo de caché de Contao'
         self_update:
-            title: 'Actualizando de Contao Manager'
+            title: ''
 
     taskoperation:
         self-update:
             detail: 'Actualización de {old} a {new}'
-            success: 'Actualización a {new}'
+            success: ''
         install-uploads:
             summary: 'Instalación de cargas'
             console: 'Artefacto instalado para {package} (versión {version}) [a paquetes / {name}]'

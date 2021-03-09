@@ -59,12 +59,12 @@ cs:
         rebuild_cache:
             title: 'Přetváří se meziúložiště Contaa.'
         self_update:
-            title: 'Aktualizuje se Správce Contaa'
+            title: ''
 
     taskoperation:
         self-update:
             detail: 'Aktualizování {old} na {new}'
-            success: 'Aktualizování na {new}'
+            success: ''
         install-uploads:
             summary: ''
             console: 'Nainstalovaný artefakt pro {package} (verze {version}) [do balíčků/{name}]'

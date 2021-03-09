@@ -59,7 +59,7 @@ zh:
         rebuild_cache:
             title: 'Contao 缓存重建中'
         self_update:
-            title: 'Contao 管理器更新中'
+            title: ''
 
     taskoperation:
         self-update:

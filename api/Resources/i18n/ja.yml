@@ -59,12 +59,12 @@ ja:
         rebuild_cache:
             title: 'Contaoのキャッシュを再作成'
         self_update:
-            title: 'Contao Managerを更新'
+            title: 'Contao Managerの自己更新'
 
     taskoperation:
         self-update:
             detail: '{old}から{new}に更新中'
-            success: ''
+            success: '{new}に更新完了'
         install-uploads:
             summary: 'アップロードしたファイルをインストール中'
             console: '{package} (バージョン {version})のインストール過程[packages/{name}に存在]'

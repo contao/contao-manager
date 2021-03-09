@@ -38,6 +38,7 @@
     "ui.logout.logout": "Выход",
     "ui.logout.login": "Вернуться на страницу входа",
     "ui.oauth.error": "Неверная попытка OAuth. Проверьте параметры запроса.",
+    "ui.oauth.https": "The redirect URI MUST use a secure protocol (https:) to prevent the authentication token from being transmitted in clear-text.",
     "ui.oauth.headline": "Авторизация OAuth",
     "ui.oauth.description": "Следующее приложение или служба запрашивает удаленный доступ к экземпляру Contao Manager.",
     "ui.oauth.allow": "Разрешить доступ",

@@ -59,12 +59,12 @@ ru:
         rebuild_cache:
             title: 'Перестроение кеша Contao'
         self_update:
-            title: 'Обновление Contao Manager'
+            title: 'Автоматическое обновление Contao Manager'
 
     taskoperation:
         self-update:
             detail: 'Обновление с {old} до {new}'
-            success: ''
+            success: 'Обновлено до {new}'
         install-uploads:
             summary: 'Установка загрузок'
             console: 'Установлен артефакт для {package} (версии {version}) [к пакетам/{name}]'

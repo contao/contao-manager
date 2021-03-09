@@ -59,7 +59,7 @@ nl:
         rebuild_cache:
             title: 'Contao Cache opnieuw opbouwen'
         self_update:
-            title: 'Contao Manager updaten'
+            title: ''
 
     taskoperation:
         self-update:

@@ -38,6 +38,7 @@
     "ui.logout.logout": "Uitloggen",
     "ui.logout.login": "Terug naar inloggen",
     "ui.oauth.error": "Ongeldige OAuth-poging. Controleer de request parameters.",
+    "ui.oauth.https": "The redirect URI MUST use a secure protocol (https:) to prevent the authentication token from being transmitted in clear-text.",
     "ui.oauth.headline": "OAuth Authenticatie",
     "ui.oauth.description": "De volgende toepassing of service vraagt om externe toegang tot uw Contao Manager.",
     "ui.oauth.allow": "Toegang verlenen",
