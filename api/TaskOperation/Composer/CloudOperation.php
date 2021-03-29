@@ -111,7 +111,13 @@ class CloudOperation implements TaskOperationInterface
                 );
 
             case CloudJob::STATUS_PROCESSING:
-                $seconds = time() - $this->taskConfig->getState('cloud-job-processing');
+                $seconds = $this->taskConfig->getState('cloud-job-processing');
+
+                if (!$seconds) {
+                    return '';
+                }
+
+                $seconds = time() - $seconds;
 
                 return $this->translator->trans(
                     'taskoperation.cloud.processing',
