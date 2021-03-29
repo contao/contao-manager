@@ -123,16 +123,6 @@
                     margin: 0 0 10px;
                 }
             }
-
-            .link-menu {
-                left: auto;
-                right: 0;
-
-                &:before {
-                    left: auto;
-                    right: 17px;
-                }
-            }
         }
 
         &__loader {

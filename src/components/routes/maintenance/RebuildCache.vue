@@ -10,7 +10,7 @@
 
             <fieldset class="maintenance__actions">
                 <button-group :label="$t('ui.maintenance.rebuildCache.rebuildProd')" type="primary" icon="update" @click="rebuildProd">
-                    <link-menu :items="advancedActions()" color="primary"/>
+                    <link-menu align="right" :items="advancedActions()" color="primary"/>
                 </button-group>
             </fieldset>
         </div>

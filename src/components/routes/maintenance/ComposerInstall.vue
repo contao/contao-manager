@@ -13,7 +13,7 @@
 
             <fieldset class="maintenance__actions">
                 <button-group :label="$t('ui.maintenance.composerInstall.button')" type="primary" icon="run" @click="composerInstall">
-                    <link-menu :items="advancedActions" color="primary"/>
+                    <link-menu align="right" :items="advancedActions" color="primary"/>
                 </button-group>
             </fieldset>
         </div>
