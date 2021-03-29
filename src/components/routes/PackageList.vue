@@ -19,8 +19,9 @@
             <div class="package-actions__inner" v-else-if="totalChanges && !uploading">
                 <cloud-status button-class="package-actions__button package-actions__button--cloud"/>
                 <p class="package-actions__text">{{ $tc('ui.packages.changesMessage', totalChanges) }}</p>
-                <loading-button class="package-actions__button package-actions__button--dryRun widget-button" :loading="cloudLoading" :disabled="cloudError" @click="dryrunChanges">{{ $t('ui.packages.changesDryrun') }}</loading-button>
-                <loading-button class="package-actions__button widget-button widget-button--primary" :loading="cloudLoading" :disabled="cloudError" @click="applyChanges">{{ $t('ui.packages.changesApply') }}</loading-button>
+                <button-group class="package-actions__button-group" align-top type="primary" icon="update" :loading="cloudLoading" :disabled="cloudError" :more-disabled="cloudLoading || cloudError" :label="$t('ui.packages.changesApply')" @click="applyChanges">
+                    <link-menu align="right" valign="top" :items="applyActions" color="primary"/>
+                </button-group>
                 <button class="package-actions__button widget-button widget-button--alert" :disabled="!canResetChanges && !confirmed.length" @click="resetChanges">{{ $t('ui.packages.changesReset') }}</button>
             </div>
         </template>
@@ -30,11 +31,13 @@
 <script>
     import { mapState, mapGetters } from 'vuex';
 
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import PackageBase from './Packages/Base';
     import PackageUploads from './Packages/Uploads';
     import ComposerPackage from './Packages/ComposerPackage';
     import CloudStatus from '../fragments/CloudStatus';
+    import ButtonGroup from '../widgets/ButtonGroup';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+    import LinkMenu from '../../../../package-list/src/components/fragments/LinkMenu';
 
     const sortPackages = (a, b) => {
         if (a.name === 'contao/manager-bundle') {
@@ -49,7 +52,7 @@
     };
 
     export default {
-        components: { PackageBase, PackageUploads, ComposerPackage, LoadingButton, CloudStatus },
+        components: { PackageBase, PackageUploads, ComposerPackage, LoadingButton, CloudStatus, ButtonGroup, LinkMenu },
 
         computed: {
             ...mapGetters('cloud', { cloudLoading: 'isLoading', cloudError: 'hasError' }),
@@ -73,6 +76,21 @@
             removingUploads: vm => vm.removing.length > 0,
             showHeadline: vm => vm.installedPackages.length > 0 && (vm.hasAdded || vm.hasUploads || vm.files.length),
             hasAdded: vm => vm.addedPackages.length,
+
+            applyActions: vm => [
+                {
+                    label: vm.$t('ui.packages.changesDryrun'),
+                    action: vm.dryrunChanges,
+                },
+                {
+                    label: vm.$t('ui.packages.changesDryrunAll'),
+                    action: vm.dryrunChangesAll,
+                },
+                {
+                    label: vm.$t('ui.packages.changesApplyAll'),
+                    action: vm.applyChangesAll,
+                },
+            ],
         },
 
         methods: {
@@ -93,11 +111,20 @@
             },
 
             dryrunChanges() {
-                this.$store.dispatch('packages/apply', true);
+                this.$store.dispatch('packages/apply', { dry_run: true });
+            },
+
+            dryrunChangesAll() {
+                this.$store.dispatch('packages/apply', { dry_run: true, update_all: true });
             },
 
             async applyChanges() {
                 await this.$store.dispatch('packages/apply');
+                await this.$store.dispatch('packages/load');
+            },
+
+            async applyChangesAll() {
+                await this.$store.dispatch('packages/apply', { update_all: true });
                 await this.$store.dispatch('packages/load');
             },
 

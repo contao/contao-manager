@@ -127,7 +127,8 @@
         position: relative;
 
         &__button {
-            margin: 0 !important;
+            margin-left: 0;
+            margin-right: 0;
             padding-left: 8px;
             cursor: help !important;
         }

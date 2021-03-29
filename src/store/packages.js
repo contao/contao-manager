@@ -256,7 +256,7 @@ export default {
             return packages;
         },
 
-        apply({ state, dispatch }, dryRun = false) {
+        apply({ state, dispatch }, options = { dry_run: false, update_all: false }) {
             const require = state.change;
             const remove = state.remove;
             const update = state.update.concat(
@@ -303,15 +303,20 @@ export default {
                 });
             });
 
+            const config = {
+                require,
+                remove,
+                uploads: true,
+                dry_run: !!options.dry_run,
+            };
+
+            if (!options.update_all) {
+                config.update = update;
+            }
+
             const task = {
                 name: 'composer/update',
-                config: {
-                    require,
-                    remove,
-                    update,
-                    uploads: true,
-                    dry_run: dryRun === true,
-                },
+                config,
             };
 
             return dispatch('tasks/execute', task, { root: true });

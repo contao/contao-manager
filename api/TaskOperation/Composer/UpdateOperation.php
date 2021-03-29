@@ -30,6 +30,11 @@ class UpdateOperation extends AbstractProcessOperation
     private $packages;
 
     /**
+     * @var bool
+     */
+    private $dryRun;
+
+    /**
      * Constructor.
      *
      * @param bool $dryRun
@@ -38,6 +43,7 @@ class UpdateOperation extends AbstractProcessOperation
     {
         $this->translator = $translator;
         $this->packages = $packages;
+        $this->dryRun = $dryRun;
 
         try {
             parent::__construct($processFactory->restoreBackgroundProcess('composer-update'));
@@ -79,6 +85,16 @@ class UpdateOperation extends AbstractProcessOperation
 
     public function getSummary(): string
     {
-        return 'composer update '.implode(' ', $this->packages);
+        $summary = 'composer update';
+
+        if (!empty($this->packages)) {
+            $summary .= ' '.implode(' ', $this->packages);
+        }
+
+        if ($this->dryRun) {
+            $summary .= ' --dry-run';
+        }
+
+        return $summary;
     }
 }

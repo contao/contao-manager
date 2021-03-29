@@ -31,6 +31,11 @@ class InstallOperation extends AbstractProcessOperation
     private $translator;
 
     /**
+     * @var bool
+     */
+    private $dryRun;
+
+    /**
      * Constructor.
      *
      * @param bool $dryRun
@@ -40,6 +45,7 @@ class InstallOperation extends AbstractProcessOperation
     {
         $this->taskConfig = $taskConfig;
         $this->translator = $translator;
+        $this->dryRun = $dryRun;
 
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-install');
@@ -88,7 +94,13 @@ class InstallOperation extends AbstractProcessOperation
 
     public function getSummary(): string
     {
-        return 'composer install';
+        $summary = 'composer install';
+
+        if ($this->dryRun) {
+            $summary .= ' --dry-run';
+        }
+
+        return $summary;
     }
 
     public function getDetails(): ?string

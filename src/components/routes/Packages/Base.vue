@@ -58,9 +58,14 @@
         }
 
         @include screen(800) {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
             &__button.widget-button {
-                width: 180px;
+                width: auto;
                 margin: 0 15px;
+                padding: 0 15px;
             }
         }
     }
@@ -85,7 +90,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-end;
-            align-items: baseline;
+            align-items: center;
 
             margin: 0;
             padding: 12px;
@@ -104,14 +109,10 @@
         }
 
         &__text {
-            display: none;
-
-            @include screen(600) {
-                flex-grow: 1;
-                display: initial;
-                margin: 0 8px;
-                font-weight: $font-weight-bold;
-            }
+            flex-grow: 1;
+            display: initial;
+            margin: 0 8px;
+            font-weight: $font-weight-bold;
         }
 
         &__button {
@@ -130,6 +131,20 @@
                 &--dryRun {
                     flex-grow: 0;
                 }
+            }
+        }
+
+        &__button-group {
+            display: block;
+            width: 100%;
+            margin: 8px;
+
+            > .button-group__primary {
+                padding: 0 15px !important;
+            }
+
+            @include screen(600) {
+                width: auto !important;
             }
         }
     }

@@ -134,8 +134,10 @@ class UpdateTask extends AbstractPackagesTask
 
     protected function getComposerDefinition(TaskConfig $config): CloudChanges
     {
+        $updates = $config->getOption('update', []);
+
         $definition = new CloudChanges();
-        $definition->setUpdates($config->getOption('update', []));
+        $definition->setUpdates($updates);
         $definition->setDryRun($config->getOption('dry_run', false));
 
         foreach ($config->getOption('require', []) as $name => $version) {
@@ -148,6 +150,11 @@ class UpdateTask extends AbstractPackagesTask
 
         $this->addContaoConflictsRequirement($definition);
         $this->handleContaoStability($definition);
+
+        // Update all packages if none are set
+        if (empty($updates)) {
+            $definition->setUpdates([]);
+        }
 
         return $definition;
     }

@@ -88,7 +88,17 @@ class CloudOperation implements TaskOperationInterface
 
     public function getSummary(): string
     {
-        return 'composer update '.implode(' ', $this->changes->getUpdates());
+        $summary = 'composer update ';
+
+        if (!empty($this->changes->getUpdates())) {
+            $summary .= implode(' ', $this->changes->getUpdates());
+        }
+
+        if ($this->changes->getDryRun()) {
+            $summary .= ' --dry-run';
+        }
+
+        return $summary;
     }
 
     public function getDetails(): ?string

@@ -1,15 +1,18 @@
 <template>
     <div class="button-group">
-        <button :class="primaryClass" @click="e => $emit('click', e)" :disabled="disabled">{{ label }}</button>
-        <button :class="moreClass" @click="toggle"><svg fill="#FFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg></button>
-        <div ref="group" class="button-group__group" v-show="showGroup" tabindex="-1" @blur="close" @click="close">
+        <loading-button :class="primaryClass" @click="e => $emit('click', e)" :disabled="disabled" :loading="loading">{{ label }}</loading-button>
+        <button :class="moreClass" @click="toggle" :disabled="moreDisabled"><svg fill="#FFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg></button>
+        <div ref="group" :class="{ 'button-group__group': true, [`button-group__group--top`]: alignTop }" v-show="showGroup" tabindex="-1" @blur="close" @click="close">
             <slot/>
         </div>
     </div>
 </template>
 
 <script>
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+
     export default {
+        components: { LoadingButton },
 
         props: {
             label: {
@@ -19,6 +22,9 @@
             type: String,
             icon: String,
             disabled: Boolean,
+            loading: Boolean,
+            moreDisabled: Boolean,
+            alignTop: Boolean,
         },
 
         data: () => ({
@@ -118,6 +124,17 @@
 
             .link-menu {
                 margin-top: 3px;
+            }
+
+
+            &--top {
+                top: auto;
+                bottom: 39px;
+
+                .link-menu {
+                    margin-top: 0;
+                    margin-bottom: 3px;
+                }
             }
         }
     }
