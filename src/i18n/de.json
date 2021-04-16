@@ -230,6 +230,8 @@
     "ui.packages.changesMessage": "Du hast eine unbestätigte Änderung. | Du hast {count} unbestätigte Änderungen.",
     "ui.packages.changesDryrun": "Testlauf",
     "ui.packages.changesApply": "Änderungen anwenden",
+    "ui.packages.changesApplyAll": "Alle Pakete aktualisieren",
+    "ui.packages.changesDryrunAll": "Testlauf mit allen Paketen",
     "ui.packages.changesReset": "Änderungen verwerfen",
     "ui.packages.changesReview": "Änderungen prüfen",
     "ui.packagelist.loading": "Laden …",

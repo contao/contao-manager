@@ -3,8 +3,8 @@ de:
         allow_url_fopen:
             title: 'Die PHP-Einstellung "allow_url_fopen" ist auf dem Server deaktiviert.'
         process:
-            title: 'Die PHP-Funktion "proc_open" und/oder "proc_close" ist auf dem Server nicht verfügbar.'
-            detail: 'Die Funktionen "proc_open" und "proc_close" sind notwendig, um Kommandozeilentasks im Hintergrund auszuführen. Bitte frage bei deinem Hosting-Anbieter nach, warum die Funktionen nicht verfügbar sind; der Contao Manager läuft nicht ohne sie.'
+            title: 'Die PHP "proc_*" Funktionen ist auf dem Server nicht verfügbar.'
+            detail: 'Die Funktionen "proc_open", "proc_close", "proc_get_status" und "proc_terminate" sind notwendig, um Kommandozeilentasks im Hintergrund auszuführen. Bitte frage bei deinem Hosting-Anbieter nach, warum die Funktionen nicht verfügbar sind; der Contao Manager läuft nicht ohne sie.'
         intl:
             title: 'Die PHP Intl-Erweiterung ist nicht verfügbar.'
             detail: 'Contao 4 benötigt die PHP Intl-Erweiterung für die Internationalisierung der Anwendung.'

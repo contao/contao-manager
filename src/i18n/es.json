@@ -230,6 +230,8 @@
     "ui.packages.changesMessage": "Tiene un cambio sin confirmar. | Tiene {count} cambios sin confirmar.",
     "ui.packages.changesDryrun": "Funcionamiento en seco",
     "ui.packages.changesApply": "Aplicar cambios",
+    "ui.packages.changesApplyAll": "Update all packages",
+    "ui.packages.changesDryrunAll": "Dry run all packages",
     "ui.packages.changesReset": "Restablecer cambios",
     "ui.packages.changesReview": "Revisar cambios",
     "ui.packagelist.loading": "Cargando ...",

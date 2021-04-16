@@ -230,6 +230,8 @@
     "ui.packages.changesMessage": "Hai una modifica non confermata. | Hai {count} modifiche non confermate.",
     "ui.packages.changesDryrun": "Esecuzione a prova",
     "ui.packages.changesApply": "Applicare le modifiche",
+    "ui.packages.changesApplyAll": "Update all packages",
+    "ui.packages.changesDryrunAll": "Dry run all packages",
     "ui.packages.changesReset": "Ripristina modifiche",
     "ui.packages.changesReview": "Revisione dei cambiamenti",
     "ui.packagelist.loading": "Caricamento in corso ...",

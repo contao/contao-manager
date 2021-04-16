@@ -230,6 +230,8 @@
     "ui.packages.changesMessage": "You have one unconfirmed change. | You have {count} unconfirmed changes.",
     "ui.packages.changesDryrun": "Dry Run",
     "ui.packages.changesApply": "应用更改",
+    "ui.packages.changesApplyAll": "Update all packages",
+    "ui.packages.changesDryrunAll": "Dry run all packages",
     "ui.packages.changesReset": "重置更改",
     "ui.packages.changesReview": "预览更改",
     "ui.packagelist.loading": "加载 …",

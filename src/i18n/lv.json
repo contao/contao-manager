@@ -230,6 +230,8 @@
     "ui.packages.changesMessage": "You have one unconfirmed change. | You have {count} unconfirmed changes.",
     "ui.packages.changesDryrun": "Dry Run",
     "ui.packages.changesApply": "Pielietot izmaiņas",
+    "ui.packages.changesApplyAll": "Update all packages",
+    "ui.packages.changesDryrunAll": "Dry run all packages",
     "ui.packages.changesReset": "Atiestatīt izmaiņas",
     "ui.packages.changesReview": "Pārskatīt izmaiņas",
     "ui.packagelist.loading": "Ielādē ...",

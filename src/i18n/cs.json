@@ -230,6 +230,8 @@
     "ui.packages.changesMessage": "Máte jednu nepotvrzenou změnu. | Máte celkem {count} nepotvrzených změn.",
     "ui.packages.changesDryrun": "Zkouška nanečisto",
     "ui.packages.changesApply": "Provést změny",
+    "ui.packages.changesApplyAll": "Update all packages",
+    "ui.packages.changesDryrunAll": "Dry run all packages",
     "ui.packages.changesReset": "Vrátit změny",
     "ui.packages.changesReview": "Ukázat změny",
     "ui.packagelist.loading": "Spouštění…",

@@ -230,6 +230,8 @@
     "ui.packages.changesMessage": "Vous avez un changement non confirmé. | Vous avez {count} changements non confirmés.",
     "ui.packages.changesDryrun": "Tester (Dry run)",
     "ui.packages.changesApply": "Appliquer les changements",
+    "ui.packages.changesApplyAll": "Update all packages",
+    "ui.packages.changesDryrunAll": "Dry run all packages",
     "ui.packages.changesReset": "Annuler les changements",
     "ui.packages.changesReview": "Revoir les changements",
     "ui.packagelist.loading": "Chargement…",
