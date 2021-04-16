@@ -15,7 +15,7 @@
     "details-element-polyfill": "^2.4.0",
     "v-clipboard": "^2.2.3",
     "vue": "^2.6.12",
-    "vue-i18n": "^8.24.2",
+    "vue-i18n": "^8.24.3",
     "vue-resource": "^1.5.2",
     "vue-router": "^2.8.1",
     "vue-upload-component": "^2.8.22",
