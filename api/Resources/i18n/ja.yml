@@ -3,8 +3,8 @@ ja:
         allow_url_fopen:
             title: 'サーバーのPHPの設定で"allow_url_fopen"が有効ではありません。'
         process:
-            title: 'サーバーでPHPの関数"proc_open"と"proc_close"の両方または一方を利用できません。'
-            detail: '関数"proc_open"と"proc_close"はコマンド行のタスクをバックグラウンドで動作させるために必要です。ホスティングサービスの提供者に、これらのメソッドを利用できない理由を確認してください。これらがないと、Contao Managerは正しく動作しません。'
+            title: 'PHPの"proc_"関数が有効ではありません。'
+            detail: 'バックグラウンドでコマンド行のタスクを実行するために"proc_open"、"proc_close"、"proc_get_status"、"proc_terminate"といった関数が必要です。これらのメソッドが何故利用できないかをホスティングサービスの提供者に確認してください、これらなしではContao Managerは正しく動作しません。'
         intl:
             title: 'PHPのIntl拡張を利用できません。'
             detail: 'Contao 4は国際化の目的のためにPHPのIntl拡張を必要とします。'
