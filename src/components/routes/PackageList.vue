@@ -37,7 +37,7 @@
     import CloudStatus from '../fragments/CloudStatus';
     import ButtonGroup from '../widgets/ButtonGroup';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import LinkMenu from '../../../../package-list/src/components/fragments/LinkMenu';
+    import LinkMenu from 'contao-package-list/src/components/fragments/LinkMenu';
 
     const sortPackages = (a, b) => {
         if (a.name === 'contao/manager-bundle') {
