@@ -1,3 +1,6 @@
+const WebpackPwaManifest = require('webpack-pwa-manifest')
+const path = require('path');
+
 module.exports = {
     productionSourceMap: false,
     baseUrl: '',
@@ -24,19 +27,30 @@ module.exports = {
                 crossOriginLoading: 'anonymous',
             },
 
+            plugins: [
+                new WebpackPwaManifest({
+                    name: 'Contao Manager',
+                    background_color: '#ffffff',
+                    theme_color: '#ffffff',
+                    orientation: 'omit',
+                    publicPath: '.',
+                    icons: [
+                        {
+                            src: path.resolve('node_modules/contao-package-list/src/assets/icons/android-chrome-192x192.png'),
+                            size: '192x192',
+                            destination: 'icons',
+                        },
+                        {
+                            src: path.resolve('node_modules/contao-package-list/src/assets/icons/android-chrome-512x512.png'),
+                            size: '512x512',
+                            destination: 'icons',
+                        },
+                    ],
+                }),
+            ],
+
             module: {
                 rules: [
-                    {
-                        test: /(site\.webmanifest|browserconfig\.xml)$/,
-                        use: [
-                            {
-                                loader: "file-loader"
-                            },
-                            {
-                                loader: "app-manifest-loader"
-                            }
-                        ]
-                    },
                     {
                         test: /icons[\\/][^\\/]+\.(png|jpe?g|gif|webp|svg|ico)(\?.*)?$/,
                         use: [
