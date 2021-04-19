@@ -75,7 +75,10 @@ failTask = (response, store, resolve, reject) => {
         }
     }
 
-    store.commit('setStatus', 'failed');
+    if (!ignoreErrors) {
+        store.commit('setStatus', 'failed');
+    }
+
     reject();
 };
 
@@ -138,6 +141,20 @@ export default {
 
                 ignoreErrors = !!task.ignoreErrors;
                 delete task.ignoreErrors;
+
+                if (ignoreErrors) {
+                    Vue.http.interceptors.unshift((request, next) => {
+                        next((response) => {
+                            if (request.url.substring(0, 4) === 'api/'
+                                && response.headers.get('Content-Type') !== 'application/json'
+                                && response.status >= 400
+                                && response.status <= 599
+                            ) {
+                                throw response.data;
+                            }
+                        })
+                    });
+                }
 
                 store.commit('setCurrent', task);
                 store.commit('setStatus', 'created');
