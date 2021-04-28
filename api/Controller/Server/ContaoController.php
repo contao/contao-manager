@@ -217,6 +217,7 @@ class ContaoController
                 '.env.local',
                 '.git',
                 '.idea',
+                '.well-known',
                 'cgi-bin',
                 'contao-manager',
                 'web',
