@@ -41,6 +41,7 @@
     "ui.oauth.https": "URI перенаправления ДОЛЖЕН использовать защищенный протокол (https:), чтобы предотвратить передачу токена аутентификации в виде открытого текста.",
     "ui.oauth.headline": "Авторизация OAuth",
     "ui.oauth.description": "Следующее приложение или служба запрашивает удаленный доступ к экземпляру Contao Manager.",
+    "ui.oauth.domain": "Before allowing access, make sure you know this URL and trust its owner!",
     "ui.oauth.allow": "Разрешить доступ",
     "ui.oauth.deny": "Запретить доступ",
 

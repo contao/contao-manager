@@ -39,8 +39,9 @@
     "ui.logout.login": "Zurück zum Login",
     "ui.oauth.error": "Ungültiger OAuth-Versuch. Bitte überprüfe die Request-Parameter.",
     "ui.oauth.https": "Die Rückleitungs-URL MUSS eine sichere Verbindung (https:) nutzen, um die Übertragung der Anmeldedaten im Klartext zu verhindern.",
-    "ui.oauth.headline": "OAuth-Authentifizierung",
+    "ui.oauth.headline": "Remote-Anmeldung",
     "ui.oauth.description": "Die folgende Anwendung oder der folgende Dienst fordert den Fernzugriff auf deine Contao Manager-Instanz an.",
+    "ui.oauth.domain": "Bevor du diesen Zugriff erlaubst, stelle sicher dass du die URL kennst und ihr vertraust!",
     "ui.oauth.allow": "Zugriff erlauben",
     "ui.oauth.deny": "Zugriff verweigern",
 

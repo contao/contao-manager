@@ -41,6 +41,7 @@
     "ui.oauth.https": "The redirect URI MUST use a secure protocol (https:) to prevent the authentication token from being transmitted in clear-text.",
     "ui.oauth.headline": "OAuth认证",
     "ui.oauth.description": "以下应用程序或者服务正在请求对您的Contao Manager实例远程访问。",
+    "ui.oauth.domain": "Before allowing access, make sure you know this URL and trust its owner!",
     "ui.oauth.allow": "允许访问",
     "ui.oauth.deny": "拒绝访问",
 

@@ -41,6 +41,7 @@
     "ui.oauth.https": "URI przekierowania MUSI używać bezpiecznego protokołu (https:), aby nie przesyłać tokena poświadczenia otwartym tekstem.",
     "ui.oauth.headline": "Uwierzytelnianie OAuth",
     "ui.oauth.description": "Następująca aplikacja lub usługa żąda zdalnego dostępu do twojej instancji Contao Manager.",
+    "ui.oauth.domain": "Before allowing access, make sure you know this URL and trust its owner!",
     "ui.oauth.allow": "Zezwól na dostęp",
     "ui.oauth.deny": "Odmów dostępu",
 

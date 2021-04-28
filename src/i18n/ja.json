@@ -41,6 +41,7 @@
     "ui.oauth.https": "平文で認証トークンが転送されることを防ぐため、リダイレクトのURIは安全なプロトコル(https:)を*使用*しなければなりません。",
     "ui.oauth.headline": "OAuth認証",
     "ui.oauth.description": "以下のアプリケーションやサービスが、このContao Managerへのリモートアクセスを要求しています。",
+    "ui.oauth.domain": "Before allowing access, make sure you know this URL and trust its owner!",
     "ui.oauth.allow": "アクセスを許可",
     "ui.oauth.deny": "アクセスを拒否",
 
