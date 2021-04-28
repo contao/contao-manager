@@ -8,7 +8,10 @@
             <h1 class="view-oauth__headline">{{ $t('ui.oauth.headline') }}</h1>
             <p class="view-oauth__description">{{ $t('ui.oauth.description') }}</p>
             <p class="view-oauth__client">{{ $route.query.client_id }}</p>
-
+            <p class="view-oauth__domain">
+              {{ $t('ui.oauth.domain') }}<br>
+              <strong>{{ hostname }}</strong>
+            </p>
             <loading-button class="view-oauth__button" color="primary" :disabled="!valid" :loading="authenticating" @click="allowAccess">
                 {{ $t('ui.oauth.allow') }}
             </loading-button>
@@ -30,6 +33,10 @@
             valid: false,
             authenticating: false,
         }),
+
+        computed: {
+          hostname: vm => new URL(vm.$route.query.return_url).hostname,
+        },
 
         methods: {
             async allowAccess() {
@@ -182,6 +189,20 @@
         &__client {
             margin: 1em 0;
             font-size: 32px;
+        }
+
+        &__domain {
+          color: $red-button;
+          margin-top: .5em;
+          margin-bottom: 2em;
+
+          > strong {
+            margin-top: .5em;
+            display: inline-block;
+            background: $red-button;
+            color: #fff;
+            padding: 5px 10px;
+          }
         }
 
         &__error {
