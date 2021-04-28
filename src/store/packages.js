@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { coerce, satisfies, eq } from 'semver';
+import { coerce, satisfies, eq, valid, parse } from 'semver';
 
 import details from 'contao-package-list/src/store/packages/details';
 import features from 'contao-package-list/src/store/packages/features';
@@ -187,18 +187,28 @@ export default {
                 return local;
             }
 
+            const getVersion = (packageData) => {
+                if (!packageData.version && !packageData.version_normalized) {
+                    return null;
+                }
+
+                if (valid(packageData.version)) {
+                    return parse(packageData.version)
+                }
+
+                return coerce(packageData.version_normalized, { loose: true })
+            };
+
             const rootConstraint = state.change[name] || state.root.require[name];
-            const rootVersion = state.installed[name]?.version_normalized && coerce(state.installed[name].version_normalized, { loose: true });
+            const rootVersion = getVersion(state.installed[name]);
 
             metadata.update = null;
             if (metadata.versions && rootConstraint && rootConstraint.substr(0, 4) !== 'dev-' && rootConstraint.substr(-4) !== '-dev') {
                 let update;
                 metadata.update = { valid: true, latest: true, version: null, time: null };
-
                 if (rootConstraint && rootVersion) {
                     update = metadata.versions.filter(pkg => {
-                        const pkgVersion = coerce(pkg.version_normalized, { loose: true });
-                        return satisfies(pkgVersion, rootConstraint);
+                        return satisfies(getVersion(pkg), rootConstraint);
                     }).pop();
 
                     if (!update) {
@@ -207,7 +217,7 @@ export default {
                         metadata.update.version = update.version;
                         metadata.update.time = update.time;
                         metadata.update.latest = eq(
-                            coerce(update.version_normalized, { loose: true }),
+                            getVersion(update),
                             rootVersion
                         );
                     }
