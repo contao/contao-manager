@@ -39,9 +39,9 @@
     "ui.logout.login": "Back To Login",
     "ui.oauth.error": "Invalid OAuth attempt. Check the request parameters.",
     "ui.oauth.https": "The redirect URI MUST use a secure protocol (https:) to prevent the authentication token from being transmitted in clear-text.",
-    "ui.oauth.headline": "OAuth Authentication",
+    "ui.oauth.headline": "Remote Authentication",
     "ui.oauth.description": "The following application or service is requesting remote access to your Contao Manager instance.",
-    "ui.oauth.domain": "Before allowing access, make sure you trust the service or application at",
+    "ui.oauth.domain": "Before allowing access, make sure you know this URL and trust its owner!",
     "ui.oauth.allow": "Allow Access",
     "ui.oauth.deny": "Deny Access",
 

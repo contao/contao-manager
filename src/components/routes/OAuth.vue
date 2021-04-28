@@ -7,11 +7,8 @@
         <main class="view-oauth__form">
             <h1 class="view-oauth__headline">{{ $t('ui.oauth.headline') }}</h1>
             <p class="view-oauth__description">{{ $t('ui.oauth.description') }}</p>
-            <p class="view-oauth__client">{{ $route.query.client_id }}</p>
-            <p class="view-oauth__domain">
-              {{ $t('ui.oauth.domain') }}<br>
-              <strong>{{ hostname }}</strong>
-            </p>
+            <p class="view-oauth__client">{{ hostname }}</p>
+            <p class="view-oauth__warning">{{ $t('ui.oauth.domain') }}</p>
             <loading-button class="view-oauth__button" color="primary" :disabled="!valid" :loading="authenticating" @click="allowAccess">
                 {{ $t('ui.oauth.allow') }}
             </loading-button>
@@ -191,24 +188,10 @@
             font-size: 32px;
         }
 
-        &__domain {
+        &__warning {
           color: $red-button;
           margin-top: .5em;
           margin-bottom: 2em;
-
-          > strong {
-            margin-top: .5em;
-            display: inline-block;
-            background: $red-button;
-            color: #fff;
-            padding: 5px 10px;
-          }
-        }
-
-        &__error {
-            padding: 10px;
-            color: $red-button;
-            border: 1px solid $red-button;
         }
 
         &__button {
