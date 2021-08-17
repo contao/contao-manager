@@ -41,7 +41,7 @@ class InstallOperation extends AbstractProcessOperation
      * @param bool $dryRun
      * @param null $timeout
      */
-    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Environment $environment, Translator $translator, $dryRun = false, $timeout = null)
+    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Environment $environment, Translator $translator, $dryRun = false)
     {
         $this->taskConfig = $taskConfig;
         $this->translator = $translator;
@@ -84,9 +84,8 @@ class InstallOperation extends AbstractProcessOperation
                 'composer-install'
             );
 
-            if (null !== $timeout) {
-                $process->setTimeout($timeout - 5);
-            }
+            // An install task should never need 5min to install
+            $process->setTimeout(60 * 5);
 
             parent::__construct($process);
         }
