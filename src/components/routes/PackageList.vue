@@ -19,7 +19,7 @@
             <div class="package-actions__inner" v-else-if="totalChanges && !uploading">
                 <cloud-status button-class="package-actions__button package-actions__button--cloud"/>
                 <p class="package-actions__text">{{ $tc('ui.packages.changesMessage', totalChanges) }}</p>
-                <button-group class="package-actions__button-group" align-top type="primary" icon="update" :loading="cloudLoading" :disabled="cloudError" :more-disabled="cloudLoading || cloudError" :label="$t('ui.packages.changesApply')" @click="applyChanges">
+                <button-group class="package-actions__button-group" align-top type="primary" icon="update" :loading="cloudLoading" :disabled="cloudError" :more-disabled="cloudLoading || cloudError" :label="$t('ui.packages.changesApply')" @click="hasLockFile ? applyChanges() : applyChangesAll()">
                     <link-menu align="right" valign="top" :items="applyActions" color="primary"/>
                 </button-group>
                 <button class="package-actions__button widget-button widget-button--alert" :disabled="!canResetChanges && !confirmed.length" @click="resetChanges">{{ $t('ui.packages.changesReset') }}</button>
@@ -54,6 +54,10 @@
     export default {
         components: { PackageBase, PackageUploads, ComposerPackage, LoadingButton, CloudStatus, ButtonGroup, LinkMenu },
 
+        data: () => ({
+            hasLockFile: true,
+        }),
+
         computed: {
             ...mapGetters('cloud', { cloudLoading: 'isLoading', cloudError: 'hasError' }),
             ...mapState('packages', {
@@ -77,20 +81,31 @@
             showHeadline: vm => vm.installedPackages.length > 0 && (vm.hasAdded || vm.hasUploads || vm.files.length),
             hasAdded: vm => vm.addedPackages.length,
 
-            applyActions: vm => [
-                {
-                    label: vm.$t('ui.packages.changesDryrun'),
-                    action: vm.dryrunChanges,
-                },
-                {
-                    label: vm.$t('ui.packages.changesDryrunAll'),
-                    action: vm.dryrunChangesAll,
-                },
-                {
-                    label: vm.$t('ui.packages.changesApplyAll'),
-                    action: vm.applyChangesAll,
-                },
-            ],
+            applyActions() {
+                if (!this.hasLockFile) {
+                    return [
+                        {
+                            label: this.$t('ui.packages.changesDryrun'),
+                            action: this.dryrunChanges,
+                        }
+                    ];
+                }
+
+                return [
+                    {
+                        label: this.$t('ui.packages.changesDryrun'),
+                        action: this.dryrunChanges,
+                    },
+                    {
+                        label: this.$t('ui.packages.changesDryrunAll'),
+                        action: this.dryrunChangesAll,
+                    },
+                    {
+                        label: this.$t('ui.packages.changesApplyAll'),
+                        action: this.applyChangesAll,
+                    },
+                ];
+            },
         },
 
         methods: {
@@ -133,6 +148,12 @@
                 this.$store.commit('packages/uploads/unconfirmAll');
             },
         },
+
+        mounted() {
+            this.$store.dispatch('server/composer/get').then((result) => {
+                this.hasLockFile = result.lock.found;
+            });
+        }
     };
 </script>
 
