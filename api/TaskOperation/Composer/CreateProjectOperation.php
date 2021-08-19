@@ -98,20 +98,27 @@ class CreateProjectOperation extends AbstractInlineOperation
     {
         if ($coreOnly) {
             $require = <<<JSON
-        "contao/manager-bundle": "$version.*",
-        "contao/conflicts": "*@dev"
+        "contao/conflicts": "*@dev",
+        "contao/manager-bundle": "$version.*"
 JSON;
         } else {
             $require = <<<JSON
+        "contao/conflicts": "*@dev",
         "contao/manager-bundle": "$version.*",
         "contao/calendar-bundle": "$version.*",
         "contao/comments-bundle": "$version.*",
         "contao/faq-bundle": "$version.*",
         "contao/listing-bundle": "$version.*",
         "contao/news-bundle": "$version.*",
-        "contao/newsletter-bundle": "$version.*",
-        "contao/conflicts": "*@dev"
+        "contao/newsletter-bundle": "$version.*"
 JSON;
+        }
+
+        // https://github.com/contao/contao-manager/issues/627
+        if (version_compare($version, '4.12', '>=')) {
+            $script = '@php vendor/bin/contao-setup';
+        } else {
+            $script = 'Contao\\\\ManagerBundle\\\\Composer\\\\ScriptHandler::initializeApplication';
         }
 
         return <<<JSON
@@ -125,10 +132,10 @@ $require
     },
     "scripts": {
         "post-install-cmd": [
-            "Contao\\\\ManagerBundle\\\\Composer\\\\ScriptHandler::initializeApplication"
+            "$script"
         ],
         "post-update-cmd": [
-            "Contao\\\\ManagerBundle\\\\Composer\\\\ScriptHandler::initializeApplication"
+            "$script"
         ]
     }
 }
