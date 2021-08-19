@@ -57,9 +57,10 @@
                 <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="contao-check__icon" />
                 <h1 class="contao-check__headline">{{ $t('ui.server.contao.headline') }}</h1>
                 <p class="contao-check__description">{{ $t('ui.server.contao.description') }}</p>
-                <p class="contao-check__version"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
-                <p class="contao-check__version" v-if="supportsLatest"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
-                <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.2' }) }}</span></p>
+                <p class="contao-check__version" v-if="phpVersionId >= 70300"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
+                <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.2' }) }}</span></p>
+                <p class="contao-check__version" v-if="phpVersionId >= 70300"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
+                <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.3' }) }}</span></p>
                 <i18n tag="p" path="ui.server.contao.releaseplan">
                     <template #contaoReleasePlan><a :href="`https://to.contao.org/release-plan?lang=${$i18n.locale}`" target="_blank" rel="noreferrer noopener">{{ $t('ui.server.contao.releaseplanLink') }}</a></template>
                 </i18n>
@@ -108,7 +109,7 @@
 
         data: () => ({
             processing: false,
-            supportsLatest: true,
+            phpVersionId: 70300,
             version: '',
             coreOnly: 'no',
             noUpdate: false,
@@ -127,14 +128,20 @@
             currentHref: () => window.location.href,
 
             versions() {
-                if (!this.supportsLatest) {
+                if (this.phpVersionId < 70200) {
                     return {
-                        '4.4': `Contao 4.4 (${this.$t('ui.server.contao.ltsTitle')})`,
+                        '4.4': 'Contao 4.4',
+                    };
+                }
+
+                if (this.phpVersionId < 70300) {
+                    return {
+                        '4.9': `Contao 4.9 (${this.$t('ui.server.contao.ltsTitle')})`,
                     };
                 }
 
                 return {
-                    '4.11': `Contao 4.11 (${this.$t('ui.server.contao.latestTitle')})`,
+                    '4.12': `Contao 4.12 (${this.$t('ui.server.contao.latestTitle')})`,
                     '4.9': `Contao 4.9 (${this.$t('ui.server.contao.ltsTitle')})`,
                 };
             },
@@ -242,10 +249,7 @@
         async mounted() {
             if (this.current) {
                 const phpWeb = await this.$store.dispatch('server/php-web/get');
-
-                if (phpWeb.version_id < 70200) {
-                    this.supportsLatest = false;
-                }
+                this.phpVersionId = phpWeb.version_id;
             }
 
             if (result) {
