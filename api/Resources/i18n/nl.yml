@@ -3,8 +3,8 @@ nl:
         allow_url_fopen:
             title: 'De PHP instelling "allow_url_fopen" is niet ingeschakeld op de server.'
         process:
-            title: 'De PHP functie "proc_open" en/of "proc_close" is niet beschikbaar op de server.'
-            detail: 'De "proc_open" en "proc_close" functies zijn nodig om de opdrachtregeltaken op de achtergrond te kunnen uitvoeren. Vraag na bij uw hostingprovider waarom deze methode niet beschikbaar is.; de Contao Manager zal niet goed werken zonder deze functies.'
+            title: ''
+            detail: ''
         intl:
             title: 'De PHP Intl extensie is niet beschikbaar.'
             detail: 'Contao 4 vereist de Intl extension voor internationalisering.'

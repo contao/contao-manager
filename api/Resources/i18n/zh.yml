@@ -3,7 +3,7 @@ zh:
         allow_url_fopen:
             title: '服务器未启用PHP设置"allow_url_fopen"'
         process:
-            title: '服务器中PHP函数"proc_open"  "proc_close" 不可用。'
+            title: ''
             detail: ''
         intl:
             title: 'PHP扩展Intl不可用'

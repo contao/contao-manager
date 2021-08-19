@@ -3,8 +3,8 @@ cs:
         allow_url_fopen:
             title: 'Služba PHP "allow_url_fopen" není na tomto serveru spuštěna.'
         process:
-            title: 'Funkce PHP "proc_open" a/nebo "proc_close" není na serveru povolena.'
-            detail: 'Funkce "proc_open" a "proc_close" jsou nezbytné pro spouštění příkazů na pozadí. Dotázejte se Vašeho poskytovatele, proč není daná k dispozici. Správce Contaa nebude moct bez toho fungovat správně.'
+            title: ''
+            detail: ''
         intl:
             title: 'Rozšíření PHP Intl není na tomto serveru spuštěno.'
             detail: 'Contao 4 vyžaduje rozšíření PHP Intl pro mezinárodní záležitosti.'

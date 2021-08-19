@@ -3,7 +3,7 @@ pt:
         allow_url_fopen:
             title: 'A função PHP "allow_url_fopen" não está ativada no servidor. '
         process:
-            title: 'A função PHP "proc_open" e/ou "proc_close" não está disponível no servidor.'
+            title: ''
             detail: ''
         intl:
             title: 'A extensão PHP Intl não está disponível.'
