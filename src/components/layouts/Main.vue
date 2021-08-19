@@ -5,7 +5,16 @@
             <navigation></navigation>
         </header>
 
-        <slot name="subheader"/>
+        <div class="layout-main__subheader" v-if="$slots.search">
+            <div class="layout-main__subheader-inside">
+
+                <div class="layout-main__news" v-if="currentNews">
+                    <a :href="currentNews.url" :title="currentNews.title" target="_blank" rel="noreferrer noopener"><img :src="currentNews.image" width="320" height="50" :alt="currentNews.title"></a>
+                </div>
+
+                <slot name="search"/>
+            </div>
+        </div>
 
         <main class="layout-main__content">
             <slot/>
@@ -16,11 +25,19 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     import Navigation from '../fragments/Navigation';
     import FooterFragment from '../fragments/Footer';
 
     export default {
         components: { Navigation, FooterFragment },
+
+        computed: {
+            ...mapState('algolia', ['news']),
+
+            currentNews: vm => vm.news.length ? vm.news[0] : null,
+        },
     };
 </script>
 
@@ -43,6 +60,31 @@
             }
         }
 
+        &__subheader {
+            margin: 30px 0 45px;
+            padding: 20px 0;
+            background: #e5dfcf;
+            border-bottom: 1px solid #dcd8cc;
+
+            &-inside {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+        }
+
+        &__news {
+            width: 320px;
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            width: 100%;
+            margin: 0;
+        }
+
         &__logo {
             display: inline;
             color: $text-color;
@@ -61,17 +103,36 @@
             }
         }
 
+        &__subheader-inside,
         &__content,
         footer {
             position: relative;
             margin: 0 20px;
+        }
 
-            @include screen(1024) {
+        @include screen(700) {
+            &__subheader-inside {
+                flex-direction: row;
+            }
+
+            &__news {
+                margin: 0 20px 0 0;
+            }
+        }
+
+        @include screen(1024) {
+            &__subheader-inside,
+            &__content,
+            footer {
                 max-width: 960px;
                 margin: 0 auto;
             }
+        }
 
-            @include screen(1200) {
+        @include screen(1200) {
+            &__subheader-inside,
+            &__content,
+            footer {
                 max-width: 1180px;
             }
         }
