@@ -3,20 +3,20 @@ lv:
         allow_url_fopen:
             title: 'PHP iestatījums "allow_url_fopen" serverī nav iespējots.'
         process:
-            title: 'PHP funkcija "proc_open" un / vai "proc_close" serverī nav pieejama.'
-            detail: ''
+            title: 'Serverī nav pieejamas PHP "proc_*" funkcijas.'
+            detail: 'Funkcijas "proc_open", "proc_close", "proc_get_status" un "proc_terminate" ir nepieciešamas, lai fona režīmā palaistu komandrindas uzdevumus. Noskaidrojiet pie sava hostinga pakalpojumu sniedzēja, kāpēc šī metode nav pieejama; bez tās Contao Manager nedarbosies pareizi.'
         intl:
             title: 'PHP Intl paplašinājums nav pieejams.'
             detail: 'Contao 4 ir nepieciešams PHP Intl paplašinājums internacionalizācijas vajadzībām.'
         openssl:
             title: 'PHP OpenSSL paplašinājums nav pieejams.'
-            detail: ''
+            detail: 'Contao Manager ir nepieciešams OpenSSL paplašinājums, lai failus lejupielādētu šifrētā savienojumā (https).'
         dom:
             title: 'PHP DOM paplašinājums nav pieejams.'
-            detail: ''
+            detail: 'Contao 4 ir nepieciešams PHP DOM paplašinājums, lai analizētu XML dokumentus.'
         xmlreader:
             title: 'PHP XMLReader paplašinājums nav pieejams.'
-            detail: ''
+            detail: 'Contao 4 ir nepieciešams PHP DOM paplašinājums, lai analizētu XML dokumentus.'
         graphics_lib:
             title: 'Nav pieejama neviena PHP attēlu apstrādes bibliotēka.'
             detail: 'Lai apstrādātu attēlus, Contao 4 nepieciešams paplašinājums GD, Imagick vai Gmagick.'
@@ -28,16 +28,10 @@ lv:
             title: 'Phar datnei jāatrod mapē /web.'
         memory_limit:
             title: 'Nepietiekams PHP atmiņas ierobežojums'
-            detail: ''
+            detail: 'Jūsu PHP konfigurācija atļauj tikai {limit} atmiņu (komandrindā). Ar to nepietiek, lai palaistu Composer, un nebija iespējams automātiski palielināt šo limitu. Lūdzu, sazinieties ar savu hostinga pakalpojumu sniedzēju, lai saņemtu atbalstu.'
         systempdir:
             title: 'Nevar rakstīt sistēmas pagaidu direktorijā.'
-            detail: ''
-        contao_unknown:
-            title: 'Nezināms instalācijas statuss'
-            detail: ""
-        contao_version:
-            title: 'Nevarēja noteikt Contao versiju'
-            detail: ""
+            detail: 'Visticamāk, tā ir problēma ar jūsu hostinga konfigurāciju. Pārliecinieties, vai open_basedir ļauj piekļūt pagaidu direktorijai, vai arī sys_temp_dir ir pareizi konfigurēta.'
 
     boot:
         composer:
@@ -51,97 +45,53 @@ lv:
             platform: 'Platforma nedrīkst būt konfigurēta composer.json.'
             cache: 'Kešatmiņas rekvizīti nedrīkst būt konfigurēti composer.json.'
 
-    taskstatus:
-        created: 'Konsoles uzdevums ir izveidots ...'
-        complete:
-            summary: 'Konsoles uzdevums ir pabeigts!'
-            detail: 'Fona uzdevums tika veiksmīgi pabeigts. Vairāk informācijai apskatiet konsoles protokolu.'
-            console: '### Uzdevums veiksmīgi pabeigts ###'
-        aborting:
-            summary: 'Aptur pašreizējo darbību ...'
-            detail: 'Fona uzdevums tiek atcelts.'
-            console: '### Fona uzdevums tiek atcelts ###'
-        stopped:
-            summary: 'Konsoles uzdevums ir pārtraukts!'
-            detail: 'Fona uzdevums tika atcelts. Lūdzu, pārbaudiet konsoles protokolu.'
-            console: '### Fona uzdevums tika atcelts ###'
-        error:
-            summary: 'Konsoles uzdevums ir pārtraukts!'
-            detail: ''
-            console: '### Fona uzdevums negaidīti ir apturēts ###'
-
     task:
         setup_packages:
             title: 'Instalē Contao lietotni'
-            completeSummary: 'Uzstādīšana ir pabeigta!'
-            completeDetail: 'Lai pabeigtu iestatīšanas procesu, lūdzu, atveriet instalēšanas rīku un ievadiet datubāzes akreditācijas datus.'
         install_packages:
-            title: ''
+            title: 'Composer atkarību instalēšana'
         update_packages:
             title: 'Atjaunina pakotnes'
-            completeSummary: 'Contao pakotnes ir atjauninātas!'
-            completeDetail: 'Lūdzu, atveriet instalēšanas rīku, lai piemērotu nepieciešamās datu bāzes izmaiņas.'
         dump_autoload:
             title: ''
         clear_cache:
             title: 'Iztīra Composer kešatmiņu'
         rebuild_cache:
             title: 'Pārbūvē Contao kešatmiņu'
-        install_tool:
-            title: 'Contao instalēšanas rīks'
         self_update:
-            title: 'Atjaunina Contao pārvaldnieku'
-            completeSummary: 'Contao Manager tika veiksmīgi atjaunināts'
-            completeDetail: 'Atjaunināts uz versiju {current}'
+            title: 'Contao Manager pašatjaunināšana'
 
     taskoperation:
         self-update:
-            summary: 'Instalē jaunāko Contao Manager …'
             detail: 'Atjaunina no {old} uz {new}'
-        remove-cache:
-            summary: 'Dzēš kešatmiņas direktoriju ...'
-        remove-vendor:
-            summary: ''
-        cache-warmup:
-            summary: ''
-        cache-clear:
-            summary: 'Iztīra lietojumprogrammas kešatmiņu ...'
-        composer-update:
-            summary: ''
-        composer-require:
-            summary: 'Pievieno Composer pakotnes ...'
-        composer-remove:
-            summary: 'Noņem Composer pakotnes ...'
+            success: 'Atjaunināts uz {new}'
         install-uploads:
-            summary: ''
-            console: ''
+            summary: 'Augšupielādes instalēšana'
+            console: 'Instalēts artefakts {package} (versija {version}) [uz packages/{name}]'
         remove-uploads:
-            summary: 'Notiek augšupielādes failu noņemšana ...'
+            summary: 'Augšupielādes noņemšana'
         composer-install:
-            summary: ''
-            summaryRetry: ''
+            retry: 'atkārtots mēģinājums {current}/{max}'
+            nothing: 'Nekas nav jāinstalē vai jāatjaunina'
+            result: '{installs} instalēts, {updates} atjaunināts, {removals} noņemts'
         dump-autoload:
-            summary: ''
-        install-lock:
-            summary: 'Bloķē Contao instalēšanas rīku ...'
-        install-unlock:
-            summary: 'Atbloķē Contao instalēšanas rīku ...'
-        create-project:
-            summary: ''
+            result: 'Izveidoti optimizēti autoload faili, kas satur {count} klases'
         cloud:
-            queuedSummary: ''
-            queuedDetail: ''
-            processingSummary: ''
-            processingDetail: 'Darbs ID {job} darbojas {seconds} sekundes'
-            errorSummary: ''
-            finishedSummary: ''
-            finishedDetail: ''
-        clear-cache:
-            summary: 'Dzēš kešatmiņas datnes ...'
+            queued: 'Ierindots, sāks aptuveni pēc {seconds} sekundēm (pašlaik {jobs} darbi uz {workers} darbiniekiem).'
+            processing: 'Aktīvs {seconds} sekundes.'
+            error: 'Neizdevās atrisināt atkarības'
+            finished: 'Pabeigts {seconds} sekundēs. Atmiņas izmantošana: {memory} (maksimums: {peak}), laiks: {time}.'
 
     upload:
         error:
-            file: ''
-            json: ''
-            schema: ''
-            partial: ''
+            file: 'Datne ir nederīga vai nesatur composer.json.'
+            json: 'Composer.json nesatur derīgus JSON datus.'
+            schema: 'Composer.json shēmas validācija neizdevās.'
+            partial: 'Failu augšupielāde netika pabeigta.'
+
+    error:
+        writable:
+            root: 'Contao Manager nevarēja rakstīt uz saknes direktoriju adresē "{path}".'
+            directory: 'Contao Manager nevarēja izveidot direktoriju "{path}".'
+            config-file: 'Contao Manager nevarēja uzrakstīt konfigurācijas failu uz "{file}".'
+            detail: 'Izskatās, ka jūsu serveris nav pareizi konfigurēts. Ja gatavojaties instalēt Contao, lūdzu, iestatiet sava tīmekļa servera DocumentRoot. Pretējā gadījumā pārliecinieties, ka failu piekļuves atļaujas ir pareizas. Ja neesat pārliecināts, kā to novērst, sazinieties ar savu hostinga pakalpojumu sniedzēju, lai saņemtu atbalstu.'

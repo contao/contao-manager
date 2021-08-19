@@ -3,8 +3,8 @@ es:
         allow_url_fopen:
             title: 'La configuración de PHP "allow_url_fopen" no está habilitada en el servidor.'
         process:
-            title: 'La función PHP "proc_open" and/or "proc_close" no está disponible en el servidor.'
-            detail: 'Las funciones "proc_open" y "proc_close" son necesarias para ejecutar tareas de línea de comandos en segundo plano. Consulte con su proveedor de alojamiento por qué este método no está disponible; Contao Manager no se ejecutará correctamente sin él.'
+            title: 'Las funciones PHP "proc_ *" no están disponibles en el servidor. '
+            detail: 'Las funciones "proc_open", "proc_close", "proc_get_status" y "proc_terminate" son necesarias para ejecutar tareas de línea de comandos en segundo plano. Consulte con su proveedor de alojamiento por qué este método no está disponible; el Contao Manager no se ejecutará correctamente sin él. '
         intl:
             title: 'La extensión PHP Intl no está disponible.'
             detail: 'Contao 4 requiere la extensión PHP Intl para fines de internacionalización.'
@@ -59,12 +59,12 @@ es:
         rebuild_cache:
             title: 'Reconstruyendo de caché de Contao'
         self_update:
-            title: ''
+            title: 'Autoactualización de Contao Manager '
 
     taskoperation:
         self-update:
             detail: 'Actualización de {old} a {new}'
-            success: ''
+            success: 'Actualizado a {new}'
         install-uploads:
             summary: 'Instalación de cargas'
             console: 'Artefacto instalado para {package} (versión {version}) [a paquetes / {name}]'
@@ -78,7 +78,7 @@ es:
             result: 'Archivos de carga automática optimizados generados que contienen {count} clases'
         cloud:
             queued: 'En cola, comenzando en aprox. {seconds} segundos (actualmente {jobs} trabajos en {workers} trabajadores)'
-            processing: ''
+            processing: 'Activo durante {seconds} segundos.'
             error: 'No se pudieron resolver las dependencias'
             finished: 'Completado en {seconds} segundos. Uso de memoria: {memory} (pico: {peak}), tiempo: {time}.'
 
@@ -91,7 +91,7 @@ es:
 
     error:
         writable:
-            root: ''
+            root: 'El Contao Manager no pudo escribir en el directorio raíz en "{path}". '
             directory: 'Contao Manager no pudo crear el directorio "{path}".'
             config-file: 'Contao Manager no pudo escribir un archivo de configuración en "{file}".'
             detail: 'Parece que su servidor no está configurado correctamente. Si está a punto de instalar Contao, configure el DocumentRoot de su servidor web. De lo contrario, asegúrese de que los permisos de acceso a archivos sean correctos. Si no está seguro de cómo solucionar este problema, comuníquese con su proveedor de alojamiento para obtener asistencia.'
