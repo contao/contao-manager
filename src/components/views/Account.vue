@@ -43,7 +43,7 @@
             <p>
                 {{ $t('ui.account.contribute1') }}<br>
                 <i18n :tag="false" path="ui.account.contribute2">
-                    <template #becomingAMember><a href="https://association.contao.org/mitglied-werden.html" target="_blank">{{ $t('ui.account.contributeMember') }}</a></template>
+                    <template #donate><a href="https://to.contao.org/donate" target="_blank">{{ $t('ui.account.contributeDonate') }}</a></template>
                 </i18n>
             </p>
         </aside>
