@@ -34,7 +34,7 @@
         "symfony/monolog-bundle": "^3.3",
         "firebase/php-jwt": "^4.0",
         "crell/api-problem": "^3.1",
-        "composer/composer": "dev-bugfix/package-type-update",
+        "composer/composer": "^2.1.7",
         "studio24/rotate": "^1.0",
         "ramsey/uuid": "^3.9"
     },
@@ -42,12 +42,6 @@
         "phpunit/phpunit": "^7.5",
         "friendsofphp/php-cs-fixer": "^2.14"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/aschempp/composer"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Contao\\ManagerApi\\": "api/"
