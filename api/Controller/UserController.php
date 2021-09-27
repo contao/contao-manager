@@ -150,12 +150,6 @@ class UserController extends Controller
             throw new BadRequestHttpException('Invalid payload for OAuth token.');
         }
 
-        foreach ($this->config->getTokens() as $payload) {
-            if ($payload['username'] === $username && $payload['client_id'] === $clientId) {
-                $this->config->deleteToken($payload['id']);
-            }
-        }
-
         return new JsonResponse($this->config->createToken($username, $clientId, $scope), Response::HTTP_CREATED);
     }
 

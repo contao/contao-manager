@@ -116,7 +116,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }
 
         if (\function_exists('getallheaders')) {
-            /** @noinspection PhpComposerExtensionStubsInspection */
             $headers = getallheaders();
 
             if (isset($headers['authorization'])) {
