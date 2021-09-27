@@ -161,7 +161,7 @@ class ProcessRunner extends AbstractProcess
         $this->stop(15 === $signo ? 0 : 10);
     }
 
-    private function loadConfig(array $config = null)
+    private function loadConfig(array $config = null): array
     {
         if (null === $config) {
             $config = static::readConfig($this->setFile);

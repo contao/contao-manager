@@ -242,7 +242,7 @@ class ProcessController extends AbstractProcess
         throw new \RuntimeException('No forker found for your current platform.');
     }
 
-    public static function create(string $workDir, array $commandline, string $cwd = null, string $id = null)
+    public static function create(string $workDir, array $commandline, string $cwd = null, string $id = null): self
     {
         return new static(
             [
@@ -254,7 +254,7 @@ class ProcessController extends AbstractProcess
         );
     }
 
-    public static function restore(string $workDir, string $id)
+    public static function restore(string $workDir, string $id): self
     {
         $config = static::readConfig($workDir.'/'.$id.'.set.json');
 
