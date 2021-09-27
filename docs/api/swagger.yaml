@@ -42,7 +42,7 @@ paths:
 
         get:
             summary: Get current session status
-            description: Returns information about the current session (based on authentication cookie)
+            description: Returns information about the current session (based on authentication)
             tags: [Session]
             responses:
                 200:
@@ -50,7 +50,9 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/User'
+                                oneOf:
+                                    - $ref: '#/components/schemas/User'
+                                    - $ref: '#/components/schemas/TokenResponse'
                 204:
                     description: If there are no records in the user database
                 401:
@@ -329,7 +331,8 @@ paths:
                             type: object
                             properties:
                                 directory:
-                                    type: string|null
+                                    type: string
+                                    nullable: true
                                     description: The directory name or null if only the `web` directory must be created.
             responses:
                 201:
@@ -476,7 +479,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/TokenResponse'
 
-    /api/users/{username}/tokens/{token}:
+    /api/users/{username}/tokens/{id}:
         get:
             summary: Get Token
             tags: [Users]
@@ -486,7 +489,7 @@ paths:
                   required: true
                   schema:
                       type: string
-                - name: token
+                - name: id
                   in: path
                   required: true
                   schema:
@@ -510,7 +513,7 @@ paths:
                   required: true
                   schema:
                       type: string
-                - name: token
+                - name: id
                   in: path
                   required: true
                   schema:
@@ -1041,14 +1044,20 @@ components:
         TokenResponse:
             type: object
             properties:
-                client_id:
+                id:
                     type: string
-                    description: OAuth client ID of the token.
+                token:
+                    type: string
+                    description: Only available if the token was freshly created.
                 username:
                     type: string
                     description: Username of the token.
-                token:
+                client_id:
                     type: string
+                    description: Client ID of the token.
+                scope:
+                    type: string
+                    description: Permission scope of the token.
 
         ConfigManager:
             type: object
@@ -1098,7 +1107,8 @@ components:
             properties:
                     version:
                         description: The Contao version number.
-                        type: string|null
+                        type: string
+                        nullable: true
                     api:
                         type: object
                         properties:

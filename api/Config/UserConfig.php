@@ -139,12 +139,12 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     {
         $this->initialize();
 
-        $password = $this->container->get(UserPasswordEncoderInterface::class)->encodePassword(
+        $encodedPassword = $this->container->get(UserPasswordEncoderInterface::class)->encodePassword(
             new User($username, null),
             $password
         );
 
-        return new User($username, $password);
+        return new User($username, $encodedPassword);
     }
 
     /**

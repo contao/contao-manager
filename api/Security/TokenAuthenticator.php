@@ -31,6 +31,11 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     private $config;
 
     /**
+     * @var string
+     */
+    private $tokenId;
+
+    /**
      * Constructor.
      */
     public function __construct(UserConfig $config)
@@ -77,6 +82,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             return null;
         }
 
+        $this->tokenId = $token['id'];
+
         return $userProvider->loadUserByUsername($token['username']);
     }
 
@@ -93,6 +100,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
     {
         $token->setAttribute('authenticator', static::class);
+        $token->setAttribute('token_id', $this->tokenId);
 
         return null;
     }

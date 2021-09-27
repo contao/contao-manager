@@ -15,6 +15,7 @@ namespace Contao\ManagerApi\Controller;
 use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Security\JwtManager;
+use Contao\ManagerApi\Security\TokenAuthenticator;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,6 +73,15 @@ class SessionController
     private function getStatus(): Response
     {
         if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $token = $this->security->getToken();
+
+            if (null !== $token
+                && TokenAuthenticator::class === $token->getAttribute('authenticator')
+                && null !== ($payload = $this->config->getToken($token->getAttribute('token_id')))
+            ) {
+                return new JsonResponse($payload);
+            }
+
             return new JsonResponse(['username' => (string) $this->security->getUser()]);
         }
 
