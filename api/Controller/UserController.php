@@ -184,7 +184,7 @@ class UserController extends Controller
 
         $this->config->deleteToken($id);
 
-        return new Response('', Response::HTTP_NO_CONTENT);
+        return new JsonResponse($payload);
     }
 
     /**
