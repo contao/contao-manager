@@ -3,8 +3,8 @@ it:
         allow_url_fopen:
             title: 'L''impostazione PHP "allow_url_fopen" non è abilitata sul server.'
         process:
-            title: ''
-            detail: ''
+            title: 'Le funzioni PHP "proc_*" non sono disponibili sul server.'
+            detail: 'Le funzioni "proc_open", "proc_close", "proc_get_status" e "proc_terminate" sono necessarie per eseguire compiti da linea di comando in background. Verifica con il tuo fornitore di hosting perché questo metodo non è disponibile; il Contao Manager non funzionerà correttamente senza di esso.'
         intl:
             title: 'L''estensione PHP Intl non è disponibile.'
             detail: 'Contao 4 richiede l''estensione PHP Intl per l''internazionalizzazione.'
@@ -59,12 +59,12 @@ it:
         rebuild_cache:
             title: 'Ricostruzione di Contao Cache'
         self_update:
-            title: ''
+            title: 'Auto-aggiornamento del Contao Manager'
 
     taskoperation:
         self-update:
             detail: 'Aggiornamento da {old} a {new}'
-            success: ''
+            success: 'Aggiornato a {nuovo}'
         install-uploads:
             summary: 'Installazione uploads'
             console: 'Installate modifiche per {package} (versione {version}) [su pacchetti / {name}]'
