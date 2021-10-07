@@ -79,7 +79,7 @@ class RebuildCacheTask extends AbstractTask
             $operations[] = new CacheWarmupOperation($this->processFactory, $config->getOption('environment', 'prod'));
         } else {
             // Remove cache directory again (contao/contao-manager#655)
-            $operations[] = new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, $this->filesystem);
+            $operations[] = new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, $this->filesystem, 'remove-cache-again');
         }
 
         return $operations;

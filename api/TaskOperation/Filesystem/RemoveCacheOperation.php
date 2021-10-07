@@ -34,11 +34,17 @@ class RemoveCacheOperation extends AbstractInlineOperation
      */
     private $filesystem;
 
-    public function __construct(string $environment, ApiKernel $kernel, TaskConfig $taskConfig, Filesystem $filesystem)
+    /**
+     * @var string
+     */
+    private $name;
+
+    public function __construct(string $environment, ApiKernel $kernel, TaskConfig $taskConfig, Filesystem $filesystem, string $name = 'remove-cache')
     {
         $this->environment = $environment;
         $this->kernel = $kernel;
         $this->filesystem = $filesystem;
+        $this->name = $name;
 
         parent::__construct($taskConfig);
     }
@@ -57,7 +63,7 @@ class RemoveCacheOperation extends AbstractInlineOperation
 
     protected function getName(): string
     {
-        return 'remove-cache@'.$this->getCacheDir();
+        return $this->name.'@'.$this->getCacheDir();
     }
 
     /**
