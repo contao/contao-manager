@@ -98,6 +98,10 @@ export default {
                     store.commit('setUsername', null);
                     stopCountdown();
 
+                    if (response.status === 403) {
+                        store.commit('setLocked', null, { root: true });
+                    }
+
                     return response.status;
                 },
             );
@@ -113,7 +117,13 @@ export default {
 
                     return true;
                 },
-                () => false,
+                (response) => {
+                    if (response.status === 403) {
+                        store.commit('setLocked', null, { root: true });
+                    }
+
+                    return false;
+                },
             );
         },
 

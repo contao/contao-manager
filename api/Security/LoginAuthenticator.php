@@ -14,6 +14,7 @@ namespace Contao\ManagerApi\Security;
 
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,14 +39,31 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
      */
     private $jwtManager;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory, JwtManager $jwtManager)
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var string
+     */
+    private $lockFile;
+
+    public function __construct(EncoderFactoryInterface $encoderFactory, JwtManager $jwtManager, Filesystem $filesystem, string $lockFile)
     {
         $this->encoderFactory = $encoderFactory;
         $this->jwtManager = $jwtManager;
+        $this->filesystem = $filesystem;
+        $this->lockFile = $lockFile;
     }
 
     public function supports(Request $request): bool
     {
+        // Manager login is locked
+        if (((int) @file_get_contents($this->lockFile)) >= 3) {
+            return false;
+        }
+
         return '/api/session' === $request->getPathInfo()
             && $request->isMethod(Request::METHOD_POST)
             && $request->request->has('username')
@@ -84,11 +102,17 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
+        // Increase lock counter
+        $this->filesystem->dumpFile($this->lockFile, (string) (((int) @file_get_contents($this->lockFile)) + 1));
+
         return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
     {
+        // Reset lock counter
+        $this->filesystem->dumpFile($this->lockFile, '0');
+
         $token->setAttribute('authenticator', static::class);
 
         $response = new JsonResponse(['username' => $token->getUsername()]);

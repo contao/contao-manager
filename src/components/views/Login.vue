@@ -4,7 +4,12 @@
             <img src="../../assets/images/logo.svg" width="80" height="80" alt="Contao Logo" />
             <p class="view-login__product">Contao Manager</p>
         </header>
-        <main class="view-login__form">
+        <main class="view-login__locked" v-if="locked">
+            <i18n tag="p" path="ui.login.locked">
+                <template #lockFile><strong>var/manager_lock</strong></template>
+            </i18n>
+        </main>
+        <main class="view-login__form" v-else>
             <form @submit.prevent="login">
                 <h1 class="view-login__headline">{{ $t('ui.login.headline') }}</h1>
                 <p class="view-login__description">{{ $t('ui.login.description') }}</p>
@@ -23,6 +28,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import views from '../../router/views';
 
     import BoxedLayout from '../layouts/Boxed';
@@ -41,6 +47,8 @@
         }),
 
         computed: {
+            ...mapState(['locked']),
+
             inputValid() {
                 return this.username !== '' && this.password !== '' && this.password.length >= 8;
             },
@@ -72,7 +80,9 @@
         },
 
         mounted() {
-            this.$refs.username.focus();
+            if (this.$refs.username) {
+                this.$refs.username.focus();
+            }
         },
     };
 </script>
@@ -104,6 +114,15 @@
                 padding-right: 30px;
                 margin: 5px 0 10px;
             }
+        }
+
+        &__locked {
+            max-width: 290px;
+            margin: -20px auto 60px;
+            padding: 20px;
+            background: $red-button;
+            color: #fff;
+            text-align: center;
         }
 
         &__headline {

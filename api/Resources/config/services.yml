@@ -5,6 +5,7 @@ services:
         public: false
         bind:
             $debug: '%kernel.debug%'
+            $lockFile: '%kernel.project_dir%/var/manager_lock'
 
     Contao\ManagerApi\:
         resource: '../../*'

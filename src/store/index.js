@@ -23,6 +23,7 @@ const store = new Vuex.Store({
     state: {
         view: views.INIT,
         error: null,
+        locked: false,
         safeMode: false,
         contaoVersion: null,
         contaoApi: null,
@@ -31,6 +32,11 @@ const store = new Vuex.Store({
     mutations: {
         setView(state, view) {
             state.view = view;
+        },
+
+        setLocked(state) {
+            state.view = 'login';
+            state.locked = true;
         },
 
         setError(state, error) {

@@ -125,7 +125,7 @@
                 this.$store.commit('setView', views.BOOT);
             } else if (accountStatus === 204) {
                 this.$store.commit('setView', views.ACCOUNT);
-            } else if (accountStatus === 401) {
+            } else if (accountStatus === 401 || accountStatus === 403) {
                 this.$store.commit('setView', views.LOGIN);
             } else {
                 this.$store.commit('apiError', { status: accountStatus });

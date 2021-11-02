@@ -39,6 +39,10 @@ Vue.http.interceptors.push((request, next) => {
             throw response.data;
         }
 
+        if (url === 'api/session' && response.status !== 200) {
+            return;
+        }
+
         if (request.url.substring(0, 4) === 'api/'
             && response.headers.get('Content-Type') !== 'application/json'
             && response.status >= 400
@@ -52,10 +56,6 @@ Vue.http.interceptors.push((request, next) => {
             });
 
             throw response.data;
-        }
-
-        if (url === 'api/session' && response.status !== 200) {
-            return;
         }
 
         store.commit('auth/renewCountdown');

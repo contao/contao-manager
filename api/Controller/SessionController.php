@@ -43,15 +43,25 @@ class SessionController
      */
     private $jwtManager;
 
-    public function __construct(UserConfig $config, Security $security, JwtManager $jwtManager)
+    /**
+     * @var string
+     */
+    private $lockFile;
+
+    public function __construct(UserConfig $config, Security $security, JwtManager $jwtManager, string $lockFile)
     {
         $this->config = $config;
         $this->security = $security;
         $this->jwtManager = $jwtManager;
+        $this->lockFile = $lockFile;
     }
 
     public function __invoke(Request $request): Response
     {
+        if (((int) @file_get_contents($this->lockFile)) >= 3) {
+            return new Response('Access denied', Response::HTTP_FORBIDDEN);
+        }
+
         switch ($request->getMethod()) {
             case 'GET':
                 return $this->getStatus();
