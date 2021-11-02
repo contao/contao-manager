@@ -39,6 +39,8 @@ paths:
                                 $ref: '#/components/schemas/User'
                 401:
                     description: If the authentication was not successful.
+                403:
+                    description: If the Contao Manager is locked after three unsuccessful login attempts.
 
         get:
             summary: Get current session status
@@ -57,6 +59,8 @@ paths:
                     description: If there are no records in the user database
                 401:
                     description: If the user is not authenticated
+                403:
+                    description: If the Contao Manager is locked after three unsuccessful login attempts.
 
         delete:
             summary: Delete the current session (logout)
@@ -66,6 +70,8 @@ paths:
                     description: On successful logout.
                 401:
                     description: If there is no active session.
+                403:
+                    description: If the Contao Manager is locked after three unsuccessful login attempts.
 
 
     #############
