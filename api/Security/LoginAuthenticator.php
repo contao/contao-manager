@@ -44,7 +44,7 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
         $this->jwtManager = $jwtManager;
     }
 
-    public function supports(Request $request)
+    public function supports(Request $request): bool
     {
         return '/api/session' === $request->getPathInfo()
             && $request->isMethod(Request::METHOD_POST)
@@ -52,7 +52,7 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
             && $request->request->has('password');
     }
 
-    public function start(Request $request, AuthenticationException $authException = null)
+    public function start(Request $request, AuthenticationException $authException = null): Response
     {
         return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
     }
@@ -62,7 +62,7 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
         return $request->request->all();
     }
 
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials, UserProviderInterface $userProvider): User
     {
         $user = $userProvider->loadUserByUsername($credentials['username']);
 
@@ -75,19 +75,19 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
         return $user;
     }
 
-    public function checkCredentials($credentials, UserInterface $user)
+    public function checkCredentials($credentials, UserInterface $user): bool
     {
         $encoder = $this->encoderFactory->getEncoder($user);
 
         return $encoder->isPasswordValid($user->getPassword(), $credentials['password'], null);
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
     {
         $token->setAttribute('authenticator', static::class);
 
@@ -98,7 +98,7 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
         return $response;
     }
 
-    public function supportsRememberMe()
+    public function supportsRememberMe(): bool
     {
         return false;
     }
