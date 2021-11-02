@@ -3,8 +3,8 @@ cs:
         allow_url_fopen:
             title: 'Služba PHP "allow_url_fopen" není na tomto serveru spuštěna.'
         process:
-            title: ''
-            detail: ''
+            title: 'Funkce PHP  "proc_*" není k dispozici na tomto serveru.'
+            detail: 'Funkce "proc_open" a "proc_close" jsou nezbytné pro spouštění příkazů na pozadí. Dotázejte se Vašeho poskytovatele, proč není daná k dispozici. Správce Contaa nebude moct bez toho fungovat správně.'
         intl:
             title: 'Rozšíření PHP Intl není na tomto serveru spuštěno.'
             detail: 'Contao 4 vyžaduje rozšíření PHP Intl pro mezinárodní záležitosti.'
@@ -53,34 +53,34 @@ cs:
         update_packages:
             title: 'Aktualizují se balíčky'
         dump_autoload:
-            title: ''
+            title: 'Vyčistit Autoloadera Composeru'
         clear_cache:
             title: 'Vyprazdňování meziúložiště Composeru'
         rebuild_cache:
             title: 'Přetváří se meziúložiště Contaa.'
         self_update:
-            title: ''
+            title: 'Spustit samoaktualizaci Správce Contaa'
 
     taskoperation:
         self-update:
             detail: 'Aktualizování {old} na {new}'
-            success: ''
+            success: 'Aktualizovat na {new}'
         install-uploads:
-            summary: ''
+            summary: 'Instalují se nahrané soubory'
             console: 'Nainstalovaný artefakt pro {package} (verze {version}) [do balíčků/{name}]'
         remove-uploads:
-            summary: ''
+            summary: 'Smazat nahrané soubory'
         composer-install:
-            retry: ''
-            nothing: ''
-            result: ''
+            retry: 'Nový pokus {current}/{max}'
+            nothing: 'Neexistuje nic k nainstalování či aktualizování'
+            result: 'nainstalováno: {installs}, zaktualizováno: {updates}, smazáno: {removals}'
         dump-autoload:
-            result: ''
+            result: 'Vygenerované optiomalizované autoload soubory obsahují počet tříd: {count}'
         cloud:
-            queued: ''
-            processing: ''
-            error: ''
-            finished: ''
+            queued: 'Proces začne za {seconds} s. (současný {jobs} proces - počet uživatelů: {workers})'
+            processing: 'Doba aktivity: {seconds} s'
+            error: 'Vyřešení závislostí nevyšlo'
+            finished: 'Dokončení:  {seconds} s. Využití paměti: {memory} (vrchol: {peak}), doba: {time}.'
 
     upload:
         error:
@@ -91,7 +91,7 @@ cs:
 
     error:
         writable:
-            root: ''
-            directory: ''
-            config-file: ''
-            detail: ''
+            root: 'Správce Contaa nemůže zapisovat do kořenového adresáře na "{path}".'
+            directory: 'Správce Contaa nemůže vytvořit adresář "{path}".'
+            config-file: 'Správce Contaa nemůže zapisovat do konfiguračního souboru v "{path}".'
+            detail: 'Vypadá to, že Váš webový server není správně nastavený. Pokud chcete nainstalovat Contao, nastavte prosím kořenový dokument na Vašem webovém serveru. Jinak se jistěte, že jsou přístupová práva nastavená správně. Pokud si nejste jistí, obraťte se na správce webových služeb.'

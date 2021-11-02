@@ -31,6 +31,7 @@
     "ui.login.password": "密码",
     "ui.login.forgotPassword": "忘记密码",
     "ui.login.button": "登录",
+    "ui.login.locked": "Access has been denied because the Contao Manager is locked. To unlock, delete the {lockFile} file in your Contao root directory.",
     "ui.logout.headline": "会话超时",
     "ui.logout.warning": "超过25分钟没有活动。安全原因您的会话将很快被终止。",
     "ui.logout.expired": "由于超过30分钟没有活动，您的会话已自动终止。",

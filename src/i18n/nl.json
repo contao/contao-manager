@@ -31,6 +31,7 @@
     "ui.login.password": "Wachtwoord",
     "ui.login.forgotPassword": "Wachtwoord vergeten?",
     "ui.login.button": "Aanmelden",
+    "ui.login.locked": "Access has been denied because the Contao Manager is locked. To unlock, delete the {lockFile} file in your Contao root directory.",
     "ui.logout.headline": "Time-out sessie",
     "ui.logout.warning": "U bent meer dan 25 minuten inactief geweest. Om veiligheidsredenen wordt uw sessie binnenkort beëindigd.",
     "ui.logout.expired": "Uw sessie is automatisch beëindigd omdat u meer dan 30 minuten inactief bent geweest.",

@@ -31,6 +31,7 @@
     "ui.login.password": "Пароль",
     "ui.login.forgotPassword": "Забыли пароль?",
     "ui.login.button": "Вход в систему",
+    "ui.login.locked": "Access has been denied because the Contao Manager is locked. To unlock, delete the {lockFile} file in your Contao root directory.",
     "ui.logout.headline": "Тайм-аут сеанса",
     "ui.logout.warning": "Вы были неактивны более 25 минут. Из соображений безопасности ваша сессия будет прервана в ближайшее время.",
     "ui.logout.expired": "Ваш сеанс был автоматически прерван, потому, что вы были неактивны более 30 минут.",

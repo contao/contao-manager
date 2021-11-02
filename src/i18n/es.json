@@ -31,6 +31,7 @@
     "ui.login.password": "Contraseña",
     "ui.login.forgotPassword": "¿Ha olvidado su contraseña?",
     "ui.login.button": "Registrarse",
+    "ui.login.locked": "Access has been denied because the Contao Manager is locked. To unlock, delete the {lockFile} file in your Contao root directory.",
     "ui.logout.headline": "Timeout de la sesión",
     "ui.logout.warning": "Ha estado inactivo por más de 25 minutos. Por razones de seguridad, su sesión finalizará en breve.",
     "ui.logout.expired": "Su sesión finalizó automáticamente porque ha estado inactivo durante más de 30 minutos.",

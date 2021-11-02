@@ -31,6 +31,7 @@
     "ui.login.password": "Лозинка",
     "ui.login.forgotPassword": "Заборавили сте лозинку?",
     "ui.login.button": "Пријава",
+    "ui.login.locked": "Access has been denied because the Contao Manager is locked. To unlock, delete the {lockFile} file in your Contao root directory.",
     "ui.logout.headline": "Сесија је истекла",
     "ui.logout.warning": "Нисте били активни дуже од 25 минута. Из безбедносних разлога ваша сесија ће бити ускоро прекинута.",
     "ui.logout.expired": "Ваша сесија је аутоматски прекинута јер сте били неактивни дуже од 30 минута.",
