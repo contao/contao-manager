@@ -161,9 +161,10 @@
             async boot() {
                 this.bootDescription = this.$t('ui.server.running');
 
-                try {
-                    result = await this.$store.dispatch('server/contao/get');
+                const response = await this.$store.dispatch('server/contao/get');
+                result = response.body;
 
+                if (response.status === 200) {
                     if (!result.version) {
                         this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.contao.empty');
@@ -182,18 +183,15 @@
 
                         this.$store.commit('setVersions', result);
                     }
-
-                } catch (response) {
-                    if (response.status === 503) {
-                        this.bootState = 'error';
-                        this.bootDescription = this.$t('ui.server.prerequisite');
-                    } else if (response.status === 502) {
-                        window.localStorage.removeItem('contao_manager_booted');
-                        this.$store.commit('setView', views.RECOVERY);
-                    } else {
-                        this.bootState = 'action';
-                        this.bootDescription = this.$t('ui.server.error');
-                    }
+                } else if (response.status === 503) {
+                    this.bootState = 'error';
+                    this.bootDescription = this.$t('ui.server.prerequisite');
+                } else if (response.status === 502) {
+                    window.localStorage.removeItem('contao_manager_booted');
+                    this.$store.commit('setView', views.RECOVERY);
+                } else {
+                    this.bootState = 'action';
+                    this.bootDescription = this.$t('ui.server.error');
                 }
 
                 this.$emit('result', 'Contao', this.bootState);

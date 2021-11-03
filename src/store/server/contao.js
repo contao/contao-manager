@@ -24,13 +24,13 @@ export default {
                 });
             }
 
-            return Vue.http.get('api/server/contao').then(
-                response => response.body,
-            ).then((result) => {
-                commit('setCache', result);
+            const handle = (response) => {
+                commit('setCache', response);
 
-                return result;
-            });
+                return response;
+            };
+
+            return Vue.http.get('api/server/contao').then(handle, handle);
         },
 
         documentRoot(store, directory) {

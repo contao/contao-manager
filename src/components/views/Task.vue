@@ -31,14 +31,15 @@
                 <loader/>
             </div>
         </header>
-        <main class="view-task__main" v-if="hasTask">
-            <task-header class="view-task__summary" :show-console.sync="showConsole"/>
-            <div class="view-task__operations">
-                <template v-for="(operation, i) in currentTask.operations">
-                    <task-operation v-bind="operation" :show-console="showConsole" :key="i"/>
-                </template>
-            </div>
-        </main>
+
+        <console
+            class="view-task__main"
+            :title="hasTask ? currentTask.title : $t('ui.task.loading')"
+            :operations="currentTask.operations"
+            :console-output="currentTask.console"
+            :show-console.sync="showConsole"
+            v-if="hasTask"
+        />
     </boxed-layout>
 </template>
 
@@ -48,14 +49,14 @@
     import BoxedLayout from '../layouts/Boxed';
     import Loader from 'contao-package-list/src/components/fragments/Loader';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import TaskOperation from '../fragments/TaskOperation';
-    import TaskHeader from '../fragments/TaskHeader';
+    import Console from '../fragments/Console';
+    import ConsoleOperation from '../fragments/ConsoleOperation';
     import Checkbox from '../widgets/Checkbox';
 
     export default {
         name: 'TaskView',
         mixins: [task],
-        components: { BoxedLayout, Loader, LoadingButton, TaskHeader, TaskOperation, Checkbox },
+        components: { BoxedLayout, Loader, LoadingButton, Console, ConsoleOperation, Checkbox },
 
         data: () => ({
             audit: true,
@@ -204,10 +205,6 @@
             @include screen(960) {
                 width: auto;
             }
-        }
-
-        &__operations {
-            padding: 20px 0;
         }
 
         &__main {

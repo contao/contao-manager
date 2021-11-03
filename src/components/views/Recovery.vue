@@ -8,6 +8,17 @@
         <main class="view-recovery__content">
             <p class="view-recovery__description">{{ $t('ui.recovery.description') }}</p>
 
+            <console
+                class="view-recovery__console"
+                :title="$t('ui.recovery.console')"
+                :operations="[{ status: 'error', summary: 'vendor/bin/contao-console contao:version', console }]"
+                :console-output="console"
+                show-console force-console
+                v-if="console"
+            />
+
+            <p class="view-recovery__description">{{ $t('ui.recovery.repairOptions') }}</p>
+
             <div class="view-recovery__option">
                 <h3>{{ $t('ui.recovery.repairHeadline') }}</h3>
                 <p>{{ $t('ui.recovery.repairDescription') }}</p>
@@ -33,13 +44,15 @@
 
     import BoxedLayout from '../layouts/Boxed';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+    import Console from '../fragments/Console';
 
     export default {
-        components: { BoxedLayout, LoadingButton },
+        components: { BoxedLayout, LoadingButton, Console },
 
         data: () => ({
             repairStarted: false,
             repairFailed: false,
+            console: '',
         }),
 
         computed: {
@@ -81,6 +94,14 @@
                 this.$store.commit('setView', views.READY);
             },
         },
+
+        async mounted () {
+            const response = await this.$store.dispatch('server/contao/get');
+
+            if (response.status === 502 && response.body.error) {
+                this.console = response.data.error;
+            }
+        }
     };
 </script>
 
@@ -123,6 +144,10 @@
             max-width: 600px;
             margin: 0 auto;
             text-align: center;
+        }
+
+        &__console {
+            margin: 30px 0 60px;
         }
 
         &__option {

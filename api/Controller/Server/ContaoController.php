@@ -103,12 +103,25 @@ class ContaoController
                 return new Response('', Response::HTTP_BAD_REQUEST);
             }
 
-            if ($e instanceof ProcessOutputException || $e instanceof ProcessFailedException) {
+            if ($e instanceof ProcessFailedException) {
                 return new JsonResponse(
                     [
                         'version' => null,
                         'api' => 0,
                         'supported' => false,
+                        'error' => $e->getMessage(),
+                    ],
+                    Response::HTTP_BAD_GATEWAY
+                );
+            }
+
+            if ($e instanceof ProcessOutputException) {
+                return new JsonResponse(
+                    [
+                        'version' => null,
+                        'api' => 0,
+                        'supported' => false,
+                        'error' => $this->contaoConsole->debugConsoleIssues(),
                     ],
                     Response::HTTP_BAD_GATEWAY
                 );

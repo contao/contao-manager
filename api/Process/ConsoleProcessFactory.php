@@ -102,9 +102,15 @@ class ConsoleProcessFactory implements LoggerAwareInterface
     /**
      * Creates a foreground process for the Contao console.
      */
-    public function createContaoConsoleProcess(array $arguments): Process
+    public function createContaoConsoleProcess(array $arguments, bool $debug = false): Process
     {
         array_unshift($arguments, $this->getContaoConsolePath());
+
+        if ($debug) {
+            array_unshift($arguments, '-ddisplay_errors=1');
+            array_unshift($arguments, '-ddisplay_startup_errors=1');
+            array_unshift($arguments, '-derror_reporting=-1');
+        }
 
         return $this->createForegroundProcess($arguments);
     }

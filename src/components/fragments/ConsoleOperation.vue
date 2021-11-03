@@ -1,34 +1,34 @@
 <template>
-    <component ref="details" :is="console ? 'details' : 'div'" class="task-operation" @toggle="toggleConsole">
-        <component :is="console ? 'summary' : 'div'" class="task-operation__summary" :class="{ 'task-operation__summary--console': !!console }">
-            <div class="task-operation__status">
-                <svg v-if="isActive" class="task-operation__icon task-operation__icon--active" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#dbab0a">
+    <component ref="details" :is="console && !forceConsole ? 'details' : 'div'" class="console-operation" @toggle="toggleConsole">
+        <component :is="console && !forceConsole ? 'summary' : 'div'" class="console-operation__summary" :class="{ 'console-operation__summary--console': !!console }">
+            <div class="console-operation__status">
+                <svg v-if="isActive" class="console-operation__icon console-operation__icon--active" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#dbab0a">
                     <g fill="none" fillrule="evenodd"><g transform="translate(1 1)" stroke-width="2"><circle opacity=".5" cx="8" cy="8" r="7"></circle><path d=" M 15 8 A 7 7 0 0 1 8 15"></path></g></g>
                     <path fill-rule="evenodd" d="M9 5a4 4 0 100 8 4 4 0 000-8z"></path>
                 </svg>
-                <svg v-else-if="isSuccess" class="task-operation__icon task-operation__icon--success" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg>
-                <svg v-else-if="isError || isStopped" class="task-operation__icon task-operation__icon--error" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"></path></svg>
-                <svg v-else class="task-operation__icon task-operation__icon--pending" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z"></path></svg>
+                <svg v-else-if="isSuccess" class="console-operation__icon console-operation__icon--success" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg>
+                <svg v-else-if="isError || isStopped" class="console-operation__icon console-operation__icon--error" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"></path></svg>
+                <svg v-else class="console-operation__icon console-operation__icon--pending" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z"></path></svg>
             </div>
-            <div class="task-operation__label">
-                <h2 class="task-operation__title">{{ summary }}</h2>
-                <p class="task-operation__description" v-if="details">{{ details }}</p>
+            <div class="console-operation__label">
+                <h2 class="console-operation__title">{{ summary }}</h2>
+                <p class="console-operation__description" v-if="details">{{ details }}</p>
             </div>
         </component>
 
-        <div class="task-operation__console" v-if="console">
-            <button class="task-operation__scroll task-operation__scroll--top" @click="scrollToTop" v-show="!isScrolledTop">
+        <div class="console-operation__console" v-if="console">
+            <button class="console-operation__scroll console-operation__scroll--top" @click="scrollToTop" v-show="!isScrolledTop">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
             </button>
-            <div ref="console" @scroll="scrolled" class="task-operation__lines">
+            <div ref="console" @scroll="scrolled" class="console-operation__lines">
                 <template v-for="(line, i) in consoleLines">
-                    <div class="task-operation__line" :data-index="i" :key="i">
-                        <span class="task-operation__line-number">{{ i + 1 }}</span>
-                        <span class="task-operation__line-content">{{ line }}</span>
+                    <div class="console-operation__line" :data-index="i" :key="i">
+                        <span class="console-operation__line-number">{{ i + 1 }}</span>
+                        <span class="console-operation__line-content">{{ line }}</span>
                     </div>
                 </template>
             </div>
-            <button class="task-operation__scroll task-operation__scroll--bottom" @click="scrollToBottom" v-show="!isScrolledBottom">
+            <button class="console-operation__scroll console-operation__scroll--bottom" @click="scrollToBottom" v-show="!isScrolledBottom">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
             </button>
         </div>
@@ -40,7 +40,7 @@
     import Loader from 'contao-package-list/src/components/fragments/Loader';
 
     export default {
-        name: 'TaskOperation',
+        name: 'ConsoleOperation',
         components: { Loader },
 
         props: {
@@ -49,6 +49,7 @@
             details: String,
             console: String,
             showConsole: Boolean,
+            forceConsole: Boolean,
         },
 
         data: () => ({
@@ -148,7 +149,7 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "../../../node_modules/contao-package-list/src/assets/styles/defaults";
 
-    .task-operation {
+    .console-operation {
         position: relative;
         padding: 0 16px;
         text-align: left;
@@ -163,8 +164,11 @@
 
             &--console {
                 margin-left: 0;
-                cursor: pointer;
             }
+        }
+
+        summary {
+            cursor: pointer;
         }
 
         &__status {

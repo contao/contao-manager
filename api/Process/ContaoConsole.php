@@ -14,6 +14,7 @@ namespace Contao\ManagerApi\Process;
 
 use Composer\Semver\VersionParser;
 use Contao\ManagerApi\Exception\ProcessOutputException;
+use Symfony\Component\Process\Exception\ExceptionInterface;
 
 class ContaoConsole
 {
@@ -51,5 +52,17 @@ class ContaoConsole
         }
 
         return $version;
+    }
+
+    public function debugConsoleIssues(): string
+    {
+        try {
+            $process = $this->processFactory->createContaoConsoleProcess(['contao:version'], true);
+            $process->run();
+
+            return trim($process->getOutput());
+        } catch (ExceptionInterface $e) {
+            return $e->getMessage();
+        }
     }
 }
