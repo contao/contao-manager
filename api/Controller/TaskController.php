@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Controller;
 
+use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Task\TaskManager;
 use Contao\ManagerApi\Task\TaskStatus;
+use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -97,7 +99,7 @@ class TaskController
         try {
             return $this->getResponse($this->taskManager->deleteTask());
         } catch (\RuntimeException $e) {
-            return new Response($e->getMessage(), Response::HTTP_FORBIDDEN);
+            return new ApiProblemResponse((new ApiProblem($e->getMessage()))->setStatus(Response::HTTP_FORBIDDEN));
         }
     }
 

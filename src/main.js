@@ -36,7 +36,7 @@ Vue.http.interceptors.push((request, next) => {
                 store.commit('setError', response.data);
             }
 
-            throw response.data;
+            throw response;
         }
 
         if (url === 'api/session' && response.status !== 200) {
@@ -55,7 +55,7 @@ Vue.http.interceptors.push((request, next) => {
                 response,
             });
 
-            throw response.data;
+            throw response;
         }
 
         store.commit('auth/renewCountdown');

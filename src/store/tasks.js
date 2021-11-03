@@ -204,7 +204,15 @@ export default {
                         });
                     }
 
-                    commit('setDeleting', false);
+                    if (response.headers.get('Content-Type') === 'application/problem+json') {
+                        commit('setError', response.data, { root: true });
+                    } else {
+                        commit('setError', {
+                            type: 'about:blank',
+                            status: response.status,
+                            response,
+                        }, { root: true });
+                    }
 
                     throw response;
                 },

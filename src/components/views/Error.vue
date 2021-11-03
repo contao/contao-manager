@@ -52,7 +52,7 @@
                     return this.$t('ui.error.server500');
                 }
 
-                if (this.request) {
+                if (this.response) {
                     return this.$t('ui.error.response', this.error);
                 }
 
