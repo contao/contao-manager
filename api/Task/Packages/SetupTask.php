@@ -73,7 +73,7 @@ class SetupTask extends AbstractPackagesTask
             );
         }
 
-        $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, false);
+        $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, false, !$config->isCancelled());
 
         return $operations;
     }

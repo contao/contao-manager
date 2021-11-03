@@ -88,7 +88,9 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
 
     public function abort(): void
     {
-        $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ERROR);
+        if ($this->isRunning()) {
+            $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ERROR);
+        }
     }
 
     public function delete(): void

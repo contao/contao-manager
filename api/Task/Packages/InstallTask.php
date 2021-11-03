@@ -77,7 +77,7 @@ class InstallTask extends AbstractPackagesTask
             );
         }
 
-        $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $dryRun);
+        $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $dryRun, !$config->isCancelled());
 
         return $operations;
     }

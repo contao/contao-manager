@@ -98,7 +98,9 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
 
     public function abort(): void
     {
-        $this->process->stop();
+        if ($this->isRunning()) {
+            $this->process->stop();
+        }
     }
 
     public function delete(): void

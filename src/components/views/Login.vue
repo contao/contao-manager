@@ -80,6 +80,9 @@
         },
 
         mounted() {
+            // Hide error screen when redirecting to login (timeout or 401 error).
+            this.$store.commit('setError', null);
+
             if (this.$refs.username) {
                 this.$refs.username.focus();
             }

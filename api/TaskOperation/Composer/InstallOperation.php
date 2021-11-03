@@ -41,7 +41,7 @@ class InstallOperation extends AbstractProcessOperation
      * @param bool $dryRun
      * @param null $timeout
      */
-    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Environment $environment, Translator $translator, $dryRun = false)
+    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Environment $environment, Translator $translator, $dryRun = false, bool $retry = true)
     {
         $this->taskConfig = $taskConfig;
         $this->translator = $translator;
@@ -51,7 +51,7 @@ class InstallOperation extends AbstractProcessOperation
             $process = $processFactory->restoreBackgroundProcess('composer-install');
             $retries = $taskConfig->getState('install-retry', 0);
 
-            if ($process->isTerminated() && !$process->isSuccessful() && $retries < 4) {
+            if ($retry && $process->isTerminated() && !$process->isSuccessful() && $retries < 4) {
                 $taskConfig->setState('install-retry', ++$retries);
 
                 throw new \RuntimeException('Install process failed, restarting');
