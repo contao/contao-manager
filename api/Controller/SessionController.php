@@ -58,10 +58,6 @@ class SessionController
 
     public function __invoke(Request $request): Response
     {
-        if (((int) @file_get_contents($this->lockFile)) >= 3) {
-            return new Response('Access denied', Response::HTTP_FORBIDDEN);
-        }
-
         switch ($request->getMethod()) {
             case 'GET':
                 return $this->getStatus();
@@ -99,7 +95,9 @@ class SessionController
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
-        return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
+        $status = ((int) @file_get_contents($this->lockFile)) >= 3 ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
+
+        return new ApiProblemResponse((new ApiProblem())->setStatus($status));
     }
 
     /**
