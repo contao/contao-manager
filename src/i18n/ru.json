@@ -31,7 +31,7 @@
     "ui.login.password": "Пароль",
     "ui.login.forgotPassword": "Забыли пароль?",
     "ui.login.button": "Вход в систему",
-    "ui.login.locked": "Access has been denied because the Contao Manager is locked. To unlock, delete the {lockFile} file in your Contao root directory.",
+    "ui.login.locked": "Доступ запрещен, потому, что Contao Manager заблокирован. Чтобы разблокировать, удалите файл {lockFile} в корневом каталоге Contao.",
     "ui.logout.headline": "Тайм-аут сеанса",
     "ui.logout.warning": "Вы были неактивны более 25 минут. Из соображений безопасности ваша сессия будет прервана в ближайшее время.",
     "ui.logout.expired": "Ваш сеанс был автоматически прерван, потому, что вы были неактивны более 30 минут.",
@@ -162,7 +162,7 @@
     "ui.task.confirmCancel": "Вы действительно хотите отменить задачу? Это может оставить вашу установку Contao в не работающем состоянии!",
     "ui.task.autoclose": "Закрыть сведения об успешном выполнении задачи",
     "ui.console.toggle": "Показать/Скрыть вывод консоли",
-    "ui.console.showLog": "Show full console log",
+    "ui.console.showLog": "Показать полный журнал консоли",
     "ui.console.copyLog": "Скопировать журнал в буфер обмена",
 
     "ui.widget.mandatory": "Поле не должно быть пустым.",

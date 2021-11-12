@@ -162,7 +162,7 @@
     "ui.task.confirmCancel": "Möchtest du diesen Prozess wirklich abbrechen? Deine Contao-Installation könnte in einem defekten Zustand zurückbleiben!",
     "ui.task.autoclose": "Fenster bei Erfolg schließen",
     "ui.console.toggle": "Konsolenausgabe anzeigen/verstecken",
-    "ui.console.showLog": "VollstÃ¤ndige Konsole anzeigen",
+    "ui.console.showLog": "Vollständige Konsole anzeigen",
     "ui.console.copyLog": "Konsole in Zwischenablage kopieren",
 
     "ui.widget.mandatory": "Dieses Feld darf nicht leer sein.",
