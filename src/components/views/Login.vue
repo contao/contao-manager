@@ -6,7 +6,7 @@
         </header>
         <main class="view-login__locked" v-if="locked">
             <i18n tag="p" path="ui.login.locked">
-                <template #lockFile><strong>var/manager_lock</strong></template>
+                <template #lockFile><strong>contao-manager/login.lock</strong><br></template>
             </i18n>
         </main>
         <main class="view-login__form" v-else>
@@ -126,6 +126,11 @@
             background: $red-button;
             color: #fff;
             text-align: center;
+
+            // prevent line breaks in lock file path/name
+            strong {
+                white-space: pre;
+            }
         }
 
         &__headline {

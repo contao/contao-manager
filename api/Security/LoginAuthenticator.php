@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Security;
 
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\Filesystem\Filesystem;
@@ -29,6 +30,8 @@ use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 
 class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordAuthenticatedInterface
 {
+    private const LOCK_FILE = 'login.lock';
+
     /**
      * @var EncoderFactoryInterface
      */
@@ -45,22 +48,22 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
     private $filesystem;
 
     /**
-     * @var string
+     * @var ApiKernel
      */
-    private $lockFile;
+    private $kernel;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory, JwtManager $jwtManager, Filesystem $filesystem, string $lockFile)
+    public function __construct(EncoderFactoryInterface $encoderFactory, JwtManager $jwtManager, Filesystem $filesystem, ApiKernel $kernel)
     {
         $this->encoderFactory = $encoderFactory;
         $this->jwtManager = $jwtManager;
         $this->filesystem = $filesystem;
-        $this->lockFile = $lockFile;
+        $this->kernel = $kernel;
     }
 
     public function supports(Request $request): bool
     {
         // Manager login is locked
-        if (((int) @file_get_contents($this->lockFile)) >= 3) {
+        if (self::getLockCount($this->kernel->getConfigDir()) >= 3) {
             return false;
         }
 
@@ -103,7 +106,10 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         // Increase lock counter
-        $this->filesystem->dumpFile($this->lockFile, (string) (((int) @file_get_contents($this->lockFile)) + 1));
+        $this->filesystem->dumpFile(
+            $this->kernel->getConfigDir().DIRECTORY_SEPARATOR.self::LOCK_FILE,
+            (string) (self::getLockCount($this->kernel->getConfigDir()) + 1)
+        );
 
         return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
     }
@@ -111,7 +117,7 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
     {
         // Reset lock counter
-        $this->filesystem->dumpFile($this->lockFile, '0');
+        $this->filesystem->dumpFile($this->kernel->getConfigDir().DIRECTORY_SEPARATOR.self::LOCK_FILE, '0');
 
         $token->setAttribute('authenticator', static::class);
 
@@ -130,5 +136,15 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
     public function getPassword($credentials): ?string
     {
         return $credentials['password'];
+    }
+
+    public static function isLocked(string $configDir): bool
+    {
+        return self::getLockCount($configDir) >= 3;
+    }
+
+    private static function getLockCount(string $configDir): int
+    {
+        return (int) @file_get_contents($configDir.DIRECTORY_SEPARATOR.self::LOCK_FILE);
     }
 }

@@ -12,9 +12,11 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Controller;
 
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Security\JwtManager;
+use Contao\ManagerApi\Security\LoginAuthenticator;
 use Contao\ManagerApi\Security\TokenAuthenticator;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,16 +46,16 @@ class SessionController
     private $jwtManager;
 
     /**
-     * @var string
+     * @var ApiKernel
      */
-    private $lockFile;
+    private $kernel;
 
-    public function __construct(UserConfig $config, Security $security, JwtManager $jwtManager, string $lockFile)
+    public function __construct(UserConfig $config, Security $security, JwtManager $jwtManager, ApiKernel $kernel)
     {
         $this->config = $config;
         $this->security = $security;
         $this->jwtManager = $jwtManager;
-        $this->lockFile = $lockFile;
+        $this->kernel = $kernel;
     }
 
     public function __invoke(Request $request): Response
@@ -63,6 +65,10 @@ class SessionController
                 return $this->getStatus();
 
             case 'POST':
+                if (LoginAuthenticator::isLocked($this->kernel->getConfigDir())) {
+                    return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_FORBIDDEN));
+                }
+
                 // Login should have been handled by the firewall
                 return new Response('Bad Request', Response::HTTP_BAD_REQUEST);
 
@@ -95,7 +101,7 @@ class SessionController
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
-        $status = ((int) @file_get_contents($this->lockFile)) >= 3 ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
+        $status = LoginAuthenticator::isLocked($this->kernel->getConfigDir()) ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
 
         return new ApiProblemResponse((new ApiProblem())->setStatus($status));
     }
