@@ -53,7 +53,7 @@
     "ui.boot.run": "Запуск Contao Manager",
     "ui.recovery.headline": "Восстановление системы",
     "ui.recovery.description": "Contao Manager обнаружил файлы, которые выглядят как файлы Contao, но интерфейс командной строки не работает как положено.",
-    "ui.recovery.console": "Console Output",
+    "ui.recovery.console": "Вывод консоли",
     "ui.recovery.repairOptions": "Выберите вариант восстановления вашей установки.",
     "ui.recovery.repairHeadline": "Автоматическое восстановление",
     "ui.recovery.repairDescription": "Пытаться автоматически восстановить установку путем перестроения кеша приложения и повторной установки пакетов Composer.",
