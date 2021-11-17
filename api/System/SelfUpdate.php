@@ -15,6 +15,7 @@ namespace Contao\ManagerApi\System;
 use Composer\Repository\PlatformRepository;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ManagerConfig;
+use Symfony\Component\Filesystem\Filesystem;
 
 class SelfUpdate
 {
@@ -27,14 +28,19 @@ class SelfUpdate
     private $kernel;
 
     /**
+     * @var ManagerConfig
+     */
+    private $managerConfig;
+
+    /**
      * @var Request
      */
     private $request;
 
     /**
-     * @var ManagerConfig
+     * @var Filesystem
      */
-    private $managerConfig;
+    private $filesystem;
 
     /**
      * @var array
@@ -43,11 +49,12 @@ class SelfUpdate
 
     private $checkedForUpdates = false;
 
-    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, Request $request)
+    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, Request $request, Filesystem $filesystem = null)
     {
         $this->kernel = $kernel;
         $this->managerConfig = $managerConfig;
         $this->request = $request;
+        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**
@@ -156,7 +163,7 @@ class SelfUpdate
             $this->download($tempFile);
             $this->validate($tempFile, $remote['sha1']);
             $this->install($tempFile, $phar);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             unlink($tempFile);
             throw $e;
         }
@@ -257,7 +264,7 @@ class SelfUpdate
     {
         $tmpVersion = sha1_file($tempFile);
         if ($tmpVersion !== $sha1) {
-            throw new \RuntimeException(sprintf('Download file appears to be corrupted or outdated. The file '.'received does not have the expected SHA-1 hash: %s.', $sha1));
+            throw new \RuntimeException(sprintf('Download file appears to be corrupted or outdated. The file received does not have the expected SHA-1 hash: %s.', $sha1));
         }
     }
 
@@ -266,7 +273,7 @@ class SelfUpdate
      */
     private function install(string $tempFile, string $phar): void
     {
-        rename($tempFile, $phar);
+        $this->filesystem->rename($tempFile, $phar, true);
     }
 
     /**
