@@ -164,7 +164,7 @@ class SelfUpdate
             $this->validate($tempFile, $remote['sha1']);
             $this->install($tempFile, $phar);
         } catch (\Throwable $e) {
-            unlink($tempFile);
+            $this->filesystem->remove($tempFile);
             throw $e;
         }
 
@@ -234,11 +234,7 @@ class SelfUpdate
      */
     private function backup(string $current, string $target): void
     {
-        $result = copy($current, $target);
-
-        if (false === $result) {
-            throw new \RuntimeException(sprintf('Unable to backup %s to %s.', $current, $target));
-        }
+        $this->filesystem->copy($current, $target, true);
     }
 
     /**
@@ -254,7 +250,7 @@ class SelfUpdate
             throw new \RuntimeException(sprintf('Request to URL failed: %s', $url));
         }
 
-        file_put_contents($target, $result);
+        $this->filesystem->dumpFile($target, $result);
     }
 
     /**
