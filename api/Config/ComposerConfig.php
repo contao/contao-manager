@@ -20,5 +20,20 @@ class ComposerConfig extends AbstractConfig
     public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
     {
         parent::__construct('config.json', $kernel, $filesystem);
+
+        // Make sure the config is in the correct subkey
+        if (!$this->has('config')) {
+            $this->replace(['config' => $this->all()]);
+        }
+    }
+
+    public function config(): PartialConfig
+    {
+        return new PartialConfig($this, 'config');
+    }
+
+    public function repositories(): PartialConfig
+    {
+        return new PartialConfig($this, 'repositories');
     }
 }
