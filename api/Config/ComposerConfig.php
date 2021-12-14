@@ -36,4 +36,22 @@ class ComposerConfig extends AbstractConfig
     {
         return new PartialConfig($this, 'repositories');
     }
+
+    public function allowContaoPlugins(): void
+    {
+        $config = $this->config();
+
+        if ($config->has('allow-plugin')) {
+            return;
+        }
+
+        $config->add([
+            'allow-plugins' => [
+                'composer/package-versions-deprecated' => true,
+                'contao-community-alliance/composer-plugin' => true,
+                'contao-components/installer' => true,
+                'contao/manager-plugin' => true,
+            ],
+        ]);
+    }
 }

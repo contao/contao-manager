@@ -21,6 +21,7 @@ use Composer\Repository\ArtifactRepository;
 use Composer\Repository\PathRepository;
 use Composer\Repository\PlatformRepository;
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Config\ComposerConfig;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -38,6 +39,11 @@ class Environment
     private $managerConfig;
 
     /**
+     * @var ComposerConfig
+     */
+    private $composerConfig;
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -47,10 +53,11 @@ class Environment
      */
     private $composer;
 
-    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, Filesystem $filesystem)
+    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, ComposerConfig $composerConfig, Filesystem $filesystem)
     {
         $this->kernel = $kernel;
         $this->managerConfig = $managerConfig;
+        $this->composerConfig = $composerConfig;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -154,6 +161,8 @@ class Environment
      */
     public function getComposer($reload = false): Composer
     {
+        $this->composerConfig->allowContaoPlugins();
+
         if (null === $this->composer || $reload) {
             $this->composer = Factory::create(new NullIO(), $this->getJsonFile());
         }
