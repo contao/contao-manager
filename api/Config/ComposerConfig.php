@@ -41,7 +41,7 @@ class ComposerConfig extends AbstractConfig
     {
         $config = $this->config();
 
-        if ($config->has('allow-plugin')) {
+        if ($config->has('allow-plugins')) {
             return;
         }
 
