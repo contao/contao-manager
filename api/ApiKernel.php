@@ -55,14 +55,14 @@ class ApiKernel extends Kernel
     private $configDir;
 
     /**
+     * @var string
+     */
+    private $publicDir;
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
-
-    /**
-     * @var bool
-     */
-    private $isWebDir;
 
     public function __construct($environment)
     {
@@ -91,13 +91,11 @@ class ApiKernel extends Kernel
         ];
     }
 
-    public function isWebDir()
+    public function isWebDir(): bool
     {
-        if (null === $this->isWebDir) {
-            $this->getProjectDir();
-        }
+        $publicDir = $this->getPublicDir();
 
-        return $this->isWebDir;
+        return 'web' === \dirname($publicDir) && $publicDir !== $this->getProjectDir();
     }
 
     public function getRootDir(): string
@@ -108,10 +106,17 @@ class ApiKernel extends Kernel
     public function getProjectDir(): string
     {
         if (null === $this->projectDir) {
-            $this->projectDir = $this->findProjectDir();
+            $this->findProjectDir();
         }
 
         return $this->projectDir;
+    }
+
+    public function getPublicDir(): string
+    {
+        $this->getProjectDir();
+
+        return $this->publicDir;
     }
 
     public function getCacheDir(): string
@@ -228,28 +233,30 @@ CODE
     /**
      * Finds the Contao installation directory depending on the Phar file or development mode.
      */
-    private function findProjectDir(): string
+    private function findProjectDir(): void
     {
-        $this->isWebDir = true;
-
         // @see https://getcomposer.org/doc/03-cli.md#composer
         if (false !== ($composer = getenv('COMPOSER'))) {
-            return \dirname($composer);
+            // We don't know the public dir when running on command line, but it shouldn't matter
+            $this->projectDir = $this->publicDir = \dirname($composer);
+            return;
         }
 
         $phar = \Phar::running(false);
 
         // Not a phar file, use test directory in local development
         if ('' === $phar) {
-            $testDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'test-dir';
-            $this->ensureDirectoryExists($testDir);
-
-            return $testDir;
+            $this->projectDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'test-dir';
+            $this->publicDir = $this->projectDir.'/web';
+            $this->ensureDirectoryExists($this->publicDir);
+            return;
         }
 
         // Use the current working directory in CLI mode
         if (('cli' === \PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && !empty($_SERVER['PWD'])) {
-            return $_SERVER['PWD'];
+            // We don't know the public dir when running on command line, but it shouldn't matter
+            $this->projectDir = $this->publicDir = $_SERVER['PWD'];
+            return;
         }
 
         $current = getcwd();
@@ -258,11 +265,10 @@ CODE
             $current = \dirname($phar);
         }
 
-        // Always use current folder if it is not named "web"
-        if ('web' !== basename($current)) {
-            $this->isWebDir = false;
-
-            return $current;
+        // Always use current folder if it is not named "web" or "public"
+        if ('web' !== basename($current) && 'public' !== basename($current)) {
+            $this->projectDir = $this->publicDir = $current;
+            return;
         }
 
         $contaoFiles = [
@@ -274,7 +280,8 @@ CODE
         // Use current folder if it looks like Contao, even when named "web"
         foreach ($contaoFiles as $file) {
             if ($this->filesystem->exists($current.$file)) {
-                return $current;
+                $this->projectDir = $this->publicDir = $current;
+                return;
             }
         }
 
@@ -299,7 +306,8 @@ CODE
             }
         }
 
-        return \dirname($current);
+        $this->publicDir = $current;
+        $this->projectDir = \dirname($current);
     }
 
     private function ensureDirectoryExists(string $directory): void

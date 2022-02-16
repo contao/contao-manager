@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
@@ -31,6 +32,11 @@ class CreateProjectOperation extends AbstractInlineOperation
     private $environment;
 
     /**
+     * @var ApiKernel
+     */
+    private $kernel;
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -43,16 +49,21 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * Constructor.
      */
-    public function __construct(TaskConfig $taskConfig, Environment $environment, Filesystem $filesystem)
+    public function __construct(TaskConfig $taskConfig, Environment $environment, ApiKernel $kernel, Filesystem $filesystem)
     {
         parent::__construct($taskConfig);
 
         $this->environment = $environment;
+        $this->kernel = $kernel;
         $this->filesystem = $filesystem;
         $this->version = $taskConfig->getOption('version');
 
         if (!\in_array($this->version, static::$supportedVersions, true)) {
             throw new \InvalidArgumentException('Unsupported Contao version');
+        }
+
+        if ($this->kernel->getProjectDir() === $this->kernel->getPublicDir()) {
+            throw new \RuntimeException('Cannot install without a public directory.');
         }
     }
 
@@ -94,7 +105,7 @@ class CreateProjectOperation extends AbstractInlineOperation
         return true;
     }
 
-    private function generateComposerJson($version, $coreOnly = false)
+    private function generateComposerJson($version, bool $coreOnly = false)
     {
         if ($coreOnly) {
             $require = <<<JSON
@@ -116,8 +127,10 @@ JSON;
 
         // https://github.com/contao/contao-manager/issues/627
         if (version_compare($version, '4.12', '>=')) {
+            $publicDir = basename($this->kernel->getPublicDir());
             $script = '@php vendor/bin/contao-setup';
         } else {
+            $publicDir = 'web';
             $script = 'Contao\\\\ManagerBundle\\\\Composer\\\\ScriptHandler::initializeApplication';
         }
 
@@ -128,6 +141,7 @@ JSON;
 $require
     },
     "extra": {
+        "public-dir": "$publicDir",
         "contao-component-dir": "assets"
     },
     "scripts": {

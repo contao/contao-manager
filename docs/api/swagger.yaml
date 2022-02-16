@@ -339,7 +339,10 @@ paths:
                                 directory:
                                     type: string
                                     nullable: true
-                                    description: The directory name or null if only the `web` directory must be created.
+                                    description: The directory name or null if only the `web`/`public` directory must be created.
+                                usePublicDir:
+                                    type: boolean
+                                    description: To use `public` instead of `web` directory
             responses:
                 201:
                     description: Operation successful
@@ -1129,10 +1132,13 @@ components:
                         type: boolean
                     project_dir:
                         type: string
+                        description: Full path to the project directory.
+                    public_dir:
+                        type: string
+                        description: Name of the public directory ("public" or "web").
                     is_empty:
                         type: boolean
-                    is_web:
-                        type: boolean
+                        description: True if project directory is empty.
 
         ContaoAccessKeyGet:
             type: object

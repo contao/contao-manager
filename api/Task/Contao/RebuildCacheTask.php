@@ -40,13 +40,9 @@ class RebuildCacheTask extends AbstractTask
      */
     private $filesystem;
 
-    public function __construct(
-        ApiKernel $environment,
-        ConsoleProcessFactory $processFactory,
-        Translator $translator,
-        Filesystem $filesystem
-    ) {
-        $this->kernel = $environment;
+    public function __construct(ApiKernel $kernel, ConsoleProcessFactory $processFactory, Translator $translator, Filesystem $filesystem)
+    {
+        $this->kernel = $kernel;
         $this->processFactory = $processFactory;
         $this->filesystem = $filesystem;
 

@@ -33,9 +33,10 @@ export default {
             return Vue.http.get('api/server/contao').then(handle, handle);
         },
 
-        documentRoot(store, directory) {
+        documentRoot(store, { directory, usePublicDir = false }) {
             return Vue.http.post('api/server/contao', {
                 directory,
+                usePublicDir
             }).catch(response => response);
         }
     },

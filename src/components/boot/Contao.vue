@@ -1,12 +1,15 @@
 <template>
     <boxed-layout v-if="current" :wide="true" slotClass="contao-check">
 
-        <template v-if="!isEmpty || !isWeb">
+        <template v-if="!isEmpty || (!isWeb && (!isPublic || !canUsePublicDir))">
             <header class="contao-check__header">
                 <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="contao-check__icon" />
                 <h1 class="contao-check__headline">{{ $t('ui.server.docroot.headline') }}</h1>
                 <p class="contao-check__warning">{{ $t('ui.server.docroot.warning') }}</p>
-                <p class="contao-check__description">{{ $t('ui.server.docroot.description1') }}</p>
+                <i18n tag="p" path="ui.server.docroot.description1" class="contao-check__description">
+                    <template #webDir><code>web</code></template>
+                    <template #publicDir><code>public</code></template>
+                </i18n>
                 <p class="contao-check__description">{{ $t('ui.server.docroot.description2') }}</p>
                 <a class="widget-button widget-button--inline widget-button--info widget-button--link" href="https://to.contao.org/webroot" target="_blank">{{ $t('ui.server.docroot.documentation') }}</a>
             </header>
@@ -19,9 +22,12 @@
                         <dl class="contao-check__directories">
                             <dt>{{ $t('ui.server.docroot.currentRoot') }}</dt>
                             <dd v-if="isWeb">{{ projectDir }}/web</dd>
+                            <dd v-else-if="isPublic">{{ projectDir }}/public</dd>
                             <dd v-else>{{ projectDir }}</dd>
                             <dt>{{ $t('ui.server.docroot.newRoot') }}</dt>
-                            <dd v-if="isEmpty">{{ projectDir }}<span>/web</span></dd>
+                            <dd v-if="isEmpty && canUsePublicDir && usePublicDir">{{ projectDir }}<span>/public</span></dd>
+                            <dd v-else-if="isEmpty">{{ projectDir }}<span>/web</span></dd>
+                            <dd v-else-if="canUsePublicDir && usePublicDir">{{ projectDir }}<span>/{{ directory }}/public</span></dd>
                             <dd v-else>{{ projectDir }}<span>/{{ directory }}/web</span></dd>
                         </dl>
                     </div>
@@ -35,12 +41,16 @@
                         <h2 class="contao-check__fieldtitle">{{ $t('ui.server.docroot.formTitle') }}</h2>
                         <p class="contao-check__fielddesc">{{ $t('ui.server.docroot.formText1') }} <u>{{ $t('ui.server.docroot.formText2') }}</u></p>
                         <text-field ref="directory" name="directory" :label="$t('ui.server.docroot.directory')" v-model="directory" :error="directoryError" v-if="!isEmpty"/>
+                        <radio-button name="usePublicDir" :options="publicDirOptions" allow-html v-model="usePublicDir" v-if="canUsePublicDir"/>
                         <dl class="contao-check__directories">
                             <dt>{{ $t('ui.server.docroot.currentRoot') }}</dt>
                             <dd v-if="isWeb">{{ projectDir }}/web</dd>
+                            <dd v-else-if="isPublic">{{ projectDir }}/public</dd>
                             <dd v-else>{{ projectDir }}</dd>
                             <dt>{{ $t('ui.server.docroot.newRoot') }}</dt>
-                            <dd v-if="isEmpty">{{ projectDir }}<span>/web</span></dd>
+                            <dd v-if="isEmpty && canUsePublicDir && usePublicDir">{{ projectDir }}<span>/public</span></dd>
+                            <dd v-else-if="isEmpty">{{ projectDir }}<span>/web</span></dd>
+                            <dd v-else-if="canUsePublicDir && usePublicDir">{{ projectDir }}<span>/{{ directory }}/public</span></dd>
                             <dd v-else>{{ projectDir }}<span>/{{ directory }}/web</span></dd>
                         </dl>
                         <checkbox name="autoconfig" :label="$t('ui.server.docroot.autoconfig')" :disabled="processing" v-model="autoconfig"/>
@@ -57,7 +67,7 @@
                 <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="contao-check__icon" />
                 <h1 class="contao-check__headline">{{ $t('ui.server.contao.headline') }}</h1>
                 <p class="contao-check__description">{{ $t('ui.server.contao.description') }}</p>
-                <p class="contao-check__version" v-if="phpVersionId >= 70300"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
+                <p class="contao-check__version" v-if="phpVersionId >= 70200"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
                 <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.2' }) }}</span></p>
                 <p class="contao-check__version" v-if="phpVersionId >= 70400"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
                 <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.4' }) }}</span></p>
@@ -100,22 +110,25 @@
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import Checkbox from '../widgets/Checkbox';
     import TextField from '../widgets/TextField';
+    import RadioButton from '../widgets/RadioButton';
 
     let result;
 
     export default {
         mixins: [boot],
-        components: { Checkbox, BootCheck, BoxedLayout, SelectMenu, TextField, LoadingButton },
+        components: { RadioButton, Checkbox, BootCheck, BoxedLayout, SelectMenu, TextField, LoadingButton },
 
         data: () => ({
             processing: false,
-            phpVersionId: 70300,
+            phpVersionId: 70400,
             version: '',
             coreOnly: 'no',
             noUpdate: false,
+            usePublicDir: false,
 
             isEmpty: true,
             isWeb: true,
+            isPublic: false,
             projectDir: null,
             autoconfig: false,
             directory: '',
@@ -126,6 +139,13 @@
         computed: {
             directoryError: vm => vm.directoryExists ? vm.$t('ui.server.docroot.directoryExists') : (vm.directory ? '' : vm.$t('ui.server.docroot.directoryInvalid')),
             currentHref: () => window.location.href,
+
+            publicDirOptions: vm => [
+                { label: vm.$t('ui.server.contao.webDir', { dir: '<code>web</code>' }), value: false },
+                { label: vm.$t('ui.server.contao.publicDir', { dir: '<code>public</code>' }), value: true }
+            ],
+
+            canUsePublicDir: vm => vm.phpVersionId >= 70400,
 
             versions() {
                 if (this.phpVersionId < 70200) {
@@ -140,8 +160,14 @@
                     };
                 }
 
+                if (!this.isWeb) {
+                    return {
+                        '4.13': `Contao 4.13 (${this.$t('ui.server.contao.latestTitle')} + ${this.$t('ui.server.contao.ltsTitle')})`,
+                    };
+                }
+
                 return {
-                    '4.13': `Contao 4.13 (${this.$t('ui.server.contao.latestTitle')})`,
+                    '4.13': `Contao 4.13 (${this.$t('ui.server.contao.latestTitle')} + ${this.$t('ui.server.contao.ltsTitle')})`,
                     '4.9': `Contao 4.9 (${this.$t('ui.server.contao.ltsTitle')})`,
                 };
             },
@@ -222,7 +248,10 @@
 
             async setupDocroot() {
                 this.processing = true;
-                const response = await this.$store.dispatch('server/contao/documentRoot', this.directory);
+                const response = await this.$store.dispatch('server/contao/documentRoot', {
+                    directory: this.directory,
+                    usePublicDir: this.canUsePublicDir && this.usePublicDir,
+                });
 
                 // The target directory exists
                 if (response.status === 403) {
@@ -253,7 +282,9 @@
             if (result) {
                 this.projectDir = result.project_dir;
                 this.isEmpty = result.is_empty;
-                this.isWeb = result.is_web;
+                this.isWeb = result.public_dir === 'web';
+                this.isPublic = result.public_dir === 'public';
+                this.usePublicDir = result.public_dir === 'public';
             }
 
             this.directory = location.hostname;
@@ -337,6 +368,10 @@
             .widget-checkbox {
                 margin-top: 20px;
                 font-weight: $font-weight-medium;
+            }
+
+            .widget-radio-button {
+                margin-top: 20px;
             }
         }
 

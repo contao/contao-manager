@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Task\Packages;
 
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Composer\CloudChanges;
 use Contao\ManagerApi\Composer\CloudResolver;
 use Contao\ManagerApi\Composer\Environment;
@@ -36,12 +37,18 @@ class SetupTask extends AbstractPackagesTask
      */
     private $cloudResolver;
 
-    public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
+    /**
+     * @var ApiKernel
+     */
+    private $kernel;
+
+    public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, ApiKernel $kernel, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $serverInfo, $filesystem, $translator);
 
         $this->processFactory = $processFactory;
         $this->cloudResolver = $cloudResolver;
+        $this->kernel = $kernel;
     }
 
     public function getName(): string
@@ -56,7 +63,7 @@ class SetupTask extends AbstractPackagesTask
 
     protected function buildOperations(TaskConfig $config): array
     {
-        $operations = [new CreateProjectOperation($config, $this->environment, $this->filesystem)];
+        $operations = [new CreateProjectOperation($config, $this->environment, $this->kernel, $this->filesystem)];
 
         if ($config->getOption('no-update')) {
             return $operations;

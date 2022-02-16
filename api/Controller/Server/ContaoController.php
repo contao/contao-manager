@@ -135,7 +135,10 @@ class ContaoController
             $isEmpty = 0 === \count($files);
 
             if ($request->isMethod('POST')) {
-                return $this->createDirectories($isEmpty ? null : $request->request->get('directory'));
+                return $this->createDirectories(
+                    $isEmpty ? null : $request->request->get('directory'),
+                    $request->request->getBoolean('usePublicDir')
+                );
             }
 
             return new JsonResponse(
@@ -148,8 +151,8 @@ class ContaoController
                     ],
                     'supported' => false,
                     'project_dir' => $this->kernel->getProjectDir(),
+                    'public_dir' => \basename($this->kernel->getPublicDir()),
                     'is_empty' => $isEmpty,
-                    'is_web' => $this->kernel->isWebDir(),
                 ]
             );
         }
@@ -167,7 +170,7 @@ class ContaoController
         );
     }
 
-    private function createDirectories(?string $directory): Response
+    private function createDirectories(?string $directory, bool $usePublicDir): Response
     {
         if ('' === \Phar::running()) {
             return new Response('', Response::HTTP_SERVICE_UNAVAILABLE);
@@ -175,9 +178,13 @@ class ContaoController
 
         $currentRoot = $this->kernel->getProjectDir();
         $targetRoot = $currentRoot;
-        $webDir = $currentRoot.'/web';
+        $publicDir = $currentRoot.'/'.($usePublicDir ? 'public' : 'web');
 
         if (null !== $directory) {
+            if (false !== strpos($directory, '..')) {
+                return new Response('', Response::HTTP_BAD_REQUEST);
+            }
+
             if ($this->filesystem->exists($currentRoot.'/'.$directory)) {
                 return new ApiProblemResponse(
                     (new ApiProblem('Target directory exists'))
@@ -186,13 +193,13 @@ class ContaoController
             }
 
             $targetRoot = $currentRoot.'/'.$directory;
-            $webDir = $targetRoot.'/web';
+            $publicDir = $targetRoot.'/'.($usePublicDir ? 'public' : 'web');
             $this->filesystem->mkdir($targetRoot);
             $this->filesystem->mirror($this->kernel->getConfigDir(), $targetRoot.'/contao-manager');
             $this->filesystem->remove($this->kernel->getConfigDir());
         }
 
-        $this->filesystem->mkdir($webDir);
+        $this->filesystem->mkdir($publicDir);
 
         // Create response before moving Phar, otherwise the JsonResponse class cannot be autoloaded
         $response = new JsonResponse([
@@ -204,12 +211,20 @@ class ContaoController
             ],
             'supported' => false,
             'project_dir' => $targetRoot,
+            'public_dir' => ($usePublicDir ? 'public' : 'web'),
             'is_empty' => true,
-            'is_web' => true,
         ], Response::HTTP_CREATED);
 
         $phar = \Phar::running(false);
-        rename($phar, $webDir.'/'.basename($phar));
+        $this->filesystem->rename($phar, $publicDir.'/'.basename($phar));
+
+        if ($this->filesystem->exists(\dirname($phar).'/.htaccess')) {
+            $this->filesystem->rename(\dirname($phar).'/.htaccess', $publicDir.'/.htaccess');
+        }
+
+        if (0 === \count(array_diff(scandir(\dirname($phar), SCANDIR_SORT_NONE), ['.', '..']))) {
+            $this->filesystem->remove(\dirname($phar));
+        }
 
         return $response;
     }
@@ -233,7 +248,6 @@ class ContaoController
                 '.well-known',
                 'cgi-bin',
                 'contao-manager',
-                'web',
                 'plesk-stat',
                 '.bash_profile',
                 '.bash_logout',
@@ -242,7 +256,8 @@ class ContaoController
                 '.ftpquota',
                 '.htaccess',
                 'user.ini',
-                basename(\Phar::running()),
+                basename(dirname(\Phar::running())), // Allow parent directory of the PHAR file (public dir)
+                basename(\Phar::running()), // Allow the PHAR file itself
             ]
         );
     }
