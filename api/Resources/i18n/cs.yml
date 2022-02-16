@@ -24,8 +24,6 @@ cs:
             title: 'Metoda pro vytvoření symlinků buď není dostupná nebo nefunguje správně.'
         session:
             title: 'Sezení PHP nelze zahájit.'
-        web_root:
-            title: 'Soubor .phar musí být umístěný ve složce /web.'
         memory_limit:
             title: 'Nedostatečné množství paměti pro PHP'
             detail: 'Vaše nastavení PHP dovoluje (na příkazovém řádku) jen omezené akce kvůli omezení paměti {limit}. Ta není dostatečná pro chod Composeru a nešlo automaticky zvýšit paměť. Kontaktujte prosím Vaše poskytovatele služeb.'

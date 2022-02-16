@@ -24,8 +24,6 @@ zh:
             title: 'PHP符号链接方法不可用或无法正常工作。'
         session:
             title: 'PHP session无法启动。'
-        web_root:
-            title: 'Phar文件必须位于/web文件夹下'
         memory_limit:
             title: 'PHP内存限制不足'
             detail: '当前PHP配置仅允许 {limit} 内存 (在命令行中)。该内存设置无法满足运行Composer，该设置无法自动调整增加限制。请联系主机提供商提供相关支持。'

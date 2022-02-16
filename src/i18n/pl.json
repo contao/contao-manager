@@ -53,7 +53,7 @@
     "ui.boot.run": "Otwórz Contao Manager",
     "ui.recovery.headline": "Odzyskiwanie Systemu",
     "ui.recovery.description": "Contao Manager wykrył pliki, które wyglądają jak z Contao, ale interfejs linii komend (CLI) nie działa tak jak powinien.",
-    "ui.recovery.console": "Console Output",
+    "ui.recovery.console": "Wyjście Konsolie",
     "ui.recovery.repairOptions": "Wybierz opcję naprawy twojej instalacji.",
     "ui.recovery.repairHeadline": "Automatyczna Naprawa",
     "ui.recovery.repairDescription": "Próba automatycznego naprawienia instalacji poprzez przebudowanie pamięci cache aplikacji i ponownej instalacji pakietów Composera.",
@@ -162,7 +162,7 @@
     "ui.task.confirmCancel": "Czy na pewno chcesz anulować to zadanie? To może pozostawić twoją instalację w nieznanym stanie.",
     "ui.task.autoclose": "Zamknij szczegóły zadania, gdy udane",
     "ui.console.toggle": "Pokaż/Ukryj Konsolę",
-    "ui.console.showLog": "Show full console log",
+    "ui.console.showLog": "Pokaż pełny dziennik konsoli",
     "ui.console.copyLog": "Skopiuj dziennik do schowka",
 
     "ui.widget.mandatory": "To pole nie może być puste.",

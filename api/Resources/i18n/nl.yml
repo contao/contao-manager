@@ -24,8 +24,6 @@ nl:
             title: 'PHP-symlink methode is niet beschikbaar of werkt niet correct.'
         session:
             title: 'PHP-sessie kan niet worden gestart.'
-        web_root:
-            title: 'Het Phar bestand moet zich bevinden in de /web map.'
         memory_limit:
             title: 'Limiet PHP-geheugen onvoldoende'
             detail: 'Uw PHP-configuratie staat alleen {limit} geheugen toe (op de opdrachtregel). Dit is niet genoeg om Composer uit te voeren, het was niet mogelijk om deze limiet automatisch te verhogen. Neem contact op met uw hostingprovider voor ondersteuning.'

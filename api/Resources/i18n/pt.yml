@@ -24,8 +24,6 @@ pt:
             title: 'A utilização de Links Simbólicos (symlink) está desactivada ou não funciona correctamente.'
         session:
             title: 'A sessão PHP falhou ao iniciar.'
-        web_root:
-            title: 'O ficheiro Phar necessita estar na pasta /web .'
         memory_limit:
             title: 'Memória limite PHP insuficiente'
             detail: 'A configuração PHP atual apenas permite {limit} de memória (na linha de comandos). Estes recursos não são suficientes para executar o Composer e não é possível aumentar este limite automaticamente. Por favor contacte o seu fornecedor de conteúdo  para assistência.'

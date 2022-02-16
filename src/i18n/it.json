@@ -53,7 +53,7 @@
     "ui.boot.run": "Avvia Contao Manager",
     "ui.recovery.headline": "Sistema di recupero",
     "ui.recovery.description": "Contao Manager ha rilevato file che assomigliano a Contao, ma l'interfaccia della riga di comando non funziona come previsto.",
-    "ui.recovery.console": "Console Output",
+    "ui.recovery.console": "Uscita console",
     "ui.recovery.repairOptions": "Scegliere un'opzione per riparare l'installazione.",
     "ui.recovery.repairHeadline": "Riparazione automatica",
     "ui.recovery.repairDescription": "Tentativi di riparare automaticamente l'installazione ricostruendo la cache dell'applicazione e reinstallando i pacchetti Composer.",
@@ -162,7 +162,7 @@
     "ui.task.confirmCancel": "Sei sicuro di annullare questo compito? Questo potrebbe lasciare l'installazione di Contao in uno stato danneggiato!",
     "ui.task.autoclose": "Chiudi i dettagli dell'attività in caso di successo",
     "ui.console.toggle": "Visualizza/nasconde l'uscita console",
-    "ui.console.showLog": "Show full console log",
+    "ui.console.showLog": "Mostra il registro completo della console",
     "ui.console.copyLog": "Copia il registro negli appunti",
 
     "ui.widget.mandatory": "Questo campo non deve essere vuoto.",

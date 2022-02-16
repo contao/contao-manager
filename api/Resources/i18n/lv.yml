@@ -24,8 +24,6 @@ lv:
             title: 'PHP simbolu metode nav pieejama vai nedarbojas pareizi.'
         session:
             title: 'Nevarēja uzsākt PHP sesiju.'
-        web_root:
-            title: 'Phar datnei jāatrod mapē /web.'
         memory_limit:
             title: 'Nepietiekams PHP atmiņas ierobežojums'
             detail: 'Jūsu PHP konfigurācija atļauj tikai {limit} atmiņu (komandrindā). Ar to nepietiek, lai palaistu Composer, un nebija iespējams automātiski palielināt šo limitu. Lūdzu, sazinieties ar savu hostinga pakalpojumu sniedzēju, lai saņemtu atbalstu.'

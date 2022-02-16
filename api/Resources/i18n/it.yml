@@ -24,8 +24,6 @@ it:
             title: 'Il metodo PHP symlink non è disponibile o non funziona correttamente.'
         session:
             title: 'Non è stato possibile avviare la sessione PHP.'
-        web_root:
-            title: 'Il file Phar deve trovarsi nella cartella / web.'
         memory_limit:
             title: 'Limite della memoria PHP non sufficiente'
             detail: 'La configurazione PHP consente solo la memoria {limit} (sulla riga di comando). Questo non è sufficiente per eseguire Composer e non è stato possibile aumentare automaticamente questo limite. Si prega di contattare il proprio fornitore di webhosting per il supporto.'

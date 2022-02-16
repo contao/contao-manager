@@ -24,8 +24,6 @@ es:
             title: 'El método de enlace simbólico PHP no está disponible o no funciona correctamente.'
         session:
             title: 'La sesión de PHP no se pudo iniciar.'
-        web_root:
-            title: 'El archivo Phar debe estar ubicado en la carpeta /web.'
         memory_limit:
             title: 'Límite insuficiente de memoria de PHP'
             detail: 'Su configuración PHP solo permite {limit} memoria (en la línea de comando). Esto no es suficiente para ejecutar Composer y no fue posible aumentar este límite automáticamente. Por favor, póngase en contacto con su proveedor de hosting para obtener asistencia.'
