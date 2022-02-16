@@ -23,7 +23,7 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * @var array
      */
-    private static $supportedVersions = ['4.4', '4.9', '4.12'];
+    private static $supportedVersions = ['4.4', '4.9', '4.13'];
 
     /**
      * @var Environment
