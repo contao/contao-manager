@@ -1110,8 +1110,6 @@ components:
         ConfigManager:
             type: object
             properties:
-                server:
-                    type: string
                 php_cli:
                     type: string
                     description: Path to the PHP executable.
@@ -1312,7 +1310,7 @@ components:
                             description: Creates a `composer.json` for the Contao Managed Edition.
                         version:
                             type: string
-                            enum: [4.4, 4.9]
+                            enum: [4.4, 4.9, 4.13]
                             required: true
                         core-only:
                             type: boolean
@@ -1353,7 +1351,7 @@ components:
                         uploads:
                             type: boolean
                             default: false
-                            description: Install uploaded packages that are in the of packages to update
+                            description: Install uploaded packages that are in the list of packages to update
                         require:
                             type: object
                             description: List of packages to require. Key is package name and value is version, which can be empty.
