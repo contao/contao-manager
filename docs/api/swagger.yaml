@@ -1118,6 +1118,18 @@ components:
                         description: The Contao version number.
                         type: string
                         nullable: true
+                    cli:
+                        type: object
+                        properties:
+                            commands:
+                                type: object
+                                additionalProperties:
+                                    type: object
+                                    properties:
+                                        arguments:
+                                            type: array
+                                        options:
+                                            type: array
                     api:
                         type: object
                         properties:

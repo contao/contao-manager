@@ -104,10 +104,8 @@ class ContaoController
             }
 
             if ($e instanceof ProcessFailedException) {
-                return new JsonResponse(
+                return $this->createResponse(
                     [
-                        'version' => null,
-                        'api' => 0,
                         'supported' => false,
                         'error' => $e->getMessage(),
                     ],
@@ -116,10 +114,8 @@ class ContaoController
             }
 
             if ($e instanceof ProcessOutputException) {
-                return new JsonResponse(
+                return $this->createResponse(
                     [
-                        'version' => null,
-                        'api' => 0,
                         'supported' => false,
                         'error' => $this->contaoConsole->debugConsoleIssues(),
                     ],
@@ -141,25 +137,17 @@ class ContaoController
                 );
             }
 
-            return new JsonResponse(
-                [
-                    'version' => null,
-                    'api' => [
-                        'version' => 0,
-                        'features' => [],
-                        'commands' => [],
-                    ],
-                    'supported' => false,
-                    'project_dir' => $this->kernel->getProjectDir(),
-                    'public_dir' => \basename($this->kernel->getPublicDir()),
-                    'is_empty' => $isEmpty,
-                ]
-            );
+            return $this->createResponse([
+                'is_empty' => $isEmpty,
+            ]);
         }
 
-        return new JsonResponse(
+        return $this->createResponse(
             [
                 'version' => $contaoVersion,
+                'cli' => [
+                    'commands' => $this->contaoConsole->getCommandList(),
+                ],
                 'api' => [
                     'version' => $this->contaoApi->getVersion(),
                     'features' => $this->contaoApi->getFeatures(),
@@ -202,14 +190,7 @@ class ContaoController
         $this->filesystem->mkdir($publicDir);
 
         // Create response before moving Phar, otherwise the JsonResponse class cannot be autoloaded
-        $response = new JsonResponse([
-            'version' => null,
-            'api' => [
-                'version' => 0,
-                'features' => [],
-                'commands' => [],
-            ],
-            'supported' => false,
+        $response = $this->createResponse([
             'project_dir' => $targetRoot,
             'public_dir' => ($usePublicDir ? 'public' : 'web'),
             'is_empty' => true,
@@ -306,5 +287,24 @@ class ContaoController
         }
 
         return null;
+    }
+
+    private function createResponse(array $data, int $status = Response::HTTP_OK): JsonResponse
+    {
+        return new JsonResponse(array_merge([
+            'version' => null,
+            'cli' => [
+                'commands' => [],
+            ],
+            'api' => [
+                'version' => 0,
+                'features' => [],
+                'commands' => [],
+            ],
+            'supported' => false,
+            'project_dir' => $this->kernel->getProjectDir(),
+            'public_dir' => \basename($this->kernel->getPublicDir()),
+            'is_empty' => false,
+        ], $data), $status);
     }
 }
