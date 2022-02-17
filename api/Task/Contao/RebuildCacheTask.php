@@ -15,11 +15,13 @@ namespace Contao\ManagerApi\Task\Contao;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
+use Contao\ManagerApi\Process\ContaoConsole;
 use Contao\ManagerApi\Task\AbstractTask;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Contao\CacheClearOperation;
 use Contao\ManagerApi\TaskOperation\Contao\CacheWarmupOperation;
+use Contao\ManagerApi\TaskOperation\Contao\MaintenanceModeOperation;
 use Contao\ManagerApi\TaskOperation\Filesystem\RemoveCacheOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -36,14 +38,20 @@ class RebuildCacheTask extends AbstractTask
     private $processFactory;
 
     /**
+     * @var ContaoConsole
+     */
+    private $contaoConsole;
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
 
-    public function __construct(ApiKernel $kernel, ConsoleProcessFactory $processFactory, Translator $translator, Filesystem $filesystem)
+    public function __construct(ApiKernel $kernel, ConsoleProcessFactory $processFactory, ContaoConsole $contaoConsole, Translator $translator, Filesystem $filesystem)
     {
         $this->kernel = $kernel;
         $this->processFactory = $processFactory;
+        $this->contaoConsole = $contaoConsole;
         $this->filesystem = $filesystem;
 
         parent::__construct($translator);
@@ -66,6 +74,13 @@ class RebuildCacheTask extends AbstractTask
 
     protected function buildOperations(TaskConfig $config): array
     {
+        $supportsMaintenance = $config->getState('supports-maintenance');
+
+        if (null === $supportsMaintenance) {
+            $supportsMaintenance = \array_key_exists('contao:maintenance-mode', $this->contaoConsole->getCommandList());
+            $config->setState('supports-maintenance', $supportsMaintenance);
+        }
+
         $operations = [
             new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, $this->filesystem),
             new CacheClearOperation($this->processFactory, $config->getOption('environment', 'prod')),
@@ -76,6 +91,11 @@ class RebuildCacheTask extends AbstractTask
         } else {
             // Remove cache directory again (contao/contao-manager#655)
             $operations[] = new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, $this->filesystem, 'remove-cache-again');
+        }
+
+        if ($supportsMaintenance) {
+            array_unshift($operations, new MaintenanceModeOperation($config, $this->processFactory, 'enable'));
+            $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'disable');
         }
 
         return $operations;

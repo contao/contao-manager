@@ -66,7 +66,13 @@ class InstallTask extends AbstractPackagesTask
     {
         $operations = [];
         $dryRun = (bool) $config->getOption('dry_run', false);
-        $supportsMaintenance = \array_key_exists('contao:maintenance-mode', $this->contaoConsole->getCommandList());
+
+        $supportsMaintenance = $config->getState('supports-maintenance');
+
+        if (null === $supportsMaintenance) {
+            $supportsMaintenance = \array_key_exists('contao:maintenance-mode', $this->contaoConsole->getCommandList());
+            $config->setState('supports-maintenance', $supportsMaintenance);
+        }
 
         if ($config->getOption('remove-vendor', false)) {
             $operations[] = new RemoveVendorOperation($config, $this->environment, $this->filesystem);
