@@ -141,8 +141,8 @@
             currentHref: () => window.location.href,
 
             publicDirOptions: vm => [
-                { label: vm.$t('ui.server.contao.webDir', { dir: '<code>web</code>' }), value: false },
-                { label: vm.$t('ui.server.contao.publicDir', { dir: '<code>public</code>' }), value: true }
+                { label: vm.$t('ui.server.contao.publicDir', { dir: '<code>web</code>', version: '4.9+' }), value: false },
+                { label: vm.$t('ui.server.contao.publicDir', { dir: '<code>public</code>', version: '4.13+' }), value: true }
             ],
 
             canUsePublicDir: vm => vm.phpVersionId >= 70400,
