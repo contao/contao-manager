@@ -12,6 +12,12 @@
             "role": "Developer"
         }
     ],
+    "funding": [
+        {
+            "type": "other",
+            "url": "https://to.contao.org/donate"
+        }
+    ],
     "support": {
         "issues": "https://github.com/contao/contao-manager/issues",
         "forum": "https://community.contao.org",
