@@ -17,15 +17,22 @@ use Contao\ManagerApi\Composer\CloudResolver;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
+use Contao\ManagerApi\Process\ContaoConsole;
 use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\Composer\CloudOperation;
 use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
+use Contao\ManagerApi\TaskOperation\Contao\MaintenanceModeOperation;
 use Contao\ManagerApi\TaskOperation\Filesystem\RemoveVendorOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
 class InstallTask extends AbstractPackagesTask
 {
+    /**
+     * @var ContaoConsole
+     */
+    private $contaoConsole;
+
     /**
      * @var ConsoleProcessFactory
      */
@@ -36,10 +43,11 @@ class InstallTask extends AbstractPackagesTask
      */
     private $cloudResolver;
 
-    public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
+    public function __construct(ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $serverInfo, $filesystem, $translator);
 
+        $this->contaoConsole = $contaoConsole;
         $this->processFactory = $processFactory;
         $this->cloudResolver = $cloudResolver;
     }
@@ -57,7 +65,8 @@ class InstallTask extends AbstractPackagesTask
     protected function buildOperations(TaskConfig $config): array
     {
         $operations = [];
-        $dryRun = (bool)$config->getOption('dry_run', false);
+        $dryRun = (bool) $config->getOption('dry_run', false);
+        $supportsMaintenance = \array_key_exists('contao:maintenance-mode', $this->contaoConsole->getCommandList());
 
         if ($config->getOption('remove-vendor', false)) {
             $operations[] = new RemoveVendorOperation($config, $this->environment, $this->filesystem);
@@ -77,7 +86,15 @@ class InstallTask extends AbstractPackagesTask
             );
         }
 
+        if ($supportsMaintenance) {
+            $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'enable');
+        }
+
         $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $dryRun, !$config->isCancelled());
+
+        if ($supportsMaintenance) {
+            $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'disable');
+        }
 
         return $operations;
     }

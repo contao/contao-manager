@@ -19,6 +19,7 @@ use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Config\UploadsConfig;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
+use Contao\ManagerApi\Process\ContaoConsole;
 use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
@@ -27,12 +28,18 @@ use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
 use Contao\ManagerApi\TaskOperation\Composer\RemoveOperation;
 use Contao\ManagerApi\TaskOperation\Composer\RequireOperation;
 use Contao\ManagerApi\TaskOperation\Composer\UpdateOperation;
+use Contao\ManagerApi\TaskOperation\Contao\MaintenanceModeOperation;
 use Contao\ManagerApi\TaskOperation\Filesystem\InstallUploadsOperation;
 use Contao\ManagerApi\TaskOperation\Filesystem\RemoveUploadsOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
 class UpdateTask extends AbstractPackagesTask
 {
+    /**
+     * @var ContaoConsole
+     */
+    private $contaoConsole;
+
     /**
      * @var ConsoleProcessFactory
      */
@@ -48,10 +55,11 @@ class UpdateTask extends AbstractPackagesTask
      */
     private $uploads;
 
-    public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, UploadsConfig $uploads, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
+    public function __construct(ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, UploadsConfig $uploads, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $serverInfo, $filesystem, $translator);
 
+        $this->contaoConsole = $contaoConsole;
         $this->processFactory = $processFactory;
         $this->cloudResolver = $cloudResolver;
         $this->uploads = $uploads;
@@ -81,6 +89,7 @@ class UpdateTask extends AbstractPackagesTask
     protected function buildOperations(TaskConfig $config): array
     {
         $changes = $this->getComposerDefinition($config);
+        $supportsMaintenance = \array_key_exists('contao:maintenance-mode', $this->contaoConsole->getCommandList());
 
         $operations = [];
 
@@ -94,9 +103,22 @@ class UpdateTask extends AbstractPackagesTask
 
         if ($this->environment->useCloudResolver()) {
             $operations[] = new CloudOperation($this->cloudResolver, $changes, $config, $this->environment, $this->translator, $this->filesystem);
+
+            if ($supportsMaintenance) {
+                $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'enable');
+            }
+
             $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $changes->getDryRun(), !$config->isCancelled());
         } else {
+            if ($supportsMaintenance) {
+                $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'enable');
+            }
+
             $operations[] = new UpdateOperation($this->processFactory, $this->environment, $this->translator, $changes->getUpdates(), $changes->getDryRun());
+        }
+
+        if ($supportsMaintenance) {
+            $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'disable');
         }
 
         if ($config->getOption('uploads', false) && \count($this->uploads)) {
