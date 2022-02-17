@@ -40,7 +40,7 @@
                         <h2 class="contao-check__fieldtitle">{{ $t('ui.server.docroot.conflictsTitle') }}</h2>
                         <p class="contao-check__fielddesc">{{ $t('ui.server.docroot.conflictsDirectory', { count: conflicts.length }) }}</p>
                         <ul>
-                            <li v-for="file in conflicts.slice(0, 5)">{{ file }}</li>
+                            <li v-for="file in conflicts.slice(0, 5)" :key="file">{{ file }}</li>
                             <li v-if="conflicts.length > 5">...</li>
                         </ul>
                         <checkbox name="ignoreConflicts" :label="$t('ui.server.docroot.ignoreConflicts')" :disabled="processing" v-if="isPublic || isWeb" v-model="forceInstall"/>
