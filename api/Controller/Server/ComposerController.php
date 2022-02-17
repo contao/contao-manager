@@ -21,6 +21,7 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 use Seld\JsonLint\ParsingException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,10 +41,16 @@ class ComposerController
      */
     private $translator;
 
-    public function __construct(Environment $environment, Translator $translator)
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    public function __construct(Environment $environment, Translator $translator, Filesystem $filesystem)
     {
         $this->environment = $environment;
         $this->translator = $translator;
+        $this->filesystem = $filesystem;
     }
 
     public function __invoke(ServerInfo $serverInfo): Response
@@ -61,13 +68,20 @@ class ComposerController
             'vendor' => ['found' => false],
         ];
 
-        if ($this->environment->hasPackage('contao/manager-bundle')) {
+        if ($this->filesystem->exists($this->environment->getJsonFile())) {
             $result['json']['found'] = true;
             $result['json']['valid'] = true;
             $result['vendor']['found'] = is_dir($this->environment->getVendorDir());
 
-            if ($this->validateLockFile($result)) {
-                $this->validateSchema($result);
+            if ($this->validateSchema($result)) {
+                // If schema is valid but does not contain contao/manager-bundle,
+                // mark as "not found" so the install screen will conflict with the file.
+                if (!$this->environment->hasPackage('contao/manager-bundle')) {
+                    $result['json']['found'] = false;
+                    $result['json']['valid'] = false;
+                } else {
+                    $this->validateLockFile($result);
+                }
             }
         }
 
@@ -105,7 +119,7 @@ class ComposerController
         try {
             $locker = $this->environment->getComposer()->getLocker();
 
-            if ($locker->isLocked()) {
+            if ($locker && $locker->isLocked()) {
                 $result['lock']['found'] = true;
 
                 if ($locker->isFresh()) {
@@ -114,12 +128,12 @@ class ComposerController
             }
 
             return true;
-        } catch (\InvalidArgumentException $e) {
-            $result['json']['found'] = false;
-            $result['json']['valid'] = false;
         } catch (ParsingException $e) {
             $result['json']['valid'] = false;
             $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage().' '.$e->getDetails()]);
+        } catch (\Exception $e) {
+            $result['json']['valid'] = false;
+            $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage()]);
         }
 
         return false;

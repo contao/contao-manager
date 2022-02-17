@@ -277,7 +277,7 @@ CODE
             '/system/config/constants.php',
         ];
 
-        // Use current folder if it looks like Contao, even when named "web"
+        // Use current folder if it looks like Contao
         foreach ($contaoFiles as $file) {
             if ($this->filesystem->exists($current.$file)) {
                 $this->projectDir = $this->publicDir = $current;
