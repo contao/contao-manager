@@ -151,6 +151,7 @@
         'details',
         'link',
         'lock',
+        'maintenance',
         'more',
         'power',
         'run',

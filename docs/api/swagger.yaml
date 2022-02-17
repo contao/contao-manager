@@ -838,6 +838,45 @@ paths:
                 501:
                     description: If the current Contao version does not support the JWT cookie.
 
+    /api/contao/maintenance-mode:
+        get:
+            summary: Get maintenance mode status
+            tags: [Contao API]
+            responses:
+                200:
+                    description: Get maintenance mode status
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ContaoMaintenanceMode'
+                501:
+                    description: If the current Contao version does not support maintenance mode.
+        put:
+            summary: Enable the maintenance mode
+            tags: [Contao API]
+            responses:
+                200:
+                    description: Enable the maintenance mode
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ContaoMaintenanceMode'
+                501:
+                    description: If the current Contao version does not support maintenance mode.
+        delete:
+            summary: Disable the maintenance mode
+            tags: [Contao API]
+            responses:
+                200:
+                    description: Disable the maintenance mode
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ContaoMaintenanceMode'
+                501:
+                    description: If the current Contao version does not support maintenance mode.
+
+
 
     #############
     #   Tasks   #
@@ -1176,6 +1215,12 @@ components:
             type: object
             properties:
                 debug:
+                    type: boolean
+
+        ContaoMaintenanceMode:
+            type: object
+            properties:
+                enabled:
                     type: boolean
 
         TaskGet:

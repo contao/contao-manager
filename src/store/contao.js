@@ -3,6 +3,7 @@
 import accessKey from './contao/accessKey';
 import installTool from './contao/installTool';
 import jwtCookie from './contao/jwtCookie';
+import maintenanceMode from './contao/maintenanceMode';
 
 export default {
     namespaced: true,
@@ -11,6 +12,7 @@ export default {
         'access-key': accessKey,
         'install-tool': installTool,
         'jwt-cookie': jwtCookie,
+        'maintenance-mode': maintenanceMode,
     },
 
     actions: {
