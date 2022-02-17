@@ -15,7 +15,7 @@
             </header>
 
             <transition name="animate-flip" type="transition" mode="out-in">
-                <section class="contao-check__form contao-check__form--center" v-if="directoryUpdated" v-bind:key="'front'">
+                <section class="contao-check__form contao-check__form--center" v-if="directoryUpdated" v-bind:key="'updated'">
                     <div class="contao-check__fields">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" /></svg>
                         <p class="contao-check__fielddesc">{{ $t('ui.server.docroot.confirmation') }}</p>
@@ -35,7 +35,23 @@
                         <loading-button inline :href="currentHref" :loading="processing" color="primary" icon="update" @click="reload">{{ $t('ui.server.docroot.reload') }}</loading-button>
                     </div>
                 </section>
-                <section class="contao-check__form contao-check__form--center" v-else v-bind:key="'back'">
+                <section class="contao-check__form contao-check__form--center" v-else-if="conflicts.length" v-bind:key="'conflicts'">
+                    <div class="contao-check__fields">
+                        <h2 class="contao-check__fieldtitle">{{ $t('ui.server.docroot.conflictsTitle') }}</h2>
+                        <p class="contao-check__fielddesc">{{ $t('ui.server.docroot.conflictsDirectory', { count: conflicts.length }) }}</p>
+                        <ul>
+                            <li v-for="file in conflicts.slice(0, 5)">{{ file }}</li>
+                            <li v-if="conflicts.length > 5">...</li>
+                        </ul>
+                        <checkbox name="ignoreConflicts" :label="$t('ui.server.docroot.ignoreConflicts')" :disabled="processing" v-if="isPublic || isWeb" v-model="forceInstall"/>
+                    </div>
+                    <div class="contao-check__fields contao-check__fields--center">
+                        <button class="widget-button widget-button--alert widget-button--run" v-if="forceInstall" @click="conflicts=[];isEmpty=true">{{ $t('ui.server.contao.setup') }}</button>
+                        <button class="widget-button widget-button--primary widget-button--gear" @click="conflicts=[]" v-else>{{ $t('ui.server.docroot.create') }}</button>
+                    </div>
+                </section>
+
+                <section class="contao-check__form contao-check__form--center" v-else v-bind:key="'setup'">
                     <img src="../../assets/images/button-update.svg" class="invisible" alt=""> <!-- prefetch the update icon for the confirmation page -->
                     <div class="contao-check__fields">
                         <h2 class="contao-check__fieldtitle">{{ $t('ui.server.docroot.formTitle') }}</h2>
@@ -126,11 +142,13 @@
             noUpdate: false,
             usePublicDir: false,
 
+            conflicts: [],
             isEmpty: true,
             isWeb: true,
             isPublic: false,
             projectDir: null,
             autoconfig: false,
+            forceInstall: false,
             directory: '',
             directoryExists: false,
             directoryUpdated: false,
@@ -281,7 +299,8 @@
 
             if (result) {
                 this.projectDir = result.project_dir;
-                this.isEmpty = result.is_empty;
+                this.conflicts = result.conflicts;
+                this.isEmpty = result.conflicts.length === 0;
                 this.isWeb = result.public_dir === 'web';
                 this.isPublic = result.public_dir === 'public';
                 this.usePublicDir = result.public_dir === 'public';

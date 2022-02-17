@@ -128,17 +128,16 @@ class ContaoController
 
         if (null === $contaoVersion) {
             $files = $this->getProjectFiles();
-            $isEmpty = 0 === \count($files);
 
             if ($request->isMethod('POST')) {
                 return $this->createDirectories(
-                    $isEmpty ? null : $request->request->get('directory'),
+                    0 === \count($files) ? null : $request->request->get('directory'),
                     $request->request->getBoolean('usePublicDir')
                 );
             }
 
             return $this->createResponse([
-                'is_empty' => $isEmpty,
+                'conflicts' => $files,
             ]);
         }
 
@@ -193,7 +192,7 @@ class ContaoController
         $response = $this->createResponse([
             'project_dir' => $targetRoot,
             'public_dir' => ($usePublicDir ? 'public' : 'web'),
-            'is_empty' => true,
+            'conflicts' => [],
         ], Response::HTTP_CREATED);
 
         $phar = \Phar::running(false);
@@ -215,9 +214,9 @@ class ContaoController
      */
     private function getProjectFiles(): array
     {
-        $content = scandir($this->kernel->getProjectDir(), SCANDIR_SORT_NONE);
+        $content = scandir($this->kernel->getProjectDir());
 
-        return array_diff(
+        return array_values(array_diff(
             $content,
             [
                 '.',
@@ -230,6 +229,7 @@ class ContaoController
                 'cgi-bin',
                 'contao-manager',
                 'plesk-stat',
+                'web',
                 '.bash_profile',
                 '.bash_logout',
                 '.bashrc',
@@ -240,7 +240,7 @@ class ContaoController
                 basename(dirname(\Phar::running())), // Allow parent directory of the PHAR file (public dir)
                 basename(\Phar::running()), // Allow the PHAR file itself
             ]
-        );
+        ));
     }
 
     /**
@@ -302,9 +302,9 @@ class ContaoController
                 'commands' => [],
             ],
             'supported' => false,
+            'conflicts' => [],
             'project_dir' => $this->kernel->getProjectDir(),
             'public_dir' => \basename($this->kernel->getPublicDir()),
-            'is_empty' => false,
         ], $data), $status);
     }
 }

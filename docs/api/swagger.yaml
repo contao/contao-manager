@@ -1181,15 +1181,15 @@ components:
                                 type: array
                     supported:
                         type: boolean
+                    conflicts:
+                        type: array
+                        description: List of conflicting files in the project directory.
                     project_dir:
                         type: string
                         description: Full path to the project directory.
                     public_dir:
                         type: string
                         description: Name of the public directory ("public" or "web").
-                    is_empty:
-                        type: boolean
-                        description: True if project directory is empty.
 
         ContaoAccessKeyGet:
             type: object
