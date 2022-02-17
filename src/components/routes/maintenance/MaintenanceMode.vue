@@ -1,5 +1,5 @@
 <template>
-    <message-overlay :message="overlayMessage" :active="safeMode || (!loading && !supportsMaintenanceMode)">
+    <message-overlay :message="overlayMessage" :active="safeMode || (!loading && !supported)">
         <section class="maintenance">
             <div class="maintenance__inside">
                 <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" alt="" /></figure>
@@ -8,8 +8,9 @@
                     <p>{{ $t('ui.maintenance.maintenanceMode.description') }}</p>
                 </div>
                 <fieldset class="maintenance__actions">
-                    <loading-button class="widget-button widget-button--primary widget-button--maintenance" :loading="loading" v-if="!isMaintenanceMode" @click="enableMaintenanceMode">{{ $t('ui.maintenance.maintenanceMode.enable') }}</loading-button>
-                    <loading-button class="widget-button widget-button--alert widget-button--maintenance" :loading="loading" v-if="isMaintenanceMode" @click="disableMaintenanceMode">{{ $t('ui.maintenance.maintenanceMode.disable') }}</loading-button>
+                    <loader class="maintenance__loader" v-if="loading && !supported"/>
+                    <loading-button class="widget-button widget-button--primary widget-button--maintenance" :loading="loading" :disabled="!supported" v-else-if="!enabled" @click="enableMaintenanceMode">{{ $t('ui.maintenance.maintenanceMode.enable') }}</loading-button>
+                    <loading-button class="widget-button widget-button--alert widget-button--maintenance" :loading="loading" :disabled="!supported" v-else @click="disableMaintenanceMode">{{ $t('ui.maintenance.maintenanceMode.disable') }}</loading-button>
                 </fieldset>
             </div>
         </section>
@@ -27,9 +28,9 @@
         components: { MessageOverlay, Loader, LoadingButton },
 
         data: () => ({
-            supportsMaintenanceMode: false,
-            isMaintenanceMode: false,
             loading: true,
+            supported: false,
+            enabled: false,
         }),
 
         computed: {
@@ -40,13 +41,13 @@
         methods: {
             async enableMaintenanceMode() {
                 this.loading = true;
-                this.isMaintenanceMode = await this.$store.dispatch('contao/maintenance-mode/enable');
+                this.enabled = await this.$store.dispatch('contao/maintenance-mode/enable');
                 this.loading = false;
             },
 
             async disableMaintenanceMode() {
                 this.loading = true;
-                this.isMaintenanceMode = await this.$store.dispatch('contao/maintenance-mode/disable');
+                this.enabled = await this.$store.dispatch('contao/maintenance-mode/disable');
                 this.loading = false;
             },
         },
@@ -57,11 +58,11 @@
             if (response.status === 200) {
                 const commands = Object.keys(response.body?.cli?.commands);
 
-                this.supportsMaintenanceMode = commands.includes('contao:maintenance-mode') ||
+                this.supported = commands.includes('contao:maintenance-mode') ||
                     (commands.includes('lexik:maintenance:lock') && commands.includes('lexik:maintenance:unlock'))
 
-                if (this.supportsMaintenanceMode) {
-                    this.isMaintenanceMode = await this.$store.dispatch('contao/maintenance-mode/isEnabled')
+                if (this.supported) {
+                    this.enabled = await this.$store.dispatch('contao/maintenance-mode/isEnabled')
                 }
             }
 
