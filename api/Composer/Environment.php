@@ -161,7 +161,7 @@ class Environment
      */
     public function getComposer($reload = false): Composer
     {
-        $this->composerConfig->allowContaoPlugins();
+        $this->composerConfig->allowPlugins();
 
         if (null === $this->composer || $reload) {
             $this->composer = Factory::create(new NullIO(), $this->getJsonFile());
@@ -218,7 +218,7 @@ class Environment
     {
         $locker = $this->getComposer()->getLocker();
 
-        if (!$locker->isLocked()) {
+        if (null === $locker || !$locker->isLocked()) {
             return [];
         }
 
