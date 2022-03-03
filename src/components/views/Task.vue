@@ -50,13 +50,12 @@
     import Loader from 'contao-package-list/src/components/fragments/Loader';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import Console from '../fragments/Console';
-    import ConsoleOperation from '../fragments/ConsoleOperation';
     import Checkbox from '../widgets/Checkbox';
 
     export default {
         name: 'TaskView',
         mixins: [task],
-        components: { BoxedLayout, Loader, LoadingButton, Console, ConsoleOperation, Checkbox },
+        components: { BoxedLayout, Loader, LoadingButton, Console, Checkbox },
 
         data: () => ({
             audit: true,
