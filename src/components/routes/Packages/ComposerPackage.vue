@@ -95,9 +95,9 @@
 
             packageData: vm => Object.assign(
                 {},
+                vm.data,
                 vm.installed[vm.data.name] || {},
                 vm.metadata || {},
-                vm.data
             ),
 
             license: vm => vm.packageData.license instanceof Array ? vm.packageData.license.join('/') : vm.packageData.license,
