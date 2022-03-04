@@ -114,7 +114,7 @@ class UpdateTask extends AbstractPackagesTask
                 $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'enable');
             }
 
-            $operations[] = new UpdateOperation($this->processFactory, $this->environment, $this->translator, $changes->getUpdates(), $changes->getDryRun());
+            $operations[] = new UpdateOperation($this->processFactory, $this->environment, $changes->getUpdates(), $changes->getDryRun());
         }
 
         if ($supportsMaintenance) {

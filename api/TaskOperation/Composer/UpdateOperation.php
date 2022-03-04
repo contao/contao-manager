@@ -13,17 +13,11 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
 use Contao\ManagerApi\Composer\Environment;
-use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class UpdateOperation extends AbstractProcessOperation
 {
-    /**
-     * @var Translator
-     */
-    private $translator;
-
     /**
      * @var array
      */
@@ -34,14 +28,8 @@ class UpdateOperation extends AbstractProcessOperation
      */
     private $dryRun;
 
-    /**
-     * Constructor.
-     *
-     * @param bool $dryRun
-     */
-    public function __construct(ConsoleProcessFactory $processFactory, Environment $environment, Translator $translator, array $packages = [], $dryRun = false)
+    public function __construct(ConsoleProcessFactory $processFactory, Environment $environment, array $packages = [], bool $dryRun = false)
     {
-        $this->translator = $translator;
         $this->packages = $packages;
         $this->dryRun = $dryRun;
 

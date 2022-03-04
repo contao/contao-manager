@@ -35,13 +35,7 @@ class InstallOperation extends AbstractProcessOperation
      */
     private $dryRun;
 
-    /**
-     * Constructor.
-     *
-     * @param bool $dryRun
-     * @param null $timeout
-     */
-    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Environment $environment, Translator $translator, $dryRun = false, bool $retry = true)
+    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Environment $environment, Translator $translator, bool $dryRun = false, bool $retry = true)
     {
         $this->taskConfig = $taskConfig;
         $this->translator = $translator;
@@ -62,7 +56,6 @@ class InstallOperation extends AbstractProcessOperation
             $arguments = [
                 'composer',
                 'install',
-                '--prefer-dist',
                 '--no-dev',
                 '--no-progress',
                 '--no-ansi',

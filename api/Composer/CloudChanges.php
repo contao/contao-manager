@@ -47,7 +47,7 @@ class CloudChanges
         $this->addUpdate($packageName);
     }
 
-    public function getRequiredPackages()
+    public function getRequiredPackages(): array
     {
         return $this->require;
     }
@@ -61,7 +61,7 @@ class CloudChanges
         $this->addUpdate($packageName);
     }
 
-    public function getRemovedPackages()
+    public function getRemovedPackages(): array
     {
         return $this->remove;
     }
@@ -80,17 +80,17 @@ class CloudChanges
         $this->updates[$packageName] = $packageName;
     }
 
-    public function getUpdates()
+    public function getUpdates(): array
     {
         return array_values($this->updates);
     }
 
-    public function setDryRun($dryRun): void
+    public function setDryRun(bool $dryRun): void
     {
-        $this->dryRun = (bool) $dryRun;
+        $this->dryRun = $dryRun;
     }
 
-    public function getDryRun()
+    public function getDryRun(): bool
     {
         return $this->dryRun;
     }
