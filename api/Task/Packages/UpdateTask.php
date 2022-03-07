@@ -103,19 +103,15 @@ class UpdateTask extends AbstractPackagesTask
 
         if ($this->environment->useCloudResolver()) {
             $operations[] = new CloudOperation($this->cloudResolver, $changes, $config, $this->environment, $this->translator, $this->filesystem);
-
-            if ($supportsMaintenance) {
-                $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'enable');
-            }
-
-            $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $changes->getDryRun(), !$config->isCancelled());
         } else {
-            if ($supportsMaintenance) {
-                $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'enable');
-            }
-
             $operations[] = new UpdateOperation($this->processFactory, $this->environment, $changes->getUpdates(), $changes->getDryRun());
         }
+
+        if ($supportsMaintenance) {
+            $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'enable');
+        }
+
+        $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $changes->getDryRun(), !$config->isCancelled());
 
         if ($supportsMaintenance) {
             $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'disable');

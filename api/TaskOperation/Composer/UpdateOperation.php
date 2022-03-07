@@ -44,7 +44,7 @@ class UpdateOperation extends AbstractProcessOperation
                 $packages,
                 [
                     '--with-dependencies',
-                    '--prefer-dist',
+                    '--no-install',
                     '--no-dev',
                     '--no-progress',
                     '--no-ansi',
