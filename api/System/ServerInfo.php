@@ -116,11 +116,7 @@ class ServerInfo
      */
     public function getPhpEnv(): array
     {
-        $env = array_map(function () { return false; }, $_ENV);
-        $env['PATH'] = $_ENV['PATH'] ?? false;
-        $env['PHP_PATH'] = $this->getPhpExecutable();
-
-        return $env;
+        return ['PHP_PATH' => $this->getPhpExecutable()];
     }
 
     /**
