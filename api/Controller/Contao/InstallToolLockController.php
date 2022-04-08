@@ -93,7 +93,7 @@ class InstallToolLockController
 
     private function lockInstallTool(): Response
     {
-        $this->filesystem->dumpFile($this->lockFile, 3);
+        $this->filesystem->dumpFile($this->lockFile, '3');
 
         return $this->getLockStatus();
     }
