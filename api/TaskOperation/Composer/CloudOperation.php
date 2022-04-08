@@ -94,6 +94,8 @@ class CloudOperation implements TaskOperationInterface
             $summary .= implode(' ', $this->changes->getUpdates());
         }
 
+        $summary .= ' --no-install';
+
         if ($this->changes->getDryRun()) {
             $summary .= ' --dry-run';
         }
