@@ -66,12 +66,15 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
 
     public function run(): void
     {
-        if ($this->isStarted()) {
-            if ($this->taskConfig->getState($this->getName().'.started', 0) < (time() + 60)) {
-                $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ERROR);
-                $this->taskConfig->setState($this->getName().'.error', 'Inline operation did not complete within 60 seconds.');
-            }
+        // Inline task should never need more than 60secs to complete. Assume something went wrong.
+        if ($this->isRunning() && $this->taskConfig->getState($this->getName().'.started', 0) < (time() + 60)) {
+            $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ERROR);
+            $this->taskConfig->setState($this->getName().'.error', 'Inline operation did not complete within 60 seconds.');
+            return;
+        }
 
+        // Do not start the inline task again if it has been started
+        if ($this->isStarted()) {
             return;
         }
 
