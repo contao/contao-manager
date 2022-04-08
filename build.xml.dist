@@ -14,7 +14,7 @@
         <echo message="  phing tx    -  Syncs language files with Transifex" />
     </target>
 
-    <target name="prod" depends="clone, composer, cache, npm, build-prod, box-prod, cleanup, version">
+    <target name="prod" depends="clone, composer, cache, yarn, build-prod, box-prod, cleanup, version">
         <echo message="Contao Manager ${version} build complete" />
     </target>
 
@@ -99,9 +99,9 @@
         </exec>
     </target>
 
-    <target name="npm">
+    <target name="yarn">
         <echo message="Installing UI dependencies" />
-        <exec executable="npm" dir="contao-manager-${version}" checkreturn="true">
+        <exec executable="yarn" dir="contao-manager-${version}" checkreturn="true">
             <arg value="install" />
             <arg value="--no-optional" />
         </exec>
@@ -109,7 +109,7 @@
 
     <target name="build-prod">
         <echo message="Compiling UI files" />
-        <exec executable="npm" dir="contao-manager-${version}" checkreturn="true">
+        <exec executable="yarn" dir="contao-manager-${version}" checkreturn="true">
             <arg value="run" />
             <arg value="build" />
         </exec>
@@ -117,7 +117,7 @@
 
     <target name="build-dev">
         <echo message="Compiling UI files" />
-        <exec executable="npm" passthru="true" checkreturn="true">
+        <exec executable="yarn" passthru="true" checkreturn="true">
             <arg value="run" />
             <arg value="build" />
         </exec>
