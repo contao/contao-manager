@@ -109,7 +109,7 @@
     "ui.server.contao.found": "Atrasts Contao {versija} (API versija {api}).",
     "ui.server.contao.headline": "Contao uzstādīšana",
     "ui.server.contao.description": "Laipni lūdzam jūsu Contao Open Source CMS iestatīšanas procesā. Varat izvēlēties starp divām instalācijas versijām.",
-    "ui.server.contao.publicDir": "Use {dir} for public files (for Contao {version})",
+    "ui.server.contao.publicDir": "Izmantojiet {dir} publiskajām datnēm (Contao {version})",
     "ui.server.contao.ltsTitle": "Ilgtermiņa atbalsts",
     "ui.server.contao.ltsText": "LTS versijai ir pagarināts atbalsta periods līdz pat četriem gadiem.",
     "ui.server.contao.latestTitle": "Jaunākais",

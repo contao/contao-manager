@@ -1,16 +1,16 @@
-fa:
+br:
     integrity:
         allow_url_fopen:
-            title: 'تنظیم PHP "allow_url_fopen" در سرور فعال نیست.'
+            title: 'An arventennoù PHP "allow_url_fopen" n''eo ket gweredekaet war ar servijer.'
         process:
             title: ''
             detail: ''
         intl:
-            title: 'افزونه PHP Intl موجود نیست.'
-            detail: ''
+            title: 'N''eo ket hegerz an astenn PHP Intl.'
+            detail: 'Contao 4 a c''houlenn an astenn PHP Intl evit ma vo etrebroadel.'
         openssl:
-            title: 'افزونه‌ی PHP OpenSSL موجود نیست.'
-            detail: ''
+            title: 'N''eo ket hegerz an astenn PHP OpenSSL.'
+            detail: 'Manager contao a c''houl an amzer openssl evit pellgargañ restroù dre ur gevreadenn dirinegañ (https).'
         dom:
             title: ''
             detail: ''
@@ -23,12 +23,12 @@ fa:
         symlink:
             title: ''
         session:
-            title: ''
+            title: 'N''hall ket bezañ kroget an dalc''h PHP.'
         memory_limit:
-            title: 'محدویت حافظه‌ی PHP ناکافی'
+            title: ''
             detail: ''
         systempdir:
-            title: 'قادر به نوشتن دایرکتوری سیستم موقت نیست.'
+            title: ''
             detail: ''
 
     boot:
@@ -37,8 +37,8 @@ fa:
 
     config:
         php_cli:
-            not_found: 'این مسیر شما یک باینری PHP معتبر نیست.'
-            incompatible: 'این باینری PHP نسخه‌ی {cli} است اما وب سرورتان  نسخه‌ی {web} است.'
+            not_found: ''
+            incompatible: ''
         cloud:
             platform: ''
             cache: ''
@@ -49,13 +49,13 @@ fa:
         install_packages:
             title: ''
         update_packages:
-            title: 'بروزرسانی بسته‌ها'
+            title: 'Oc''h hizivaat ar pakadoù'
         dump_autoload:
             title: ''
         clear_cache:
             title: ''
         rebuild_cache:
-            title: ''
+            title: 'Oc''h adsevel krubuilh Contao'
         self_update:
             title: ''
 
