@@ -6,7 +6,7 @@
             <!--<p class="view-task__description">{{ $t('ui.task.description') }}</p>-->
             <p class="view-task__description" v-if="taskStatus">{{ $t(`ui.task.${taskStatus}`) }}</p>
 
-            <template class="task-popup__summary" v-if="isFailed && !awaitTask">
+            <template class="view-task__summary" v-if="isFailed && !awaitTask">
                 <p class="view-task__text">
                     {{ $t('ui.task.failedDescription1') }}<br>
                     {{ $t('ui.task.failedDescription2') }}
