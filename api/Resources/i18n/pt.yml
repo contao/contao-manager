@@ -3,8 +3,8 @@ pt:
         allow_url_fopen:
             title: 'A função PHP "allow_url_fopen" não está ativada no servidor. '
         process:
-            title: ''
-            detail: ''
+            title: 'As funções "proc_*" do PHP não estão disponíveis no servidor.'
+            detail: 'As funções "proc_open", "proc_close", "proc_get_status" e "proc_terminate" são necessárias para executar tarefas de linha de comando em segundo plano. Verifique com o seu fornecedor de alojamento porque é que este método não está disponível; o Gestor de Contacto não funcionará correctamente sem ele.'
         intl:
             title: 'A extensão PHP Intl não está disponível.'
             detail: 'O Contao 4 necessita da extensão PHP Intl para propósitos de internacionalização.'
@@ -19,9 +19,9 @@ pt:
             detail: 'O contao 4 necessita da extensão PHP DOM para reconhecer documentos XML.'
         graphics_lib:
             title: 'Nenhuma biblioteca de processamento de imagens PHP está disponível. '
-            detail: 'O Contao 4 necessita da(s) extensão(ões) GD, Imagick ou Gmagick para poder processar imagens.'
+            detail: 'O Contacto 4 requer ou a extensão GD, Imagick ou Gmagick para processar imagens.'
         symlink:
-            title: 'A utilização de Links Simbólicos (symlink) está desactivada ou não funciona correctamente.'
+            title: 'O método PHP symlink não está disponível ou não funciona correctamente.'
         session:
             title: 'A sessão PHP falhou ao iniciar.'
         memory_limit:
@@ -29,7 +29,7 @@ pt:
             detail: 'A configuração PHP atual apenas permite {limit} de memória (na linha de comandos). Estes recursos não são suficientes para executar o Composer e não é possível aumentar este limite automaticamente. Por favor contacte o seu fornecedor de conteúdo  para assistência.'
         systempdir:
             title: 'Impossível escrever no directório de memória de sistema temporário.'
-            detail: 'Aparentemente existe um problema com a sua configuração hosting (servidor). Certifique-se que open _basedir permite acesso ao directório temporário e que sys_temp_dir está configurado correctamente. '
+            detail: 'Isto é muito provavelmente um problema com a configuração do seu alojamento. Certifique-se de que o open_basedir permite o acesso ao directório temporário ou de que o sys_temp_dir está correctamente configurado.'
 
     boot:
         composer:
@@ -51,34 +51,34 @@ pt:
         update_packages:
             title: 'A atualizar pacotes'
         dump_autoload:
-            title: ''
+            title: 'Compressor de descarga classe Autoloader'
         clear_cache:
             title: 'A limpar Cache Composer'
         rebuild_cache:
             title: 'A reconstruir Cache Composer'
         self_update:
-            title: ''
+            title: 'Contao Manager Auto-atualização'
 
     taskoperation:
         self-update:
             detail: 'A atualizar de {old} para {new}'
-            success: ''
+            success: 'Actualizado para {new}'
         install-uploads:
-            summary: ''
+            summary: 'Instalação de uploads'
             console: 'Artifact instalado de {package} (versão {version}) [para packages/{name}]'
         remove-uploads:
-            summary: ''
+            summary: 'Remoção de uploads'
         composer-install:
-            retry: ''
-            nothing: ''
-            result: ''
+            retry: 'tentando de novo {current}/{max}'
+            nothing: 'Nada para instalar ou actualizar'
+            result: '{installs} instalado, {updates} actualizado, {removals} retirado'
         dump-autoload:
-            result: ''
+            result: 'Geração de ficheiros de carga automática optimizados contendo classes {count}.'
         cloud:
-            queued: ''
-            processing: ''
-            error: ''
-            finished: ''
+            queued: 'Em fila de espera, começando em aproximadamente. {seconds} secundos (actualmente {jobs} empregos em {workers} trabalhadores)'
+            processing: 'Activo durante {seconds} segundos.'
+            error: 'Falha na resolução de dependências'
+            finished: 'Concluído em {seconds} segundos. Utilização de memória: {memory} (pico: {peak}), hora: {time}.'
 
     upload:
         error:
@@ -89,7 +89,7 @@ pt:
 
     error:
         writable:
-            root: ''
-            directory: ''
-            config-file: ''
-            detail: ''
+            root: 'O Gestor de Contacto não pôde escrever para o directório raiz em "{path}".'
+            directory: 'O Contao Manager não pôde criar o directório "{path}".'
+            config-file: 'O Contao Manager não pôde escrever um ficheiro de configuração para "{file}".'
+            detail: 'Parece que o seu servidor não está configurado correctamente. Se está prestes a instalar o Contao, por favor configure o DocumentRoot do seu servidor web. Caso contrário, certifique-se de que as permissões de acesso ao ficheiro estão correctas. Se não tiver a certeza de como corrigir isto, contacte o seu fornecedor de alojamento para obter apoio.'
