@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
     title: Contao Manager API
-    version: "1.5.0"
+    version: "1.6.0"
 
 paths:
 
@@ -745,6 +745,58 @@ paths:
                 501:
                     description: If the current Contao version does not support the access-key API.
 
+    /api/contao/database-migration:
+        get:
+            summary: Gets the current migration task status.
+            tags: [Contao API]
+            responses:
+                200:
+                    description: The database migration status.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ContaoDatabaseMigration'
+                501:
+                    description: If the current Contao version does not support the database migration API.
+        put:
+            summary: Starts a database migration task.
+            tags: [Contao API]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                hash:
+                                    type: string
+                                    required: false
+                                    description: The migration hash to execute. If no hash is given, a --dry-run is executed to get pending migrations.
+                                type:
+                                    type: string
+                                    description: If only migrations or only schema updates should be checked.
+                                    enum:
+                                        - migrations-only
+                                        - schema-only
+                                withDeletes:
+                                    type: boolean
+                                    description: Executes migrations including DROP queries.
+            responses:
+                201:
+                    description: The database migration task was started successfully.
+                400:
+                    description: A database migration task already exists.
+                501:
+                    description: If the current Contao version does not support the database migration API.
+        delete:
+            summary: Removes the access key.
+            tags: [Contao API]
+            responses:
+                200:
+                    description: The database migration task was deleted.
+                400:
+                    description: No database migration task is found.
+                501:
+                    description: If the current Contao version does not support the database migration API.
 
     /api/contao/install-tool/lock:
         get:
@@ -1201,6 +1253,45 @@ components:
                 user:
                     type: string
                 password:
+                    type: string
+
+        ContaoDatabaseMigration:
+            type: object
+            properties:
+                type:
+                    type: string
+                    enum:
+                        - schema
+                        - schema-only
+                        - migrations
+                        - migrations-only
+                status:
+                    type: string
+                    enum:
+                        - pending
+                        - active
+                        - complete
+                        - error
+                operations:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            name:
+                                type: string
+                                description: Name of the migration or SQL statement for schema update.
+                            status:
+                                type: string
+                                enum:
+                                    - pending
+                                    - active
+                                    - complete
+                                    - error
+                            message:
+                                type: string
+                                required: false
+                                description: Result message of an executed migration (not available for schema updates).
+                hash:
                     type: string
 
         ContaoInstallToolLock:
