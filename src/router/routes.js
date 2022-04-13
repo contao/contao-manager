@@ -4,4 +4,5 @@ export default {
     packages: { name: 'packages' },
     oauth: { name: 'oauth' },
     maintenance: { name: 'maintenance' },
+    databaseMigration: { name: 'database-migration' },
 };

@@ -2,6 +2,7 @@
     <main-layout>
 
         <rebuild-cache/>
+        <database-migration/>
         <maintenance-mode/>
         <install-tool/>
         <debug-mode/>
@@ -15,6 +16,7 @@
 
 <script>
     import MainLayout from '../layouts/Main';
+    import DatabaseMigration from './maintenance/DatabaseMigration';
     import RebuildCache from './maintenance/RebuildCache';
     import InstallTool from './maintenance/InstallTool';
     import DebugMode from './maintenance/DebugMode';
@@ -27,6 +29,7 @@
     export default {
         components: {
             MainLayout,
+            DatabaseMigration,
             RebuildCache,
             InstallTool,
             MaintenanceMode,
