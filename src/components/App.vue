@@ -145,6 +145,7 @@
         'cloud',
         'cloud-off',
         'console',
+        'database',
         'edit',
         'gear',
         'hide',
