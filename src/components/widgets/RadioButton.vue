@@ -63,5 +63,9 @@
         input:checked + label {
             background-image: url("../../assets/images/widget-radio--on.svg");
         }
+
+        input:disabled + label {
+            opacity: .5;
+        }
     }
 </style>

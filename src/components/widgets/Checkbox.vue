@@ -51,10 +51,15 @@
             padding-left: 25px;
             background: url("../../assets/images/widget-checkbox--off.svg") 0 1px no-repeat;
             background-size: 20px 20px;
+            text-align: left;
         }
 
         input:checked + label {
             background-image: url("../../assets/images/widget-checkbox--on.svg");
+        }
+
+        input:disabled + label {
+            opacity: .5;
         }
     }
 </style>
