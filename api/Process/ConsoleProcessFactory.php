@@ -20,6 +20,7 @@ use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
 
@@ -43,12 +44,18 @@ class ConsoleProcessFactory implements LoggerAwareInterface
     private $serverInfo;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * Constructor.
      */
-    public function __construct(ApiKernel $kernel, ServerInfo $serverInfo)
+    public function __construct(ApiKernel $kernel, ServerInfo $serverInfo, Filesystem $filesystem = null)
     {
         $this->kernel = $kernel;
         $this->serverInfo = $serverInfo;
+        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**
@@ -68,6 +75,12 @@ class ConsoleProcessFactory implements LoggerAwareInterface
      */
     public function getContaoConsolePath(): string
     {
+        $contaoPath = $this->kernel->getProjectDir().'/vendor/contao/contao/manager-bundle/bin/contao-console';
+
+        if ($this->kernel->isDebug() && $this->filesystem->exists($contaoPath)) {
+            return $contaoPath;
+        }
+
         return $this->kernel->getProjectDir().'/vendor/contao/manager-bundle/bin/contao-console';
     }
 
@@ -76,6 +89,12 @@ class ConsoleProcessFactory implements LoggerAwareInterface
      */
     public function getContaoApiPath(): string
     {
+        $contaoPath = $this->kernel->getProjectDir().'/vendor/contao/contao/manager-bundle/bin/contao-api';
+
+        if ($this->kernel->isDebug() && $this->filesystem->exists($contaoPath)) {
+            return $contaoPath;
+        }
+
         return $this->kernel->getProjectDir().'/vendor/contao/manager-bundle/bin/contao-api';
     }
 

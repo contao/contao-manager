@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller\Server;
 
 use Contao\ManagerApi\ApiKernel;
-use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Exception\ProcessOutputException;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
@@ -55,11 +54,6 @@ class ContaoController
     private $processFactory;
 
     /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -74,7 +68,6 @@ class ContaoController
         ContaoApi $contaoApi,
         ContaoConsole $contaoConsole,
         ConsoleProcessFactory $processFactory,
-        Environment $environment,
         LoggerInterface $logger = null,
         Filesystem $filesystem = null
     ) {
@@ -82,7 +75,6 @@ class ContaoController
         $this->contaoApi = $contaoApi;
         $this->contaoConsole = $contaoConsole;
         $this->processFactory = $processFactory;
-        $this->environment = $environment;
         $this->logger = $logger;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
@@ -249,7 +241,7 @@ class ContaoController
      */
     private function getContaoVersion(): ?string
     {
-        if ($this->environment->hasPackage('contao/manager-bundle') || $this->filesystem->exists($this->processFactory->getContaoConsolePath())) {
+        if ($this->filesystem->exists($this->processFactory->getContaoConsolePath())) {
             return $this->contaoConsole->getVersion();
         }
 

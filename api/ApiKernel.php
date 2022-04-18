@@ -277,6 +277,10 @@ CODE
             '/system/config/constants.php',
         ];
 
+        if ($this->isDebug()) {
+            $contaoFiles[] = '/vendor/contao/contao/manager-bundle/bin/contao-console';
+        }
+
         // Use current folder if it looks like Contao
         foreach ($contaoFiles as $file) {
             if ($this->filesystem->exists($current.$file)) {
@@ -292,6 +296,10 @@ CODE
                 \dirname($current).'/system/constants.php',
                 \dirname($current).'/system/config/constants.php',
             ];
+
+            if ($this->isDebug()) {
+                $files[] = \dirname($current).'/vendor/contao/contao/manager-bundle/bin/contao-console';
+            }
 
             foreach ($files as $file) {
                 if ($this->filesystem->exists($file)) {
