@@ -1,8 +1,10 @@
 <template>
     <div class="console">
         <section class="console__header">
-            <h1 class="console__headline">{{ title }}</h1>
-            <p class="console__description" v-if="description">{{ description }}</p>
+            <div>
+                <h1 class="console__headline">{{ title }}</h1>
+                <p class="console__description" v-if="description">{{ description }}</p>
+            </div>
             <div class="console__actions">
                 <button
                     class="widget-button widget-button--transparent widget-button--console console__action"
@@ -72,10 +74,6 @@
                     popup.document.write(`<pre>${this.consoleOutput}</pre>`);
                     popup.document.close();
                 }
-            },
-
-            copyLog() {
-
             },
         },
     }
