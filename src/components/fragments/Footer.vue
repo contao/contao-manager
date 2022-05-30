@@ -18,7 +18,7 @@
 
 <script>
     import i18n from '../../i18n';
-    import locales from '../../i18n/locales';
+    import locales from 'contao-package-list/src/i18n/locales';
     import views from "../../router/views";
 
     export default {

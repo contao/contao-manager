@@ -1,0 +1,95 @@
+sv:
+    integrity:
+        allow_url_fopen:
+            title: 'PHP-inställningen "allow_url_fopen" är inte aktiverad på servern.'
+        process:
+            title: 'PHP "proc_*"-funktionerna är inte tillgängliga på servern.'
+            detail: 'Funktionerna "proc_open", "proc_close", "proc_get_status" och "proc_terminate" är nödvändiga för att köra kommandoradsuppgifter i bakgrunden. Kontrollera med din värdleverantör varför den här metoden inte är tillgänglig; Contao Manager kommer inte att fungera korrekt utan den.'
+        intl:
+            title: 'PHP Intl-tillägget är inte tillgängligt.'
+            detail: 'Contao 4 kräver PHP Intl-tillägget för internationaliseringsändamål.'
+        openssl:
+            title: 'PHP OpenSSL-tillägget är inte tillgängligt.'
+            detail: 'Contao Manager kräver OpenSSL-tillägget för att ladda ner filer över en krypterad anslutning (https).'
+        dom:
+            title: 'PHP DOM-tillägget är inte tillgängligt.'
+            detail: 'Contao 4 kräver PHP DOM-tillägget för att tolka XML-dokument.'
+        xmlreader:
+            title: 'PHP XMLReader-tillägget är inte tillgängligt.'
+            detail: 'Contao 4 kräver PHP DOM-tillägget för att tolka XML-dokument.'
+        graphics_lib:
+            title: 'Inget PHP-bildbehandlingsbibliotek är tillgängligt.'
+            detail: 'Contao 4 kräver antingen tillägget GD, Imagick eller Gmagick för att bearbeta bilder.'
+        symlink:
+            title: 'PHP symlink-metoden är inte tillgänglig eller fungerar inte korrekt.'
+        session:
+            title: 'PHP-sessionen kunde inte startas.'
+        memory_limit:
+            title: 'Otillräcklig gräns för PHP-minne'
+            detail: 'Din PHP-konfiguration tillåter endast {limit}-minne (på kommandoraden). Detta räcker inte för att köra Composer och det var inte möjligt att automatiskt öka denna gräns. Kontakta din värdleverantör för support.'
+        systempdir:
+            title: 'Det går inte att skriva till den tillfälliga systemkatalogen.'
+            detail: 'Detta är troligen ett problem med din värdkonfiguration. Se till att antingen open_basedir tillåter åtkomst till den temporära katalogen eller att sys_temp_dir är korrekt konfigurerad.'
+
+    boot:
+        composer:
+            invalid: 'composer.json schemavalidering: {exception}'
+
+    config:
+        php_cli:
+            not_found: 'Den här sökvägen innehåller inte en giltig PHP-binär.'
+            incompatible: 'Den här binära filen är en PHP-version {cli} men din webbserver är version {web}.'
+        cloud:
+            platform: 'Plattform får inte konfigureras i composer.json.'
+            cache: 'Cacheegenskaper får inte konfigureras i composer.json.'
+
+    task:
+        setup_packages:
+            title: 'Installerar Contao-applikationen'
+        install_packages:
+            title: 'Installera Composer Dependens'
+        update_packages:
+            title: 'Uppdaterar paket'
+        dump_autoload:
+            title: 'Dumping Composer Class Autoloader'
+        clear_cache:
+            title: 'Rensa Composer Cache'
+        rebuild_cache:
+            title: 'Bygger om Contao Cache'
+        self_update:
+            title: 'Självuppdatering för Contao Manager'
+
+    taskoperation:
+        self-update:
+            detail: 'Uppdaterar från {old} till {new}'
+            success: 'Uppdaterad till {new}'
+        install-uploads:
+            summary: 'Installerar uppladdningar'
+            console: 'Installerad artefakt för {package} (version {version}) [till package/{name}]'
+        remove-uploads:
+            summary: 'Tar bort uppladdningar'
+        composer-install:
+            retry: 'försöker igen {current}/{max}'
+            nothing: 'Inget att installera eller uppdatera'
+            result: '{installs} installerat, {updates} uppdaterat, {removals} borttaget'
+        dump-autoload:
+            result: 'Genererade optimerade autoload-filer som innehåller {count} klasser'
+        cloud:
+            queued: 'Kö, med start om ca. {seconds} sekunder (för närvarande {jobs} jobb på {workers} arbetare)'
+            processing: 'Aktiv i {seconds} sekunder.'
+            error: 'Det gick inte att lösa beroenden'
+            finished: 'Klart på {seconds} sekunder. Minnesanvändning: {memory} (peak: {peak}), tid: {time}.'
+
+    upload:
+        error:
+            file: 'Filen är ogiltig eller innehåller inte en composer.json.'
+            json: 'Composer.json innehåller inte giltig JSON-data.'
+            schema: 'Composer.json-schemavalideringen misslyckades.'
+            partial: 'Filuppladdningen slutfördes inte.'
+
+    error:
+        writable:
+            root: 'Contao Manager kunde inte skriva till rotkatalogen på "{path}".'
+            directory: 'Contao Manager kunde inte skapa katalogen "{path}".'
+            config-file: 'Contao Manager kunde inte skriva en konfigurationsfil till "{file}".'
+            detail: 'Det verkar som om din server inte är korrekt konfigurerad. Om du är på väg att installera Contao, vänligen konfigurera DocumentRoot för din webbserver. Se annars till att filåtkomstbehörigheterna är korrekta. Om du är osäker på hur du åtgärdar detta, kontakta din värdleverantör för support.'
