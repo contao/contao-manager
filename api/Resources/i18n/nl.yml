@@ -3,8 +3,8 @@ nl:
         allow_url_fopen:
             title: 'De PHP instelling "allow_url_fopen" is niet ingeschakeld op de server.'
         process:
-            title: ''
-            detail: ''
+            title: 'De PHP "proc_*" functies zijn niet beschikbaar op de server.'
+            detail: 'De functies "proc_open", "proc_close", "proc_get_status" en "proc_terminate" zijn nodig om opdrachtregeltaken op de achtergrond uit te voeren. Neem contact op met uw hostingprovider waarom deze methode niet beschikbaar is; De Contao Manager wordt niet correct uitgevoerd zonder deze methode.'
         intl:
             title: 'De PHP Intl extensie is niet beschikbaar.'
             detail: 'Contao 4 vereist de Intl extension voor internationalisering.'
@@ -57,12 +57,12 @@ nl:
         rebuild_cache:
             title: 'Contao Cache opnieuw opbouwen'
         self_update:
-            title: ''
+            title: 'Contao Manager Zelf-update'
 
     taskoperation:
         self-update:
             detail: 'Bijwerken van {old} naar {new}'
-            success: ''
+            success: 'Update naar {new}'
         install-uploads:
             summary: 'Uploads installeren'
             console: 'Artefact geïnstalleerd voor {package} (version {version}) [to packages/{name}]'

@@ -1,0 +1,95 @@
+tr:
+    integrity:
+        allow_url_fopen:
+            title: 'Sunucuda "allow_url_fopen" PHP ayarı etkinleştirilmemiş.'
+        process:
+            title: 'Sunucuda "proc_*" işlevleri kullanılamıyor.'
+            detail: '"proc_open", "proc_close", "proc_get_status" ve "proc_terminate" işlevleri arka planda komut satırı işlemlerini yapmak için gereklidir. Barındırma hizmeti sağlayıcınıza bu yöntemlerin neden kullanılamadığını sorun. Bunlar olmadan Contao Manager düzgün şekilde çalışmaz.'
+        intl:
+            title: 'PHP Intl eklentisi kullanılamıyor.'
+            detail: 'Contao 4 uluslararası özelliklerinin çalışabilmesi için PHP Intl eklentisi gereklidir.'
+        openssl:
+            title: 'PHP OpenSSL eklentisi kullanılamıyor.'
+            detail: 'Contao Manager, şifrelenmiş bir bağlantı (https) üzerinden  dosyaları indirebilmek için OpenSSL eklentisine gerek duyar.'
+        dom:
+            title: 'PHP DOM eklentisi kullanılamıyor.'
+            detail: 'Contao 4, XML dosyalarını işleyebilmek için PHP DOM eklentisine gerek duyar.'
+        xmlreader:
+            title: 'PHP XML Reader eklentisi kullanılamıyor.'
+            detail: 'Contao 4, XML dosyalarını işleyebilmek için PHP DOM eklentisine gerek duyar.'
+        graphics_lib:
+            title: 'Kullanılabilecek bir PHP görsel işleme kitaplığı bulunamadı.'
+            detail: 'Contao 4, görselleri işlemek için GD, Imagick ya da Gmagick eklentisine gerek duyar.'
+        symlink:
+            title: 'PHP symlink yöntemi kullanılamıyor ya da düzgün şekilde çalışmıyor.'
+        session:
+            title: 'PHP oturumu başlatılamadı.'
+        memory_limit:
+            title: 'PHP bellek sınırı yetersiz'
+            detail: 'PHP yapılandırmanız yalnızca {limit} bellek kullanımına (komut satırında) izin veriyor. Bu değer, Composer çalıştırmak için yetersiz ve bu sınır otomatik olarak artırılamadı. Destek almak için barındırma hizmeti sağlayıcınızla görüşün.'
+        systempdir:
+            title: 'Geçici sistem klasörüne yazılamadı.'
+            detail: 'Bu sorun büyük olasılıkla barındırma hizmeti yapılandırmanızla ilgilidir. open_basedir tarafından geçici klasöre erişme izin verildiğinden ya da sys_temp_dir parametresinin doğru yapılandırıldığından emin olun.'
+
+    boot:
+        composer:
+            invalid: 'composer.json şema doğrulaması: {exception}'
+
+    config:
+        php_cli:
+            not_found: 'Bu yolda geçerli bir PHP binary dosyası bulunamadı.'
+            incompatible: 'Bu binary dosyası bir PHP {cli} sürümü. Ancak sunucunuz {web} sürümü.'
+        cloud:
+            platform: 'Platform, composer.json içinden yapılandırılmamalıdır.'
+            cache: 'Ön bellek özellikleri composer.json içinde yapılandırılmamalıdır.'
+
+    task:
+        setup_packages:
+            title: 'Contao uygulaması kuruluyor'
+        install_packages:
+            title: 'Composer bağımlılıkları kuruluyor'
+        update_packages:
+            title: 'Paketler güncelleniyor'
+        dump_autoload:
+            title: 'Composer sınıf otomatik yükleyicisi indiriliyor'
+        clear_cache:
+            title: 'Composer ön belleği temizleniyor'
+        rebuild_cache:
+            title: 'Contao ön belleği yeniden oluşturuluyor'
+        self_update:
+            title: 'Contao Manager kendi kendine güncelleme'
+
+    taskoperation:
+        self-update:
+            detail: '{old} sürümünden {new} sürümüne güncelleniyor'
+            success: '{new} sürümüne güncellendi'
+        install-uploads:
+            summary: 'Yüklemeler kuruluyor'
+            console: '{package} ({version} sürümü) için [to packages/{name}] artifaktı kuruldu'
+        remove-uploads:
+            summary: 'Yüklemeler kaldırılıyor'
+        composer-install:
+            retry: 'yeniden deneniyor {current}/{max}'
+            nothing: 'Kurulacak ya da güncellenecek bir şey yok'
+            result: '{installs} kuruldu, {updates} güncellendi, {removals} kaldırıldı'
+        dump-autoload:
+            result: '{count} sınıf içeren iyileştirilmiş otomatik yükleme dosyası üretildi'
+        cloud:
+            queued: 'Kuyrukta, yaklaşık {seconds} saniye içinde başlayacak (şu anda {workers} işlem üzerinde {jobs} görev yapılıyor)'
+            processing: '{seconds} saniyedir işleniyor.'
+            error: 'Bağımlılıklar çözümlenemedi'
+            finished: '{seconds} saniyede tamamlandı. Bellek kullanımı: {memory} (en fazla: {peak}), süre: {time}.'
+
+    upload:
+        error:
+            file: 'Dosya geçersiz ya da composer.json dosyasını içermiyor.'
+            json: 'composer.json dosyasında geçerli bir JSON verisi bulunamadı.'
+            schema: 'composer.json şeması doğrulanamadı.'
+            partial: 'Dosya yüklemesi tamamlanamadı.'
+
+    error:
+        writable:
+            root: 'Contao Manager "{path}" yolundaki kök klasöre yazamadı.'
+            directory: 'Contao Manager "{path}" klasörünü oluşturamadı.'
+            config-file: 'Contao Manager "{file}" dosyasına yapılandırmayı yazamadı.'
+            detail: 'Sunucunuz doğru yapılandırılmamış gibi görünüyor. Contao kuracaksanız, lütfen web sunucunuzun kök belge klasörüne kurun. Yoksa dosya erişim izinlerinin doğru olduğundan emin olun. Bu sorunu nasıl düzelteceğinizden emin değilseniz, destek almak için barındırma hizmeti sağlayıcınızla görüşün.'
