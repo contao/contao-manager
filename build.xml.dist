@@ -134,7 +134,8 @@
 
     <target name="box-dev">
         <echo message="Creating the .phar file" />
-        <exec executable="box" checkreturn="true" passthru="true">
+        <exec executable="php" checkreturn="true" passthru="true">
+            <arg value="tools/phing/vendor/bin/box" />
             <arg value="compile" />
         </exec>
     </target>
