@@ -63,14 +63,8 @@ class ContaoController
      */
     private $filesystem;
 
-    public function __construct(
-        ApiKernel $kernel,
-        ContaoApi $contaoApi,
-        ContaoConsole $contaoConsole,
-        ConsoleProcessFactory $processFactory,
-        LoggerInterface $logger = null,
-        Filesystem $filesystem = null
-    ) {
+    public function __construct(ApiKernel $kernel, ContaoApi $contaoApi, ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, LoggerInterface $logger = null, Filesystem $filesystem = null)
+    {
         $this->kernel = $kernel;
         $this->contaoApi = $contaoApi;
         $this->contaoConsole = $contaoConsole;
@@ -230,7 +224,7 @@ class ContaoController
                 '.ftpquota',
                 '.htaccess',
                 'user.ini',
-                basename(dirname(\Phar::running())), // Allow parent directory of the PHAR file (public dir)
+                basename(\dirname(\Phar::running())), // Allow parent directory of the PHAR file (public dir)
                 basename(\Phar::running()), // Allow the PHAR file itself
             ]
         ));
@@ -297,7 +291,7 @@ class ContaoController
             'supported' => false,
             'conflicts' => [],
             'project_dir' => $this->kernel->getProjectDir(),
-            'public_dir' => \basename($this->kernel->getPublicDir()),
+            'public_dir' => basename($this->kernel->getPublicDir()),
         ], $data), $status);
     }
 }

@@ -23,7 +23,7 @@ class ProcessController extends AbstractProcess
     protected $config = [];
 
     /**
-     * @var ForkerInterface[]
+     * @var array<ForkerInterface>
      */
     private $forkers = [];
 
@@ -108,7 +108,7 @@ class ProcessController extends AbstractProcess
             return '';
         }
 
-        return isset(Process::$exitCodes[$exitcode]) ? Process::$exitCodes[$exitcode] : 'Unknown error';
+        return Process::$exitCodes[$exitcode] ?? 'Unknown error';
     }
 
     public function isSuccessful(): bool
@@ -230,10 +230,8 @@ class ProcessController extends AbstractProcess
         $class = $this->config['forker'] ?? null;
 
         foreach ($this->forkers as $forker) {
-            if ((null === $class && $forker->isSupported())
-                || (null !== $class && is_a($forker, $class))
-            ) {
-                $this->config['forker'] = get_class($forker);
+            if (null === $class ? $forker->isSupported() : is_a($forker, $class)) {
+                $this->config['forker'] = \get_class($forker);
 
                 return $forker;
             }

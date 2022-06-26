@@ -213,7 +213,6 @@ class Environment
         return new JsonFile($this->getLockFile());
     }
 
-
     public function getComposerLock(): array
     {
         $locker = $this->getComposer()->getLocker();

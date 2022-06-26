@@ -34,7 +34,7 @@ final class TaskStatus implements \JsonSerializable
     private $title;
 
     /**
-     * @var TaskOperationInterface[]
+     * @var array<TaskOperationInterface>
      */
     private $operations;
 
@@ -43,7 +43,9 @@ final class TaskStatus implements \JsonSerializable
      */
     private $cancellable = false;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $autoClose = false;
 
     /**
@@ -80,7 +82,7 @@ final class TaskStatus implements \JsonSerializable
     }
 
     /**
-     * @return TaskOperationInterface[]
+     * @return array<TaskOperationInterface>
      */
     public function getOperations(): array
     {

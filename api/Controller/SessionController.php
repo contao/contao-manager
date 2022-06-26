@@ -87,7 +87,8 @@ class SessionController
         if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
             $token = $this->security->getToken();
 
-            if (null !== $token
+            if (
+                null !== $token
                 && TokenAuthenticator::class === $token->getAttribute('authenticator')
                 && null !== ($payload = $this->config->getToken($token->getAttribute('token_id')))
             ) {

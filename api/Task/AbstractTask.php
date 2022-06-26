@@ -131,7 +131,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
     abstract protected function getTitle(): string;
 
     /**
-     * @return TaskOperationInterface[]
+     * @return array<TaskOperationInterface>
      */
     abstract protected function buildOperations(TaskConfig $config): array;
 }

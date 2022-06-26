@@ -31,7 +31,9 @@ class SysTempDirCheck extends AbstractIntegrityCheck
         return null;
     }
 
-    /** @noinspection MkdirRaceConditionInspection */
+    /**
+     * @noinspection MkdirRaceConditionInspection
+     */
     private function canWriteFileInDirectory(string $path, bool $createDirectory = false)
     {
         if ($createDirectory) {

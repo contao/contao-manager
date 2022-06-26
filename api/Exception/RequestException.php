@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Exception;
 
-use Throwable;
-
 class RequestException extends \RuntimeException
 {
     /**
@@ -26,7 +24,7 @@ class RequestException extends \RuntimeException
      */
     private $statusCode;
 
-    public function __construct(string $url, ?int $statusCode, Throwable $previous = null)
+    public function __construct(string $url, ?int $statusCode, \Throwable $previous = null)
     {
         $message = "HTTP request to $url failed ";
 

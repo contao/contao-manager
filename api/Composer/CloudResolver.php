@@ -84,6 +84,7 @@ class CloudResolver implements LoggerAwareInterface
                 throw new CloudException('Composer Resolver did not accept the API call', $statusCode, $content, $body);
             case 503:
                 throw new CloudException('Too many jobs on the Composer Resolver queue.', $statusCode, $content, $body);
+
             default:
                 throw $this->createUnknownResponseException($statusCode, $content, $body);
         }

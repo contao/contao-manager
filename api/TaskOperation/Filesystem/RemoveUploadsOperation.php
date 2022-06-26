@@ -65,9 +65,12 @@ class RemoveUploadsOperation extends AbstractInlineOperation
 
     public function getDetails(): ?string
     {
-        $files = array_map(function ($config) {
-            return $config['name'];
-        }, $this->uploads);
+        $files = array_map(
+            static function ($config) {
+                return $config['name'];
+            },
+            $this->uploads
+        );
 
         return implode(', ', $files);
     }

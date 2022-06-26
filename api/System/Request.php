@@ -49,7 +49,7 @@ class Request
         $context = $this->createStreamContext($url, 0);
 
         try {
-            $stream = fopen($url, 'rb', false, $context);
+            $stream = fopen($url, 'r', false, $context);
             $statusCode = $this->getLastStatusCode($http_response_header ?? null);
         } catch (\Throwable $e) {
             if ($catch) {
@@ -62,7 +62,7 @@ class Request
         return $stream;
     }
 
-    public function getJson(string $url, array $headers = [], ?int &$statusCode = null, bool $catch = false): ?string
+    public function getJson(string $url, array $headers = [], int &$statusCode = null, bool $catch = false): ?string
     {
         $headers[] = 'Accept: application/json';
 

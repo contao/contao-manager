@@ -120,9 +120,9 @@ class TaskUpdateCommand extends Command
     }
 
     /**
-     * @param TaskOperationInterface[] $operations
-     * @param ConsoleSectionOutput[]   $sections
-     * @param ProgressIndicator[]      $progresses
+     * @param array<TaskOperationInterface> $operations
+     * @param array<ConsoleSectionOutput>   $sections
+     * @param array<ProgressIndicator>      $progresses
      */
     private function updateOperations(array $operations, array $sections, array &$progresses): bool
     {

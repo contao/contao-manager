@@ -59,7 +59,8 @@ class InstallToolLockController
             $contaoVersion = null;
         }
 
-        if (null === $contaoVersion
+        if (
+            null === $contaoVersion
             || version_compare((new VersionParser())->normalize($contaoVersion), '4.4.9', '<')
         ) {
             return new ApiProblemResponse(

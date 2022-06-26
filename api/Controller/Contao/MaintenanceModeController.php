@@ -146,7 +146,7 @@ class MaintenanceModeController
     {
         $process = $this->processFactory->createContaoConsoleProcess([
             'lexik:maintenance:'.$command,
-            '--no-interaction'
+            '--no-interaction',
         ]);
         $process->run();
 

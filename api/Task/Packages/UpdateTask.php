@@ -120,7 +120,7 @@ class UpdateTask extends AbstractPackagesTask
         if ($config->getOption('uploads', false) && \count($this->uploads)) {
             $uploads = array_filter(
                 $this->uploads->all(),
-                function ($upload) use ($changes) {
+                static function ($upload) use ($changes) {
                     return $upload['success']
                         && isset($upload['package']['name'])
                         && \in_array($upload['package']['name'], $changes->getUpdates(), true);
@@ -181,7 +181,8 @@ class UpdateTask extends AbstractPackagesTask
     {
         $rootRequires = $this->environment->getComposer()->getPackage()->getRequires();
 
-        if (isset($rootRequires['contao/conflicts'])
+        if (
+            isset($rootRequires['contao/conflicts'])
             && '*@dev' === $rootRequires['contao/conflicts']->getPrettyConstraint()
         ) {
             if (!empty($definition->getUpdates())) {
@@ -210,6 +211,7 @@ class UpdateTask extends AbstractPackagesTask
                     if (!isset($rootRequires['contao/core-bundle'])) {
                         $definition->requirePackage('contao/core-bundle', $version);
                     }
+
                     if (!isset($rootRequires['contao/installation-bundle'])) {
                         $definition->requirePackage('contao/installation-bundle', $version);
                     }
@@ -217,6 +219,7 @@ class UpdateTask extends AbstractPackagesTask
                     if (isset($rootRequires['contao/core-bundle'])) {
                         $definition->removePackage('contao/core-bundle');
                     }
+
                     if (isset($rootRequires['contao/installation-bundle'])) {
                         $definition->removePackage('contao/installation-bundle');
                     }

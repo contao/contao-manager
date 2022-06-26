@@ -81,6 +81,7 @@ class Translator
         }
 
         $replace = [];
+
         foreach ($params as $k => $v) {
             $replace['{'.$k.'}'] = $v;
         }
