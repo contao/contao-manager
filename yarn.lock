@@ -3036,7 +3036,7 @@ constants-browserify@^1.0.0:
 
 "contao-package-list@git+https://github.com/contao/package-list.git":
   version "1.0.0"
-  resolved "git+https://github.com/contao/package-list.git#843abba3af4380247d394e4416d29d1d33bb8b9b"
+  resolved "git+https://github.com/contao/package-list.git#78ff206778951b4d08944414df855ab8b49961d4"
   dependencies:
     algoliasearch "^3.35.1"
     semver "^6.3.0"
