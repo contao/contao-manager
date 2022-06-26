@@ -29,7 +29,7 @@ The frontend is a SPA (Single Page Application) build using Vue.js.
 To start the frontend server run the following command:
 
 ```
-$ npm run serve
+$ yarn run serve
 ```
 
 This will automatically open your default browser with the frontend.

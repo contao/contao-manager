@@ -26,10 +26,10 @@ $ composer.phar install
 ```
 
 
-Install Javascript dependencies using NPM.
+Install Javascript dependencies using Yarn.
 
 ```
-$ npm install
+$ yarn install
 ```
 
 
