@@ -1,6 +1,7 @@
 # Dependencies
 /vendor
 /node_modules
+/tools/*/vendor
 
 # Generated
 /api/Resources/cache
