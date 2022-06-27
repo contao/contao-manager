@@ -14,6 +14,10 @@
                 <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
                 <h1 class="view-boot__issue">{{ $t('ui.boot.issue1') }}</h1>
                 <p class="view-boot__issue">{{ $t('ui.boot.issue2') }}</p>
+                <button @click="runSafeMode" class="widget-button widget-button--warning view-boot__safeMode" v-if="safeMode">{{ $t('ui.boot.safeMode') }}</button>
+            </div>
+            <div class="view-boot__summary" v-else-if="safeMode">
+                <button @click="runSafeMode" class="widget-button widget-button--warning view-boot__safeMode">{{ $t('ui.boot.safeMode') }}</button>
             </div>
             <div class="view-boot__summary" v-else-if="!autoContinue">
                 <button @click="finish" class="widget-button widget-button--primary view-boot__continue" :disabled="!canContinue">{{ $t('ui.boot.run') }}</button>
@@ -51,6 +55,7 @@
         }),
 
         computed: {
+            ...mapState(['safeMode']),
             ...mapState('tasks', { tasksInitialized: 'initialized' }),
 
             hasError: vm => Object.values(vm.status).indexOf('error') !== -1,
@@ -81,6 +86,11 @@
         methods: {
             async setView(view) {
                 this.currentView = view;
+            },
+
+            runSafeMode() {
+                this.$store.commit('setSafeMode', true);
+                this.$store.commit('setView', views.READY);
             },
 
             finish() {
@@ -210,6 +220,13 @@
             text-align: center;
             color: $red-button;
             line-height: 1.2em;
+        }
+
+        &__safeMode {
+            clear: both;
+            display: block !important;
+            width: 220px !important;
+            margin: 2em auto 0;
         }
 
         &__continue {
