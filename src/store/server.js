@@ -3,6 +3,7 @@
 import composer from './server/composer';
 import config from './server/config';
 import contao from './server/contao';
+import database from './server/database';
 import opcache from './server/opcache';
 import phpCli from './server/phpCli';
 import phpinfo from './server/phpinfo';
@@ -16,6 +17,7 @@ export default {
         composer,
         config,
         contao,
+        database,
         opcache,
         phpinfo,
         'php-cli': phpCli,
