@@ -111,12 +111,12 @@
         </template>
     </boxed-layout>
 
-    <boot-check v-else :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription">
-        <button v-if="bootState === 'action'" @click="show" class="widget-button widget-button--primary widget-button--run">{{ $t('ui.server.contao.setup') }}</button>
-    </boot-check>
+    <boot-check v-else :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription"></boot-check>
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     import views from '../../router/views';
     import boot from '../../mixins/boot';
 
@@ -155,6 +155,8 @@
         }),
 
         computed: {
+            ...mapState('tasks', { taskStatus: 'status' }),
+
             directoryError: vm => vm.directoryExists ? vm.$t('ui.server.docroot.directoryExists') : (vm.directory ? '' : vm.$t('ui.server.docroot.directoryInvalid')),
             currentHref: () => window.location.href,
 
@@ -203,9 +205,10 @@
             },
 
             async boot() {
+                this.bootState = 'loading';
                 this.bootDescription = this.$t('ui.server.running');
 
-                const response = await this.$store.dispatch('server/contao/get');
+                const response = await this.$store.dispatch('server/contao/get', false);
                 result = response.body;
 
                 if (response.status === 200) {
@@ -239,10 +242,10 @@
                 }
 
                 this.$emit('result', 'Contao', this.bootState);
-            },
 
-            show() {
-                this.$emit('view', 'Contao');
+                if (this.bootState === 'action') {
+                    this.$emit('view', 'Contao');
+                }
             },
 
             async install() {
@@ -254,14 +257,16 @@
                     noUpdate: this.noUpdate,
                 });
 
-                if (this.noUpdate) {
-                    await this.$store.dispatch('tasks/deleteCurrent');
-                    this.$store.commit('setSafeMode', true);
-                    this.$store.commit('setView', views.READY);
+                if (this.taskStatus !== 'complete') {
                     return;
                 }
 
-                window.location.reload();
+                await this.$store.dispatch('tasks/deleteCurrent');
+
+                if (this.noUpdate) {
+                    this.$store.commit('setSafeMode', true);
+                    this.$store.commit('setView', views.READY);
+                }
             },
 
             async setupDocroot() {

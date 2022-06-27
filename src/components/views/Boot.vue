@@ -1,5 +1,7 @@
 <template>
-    <boxed-layout :wide="true" slotClass="view-boot" v-if="!currentView">
+    <div ref="current" v-if="currentStep"></div>
+
+    <boxed-layout :wide="true" slotClass="view-boot" v-else>
         <header class="view-boot__header">
             <img src="../../assets/images/boot.svg" width="80" height="80" alt="Contao Logo" class="view-boot__icon">
             <h1 class="view-boot__headline">{{ $t('ui.boot.headline') }}</h1>
@@ -7,7 +9,7 @@
         </header>
         <main v-if="tasksInitialized" class="view-boot__checks">
 
-            <component v-for="(component, name) in views" :is="component" :current="false" :ready="canShow(name)" :key="name" @result="result" @view="setView"/>
+            <div ref="steps"></div>
 
             <div class="clearfix"></div>
             <div class="view-boot__summary view-boot__summary--error" v-if="hasError">
@@ -27,11 +29,10 @@
             <loader/>
         </main>
     </boxed-layout>
-
-    <component v-else :is="currentView ? views[currentView] : null" :current="true" @view="setView"/>
 </template>
 
 <script>
+    import Vue from 'vue';
     import { mapState } from 'vuex';
 
     import views from '../../router/views';
@@ -45,12 +46,14 @@
     import PhpCli from '../boot/PhpCli';
     import Composer from '../boot/Composer';
     import Contao from '../boot/Contao';
+    import Database from '../boot/Database';
 
     export default {
         components: { BoxedLayout, Loader },
 
         data: () => ({
-            currentView: null,
+            steps: [],
+            currentStep: null,
             status: {},
         }),
 
@@ -73,19 +76,33 @@
                     && Object.values(vm.status).indexOf('error') === -1
                     && Object.values(vm.status).indexOf('action') === -1
                     && Object.values(vm.status).indexOf('warning') === -1,
-
-            views() {
-                if (this.$route.name === routes.oauth.name) {
-                    return { PhpWeb, Config, PhpCli, SelfUpdate };
-                }
-
-                return { PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao };
-            },
         },
 
         methods: {
             async setView(view) {
-                this.currentView = view;
+                if (!view) {
+                    this.currentStep = null;
+                    this.$nextTick(() => {
+                        this.$refs.steps.innerHTML = '';
+
+                        Object.keys(this.steps).forEach((key) => {
+                            this.steps[key].current = false;
+                            this.$refs.steps.append(this.steps[key].$el);
+                        })
+                    });
+                    return;
+                }
+
+                Object.keys(this.steps).forEach((key) => {
+                    this.steps[key].current = false;
+                })
+
+                this.currentStep = view;
+                this.$nextTick(() => {
+                    this.$refs.current.innerHTML = '';
+                    this.$refs.current.append(this.steps[view].$el);
+                    this.steps[view].current = true;
+                })
             },
 
             runSafeMode() {
@@ -101,14 +118,12 @@
 
             result(name, state) {
                 this.$set(this.status, name, state);
-                this.update();
-            },
 
-            update() {
                 const keys = Object.keys(this.status);
                 for (let k = 0; k < keys.length; k += 1) {
                     if (this.status[keys[k]] === null) {
-                        this.currentView = null;
+                        this.steps[keys[k]].ready = this.canShow(keys[k]);
+                        this.currentStep = null;
                         return;
                     }
                 }
@@ -129,17 +144,40 @@
                 return false;
             },
 
-            setStatus(components) {
+            initViews() {
+                this.$refs.steps.innerHTML = '';
+                this.steps = {};
+                let steps = { PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao, Database };
+
+                if (this.$route.name === routes.oauth.name) {
+                    steps = { PhpWeb, Config, PhpCli, SelfUpdate };
+                }
+
                 this.status = Object
-                    .keys(components)
+                    .keys(steps)
                     .reduce((status, key) => Object.assign(status, { [key]: null }), {})
                 ;
+
+                Object.keys(steps).forEach((key) => {
+                    const instance = new (Vue.extend(steps[key]))({
+                        parent: this
+                    });
+
+                    instance.$mount();
+                    instance.$on('result', this.result);
+                    instance.$on('view', this.setView);
+                    instance.ready = this.canShow(key);
+
+                    this.steps[key] = instance;
+
+                    this.$refs.steps.append(instance.$el);
+                })
             },
         },
 
         watch: {
-            views(value) {
-                this.setStatus(value);
+            $route() {
+                this.initViews();
             },
 
             shouldContinue(value) {
@@ -149,10 +187,10 @@
             },
         },
 
-        async created() {
+        async mounted() {
             await this.$store.dispatch('reset');
             await this.$store.dispatch('tasks/init');
-            this.setStatus(this.views);
+            this.initViews();
         },
     };
 </script>

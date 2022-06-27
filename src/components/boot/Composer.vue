@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import views from '../../router/views';
+    import { mapState } from 'vuex';
     import boot from '../../mixins/boot';
     import BootCheck from '../fragments/BootCheck';
 
@@ -13,8 +13,13 @@
         mixins: [boot],
         components: { BootCheck },
 
+        computed: {
+            ...mapState('tasks', { taskStatus: 'status' }),
+        },
+
         methods: {
             boot() {
+                this.bootState = 'loading';
                 this.bootDescription = this.$t('ui.server.running');
 
                 this.$store.dispatch('server/composer/get').then((result) => {
@@ -42,10 +47,14 @@
                 });
             },
 
-            install() {
-                this.$store.dispatch('tasks/execute', { name: 'composer/install' }).then(() => {
-                    window.location.reload();
-                });
+            async install() {
+                await this.$store.dispatch('tasks/execute', { name: 'composer/install' });
+
+                if (this.taskStatus !== 'complete') {
+                    return;
+                }
+
+                await this.$store.dispatch('tasks/deleteCurrent');
             },
         },
     };
