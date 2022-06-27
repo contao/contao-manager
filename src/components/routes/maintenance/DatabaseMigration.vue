@@ -26,12 +26,11 @@
     import routes from '../../../router/routes';
 
     import MessageOverlay from '../../fragments/MessageOverlay';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
     import ButtonGroup from '../../widgets/ButtonGroup';
     import LinkMenu from 'contao-package-list/src/components/fragments/LinkMenu';
 
     export default {
-        components: { MessageOverlay, Loader, ButtonGroup, LinkMenu },
+        components: { MessageOverlay, ButtonGroup, LinkMenu },
 
         data: () => ({
             routes,
