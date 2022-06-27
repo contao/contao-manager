@@ -1,5 +1,5 @@
 <template>
-    <div :class="'widget widget-text' + (error ? ' widget--error' : '')">
+    <div class="widget widget-text" :class="{ 'widget--error': error, 'widget--required': required }">
         <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
         <input
             ref="input"
@@ -7,9 +7,12 @@
             :id="label ? 'ctrl_'+name : ''"
             :name="name"
             :placeholder="placeholder"
+            :required="required"
             :disabled="disabled"
             :value="value"
             @input="input($event.target.value)"
+            @focus="$emit('focus')"
+            @blur="$emit('blur')"
             autocapitalize="none"
         >
         <p class="widget__error" v-if="error">{{ error }}</p>
@@ -21,27 +24,19 @@
         props: {
             type: {
                 type: String,
-                validator: value => value === 'text' || value === 'password',
+                validator: value => ['text', 'tel', 'email', 'url', 'password', 'search'].includes(value),
             },
             name: {
                 type: String,
                 required: true,
             },
-            label: {
-                type: String,
-            },
-            value: {
-                type: String,
-            },
-            placeholder: {
-                type: String,
-            },
-            disabled: {
-                type: Boolean,
-            },
-            error: {
-                type: String,
-            },
+            label: String,
+            value: String,
+            pattern: String,
+            placeholder: String,
+            disabled: Boolean,
+            required: Boolean,
+            error: String,
         },
 
         methods: {

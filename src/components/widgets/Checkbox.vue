@@ -1,11 +1,12 @@
 <template>
-    <div class="widget widget-checkbox">
+    <div class="widget widget-checkbox" :class="{ 'widget--required': required }">
         <input
             ref="input"
             type="checkbox"
             :id="label ? 'ctrl_'+name : ''"
             :name="name"
             :disabled="disabled"
+            :required="required"
             :checked="value"
             @change="toggle($event.target.checked)"
         >
@@ -24,12 +25,9 @@
                 type: String,
                 required: true,
             },
-            value: {
-                type: Boolean,
-            },
-            disabled: {
-                type: Boolean,
-            },
+            value: Boolean,
+            disabled: Boolean,
+            required: Boolean,
         },
         methods: {
             toggle(value) {

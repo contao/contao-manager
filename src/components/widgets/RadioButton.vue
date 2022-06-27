@@ -1,5 +1,5 @@
 <template>
-    <div class="widget widget-radio-button">
+    <div class="widget widget-radio-button" :class="{ 'widget--required': required }">
         <div v-for="(option, k) in options" :key="k">
             <input
                 ref="input"
@@ -7,6 +7,7 @@
                 :id="`ctrl_${name}_${option.value}`"
                 :name="name"
                 :disabled="option.disabled"
+                :required="required"
                 :checked="value === option.value"
                 @click="$emit('input', option.value)"
             >
@@ -30,9 +31,8 @@
             value: {
                 required: true,
             },
-            disabled: {
-                type: Boolean,
-            },
+            disabled: Boolean,
+            required: Boolean,
             allowHtml: {
                 type: Boolean,
                 default: false,
