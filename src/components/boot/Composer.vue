@@ -1,7 +1,6 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.composer.title')" :description="bootDescription">
         <button v-if="bootState === 'action'" @click="install" class="widget-button widget-button--primary widget-button--run">{{ $t('ui.server.composer.button') }}</button>
-        <button v-if="bootState === 'action'" @click="runSafeMode" class="widget-button">{{ $t('ui.server.composer.safeMode') }}</button>
     </boot-check>
 </template>
 
@@ -25,6 +24,7 @@
                     } else if (result.json.found && !result.vendor.found) {
                         this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.composer.install');
+                        this.$store.commit('setSafeMode', true);
                     } else {
                         this.bootState = 'success';
                         this.bootDescription = this.$t('ui.server.composer.success');
@@ -46,11 +46,6 @@
                 this.$store.dispatch('tasks/execute', { name: 'composer/install' }).then(() => {
                     window.location.reload();
                 });
-            },
-
-            runSafeMode() {
-                this.$store.commit('setSafeMode', true);
-                this.$store.commit('setView', views.READY);
             },
         },
     };
