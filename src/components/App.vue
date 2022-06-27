@@ -1,6 +1,12 @@
 <template>
     <div id="app">
-        <div class="https-warning" v-if="isInsecure">
+        <div class="safe-mode" v-if="safeMode && view === 'ready'">
+            <strong class="safe-mode__headline">{{ $t('ui.app.safeModeHeadline') }}</strong>&nbsp;
+            <span class="safe-mode__description">{{ $t('ui.app.safeModeDescription') }}</span>&nbsp;
+            <a class="safe-mode__link" href="javascript:window.location.reload()">{{ $t('ui.app.safeModeExit') }}</a>
+        </div>
+
+        <div class="https-warning" v-else-if="isInsecure">
             <strong class="https-warning__headline">{{ $t('ui.app.httpsHeadline') }}</strong>&nbsp;
             <span class="https-warning__description">{{ $t('ui.app.httpsDescription') }}</span>&nbsp;
             <a :href="$t('ui.app.httpsHref')" target="_blank" class="https-warning__link">{{ $t('ui.app.httpsLink') }}</a>
@@ -58,6 +64,7 @@
         }),
 
         computed: {
+            ...mapState(['safeMode']),
             ...mapState(['view', 'error']),
             ...mapState('auth', ['username']),
             ...mapState('tasks', { taskStatus: 'status' }),
@@ -177,6 +184,36 @@
         height: 27px;
         padding: 4px 8px;
         background: $orange-button;
+        color: #fff;
+        text-align: center;
+        z-index: 100;
+
+        &__description {
+            display: none;
+
+            @include screen(600) {
+                display: inline;
+            }
+        }
+
+        &__link {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        + div {
+            padding-top: 25px;
+        }
+    }
+
+    .safe-mode {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 27px;
+        padding: 4px 8px;
+        background: $red-button;
         color: #fff;
         text-align: center;
         z-index: 100;
