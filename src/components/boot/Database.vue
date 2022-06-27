@@ -2,9 +2,11 @@
     <boxed-layout v-if="current" :wide="true" slotClass="database-check">
 
         <header class="database-check__header">
-            <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="database-check__icon" />
+            <img src="../../assets/images/database.svg" width="80" height="80" class="database-check__icon" alt="">
             <h1 class="database-check__headline">{{ $t('ui.server.database.headline') }}</h1>
-            <p class="database-check__description">{{ $t('ui.server.database.description') }}</p>
+            <i18n tag="p" path="ui.server.database.description" class="database-check__description">
+                <template #env><code>.env</code></template>
+            </i18n>
         </header>
 
         <main class="database-check__form">
@@ -19,11 +21,11 @@
                         :label="$t('ui.server.database.url')" :placeholder="$t('ui.server.database.urlPlaceholder')"
                         required :pattern="urlPattern"
                         :disabled="processing"
-                        v-model="url" @focus="validUrl=true" @blur="parseUrl"
+                        v-model="url" @keyup="validUrl=true" @blur="parseUrl"
                         :error="validUrl ? undefined : $t('ui.server.database.validUrl')"
                     />
 
-                    <p>or</p>
+                    <div class="database-check__or"><span>{{ $t('ui.server.database.or') }}</span></div>
 
                     <text-field name="user" :label="$t('ui.server.database.user')" :disabled="processing" v-model="user"/>
                     <text-field name="password" type="password" :label="$t('ui.server.database.password')" :disabled="processing" v-model="password"/>
@@ -195,7 +197,7 @@
                     return;
                 }
 
-                const serverParts = this.server.split(':', 1);
+                const serverParts = this.server.split(':', 2);
                 const server = `${encodeURIComponent(serverParts[0])}:${serverParts[1] || '3306'}`;
 
                 let url = 'mysql://';
@@ -263,6 +265,12 @@
             }
         }
 
+        &__icon {
+            background: $contao-color;
+            border-radius: 10px;
+            padding:10px;
+        }
+
         &__headline {
             margin-top: 20px;
             margin-bottom: 25px;
@@ -307,6 +315,32 @@
         &__fielddesc {
             margin-bottom: 1em;
             text-align: justify;
+        }
+
+        &__or {
+            position: relative;
+            overflow: hidden;
+            margin: 1em 0;
+            text-align: center;
+
+            &:before {
+                content: "";
+                position: absolute;
+                top: .8em;
+                left: 0;
+                right: 0;
+                display: block;
+                height: 1px;
+                background: $border-color;
+                z-index: 1;
+            }
+
+            span {
+                position: relative;
+                padding: 0 10px;
+                background: #fff;
+                z-index: 2;
+            }
         }
 
         .widget-button {

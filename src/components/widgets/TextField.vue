@@ -11,6 +11,7 @@
             :disabled="disabled"
             :value="value"
             @input="input($event.target.value)"
+            @keyup="$emit('keyup')"
             @focus="$emit('focus')"
             @blur="$emit('blur')"
             autocapitalize="none"
