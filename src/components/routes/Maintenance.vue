@@ -102,6 +102,18 @@
             }
         }
 
+        &__warning {
+            position: relative;
+            top: -2px;
+            margin-left: .5em;
+            padding: 2px 8px;
+            font-size: 14px;
+            line-height: 1em;
+            font-weight: $font-weight-normal;
+            background: $orange-button;
+            color: #fff;
+        }
+
         &__actions {
             @include screen(600) {
                 margin: 0 -10px;

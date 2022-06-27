@@ -6,7 +6,9 @@
             <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.packages">
                 <a>{{ $t('ui.navigation.packages') }}<span class="navigation__item-badge" v-if="packageChanges > 0">{{ packageChanges }}</span></a>
             </router-link>
-            <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.maintenance"><a>{{ $t('ui.navigation.maintenance') }}</a></router-link>
+            <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.maintenance">
+                <a>{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="totalMigrations || totalSchemaUpdates">1</span></a>
+            </router-link>
             <li class="navigation__item navigation__item--main">
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ $t('ui.navigation.tools') }}</a>
                 <ul class="navigation__group navigation__group--sub">
@@ -40,12 +42,14 @@
     export default {
         data: () => ({
             routes,
+            databaseChanges: 0,
         }),
 
         computed: {
             ...mapState(['safeMode']),
             ...mapState('contao/access-key', { showAppDev: 'isEnabled' }),
             ...mapState('contao/jwt-cookie', { showPreview: 'isDebugEnabled' }),
+            ...mapState('server/database', ['totalMigrations', 'totalSchemaUpdates']),
             ...mapGetters('packages', ['totalChanges']),
             ...mapGetters('packages/uploads', ['totalUploads']),
 
@@ -85,6 +89,7 @@
         mounted() {
             this.$store.dispatch('contao/jwt-cookie/get').catch(() => {});
             this.$store.dispatch('contao/access-key/get').catch(() => {});
+            this.$store.dispatch('server/database/get').catch(() => {});
         },
     };
 </script>

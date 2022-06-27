@@ -4,15 +4,16 @@
             <div class="maintenance__inside">
                 <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" alt="" /></figure>
                 <div class="maintenance__about">
-                    <h1>{{ $t('ui.maintenance.databaseMigration.title') }}</h1>
+                    <h1>
+                        {{ $t('ui.maintenance.databaseMigration.title') }}
+                        <span class="maintenance__warning" v-if="totalMigrations">{{ $tc('ui.maintenance.databaseMigration.migrations', totalMigrations) }}</span>
+                        <span class="maintenance__warning" v-else-if="totalSchemaUpdates">{{ $tc('ui.maintenance.databaseMigration.schemaUpdates', totalSchemaUpdates) }}</span>
+                    </h1>
                     <p>{{ $t('ui.maintenance.databaseMigration.description') }}</p>
                 </div>
-                <fieldset class="maintenance__actions" v-if="loading">
-                    <loader class="maintenance__loader"/>
-                </fieldset>
-                <fieldset class="maintenance__actions" v-else>
-                    <button-group :to="{ name: routes.databaseMigration.name }" :label="$t('ui.maintenance.databaseMigration.button')" type="primary" icon="database">
-                        <link-menu align="right" :items="advancedActions()" color="primary"/>
+                <fieldset class="maintenance__actions">
+                    <button-group :to="{ name: routes.databaseMigration.name }" :label="$t('ui.maintenance.databaseMigration.button')" :type="(totalMigrations || totalSchemaUpdates) ? 'warning' : 'primary'" icon="database">
+                        <link-menu align="right" :items="advancedActions()" :color="(totalMigrations || totalSchemaUpdates) ? 'warning' : 'primary'"/>
                     </button-group>
                 </fieldset>
             </div>
@@ -34,12 +35,11 @@
 
         data: () => ({
             routes,
-            loading: true,
-            supported: false,
         }),
 
         computed: {
             ...mapState(['safeMode']),
+            ...mapState('server/database', ['supported', 'totalMigrations', 'totalSchemaUpdates']),
             overlayMessage: vm => vm.safeMode ? vm.$t('ui.maintenance.safeMode') : vm.$t('ui.maintenance.unsupported'),
         },
 
@@ -56,21 +56,6 @@
                     },
                 ];
             },
-        },
-
-        async mounted () {
-            const response = await this.$store.dispatch('server/contao/get');
-
-            if (response.status === 200) {
-                const commands = response.body?.cli?.commands;
-
-                this.supported = commands['contao:migrate']
-                    && commands['contao:migrate']?.options.includes('hash')
-                    && commands['contao:migrate']?.options.includes('format')
-                    && commands['contao:migrate']?.options.includes('dry-run');
-            }
-
-            this.loading = false
         }
     };
 </script>

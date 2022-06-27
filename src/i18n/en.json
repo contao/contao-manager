@@ -245,6 +245,8 @@
     "ui.navigation.logout": "Logout",
     "ui.maintenance.databaseMigration.title": "Database Migrations",
     "ui.maintenance.databaseMigration.description": "Database migrations ensure consistent data and table schemas.",
+    "ui.maintenance.databaseMigration.migrations": "One pending database migration | {count} pending database migrations",
+    "ui.maintenance.databaseMigration.schemaUpdates": "One pending schema update | {count} pending schema updates",
     "ui.maintenance.databaseMigration.button": "Check database",
     "ui.maintenance.databaseMigration.migrationOnly": "Check migrations only",
     "ui.maintenance.databaseMigration.schemaOnly": "Check schema only",
