@@ -108,6 +108,67 @@ class ContaoConsole
         return $this->commands = $this->normalizeCommands($data['commands'] ?? []);
     }
 
+    public function checkDatabaseMigrations(): ?array
+    {
+        $commands = $this->getCommandList();
+
+        if (
+            !isset($commands['contao:migrate']['options'])
+            || !\in_array('format', $commands['contao:migrate']['options'], true)
+            || !\in_array('dry-run', $commands['contao:migrate']['options'], true)
+        ) {
+            return null;
+        }
+
+        $arguments = [
+            'contao:migrate',
+            '--format=ndjson',
+            '--dry-run',
+            '--no-interaction',
+        ];
+
+        if (\in_array('no-backup', $commands['contao:migrate']['options'], true)) {
+            $arguments[] = '--no-backup';
+        }
+
+        $process = $this->processFactory->createContaoConsoleProcess($arguments);
+        $process->run();
+        $output = $process->getOutput();
+
+        if (!empty($output)) {
+            $lines = explode("\n", $output);
+
+            while ($line = array_shift($lines)) {
+                $data = json_decode($line, true);
+
+                if ('error' === ($data['type'] ?? null)) {
+                    return [
+                        'type' => 'error',
+                        'message' => $data['message'] ?? '',
+                    ];
+                }
+
+                if ('migration-pending' === ($data['type'] ?? '') && !empty($data['names'])) {
+                    return [
+                        'type' => 'migration',
+                        'total' => \count($data['names']),
+                    ];
+                }
+
+                if ('schema-pending' === ($data['type'] ?? '') && !empty($data['commands'])) {
+                    return [
+                        'type' => 'schema',
+                        'total' => \count($data['commands']),
+                    ];
+                }
+            }
+        }
+
+        return [
+            'type' => 'empty',
+        ];
+    }
+
     private function normalizeCommands(array $commands): array
     {
         $data = [];

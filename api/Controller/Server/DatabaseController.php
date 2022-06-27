@@ -33,14 +33,8 @@ class DatabaseController
 {
     private const URL_PATTERN = '^([^:]+)://(([^:@]+)(:([^@]+))?@)?([a-z][^:]+(:[0-9]+)?)/(.+)$';
 
-    public function __construct(
-        ApiKernel $kernel,
-        ContaoApi $contaoApi,
-        ContaoConsole $contaoConsole,
-        ConsoleProcessFactory $processFactory,
-        LoggerInterface $logger = null,
-        Filesystem $filesystem = null
-    ) {
+    public function __construct(ApiKernel $kernel, ContaoApi $contaoApi, ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, LoggerInterface $logger = null, Filesystem $filesystem = null)
+    {
         $this->kernel = $kernel;
         $this->contaoApi = $contaoApi;
         $this->contaoConsole = $contaoConsole;
@@ -91,7 +85,7 @@ class DatabaseController
         return new JsonResponse([
             'url' => $url,
             'pattern' => self::URL_PATTERN,
-            'status' => $this->contaoConsole->checkDatabaseMigrations()
+            'status' => $this->contaoConsole->checkDatabaseMigrations(),
         ]);
     }
 }
