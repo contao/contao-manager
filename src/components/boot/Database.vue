@@ -54,12 +54,11 @@
     import BoxedLayout from '../layouts/Boxed';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import TextField from '../widgets/TextField';
-    import RadioButton from '../widgets/RadioButton';
     import routes from '../../router/routes';
 
     export default {
         mixins: [boot],
-        components: { RadioButton, BootCheck, BoxedLayout, TextField, LoadingButton },
+        components: { BootCheck, BoxedLayout, TextField, LoadingButton },
 
         data: () => ({
             processing: false,
