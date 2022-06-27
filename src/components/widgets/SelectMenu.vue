@@ -1,11 +1,12 @@
 <template>
-    <div :class="'widget widget-select' + (error ? ' widget--error' : '')">
+    <div class="widget widget-select" :class="{ 'widget--error': error, 'widget--required': required }">
         <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
         <select
             ref="input"
             :id="label ? 'ctrl_'+name : ''"
             :name="name"
             :disabled="disabled"
+            :required="required"
             @change="input($event.target.value)"
         >
             <option v-for="(v, k) in options" :value="k" :selected="k === value" :key="k">{{ v }}</option>
@@ -21,22 +22,15 @@
                 type: String,
                 required: true,
             },
-            label: {
-                type: String,
-            },
-            value: {
-                type: String,
-            },
-            disabled: {
-                type: Boolean,
-            },
-            error: {
-                type: String,
-            },
             options: {
                 type: Object,
                 required: true,
             },
+            label: String,
+            value: String,
+            disabled: Boolean,
+            required: Boolean,
+            error: String,
         },
 
         methods: {
