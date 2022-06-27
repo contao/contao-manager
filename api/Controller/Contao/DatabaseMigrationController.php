@@ -49,7 +49,8 @@ class DatabaseMigrationController
     {
         $commands = $this->console->getCommandList();
 
-        if (!isset($commands['contao:migrate']['options'])
+        if (
+            !isset($commands['contao:migrate']['options'])
             || !\in_array('hash', $commands['contao:migrate']['options'], true)
             || !\in_array('format', $commands['contao:migrate']['options'], true)
             || !\in_array('dry-run', $commands['contao:migrate']['options'], true)
@@ -81,6 +82,7 @@ class DatabaseMigrationController
                 }
 
                 $process->delete();
+
                 return new Response();
         }
 
@@ -179,7 +181,7 @@ class DatabaseMigrationController
             if ('migration-result' === ($data['type'] ?? '')) {
                 $operations[$c]['message'] = $data['message'];
                 $operations[$c]['status'] = ($data['isSuccessful'] ? TaskStatus::STATUS_COMPLETE : TaskStatus::STATUS_ERROR);
-                $c++;
+                ++$c;
             }
         }
 

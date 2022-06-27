@@ -112,7 +112,8 @@ class ContaoConsole
     {
         $commands = $this->getCommandList();
 
-        if (!isset($commands['contao:migrate']['options'])
+        if (
+            !isset($commands['contao:migrate']['options'])
             || !\in_array('format', $commands['contao:migrate']['options'], true)
             || !\in_array('dry-run', $commands['contao:migrate']['options'], true)
         ) {
@@ -150,14 +151,14 @@ class ContaoConsole
                 if ('migration-pending' === ($data['type'] ?? '') && !empty($data['names'])) {
                     return [
                         'type' => 'migration',
-                        'total' => count($data['names']),
+                        'total' => \count($data['names']),
                     ];
                 }
 
                 if ('schema-pending' === ($data['type'] ?? '') && !empty($data['commands'])) {
                     return [
                         'type' => 'schema',
-                        'total' => count($data['commands']),
+                        'total' => \count($data['commands']),
                     ];
                 }
             }
