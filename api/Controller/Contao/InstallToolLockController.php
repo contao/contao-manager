@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Controller\Contao;
 
+use Composer\Semver\Constraint\Constraint;
+use Composer\Semver\Constraint\MultiConstraint;
 use Composer\Semver\VersionParser;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
@@ -61,7 +63,11 @@ class InstallToolLockController
 
         if (
             null === $contaoVersion
-            || version_compare((new VersionParser())->normalize($contaoVersion), '4.4.9', '<')
+            || (new MultiConstraint([
+                    new Constraint('<', '4.4.9'),
+                    new Constraint('>=', '5.0'),
+                ], false)
+            )->matches(new Constraint('=', $contaoVersion))
         ) {
             return new ApiProblemResponse(
                 (new ApiProblem('Contao does not support locking the install tool.'))
