@@ -48,14 +48,14 @@ class TaskManager implements LoggerAwareInterface
     private $logFile;
 
     /**
-     * @var TaskInterface[]
+     * @var array<TaskInterface>
      */
     private $tasks = [];
 
     /**
      * Constructor.
      *
-     * @param TaskInterface[] $tasks
+     * @param iterable<TaskInterface> $tasks
      */
     public function __construct(iterable $tasks, ApiKernel $kernel, ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
     {

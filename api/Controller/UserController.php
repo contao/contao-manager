@@ -124,7 +124,7 @@ class UserController extends Controller
     {
         $tokens = array_filter(
             $this->config->getTokens(),
-            function ($token) use ($username) {
+            static function ($token) use ($username) {
                 return $token['user'] === $username;
             }
         );
@@ -190,7 +190,7 @@ class UserController extends Controller
     /**
      * Creates a response for given user information.
      *
-     * @param UserInterface|UserInterface[] $user
+     * @param UserInterface|array<UserInterface> $user
      */
     private function getUserResponse($user, int $status = Response::HTTP_OK, bool $addLocation = false): Response
     {
@@ -209,7 +209,7 @@ class UserController extends Controller
     /**
      * Converts a user to JSON representation.
      *
-     * @param UserInterface[]|UserInterface $user
+     * @param array<UserInterface>|UserInterface $user
      *
      * @throws \InvalidArgumentException
      */

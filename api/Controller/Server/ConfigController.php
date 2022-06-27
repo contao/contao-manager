@@ -96,7 +96,7 @@ class ConfigController
         $info = $this->serverInfo->getPhpExecutableFinder()->getServerInfo($phpCli);
 
         if (null === $info) {
-            return  $this->translator->trans('config.php_cli.not_found');
+            return $this->translator->trans('config.php_cli.not_found');
         }
 
         $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
@@ -142,7 +142,8 @@ class ConfigController
             $issues[] = $this->translator->trans('config.cloud.platform');
         }
 
-        if (isset($data['config']['cache-dir'])
+        if (
+            isset($data['config']['cache-dir'])
             || isset($data['config']['cache-files-dir'])
             || isset($data['config']['cache-repo-dir'])
             || isset($data['config']['cache-vcs-dir'])

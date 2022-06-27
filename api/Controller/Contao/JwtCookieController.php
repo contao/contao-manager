@@ -15,6 +15,7 @@ namespace Contao\ManagerApi\Controller\Contao;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Process\ContaoApi;
 use Crell\ApiProblem\ApiProblem;
+use Seld\JsonLint\ParsingException;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +45,7 @@ class JwtCookieController
     /**
      * Handles the controller action.
      *
-     * @throws \Seld\JsonLint\ParsingException
+     * @throws ParsingException
      *
      * @return Response
      */
@@ -72,7 +73,7 @@ class JwtCookieController
     }
 
     /**
-     * @throws \Seld\JsonLint\ParsingException
+     * @throws ParsingException
      */
     private function getJwtPayload(Request $request): Response
     {
@@ -86,7 +87,7 @@ class JwtCookieController
     }
 
     /**
-     * @throws \Seld\JsonLint\ParsingException
+     * @throws ParsingException
      */
     private function setJwtToken(Request $request): Response
     {

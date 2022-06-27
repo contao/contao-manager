@@ -375,13 +375,15 @@ class CloudOperation implements TaskOperationInterface
         $this->taskConfig->setState('cloud-job-status', $this->job->jsonSerialize());
         $this->taskConfig->setState('cloud-job-updated', time());
 
-        if ($this->job->isProcessing()
+        if (
+            $this->job->isProcessing()
             && !$this->taskConfig->getState('cloud-job-processing')
         ) {
             $this->taskConfig->setState('cloud-job-processing', time());
         }
 
-        if (($this->job->isSuccessful() || $this->job->isFailed())
+        if (
+            ($this->job->isSuccessful() || $this->job->isFailed())
             && !$this->taskConfig->getState('cloud-job-finished')
         ) {
             $this->taskConfig->setState('cloud-job-finished', time());
@@ -427,7 +429,6 @@ class CloudOperation implements TaskOperationInterface
             }
 
             return $this->output;
-
         } catch (\Exception $exception) {
             return $this->output = self::CLOUD_ERROR;
         }

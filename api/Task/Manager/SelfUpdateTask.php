@@ -44,7 +44,7 @@ class SelfUpdateTask extends AbstractTask
     }
 
     /**
-     * @return TaskOperationInterface[]
+     * @return array<TaskOperationInterface>
      */
     protected function buildOperations(TaskConfig $config): array
     {

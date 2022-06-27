@@ -107,7 +107,7 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
     {
         // Increase lock counter
         $this->filesystem->dumpFile(
-            $this->kernel->getConfigDir().DIRECTORY_SEPARATOR.self::LOCK_FILE,
+            $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.self::LOCK_FILE,
             (string) (self::getLockCount($this->kernel->getConfigDir()) + 1)
         );
 
@@ -117,7 +117,7 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
     {
         // Reset lock counter
-        $this->filesystem->dumpFile($this->kernel->getConfigDir().DIRECTORY_SEPARATOR.self::LOCK_FILE, '0');
+        $this->filesystem->dumpFile($this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.self::LOCK_FILE, '0');
 
         $token->setAttribute('authenticator', static::class);
 
@@ -145,6 +145,6 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
 
     private static function getLockCount(string $configDir): int
     {
-        return (int) @file_get_contents($configDir.DIRECTORY_SEPARATOR.self::LOCK_FILE);
+        return (int) @file_get_contents($configDir.\DIRECTORY_SEPARATOR.self::LOCK_FILE);
     }
 }

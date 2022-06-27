@@ -90,7 +90,7 @@ class PhpExecutableFinder
 
         try {
             $process = new Process($arguments);
-            $process->mustRun(null, array_map(function () { return false; }, $_ENV));
+            $process->mustRun(null, array_map(static function () { return false; }, $_ENV));
             $output = @json_decode(trim($process->getOutput()), true);
 
             if (null === $output) {
@@ -115,8 +115,8 @@ class PhpExecutableFinder
     {
         $results = [];
 
-        if (ini_get('open_basedir')) {
-            $searchPath = explode(PATH_SEPARATOR, ini_get('open_basedir'));
+        if (\ini_get('open_basedir')) {
+            $searchPath = explode(PATH_SEPARATOR, \ini_get('open_basedir'));
             $dirs = [];
 
             foreach ($searchPath as $path) {
@@ -140,6 +140,7 @@ class PhpExecutableFinder
         }
 
         $suffixes = [''];
+
         if ('\\' === \DIRECTORY_SEPARATOR) {
             $pathExt = getenv('PATHEXT');
             $suffixes = array_merge(
@@ -151,7 +152,8 @@ class PhpExecutableFinder
         foreach ($this->names as $name) {
             foreach ($suffixes as $suffix) {
                 foreach ($dirs as $dir) {
-                    if (@is_file($file = $dir.\DIRECTORY_SEPARATOR.$name.$suffix)
+                    if (
+                        @is_file($file = $dir.\DIRECTORY_SEPARATOR.$name.$suffix)
                         && ('\\' === \DIRECTORY_SEPARATOR || is_executable($file))
                     ) {
                         $results[] = $file;
@@ -168,7 +170,7 @@ class PhpExecutableFinder
         $fallback = null;
         $sapi = null;
 
-        if ($openBasedir = ini_get('open_basedir')) {
+        if ($openBasedir = \ini_get('open_basedir')) {
             $openBasedir = explode(PATH_SEPARATOR, $openBasedir);
         }
 
@@ -194,7 +196,8 @@ class PhpExecutableFinder
             $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
             $vCli = vsprintf('%s.%s', explode('.', $info['version']));
 
-            if ((null === $fallback || ('cli' !== $sapi && 'cli' === $info['sapi']))
+            if (
+                null === $fallback || ('cli' !== $sapi && 'cli' === $info['sapi'])
                 && version_compare($vWeb, $vCli, 'eq')
             ) {
                 $fallback = $path;

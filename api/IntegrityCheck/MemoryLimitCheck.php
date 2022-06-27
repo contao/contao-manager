@@ -25,12 +25,12 @@ class MemoryLimitCheck extends AbstractIntegrityCheck
         return (new ApiProblem(
             $this->trans('memory_limit.title'),
             'https://php.net/memory_limit'
-        ))->setDetail($this->trans('memory_limit.detail', ['limit' => trim(ini_get('memory_limit'))]));
+        ))->setDetail($this->trans('memory_limit.detail', ['limit' => trim(\ini_get('memory_limit'))]));
     }
 
     private function hasEnoughMemory(): bool
     {
-        $memoryLimit = (string) trim(ini_get('memory_limit'));
+        $memoryLimit = (string) trim(\ini_get('memory_limit'));
 
         if ('-1' === $memoryLimit) {
             return true;
@@ -41,10 +41,10 @@ class MemoryLimitCheck extends AbstractIntegrityCheck
         $memoryLimit = (int) $memoryLimit;
 
         switch ($unit) {
-            /* @noinspection PhpMissingBreakStatementInspection */
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'g':
                 $memoryLimit *= 1024;
-            /* @noinspection PhpMissingBreakStatementInspection */
+            /** @noinspection PhpMissingBreakStatementInspection */
             // no break
             case 'm':
                 $memoryLimit *= 1024;

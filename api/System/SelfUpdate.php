@@ -165,6 +165,7 @@ class SelfUpdate
             $this->install($tempFile, $phar);
         } catch (\Throwable $e) {
             $this->filesystem->remove($tempFile);
+
             throw $e;
         }
 
@@ -188,7 +189,8 @@ class SelfUpdate
         $lastUpdate = $this->managerConfig->get('last_update');
         $latestVersion = $this->managerConfig->get('latest_version');
 
-        if (!$this->isDev()
+        if (
+            !$this->isDev()
             && null !== $lastUpdate
             && null !== $latestVersion
             && false !== ($lastUpdate = strtotime($lastUpdate))
@@ -216,7 +218,8 @@ class SelfUpdate
             $content = trim($this->request->get($url, $statusCode, false, 0));
             $data = json_decode($content, true);
 
-            if (!isset($data['version'], $data['sha1'])
+            if (
+                !isset($data['version'], $data['sha1'])
                 || !preg_match('@^\d+\.\d+\.\d+(-[a-z0-9\-]+)?$@', $data['version'])
                 || !preg_match('%^[a-z0-9]{40}%', $data['sha1'])
             ) {
@@ -259,6 +262,7 @@ class SelfUpdate
     private function validate(string $tempFile, string $sha1): void
     {
         $tmpVersion = sha1_file($tempFile);
+
         if ($tmpVersion !== $sha1) {
             throw new \RuntimeException(sprintf('Download file appears to be corrupted or outdated. The file received does not have the expected SHA-1 hash: %s.', $sha1));
         }

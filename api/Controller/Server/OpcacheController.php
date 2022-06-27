@@ -53,7 +53,7 @@ class OpcacheController
 
     private function deleteOpcache(): Response
     {
-        /* @noinspection PhpComposerExtensionStubsInspection */
+        /** @noinspection PhpComposerExtensionStubsInspection */
         opcache_reset();
 
         return $this->getOpcache();

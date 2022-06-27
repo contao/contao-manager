@@ -148,7 +148,7 @@ class ApiKernel extends Kernel
 
         $this->configDir = $this->getProjectDir().\DIRECTORY_SEPARATOR.'contao-manager';
 
-        if ('' === ($phar = \Phar::running(false))) {
+        if ('' === \Phar::running(false)) {
             return $this->configDir;
         }
 
@@ -165,7 +165,9 @@ class ApiKernel extends Kernel
 
         // Make sure the config directory contains a .htaccess file
         if (!$this->filesystem->exists($this->configDir.\DIRECTORY_SEPARATOR.'.htaccess')) {
-            $this->filesystem->dumpFile($this->configDir.\DIRECTORY_SEPARATOR.'.htaccess', <<<'CODE'
+            $this->filesystem->dumpFile(
+                $this->configDir.\DIRECTORY_SEPARATOR.'.htaccess',
+                <<<'CODE'
 <IfModule !mod_authz_core.c>
     Order deny,allow
     Deny from all
@@ -239,6 +241,7 @@ CODE
         if (false !== ($composer = getenv('COMPOSER'))) {
             // We don't know the public dir when running on command line, but it shouldn't matter
             $this->projectDir = $this->publicDir = \dirname($composer);
+
             return;
         }
 
@@ -249,6 +252,7 @@ CODE
             $this->projectDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'test-dir';
             $this->publicDir = $this->projectDir.'/web';
             $this->ensureDirectoryExists($this->publicDir);
+
             return;
         }
 
@@ -256,6 +260,7 @@ CODE
         if (('cli' === \PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && !empty($_SERVER['PWD'])) {
             // We don't know the public dir when running on command line, but it shouldn't matter
             $this->projectDir = $this->publicDir = $_SERVER['PWD'];
+
             return;
         }
 
@@ -268,6 +273,7 @@ CODE
         // Always use current folder if it is not named "web" or "public"
         if ('web' !== basename($current) && 'public' !== basename($current)) {
             $this->projectDir = $this->publicDir = $current;
+
             return;
         }
 
@@ -285,6 +291,7 @@ CODE
         foreach ($contaoFiles as $file) {
             if ($this->filesystem->exists($current.$file)) {
                 $this->projectDir = $this->publicDir = $current;
+
                 return;
             }
         }

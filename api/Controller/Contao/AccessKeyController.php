@@ -127,7 +127,8 @@ class AccessKeyController
     private function isSupported(string $action): bool
     {
         return 1 === $this->api->getVersion()
-            || ($this->api->hasCommand('dot-env:'.$action)
+            || (
+                $this->api->hasCommand('dot-env:'.$action)
                 && \in_array('APP_DEV_ACCESSKEY', $this->api->getFeatures()['contao/manager-bundle']['dot-env'], true)
             );
     }

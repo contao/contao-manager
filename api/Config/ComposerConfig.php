@@ -40,6 +40,7 @@ class ComposerConfig extends AbstractConfig
     public function allowPlugins(): void
     {
         $config = $this->config();
+
         if (true !== $config->get('allow-plugins')) {
             $config->set('allow-plugins', true);
         }

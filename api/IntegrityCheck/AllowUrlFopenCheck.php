@@ -18,7 +18,7 @@ class AllowUrlFopenCheck extends AbstractIntegrityCheck
 {
     public function run(): ?ApiProblem
     {
-        if (ini_get('allow_url_fopen')) {
+        if (\ini_get('allow_url_fopen')) {
             return null;
         }
 

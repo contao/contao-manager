@@ -84,7 +84,8 @@ class ContaoConsole
             return $this->commands = [];
         }
 
-        if ('Contao Managed Edition' === ($data['application']['name'] ?? '')
+        if (
+            'Contao Managed Edition' === ($data['application']['name'] ?? '')
             && isset($data['application']['version'])
         ) {
             try {

@@ -83,7 +83,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     /**
      * Gets all users.
      *
-     * @return User[]
+     * @return array<User>
      */
     public function getUsers(): array
     {

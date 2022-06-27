@@ -8,14 +8,14 @@ if (function_exists('ini_set')) {
     @ini_set('opcache.enable_cli', '0');
 
     if (isset($_GET['opcache_reset']) && $_GET['opcache_reset'] === md5(Phar::running(false))) {
-        $opcacheEnabled = @ini_get('opcache.enable');
+        $GLOBALS['opcacheEnabled'] = @ini_get('opcache.enable');
     } else {
-        $opcacheEnabled = @ini_set('opcache.enable', '0');
+        $GLOBALS['opcacheEnabled'] = @ini_set('opcache.enable', '0');
     }
 }
 
 if (PHP_VERSION_ID < 50509) {
-    die('You are using PHP '.phpversion()." but you need least PHP 5.5.9 to run the Contao Manager.\n");
+    die('You are using PHP '.PHP_VERSION." but you need least PHP 5.5.9 to run the Contao Manager.\n");
 }
 
 if (!extension_loaded('Phar')) {
@@ -33,14 +33,15 @@ if (function_exists('date_default_timezone_set') && function_exists('date_defaul
 }
 
 if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
-    if (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] === 'test') {
+    if (isset($_SERVER['argv'][1]) && 'test' === $_SERVER['argv'][1]) {
         die(json_encode(['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI]));
     }
 
     Phar::mapPhar('contao-manager.phar');
     require 'phar://contao-manager.phar/api/console';
 } else {
-    function rewrites() {
+    function rewrites()
+    {
         // The function argument is unreliable across servers, Nginx for example is always empty
         list(,$url) = explode(basename(__FILE__), $_SERVER['REQUEST_URI'], 2);
 

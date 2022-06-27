@@ -39,11 +39,8 @@ class SecurityListener implements EventSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(
-        JwtManager $jwtManager,
-        TokenStorageInterface $tokenStorage,
-        AuthorizationCheckerInterface $authorizationChecker
-    ) {
+    public function __construct(JwtManager $jwtManager, TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authorizationChecker)
+    {
         $this->jwtManager = $jwtManager;
         $this->tokenStorage = $tokenStorage;
         $this->authorizationChecker = $authorizationChecker;
@@ -60,7 +57,8 @@ class SecurityListener implements EventSubscriberInterface
 
         $token = $this->tokenStorage->getToken();
 
-        if (null !== $token
+        if (
+            null !== $token
             && $token->hasAttribute('authenticator')
             && JwtAuthenticator::class === $token->getAttribute('authenticator')
             && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')

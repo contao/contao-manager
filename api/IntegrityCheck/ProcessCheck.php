@@ -18,7 +18,8 @@ class ProcessCheck extends AbstractIntegrityCheck
 {
     public function run(): ?ApiProblem
     {
-        if (\function_exists('proc_open')
+        if (
+            \function_exists('proc_open')
             && \function_exists('proc_close')
             && \function_exists('proc_get_status')
             && \function_exists('proc_terminate')

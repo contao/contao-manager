@@ -31,7 +31,7 @@ class ApiProblemResponse extends Response
 
         if (!$problem->getTitle()) {
             $code = $problem->getStatus();
-            $problem->setTitle(isset(Response::$statusTexts[$code]) ? Response::$statusTexts[$code] : 'unknown status');
+            $problem->setTitle(Response::$statusTexts[$code] ?? 'unknown status');
         }
 
         try {

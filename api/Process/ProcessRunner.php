@@ -82,7 +82,7 @@ class ProcessRunner extends AbstractProcess
         }
 
         if (is_file($this->inputFile)) {
-            $this->stdin = fopen($this->inputFile, 'rb');
+            $this->stdin = fopen($this->inputFile, 'r');
             $this->process->setInput($this->stdin);
         }
 
@@ -139,7 +139,7 @@ class ProcessRunner extends AbstractProcess
     public function addOutput(string $line): void
     {
         if (!\is_resource($this->stdout)) {
-            $this->stdout = fopen($this->outputFile, 'wb');
+            $this->stdout = fopen($this->outputFile, 'w');
         }
 
         fwrite($this->stdout, $line);
