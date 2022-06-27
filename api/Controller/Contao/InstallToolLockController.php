@@ -14,7 +14,6 @@ namespace Contao\ManagerApi\Controller\Contao;
 
 use Composer\Semver\Constraint\Constraint;
 use Composer\Semver\Constraint\MultiConstraint;
-use Composer\Semver\VersionParser;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Process\ContaoConsole;
@@ -64,9 +63,9 @@ class InstallToolLockController
         if (
             null === $contaoVersion
             || (new MultiConstraint([
-                    new Constraint('<', '4.4.9'),
-                    new Constraint('>=', '5.0'),
-                ], false)
+                new Constraint('<', '4.4.9'),
+                new Constraint('>=', '5.0'),
+            ], false)
             )->matches(new Constraint('=', $contaoVersion))
         ) {
             return new ApiProblemResponse(
