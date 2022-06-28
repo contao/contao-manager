@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
     productionSourceMap: false,
-    baseUrl: '',
+    publicPath: '',
 
     devServer: {
         proxy: {
