@@ -125,9 +125,12 @@
 
     <target name="box-prod">
         <echo message="Creating the .phar file" />
-        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://github.com/box-project/box/releases/download/3.11.1/box.phar > box.phar" />
+        <exec executable="php" dir="contao-manager-${version}/tools/phing" checkreturn="true">
+            <arg value="../../composer.phar" />
+            <arg value="install" />
+        </exec>
         <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
-            <arg value="box.phar" />
+            <arg value="tools/phing/vendor/bin/box" />
             <arg value="compile" />
         </exec>
     </target>
