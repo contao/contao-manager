@@ -40,7 +40,7 @@
         "symfony/monolog-bundle": "^3.3",
         "firebase/php-jwt": "^4.0",
         "crell/api-problem": "^3.1",
-        "composer/composer": "^2.2",
+        "composer/composer": "dev-bugfix/config-release",
         "studio24/rotate": "^1.0",
         "ramsey/uuid": "^3.9"
     },
@@ -48,6 +48,12 @@
         "phpunit/phpunit": "^7.5",
         "bamarni/composer-bin-plugin": "^1.4"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/aschempp/composer.git"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Contao\\ManagerApi\\": "api/"
