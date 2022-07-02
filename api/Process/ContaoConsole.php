@@ -177,6 +177,68 @@ class ContaoConsole
         ];
     }
 
+    public function getUsers(): ?array
+    {
+        $commands = $this->getCommandList();
+
+        if (
+            !isset($commands['contao:user:list']['options'])
+            || !\in_array('format', $commands['contao:user:list']['options'], true)
+            || !\in_array('column', $commands['contao:user:list']['options'], true)
+        ) {
+            return null;
+        }
+
+        $arguments = [
+            'contao:user:list',
+            '--format=json',
+            '--column=username',
+            '--column=name',
+            '--column=admin',
+            '--column=dateAdded',
+            '--column=lastLogin',
+            '--no-interaction',
+        ];
+
+        $process = $this->processFactory->createContaoConsoleProcess($arguments);
+        $process->run();
+        $output = $process->getOutput();
+        $data = json_decode($output, true);
+
+        return \is_array($data) ? $data : null;
+    }
+
+    public function createAdminUser(array $user): bool
+    {
+        $commands = $this->getCommandList();
+
+        if (
+            !isset($commands['contao:user:create']['options'])
+            || !\in_array('username', $commands['contao:user:create']['options'], true)
+            || !\in_array('name', $commands['contao:user:create']['options'], true)
+            || !\in_array('email', $commands['contao:user:create']['options'], true)
+            || !\in_array('password', $commands['contao:user:create']['options'], true)
+            || !\in_array('admin', $commands['contao:user:create']['options'], true)
+        ) {
+            return false;
+        }
+
+        $arguments = [
+            'contao:user:create',
+            '--admin',
+            '--username='.$user['username'],
+            '--name='.$user['name'],
+            '--email='.$user['email'],
+            '--password='.$user['password'],
+            '--no-interaction',
+        ];
+
+        $process = $this->processFactory->createContaoConsoleProcess($arguments);
+        $process->run();
+
+        return $process->isSuccessful();
+    }
+
     private function normalizeCommands(array $commands): array
     {
         $data = [];
