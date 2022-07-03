@@ -58,32 +58,42 @@ class AdminUserController
             );
         }
 
-        if (
-            $request->isMethod('POST')
-            && !$this->contaoConsole->createAdminUser([
-                'username' => $request->request->get('username'),
-                'name' => $request->request->get('name'),
-                'email' => $request->request->get('email'),
-                'password' => $request->request->get('password'),
-            ])
-        ) {
-            return new ApiProblemResponse(
-                (new ApiProblem('Unable to create user'))
-                    ->setStatus(Response::HTTP_BAD_REQUEST)
-            );
-        }
+        if ($request->isMethod('POST')) {
+            if ($this->hasAdminUser()) {
+                return new ApiProblemResponse(
+                    (new ApiProblem('Admin user already exists'))
+                        ->setStatus(Response::HTTP_BAD_REQUEST)
+                );
+            }
 
-        $hasUser = false;
-
-        foreach ($this->contaoConsole->getUsers() as $user) {
-            if ($user['admin']) {
-                $hasUser = true;
-                break;
+            if (
+                !$this->contaoConsole->createAdminUser([
+                    'username' => $request->request->get('username'),
+                    'name' => $request->request->get('name'),
+                    'email' => $request->request->get('email'),
+                    'password' => $request->request->get('password'),
+                ])
+            ) {
+                return new ApiProblemResponse(
+                    (new ApiProblem('Unable to create user'))
+                        ->setStatus(Response::HTTP_BAD_REQUEST)
+                );
             }
         }
 
         return new JsonResponse([
-            'hasUser' => $hasUser,
+            'hasUser' => $this->hasAdminUser(),
         ]);
+    }
+
+    private function hasAdminUser(): bool
+    {
+        foreach ($this->contaoConsole->getUsers() as $user) {
+            if ($user['admin']) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
