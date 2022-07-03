@@ -2,7 +2,7 @@
     <boxed-layout v-if="current" :wide="true" slotClass="admin-user-check">
 
         <header class="admin-user-check__header">
-            <img src="../../assets/images/person.svg" width="80" height="80" class="admin-user-check__icon" alt="">
+            <img src="../../assets/images/user.svg" width="80" height="80" class="admin-user-check__icon" alt="">
             <h1 class="admin-user-check__headline">{{ $t('ui.server.adminUser.headline') }}</h1>
             <i18n tag="p" path="ui.server.adminUser.description" class="admin-user-check__description">
                 <template #env><code>.env</code></template>
