@@ -359,6 +359,63 @@ paths:
                 501:
                     description: Operation is not supported (e.g. not running as Phar).
 
+    /api/server/admin-user:
+        get:
+            summary: Gets if there is an admin user
+            tags: [Server Configuration]
+            responses:
+                200:
+                    description: Gets if there is an admin user
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    hasUser:
+                                        type: boolean
+                500:
+                    description: If any of the commands did not run successfully.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+
+        post:
+            summary: Create an admin user
+            tags: [Server Configuration]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                username:
+                                    type: string
+                                name:
+                                    type: string
+                                email:
+                                    type: string
+                                password:
+                                    type: string
+            responses:
+                200:
+                    description: Operation successful
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    hasUser:
+                                        type: boolean
+                400:
+                    description: Admin user already exists or unable to create a new one with the specified details.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                501:
+                    description: Operation is not supported
+
 
     #############
     #   Users   #
