@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6ecfc23f9cdb10642fa15d2e961a1df",
+    "content-hash": "db2ee76d777048a0a03b4024ad3184b7",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -84,16 +84,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "dev-bugfix/config-release",
+            "version": "2.2.15",
             "source": {
                 "type": "git",
-                "url": "https://github.com/aschempp/composer.git",
-                "reference": "824ddb716ef8bc6c7cee503e05f0a8e7c33832ac"
+                "url": "https://github.com/composer/composer.git",
+                "reference": "509dcbd4f8d459e0ef2ef223a231b8c31bceed78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aschempp/composer/zipball/824ddb716ef8bc6c7cee503e05f0a8e7c33832ac",
-                "reference": "824ddb716ef8bc6c7cee503e05f0a8e7c33832ac",
+                "url": "https://api.github.com/repos/composer/composer/zipball/509dcbd4f8d459e0ef2ef223a231b8c31bceed78",
+                "reference": "509dcbd4f8d459e0ef2ef223a231b8c31bceed78",
                 "shasum": ""
             },
             "require": {
@@ -137,33 +137,7 @@
                     "Composer\\": "src/Composer"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Composer\\Test\\": "tests/Composer/Test",
-                    "Composer\\PHPStanRules\\": "phpstan/Rules/src",
-                    "Composer\\PHPStanRulesTests\\": "phpstan/Rules/tests"
-                },
-                "classmap": [
-                    "phpstan/Rules/tests/data"
-                ]
-            },
-            "scripts": {
-                "compile": [
-                    "@php -dphar.readonly=0 bin/compile"
-                ],
-                "test": [
-                    "@php simple-phpunit"
-                ],
-                "phpstan-setup": [
-                    "@composer config platform --unset",
-                    "@composer update",
-                    "@composer require --dev phpstan/phpstan:1.4.* phpstan/phpstan-phpunit:1.0.* phpstan/phpstan-deprecation-rules:1.0.* phpstan/phpstan-strict-rules:1.1.* phpunit/phpunit:^7.5.20 --with-all-dependencies",
-                    "git checkout composer.json composer.lock"
-                ],
-                "phpstan": [
-                    "@php vendor/bin/phpstan analyse --configuration=phpstan/config.neon"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -187,11 +161,25 @@
                 "package"
             ],
             "support": {
-                "issues": "https://github.com/composer/composer/issues",
                 "irc": "ircs://irc.libera.chat:6697/composer",
-                "source": "https://github.com/aschempp/composer/tree/bugfix/config-release"
+                "issues": "https://github.com/composer/composer/issues",
+                "source": "https://github.com/composer/composer/tree/2.2.15"
             },
-            "time": "2022-07-01T08:10:36+00:00"
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-07-01T10:01:26+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -633,16 +621,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "1.13.2",
+            "version": "1.13.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "5b668aef16090008790395c02c893b1ba13f7e08"
+                "reference": "648b0343343565c4a056bfc8392201385e8d89f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/5b668aef16090008790395c02c893b1ba13f7e08",
-                "reference": "5b668aef16090008790395c02c893b1ba13f7e08",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/648b0343343565c4a056bfc8392201385e8d89f0",
+                "reference": "648b0343343565c4a056bfc8392201385e8d89f0",
                 "shasum": ""
             },
             "require": {
@@ -654,9 +642,10 @@
             "require-dev": {
                 "doctrine/cache": "^1.11 || ^2.0",
                 "doctrine/coding-standard": "^6.0 || ^8.1",
-                "phpstan/phpstan": "^0.12.20",
+                "phpstan/phpstan": "^1.4.10 || ^1.8.0",
                 "phpunit/phpunit": "^7.5 || ^8.0 || ^9.1.5",
-                "symfony/cache": "^4.4 || ^5.2"
+                "symfony/cache": "^4.4 || ^5.2",
+                "vimeo/psalm": "^4.10"
             },
             "type": "library",
             "autoload": {
@@ -699,9 +688,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/annotations/issues",
-                "source": "https://github.com/doctrine/annotations/tree/1.13.2"
+                "source": "https://github.com/doctrine/annotations/tree/1.13.3"
             },
-            "time": "2021-08-05T19:00:23+00:00"
+            "time": "2022-07-02T10:48:51+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -6399,9 +6388,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "composer/composer": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
