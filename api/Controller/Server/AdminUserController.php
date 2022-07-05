@@ -88,7 +88,7 @@ class AdminUserController
 
     private function hasAdminUser(): bool
     {
-        foreach ($this->contaoConsole->getUsers() as $user) {
+        foreach ($this->contaoConsole->getUsers() ?? [] as $user) {
             if ($user['admin']) {
                 return true;
             }
