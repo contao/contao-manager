@@ -16,7 +16,7 @@
                     <p class="admin-user-check__fielddesc">{{ $t('ui.server.adminUser.formText') }}</p>
                     <text-field name="username" :label="$t('ui.server.adminUser.username')" :disabled="processing" v-model="username"/>
                     <text-field name="name" :label="$t('ui.server.adminUser.name')" :disabled="processing" v-model="name"/>
-                    <text-field name="email" :label="$t('ui.server.adminUser.email')" :disabled="processing" v-model="email"/>
+                    <text-field name="email" type="email" :label="$t('ui.server.adminUser.email')" :disabled="processing" v-model="email"/>
                     <text-field name="password" type="password" :label="$t('ui.server.adminUser.password')" :disabled="processing" v-model="password"/>
                 </div>
 
