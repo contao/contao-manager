@@ -111,7 +111,9 @@
         </template>
     </boxed-layout>
 
-    <boot-check v-else :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription"></boot-check>
+    <boot-check v-else :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription">
+        <button v-if="bootState === 'action'" @click="show" class="widget-button widget-button--primary widget-button--run">{{ $t('ui.server.contao.setup') }}</button>
+    </boot-check>
 </template>
 
 <script>
@@ -244,8 +246,19 @@
                 this.$emit('result', 'Contao', this.bootState);
 
                 if (this.bootState === 'action') {
-                    this.$emit('view', 'Contao');
+                    const composer = await this.$store.dispatch('server/composer/get');
+
+                    if (!composer.json.found) {
+                        this.$emit('view', 'Contao');
+                    } else if (composer.json.valid) {
+                        this.$store.commit('setSafeMode', true);
+                    }
                 }
+            },
+
+            show() {
+                this.$store.commit('setSafeMode', false);
+                this.$emit('view', 'Contao');
             },
 
             async install() {
