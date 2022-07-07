@@ -60,15 +60,20 @@
             },
 
             phpinfo() {
-                this.$store.dispatch('server/phpinfo/get').then((content) => {
-                    const popup = window.open();
+                const popup = window.open();
 
-                    if (popup) {
-                        popup.document.open();
+                if (popup) {
+                    popup.document.open();
+                    popup.document.write('<p class="phpinfo__loading" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; font: 4vmin -apple-system, system-ui, &quot;Segoe UI&quot;, Roboto, Oxygen-Sans, Ubuntu, Cantarell, &quot;Helvetica Neue&quot;, sans-serif;">');
+                    popup.document.write(this.$t('ui.navigation.phpinfoLoading'));
+                    popup.document.write('</p>');
+
+                    this.$store.dispatch('server/phpinfo/get').then((content) => {
                         popup.document.write(content);
                         popup.document.close();
-                    }
-                });
+                        popup.document.body.removeChild(popup.document.querySelector('.phpinfo__loading'));
+                    });
+                }
             },
 
             systemCheck() {
