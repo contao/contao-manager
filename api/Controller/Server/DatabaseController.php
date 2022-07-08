@@ -59,6 +59,7 @@ class DatabaseController
             !isset($commands['contao:migrate']['options'], $features['contao/manager-bundle']['dot-env'])
             || !\in_array('format', $commands['contao:migrate']['options'], true)
             || !\in_array('dry-run', $commands['contao:migrate']['options'], true)
+            || !\in_array('hash', $commands['contao:migrate']['options'], true)
             || !\in_array('DATABASE_URL', $features['contao/manager-bundle']['dot-env'], true)
         ) {
             return new ApiProblemResponse(

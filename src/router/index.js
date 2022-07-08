@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import store from '../store';
 import routes from './routes';
 
 import Discover from '../components/routes/Discover';
@@ -38,6 +39,15 @@ const router = new Router({
             name: routes.databaseMigration.name,
             path: '/database-migration',
             component: DatabaseMigration,
+            beforeEnter: async (to, from, next) => {
+                if (store.state.server.database.supported) {
+                    next();
+                } else {
+                    next({
+                        name: routes.discover.name
+                    })
+                }
+            },
         },
         { path: '*', redirect: '/discover' },
     ],
