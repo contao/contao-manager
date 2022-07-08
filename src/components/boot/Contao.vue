@@ -239,7 +239,7 @@
                     window.localStorage.removeItem('contao_manager_booted');
                     this.$store.commit('setView', views.RECOVERY);
                 } else {
-                    this.bootState = 'action';
+                    this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.error');
                 }
 

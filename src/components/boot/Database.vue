@@ -43,8 +43,8 @@
 
     <boot-check v-else :progress="bootState" :title="$t('ui.server.database.title')" :description="bootDescription">
         <button type="button" v-if="bootState === 'warning'" @click="checkDatabase" class="widget-button widget-button--warning">{{ $t('ui.server.database.check') }}</button>
-        <button type="button" v-if="bootState === 'error'" @click="showConfiguration" class="widget-button widget-button--primary widget-button--run">{{ $t('ui.server.database.setup') }}</button>
-        <button type="button" class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" @click="showConfiguration">{{ $t('ui.server.database.change') }}</button>
+        <button type="button" v-if="bootState === 'action'" @click="showConfiguration" class="widget-button widget-button--primary widget-button--run">{{ $t('ui.server.database.setup') }}</button>
+        <button type="button" class="widget-button widget-button--edit" v-if="bootState === 'success' || bootState === 'warning'" @click="showConfiguration">{{ $t('ui.server.database.change') }}</button>
     </boot-check>
 </template>
 
@@ -111,7 +111,7 @@
 
                     switch (result.status.type) {
                         case 'error':
-                            this.bootState = 'error';
+                            this.bootState = 'action';
                             this.$store.commit('setSafeMode', true);
 
                             if (this.url === '') {
@@ -142,7 +142,7 @@
                     this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.prerequisite');
                 } else {
-                    this.bootState = 'action';
+                    this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.error');
                 }
 

@@ -53,6 +53,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import routes from '../../router/routes';
     import BoxedLayout from '../layouts/Boxed';
     import Loader from 'contao-package-list/src/components/fragments/Loader';
@@ -76,6 +77,8 @@
         }),
 
         computed: {
+            ...mapState('server/database', ['supported', 'totalMigrations', 'totalSchemaUpdates']),
+
             isEmpty: vm => vm.status !== 'active' && vm.operations && !vm.operations.length,
             executing: vm => vm.status === 'active',
             isComplete: vm => vm.status === 'complete',
@@ -265,6 +268,7 @@
             async close () {
                 this.closing = true;
                 await this.$http.delete('api/contao/database-migration');
+                await this.$store.dispatch('server/database/get', false);
 
                 this.$router.push({ name: routes.maintenance.name });
                 this.closing = false;
