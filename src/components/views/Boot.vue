@@ -83,6 +83,10 @@
                 if (!view) {
                     this.currentStep = null;
                     this.$nextTick(() => {
+                        if (!this.$refs.steps) {
+                            return;
+                        }
+
                         this.$refs.steps.innerHTML = '';
 
                         Object.keys(this.steps).forEach((key) => {
@@ -145,6 +149,10 @@
             },
 
             initViews() {
+                if (!this.$refs.steps) {
+                    return;
+                }
+
                 this.$refs.steps.innerHTML = '';
                 this.steps = {};
                 let steps = { PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao, Database };
