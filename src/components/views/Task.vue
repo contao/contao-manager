@@ -21,7 +21,7 @@
                 <div class="view-task__actions">
                     <loading-button class="view-task__action" :loading="isAborting" @click="cancelTask" v-if="allowCancel && (isActive || isAborting)">{{ $t('ui.task.buttonCancel') }}</loading-button>
 
-                    <a class="view-task__action widget-button widget-button--primary" href="/contao/install" @click="audit = false" target="_blank" v-if="!isActive && requiresAudit && audit">{{ $t('ui.task.buttonAudit') }}</a>
+                    <loading-button class="view-task__action" color="primary" :loading="loadingMigrations || deletingTask" :disabled="supportsMigrations && totalChanges === 0" @click="updateDatabase" v-if="requiresAudit">{{ $t('ui.task.buttonAudit') }}</loading-button>
 
                     <loading-button class="view-task__action" :loading="deletingTask" @click="deleteTask" v-if="!isActive && !isAborting">{{ $t('ui.task.buttonConfirm') }}</loading-button>
                     <checkbox name="autoclose" :label="$t('ui.task.autoclose')" v-model="autoClose" v-if="isActive && allowAutoClose"/>
@@ -44,7 +44,9 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex';
     import task from '../../mixins/task';
+    import routes from '../../router/routes';
 
     import BoxedLayout from '../layouts/Boxed';
     import Loader from 'contao-package-list/src/components/fragments/Loader';
@@ -58,12 +60,16 @@
         components: { BoxedLayout, Loader, LoadingButton, Console, Checkbox },
 
         data: () => ({
-            audit: true,
             showConsole: false,
             autoClose: false,
             favicons: null,
             faviconInterval: null,
         }),
+
+        computed: {
+            ...mapState('server/database', { supportsMigrations: 'supported', loadingMigrations: 'loading' }),
+            ...mapGetters('server/database', ['totalChanges']),
+        },
 
         methods: {
             cancelTask() {
@@ -72,16 +78,23 @@
                 }
             },
 
-            deleteTask() {
+            async deleteTask() {
                 const reload = this.isError;
 
-                this.$store.dispatch('tasks/deleteCurrent').then(
-                    () => {
-                        if (reload) {
-                            window.location.reload();
-                        }
-                    },
-                );
+                await this.$store.dispatch('tasks/deleteCurrent')
+
+                if (reload) {
+                    window.location.reload();
+                }
+            },
+
+            async updateDatabase() {
+                if (this.supportsMigrations) {
+                    await this.$store.dispatch('tasks/deleteCurrent');
+                    this.$router.push({ name: routes.databaseMigration.name });
+                } else {
+                    window.open('/contao/install');
+                }
             },
 
             updateFavicon() {
@@ -137,6 +150,12 @@
             autoClose(value) {
                 window.localStorage.setItem('contao_manager_autoclose', value ? '1' : '0');
             },
+
+            isComplete() {
+                if (this.isComplete) {
+                    this.$store.dispatch('server/database/get', false);
+                }
+            }
         },
 
         mounted() {
@@ -145,6 +164,8 @@
 
             this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
             this.autoClose = window.localStorage.getItem('contao_manager_autoclose') === '1';
+
+            this.$store.dispatch('server/database/get');
         },
 
         beforeDestroy() {

@@ -5,17 +5,27 @@ export default {
 
     state: {
         cache: null,
+        loading: false,
         supported: false,
         totalMigrations: 0,
         totalSchemaUpdates: 0,
     },
 
+    getters: {
+        totalChanges: state => state.totalMigrations + state.totalSchemaUpdates,
+    },
+
     mutations: {
+        setLoading(state, value) {
+            state.loading = !!value;
+        },
+
         setCache(state, response) {
             state.cache = response;
             state.supported = false;
             state.totalMigrations = 0;
             state.totalSchemaUpdates = 0;
+            state.loading = false;
 
             if (response.status === 200) {
                 state.supported = true;
@@ -42,6 +52,8 @@ export default {
 
                 return response;
             };
+
+            commit('setLoading', true);
 
             return Vue.http.get('api/server/database').then(handle, handle);
         },
