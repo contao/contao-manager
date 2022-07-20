@@ -121,38 +121,6 @@
                         return;
                     }
 
-                    result = new RegExp('^ALTER TABLE ([^ ]+) ADD ([^ ]+) (.+)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.addField', { table: result[1], field: result[2] }),
-                            details: result[3],
-                            console: change.name,
-                        });
-                        return;
-                    }
-
-                    result = new RegExp('^ALTER TABLE ([^ ]+) CHANGE ([^ ]+) ([^ ]+) (.+)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.changeField', { table: result[1], field: result[2] }),
-                            details: result[4],
-                            console: change.name,
-                        });
-                        return;
-                    }
-
-                    result = new RegExp('^ALTER TABLE ([^ ]+) DROP (.+)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.dropField', { table: result[1], field: result[2] }),
-                            console: change.name,
-                        });
-                        return;
-                    }
-
                     result = new RegExp('^CREATE INDEX ([^ ]+) ON ([^ ]+) \\(([^)]+)\\)$').exec(change.name);
                     if (result) {
                         operations.push({
@@ -161,6 +129,58 @@
                             details: result[3],
                             console: change.name,
                         });
+                        return;
+                    }
+
+                    result = new RegExp('^DROP INDEX ([^ ]+) ON ([^ ]+)$').exec(change.name);
+                    if (result) {
+                        operations.push({
+                            status: change.status,
+                            summary: this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }),
+                            details: result[3],
+                            console: change.name,
+                        });
+                        return;
+                    }
+
+                    result = new RegExp('^ALTER TABLE ([^ ]+) (.+)$').exec(change.name);
+                    if (result) {
+                        const table = result[1];
+                        const operation = {
+                            status: change.status,
+                            summary: [],
+                            details: [],
+                            console: change.name,
+                        };
+
+                        result[2].split(',').map(p => p.trim()).forEach((part) => {
+                            let alter;
+                            alter = new RegExp('^ADD ([^ ]+) (.+)$').exec(part);
+                            if (alter) {
+                                operation.summary.push(this.$t('ui.migrate.addField', { table, field: alter[1] }));
+                                operation.details.push(alter[2]);
+                                return;
+                            }
+
+                            alter = new RegExp('^CHANGE ([^ ]+) ([^ ]+) (.+)$').exec(part);
+                            if (alter) {
+                                operation.summary.push(this.$t('ui.migrate.changeField', { table, field: alter[1] }));
+                                operation.details.push(alter[3]);
+                                return;
+                            }
+
+                            alter = new RegExp('^DROP (.+)$').exec(part);
+                            if (alter) {
+                                operation.summary.push(this.$t('ui.migrate.dropField', { table, field: alter[1] }));
+                                operation.details.push('');
+                                return;
+                            }
+
+                            operation.summary.push(part);
+                            operation.details.push('');
+                        })
+
+                        operations.push(operation);
                         return;
                     }
 

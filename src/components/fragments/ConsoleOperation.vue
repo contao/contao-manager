@@ -11,8 +11,17 @@
                 <svg v-else class="console-operation__icon console-operation__icon--pending" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z"></path></svg>
             </div>
             <div class="console-operation__label">
-                <h2 class="console-operation__title">{{ summary }}</h2>
-                <p class="console-operation__description" v-if="details">{{ details }}</p>
+                <template v-if="Array.isArray(summary)">
+                    <template v-for="(title, k) in summary">
+                        <h2 class="console-operation__title">{{ title }}</h2>
+                        <p class="console-operation__description" v-if="details[k]">{{ details[k] }}</p>
+                        <br/>
+                    </template>
+                </template>
+                <template v-else>
+                    <h2 class="console-operation__title">{{ summary }}</h2>
+                    <p class="console-operation__description" v-if="details">{{ details }}</p>
+                </template>
             </div>
         </component>
 
@@ -45,8 +54,8 @@
 
         props: {
             status: String,
-            summary: String,
-            details: String,
+            summary: [String, Array],
+            details: [String, Array],
             console: String,
             showConsole: Boolean,
             forceConsole: Boolean,
