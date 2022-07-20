@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Task\Packages;
 
+use Composer\Semver\Constraint\Constraint;
 use Composer\Semver\VersionParser;
 use Contao\ManagerApi\Composer\CloudChanges;
 use Contao\ManagerApi\Composer\CloudResolver;
@@ -208,12 +209,16 @@ class UpdateTask extends AbstractPackagesTask
                 $rootRequires = $this->environment->getComposer()->getPackage()->getRequires();
 
                 if ($version && 'stable' !== VersionParser::parseStability($version)) {
-                    if (!isset($rootRequires['contao/core-bundle'])) {
-                        $definition->requirePackage('contao/core-bundle', $version);
-                    }
+                    $definition->requirePackage('contao/core-bundle', $version);
 
-                    if (!isset($rootRequires['contao/installation-bundle'])) {
+                    $versionParser = new VersionParser();
+                    $constraint = $versionParser->parseConstraints($version);
+                    $isContao5 = $constraint->matches(new Constraint('>=', '5.0@rc'));
+
+                    if (!$isContao5) {
                         $definition->requirePackage('contao/installation-bundle', $version);
+                    } elseif (isset($rootRequires['contao/installation-bundle'])) {
+                        $definition->removePackage('contao/installation-bundle');
                     }
                 } else {
                     if (isset($rootRequires['contao/core-bundle'])) {
