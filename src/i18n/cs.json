@@ -185,6 +185,7 @@
     "ui.navigation.backend": "Backend Contaa",
     "ui.navigation.debug": "Debugový mód Contaa",
     "ui.navigation.phpinfo": "Informace o PHP",
+    "ui.navigation.phpinfoLoading": "Loading PHP Information…",
     "ui.navigation.maintenance": "Údržba",
     "ui.navigation.rebuildCache": "Přetvoření meziúložiště",
     "ui.navigation.systemCheck": "Kontrola systému",

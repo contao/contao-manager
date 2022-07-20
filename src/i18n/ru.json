@@ -185,6 +185,7 @@
     "ui.navigation.backend": "Панель управления Contao",
     "ui.navigation.debug": "Режим отладки Contao",
     "ui.navigation.phpinfo": "Информация о PHP",
+    "ui.navigation.phpinfoLoading": "Loading PHP Information…",
     "ui.navigation.maintenance": "Обслуживание",
     "ui.navigation.rebuildCache": "Восстановить кеш",
     "ui.navigation.systemCheck": "Проверка системы",

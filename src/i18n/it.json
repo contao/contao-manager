@@ -185,6 +185,7 @@
     "ui.navigation.backend": "Contao Backend",
     "ui.navigation.debug": "Modalità Debug Contao",
     "ui.navigation.phpinfo": "Informazioni PHP",
+    "ui.navigation.phpinfoLoading": "Loading PHP Information…",
     "ui.navigation.maintenance": "Manutenzione",
     "ui.navigation.rebuildCache": "Ricostruisci la cache",
     "ui.navigation.systemCheck": "Verifica del sistema",

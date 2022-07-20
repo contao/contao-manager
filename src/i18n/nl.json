@@ -185,6 +185,7 @@
     "ui.navigation.backend": "Contao Backend",
     "ui.navigation.debug": "Contao foutopsporingsmodus",
     "ui.navigation.phpinfo": "PHP Informatie",
+    "ui.navigation.phpinfoLoading": "Loading PHP Information…",
     "ui.navigation.maintenance": "Onderhoud",
     "ui.navigation.rebuildCache": "Cache opnieuw opbouwen",
     "ui.navigation.systemCheck": "Systeem Controle",

@@ -185,6 +185,7 @@
     "ui.navigation.backend": "Contaoのバックエンド",
     "ui.navigation.debug": "Contaoのデバッグモード",
     "ui.navigation.phpinfo": "PHPの情報",
+    "ui.navigation.phpinfoLoading": "Loading PHP Information…",
     "ui.navigation.maintenance": "保守",
     "ui.navigation.rebuildCache": "キャッシュを再作成",
     "ui.navigation.systemCheck": "システム検査",

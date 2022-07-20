@@ -185,6 +185,7 @@
     "ui.navigation.backend": "Contao yönetim bölümü",
     "ui.navigation.debug": "Contao hata ayıklama kipi",
     "ui.navigation.phpinfo": "PHP bilgileri",
+    "ui.navigation.phpinfoLoading": "Loading PHP Information…",
     "ui.navigation.maintenance": "Bakım",
     "ui.navigation.rebuildCache": "Ön belleği yeniden oluştur",
     "ui.navigation.systemCheck": "Sistem denetimi",

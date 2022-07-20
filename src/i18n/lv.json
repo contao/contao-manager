@@ -185,6 +185,7 @@
     "ui.navigation.backend": "Contao aizmugure",
     "ui.navigation.debug": "Contao atkļūdošanas režīms",
     "ui.navigation.phpinfo": "PHP informācija",
+    "ui.navigation.phpinfoLoading": "Loading PHP Information…",
     "ui.navigation.maintenance": "Uzturēšana",
     "ui.navigation.rebuildCache": "Pārbūvēt kešatmiņu",
     "ui.navigation.systemCheck": "Sistēmas pārbaude",

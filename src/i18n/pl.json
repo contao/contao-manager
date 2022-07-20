@@ -185,6 +185,7 @@
     "ui.navigation.backend": "Contao Backend",
     "ui.navigation.debug": "Contao Tryb Debug",
     "ui.navigation.phpinfo": "Informacja PHP",
+    "ui.navigation.phpinfoLoading": "Loading PHP Information…",
     "ui.navigation.maintenance": "Konserwacja",
     "ui.navigation.rebuildCache": "Przebuduj cache",
     "ui.navigation.systemCheck": "Sprawdzenie Systemu",

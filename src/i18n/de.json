@@ -185,6 +185,7 @@
     "ui.navigation.backend": "Contao-Backend",
     "ui.navigation.debug": "Contao-Debug-Modus",
     "ui.navigation.phpinfo": "PHP-Informationen",
+    "ui.navigation.phpinfoLoading": "Lade PHP-Informationen…",
     "ui.navigation.maintenance": "Systemwartung",
     "ui.navigation.rebuildCache": "Cache erneuern",
     "ui.navigation.systemCheck": "Systemprüfung",
