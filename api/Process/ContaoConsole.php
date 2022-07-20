@@ -52,6 +52,12 @@ class ContaoConsole
             return $this->version;
         }
 
+        $this->getCommandList(true);
+
+        if (null !== $this->version) {
+            return $this->version;
+        }
+
         $process = $this->processFactory->createContaoConsoleProcess(['contao:version']);
         $process->run();
 
@@ -68,14 +74,14 @@ class ContaoConsole
         return $this->version = $version;
     }
 
-    public function getCommandList(): array
+    public function getCommandList(bool $mustRun = false): array
     {
         if (null !== $this->commands) {
             return $this->commands;
         }
 
         $process = $this->processFactory->createContaoConsoleProcess(['list', '--format=json']);
-        $process->run();
+        $mustRun ? $process->mustRun() : $process->run();
 
         $data = json_decode(trim($process->getOutput()), true);
 
@@ -114,17 +120,5 @@ class ContaoConsole
         }
 
         return $data;
-    }
-
-    public function debugConsoleIssues(): string
-    {
-        try {
-            $process = $this->processFactory->createContaoConsoleProcess(['contao:version'], true);
-            $process->run();
-
-            return trim($process->getOutput());
-        } catch (ExceptionInterface $e) {
-            return $e->getMessage();
-        }
     }
 }

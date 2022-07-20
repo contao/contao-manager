@@ -103,7 +103,7 @@ class ContaoController
                 return $this->createResponse(
                     [
                         'supported' => false,
-                        'error' => $this->contaoConsole->debugConsoleIssues(),
+                        'error' => $e->getProcess()->getErrorOutput(),
                     ],
                     Response::HTTP_BAD_GATEWAY
                 );
