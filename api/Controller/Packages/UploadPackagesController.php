@@ -324,7 +324,7 @@ class UploadPackagesController
             if ('contao/manager-plugin' === $package->getName()) {
                 $require = new MultiConstraint([
                     new Constraint('>=', '2.7'),
-                    new Constraint('=', 'dev-master'),
+                    new Constraint('=', 'dev-main'),
                 ], false);
 
                 if ($require->matches(new Constraint('=', $package->getVersion()))) {
