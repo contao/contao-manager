@@ -31,6 +31,7 @@ const locales = {
     ru: () => merge(import('contao-package-list/src/i18n/ru.json'), import('./ru.json')),
     sr: () => merge(import('contao-package-list/src/i18n/sr.json'), import('./sr.json')),
     sv: () => merge(import('contao-package-list/src/i18n/sv.json'), import('./sv.json')),
+    tr: () => merge(import('contao-package-list/src/i18n/tr.json'), import('./tr.json')),
     zh: () => merge(import('contao-package-list/src/i18n/zh.json'), import('./zh.json')),
 };
 
