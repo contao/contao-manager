@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 
 import store from '../store';
+import { setLocale as setDatimLocale } from 'contao-package-list/src/filters/datimFormat'
 
 const merge = async (...files) => {
     let data = {}, i;
@@ -39,6 +40,7 @@ const i18n = new VueI18n();
 
 const setLocale = (locale) => {
     i18n.locale = locale;
+    setDatimLocale(locale);
     store.commit('algolia/setLanguage', locale);
     document.querySelector('html').setAttribute('lang', locale);
 };
