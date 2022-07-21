@@ -208,7 +208,7 @@ export default {
                 metadata.update = { valid: true, latest: true, version: null, time: null };
                 if (rootConstraint && rootVersion) {
                     update = metadata.versions.filter(pkg => {
-                        return satisfies(getVersion(pkg), rootConstraint);
+                        return pkg.version === rootVersion.version || satisfies(getVersion(pkg), rootConstraint);
                     }).pop();
 
                     if (!update) {
