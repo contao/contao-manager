@@ -21,7 +21,7 @@
                 <div class="view-task__actions">
                     <loading-button class="view-task__action" :loading="isAborting" @click="cancelTask" v-if="allowCancel && (isActive || isAborting)">{{ $t('ui.task.buttonCancel') }}</loading-button>
 
-                    <loading-button class="view-task__action" color="primary" :loading="loadingMigrations || deletingTask" :disabled="supportsMigrations && totalChanges === 0" @click="updateDatabase" v-if="requiresAudit">{{ $t('ui.task.buttonAudit') }}</loading-button>
+                    <loading-button class="view-task__action" color="primary" :loading="loadingMigrations" :disabled="(supportsMigrations && totalChanges === 0) || deletingTask" @click="updateDatabase" v-if="requiresAudit">{{ $t('ui.task.buttonAudit') }}</loading-button>
 
                     <loading-button class="view-task__action" :loading="deletingTask" @click="deleteTask" v-if="!isActive && !isAborting">{{ $t('ui.task.buttonConfirm') }}</loading-button>
                     <checkbox name="autoclose" :label="$t('ui.task.autoclose')" v-model="autoClose" v-if="isActive && allowAutoClose"/>
