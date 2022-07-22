@@ -4,9 +4,7 @@
         <header class="admin-user-check__header">
             <img src="../../assets/images/user.svg" width="80" height="80" class="admin-user-check__icon" alt="">
             <h1 class="admin-user-check__headline">{{ $t('ui.server.adminUser.headline') }}</h1>
-            <i18n tag="p" path="ui.server.adminUser.description" class="admin-user-check__description">
-                <template #env><code>.env</code></template>
-            </i18n>
+            <p class="admin-user-check__description">{{ $t('ui.server.adminUser.description') }}</p>
         </header>
 
         <main class="admin-user-check__form">
@@ -14,16 +12,32 @@
                 <div class="admin-user-check__fields">
                     <h2 class="admin-user-check__fieldtitle">{{ $t('ui.server.adminUser.formTitle') }}</h2>
                     <p class="admin-user-check__fielddesc">{{ $t('ui.server.adminUser.formText') }}</p>
-                    <text-field name="username" :label="$t('ui.server.adminUser.username')" :disabled="processing" v-model="username"/>
-                    <text-field name="name" :label="$t('ui.server.adminUser.name')" :disabled="processing" v-model="name"/>
-                    <text-field name="email" type="email" :label="$t('ui.server.adminUser.email')" :disabled="processing" v-model="email"/>
-                    <text-field name="password" type="password" :label="$t('ui.server.adminUser.password')" :disabled="processing" v-model="password"/>
+
+                    <text-field ref="username" name="username" :label="$t('ui.server.adminUser.username')" :disabled="processing" required validate v-model="username"/>
+                    <text-field ref="name" name="name" :label="$t('ui.server.adminUser.name')" :disabled="processing" required validate v-model="name"/>
+                    <text-field
+                        ref="email"
+                        name="email"
+                        type="email"
+                        :label="$t('ui.server.adminUser.email')"
+                        :disabled="processing"
+                        required validate
+                        :error="errors.email" @focus="errors.email = ''" @blur="validateEmail"
+                        v-model="email"
+                    />
+                    <text-field
+                        ref="password" name="password" type="password"
+                        :label="$t('ui.server.adminUser.password')" :placeholder="$t('ui.server.adminUser.passwordPlaceholder')"
+                        :disabled="processing"
+                        required pattern=".{8,}" validate
+                        :error="errors.password" @focus="errors.password = ''" @blur="validatePassword"
+                        v-model="password"
+                    />
                 </div>
 
-                <loading-button submit color="primary" icon="save" :loading="processing" :disabled="!valid">{{ $t('ui.server.adminUser.save') }}</loading-button>
+                <loading-button submit color="primary" :loading="processing" :disabled="!valid">{{ $t('ui.server.adminUser.create') }}</loading-button>
                 <button type="button" class="widget-button" :disabled="processing" @click="cancel">{{ $t('ui.server.adminUser.cancel') }}</button>
             </form>
-
         </main>
 
     </boxed-layout>
@@ -54,29 +68,15 @@
             name: '',
             email: '',
             password: '',
+
+            errors: {
+                email: '',
+                password: '',
+            },
+            error: null,
         }),
 
-        watch: {
-            username() {
-                this.validate();
-            },
-            name() {
-                this.validate();
-            },
-            email() {
-                this.validate();
-            },
-            password() {
-                this.validate();
-            },
-        },
-
         methods: {
-            reload() {
-                this.processing = true;
-                window.location.reload()
-            },
-
             async boot() {
                 this.bootState = 'loading';
                 this.bootDescription = this.$t('ui.server.running');
@@ -91,19 +91,21 @@
                     if (this.hasUser) {
                         this.bootState = 'success';
                         this.bootDescription = this.$t('ui.server.adminUser.success');
-                    }
-                    else {
+                    } else {
                         this.bootState = 'warning';
                         this.bootDescription = this.$t('ui.server.adminUser.warning');
                     }
                 } else if (response.status === 501) {
                     this.bootState = 'info';
                     this.bootDescription = this.$t('ui.server.adminUser.unsupported');
+                } else if (response.status === 502) {
+                    this.bootState = 'info';
+                    this.bootDescription = this.$t('ui.server.adminUser.unavailable');
                 } else if (response.status === 503) {
                     this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.prerequisite');
                 } else {
-                    this.bootState = 'action';
+                    this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.error');
                 }
 
@@ -115,29 +117,52 @@
             },
 
             validate() {
-                this.valid = false;
+                this.error = null;
 
-                if (!this.username || !this.name || !this.email || !this.password) {
+                this.valid = this.$refs.username.checkValidity()
+                    && this.$refs.name.checkValidity()
+                    && this.$refs.email.checkValidity()
+                    && this.$refs.password.checkValidity();
+            },
+
+            validateEmail() {
+                this.errors.email = null;
+
+                if (this.email === '') {
                     return;
                 }
 
-                this.valid = true;
+                if (!this.$refs.email.checkValidity()) {
+                    this.errors.email = this.$t('ui.server.adminUser.emailInvalid');
+                }
             },
 
-            async save(event) {
-                event.preventDefault();
+            validatePassword() {
+                this.errors.password = null;
+
+                if (this.password === '') {
+                    return;
+                }
+
+                if (this.password.length < 8) {
+                    this.errors.password = this.$t('ui.server.adminUser.passwordLength');
+                }
+            },
+
+            async save() {
                 this.processing = true;
 
                 const response = await this.$store.dispatch('server/adminUser/set', {
                     username: this.username,
                     name: this.name,
                     email: this.email,
-                    password: this.password,
+                    password: this.password
                 });
 
-                if (response.body.hasUser !== true) {
+                if (response.status === 502) {
                     this.processing = false;
                     this.valid = false;
+                    this.error = response.body.detail || true;
                     return;
                 }
 
@@ -149,7 +174,27 @@
             },
 
             cancel() {
+                this.username = '';
+                this.name = '';
+                this.email = '';
+                this.password = '';
+
                 this.$emit('view', null);
+            }
+        },
+
+        watch: {
+            username() {
+                this.validate();
+            },
+            name() {
+                this.validate();
+            },
+            email() {
+                this.validate();
+            },
+            password() {
+                this.validate();
             }
         }
     };
@@ -223,30 +268,12 @@
             text-align: justify;
         }
 
-        &__or {
-            position: relative;
-            overflow: hidden;
-            margin: 1em 0;
-            text-align: center;
-
-            &:before {
-                content: "";
-                position: absolute;
-                top: .8em;
-                left: 0;
-                right: 0;
-                display: block;
-                height: 1px;
-                background: $border-color;
-                z-index: 1;
-            }
-
-            span {
-                position: relative;
-                padding: 0 10px;
-                background: #fff;
-                z-index: 2;
-            }
+        &__error {
+            margin-bottom: 1.5em;
+            padding: 4px 10px;
+            color: #fff;
+            background: $red-button;
+            border-radius: 2px;
         }
 
         .widget-button {

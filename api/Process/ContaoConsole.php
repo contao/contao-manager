@@ -14,7 +14,7 @@ namespace Contao\ManagerApi\Process;
 
 use Composer\Semver\VersionParser;
 use Contao\ManagerApi\Exception\ProcessOutputException;
-use Symfony\Component\Process\Exception\ExceptionInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ContaoConsole
 {
@@ -202,13 +202,20 @@ class ContaoConsole
 
         $process = $this->processFactory->createContaoConsoleProcess($arguments);
         $process->run();
-        $output = $process->getOutput();
-        $data = json_decode($output, true);
+
+        if (!$process->isSuccessful()) {
+            return null;
+        }
+
+        $data = json_decode($process->getOutput(), true);
 
         return \is_array($data) ? $data : null;
     }
 
-    public function createAdminUser(array $user): bool
+    /**
+     * @throws ProcessFailedException
+     */
+    public function createAdminUser(array $user): void
     {
         $commands = $this->getCommandList();
 
@@ -220,7 +227,7 @@ class ContaoConsole
             || !\in_array('password', $commands['contao:user:create']['options'], true)
             || !\in_array('admin', $commands['contao:user:create']['options'], true)
         ) {
-            return false;
+            return;
         }
 
         $arguments = [
@@ -234,9 +241,7 @@ class ContaoConsole
         ];
 
         $process = $this->processFactory->createContaoConsoleProcess($arguments);
-        $process->run();
-
-        return $process->isSuccessful();
+        $process->mustRun();
     }
 
     private function normalizeCommands(array $commands): array

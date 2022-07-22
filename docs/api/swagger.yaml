@@ -369,12 +369,21 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    hasUser:
-                                        type: boolean
-                500:
-                    description: If any of the commands did not run successfully.
+                                $ref: '#/components/schemas/ServerAdminUser'
+                501:
+                    description: Contao console does not support the necessary contao:user:list and/or contao:user:create commands/options.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                502:
+                    description: If the command line does not work as expected.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                503:
+                    description: If the PHP command line binary cannot be found.
                     content:
                         application/problem+json:
                             schema:
@@ -398,23 +407,36 @@ paths:
                                 password:
                                     type: string
             responses:
-                200:
-                    description: Operation successful
+                201:
+                    description: User was created successfully.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    hasUser:
-                                        type: boolean
-                400:
-                    description: Admin user already exists or unable to create a new one with the specified details.
+                                $ref: '#/components/schemas/ServerAdminUser'
+                405:
+                    description: An admin user already exists.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                500:
+                    description: The user account could not be created.
                     content:
                         application/problem+json:
                             schema:
                                 $ref: '#/components/schemas/ApiProblem'
                 501:
-                    description: Operation is not supported
+                    description: Contao console does not support the necessary contao:user:list and/or contao:user:create commands/options.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                503:
+                    description: If the PHP command line binary cannot be found.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
 
 
     #############
@@ -1297,6 +1319,12 @@ components:
                     public_dir:
                         type: string
                         description: Name of the public directory ("public" or "web").
+
+        ServerAdminUser:
+            type: object
+            properties:
+                hasUser:
+                    type: boolean
 
         ContaoAccessKeyGet:
             type: object

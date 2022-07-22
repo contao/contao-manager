@@ -19,6 +19,7 @@ use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -53,7 +54,7 @@ class AdminUserController
             || !\in_array('column', $commands['contao:user:list']['options'], true)
         ) {
             return new ApiProblemResponse(
-                (new ApiProblem('Not supported'))
+                (new ApiProblem('Contao console does not support the necessary contao:user:list and/or contao:user:create commands/options.'))
                     ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
             );
         }
@@ -61,34 +62,57 @@ class AdminUserController
         if ($request->isMethod('POST')) {
             if ($this->hasAdminUser()) {
                 return new ApiProblemResponse(
-                    (new ApiProblem('Admin user already exists'))
-                        ->setStatus(Response::HTTP_BAD_REQUEST)
+                    (new ApiProblem('An admin user already exists.'))
+                        ->setStatus(Response::HTTP_METHOD_NOT_ALLOWED)
                 );
             }
 
-            if (
-                !$this->contaoConsole->createAdminUser([
+            try {
+                $this->contaoConsole->createAdminUser([
                     'username' => $request->request->get('username'),
                     'name' => $request->request->get('name'),
                     'email' => $request->request->get('email'),
                     'password' => $request->request->get('password'),
-                ])
-            ) {
-                return new ApiProblemResponse(
-                    (new ApiProblem('Unable to create user'))
-                        ->setStatus(Response::HTTP_BAD_REQUEST)
-                );
+                ]);
+
+                return $this->getUserResponse(Response::HTTP_CREATED);
+            } catch (ProcessFailedException $exception) {
+                $problem = new ApiProblem('Unable to create back end account.');
+                $problem->setStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+                $problem['debug'] = $exception->getProcess()->getOutput().$exception->getProcess()->getErrorOutput();
+
+                return new ApiProblemResponse($problem);
             }
         }
 
-        return new JsonResponse([
-            'hasUser' => $this->hasAdminUser(),
-        ]);
+        return $this->getUserResponse();
     }
 
-    private function hasAdminUser(): bool
+    private function getUserResponse(int $status = Response::HTTP_OK)
     {
-        foreach ($this->contaoConsole->getUsers() ?? [] as $user) {
+        $hasAdmin = $this->hasAdminUser();
+
+        if (null === $hasAdmin) {
+            return new ApiProblemResponse(
+                (new ApiProblem('Unable to retrieve user list.'))
+                    ->setStatus(Response::HTTP_BAD_GATEWAY)
+            );
+        }
+
+        return new JsonResponse([
+            'hasUser' => $hasAdmin,
+        ], $status);
+    }
+
+    private function hasAdminUser(): ?bool
+    {
+        $users = $this->contaoConsole->getUsers();
+
+        if (null === $users) {
+            return null;
+        }
+
+        foreach ($users as $user) {
             if ($user['admin']) {
                 return true;
             }
