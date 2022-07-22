@@ -27,13 +27,25 @@
                 <p class="view-account__description">{{ $t('ui.account.description') }}</p>
 
                 <fieldset class="view-account__fields">
-                    <text-field ref="username" name="username" :label="$t('ui.account.username')" class="inline" :disabled="installing" v-model="username"></text-field>
-                    <text-field type="password" name="password" :label="$t('ui.account.password')" :placeholder="$t('ui.account.passwordPlaceholder')" :error="errors.password" :disabled="installing" v-model="password" @input="validatePassword"></text-field>
-                    <text-field type="password" name="password_confirm" :label="$t('ui.account.passwordConfirm')" :disabled="installing" :error="errors.password_confirm" v-model="password_confirm" @input="validatePasswordConfirm"></text-field>
-                </fieldset>
+                    <text-field
+                        ref="username" name="username"
+                        :label="$t('ui.account.username')"
+                        :disabled="installing"
+                        required
+                        @keyup="validate"
+                        v-model="username"
+                    />
+                    <text-field
+                        ref="password" name="password" type="password"
+                        :label="$t('ui.account.password')" :placeholder="$t('ui.account.passwordPlaceholder')"
+                        :disabled="installing"
+                        required pattern=".{8,}"
+                        :error="errors.password" @blur="validatePassword"
+                        @keyup="validate"
+                        v-model="password"
+                    />
 
-                <fieldset class="view-account__fields">
-                    <loading-button submit color="primary" :disabled="!inputValid" :loading="installing">{{ $t('ui.account.submit') }}</loading-button>
+                    <loading-button submit color="primary" :disabled="!valid" :loading="installing">{{ $t('ui.account.submit') }}</loading-button>
                 </fieldset>
             </form>
         </main>
@@ -63,65 +75,35 @@
         data: () => ({
             username: '',
             password: '',
-            password_confirm: '',
 
             errors: {
                 password: '',
             },
 
             installing: false,
+            valid: false,
         }),
 
-        computed: {
-            inputValid() {
-                return !(this.username === '' || this.password === '' || this.password_confirm === '' || !this.passwordValid);
-            },
-
-            passwordValid() {
-                return this.password === ''
-                    || this.password_confirm === ''
-                    || (this.password === this.password_confirm
-                        && this.password.length >= 8);
-            },
-        },
-
         methods: {
+            validate() {
+                this.valid = this.$refs.username.checkValidity()
+                    && this.$refs.password.checkValidity();
+            },
+
             validatePassword() {
                 this.errors.password = null;
-                this.errors.password_confirm = null;
-
-                if (this.password === '' && this.password_confirm === '') {
-                    return;
-                }
 
                 if (this.password === '') {
-                    this.errors.password = this.$t('ui.widget.mandatory');
-                } else if (this.password.length < 8) {
-                    this.errors.password = this.$t('ui.account.passwortLength');
-                } else if (this.password !== this.password_confirm) {
-                    this.errors.password_confirm = this.$t('ui.account.passwortDifferent');
-                }
-            },
-
-            validatePasswordConfirm() {
-                this.errors.password = null;
-                this.errors.password_confirm = null;
-
-                if (this.password === '' && this.password_confirm === '') {
                     return;
                 }
 
-                if (this.password_confirm === '') {
-                    this.errors.password_confirm = this.$t('ui.widget.mandatory');
-                } else if (this.password_confirm.length < 8) {
-                    this.errors.password_confirm = this.$t('ui.account.passwortLength');
-                } else if (this.password !== this.password_confirm) {
-                    this.errors.password_confirm = this.$t('ui.account.passwortDifferent');
+                if (this.password.length < 8) {
+                    this.errors.password = this.$t('ui.account.passwordLength');
                 }
             },
 
             createAccount() {
-                if (!this.inputValid) {
+                if (!this.valid) {
                     return;
                 }
 
@@ -180,23 +162,34 @@
         }
 
         &__headline {
+            margin-bottom: .5em;
             font-size: 18px;
             font-weight: $font-weight-bold;
+            line-height: 30px;
+        }
+
+        &__description {
+            margin-bottom: 1em;
+            text-align: justify;
         }
 
         &__form {
             position: relative;
-            max-width: 250px;
+            max-width: 280px;
             margin: 0 auto;
 
-            input,
-            select {
-                margin: 5px 0 10px;
-            }
-        }
+            .widget-text {
+                margin-top: 10px;
 
-        &__fields {
-            margin-top: 2em;
+                label {
+                    display: block;
+                    padding-bottom: 5px;
+                }
+            }
+
+            .widget-button {
+                margin-top: 1.5em;
+            }
         }
 
         &__contribute {
@@ -229,7 +222,7 @@
                 .widget-text label {
                     float: left;
                     width: 120px;
-                    padding-top: 15px;
+                    padding-top: 10px;
                     font-weight: $font-weight-medium;
                 }
 

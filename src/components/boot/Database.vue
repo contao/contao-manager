@@ -19,7 +19,7 @@
                         ref="url"
                         name="url" type="url"
                         :label="$t('ui.server.database.url')" :placeholder="$t('ui.server.database.urlPlaceholder')"
-                        required :pattern="urlPattern"
+                        required :pattern="urlPattern" validate
                         :disabled="processing"
                         v-model="url" @keyup="validUrl=true" @blur="parseUrl"
                         :error="validUrl ? undefined : $t('ui.server.database.validUrl')"
@@ -27,10 +27,10 @@
 
                     <div class="database-check__or"><span>{{ $t('ui.server.database.or') }}</span></div>
 
-                    <text-field name="user" :label="$t('ui.server.database.user')" :disabled="processing" v-model="user"/>
-                    <text-field name="password" type="password" :label="$t('ui.server.database.password')" :disabled="processing" v-model="password"/>
-                    <text-field name="server" :label="$t('ui.server.database.server')" :disabled="processing" required v-model="server"/>
-                    <text-field name="database" :label="$t('ui.server.database.database')" :disabled="processing" required v-model="database"/>
+                    <text-field name="user" :label="$t('ui.server.database.user')" validate :disabled="processing" v-model="user"/>
+                    <text-field name="password" type="password" :label="$t('ui.server.database.password')" validate :disabled="processing" v-model="password"/>
+                    <text-field name="server" :label="$t('ui.server.database.server')" :disabled="processing" required validate v-model="server"/>
+                    <text-field name="database" :label="$t('ui.server.database.database')" :disabled="processing" required validate v-model="database"/>
                 </div>
 
                 <loading-button submit color="primary" icon="save" :loading="processing" :disabled="!valid">{{ $t('ui.server.database.save') }}</loading-button>
@@ -66,6 +66,7 @@
             processing: false,
             validUrl: true,
             valid: false,
+            currentUrl: '',
             urlPattern: '',
 
             url: '',
@@ -105,7 +106,8 @@
                 const result = response.body;
 
                 if (response.status === 200) {
-                    this.url = response.body.url;
+                    this.url = result.url;
+                    this.currentUrl = result.url;
                     this.urlPattern = result.pattern;
                     this.parseUrl();
 
@@ -150,6 +152,11 @@
             },
 
             showConfiguration() {
+                if (this.currentUrl) {
+                    this.url = this.currentUrl;
+                    this.parseUrl();
+                }
+
                 this.$emit('view', 'Database');
             },
 
@@ -159,22 +166,11 @@
             },
 
             parseUrl() {
-                this.validUrl = true;
-                this.valid = false;
-
-                if (this.url === '') {
+                if (!this.validateUrl()) {
                     return;
                 }
 
-                const validator = new RegExp(this.urlPattern, 'i');
-
-                this.validUrl = validator.test(this.url);
-
-                if (!this.validUrl) {
-                    return;
-                }
-
-                const match = validator.exec(this.url)
+                const match = new RegExp(this.urlPattern, 'i').exec(this.url)
 
                 this.user = match[3] ? decodeURIComponent(match[3]) : '';
                 this.password = match[5] ? decodeURIComponent(match[5]) : '';
@@ -187,7 +183,7 @@
                     this.server = `${this.server}:3306`;
                 }
 
-                this.valid = true;
+                this.valid = this.validateUrl();
             },
 
             updateUrl() {
@@ -219,8 +215,20 @@
                 }
 
                 this.url = url;
+                this.valid = this.validateUrl();
+            },
+
+            validateUrl() {
                 this.validUrl = true;
-                this.valid = true;
+                this.valid = false;
+
+                if (this.url === '') {
+                    return false;
+                }
+
+                this.validUrl = new RegExp(this.urlPattern, 'i').test(this.url);
+
+                return this.validUrl;
             },
 
             async save(event) {
@@ -302,7 +310,7 @@
         }
 
         &__fields {
-            margin-bottom: 2em;
+            margin-bottom: 1.5em;
         }
 
         &__fieldtitle {
@@ -366,11 +374,9 @@
 
                 .widget-text {
                     label {
-                        display: block;
                         float: left;
                         width: 120px;
                         padding-top: 10px;
-                        font-weight: $font-weight-medium;
                     }
 
                     input {

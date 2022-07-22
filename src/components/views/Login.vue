@@ -167,6 +167,10 @@
             }
         }
 
+        .widget-text--password button {
+            display: none;
+        }
+
         &__link {
             display: block;
             font-size: 12px;
