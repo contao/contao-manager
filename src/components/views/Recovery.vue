@@ -11,7 +11,7 @@
             <console
                 class="view-recovery__console"
                 :title="$t('ui.recovery.console')"
-                :operations="[{ status: 'error', summary: 'vendor/bin/contao-console contao:version', console }]"
+                :operations="[{ status: 'error', summary: 'vendor/bin/contao-console list', console }]"
                 :console-output="console"
                 show-console force-console
                 v-if="console"
