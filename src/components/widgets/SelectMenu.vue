@@ -9,7 +9,7 @@
             :required="required"
             @change="input($event.target.value)"
         >
-            <option v-for="(v, k) in options" :value="k" :selected="k === value" :key="k">{{ v }}</option>
+            <option v-for="option in options" :value="option.value" :disabled="option.disabled" :selected="option.value === value" :key="option.value">{{ option.label }}</option>
         </select>
         <p class="widget__error" v-if="error">{{ error }}</p>
     </div>
@@ -23,7 +23,7 @@
                 required: true,
             },
             options: {
-                type: Object,
+                type: Array,
                 required: true,
             },
             label: String,

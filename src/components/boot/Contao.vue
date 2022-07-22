@@ -83,11 +83,15 @@
                 <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="contao-check__icon" />
                 <h1 class="contao-check__headline">{{ $t('ui.server.contao.headline') }}</h1>
                 <p class="contao-check__description">{{ $t('ui.server.contao.description') }}</p>
-                <p class="contao-check__version" v-if="phpVersionId >= 70200"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</p>
-                <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.ltsTitle') }}:</strong> {{ $t('ui.server.contao.ltsText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.2' }) }}</span></p>
-                <p class="contao-check__version" v-if="phpVersionId >= 70400"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</p>
-                <p class="contao-check__version" v-else><span class="contao-check__version--unavailable"><strong>{{ $t('ui.server.contao.latestTitle') }}:</strong> {{ $t('ui.server.contao.latestText') }}</span>&nbsp;<span class="contao-check__version--warning">{{ $t('ui.server.contao.noLatest', { version: '7.4' }) }}</span></p>
-                <i18n tag="p" path="ui.server.contao.releaseplan">
+
+                <ul class="contao-check__versions">
+                    <template v-for="version in versions">
+                        <li class="contao-check__version" v-if="!version.disabled"><strong>{{ version.title }}:</strong> {{ version.description }}</li>
+                        <li class="contao-check__version" v-else><strong>{{ version.title }}:</strong>&nbsp;<span class="contao-check__version--warning">{{ version.problem }}</span></li>
+                    </template>
+                </ul>
+
+                <i18n tag="p" path="ui.server.contao.releaseplan" class="contao-check__releaseplan">
                     <template #contaoReleasePlan><a :href="`https://to.contao.org/release-plan?lang=${$i18n.locale}`" target="_blank" rel="noreferrer noopener">{{ $t('ui.server.contao.releaseplanLink') }}</a></template>
                 </i18n>
             </header>
@@ -130,8 +134,6 @@
     import TextField from '../widgets/TextField';
     import RadioButton from '../widgets/RadioButton';
 
-    let result;
-
     export default {
         mixins: [boot],
         components: { RadioButton, Checkbox, BootCheck, BoxedLayout, SelectMenu, TextField, LoadingButton },
@@ -170,34 +172,56 @@
             canUsePublicDir: vm => vm.phpVersionId >= 70400,
 
             versions() {
+                const versions = [];
+
                 if (this.phpVersionId < 70200) {
-                    return {
-                        '4.4': 'Contao 4.4',
-                    };
+                    versions.push({
+                        value: '4.4',
+                        label: 'Contao 4.4',
+                        disabled: false,
+                    });
                 }
 
-                if (this.phpVersionId < 70400) {
-                    return {
-                        '4.9': `Contao 4.9 (${this.$t('ui.server.contao.ltsTitle')})`,
-                    };
-                }
+                versions.push({
+                    value: '4.9',
+                    label: `Contao 4.9 (${this.$t('ui.server.contao.ltsTitle')})`,
+                    disabled: this.phpVersionId < 70200 || !this.isWeb,
+                    title: 'Contao 4.9',
+                    description: this.$t('ui.server.contao.ltsText', { from: '2020', to: '2023' }),
+                    problem: this.$t('ui.server.contao.requires49'),
+                });
 
-                if (!this.isWeb) {
-                    return {
-                        '4.13': `Contao 4.13 (${this.$t('ui.server.contao.latestTitle')} + ${this.$t('ui.server.contao.ltsTitle')})`,
-                    };
-                }
+                versions.push({
+                    value: '4.13',
+                    label: `Contao 4.13 (${this.$t('ui.server.contao.ltsTitle')})`,
+                    disabled: this.phpVersionId < 70400,
+                    title: 'Contao 4.13',
+                    description: this.$t('ui.server.contao.ltsText', { from: '2022', to: '2025' }),
+                    problem: this.$t('ui.server.contao.requiresPHP', { version: '7.4'}),
+                });
 
-                return {
-                    '4.13': `Contao 4.13 (${this.$t('ui.server.contao.latestTitle')} + ${this.$t('ui.server.contao.ltsTitle')})`,
-                    '4.9': `Contao 4.9 (${this.$t('ui.server.contao.ltsTitle')})`,
-                };
+                versions.push({
+                    value: '5.0.x-dev',
+                    label: `Contao 5.0.x-dev (${this.$t('ui.server.contao.latestTitle')})`,
+                    disabled: this.phpVersionId < 80100,
+                    title: 'Contao 5.0',
+                    description: this.$t('ui.server.contao.latestText', { from: '2022', to: '2023' }),
+                    problem: this.$t('ui.server.contao.requiresPHP', { version: '8.1'}),
+                });
+
+                return versions;
             },
 
-            packages: vm => ({
-                'no': vm.$t('ui.server.contao.coreOnlyNo'),
-                'yes': vm.$t('ui.server.contao.coreOnlyYes'),
-            }),
+            packages: vm => ([
+                {
+                    value: 'no',
+                    label: vm.$t('ui.server.contao.coreOnlyNo'),
+                },
+                {
+                    value: 'yes',
+                    label: vm.$t('ui.server.contao.coreOnlyYes'),
+                }
+            ]),
         },
 
         methods: {
@@ -210,10 +234,20 @@
                 this.bootState = 'loading';
                 this.bootDescription = this.$t('ui.server.running');
 
+                this.phpVersionId = (await this.$store.dispatch('server/php-web/get')).version_id;
+                this.directory = location.hostname;
+
                 const response = await this.$store.dispatch('server/contao/get', false);
-                result = response.body;
+                const result = response.body;
 
                 if (response.status === 200) {
+                    this.projectDir = result.project_dir;
+                    this.conflicts = result.conflicts;
+                    this.isEmpty = result.conflicts.length === 0;
+                    this.isWeb = result.public_dir === 'web';
+                    this.isPublic = result.public_dir === 'public';
+                    this.usePublicDir = result.public_dir === 'public';
+
                     if (!result.version) {
                         this.bootState = 'action';
                         this.bootDescription = this.$t('ui.server.contao.empty');
@@ -307,24 +341,6 @@
             directory() {
                 this.directoryExists = false;
             },
-        },
-
-        async mounted() {
-            if (this.current) {
-                const phpWeb = await this.$store.dispatch('server/php-web/get');
-                this.phpVersionId = phpWeb.version_id;
-            }
-
-            if (result) {
-                this.projectDir = result.project_dir;
-                this.conflicts = result.conflicts;
-                this.isEmpty = result.conflicts.length === 0;
-                this.isWeb = result.public_dir === 'web';
-                this.isPublic = result.public_dir === 'public';
-                this.usePublicDir = result.public_dir === 'public';
-            }
-
-            this.directory = location.hostname;
         }
     };
 </script>
@@ -364,17 +380,22 @@
             font-weight: $font-weight-bold;
         }
 
+        &__versions {
+            margin: 0;
+            padding: 0 0 0 15px;
+        }
+
         &__version {
             margin: .5em 0;
             text-align: left;
 
-            &--unavailable {
-                text-decoration: line-through;
-            }
-
             &--warning {
                 color: $red-button;
             }
+        }
+
+        &__releaseplan {
+            margin-top: 1.5em;
         }
 
         &__form {

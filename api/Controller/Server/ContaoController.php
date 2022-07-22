@@ -216,6 +216,7 @@ class ContaoController
                 'cgi-bin',
                 'contao-manager',
                 'plesk-stat',
+                'public',
                 'web',
                 '.bash_profile',
                 '.bash_logout',
