@@ -68,12 +68,12 @@ class AdminUserController
             }
 
             try {
-                $this->contaoConsole->createAdminUser([
+                $this->contaoConsole->createBackendUser([
                     'username' => $request->request->get('username'),
                     'name' => $request->request->get('name'),
                     'email' => $request->request->get('email'),
-                    'password' => $request->request->get('password'),
-                ]);
+                    'language' => $request->getPreferredLanguage(),
+                ], $request->request->get('password'));
 
                 return $this->getUserResponse(Response::HTTP_CREATED);
             } catch (ProcessFailedException $exception) {

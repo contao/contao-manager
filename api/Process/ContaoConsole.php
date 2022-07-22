@@ -213,34 +213,35 @@ class ContaoConsole
     }
 
     /**
+     * @throws \RuntimeException
      * @throws ProcessFailedException
      */
-    public function createAdminUser(array $user): void
+    public function createBackendUser(array $user, string $password, bool $admin = true): void
     {
         $commands = $this->getCommandList();
 
         if (
             !isset($commands['contao:user:create']['options'])
-            || !\in_array('username', $commands['contao:user:create']['options'], true)
-            || !\in_array('name', $commands['contao:user:create']['options'], true)
-            || !\in_array('email', $commands['contao:user:create']['options'], true)
-            || !\in_array('password', $commands['contao:user:create']['options'], true)
-            || !\in_array('admin', $commands['contao:user:create']['options'], true)
+            || ($admin && !\in_array('admin', $commands['contao:user:create']['options'], true))
+            || !empty(array_diff(array_keys($user), $commands['contao:user:create']['options']))
         ) {
-            return;
+            throw new \RuntimeException('Unsupported argument to the contao:user:create command.');
         }
 
         $arguments = [
             'contao:user:create',
-            '--admin',
-            '--username='.$user['username'],
-            '--name='.$user['name'],
-            '--email='.$user['email'],
-            '--password='.$user['password'],
-            '--no-interaction',
         ];
 
+        foreach ($user as $k => $v) {
+            $arguments[] = '--'.$k.'='.$v;
+        }
+
+        if ($admin) {
+            $arguments[] = '--admin';
+        }
+
         $process = $this->processFactory->createContaoConsoleProcess($arguments);
+        $process->setInput($password."\n".$password."\n"); // Password and confirmation
         $process->mustRun();
     }
 
