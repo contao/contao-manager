@@ -161,6 +161,7 @@
             },
 
             checkDatabase() {
+                this.$store.commit('server/database/setBooting', true);
                 this.$store.commit('setView', views.READY);
                 this.$router.push({ name: routes.databaseMigration.name });
             },
@@ -231,8 +232,7 @@
                 return this.validUrl;
             },
 
-            async save(event) {
-                event.preventDefault();
+            async save() {
                 this.processing = true;
 
                 const response = await this.$store.dispatch('server/database/set', this.url);

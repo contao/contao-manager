@@ -133,6 +133,14 @@ class ContaoConsole
 
         $process = $this->processFactory->createContaoConsoleProcess($arguments);
         $process->run();
+
+        if (!$process->isSuccessful()) {
+            return [
+                'type' => 'error',
+                'message' => $process->getOutput().$process->getErrorOutput(),
+            ];
+        }
+
         $output = $process->getOutput();
 
         if (!empty($output)) {

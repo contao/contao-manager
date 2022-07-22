@@ -9,6 +9,8 @@ export default {
         supported: false,
         totalMigrations: 0,
         totalSchemaUpdates: 0,
+
+        booting: false,
     },
 
     getters: {
@@ -18,6 +20,10 @@ export default {
     mutations: {
         setLoading(state, value) {
             state.loading = !!value;
+        },
+
+        setBooting(state, value) {
+            state.booting = !!value;
         },
 
         setCache(state, response) {

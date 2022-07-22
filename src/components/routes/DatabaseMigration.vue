@@ -60,6 +60,7 @@
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import Console from '../fragments/Console';
     import Checkbox from '../widgets/Checkbox';
+    import views from '../../router/views';
 
     export default {
         name: 'DatabaseMigration',
@@ -77,7 +78,7 @@
         }),
 
         computed: {
-            ...mapState('server/database', ['supported', 'totalMigrations', 'totalSchemaUpdates']),
+            ...mapState('server/database', ['supported', 'totalMigrations', 'totalSchemaUpdates', 'booting']),
 
             isEmpty: vm => vm.status !== 'active' && vm.operations && !vm.operations.length,
             executing: vm => vm.status === 'active',
@@ -198,7 +199,7 @@
                 switch (this.type) {
                     case 'migrations':
                     case 'migrations-only':
-                        return this.$t('ui.migrate.migrationsTitle');
+                        return this.$t('ui.migrate.migrationTitle');
 
                     case 'schema':
                     case 'schema-only':
@@ -290,7 +291,14 @@
                 await this.$http.delete('api/contao/database-migration');
                 await this.$store.dispatch('server/database/get', false);
 
-                this.$router.push({ name: routes.maintenance.name });
+                if (this.booting) {
+                    this.$store.commit('server/database/setBooting', false);
+                    this.$store.commit('setView', views.BOOT);
+                    this.$router.push({ name: routes.discover.name })
+                } else {
+                    this.$router.push({ name: routes.maintenance.name });
+                }
+
                 this.closing = false;
             },
         },

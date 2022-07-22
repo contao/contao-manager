@@ -63,7 +63,7 @@ class DatabaseController
             || !\in_array('DATABASE_URL', $features['contao/manager-bundle']['dot-env'], true)
         ) {
             return new ApiProblemResponse(
-                (new ApiProblem('Not supported'))
+                (new ApiProblem('Contao console does not support the necessary contao:migrate command/arguments or CLI API features.'))
                     ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
             );
         }
