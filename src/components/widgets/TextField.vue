@@ -1,5 +1,5 @@
 <template>
-    <div class="widget widget-text" :class="{ 'widget--error': error, 'widget--required': required }">
+    <div class="widget widget-text" :class="{ 'widget--error': error, 'widget--validate': required || !!pattern, 'widget--required': required }">
         <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
         <input
             ref="input"
@@ -8,6 +8,7 @@
             :name="name"
             :placeholder="placeholder"
             :required="required"
+            :pattern="pattern"
             :disabled="disabled"
             :value="value"
             @input="input($event.target.value)"
@@ -44,12 +45,18 @@
             input(value) {
                 this.$emit('input', value);
             },
+
             enter() {
                 this.$emit('enter');
             },
+
             focus() {
                 this.$refs.input.focus();
             },
+
+            checkValidity() {
+                return this.$refs.input.checkValidity();
+            }
         },
 
         mounted() {
