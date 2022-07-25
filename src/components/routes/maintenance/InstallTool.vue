@@ -1,5 +1,5 @@
 <template>
-    <message-overlay :message="overlayMessage" :active="safeMode || (!loading && !supported)">
+    <message-overlay :message="overlayMessage" :active="safeMode || (!loading && !isSupported)">
         <section class="maintenance">
             <div class="maintenance__inside">
                 <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" alt="" /></figure>
@@ -30,13 +30,12 @@
         components: { MessageOverlay, Loader, LoadingButton },
 
         data: () => ({
-            supported: false,
             loading: true,
         }),
 
         computed: {
             ...mapState(['safeMode']),
-            ...mapState('contao/install-tool', ['isLocked']),
+            ...mapState('contao/install-tool', ['isLocked', 'isSupported']),
             overlayMessage: vm => vm.safeMode ? vm.$t('ui.maintenance.safeMode') : vm.$t('ui.maintenance.unsupported'),
         },
 
@@ -59,15 +58,9 @@
                 return;
             }
 
-            this.$store.dispatch('contao/install-tool/isLocked').then(
-                () => {
-                    this.supported = true;
-                    this.loading = false;
-                },
-                () => {
-                    this.supported = false;
-                    this.loading = false;
-                },
+            this.$store.dispatch('contao/install-tool/fetch').then(
+                () => { this.loading = false },
+                () => { this.loading = false },
             );
         },
     };

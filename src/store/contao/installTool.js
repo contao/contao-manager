@@ -7,11 +7,13 @@ const handle = (request, { commit }) => new Promise((resolve, reject) => {
         (response) => {
             commit('setCache', response.body['locked']);
             commit('setIsLocked', response.body['locked'] === true);
+            commit('setIsSupported', true);
 
             resolve(response.body['locked']);
         },
         () => {
             commit('setIsLocked', false);
+            commit('setIsSupported', false);
 
             reject();
         },
@@ -24,6 +26,7 @@ export default {
     state: {
         cache: null,
         isLocked: null,
+        isSupported: false,
     },
 
     mutations: {
@@ -34,10 +37,14 @@ export default {
         setIsLocked(state, value) {
             state.isLocked = value;
         },
+
+        setIsSupported(state, value) {
+            state.isSupported = value;
+        },
     },
 
     actions: {
-        isLocked(store, cache = true) {
+        fetch(store, cache = true) {
             if (cache && store.state.cache) {
                 return Promise.resolve(store.state.cache);
             }

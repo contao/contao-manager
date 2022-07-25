@@ -15,7 +15,7 @@
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a href="/contao">{{ $t('ui.navigation.backend') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showAppDev"><a href="/app_dev.php/" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showPreview"><a href="/preview.php/" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
-                    <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a href="/contao/install" target="_blank">{{ $t('ui.navigation.installTool') }}</a></li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showInstallTool"><a href="/contao/install" target="_blank">{{ $t('ui.navigation.installTool') }}</a></li>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="phpinfo">{{ $t('ui.navigation.phpinfo') }}</a></li>
                 </ul>
             </li>
@@ -47,6 +47,7 @@
 
         computed: {
             ...mapState(['safeMode']),
+            ...mapState('contao/install-tool', { showInstallTool: 'isSupported' }),
             ...mapState('contao/access-key', { showAppDev: 'isEnabled' }),
             ...mapState('contao/jwt-cookie', { showPreview: 'isDebugEnabled' }),
             ...mapState('server/database', ['totalMigrations', 'totalSchemaUpdates']),
@@ -87,6 +88,7 @@
         },
 
         mounted() {
+            this.$store.dispatch('contao/install-tool/fetch').catch(() => {});
             this.$store.dispatch('contao/jwt-cookie/get').catch(() => {});
             this.$store.dispatch('contao/access-key/get').catch(() => {});
             this.$store.dispatch('server/database/get').catch(() => {});
