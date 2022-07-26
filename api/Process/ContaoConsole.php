@@ -14,7 +14,7 @@ namespace Contao\ManagerApi\Process;
 
 use Composer\Semver\VersionParser;
 use Contao\ManagerApi\Exception\ProcessOutputException;
-use Symfony\Component\Process\Exception\ExceptionInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ContaoConsole
 {
@@ -175,6 +175,74 @@ class ContaoConsole
         return [
             'type' => 'empty',
         ];
+    }
+
+    public function getUsers(): ?array
+    {
+        $commands = $this->getCommandList();
+
+        if (
+            !isset($commands['contao:user:list']['options'])
+            || !\in_array('format', $commands['contao:user:list']['options'], true)
+            || !\in_array('column', $commands['contao:user:list']['options'], true)
+        ) {
+            return null;
+        }
+
+        $arguments = [
+            'contao:user:list',
+            '--format=json',
+            '--column=username',
+            '--column=name',
+            '--column=admin',
+            '--column=dateAdded',
+            '--column=lastLogin',
+            '--no-interaction',
+        ];
+
+        $process = $this->processFactory->createContaoConsoleProcess($arguments);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            return null;
+        }
+
+        $data = json_decode($process->getOutput(), true);
+
+        return \is_array($data) ? $data : null;
+    }
+
+    /**
+     * @throws \RuntimeException
+     * @throws ProcessFailedException
+     */
+    public function createBackendUser(array $user, string $password, bool $admin = true): void
+    {
+        $commands = $this->getCommandList();
+
+        if (
+            !isset($commands['contao:user:create']['options'])
+            || ($admin && !\in_array('admin', $commands['contao:user:create']['options'], true))
+            || !empty(array_diff(array_keys($user), $commands['contao:user:create']['options']))
+        ) {
+            throw new \RuntimeException('Unsupported argument to the contao:user:create command.');
+        }
+
+        $arguments = [
+            'contao:user:create',
+        ];
+
+        foreach ($user as $k => $v) {
+            $arguments[] = '--'.$k.'='.$v;
+        }
+
+        if ($admin) {
+            $arguments[] = '--admin';
+        }
+
+        $process = $this->processFactory->createContaoConsoleProcess($arguments);
+        $process->setInput($password."\n".$password."\n"); // Password and confirmation
+        $process->mustRun();
     }
 
     private function normalizeCommands(array $commands): array

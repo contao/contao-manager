@@ -47,6 +47,7 @@
     import Composer from '../boot/Composer';
     import Contao from '../boot/Contao';
     import Database from '../boot/Database';
+    import AdminUser from '../boot/AdminUser';
 
     export default {
         components: { BoxedLayout, Loader },
@@ -155,7 +156,7 @@
 
                 this.$refs.steps.innerHTML = '';
                 this.steps = {};
-                let steps = { PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao, Database };
+                let steps = { PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao, Database, AdminUser };
 
                 if (this.$route.name === routes.oauth.name) {
                     steps = { PhpWeb, Config, PhpCli, SelfUpdate };

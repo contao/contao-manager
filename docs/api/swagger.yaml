@@ -359,6 +359,85 @@ paths:
                 501:
                     description: Operation is not supported (e.g. not running as Phar).
 
+    /api/server/admin-user:
+        get:
+            summary: Gets if there is an admin user
+            tags: [Server Configuration]
+            responses:
+                200:
+                    description: Gets if there is an admin user
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ServerAdminUser'
+                501:
+                    description: Contao console does not support the necessary contao:user:list and/or contao:user:create commands/options.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                502:
+                    description: If the command line does not work as expected.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                503:
+                    description: If the PHP command line binary cannot be found.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+
+        post:
+            summary: Create an admin user
+            tags: [Server Configuration]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                username:
+                                    type: string
+                                name:
+                                    type: string
+                                email:
+                                    type: string
+                                password:
+                                    type: string
+            responses:
+                201:
+                    description: User was created successfully.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ServerAdminUser'
+                405:
+                    description: An admin user already exists.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                500:
+                    description: The user account could not be created.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                501:
+                    description: Contao console does not support the necessary contao:user:list and/or contao:user:create commands/options.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                503:
+                    description: If the PHP command line binary cannot be found.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+
 
     #############
     #   Users   #
@@ -1240,6 +1319,12 @@ components:
                     public_dir:
                         type: string
                         description: Name of the public directory ("public" or "web").
+
+        ServerAdminUser:
+            type: object
+            properties:
+                hasUser:
+                    type: boolean
 
         ContaoAccessKeyGet:
             type: object
