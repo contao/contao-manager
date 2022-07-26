@@ -72,8 +72,7 @@
             errors: {
                 email: '',
                 password: '',
-            },
-            error: null,
+            }
         }),
 
         methods: {
@@ -117,8 +116,6 @@
             },
 
             validate() {
-                this.error = null;
-
                 this.valid = this.$refs.username.checkValidity()
                     && this.$refs.name.checkValidity()
                     && this.$refs.email.checkValidity()
@@ -152,19 +149,12 @@
             async save() {
                 this.processing = true;
 
-                const response = await this.$store.dispatch('server/adminUser/set', {
+                await this.$store.dispatch('server/adminUser/set', {
                     username: this.username,
                     name: this.name,
                     email: this.email,
                     password: this.password
                 });
-
-                if (response.status === 502) {
-                    this.processing = false;
-                    this.valid = false;
-                    this.error = response.body.detail || true;
-                    return;
-                }
 
                 this.hasUser = true;
                 this.processing = false;
@@ -266,14 +256,6 @@
         &__fielddesc {
             margin-bottom: 1em;
             text-align: justify;
-        }
-
-        &__error {
-            margin-bottom: 1.5em;
-            padding: 4px 10px;
-            color: #fff;
-            background: $red-button;
-            border-radius: 2px;
         }
 
         .widget-button {
