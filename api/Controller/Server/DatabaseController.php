@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DatabaseController
 {
-    private const URL_PATTERN = '^([^:]+)://(([^:@]+)(:([^@]+))?@)?([^:/]+(:[0-9]+)?)/(.+)$';
+    private const URL_PATTERN = '^([^:]+)://(([^:@]+)(:([^@]+))?@)?([^:/]+(:[0-9]+)?)/([^?]+)(\?.+)?$';
 
     public function __construct(ApiKernel $kernel, ContaoApi $contaoApi, ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, LoggerInterface $logger = null, Filesystem $filesystem = null)
     {

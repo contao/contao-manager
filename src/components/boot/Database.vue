@@ -27,10 +27,14 @@
 
                     <div class="database-check__or"><span>{{ $t('ui.server.database.or') }}</span></div>
 
-                    <text-field name="user" :label="$t('ui.server.database.user')" validate :disabled="processing" v-model="user"/>
-                    <text-field name="password" type="password" :label="$t('ui.server.database.password')" validate :disabled="processing" v-model="password"/>
-                    <text-field name="server" :label="$t('ui.server.database.server')" :disabled="processing" required validate v-model="server"/>
-                    <text-field name="database" :label="$t('ui.server.database.database')" :disabled="processing" required validate v-model="database"/>
+                    <text-field name="user" :label="$t('ui.server.database.user')" :disabled="processing" v-model="user"/>
+                    <text-field name="password" type="password" :label="$t('ui.server.database.password')" :disabled="processing" v-model="password"/>
+                    <text-field name="server" :label="$t('ui.server.database.server')" :disabled="processing" required v-model="server"/>
+                    <text-field name="database" :label="$t('ui.server.database.database')" :disabled="processing" required v-model="database"/>
+
+                    <text-field name="serverVersion" :label="$t('ui.server.database.serverVersion')" :disabled="processing" required v-model="serverVersion" v-if="unknownServerVersion"/>
+                    <select-menu name="serverVersion" :label="$t('ui.server.database.serverVersion')" :disabled="processing" required include-blank :options="serverVersions" v-model="serverVersion" v-else/>
+
                 </div>
 
                 <loading-button submit color="primary" icon="save" :loading="processing" :disabled="!valid">{{ $t('ui.server.database.save') }}</loading-button>
@@ -51,16 +55,17 @@
 <script>
     import views from '../../router/views';
     import boot from '../../mixins/boot';
+    import routes from '../../router/routes';
 
     import BootCheck from '../fragments/BootCheck';
     import BoxedLayout from '../layouts/Boxed';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import TextField from '../widgets/TextField';
-    import routes from '../../router/routes';
+    import SelectMenu from '../widgets/SelectMenu';
+    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
         mixins: [boot],
-        components: { BootCheck, BoxedLayout, TextField, LoadingButton },
+        components: { BootCheck, BoxedLayout, TextField, SelectMenu, LoadingButton },
 
         data: () => ({
             processing: false,
@@ -74,21 +79,30 @@
             password: '',
             server: 'localhost',
             database: '',
+            serverVersion: ''
         }),
 
-        watch: {
-            user() {
-                this.updateUrl();
-            },
-            password() {
-                this.updateUrl();
-            },
-            server() {
-                this.updateUrl();
-            },
-            database() {
-                this.updateUrl();
-            },
+        computed: {
+            unknownServerVersion: vm => vm.serverVersion && !vm.serverVersions.find(v => v.value === vm.serverVersion),
+
+            serverVersions: (vm) => ([
+                {
+                    value: '8.0',
+                    label: 'MySQL 8.0+',
+                },
+                {
+                    value: '5.7.9',
+                    label: 'MySQL 5.7.9+',
+                },
+                {
+                    value: 'mariadb-10.2.7',
+                    label: 'MariaDB 10.2.7+',
+                },
+                {
+                    value: '5.1',
+                    label: vm.$t('ui.server.database.oldVersion'),
+                },
+            ]),
         },
 
         methods: {
@@ -177,11 +191,17 @@
                 this.password = match[5] ? decodeURIComponent(match[5]) : '';
                 this.server = decodeURIComponent(match[6]);
                 this.database = decodeURIComponent(match[8]);
+                this.serverVersion = '';
 
                 if (this.server.substring(this.server.length - 5) === ':3306') {
                     this.server = this.server.substring(0, this.server.length - 5);
                 } else if (!this.server.includes(':')) {
                     this.server = `${this.server}:3306`;
+                }
+
+                if (match[9]) {
+                    const params = new URLSearchParams(match[9]);
+                    this.serverVersion = params.get('serverVersion');
                 }
 
                 this.valid = this.validateUrl();
@@ -213,6 +233,10 @@
 
                 if (this.database) {
                     url += '/'+encodeURIComponent(this.database);
+                }
+
+                if (this.serverVersion) {
+                    url += `?serverVersion=${this.serverVersion}`;
                 }
 
                 this.url = url;
@@ -253,7 +277,26 @@
             cancel() {
                 this.$emit('view', null);
             }
-        }
+        },
+
+        watch: {
+            user() {
+                this.updateUrl();
+            },
+            password() {
+                this.updateUrl();
+            },
+            server() {
+                this.updateUrl();
+            },
+            database() {
+                this.updateUrl();
+            },
+            serverVersion() {
+                this.updateUrl();
+            },
+        },
+
     };
 </script>
 
@@ -298,7 +341,7 @@
             margin: 0 auto 50px;
             opacity: 1;
 
-            .widget-text {
+            .widget {
                 margin-top: 10px;
 
                 label {
@@ -372,14 +415,15 @@
                 margin: 0 50px;
                 padding-bottom: 50px;
 
-                .widget-text {
+                .widget {
                     label {
                         float: left;
                         width: 120px;
                         padding-top: 10px;
                     }
 
-                    input {
+                    input,
+                    select {
                         width: 250px !important;
                     }
                 }
