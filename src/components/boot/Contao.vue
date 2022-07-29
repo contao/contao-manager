@@ -183,12 +183,12 @@
                 }
 
                 versions.push({
-                    value: '4.9',
-                    label: `Contao 4.9 (${this.$t('ui.server.contao.ltsTitle')})`,
-                    disabled: this.phpVersionId < 70200 || !this.isWeb,
-                    title: 'Contao 4.9',
-                    description: this.$t('ui.server.contao.ltsText', { from: '2020', to: '2023' }),
-                    problem: this.$t('ui.server.contao.requires49'),
+                    value: '5.0.x-dev',
+                    label: `Contao 5.0.x-dev (${this.$t('ui.server.contao.latestTitle')})`,
+                    disabled: this.phpVersionId < 80100,
+                    title: 'Contao 5.0',
+                    description: this.$t('ui.server.contao.latestText', { from: '2022', to: '2023' }),
+                    problem: this.$t('ui.server.contao.requiresPHP', { version: '8.1'}),
                 });
 
                 versions.push({
@@ -201,12 +201,12 @@
                 });
 
                 versions.push({
-                    value: '5.0.x-dev',
-                    label: `Contao 5.0.x-dev (${this.$t('ui.server.contao.latestTitle')})`,
-                    disabled: this.phpVersionId < 80100,
-                    title: 'Contao 5.0',
-                    description: this.$t('ui.server.contao.latestText', { from: '2022', to: '2023' }),
-                    problem: this.$t('ui.server.contao.requiresPHP', { version: '8.1'}),
+                    value: '4.9',
+                    label: `Contao 4.9 (${this.$t('ui.server.contao.ltsTitle')})`,
+                    disabled: this.phpVersionId < 70200 || !this.isWeb,
+                    title: 'Contao 4.9',
+                    description: this.$t('ui.server.contao.ltsText', { from: '2020', to: '2023' }),
+                    problem: this.$t('ui.server.contao.requires49'),
                 });
 
                 return versions;
