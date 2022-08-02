@@ -18,11 +18,13 @@
         },
 
         methods: {
-            boot() {
+            async boot() {
                 this.bootState = 'loading';
                 this.bootDescription = this.$t('ui.server.running');
 
-                this.$store.dispatch('server/composer/get').then((result) => {
+                try {
+                    const result = await this.$store.dispatch('server/composer/get');
+
                     if (result.json.found && !result.json.valid) {
                         this.bootState = 'error';
                         this.bootDescription = result.json.error;
@@ -34,7 +36,13 @@
                         this.bootState = 'success';
                         this.bootDescription = this.$t('ui.server.composer.success');
                     }
-                }).catch((response) => {
+
+                    const composerConfig = await this.$store.dispatch('config/composer/get');
+
+                    if (!composerConfig || composerConfig.length === 0) {
+                        await this.$store.dispatch('config/composer/writeDefaults');
+                    }
+                } catch (response) {
                     if (response.status === 503) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.prerequisite');
@@ -42,9 +50,9 @@
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.error');
                     }
-                }).then(() => {
-                    this.$emit('result', 'Composer', this.bootState);
-                });
+                }
+
+                this.$emit('result', 'Composer', this.bootState);
             },
 
             async install() {

@@ -255,12 +255,6 @@
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.contao.old', result);
                     } else {
-                        const composerConfig = await this.$store.dispatch('config/composer/get');
-
-                        if (!composerConfig || composerConfig.length === 0) {
-                            this.$store.dispatch('config/composer/writeDefaults');
-                        }
-
                         this.bootState = 'success';
                         this.bootDescription = this.$t('ui.server.contao.found', { version: result.version, api: result.api.version });
 
