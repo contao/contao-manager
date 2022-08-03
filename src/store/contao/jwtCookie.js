@@ -43,8 +43,8 @@ export default {
             }
 
             if (store.rootState.safeMode
-                || store.rootState.contaoApi.version < 2
-                || !store.rootState.contaoApi.features?.['contao/manager-bundle']?.['jwt-cookie']?.includes('debug')
+                || store.rootState.server.contao.contaoApi.version < 2
+                || !store.rootState.server.contao.contaoApi.features?.['contao/manager-bundle']?.['jwt-cookie']?.includes('debug')
             ) {
                 return Promise.reject();
             }

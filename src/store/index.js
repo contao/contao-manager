@@ -25,8 +25,6 @@ const store = new Vuex.Store({
         error: null,
         locked: false,
         safeMode: false,
-        contaoVersion: null,
-        contaoApi: null,
     },
 
     mutations: {
@@ -49,11 +47,6 @@ const store = new Vuex.Store({
 
         setSafeMode(state, value) {
             state.safeMode = !!value;
-        },
-
-        setVersions(state, result) {
-            state.contaoVersion = result.version;
-            state.contaoApi = result.api;
         },
 
         apiError: (state, response, request = null) => {

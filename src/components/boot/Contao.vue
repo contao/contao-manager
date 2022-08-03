@@ -257,8 +257,6 @@
                     } else {
                         this.bootState = 'success';
                         this.bootDescription = this.$t('ui.server.contao.found', { version: result.version, api: result.api.version });
-
-                        this.$store.commit('setVersions', result);
                     }
                 } else if (response.status === 503) {
                     this.bootState = 'error';

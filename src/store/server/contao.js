@@ -7,16 +7,24 @@ export default {
 
     state: {
         cache: null,
+        contaoVersion: null,
+        contaoApi: null,
     },
 
     mutations: {
-        setCache(state, value) {
-            state.cache = value;
+        setCache(state, response) {
+            state.cache = response;
+            state.contaoVersion = null;
+            state.contaoApi = null;
+
+            if (response) {
+                state.contaoVersion = response.body.version;
+                state.contaoApi = response.body.api;
+            }
         },
     },
 
     actions: {
-
         get({ state, commit }, cache = true) {
             if (cache && state.cache) {
                 return new Promise((resolve) => {
@@ -34,10 +42,15 @@ export default {
         },
 
         documentRoot(store, { directory, usePublicDir = false }) {
-            return Vue.http.post('api/server/contao', {
-                directory,
+            const params = {
                 usePublicDir
-            }).catch(response => response);
+            };
+
+            if (directory) {
+                params.directory = directory;
+            }
+
+            return Vue.http.post('api/server/contao', params).catch(response => response);
         }
     },
 };
