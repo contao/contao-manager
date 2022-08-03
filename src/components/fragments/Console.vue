@@ -59,10 +59,6 @@
                 default: false,
             },
             consoleOutput: String,
-            tag: {
-                type: String,
-                default: 'div'
-            }
         },
 
         methods: {
