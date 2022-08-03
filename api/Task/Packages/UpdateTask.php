@@ -14,6 +14,7 @@ namespace Contao\ManagerApi\Task\Packages;
 
 use Composer\Semver\Constraint\Constraint;
 use Composer\Semver\VersionParser;
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Composer\CloudChanges;
 use Contao\ManagerApi\Composer\CloudResolver;
 use Contao\ManagerApi\Composer\Environment;
@@ -56,7 +57,12 @@ class UpdateTask extends AbstractPackagesTask
      */
     private $uploads;
 
-    public function __construct(ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, UploadsConfig $uploads, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
+    /**
+     * @var ApiKernel
+     */
+    private $kernel;
+
+    public function __construct(ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, UploadsConfig $uploads, ApiKernel $kernel, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $serverInfo, $filesystem, $translator);
 
@@ -64,6 +70,7 @@ class UpdateTask extends AbstractPackagesTask
         $this->processFactory = $processFactory;
         $this->cloudResolver = $cloudResolver;
         $this->uploads = $uploads;
+        $this->kernel = $kernel;
     }
 
     public function getName(): string
@@ -168,7 +175,7 @@ class UpdateTask extends AbstractPackagesTask
         }
 
         $this->addContaoConflictsRequirement($definition);
-        $this->handleContaoStability($definition);
+        $this->handleContaoRequirement($definition);
 
         // Update all packages if none are set
         if (empty($updates)) {
@@ -196,7 +203,7 @@ class UpdateTask extends AbstractPackagesTask
         $definition->requirePackage('contao/conflicts', '*@dev');
     }
 
-    private function handleContaoStability(CloudChanges $definition): void
+    private function handleContaoRequirement(CloudChanges $definition): void
     {
         foreach ($definition->getRequiredPackages() as $require) {
             $require = explode('=', $require, 2);
@@ -205,15 +212,42 @@ class UpdateTask extends AbstractPackagesTask
 
             // Automatically require core-bundle and installation-bundle if the manager-bundle is not stable
             // otherwise the dependency would not be resolved because we don't set minimum-stability
-            if ('contao/manager-bundle' === $packageName) {
+            if ('contao/manager-bundle' === $packageName && null !== $version) {
                 $rootRequires = $this->environment->getComposer()->getPackage()->getRequires();
 
-                if ($version && 'stable' !== VersionParser::parseStability($version)) {
-                    $definition->requirePackage('contao/core-bundle', $version);
+                $versionParser = new VersionParser();
+                $constraint = $versionParser->parseConstraints($version);
+                $isContao5 = $constraint->matches(new Constraint('>', '4.13.9999'));
 
-                    $versionParser = new VersionParser();
-                    $constraint = $versionParser->parseConstraints($version);
-                    $isContao5 = $constraint->matches(new Constraint('>=', '5.0@rc'));
+                // Patch composer.json to make sure we have a valid public-dir and install scripts
+                if ($isContao5) {
+                    try {
+                        $jsonFile = $this->environment->getComposerJsonFile();
+                        $json = $jsonFile->read();
+
+                        if (!isset($json['extra']['public-dir'])) {
+                            $json['extra']['public-dir'] = basename($this->kernel->getPublicDir());
+                        }
+
+                        foreach (['post-install-cmd', 'post-update-cmd'] as $group) {
+                            if (isset($json['scripts'][$group]) && \is_array($json['scripts'][$group])) {
+                                foreach ($json['scripts'][$group] as $k => $script) {
+                                    if ('Contao\ManagerBundle\Composer\ScriptHandler::initializeApplication' === $script) {
+                                        $json['scripts'][$group][$k] = '@php vendor/bin/contao-setup';
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        $jsonFile->write($json);
+                    } catch (\Exception $e) {
+                        // Ignore
+                    }
+                }
+
+                if ('stable' !== VersionParser::parseStability($version)) {
+                    $definition->requirePackage('contao/core-bundle', $version);
 
                     if (!$isContao5) {
                         $definition->requirePackage('contao/installation-bundle', $version);
