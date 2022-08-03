@@ -242,7 +242,7 @@ class ContaoConsole
         }
 
         $process = $this->processFactory->createContaoConsoleProcess($arguments);
-        $process->setInput($password."\n".$password."\n"); // Password and confirmation
+        $process->setInput($password.PHP_EOL.$password.PHP_EOL); // Password and confirmation
         $process->mustRun();
     }
 
