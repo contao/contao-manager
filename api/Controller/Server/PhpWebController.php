@@ -54,7 +54,7 @@ class PhpWebController
      *
      * @return array|null
      */
-    private function runIntegrityChecks()
+    private function runIntegrityChecks(): ?array
     {
         $problem = $this->integrity->runWebChecks();
 

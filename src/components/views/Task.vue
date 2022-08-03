@@ -21,7 +21,7 @@
                 <div class="view-task__actions">
                     <loading-button class="view-task__action" :loading="isAborting" @click="cancelTask" v-if="allowCancel && (isActive || isAborting)">{{ $t('ui.task.buttonCancel') }}</loading-button>
 
-                    <loading-button class="view-task__action" color="primary" :loading="loadingMigrations" :disabled="(supportsMigrations && totalChanges === 0) || deletingTask" @click="updateDatabase" v-if="requiresAudit">{{ $t('ui.task.buttonAudit') }}</loading-button>
+                    <loading-button class="view-task__action" color="primary" :loading="loadingMigrations" :disabled="(supportsMigrations && !hasDatabaseChanges) || deletingTask" @click="updateDatabase" v-if="requiresAudit">{{ $t('ui.task.buttonAudit') }}</loading-button>
 
                     <loading-button class="view-task__action" :loading="deletingTask" @click="deleteTask" v-if="!isActive && !isAborting">{{ $t('ui.task.buttonConfirm') }}</loading-button>
                     <checkbox name="autoclose" :label="$t('ui.task.autoclose')" v-model="autoClose" v-if="isActive && allowAutoClose"/>
@@ -46,7 +46,6 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
     import task from '../../mixins/task';
-    import routes from '../../router/routes';
 
     import BoxedLayout from '../layouts/Boxed';
     import Loader from 'contao-package-list/src/components/fragments/Loader';
@@ -68,7 +67,7 @@ import { mapGetters, mapState } from 'vuex';
 
         computed: {
             ...mapState('server/database', { supportsMigrations: 'supported', loadingMigrations: 'loading' }),
-            ...mapGetters('server/database', ['totalChanges']),
+            ...mapGetters('server/database', { hasDatabaseChanges: 'hasChanges' }),
         },
 
         methods: {
@@ -91,7 +90,7 @@ import { mapGetters, mapState } from 'vuex';
             async updateDatabase() {
                 if (this.supportsMigrations) {
                     await this.$store.dispatch('tasks/deleteCurrent');
-                    this.$router.push({ name: routes.databaseMigration.name });
+                    this.$store.commit('checkMigrations');
                 } else {
                     window.open('/contao/install');
                 }

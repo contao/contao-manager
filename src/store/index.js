@@ -22,6 +22,8 @@ const store = new Vuex.Store({
 
     state: {
         view: views.INIT,
+        setupStep: 0,
+        migrationsType: '',
         error: null,
         locked: false,
         safeMode: false,
@@ -30,10 +32,14 @@ const store = new Vuex.Store({
     mutations: {
         setView(state, view) {
             state.view = view;
+
+            if (view === views.READY) {
+                state.setupStep = 0;
+            }
         },
 
         setLocked(state) {
-            state.view = 'login';
+            state.view = views.LOGIN;
             state.locked = true;
         },
 
@@ -47,6 +53,16 @@ const store = new Vuex.Store({
 
         setSafeMode(state, value) {
             state.safeMode = !!value;
+        },
+
+        setup(state, step) {
+            state.view = views.SETUP;
+            state.setupStep = step;
+        },
+
+        checkMigrations(state, type = '') {
+            state.view = views.MIGRATION;
+            state.migrationsType = type;
         },
 
         apiError: (state, response, request = null) => {
@@ -68,13 +84,17 @@ const store = new Vuex.Store({
             commit('server/composer/setCache');
             commit('server/config/setCache');
             commit('server/contao/setCache');
+            commit('server/database/setCache');
+            commit('server/adminUser/setCache');
             commit('server/opcache/setCache');
             commit('server/phpinfo/setCache');
             commit('server/php-cli/setCache');
             commit('server/php-web/setCache');
             commit('server/self-update/setCache');
+            commit('contao/install-tool/setCache');
             commit('tasks/setInitialized', false);
             commit('cloud/setStatus', null);
+            commit('setSafeMode', false);
         },
     },
 });

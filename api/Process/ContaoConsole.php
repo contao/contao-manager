@@ -52,7 +52,7 @@ class ContaoConsole
             return $this->version;
         }
 
-        $this->getCommandList(true);
+        $this->getCommandList();
 
         if (null !== $this->version) {
             return $this->version;
@@ -74,19 +74,17 @@ class ContaoConsole
         return $this->version = $version;
     }
 
-    public function getCommandList(bool $mustRun = false): array
+    public function getCommandList(): array
     {
         if (null !== $this->commands) {
             return $this->commands;
         }
 
         $process = $this->processFactory->createContaoConsoleProcess(['list', '--format=json']);
-        $mustRun ? $process->mustRun() : $process->run();
-
-        $data = json_decode(trim($process->getOutput()), true);
+        $process->run();
 
         // If the console does not work, we don't have any command support.
-        if (!\is_array($data)) {
+        if (!$process->isSuccessful() || !\is_array($data = json_decode(trim($process->getOutput()), true))) {
             return $this->commands = [];
         }
 
@@ -137,6 +135,7 @@ class ContaoConsole
         if (!$process->isSuccessful()) {
             return [
                 'type' => 'error',
+                'total' => 1,
                 'message' => $process->getOutput().$process->getErrorOutput(),
             ];
         }
@@ -152,6 +151,7 @@ class ContaoConsole
                 if ('error' === ($data['type'] ?? null)) {
                     return [
                         'type' => 'error',
+                        'total' => 1,
                         'message' => $data['message'] ?? '',
                     ];
                 }
@@ -174,6 +174,7 @@ class ContaoConsole
 
         return [
             'type' => 'empty',
+            'total' => 0,
         ];
     }
 

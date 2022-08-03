@@ -102,7 +102,8 @@
             }
         }
 
-        &__warning {
+        &__warning,
+        &__error {
             position: relative;
             top: -2px;
             margin-left: .5em;
@@ -112,6 +113,10 @@
             font-weight: $font-weight-normal;
             background: $orange-button;
             color: #fff;
+        }
+
+        &__error {
+            background: $red-button;
         }
 
         &__actions {

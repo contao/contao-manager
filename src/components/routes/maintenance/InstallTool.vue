@@ -1,5 +1,5 @@
 <template>
-    <message-overlay :message="overlayMessage" :active="safeMode || (!loading && !isSupported)">
+    <message-overlay :message="overlayMessage" :active="safeMode || isSupported === false">
         <section class="maintenance">
             <div class="maintenance__inside">
                 <figure class="maintenance__image"><img src="../../../assets/images/logo.svg" alt="" /></figure>
@@ -9,10 +9,10 @@
                     <p>{{ $t('ui.maintenance.installTool.description') }}</p>
                 </div>
 
-                <fieldset class="maintenance__actions" v-if="!safeMode">
+                <fieldset class="maintenance__actions" v-if="!safeMode && isSupported !== false">
                     <loader class="maintenance__loader" v-if="isLocked === null"/>
-                    <loading-button class="widget-button widget-button--primary widget-button--unlock" :loading="loading" :disabled="!supported" v-else-if="isLocked" @click="unlock">{{ $t('ui.maintenance.installTool.unlock') }}</loading-button>
-                    <loading-button class="widget-button widget-button--primary widget-button--lock" :loading="loading" :disabled="!supported" v-else @click="lock">{{ $t('ui.maintenance.installTool.lock') }}</loading-button>
+                    <loading-button class="widget-button widget-button--primary widget-button--unlock" :loading="loading" :disabled="!isSupported" v-else-if="isLocked" @click="unlock">{{ $t('ui.maintenance.installTool.unlock') }}</loading-button>
+                    <loading-button class="widget-button widget-button--primary widget-button--lock" :loading="loading" :disabled="!isSupported" v-else @click="lock">{{ $t('ui.maintenance.installTool.lock') }}</loading-button>
                 </fieldset>
             </div>
         </section>
@@ -30,7 +30,7 @@
         components: { MessageOverlay, Loader, LoadingButton },
 
         data: () => ({
-            loading: true,
+            loading: false,
         }),
 
         computed: {
@@ -54,14 +54,7 @@
         },
 
         mounted() {
-            if (this.safeMode) {
-                return;
-            }
-
-            this.$store.dispatch('contao/install-tool/fetch').then(
-                () => { this.loading = false },
-                () => { this.loading = false },
-            );
+            this.$store.dispatch('contao/install-tool/fetch');
         },
     };
 </script>

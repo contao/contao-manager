@@ -48,7 +48,9 @@
     import Login from './views/Login';
     import Task from './views/Task';
     import Boot from './views/Boot';
+    import Setup from './views/Setup';
     import Recovery from './views/Recovery';
+    import Migration from './views/Migration';
 
     export default {
         components: { Loader, Error, Task },
@@ -58,7 +60,9 @@
                 [views.ACCOUNT]: Account,
                 [views.LOGIN]: Login,
                 [views.BOOT]: Boot,
+                [views.SETUP]: Setup,
                 [views.RECOVERY]: Recovery,
+                [views.MIGRATION]: Migration,
             },
             loaded: false,
         }),

@@ -2,44 +2,25 @@
 
 import Vue from 'vue';
 
-const handle = (request, { commit }) => new Promise((resolve, reject) => {
-    request.then(
-        (response) => {
-            commit('setCache', response.body['locked']);
-            commit('setIsLocked', response.body['locked'] === true);
-            commit('setIsSupported', true);
-
-            resolve(response.body['locked']);
-        },
-        () => {
-            commit('setIsLocked', false);
-            commit('setIsSupported', false);
-
-            reject();
-        },
-    );
-});
-
 export default {
     namespaced: true,
 
     state: {
         cache: null,
+        isSupported: null,
         isLocked: null,
-        isSupported: false,
     },
 
     mutations: {
-        setCache(state, value) {
-            state.cache = value;
-        },
+        setCache(state, response) {
+            state.cache = response;
+            state.isSupported = response ? false : null;
+            state.isLocked = null;
 
-        setIsLocked(state, value) {
-            state.isLocked = value;
-        },
-
-        setIsSupported(state, value) {
-            state.isSupported = value;
+            if (response && response.status === 200) {
+                state.isSupported = true;
+                state.isLocked = response.body.locked === true;
+            }
         },
     },
 
@@ -50,18 +31,37 @@ export default {
             }
 
             if (store.rootState.safeMode) {
-                return Promise.reject();
+                store.commit('setCache');
+                return Promise.resolve();
             }
 
-            return handle(Vue.http.get('api/contao/install-tool/lock'), store);
+            const handle = (response) => {
+                store.commit('setCache', response);
+
+                return Promise.resolve(response);
+            }
+
+            return Vue.http.get('api/contao/install-tool/lock').then(handle, handle);
         },
 
         lock(store) {
-            return handle(Vue.http.put('api/contao/install-tool/lock'), store);
+            const handle = (response) => {
+                store.commit('setCache', response);
+
+                return Promise.resolve(response);
+            }
+
+            return Vue.http.put('api/contao/install-tool/lock').then(handle, handle);
         },
 
         unlock(store) {
-            return handle(Vue.http.delete('api/contao/install-tool/lock'), store);
+            const handle = (response) => {
+                store.commit('setCache', response);
+
+                return Promise.resolve(response);
+            }
+
+            return Vue.http.delete('api/contao/install-tool/lock').then(handle, handle);
         },
     },
 };

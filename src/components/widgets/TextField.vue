@@ -6,7 +6,7 @@
             :type="inputType"
             :id="label ? 'ctrl_'+name : ''"
             :name="name"
-            :placeholder="validate ? (placeholder || '') : placeholder"
+            :placeholder="validate ? (placeholder || ' ') : placeholder"
             :required="required"
             :pattern="pattern"
             :disabled="disabled"
@@ -101,6 +101,8 @@
         position: absolute;
         right: 8px;
         bottom: 2px;
+        padding: 0;
+        margin: 0;
         background: none;
         border: none;
         cursor: pointer;

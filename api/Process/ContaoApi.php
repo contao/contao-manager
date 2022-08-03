@@ -78,11 +78,12 @@ class ContaoApi
 
     /**
      * @param string|array $arguments
+     * @return mixed
      *
      * @throws ParsingException
      * @throws ProcessFailedException
      */
-    public function runCommand($arguments, bool $parseJson = false): string
+    public function runCommand($arguments, bool $parseJson = false)
     {
         $process = $this->processFactory->createContaoApiProcess((array) $arguments);
         $process->mustRun();

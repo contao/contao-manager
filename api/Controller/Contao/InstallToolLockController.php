@@ -62,11 +62,13 @@ class InstallToolLockController
 
         if (
             null === $contaoVersion
-            || (new MultiConstraint([
-                new Constraint('<', '4.4.9'),
-                new Constraint('>=', '5.0'),
-            ], false)
-            )->matches(new Constraint('=', $contaoVersion))
+            || (new MultiConstraint(
+                [
+                    new Constraint('<', '4.4.9'),
+                    new Constraint('>', '4.13.9999'), // 5.0 including dev versions
+                ],
+                false
+            ))->matches(new Constraint('=', $contaoVersion))
         ) {
             return new ApiProblemResponse(
                 (new ApiProblem('Contao does not support locking the install tool.'))

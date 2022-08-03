@@ -78,7 +78,8 @@
         }),
 
         computed: {
-            ...mapState('server/database', ['supported', 'totalMigrations', 'totalSchemaUpdates', 'booting']),
+            ...mapState('server/database', ['supported']),
+            ...mapState(['setupStep']),
 
             isEmpty: vm => vm.status !== 'active' && vm.operations && !vm.operations.length,
             executing: vm => vm.status === 'active',
@@ -261,7 +262,7 @@
             },
 
             async check () {
-                const type = this.type || this.$route.query.type;
+                const type = this.type || this.$store.state.migrationsType;
 
                 if (this.status) {
                     this.type = null;
@@ -291,12 +292,11 @@
                 await this.$http.delete('api/contao/database-migration');
                 await this.$store.dispatch('server/database/get', false);
 
-                if (this.booting) {
-                    this.$store.commit('server/database/setBooting', false);
-                    this.$store.commit('setView', views.BOOT);
-                    this.$router.push({ name: routes.discover.name })
+                if (this.setupStep > 0) {
+                    await this.$store.dispatch('server/adminUser/get', false);
+                    this.$store.commit('setView', views.SETUP);
                 } else {
-                    this.$router.push({ name: routes.maintenance.name });
+                    this.$store.commit('setView', views.READY);
                 }
 
                 this.closing = false;

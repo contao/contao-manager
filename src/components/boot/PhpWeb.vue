@@ -18,27 +18,29 @@
         }),
 
         methods: {
-            boot() {
+            async boot() {
                 this.bootDescription = this.$t('ui.server.running');
 
-                this.$store.dispatch('server/php-web/get').then((result) => {
-                    if (result.problem) {
-                        this.problem = result.problem;
+                const response = await this.$store.dispatch('server/php-web/get');
+
+                if (response.status === 200) {
+                    if (response.body.problem) {
+                        this.problem = response.body.problem;
                         this.bootState = 'error';
-                        this.bootDescription = result.problem.title;
-                    } else if (result.version_id < 70000) {
+                        this.bootDescription = response.body.problem.title;
+                    } else if (response.body.version_id < 70000) {
                         this.bootState = 'info';
-                        this.bootDescription = this.$t('ui.server.php_web.below7', result);
+                        this.bootDescription = this.$t('ui.server.php_web.below7', response.body);
                     } else {
                         this.bootState = 'success';
-                        this.bootDescription = this.$t('ui.server.php_web.success', result);
+                        this.bootDescription = this.$t('ui.server.php_web.success', response.body);
                     }
-                }).catch(() => {
+                } else {
                     this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.error');
-                }).then(() => {
-                    this.$emit('result', 'PhpWeb', this.bootState);
-                });
+                }
+
+                this.$emit('result', 'PhpWeb', this.bootState);
             },
         },
     };

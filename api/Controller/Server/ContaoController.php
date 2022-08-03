@@ -117,7 +117,7 @@ class ContaoController
 
             if ($request->isMethod('POST')) {
                 return $this->createDirectories(
-                    0 === \count($files) ? null : $request->request->get('directory'),
+                    $request->request->get('directory'),
                     $request->request->getBoolean('usePublicDir')
                 );
             }

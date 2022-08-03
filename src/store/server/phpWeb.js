@@ -7,16 +7,24 @@ export default {
 
     state: {
         cache: null,
+        phpVersion: null,
+        phpVersionId: null,
     },
 
     mutations: {
-        setCache(state, value) {
-            state.cache = value;
+        setCache(state, response) {
+            state.cache = response;
+            state.phpVersion = null;
+            state.phpVersionId = null;
+
+            if (response && response.status === 200) {
+                state.phpVersion = response.body.version;
+                state.phpVersionId = response.body.version_id;
+            }
         },
     },
 
     actions: {
-
         get({ state, commit }, cache = true) {
             if (cache && state.cache) {
                 return new Promise((resolve) => {
@@ -24,14 +32,13 @@ export default {
                 });
             }
 
-            return Vue.http.get('api/server/php-web').then(
-                response => response.body,
-            ).then((result) => {
-                commit('setCache', result);
+            const handle = (response) => {
+                commit('setCache', response);
 
-                return result;
-            });
+                return Promise.resolve(response);
+            }
+
+            return Vue.http.get('api/server/php-web').then(handle, handle);
         },
-
     },
 };

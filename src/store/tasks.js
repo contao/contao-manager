@@ -183,40 +183,43 @@ export default {
             });
         },
 
-        deleteCurrent({ commit, dispatch }, retry = 2) {
+        async deleteCurrent({ commit, dispatch }, retry = 2) {
             commit('setDeleting', true);
-            return Vue.http.delete('api/task').then(
-                () => {
+
+            try {
+                await Vue.http.delete('api/task');
+                commit('setCurrent', null);
+                commit('server/database/setCache');
+                commit('server/adminUser/setCache');
+                commit('contao/install-tool/setCache');
+                await dispatch('server/contao/get', false, { root: true });
+            } catch (response) {
+                // Bad request, there are no tasks
+                if (response.status === 400) {
                     commit('setCurrent', null);
-                },
-                (response) => {
-                    // Bad request, there are no tasks
-                    if (response.status === 400) {
-                        commit('setCurrent', null);
-                        return;
-                    }
+                    return;
+                }
 
-                    if (response.status === 403 && retry > 0) {
-                        return new Promise((resolve) => {
-                            setTimeout(() => {
-                                resolve(dispatch('deleteCurrent', retry - 1));
-                            }, 5000);
-                        });
-                    }
+                if (response.status === 403 && retry > 0) {
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve(dispatch('deleteCurrent', retry - 1));
+                        }, 5000);
+                    });
+                }
 
-                    if (response.headers.get('Content-Type') === 'application/problem+json') {
-                        commit('setError', response.data, { root: true });
-                    } else {
-                        commit('setError', {
-                            type: 'about:blank',
-                            status: response.status,
-                            response,
-                        }, { root: true });
-                    }
+                if (response.headers.get('Content-Type') === 'application/problem+json') {
+                    commit('setError', response.data, { root: true });
+                } else {
+                    commit('setError', {
+                        type: 'about:blank',
+                        status: response.status,
+                        response,
+                    }, { root: true });
+                }
 
-                    throw response;
-                },
-            );
+                throw response;
+            }
         },
     },
 };

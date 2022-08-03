@@ -6,16 +6,16 @@ export default {
 	state: {
 		cache: null,
 		supported: false,
-		hasUser: false,
+		hasUser: null,
 	},
 
 	mutations: {
 		setCache(state, response) {
 			state.cache = response;
 			state.supported = false;
-			state.hasUser = false;
+			state.hasUser = null;
 
-			if (response.status === 200) {
+			if (response && (response.status === 200 || response.status === 201)) {
 				state.supported = true;
 				state.hasUser = !!response.body.hasUser;
 			}
@@ -39,11 +39,14 @@ export default {
 			return Vue.http.get('api/server/admin-user').then(handle, handle);
 		},
 
-		set(store, data) {
-			return Vue.http.post('api/server/admin-user', data).then(
-				response => response,
-				response => response
-			);
+		set({ commit }, data) {
+			const handle = (response) => {
+				commit('setCache', response);
+
+				return response;
+			};
+
+			return Vue.http.post('api/server/admin-user', data).then(handle, handle);
 		}
 	},
 };
