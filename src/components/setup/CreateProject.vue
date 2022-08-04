@@ -10,11 +10,11 @@
 
             <ul class="setup__versions">
                 <template v-for="version in versions">
-                    <li class="setup__version" v-if="!version.disabled">
+                    <li class="setup__version" :key="version.value" v-if="!version.disabled">
                         <strong>{{ version.label }}</strong><br>
                         {{ version.description }}
                     </li>
-                    <li class="setup__version" v-else>
+                    <li class="setup__version" :key="version.value" v-else>
                         <strong>{{ version.label }}</strong><br>
                         <span class="setup__version--warning">{{ version.problem }}</span>
                     </li>
