@@ -159,7 +159,7 @@
     "ui.setup.document-root.installedPublicDir": "Public files are installed in {dir}.",
     "ui.setup.create-project.headline": "Contao Installation",
     "ui.setup.create-project.description": "Contao development follows the principle of {semver}, a new minor version is released every six months. The currently supported releases are:",
-    "ui.setup.create-project.semver": "semantic versioning",
+    "ui.setup.create-project.semver": "Semantic Versioning",
     "ui.setup.create-project.latestTitle": "Latest",
     "ui.setup.create-project.ltsTitle": "Long Term Support",
     "ui.setup.create-project.latestText": "Our latest version, offers the most features with support until February {year}.",
