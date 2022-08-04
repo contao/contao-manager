@@ -183,7 +183,6 @@
     "ui.setup.database-connection.formTitle": "Connection Parameters",
     "ui.setup.database-connection.formText": "Enter a database URL or fill in the username, password, server and database fields separately.",
     "ui.setup.database-connection.url": "Database URL",
-    "ui.setup.database-connection.urlPlaceholder": "mysql://user:password@server:port/database",
     "ui.setup.database-connection.validUrl": "Database URL is invalid or connection to server failed.",
     "ui.setup.database-connection.or": "or",
     "ui.setup.database-connection.user": "Username",

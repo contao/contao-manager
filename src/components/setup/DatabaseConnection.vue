@@ -20,7 +20,7 @@
                         <text-field
                             ref="url"
                             name="url" type="url"
-                            :label="$t('ui.setup.database-connection.url')" :placeholder="$t('ui.setup.database-connection.urlPlaceholder')"
+                            :label="$t('ui.setup.database-connection.url')" placeholder="mysql://user:password@server:port/database"
                             required :pattern="urlPattern" validate
                             :disabled="processing"
                             v-model="url" @keyup="validUrl=true" @blur="parseUrl"
