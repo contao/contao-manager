@@ -36,8 +36,7 @@
             <div class="view-setup__funding">
                 <figure><img src="../../../node_modules/contao-package-list/src/assets/images/funding.svg" width="80" height="80" alt=""></figure>
                 <div>
-                    <p>{{ $t('ui.setup.funding1') }}</p>
-                    <p>{{ $t('ui.setup.funding2') }}</p>
+                    <p v-for="(line, i) in $t('ui.setup.funding').split('\n')" :key="i">{{ line }}</p>
                     <p><a class="view-setup__funding-link widget-button widget-button--small widget-button--funding widget-button--link" href="https://to.contao.org/donate" target="_blank">{{ $t('ui.setup.fundingLink') }}</a></p>
                 </div>
             </div>

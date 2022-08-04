@@ -125,8 +125,7 @@
     "ui.setup.complete3": "You can now start to create your website in the Contao back end. If you need additional extensions, continue to the Contao Manager.",
     "ui.setup.installTool": "Open the Install Tool",
     "ui.setup.login": "Login to Contao",
-    "ui.setup.funding1": "Free software is \"free\" as in \"free speech\", not as in \"free beer\". An Open Source project like Contao requires amounts of money that can't be raised by a single person or company.",
-    "ui.setup.funding2": "If you have a website or sell websites built with Contao, we would love to see you contribute back financially to the product your business relies upon.",
+    "ui.setup.funding": "Free software is \"free\" as in \"free speech\", not as in \"free beer\". An Open Source project like Contao requires amounts of money that can't be raised by a single person or company.\nIf you have a website or sell websites built with Contao, we would love to see you contribute back financially to the product your business relies upon.",
     "ui.setup.fundingLink": "Learn more",
 
     "ui.setup.document-root.headline": "Webserver Setup",
