@@ -30,7 +30,7 @@
                     <loading-button class="database-migration__action" color="primary" :loading="executing" :disabled="closing" @click="execute">{{ $t('ui.migrate.execute') }}</loading-button>
                     <loading-button class="database-migration__action" :loading="closing" :disabled="executing" @click="close">{{ $t('ui.migrate.cancel') }}</loading-button>
                 </div>
-                <div class="database-migration__actions" v-if="type === 'schema' || type === 'schema-only'">
+                <div class="database-migration__actions" v-if="hasDeletes">
                     <checkbox name="autoclose" :label="$t('ui.migrate.withDeletes')" :disabled="executing" v-model="withDeletes"/>
                 </div>
             </template>
@@ -71,6 +71,8 @@
             type: null,
             status: '',
             changes: null,
+            operations: null,
+            hasDeletes: false,
             hash: null,
             withDeletes: true,
 
@@ -85,116 +87,6 @@
             executing: vm => vm.status === 'active',
             isComplete: vm => vm.status === 'complete',
             hasError: vm => vm.status === 'error',
-
-            operations () {
-                if (!this.changes) {
-                    return null;
-                }
-
-                if (this.type === 'migrations' || this.type === 'migrations-only') {
-                    return this.changes.map(change => ({
-                        status: change.status,
-                        summary: change.name,
-                        details: change.message,
-                    }));
-                }
-
-                const operations = [];
-                this.changes.forEach((change) => {
-                    let result;
-
-                    result = new RegExp('^CREATE TABLE ([^ ]+) .+$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.addTable', { table: result[1] }),
-                            console: change.name,
-                        });
-                        return;
-                    }
-
-                    result = new RegExp('^DROP TABLE (.+)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.dropTable', { table: result[1] }),
-                            console: change.name,
-                        });
-                        return;
-                    }
-
-                    result = new RegExp('^CREATE INDEX ([^ ]+) ON ([^ ]+) \\(([^)]+)\\)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.createIndex', { name: result[1], table: result[2] }),
-                            details: result[3],
-                            console: change.name,
-                        });
-                        return;
-                    }
-
-                    result = new RegExp('^DROP INDEX ([^ ]+) ON ([^ ]+)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }),
-                            details: result[3],
-                            console: change.name,
-                        });
-                        return;
-                    }
-
-                    result = new RegExp('^ALTER TABLE ([^ ]+) (.+)$').exec(change.name);
-                    if (result) {
-                        const table = result[1];
-                        const operation = {
-                            status: change.status,
-                            summary: [],
-                            details: [],
-                            console: change.name,
-                        };
-
-                        result[2].split(',').map(p => p.trim()).forEach((part) => {
-                            let alter;
-                            alter = new RegExp('^ADD ([^ ]+) (.+)$').exec(part);
-                            if (alter) {
-                                operation.summary.push(this.$t('ui.migrate.addField', { table, field: alter[1] }));
-                                operation.details.push(alter[2]);
-                                return;
-                            }
-
-                            alter = new RegExp('^CHANGE ([^ ]+) ([^ ]+) (.+)$').exec(part);
-                            if (alter) {
-                                operation.summary.push(this.$t('ui.migrate.changeField', { table, field: alter[1] }));
-                                operation.details.push(alter[3]);
-                                return;
-                            }
-
-                            alter = new RegExp('^DROP (.+)$').exec(part);
-                            if (alter) {
-                                operation.summary.push(this.$t('ui.migrate.dropField', { table, field: alter[1] }));
-                                operation.details.push('');
-                                return;
-                            }
-
-                            operation.summary.push(part);
-                            operation.details.push('');
-                        })
-
-                        operations.push(operation);
-                        return;
-                    }
-
-                    operations.push({
-                        status: change.status,
-                        summary: change.name,
-                        console: change.name,
-                    });
-                })
-
-                return operations;
-            },
 
             consoleTitle () {
                 switch (this.type) {
@@ -237,6 +129,7 @@
                 this.type = data.type;
                 this.status = data.status;
                 this.changes = data.status === 'error' ? null : data.operations;
+                this.updateOperations();
                 this.hash = data.hash;
 
                 if (!data.status || data.status === 'active') {
@@ -253,7 +146,7 @@
                 await this.$http.put('api/contao/database-migration', {
                     type: this.type,
                     hash: this.hash,
-                    withDeletes: this.withDeletes,
+                    withDeletes: this.withDeletes && this.hasDeletes,
                 });
 
                 setTimeout(async () => {
@@ -285,6 +178,126 @@
             checkAll () {
                 this.type = 'schema';
                 this.check();
+            },
+
+            updateOperations () {
+                this.hasDeletes = false;
+
+                if (!this.changes) {
+                    this.operations = null;
+                    return;
+                }
+
+                if (this.type === 'migrations' || this.type === 'migrations-only') {
+                    this.operations = this.changes.map(change => ({
+                        status: change.status,
+                        summary: change.name,
+                        details: change.message,
+                    }));
+                    return;
+                }
+
+                const operations = [];
+                this.changes.forEach((change) => {
+                    let result;
+
+                    result = new RegExp('^CREATE TABLE ([^ ]+) .+$').exec(change.name);
+                    if (result) {
+                        operations.push({
+                            status: change.status,
+                            summary: this.$t('ui.migrate.addTable', { table: result[1] }),
+                            console: change.name,
+                        });
+                        return;
+                    }
+
+                    result = new RegExp('^DROP TABLE (.+)$').exec(change.name);
+                    if (result) {
+                        operations.push({
+                            status: change.status,
+                            summary: this.$t('ui.migrate.dropTable', { table: result[1] }),
+                            console: change.name,
+                        });
+                        this.hasDeletes = true;
+                        return;
+                    }
+
+                    result = new RegExp('^CREATE INDEX ([^ ]+) ON ([^ ]+) \\(([^)]+)\\)$').exec(change.name);
+                    if (result) {
+                        operations.push({
+                            status: change.status,
+                            summary: this.$t('ui.migrate.createIndex', { name: result[1], table: result[2] }),
+                            details: result[3],
+                            console: change.name,
+                        });
+                        return;
+                    }
+
+                    result = new RegExp('^DROP INDEX ([^ ]+) ON ([^ ]+)$').exec(change.name);
+                    if (result) {
+                        operations.push({
+                            status: change.status,
+                            summary: this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }),
+                            details: result[3],
+                            console: change.name,
+                        });
+                        this.hasDeletes = true;
+                        return;
+                    }
+
+                    result = new RegExp('^ALTER TABLE ([^ ]+) (.+)$').exec(change.name);
+                    if (result) {
+                        const table = result[1];
+                        const operation = {
+                            status: change.status,
+                            summary: [],
+                            details: [],
+                            console: change.name,
+                        };
+
+                        result[2].split(',').map(p => p.trim()).forEach((part) => {
+                            let alter;
+                            alter = new RegExp('^ADD ([^ ]+) (.+)$').exec(part);
+                            if (alter) {
+                                operation.summary.push(this.$t('ui.migrate.addField', { table, field: alter[1] }));
+                                operation.details.push(alter[2]);
+                                return;
+                            }
+
+                            alter = new RegExp('^CHANGE ([^ ]+) ([^ ]+) (.+)$').exec(part);
+                            if (alter) {
+                                operation.summary.push(this.$t('ui.migrate.changeField', { table, field: alter[1] }));
+                                operation.details.push(alter[3]);
+                                return;
+                            }
+
+                            alter = new RegExp('^DROP (.+)$').exec(part);
+                            if (alter) {
+                                operation.summary.push(this.$t('ui.migrate.dropField', { table, field: alter[1] }));
+                                operation.details.push('');
+                                this.hasDeletes = true;
+                                return;
+                            }
+
+                            operation.summary.push(part);
+                            operation.details.push('');
+                        })
+
+                        operations.push(operation);
+                        return;
+                    }
+
+                    operations.push({
+                        status: change.status,
+                        summary: change.name,
+                        console: change.name,
+                    });
+
+                    // Unknown operation, assume it could be a DROP
+                    this.hasDeletes = true;
+                })
+
+                this.operations = operations;
             },
 
             async close () {
