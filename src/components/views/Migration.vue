@@ -6,7 +6,14 @@
             <p class="database-migration__text" v-if="type === 'migrations-only'">{{ $t('ui.migrate.migrationsOnly') }}</p>
             <p class="database-migration__text" v-if="type === 'schema-only'">{{ $t('ui.migrate.schemaOnly') }}</p>
 
-            <template class="database-migration__summary" v-if="isEmpty">
+            <template v-if="checking">
+                <p class="database-migration__description">{{ $t('ui.migrate.loading') }}</p>
+                <div class="database-migration__loading">
+                    <loader/>
+                </div>
+            </template>
+
+            <template class="database-migration__summary" v-else-if="isEmpty">
                 <p class="database-migration__description" v-if="type === 'migrations-only'">{{ $t('ui.migrate.emptyMigrations') }}</p>
                 <p class="database-migration__description" v-else-if="type === 'schema-only'">{{ $t('ui.migrate.emptySchema') }}</p>
                 <p class="database-migration__description" v-else>{{ $t('ui.migrate.empty') }}</p>
@@ -16,30 +23,30 @@
                 </div>
             </template>
 
-            <template v-else-if="isComplete || hasError">
-                <p class="database-migration__description" v-if="isComplete">{{ $t('ui.migrate.completed') }}</p>
-                <p class="database-migration__description" v-else>{{ $t('ui.migrate.error') }}</p>
+            <template v-else-if="!executing && (isComplete || hasError)">
+                <p class="database-migration__description" v-for="(line,i) in description.split('\n')" :key="i">{{ line }}</p>
                 <div class="database-migration__actions">
-                    <button class="widget-button widget-button--primary" :disabled="closing" @click="check">{{ $t('ui.migrate.retry') }}</button>
-                    <loading-button :loading="closing" @click="close">{{ $t('ui.migrate.close') }}</loading-button>
+                    <template v-if="hasChanges">
+                        <loading-button :loading="closing" @click="close">{{ $t('ui.migrate.cancel') }}</loading-button>
+                        <button class="widget-button widget-button--primary" :disabled="closing" @click="check">{{ $t('ui.migrate.continue') }}</button>
+                    </template>
+                    <template v-else>
+                        <loading-button :loading="closing" @click="close">{{ $t('ui.migrate.confirm') }}</loading-button>
+                    </template>
                 </div>
             </template>
-            <template v-else-if="type">
+
+            <template v-else>
                 <p class="database-migration__description">{{ $t('ui.migrate.pending') }}</p>
                 <div class="database-migration__actions">
-                    <loading-button class="database-migration__action" color="primary" :loading="executing" :disabled="closing" @click="execute">{{ $t('ui.migrate.execute') }}</loading-button>
                     <loading-button class="database-migration__action" :loading="closing" :disabled="executing" @click="close">{{ $t('ui.migrate.cancel') }}</loading-button>
+                    <loading-button class="database-migration__action" color="primary" :loading="executing" :disabled="closing" @click="execute">{{ $t('ui.migrate.execute') }}</loading-button>
                 </div>
                 <div class="database-migration__actions" v-if="hasDeletes">
                     <checkbox name="autoclose" :label="$t('ui.migrate.withDeletes')" :disabled="executing" v-model="withDeletes"/>
                 </div>
             </template>
-            <template v-else>
-                <p class="database-migration__description">{{ $t('ui.migrate.loading') }}</p>
-                <div class="database-migration__loading">
-                    <loader/>
-                </div>
-            </template>
+
         </header>
 
         <console
@@ -47,46 +54,67 @@
             :title="consoleTitle"
             :operations="operations"
             :console-output="console"
-            v-if="operations && operations.length"
+            v-if="!checking && operations && operations.length"
         />
     </boxed-layout>
 </template>
 
 <script>
-    import { mapState } from 'vuex';
-    import routes from '../../router/routes';
+    import { mapState, mapGetters } from 'vuex';
+    import views from '../../router/views';
+
     import BoxedLayout from '../layouts/Boxed';
     import Loader from 'contao-package-list/src/components/fragments/Loader';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
     import Console from '../fragments/Console';
     import Checkbox from '../widgets/Checkbox';
-    import views from '../../router/views';
 
     export default {
-        name: 'DatabaseMigration',
         components: { BoxedLayout, Loader, LoadingButton, Console, Checkbox },
 
         data: () => ({
-            routes,
             type: null,
             status: '',
             changes: null,
-            operations: null,
             hasDeletes: false,
             hash: null,
             withDeletes: true,
 
+            previousResult: true,
+            checking: true,
+            executing: false,
             closing: false,
         }),
 
         computed: {
             ...mapState('server/database', ['supported']),
             ...mapState(['setupStep']),
+            ...mapGetters('server/database', ['hasChanges']),
 
             isEmpty: vm => vm.status !== 'active' && vm.operations && !vm.operations.length,
-            executing: vm => vm.status === 'active',
             isComplete: vm => vm.status === 'complete',
             hasError: vm => vm.status === 'error',
+
+            description () {
+                if (this.previousResult && this.hasChanges) {
+                    return this.$t('ui.migrate.previousChanges');
+                }
+
+                if (this.previousResult) {
+                    return this.$t('ui.migrate.previousComplete');
+                }
+
+
+                if (this.isComplete && this.hasChanges) {
+                    return this.$t('ui.migrate.appliedChanges');
+                }
+
+                if (this.isComplete) {
+                    return this.$t('ui.migrate.appliedComplete');
+                }
+
+                return this.$t('ui.migrate.error');
+            },
 
             consoleTitle () {
                 switch (this.type) {
@@ -114,87 +142,20 @@
 
                 return console;
             },
-        },
 
-        methods: {
-            async poll (response) {
-                if (response.status === 201) {
-                    setTimeout(async () => {
-                        this.poll(await this.$http.get('api/contao/database-migration'));
-                    }, 1000);
-                    return;
-                }
-
-                const data = await response.json()
-                this.type = data.type;
-                this.status = data.status;
-                this.changes = data.status === 'error' ? null : data.operations;
-                this.updateOperations();
-                this.hash = data.hash;
-
-                if (!data.status || data.status === 'active') {
-                    setTimeout(async () => {
-                        this.poll(await this.$http.get('api/contao/database-migration'));
-                    }, 1000);
-                }
-            },
-
-            async execute () {
-                this.status = 'active';
-                await this.$http.delete('api/contao/database-migration')
-
-                await this.$http.put('api/contao/database-migration', {
-                    type: this.type,
-                    hash: this.hash,
-                    withDeletes: this.withDeletes && this.hasDeletes,
-                });
-
-                setTimeout(async () => {
-                    this.poll(await this.$http.get('api/contao/database-migration'));
-                }, 1000);
-            },
-
-            async check () {
-                const type = this.type || this.$store.state.migrationsType;
-
-                if (this.status) {
-                    this.type = null;
-                    this.status = '';
-                    this.changes = null;
-                    this.hash = null;
-
-                    await this.$http.delete('api/contao/database-migration')
-                }
-
-                let response = await this.$http.get('api/contao/database-migration');
-
-                if (response.status === 204) {
-                    response = await this.$http.put('api/contao/database-migration', { type });
-                }
-
-                this.poll(response)
-            },
-
-            checkAll () {
-                this.type = 'schema';
-                this.check();
-            },
-
-            updateOperations () {
+            operations () {
                 this.hasDeletes = false;
 
                 if (!this.changes) {
-                    this.operations = null;
-                    return;
+                    return null;
                 }
 
                 if (this.type === 'migrations' || this.type === 'migrations-only') {
-                    this.operations = this.changes.map(change => ({
+                    return this.changes.map(change => ({
                         status: change.status,
                         summary: change.name,
                         details: change.message,
                     }));
-                    return;
                 }
 
                 const operations = [];
@@ -214,7 +175,7 @@
                     result = new RegExp('^DROP TABLE (.+)$').exec(change.name);
                     if (result) {
                         operations.push({
-                            status: change.status,
+                            status: this.withDeletes ? change.status : 'skipped',
                             summary: this.$t('ui.migrate.dropTable', { table: result[1] }),
                             console: change.name,
                         });
@@ -236,7 +197,7 @@
                     result = new RegExp('^DROP INDEX ([^ ]+) ON ([^ ]+)$').exec(change.name);
                     if (result) {
                         operations.push({
-                            status: change.status,
+                            status: this.withDeletes ? change.status : 'skipped',
                             summary: this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }),
                             details: result[3],
                             console: change.name,
@@ -297,7 +258,85 @@
                     this.hasDeletes = true;
                 })
 
-                this.operations = operations;
+                return operations;
+            },
+        },
+
+        methods: {
+            async poll (response) {
+                if (response.status === 201) {
+                    return new Promise((resolve) => {
+                        setTimeout(async () => {
+                            await this.poll(await this.$http.get('api/contao/database-migration'));
+                            resolve();
+                        }, 1000);
+                    });
+                }
+
+                const data = await response.json()
+
+                if (!this.changes || data.operations.length) {
+                    this.type = data.type;
+                    this.status = data.status;
+                    this.hash = data.hash;
+                    this.changes = data.operations;
+                }
+
+                if (!data.status || data.status === 'active') {
+                    return new Promise((resolve) => {
+                        setTimeout(async () => {
+                            await this.poll(await this.$http.get('api/contao/database-migration'));
+                            resolve();
+                        }, 1000);
+                    })
+                }
+            },
+
+            async execute () {
+                this.executing = true;
+
+                await this.$http.put('api/contao/database-migration', {
+                    type: this.type,
+                    hash: this.hash,
+                    withDeletes: this.withDeletes && this.hasDeletes,
+                });
+
+                setTimeout(async () => {
+                    await this.poll(await this.$http.get('api/contao/database-migration'));
+                    await this.$store.dispatch('server/database/get', false);
+                    this.executing = false;
+                }, 1000);
+            },
+
+            async check () {
+                this.checking = true;
+                const type = this.type || this.$store.state.migrationsType;
+
+                if (this.status) {
+                    this.type = null;
+                    this.status = '';
+                    this.changes = null;
+                    this.hash = null;
+
+                    await this.$http.delete('api/contao/database-migration')
+                }
+
+                let response = await this.$http.get('api/contao/database-migration');
+
+                if (response.status === 204) {
+                    this.previousResult = false;
+                    response = await this.$http.put('api/contao/database-migration', { type });
+                }
+
+                await this.poll(response)
+                await this.$http.delete('api/contao/database-migration')
+
+                this.checking = false;
+            },
+
+            checkAll () {
+                this.type = 'schema';
+                this.check();
             },
 
             async close () {
@@ -340,19 +379,15 @@
         }
 
         &__headline {
-            margin-top: 15px;
-            margin-bottom: 0;
+            margin-top: .5em;
+            margin-bottom: .5em;
             font-size: 36px;
             font-weight: $font-weight-light;
             line-height: 1;
         }
 
-        &__text {
-
-        }
-
         &__description {
-            margin: 10px 0 0;
+            margin: 0 50px;
             font-weight: $font-weight-bold;
         }
 

@@ -78,7 +78,7 @@ class DatabaseMigrationController
 
             case 'DELETE':
                 if (null === ($process = $this->getBackgroundProcess())) {
-                    throw new BadRequestHttpException('No migration process found.');
+                    return new Response();
                 }
 
                 $process->delete();
@@ -200,7 +200,7 @@ class DatabaseMigrationController
         foreach ($pending['commands'] as $name) {
             $operations[$name] = [
                 'name' => $name,
-                'status' => 'pending',
+                'status' => (!$process->isRunning() && !$process->isSuccessful()) ? TaskStatus::STATUS_ERROR : 'pending',
             ];
         }
 
