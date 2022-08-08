@@ -13,10 +13,10 @@ tr:
             detail: 'Contao Manager, şifrelenmiş bir bağlantı (https) üzerinden  dosyaları indirebilmek için OpenSSL eklentisine gerek duyar.'
         dom:
             title: 'PHP DOM eklentisi kullanılamıyor.'
-            detail: 'Contao 4, XML dosyalarını işleyebilmek için PHP DOM eklentisine gerek duyar.'
+            detail: 'Contao 4, XML dosyalarını okuyabilmek için PHP XML Reader eklentisine gerek duyar.'
         xmlreader:
             title: 'PHP XML Reader eklentisi kullanılamıyor.'
-            detail: 'Contao 4, XML dosyalarını işleyebilmek için PHP DOM eklentisine gerek duyar.'
+            detail: 'Contao 4, XML dosyalarını okuyabilmek için PHP XML Reader eklentisine gerek duyar.'
         graphics_lib:
             title: 'Kullanılabilecek bir PHP görsel işleme kitaplığı bulunamadı.'
             detail: 'Contao 4, görselleri işlemek için GD, Imagick ya da Gmagick eklentisine gerek duyar.'
