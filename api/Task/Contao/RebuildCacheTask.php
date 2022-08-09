@@ -75,6 +75,7 @@ class RebuildCacheTask extends AbstractTask
     protected function buildOperations(TaskConfig $config): array
     {
         $supportsMaintenance = $config->getState('supports-maintenance');
+        $environment = $config->getOption('environment', 'prod');
 
         if (null === $supportsMaintenance) {
             $supportsMaintenance = \array_key_exists('contao:maintenance-mode', $this->contaoConsole->getCommandList());
@@ -82,18 +83,18 @@ class RebuildCacheTask extends AbstractTask
         }
 
         $operations = [
-            new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, $this->filesystem),
-            new CacheClearOperation($this->processFactory, $config->getOption('environment', 'prod')),
+            new RemoveCacheOperation($environment, $this->kernel, $config, $this->filesystem),
+            new CacheClearOperation($this->processFactory, $environment),
         ];
 
         if (false !== $config->getOption('warmup', true)) {
-            $operations[] = new CacheWarmupOperation($this->processFactory, $config->getOption('environment', 'prod'));
+            $operations[] = new CacheWarmupOperation($this->processFactory, $environment);
         } else {
             // Remove cache directory again (contao/contao-manager#655)
-            $operations[] = new RemoveCacheOperation($config->getOption('environment', 'prod'), $this->kernel, $config, $this->filesystem, 'remove-cache-again');
+            $operations[] = new RemoveCacheOperation($environment, $this->kernel, $config, $this->filesystem, 'remove-cache-again');
         }
 
-        if ($supportsMaintenance) {
+        if ($supportsMaintenance && 'dev' !== $environment) {
             array_unshift($operations, new MaintenanceModeOperation($config, $this->processFactory, 'enable'));
             $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'disable');
         }
