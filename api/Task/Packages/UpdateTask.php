@@ -131,7 +131,9 @@ class UpdateTask extends AbstractPackagesTask
                 static function ($upload) use ($changes) {
                     return $upload['success']
                         && isset($upload['package']['name'])
-                        && \in_array($upload['package']['name'], $changes->getUpdates(), true);
+                        && (0 === \count($changes->getUpdates()) ||
+                            \in_array($upload['package']['name'], $changes->getUpdates(), true)
+                        );
                 }
             );
 
