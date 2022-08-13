@@ -70,14 +70,14 @@
                         <radio-button name="usePublicDir" :options="publicDirOptions" allow-html v-model="usePublicDir" v-if="canUsePublicDir"/>
                         <dl class="setup__directories">
                             <dt>{{ $t('ui.setup.document-root.currentRoot') }}</dt>
-                            <dd v-if="isWeb">{{ projectDir }}/web</dd>
-                            <dd v-else-if="isPublic">{{ projectDir }}/public</dd>
+                            <dd v-if="isWeb">{{ projectDir }}{{ directorySeparator }}web</dd>
+                            <dd v-else-if="isPublic">{{ projectDir }}{{ directorySeparator }}public</dd>
                             <dd v-else>{{ projectDir }}</dd>
                             <dt>{{ $t('ui.setup.document-root.newRoot') }}</dt>
-                            <dd v-if="isEmpty && (!wantsFix || !directory) && canUsePublicDir && usePublicDir">{{ projectDir }}<span>/public</span></dd>
-                            <dd v-else-if="isEmpty && (!wantsFix || !directory)">{{ projectDir }}<span>/web</span></dd>
-                            <dd v-else-if="canUsePublicDir && usePublicDir">{{ projectDir }}<span>/{{ directory }}/public</span></dd>
-                            <dd v-else>{{ projectDir }}<span>/{{ directory }}/web</span></dd>
+                            <dd v-if="isEmpty && (!wantsFix || !directory) && canUsePublicDir && usePublicDir">{{ projectDir }}<span>{{ directorySeparator }}public</span></dd>
+                            <dd v-else-if="isEmpty && (!wantsFix || !directory)">{{ projectDir }}<span>{{ directorySeparator }}web</span></dd>
+                            <dd v-else-if="canUsePublicDir && usePublicDir">{{ projectDir }}<span>{{ directorySeparator }}{{ directory }}{{ directorySeparator }}public</span></dd>
+                            <dd v-else>{{ projectDir }}<span>{{ directorySeparator }}{{ directory }}{{ directorySeparator }}web</span></dd>
                         </dl>
                         <checkbox name="autoconfig" :label="$t('ui.setup.document-root.autoconfig')" :disabled="processing" v-model="autoconfig"/>
                     </div>
@@ -138,6 +138,7 @@
             directory: '',
             directoryExists: false,
             directoryUpdated: false,
+            directorySeparator: '/',
         }),
 
         computed: {
@@ -153,7 +154,7 @@
 
             canUsePublicDir: vm => vm.phpVersionId >= 70400,
 
-            publicDir: vm => vm.isWeb ? `${vm.projectDir}/web` : `${vm.projectDir}/public`,
+            publicDir: vm => vm.isWeb ? `${vm.projectDir}${this.directorySeparator}web` : `${vm.projectDir}${this.directorySeparator}public`,
 
             directoryError() {
                 if (this.directoryExists) {
@@ -212,6 +213,7 @@
                 this.usePublicDir = response.body.public_dir === 'public';
                 this.wantsFix = false;
                 this.directory = this.isEmpty ? '' : location.hostname;
+                this.directorySeparator = response.body.directory_separator;
 
                 this.processing = false;
             },

@@ -293,6 +293,7 @@ class ContaoController
             'conflicts' => [],
             'project_dir' => $this->kernel->getProjectDir(),
             'public_dir' => basename($this->kernel->getPublicDir()),
+            'directory_separator' => DIRECTORY_SEPARATOR,
         ], $data), $status);
     }
 }

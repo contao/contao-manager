@@ -1,3 +1,4 @@
+
 openapi: 3.0.0
 info:
     title: Contao Manager API
@@ -1319,6 +1320,11 @@ components:
                     public_dir:
                         type: string
                         description: Name of the public directory ("public" or "web").
+                    directory_separator:
+                        type: string
+                        enum:
+                            - /
+                            - \
 
         ServerAdminUser:
             type: object
