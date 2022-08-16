@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Process;
 
 use Composer\Semver\VersionParser;
+use Composer\Util\Platform;
 use Contao\ManagerApi\Exception\ProcessOutputException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -241,8 +242,16 @@ class ContaoConsole
             $arguments[] = '--admin';
         }
 
+        if (Platform::isWindows()) {
+            $arguments[] = '--password='.$password;
+        }
+
         $process = $this->processFactory->createContaoConsoleProcess($arguments);
-        $process->setInput($password.PHP_EOL.$password.PHP_EOL); // Password and confirmation
+
+        if (!Platform::isWindows()) {
+            $process->setInput($password.PHP_EOL.$password.PHP_EOL); // Password and confirmation
+        }
+
         $process->mustRun();
     }
 
