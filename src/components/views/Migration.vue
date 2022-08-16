@@ -54,6 +54,7 @@
             :title="consoleTitle"
             :operations="operations"
             :console-output="console"
+            :show-console.sync="showConsole"
             v-if="!checking && operations && operations.length"
         />
     </boxed-layout>
@@ -80,6 +81,7 @@
             hash: null,
             withDeletes: true,
 
+            showConsole: false,
             previousResult: true,
             checking: true,
             executing: false,
