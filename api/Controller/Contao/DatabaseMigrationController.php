@@ -70,11 +70,15 @@ class DatabaseMigrationController
                     throw new BadRequestHttpException('A migration is already active');
                 }
 
-                return $this->startTask(
+                $process = $this->createProcess(
                     $request->request->get('hash'),
                     $request->request->get('type'),
                     $request->request->getBoolean('withDeletes')
                 );
+                $process->setMeta(['skip_warnings' => $request->request->getBoolean('skipWarnings')]);
+                $process->start();
+
+                return new Response('', Response::HTTP_CREATED);
 
             case 'DELETE':
                 if (null === ($process = $this->getBackgroundProcess())) {
@@ -97,19 +101,30 @@ class DatabaseMigrationController
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
-        $output = $process->getOutput();
+        $skipWarnings = (bool) ($process->getMeta()['skip_warnings'] ?? false);
+        $output = trim($process->getOutput());
 
         if (!empty($output)) {
             $lines = explode("\n", $output);
 
             while ($line = array_shift($lines)) {
                 $data = json_decode($line, true);
+                $type = $data['type'] ?? null;
 
-                if ('migration-pending' === ($data['type'] ?? '') && !empty($data['names'])) {
+                if ('warning' === $type && $skipWarnings) {
+                    continue;
+                }
+
+                if (\in_array($type, ['error', 'problem', 'warning'])) {
+                    array_unshift($lines, $line);
+                    return $this->handleProblems($lines, $process);
+                }
+
+                if ('migration-pending' === $type && !empty($data['names'])) {
                     return $this->handleMigrations($data, $lines, $process);
                 }
 
-                if ('schema-pending' === ($data['type'] ?? '') && !empty($data['commands'])) {
+                if ('schema-pending' === $type && !empty($data['commands'])) {
                     return $this->handleSchema($data, $lines, $process);
                 }
             }
@@ -123,7 +138,7 @@ class DatabaseMigrationController
         ]);
     }
 
-    private function startTask(?string $hash, ?string $type, bool $withDeletes): Response
+    private function createProcess(?string $hash, ?string $type, bool $withDeletes): ProcessController
     {
         $args = [
             'contao:migrate',
@@ -146,11 +161,7 @@ class DatabaseMigrationController
             $args[] = '--with-deletes';
         }
 
-        $process = $this->processFactory->createContaoConsoleBackgroundProcess($args, 'database-migration');
-
-        $process->start();
-
-        return new Response('', Response::HTTP_CREATED);
+        return $this->processFactory->createContaoConsoleBackgroundProcess($args, 'database-migration');
     }
 
     private function getBackgroundProcess(): ?ProcessController
@@ -160,6 +171,36 @@ class DatabaseMigrationController
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    private function handleProblems(array $lines, ProcessController $process): Response
+    {
+        $responseType = 'warning';
+        $operations = [];
+
+        foreach ($lines as $line) {
+            $data = json_decode($line, true);
+            $type = $data['type'] ?? null;
+            $message = explode("\n", $data['message'] ?? '', 2) + ['', ''];
+
+            if (\in_array($type, ['error', 'problem', 'warning'])) {
+                if ('warning' !== $type) {
+                    $responseType = 'problem';
+                }
+
+                $operations[] = [
+                    'status' => 'error',
+                    'name' => $message[0],
+                    'message' => $message[1],
+                ];
+            }
+        }
+
+        return new JsonResponse([
+            'type' => $responseType,
+            'status' => $this->getProcessStatus($process),
+            'operations' => array_values($operations),
+        ]);
     }
 
     private function handleMigrations(array $pending, array $lines, ProcessController $process): Response

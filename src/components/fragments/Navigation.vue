@@ -7,7 +7,7 @@
                 <a>{{ $t('ui.navigation.packages') }}<span class="navigation__item-badge" v-if="packageChanges > 0">{{ packageChanges }}</span></a>
             </router-link>
             <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.maintenance">
-                <a>{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="hasDatabaseChanges || hasDatabaseError">1</span></a>
+                <a>{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="hasDatabaseChanges || hasDatabaseWarning || hasDatabaseError">1</span></a>
             </router-link>
             <li class="navigation__item navigation__item--main">
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ $t('ui.navigation.tools') }}</a>
@@ -52,7 +52,7 @@
             ...mapState('contao/jwt-cookie', { showPreview: 'isDebugEnabled' }),
             ...mapGetters('packages', ['totalChanges']),
             ...mapGetters('packages/uploads', ['totalUploads']),
-            ...mapGetters('server/database', { hasDatabaseChanges: 'hasChanges', hasDatabaseError: 'hasError' }),
+            ...mapGetters('server/database', { hasDatabaseChanges: 'hasChanges', hasDatabaseWarning: 'hasWarning', hasDatabaseError: 'hasError' }),
 
             packageChanges: vm => vm.totalChanges + vm.totalUploads,
         },

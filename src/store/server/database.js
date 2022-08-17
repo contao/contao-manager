@@ -15,7 +15,8 @@ export default {
     getters: {
         totalMigrations: state => (!!state.status && state.status.type === 'migration') ? state.status.total : 0,
         totalSchemaUpdates: state => (!!state.status && state.status.type === 'schema') ? state.status.total : 0,
-        hasError: state => !!state.status && state.status.type === 'error',
+        hasError: state => !!state.status && (state.status.type === 'error' || state.status.type === 'problem'),
+        hasWarning: state => !!state.status && state.status.warnings > 0,
         hasChanges: (state, getters) => !!getters.totalMigrations || !!getters.totalSchemaUpdates,
         totalChanges: (state, getters) => getters.totalMigrations + getters.totalSchemaUpdates,
     },

@@ -133,41 +133,54 @@ class ContaoConsole
         $process = $this->processFactory->createContaoConsoleProcess($arguments);
         $process->run();
 
-        if (!$process->isSuccessful()) {
+        $output = trim($process->getOutput());
+
+        // Process could exit with error but still output JSON
+        if (!$process->isSuccessful() && !str_starts_with($output, '{')) {
             return [
                 'type' => 'error',
                 'total' => 1,
                 'message' => $process->getOutput().$process->getErrorOutput(),
+                'warnings' => 0,
             ];
         }
 
-        $output = $process->getOutput();
+        $warnings = 0;
 
         if (!empty($output)) {
             $lines = explode("\n", $output);
 
             while ($line = array_shift($lines)) {
                 $data = json_decode($line, true);
+                $type = $data['type'] ?? null;
 
-                if ('error' === ($data['type'] ?? null)) {
+                if ('warning' === $type) {
+                    ++$warnings;
+                    continue;
+                }
+
+                if ('error' === $type || 'problem' === $type) {
                     return [
-                        'type' => 'error',
+                        'type' => $type,
                         'total' => 1,
                         'message' => $data['message'] ?? '',
+                        'warnings' => $warnings,
                     ];
                 }
 
-                if ('migration-pending' === ($data['type'] ?? '') && !empty($data['names'])) {
+                if ('migration-pending' === $type && !empty($data['names'])) {
                     return [
                         'type' => 'migration',
                         'total' => \count($data['names']),
+                        'warnings' => $warnings,
                     ];
                 }
 
-                if ('schema-pending' === ($data['type'] ?? '') && !empty($data['commands'])) {
+                if ('schema-pending' === $type && !empty($data['commands'])) {
                     return [
                         'type' => 'schema',
                         'total' => \count($data['commands']),
+                        'warnings' => $warnings,
                     ];
                 }
             }
@@ -176,6 +189,7 @@ class ContaoConsole
         return [
             'type' => 'empty',
             'total' => 0,
+            'warnings' => $warnings,
         ];
     }
 

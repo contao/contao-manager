@@ -18,17 +18,27 @@
                 <p class="database-migration__description" v-else-if="type === 'schema-only'">{{ $t('ui.migrate.emptySchema') }}</p>
                 <p class="database-migration__description" v-else>{{ $t('ui.migrate.empty') }}</p>
                 <div class="database-migration__actions">
-                    <button class="widget-button widget-button--primary" :disabled="closing" @click="checkAll" v-if="type === 'migrations-only' || type === 'schema-only'">{{ $t('ui.migrate.retryAll') }}</button>
+                    <button class="widget-button widget-button--primary" :disabled="closing" @click="checkAll()" v-if="type === 'migrations-only' || type === 'schema-only'">{{ $t('ui.migrate.retryAll') }}</button>
                     <loading-button :loading="closing" @click="close">{{ $t('ui.migrate.close') }}</loading-button>
                 </div>
             </template>
 
-            <template v-else-if="!executing && (isComplete || hasError)">
+            <template v-else-if="!executing && (isComplete || hasError || hasProblem)">
                 <p class="database-migration__description" v-for="(line,i) in description.split('\n')" :key="i">{{ line }}</p>
                 <div class="database-migration__actions">
-                    <template v-if="hasChanges">
+                    <template v-if="type === 'problem'">
                         <loading-button :loading="closing" @click="close">{{ $t('ui.migrate.cancel') }}</loading-button>
-                        <button class="widget-button widget-button--primary" :disabled="closing" @click="check">{{ $t('ui.migrate.continue') }}</button>
+                        <button class="widget-button" :disabled="closing" @click="setup">{{ $t('ui.migrate.setup') }}</button>
+                        <button class="widget-button widget-button--primary" :disabled="closing" @click="checkAll()">{{ $t('ui.migrate.retry') }}</button>
+                    </template>
+                    <template v-else-if="type === 'warning'">
+                        <loading-button :loading="closing" @click="close">{{ $t('ui.migrate.cancel') }}</loading-button>
+                        <button class="widget-button widget-button" :disabled="closing" @click="checkAll()">{{ $t('ui.migrate.retry') }}</button>
+                        <button class="widget-button widget-button--primary" :disabled="closing" @click="checkAll(true)">{{ $t('ui.migrate.skip') }}</button>
+                    </template>
+                    <template v-else-if="hasChanges">
+                        <loading-button :loading="closing" @click="close">{{ $t('ui.migrate.cancel') }}</loading-button>
+                        <button class="widget-button widget-button--primary" :disabled="closing" @click="check()">{{ $t('ui.migrate.continue') }}</button>
                     </template>
                     <template v-else>
                         <loading-button :loading="closing" @click="close">{{ $t('ui.migrate.confirm') }}</loading-button>
@@ -55,6 +65,7 @@
             :operations="operations"
             :console-output="console"
             :show-console.sync="showConsole"
+            :force-console="hasProblem"
             v-if="!checking && operations && operations.length"
         />
     </boxed-layout>
@@ -96,8 +107,18 @@
             isEmpty: vm => vm.status !== 'active' && vm.operations && !vm.operations.length,
             isComplete: vm => vm.status === 'complete',
             hasError: vm => vm.status === 'error',
+            hasProblem: vm => vm.type === 'problem' || vm.type === 'warning',
 
             description () {
+                if (this.type === 'problem') {
+                    return this.$tc('ui.migrate.problem', this.operations.length);
+                }
+
+                if (this.type === 'warning') {
+                    return this.$t('ui.migrate.warning');
+                }
+
+
                 if (this.previousResult && this.hasChanges) {
                     return this.$t('ui.migrate.previousChanges');
                 }
@@ -105,7 +126,6 @@
                 if (this.previousResult) {
                     return this.$t('ui.migrate.previousComplete');
                 }
-
 
                 if (this.isComplete && this.hasChanges) {
                     return this.$t('ui.migrate.appliedChanges');
@@ -127,6 +147,12 @@
                     case 'schema':
                     case 'schema-only':
                         return this.$t('ui.migrate.schemaTitle');
+
+                    case 'problem':
+                        return this.$t('ui.migrate.problemTitle');
+
+                    case 'warning':
+                        return this.$t('ui.migrate.warningTitle');
                 }
 
                 return '';
@@ -150,6 +176,14 @@
 
                 if (!this.changes) {
                     return null;
+                }
+
+                if (this.hasProblem) {
+                    return this.changes.map(change => ({
+                        status: change.status,
+                        summary: change.name,
+                        console: change.message,
+                    }));
                 }
 
                 if (this.type === 'migrations' || this.type === 'migrations-only') {
@@ -277,7 +311,7 @@
 
                 const data = await response.json()
 
-                if (!this.changes || data.operations.length) {
+                if (!this.changes || data.status) {
                     this.type = data.type;
                     this.status = data.status;
                     this.hash = data.hash;
@@ -310,7 +344,7 @@
                 }, 1000);
             },
 
-            async check () {
+            async check (skipWarnings = false) {
                 this.checking = true;
                 const type = this.type || this.$store.state.migrationsType;
 
@@ -327,7 +361,7 @@
 
                 if (response.status === 204) {
                     this.previousResult = false;
-                    response = await this.$http.put('api/contao/database-migration', { type });
+                    response = await this.$http.put('api/contao/database-migration', { type, skipWarnings });
                 }
 
                 await this.poll(response)
@@ -336,9 +370,9 @@
                 this.checking = false;
             },
 
-            checkAll () {
-                this.type = 'schema';
-                this.check();
+            checkAll (skipWarnings = false) {
+                this.type = null;
+                this.check(skipWarnings);
             },
 
             async close () {
@@ -354,6 +388,10 @@
                 }
 
                 this.closing = false;
+            },
+
+            async setup () {
+                this.$store.commit('setup', 3);
             },
         },
 
