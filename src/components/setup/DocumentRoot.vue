@@ -101,7 +101,7 @@
                     </div>
                     <div class="setup__fields setup__fields--center">
                         <button class="widget-button widget-button--inline widget-button--gear" @click="wantsFix = true" v-if="!contaoVersion">{{ $t('ui.setup.document-root.create') }}</button>
-                        <button class="widget-button widget-button--inline widget-button--primary widget-button--run" @click="$emit('continue')">{{ $t('ui.setup.continue') }}</button>
+                        <button class="widget-button widget-button--inline widget-button--primary" @click="$emit('continue')">{{ $t('ui.setup.continue') }}</button>
                     </div>
                 </main>
 
@@ -154,7 +154,7 @@
 
             canUsePublicDir: vm => vm.phpVersionId >= 70400,
 
-            publicDir: vm => vm.isWeb ? `${vm.projectDir}${this.directorySeparator}web` : `${vm.projectDir}${this.directorySeparator}public`,
+            publicDir: vm => vm.isWeb ? `${vm.projectDir}${vm.directorySeparator}web` : `${vm.projectDir}${vm.directorySeparator}public`,
 
             directoryError() {
                 if (this.directoryExists) {
