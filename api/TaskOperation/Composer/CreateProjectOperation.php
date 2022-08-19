@@ -24,7 +24,7 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * @var array
      */
-    private static $supportedVersions = ['4.4', '4.9', '4.13', '5.0.x-dev'];
+    private static $supportedVersions = ['4.4', '4.9', '4.13', '5.0'];
 
     /**
      * @var Environment
@@ -107,29 +107,21 @@ class CreateProjectOperation extends AbstractInlineOperation
 
     private function generateComposerJson(string $version, bool $coreOnly = false)
     {
-        $coreBundle = '';
-        if ('5.0.x-dev' !== $version) {
-            $version .= '.*';
-        } else {
-            $coreBundle = ',
-        "contao/core-bundle": "'.$version.'"';
-        }
-
         if ($coreOnly) {
             $require = <<<JSON
         "contao/conflicts": "*@dev",
-        "contao/manager-bundle": "$version"$coreBundle
+        "contao/manager-bundle": "$version.*"
 JSON;
         } else {
             $require = <<<JSON
         "contao/conflicts": "*@dev",
-        "contao/manager-bundle": "$version"$coreBundle,
-        "contao/calendar-bundle": "$version",
-        "contao/comments-bundle": "$version",
-        "contao/faq-bundle": "$version",
-        "contao/listing-bundle": "$version",
-        "contao/news-bundle": "$version",
-        "contao/newsletter-bundle": "$version"
+        "contao/manager-bundle": "$version.*",
+        "contao/calendar-bundle": "$version.*",
+        "contao/comments-bundle": "$version.*",
+        "contao/faq-bundle": "$version.*",
+        "contao/listing-bundle": "$version.*",
+        "contao/news-bundle": "$version.*",
+        "contao/newsletter-bundle": "$version.*"
 JSON;
         }
 

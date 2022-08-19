@@ -87,7 +87,7 @@
                 const versions = [];
 
                 versions.push({
-                    value: '5.0.x-dev',
+                    value: '5.0',
                     label: `Contao 5.0 (${this.$t('ui.setup.create-project.latestTitle')})`,
                     disabled: this.phpVersionId < 80100,
                     description: this.$t('ui.setup.create-project.latestText', { year: '2023' }),
