@@ -192,6 +192,7 @@
     "ui.setup.database-connection.database": "Veritabanı adı",
     "ui.setup.database-connection.serverVersion": "Sunucu sürümü",
     "ui.setup.database-connection.oldVersion": "Daha eski MySQL ya da MariaDB",
+    "ui.setup.database-connection.connected": "Successfully connected to database {database} on {server} {version}.",
     "ui.setup.database-connection.error": "Veritabanı bağlantısı kurulurken sorun çıktı.",
     "ui.setup.database-connection.problem": "Contao has detected a problem with your database server.",
     "ui.setup.database-connection.migration": "Bekleyen bir aktarım var. | Bekleyen {count} aktarım var.",

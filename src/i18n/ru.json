@@ -192,6 +192,7 @@
     "ui.setup.database-connection.database": "Имя базы данных",
     "ui.setup.database-connection.serverVersion": "Версия сервера",
     "ui.setup.database-connection.oldVersion": "Старая версия MySQL или MariaDB",
+    "ui.setup.database-connection.connected": "Successfully connected to database {database} on {server} {version}.",
     "ui.setup.database-connection.error": "Ошибка подключения к базе данных.",
     "ui.setup.database-connection.problem": "Contao обнаружила проблему с сервером базы данных.",
     "ui.setup.database-connection.migration": "Существует одна незавершенная миграция. | Есть {count} ожидающие миграции.",

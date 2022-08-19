@@ -192,6 +192,7 @@
     "ui.setup.database-connection.database": "Databas namn",
     "ui.setup.database-connection.serverVersion": "Serverversion",
     "ui.setup.database-connection.oldVersion": "Äldre MySQL eller MariaDB",
+    "ui.setup.database-connection.connected": "Successfully connected to database {database} on {server} {version}.",
     "ui.setup.database-connection.error": "Fel vid anslutning till databasen.",
     "ui.setup.database-connection.problem": "Contao has detected a problem with your database server.",
     "ui.setup.database-connection.migration": "Det finns en väntande migrering. | Det finns {count} väntande migreringar.",

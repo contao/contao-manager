@@ -192,6 +192,7 @@
     "ui.setup.database-connection.database": "Nazwa bazy danych",
     "ui.setup.database-connection.serverVersion": "Wersja serwera",
     "ui.setup.database-connection.oldVersion": "Starszy MySQL lub MariaDB",
+    "ui.setup.database-connection.connected": "Successfully connected to database {database} on {server} {version}.",
     "ui.setup.database-connection.error": "Błąd połączenia z bazą danych.",
     "ui.setup.database-connection.problem": "Contao has detected a problem with your database server.",
     "ui.setup.database-connection.migration": "Jest jedna oczekująca migracja. | Jest {count} oczekujących migracji.",

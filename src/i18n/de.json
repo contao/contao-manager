@@ -192,6 +192,7 @@
     "ui.setup.database-connection.database": "Datenbankname",
     "ui.setup.database-connection.serverVersion": "Serverversion",
     "ui.setup.database-connection.oldVersion": "Ältere MySQL oder MariaDB",
+    "ui.setup.database-connection.connected": "Erfolgreiche Verbindung zur Datenbank {database} auf {server} {version}.",
     "ui.setup.database-connection.error": "Fehler beim verbinden mit der Datenbank.",
     "ui.setup.database-connection.problem": "Contao hat ein Problem mit dem Datenbank-Server gefunden.",
     "ui.setup.database-connection.migration": "Es gibt eine ausstehende Migration. | Es gibt {count} ausstehende Migrationen.",
