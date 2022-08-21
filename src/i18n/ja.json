@@ -192,7 +192,7 @@
     "ui.setup.database-connection.database": "データベース名",
     "ui.setup.database-connection.serverVersion": "サーバーのバージョン",
     "ui.setup.database-connection.oldVersion": "古いMySQLまたはMariaDB",
-    "ui.setup.database-connection.connected": "Successfully connected to database {database} on {server} {version}.",
+    "ui.setup.database-connection.connected": "{server} {version}のデータベース{database}に無事に接続できました。",
     "ui.setup.database-connection.error": "データベースの接続のエラーです。",
     "ui.setup.database-connection.problem": "Contaoはデータベースサーバーの問題を検出しました。",
     "ui.setup.database-connection.migration": "未解決の移行が1件あります。 | 未解決の移行が{count}件あります。",
