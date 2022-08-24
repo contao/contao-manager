@@ -1,5 +1,6 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription">
+        <button v-if="bootState === 'action'" @click="setup" class="widget-button widget-button--primary widget-button--run">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
         <button v-if="bootState === 'warning'" @click="setup" class="widget-button widget-button--alert">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
         <button v-if="bootState === 'success' && !hasInstallTool" @click="setup" class="widget-button">{{ $t('ui.server.contao.setup') }}</button>
     </boot-check>
@@ -90,9 +91,7 @@
                 } else if (bootState === 'action') {
                     const composer = await this.$store.dispatch('server/composer/get');
 
-                    if (!composer.json.found) {
-                        this.$store.commit('setup', 0);
-                    } else if (composer.json.valid) {
+                    if (composer.json.found && composer.json.valid) {
                         this.$store.commit('setSafeMode', true);
                     }
                 }
@@ -102,10 +101,13 @@
                 this.$emit('result', 'Contao', this.bootState);
             },
 
-            setup() {
+            async setup() {
                 this.$store.commit('setSafeMode', false);
+                const composer = await this.$store.dispatch('server/composer/get');
 
-                if (this.databaseAccessProblem) {
+                if (!composer.json.found) {
+                    this.$store.commit('setup', 0);
+                } else if (this.databaseAccessProblem) {
                     this.$store.commit('setup', 3);
                 } else if (this.databaseProblem) {
                     this.$store.commit('setView', views.MIGRATION);
