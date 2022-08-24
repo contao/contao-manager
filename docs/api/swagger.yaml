@@ -1677,6 +1677,14 @@ components:
                             status:
                                 type: string
                                 enum: [active, complete, error, stopped]
+                sponsor:
+                    type: object
+                    description: Sponsor of the current task on the Composer Cloud
+                    properties:
+                        name:
+                            type: string
+                        link:
+                            type: string
 
         Package:
             type: object

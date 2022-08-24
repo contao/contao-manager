@@ -21,10 +21,11 @@ use Contao\ManagerApi\Exception\RequestException;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\ConsoleOutput;
+use Contao\ManagerApi\TaskOperation\SponsoredOperationInterface;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class CloudOperation implements TaskOperationInterface
+class CloudOperation implements TaskOperationInterface, SponsoredOperationInterface
 {
     private const CLOUD_ERROR = 'Error handling the Composer Resolver Cloud. Please try again later.';
 
@@ -191,7 +192,6 @@ class CloudOperation implements TaskOperationInterface
         }
 
         $title = '> Resolving dependencies using Composer Cloud '.$job->getVersion();
-        $title .= "\n!!! Current server is sponsored by: ".$job->getSponsor()." !!!\n";
 
         switch ($job->getStatus()) {
             case CloudJob::STATUS_QUEUED:
@@ -321,6 +321,15 @@ class CloudOperation implements TaskOperationInterface
         } catch (\Exception $e) {
             $this->exception = $e;
         }
+    }
+
+    public function getSponsor(): ?array
+    {
+        if (!$this->job instanceof CloudJob) {
+            return null;
+        }
+
+        return $this->job->getSponsor();
     }
 
     private function getCurrentJob(): ?CloudJob

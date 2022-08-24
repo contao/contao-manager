@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Task;
 
 use Contao\ManagerApi\TaskOperation\ConsoleOutput;
+use Contao\ManagerApi\TaskOperation\SponsoredOperationInterface;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 
 final class TaskStatus implements \JsonSerializable
@@ -182,6 +183,7 @@ final class TaskStatus implements \JsonSerializable
     public function jsonSerialize()
     {
         $operations = [];
+        $sponsor = null;
 
         $isNext = true;
         $hasError = false;
@@ -193,6 +195,10 @@ final class TaskStatus implements \JsonSerializable
                 'console' => (string) $operation->getConsole(),
                 'status' => $hasError ? self::STATUS_STOPPED : $this->getOperationStatus($operation, $isNext),
             ];
+
+            if ($operation instanceof SponsoredOperationInterface) {
+                $sponsor = $operation->getSponsor();
+            }
 
             $isNext = $operation->isSuccessful();
             $hasError = $hasError || $operation->hasError();
@@ -207,6 +213,7 @@ final class TaskStatus implements \JsonSerializable
             'audit' => $this->hasAudit(),
             'status' => $this->getStatus(),
             'operations' => $operations,
+            'sponsor' => $sponsor,
         ];
     }
 

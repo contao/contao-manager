@@ -40,6 +40,10 @@
             :show-console.sync="showConsole"
             v-if="hasTask"
         />
+
+        <i18n path="ui.task.sponsor" tag="div" class="view-task__sponsor" v-if="currentTask.sponsor">
+            <template #sponsor><br><a :href="currentTask.sponsor.link" target="_blank" rel="noreferrer noopener">{{ currentTask.sponsor.name }}</a></template>
+        </i18n>
     </boxed-layout>
 </template>
 
@@ -238,6 +242,17 @@ import { mapGetters, mapState } from 'vuex';
             .sk-circle {
                 width: 30px;
                 height: 30px;
+            }
+        }
+
+        &__sponsor {
+            margin: -30px 50px 50px;
+            text-align: center;
+
+            @include screen(960) {
+                br {
+                    display: none;
+                }
             }
         }
     }

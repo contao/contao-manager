@@ -227,6 +227,8 @@
     "ui.task.failedDescription1": "Something went wrong while trying to execute operations in the background.",
     "ui.task.failedDescription2": "If this happens again, your server might not be supported.",
     "ui.task.reportProblem": "Report a Problem",
+    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
+    "ui.task.supporter": "Become a supporter",
     "ui.task.buttonAudit": "Update Database",
     "ui.task.buttonClose": "Close",
     "ui.task.buttonConfirm": "Confirm & Close",
