@@ -45,6 +45,7 @@ class UpdateOperation extends AbstractProcessOperation
                 [
                     '--with-dependencies',
                     '--no-install',
+                    '--no-scripts',
                     '--no-dev',
                     '--no-progress',
                     '--no-ansi',
@@ -79,7 +80,7 @@ class UpdateOperation extends AbstractProcessOperation
             $summary .= ' '.implode(' ', $this->packages);
         }
 
-        $summary .= ' --no-install';
+        $summary .= ' --no-install --no-scripts';
 
         if ($this->dryRun) {
             $summary .= ' --dry-run';

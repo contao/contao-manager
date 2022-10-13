@@ -95,7 +95,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
             $summary .= implode(' ', $this->changes->getUpdates());
         }
 
-        $summary .= ' --no-install';
+        $summary .= ' --no-install --no-scripts';
 
         if ($this->changes->getDryRun()) {
             $summary .= ' --dry-run';
