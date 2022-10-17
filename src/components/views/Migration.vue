@@ -212,7 +212,7 @@
                     if (result) {
                         operations.push({
                             status: this.withDeletes ? change.status : 'skipped',
-                            summary: this.$t('ui.migrate.dropTable', { table: result[1] }),
+                            summary: this.generateStatus(this.$t('ui.migrate.dropTable', { table: result[1] }), !this.withDeletes),
                             console: change.name,
                         });
                         this.hasDeletes = true;
@@ -234,7 +234,7 @@
                     if (result) {
                         operations.push({
                             status: this.withDeletes ? change.status : 'skipped',
-                            summary: this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }),
+                            summary: this.generateStatus(this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }), !this.withDeletes),
                             details: result[3],
                             console: change.name,
                         });
@@ -252,7 +252,9 @@
                             console: change.name,
                         };
 
-                        result[2].split(',').map(p => p.trim()).forEach((part) => {
+                        const ops = result[2].split(',').map(p => p.trim())
+                        let deleteOps = 0;
+                        ops.forEach((part) => {
                             let alter;
                             alter = new RegExp('^ADD ([^ ]+) (.+)$').exec(part);
                             if (alter) {
@@ -270,15 +272,20 @@
 
                             alter = new RegExp('^DROP (.+)$').exec(part);
                             if (alter) {
-                                operation.summary.push(this.$t('ui.migrate.dropField', { table, field: alter[1] }));
+                                operation.summary.push(this.generateStatus(this.$t('ui.migrate.dropField', { table, field: alter[1] }), !this.withDeletes));
                                 operation.details.push('');
                                 this.hasDeletes = true;
+                                deleteOps++;
                                 return;
                             }
 
                             operation.summary.push(part);
                             operation.details.push('');
                         })
+
+                        if (deleteOps === ops.length) {
+                            operation.status = this.withDeletes ? change.status : 'skipped'
+                        }
 
                         operations.push(operation);
                         return;
@@ -373,6 +380,10 @@
             checkAll (skipWarnings = false) {
                 this.type = null;
                 this.check(skipWarnings);
+            },
+
+            generateStatus (label, strike) {
+                return strike ? `~${label}~` : label;
             },
 
             async close () {

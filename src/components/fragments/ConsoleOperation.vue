@@ -14,13 +14,13 @@
             <div class="console-operation__label">
                 <template v-if="Array.isArray(summary)">
                     <template v-for="(title, k) in summary">
-                        <h2 class="console-operation__title" :key="`${k}_title`">{{ title }}</h2>
+                        <h2 class="console-operation__title" :class="{ 'console-operation__title--disabled': title.match(/^~.+~$/) }" :key="`${k}_title`">{{ title.replace(/^~(.+)~$/, '$1') }}</h2>
                         <p class="console-operation__description" :key="`${k}_details`" v-if="details[k]">{{ details[k] }}</p>
                         <br :key="`${k}_br`"/>
                     </template>
                 </template>
                 <template v-else>
-                    <h2 class="console-operation__title">{{ summary }}</h2>
+                    <h2 class="console-operation__title" :class="{ 'console-operation__title--disabled': summary.match(/^~.+~$/) }" :key="`${k}_title`">{{ summary.replace(/^~(.+)~$/, '$1') }}</h2>
                     <p class="console-operation__description" v-if="details">{{ details }}</p>
                 </template>
             </div>
@@ -243,6 +243,10 @@
             display: inline;
             margin: 0;
             color: #fff;
+
+            &--disabled {
+                text-decoration: line-through;
+            }
         }
 
         &__description {
