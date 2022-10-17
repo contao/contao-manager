@@ -112,7 +112,7 @@
                 } else if (this.databaseProblem) {
                     this.$store.commit('setView', views.MIGRATION);
                 } else if (!this.hasUser) {
-                    this.$store.commit('setup', 4);
+                    this.$store.commit('setup', this.hasUser === null ? 3 : 4);
                 } else {
                     this.$store.commit('setup', 0);
                 }
