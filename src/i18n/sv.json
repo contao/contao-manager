@@ -227,6 +227,7 @@
     "ui.task.failedDescription1": "Något gick fel när man försökte utföra åtgärder i bakgrunden.",
     "ui.task.failedDescription2": "Om detta händer igen kanske din server inte stöds.",
     "ui.task.reportProblem": "Rapportera ett problem",
+    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
     "ui.task.buttonAudit": "Uppdatera databas",
     "ui.task.buttonClose": "Stänga",
     "ui.task.buttonConfirm": "Bekräfta och stäng",
@@ -397,6 +398,7 @@
     "ui.package.updateLatest": "senaste versionen",
     "ui.package.updateAvailable": "{version} tillgänglig",
     "ui.package.updateUnknown": "okänd version",
+    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Version {version}",

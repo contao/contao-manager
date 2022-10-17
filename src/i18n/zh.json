@@ -227,6 +227,7 @@
     "ui.task.failedDescription1": "Something went wrong while trying to execute operations in the background.",
     "ui.task.failedDescription2": "If this happens again, your server might not be supported.",
     "ui.task.reportProblem": "报告问题",
+    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
     "ui.task.buttonAudit": "更新数据库",
     "ui.task.buttonClose": "关闭",
     "ui.task.buttonConfirm": "确认 & 关闭",
@@ -397,6 +398,7 @@
     "ui.package.updateLatest": "最新版",
     "ui.package.updateAvailable": "{version} available",
     "ui.package.updateUnknown": "unknown version",
+    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "版本 {version}",

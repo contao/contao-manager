@@ -227,6 +227,7 @@
     "ui.task.failedDescription1": "Coś poszło źle podczas próby wykonania operacji w tle.",
     "ui.task.failedDescription2": "Jeśli sytuacja się powtórzy, być może twój serwer nie ma wsparcia.",
     "ui.task.reportProblem": "Zgłoś problem",
+    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
     "ui.task.buttonAudit": "Aktualizacja Bazy Danych",
     "ui.task.buttonClose": "Zamknij",
     "ui.task.buttonConfirm": "Potwierdź i zamknij",
@@ -397,6 +398,7 @@
     "ui.package.updateLatest": "ostatnia wersja",
     "ui.package.updateAvailable": "{version} dostępna",
     "ui.package.updateUnknown": "nieznana wersja",
+    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Wersja {version}",

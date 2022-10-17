@@ -227,6 +227,7 @@
     "ui.task.failedDescription1": "Er ging iets mis bij het uitvoeren van bewerkingen op de achtergrond.",
     "ui.task.failedDescription2": "Als dit opnieuw gebeurt, wordt uw server mogelijk niet ondersteund.",
     "ui.task.reportProblem": "Een probleem melden",
+    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
     "ui.task.buttonAudit": "Update Database",
     "ui.task.buttonClose": "Sluit",
     "ui.task.buttonConfirm": "Bevestig & Sluit",
@@ -397,6 +398,7 @@
     "ui.package.updateLatest": "laatste versie",
     "ui.package.updateAvailable": "{version} beschikbaar",
     "ui.package.updateUnknown": "Onbekende versie",
+    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Versie {version}",

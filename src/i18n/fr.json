@@ -227,6 +227,7 @@
     "ui.task.failedDescription1": "Une erreur s'est produite lors de la tentative d'exécution des opérations en arrière plan",
     "ui.task.failedDescription2": "Si cela se reproduit, votre serveur peut ne pas être pris en charge",
     "ui.task.reportProblem": "Signaler un problème",
+    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
     "ui.task.buttonAudit": "Mettre à jour de la base de données",
     "ui.task.buttonClose": "Fermer",
     "ui.task.buttonConfirm": "Confirmer & fermer",
@@ -397,6 +398,7 @@
     "ui.package.updateLatest": "dernière version",
     "ui.package.updateAvailable": "{version} available",
     "ui.package.updateUnknown": "unknown version",
+    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Version {version}",

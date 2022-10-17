@@ -227,6 +227,7 @@
     "ui.task.failedDescription1": "Mēģinot izpildīt operācijas fonā, kaut kas notika nepareizi.",
     "ui.task.failedDescription2": "Ja tas atkārtojas, iespējams, ka jūsu serveris netiek atbalstīts.",
     "ui.task.reportProblem": "Ziņot par problēmu",
+    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
     "ui.task.buttonAudit": "Atjaunināt datubāzi",
     "ui.task.buttonClose": "Aizvērt",
     "ui.task.buttonConfirm": "Apstiprināt & aizvērt",
@@ -397,6 +398,7 @@
     "ui.package.updateLatest": "jaunākā versija",
     "ui.package.updateAvailable": "Pieejama {versija}",
     "ui.package.updateUnknown": "nezināma versija",
+    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Versija {version}",

@@ -227,6 +227,7 @@
     "ui.task.failedDescription1": "Нешто је кренуло погрешно приликом извршавања операција у позадини.",
     "ui.task.failedDescription2": "Ако се ово деси поново, Ваш сервер можда не подржава инсталацију.",
     "ui.task.reportProblem": "Пријави проблем",
+    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
     "ui.task.buttonAudit": "Ажурирај базу података",
     "ui.task.buttonClose": "Затвори",
     "ui.task.buttonConfirm": "Потврди и затвори",
@@ -397,6 +398,7 @@
     "ui.package.updateLatest": "последња верзија",
     "ui.package.updateAvailable": "{version} доступна",
     "ui.package.updateUnknown": "непозната верзија",
+    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Верзија {version}",
