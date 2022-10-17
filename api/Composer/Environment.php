@@ -245,11 +245,16 @@ class Environment
         $packages = [];
         $repositories = $this->getComposer()->getRepositoryManager()->getRepositories();
         $dumper = new ArrayDumper();
+        $filesystem = new \Composer\Util\Filesystem();
 
         foreach ($repositories as $repository) {
             if ($repository instanceof ArtifactRepository || $repository instanceof PathRepository) {
                 foreach ($repository->getPackages() as $package) {
                     $dump = $dumper->dump($package);
+
+                    if (isset($dump['dist']['path'])) {
+                        $dump['dist']['path'] = $filesystem->normalizePath($dump['dist']['path']);
+                    }
 
                     // see https://github.com/composer/composer/issues/7955
                     unset($dump['dist']['reference']);
