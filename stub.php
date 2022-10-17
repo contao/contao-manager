@@ -34,7 +34,11 @@ if (function_exists('date_default_timezone_set') && function_exists('date_defaul
 
 if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
     if (isset($_SERVER['argv'][1]) && 'test' === $_SERVER['argv'][1]) {
-        die(json_encode(['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI]));
+        $reply = ['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI];
+        if (\defined('PHP_BINARY')) {
+            $reply['binary'] = PHP_BINARY;
+        }
+        die(json_encode($reply));
     }
 
     Phar::mapPhar('contao-manager.phar');

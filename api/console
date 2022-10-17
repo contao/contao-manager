@@ -69,7 +69,11 @@ $input = new ArgvInput();
 switch ($input->getFirstArgument()) {
     // This "test" command is only for the dev version, if the Phar is compiled this is done in the stub.php
     case 'test':
-        die(json_encode(['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI]));
+        $reply = ['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI];
+        if (\defined('PHP_BINARY')) {
+            $reply['binary'] = PHP_BINARY;
+        }
+        die(json_encode($reply));
         break;
 
     case 'composer':

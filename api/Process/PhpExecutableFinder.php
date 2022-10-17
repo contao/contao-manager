@@ -189,6 +189,10 @@ class PhpExecutableFinder
                 continue;
             }
 
+            if (\array_key_exists('binary', $info)) {
+                $path = $info['binary'];
+            }
+
             if ('cli' === $info['sapi'] && version_compare(PHP_VERSION, $info['version'], 'eq')) {
                 return $path;
             }
