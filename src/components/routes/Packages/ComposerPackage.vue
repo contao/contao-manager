@@ -15,7 +15,10 @@
                 <template v-if="packageData.update">
                     <div class="package__version-update package__version-update--error" v-if="!packageData.update.valid">{{ $t('ui.package.updateUnknown') }}</div>
                     <div class="package__version-update package__version-update--available" v-else-if="!packageData.update.latest">{{ $t('ui.package.updateAvailable', { version: packageData.update.version }) }}</div>
-                    <div class="package__version-update package__version-update--none" v-else>{{ $t('ui.package.updateLatest') }}</div>
+                    <div class="package__version-update package__version-update--none" v-else>
+                        {{ $t('ui.package.updateLatest') }}
+                        <span class="package__version-latest" :title="$t('ui.package.updateConstraint')" v-if="packageData.latest && !packageData.latest.active"></span>
+                    </div>
                 </template>
             </div>
             <span class="composer-package__stats composer-package__stats--license">{{ license }}</span>
@@ -32,7 +35,10 @@
                     <template v-if="packageData.update">
                         <div class="package__version-update package__version-update--error" v-if="!packageData.update.valid">{{ $t('ui.package.updateUnknown') }}</div>
                         <div class="package__version-update package__version-update--available" v-else-if="!packageData.update.latest">{{ $t('ui.package.updateAvailable', { version: packageData.update.version }) }}</div>
-                        <div class="package__version-update package__version-update--none" v-else>{{ $t('ui.package.updateLatest') }}</div>
+                        <div class="package__version-update package__version-update--none" v-else>
+                            {{ $t('ui.package.updateLatest') }}
+                            <span class="package__version-latest" :title="$t('ui.package.updateConstraint')" v-if="packageData.latest && !packageData.latest.active"></span>
+                        </div>
                     </template>
                 </div>
             </slot>

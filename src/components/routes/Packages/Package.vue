@@ -296,6 +296,15 @@
             }
         }
 
+        &__version-latest {
+            float: right;
+            position: relative;
+            right: -7px;
+            width: 24px;
+            height: 20px;
+            background: $green-button url('../../../assets/images/button-update.svg') center center/20px 20px no-repeat;
+        }
+
         &__actions {
             @include screen(600) {
                 float: right;

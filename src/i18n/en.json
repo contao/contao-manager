@@ -399,6 +399,7 @@
     "ui.package.updateLatest": "latest version",
     "ui.package.updateAvailable": "{version} available",
     "ui.package.updateUnknown": "unknown version",
+    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Version {version}",

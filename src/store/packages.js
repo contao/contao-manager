@@ -220,6 +220,13 @@ export default {
                             getVersion(update),
                             rootVersion
                         );
+
+                        if (metadata.latest && metadata.latest.version) {
+                            metadata.latest.active = eq(
+                                getVersion(update),
+                                metadata.latest.version
+                            )
+                        }
                     }
                 }
             }
