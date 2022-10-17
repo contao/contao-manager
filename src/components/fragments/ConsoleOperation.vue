@@ -20,7 +20,7 @@
                     </template>
                 </template>
                 <template v-else>
-                    <h2 class="console-operation__title" :class="{ 'console-operation__title--disabled': summary.match(/^~.+~$/) }" :key="`${k}_title`">{{ summary.replace(/^~(.+)~$/, '$1') }}</h2>
+                    <h2 class="console-operation__title" :class="{ 'console-operation__title--disabled': summary.match(/^~.+~$/) }">{{ summary.replace(/^~(.+)~$/, '$1') }}</h2>
                     <p class="console-operation__description" v-if="details">{{ details }}</p>
                 </template>
             </div>
