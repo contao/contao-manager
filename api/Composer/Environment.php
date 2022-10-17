@@ -53,6 +53,11 @@ class Environment
      */
     private $composer;
 
+    /**
+     * @var \Composer\Util\Filesystem
+     */
+    private $composerFs;
+
     public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, ComposerConfig $composerConfig, Filesystem $filesystem)
     {
         $this->kernel = $kernel;
@@ -193,12 +198,11 @@ class Environment
         unset($repositories['packagist.org']);
 
         if (!empty($repositories) || !empty($json['repositories'])) {
-            $filesystem = new \Composer\Util\Filesystem();
             $json['repositories'] = [];
 
             foreach ($repositories as $repository) {
                 if (isset($repository['url'])) {
-                    $repository['url'] = $filesystem->normalizePath($repository['url']);
+                    $repository['url'] = $this->normalizeRepositoryPath($repository['url']);
                 }
 
                 $json['repositories'][] = $repository;
@@ -245,7 +249,6 @@ class Environment
         $packages = [];
         $repositories = $this->getComposer()->getRepositoryManager()->getRepositories();
         $dumper = new ArrayDumper();
-        $filesystem = new \Composer\Util\Filesystem();
 
         foreach ($repositories as $repository) {
             if ($repository instanceof ArtifactRepository || $repository instanceof PathRepository) {
@@ -253,7 +256,7 @@ class Environment
                     $dump = $dumper->dump($package);
 
                     if (isset($dump['dist']['path'])) {
-                        $dump['dist']['path'] = $filesystem->normalizePath($dump['dist']['path']);
+                        $dump['dist']['path'] = $this->normalizeRepositoryPath($dump['dist']['path']);
                     }
 
                     // see https://github.com/composer/composer/issues/7955
@@ -276,5 +279,20 @@ class Environment
         } catch (\Exception $exception) {
             return false;
         }
+    }
+
+    private function normalizeRepositoryPath(string $path): string
+    {
+        if (null === $this->composerFs) {
+            $this->composerFs = new \Composer\Util\Filesystem();
+        }
+
+        $normalizedPath = $this->composerFs->normalizePath($path);
+
+        if (0 === strpos($path, './')) {
+            $normalizedPath = './'.$normalizedPath;
+        }
+
+        return $normalizedPath;
     }
 }
