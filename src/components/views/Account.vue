@@ -32,7 +32,6 @@
                         :label="$t('ui.account.username')"
                         :disabled="installing"
                         required
-                        @keyup="validate"
                         v-model="username"
                     />
                     <text-field
@@ -41,7 +40,6 @@
                         :disabled="installing"
                         required pattern=".{8,}"
                         :error="errors.password" @blur="validatePassword"
-                        @keyup="validate"
                         v-model="password"
                     />
 
@@ -63,13 +61,13 @@
 </template>
 
 <script>
-    import views from '../../router/views';
+import views from '../../router/views';
 
-    import BoxedLayout from '../layouts/Boxed';
-    import TextField from '../widgets/TextField';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import BoxedLayout from '../layouts/Boxed';
+import TextField from '../widgets/TextField';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
-    export default {
+export default {
         components: { BoxedLayout, TextField, LoadingButton },
 
         data: () => ({
@@ -125,6 +123,16 @@
                     },
                 );
             },
+        },
+
+        watch: {
+            username () {
+                this.validate();
+            },
+
+            password () {
+                this.validate();
+            }
         },
 
         mounted() {
