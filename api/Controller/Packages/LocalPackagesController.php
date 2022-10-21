@@ -117,7 +117,7 @@ class LocalPackagesController
                 'description' => $link->getDescription(),
                 'source' => $link->getSource(),
                 'target' => $link->getTarget(),
-                'constraint' => $constraint ? $constraint->getPrettyString() : null,
+                'constraint' => $constraint->getPrettyString(),
             ];
         }
 

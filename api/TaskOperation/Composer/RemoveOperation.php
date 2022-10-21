@@ -12,17 +12,11 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
-use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class RemoveOperation extends AbstractProcessOperation
 {
-    /**
-     * @var Translator
-     */
-    private $translator;
-
     /**
      * @var array
      */
@@ -31,9 +25,8 @@ class RemoveOperation extends AbstractProcessOperation
     /**
      * Constructor.
      */
-    public function __construct(ConsoleProcessFactory $processFactory, Translator $translator, array $removed)
+    public function __construct(ConsoleProcessFactory $processFactory, array $removed)
     {
-        $this->translator = $translator;
         $this->removed = $removed;
 
         try {

@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\EventListener;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\EventListener\LocaleListener as BaseLocaleListener;
 
 class LocaleListener extends BaseLocaleListener
 {
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         parent::onKernelRequest($event);
 

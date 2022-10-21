@@ -115,8 +115,9 @@ class DatabaseMigrationController
                     continue;
                 }
 
-                if (\in_array($type, ['error', 'problem', 'warning'])) {
+                if (\in_array($type, ['error', 'problem', 'warning'], true)) {
                     array_unshift($lines, $line);
+
                     return $this->handleProblems($lines, $process);
                 }
 
@@ -183,7 +184,7 @@ class DatabaseMigrationController
             $type = $data['type'] ?? null;
             $message = explode("\n", $data['message'] ?? '', 2) + ['', ''];
 
-            if (\in_array($type, ['error', 'problem', 'warning'])) {
+            if (\in_array($type, ['error', 'problem', 'warning'], true)) {
                 if ('warning' !== $type) {
                     $responseType = 'problem';
                 }
@@ -241,7 +242,7 @@ class DatabaseMigrationController
         foreach ($pending['commands'] as $name) {
             $operations[$name] = [
                 'name' => $name,
-                'status' => (!$process->isRunning() && !$process->isSuccessful()) ? TaskStatus::STATUS_ERROR : 'pending',
+                'status' => !$process->isRunning() && !$process->isSuccessful() ? TaskStatus::STATUS_ERROR : 'pending',
             ];
         }
 

@@ -34,8 +34,8 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
         1 => 'SIGHUP',
         2 => 'SIGINT',
         3 => 'SIGQUIT',
-        15 => 'SIGTERM',
         9 => 'SIGKILL',
+        15 => 'SIGTERM',
     ];
 
     /**

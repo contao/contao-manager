@@ -25,7 +25,7 @@ class ApiProblemException extends HttpException
      */
     private $problem;
 
-    public function __construct(ApiProblem $problem, \Exception $previous = null, array $headers = [], int $code = 0)
+    public function __construct(ApiProblem $problem, \Throwable $previous = null, array $headers = [], int $code = 0)
     {
         $this->problem = $problem;
 

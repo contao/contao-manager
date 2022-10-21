@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpComposerExtensionStubsInspection */
-
 declare(strict_types=1);
 
 /*
@@ -209,7 +207,7 @@ class ProcessRunner extends AbstractProcess
     /**
      * Returns the timeout type.
      */
-    private function timeoutCode()
+    private function timeoutCode(): int
     {
         if ($this->timeout instanceof ProcessTimedOutException) {
             switch (true) {

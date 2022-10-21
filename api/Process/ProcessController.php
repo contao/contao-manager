@@ -120,7 +120,7 @@ class ProcessController extends AbstractProcess
 
     public function hasBeenSignaled(): bool
     {
-        return isset($this->config['signaled']) ? (bool) $this->config['signaled'] : false;
+        return isset($this->config['signaled']) && $this->config['signaled'];
     }
 
     public function getTermSignal(): ?int
@@ -130,7 +130,7 @@ class ProcessController extends AbstractProcess
 
     public function hasBeenStopped(): bool
     {
-        return isset($this->config['stopped']) ? (bool) $this->config['stopped'] : false;
+        return isset($this->config['stopped']) && $this->config['stopped'];
     }
 
     public function getStopSignal(): ?int

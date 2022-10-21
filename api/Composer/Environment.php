@@ -63,7 +63,7 @@ class Environment
         $this->kernel = $kernel;
         $this->managerConfig = $managerConfig;
         $this->composerConfig = $composerConfig;
-        $this->filesystem = $filesystem ?: new Filesystem();
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -221,7 +221,7 @@ class Environment
     {
         $locker = $this->getComposer()->getLocker();
 
-        if (null === $locker || !$locker->isLocked()) {
+        if (!$locker->isLocked()) {
             return [];
         }
 

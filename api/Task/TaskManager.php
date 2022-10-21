@@ -115,17 +115,14 @@ class TaskManager implements LoggerAwareInterface
 
         $status = $task->update($config);
 
-        if ($status->isComplete() && null !== $this->logger) {
+        if (null !== $this->logger && $status->isComplete()) {
             $this->logger->info('Task has been completed', ['name' => $task->getName(), 'class' => \get_class($task)]);
         }
 
         return $status;
     }
 
-    /**
-     * @return TaskStatus|null
-     */
-    public function abortTask()
+    public function abortTask(): ?TaskStatus
     {
         $config = $this->getTaskConfig();
 
@@ -142,10 +139,7 @@ class TaskManager implements LoggerAwareInterface
         return $task->abort($config);
     }
 
-    /**
-     * @return TaskStatus|null
-     */
-    public function deleteTask()
+    public function deleteTask(): ?TaskStatus
     {
         $config = $this->getTaskConfig();
 
@@ -170,10 +164,7 @@ class TaskManager implements LoggerAwareInterface
         return $status;
     }
 
-    /**
-     * @return TaskInterface
-     */
-    private function loadTask(TaskConfig $config)
+    private function loadTask(TaskConfig $config): TaskInterface
     {
         $name = $config->getName();
 
@@ -190,10 +181,7 @@ class TaskManager implements LoggerAwareInterface
         return $task;
     }
 
-    /**
-     * @return TaskConfig|null
-     */
-    private function getTaskConfig()
+    private function getTaskConfig(): ?TaskConfig
     {
         if ($this->filesystem->exists($this->configFile)) {
             try {

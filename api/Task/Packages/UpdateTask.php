@@ -22,7 +22,6 @@ use Contao\ManagerApi\Config\UploadsConfig;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Process\ContaoConsole;
-use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\Composer\CloudOperation;
@@ -62,9 +61,9 @@ class UpdateTask extends AbstractPackagesTask
      */
     private $kernel;
 
-    public function __construct(ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, UploadsConfig $uploads, ApiKernel $kernel, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
+    public function __construct(ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, UploadsConfig $uploads, ApiKernel $kernel, Environment $environment, Filesystem $filesystem, Translator $translator)
     {
-        parent::__construct($environment, $serverInfo, $filesystem, $translator);
+        parent::__construct($environment, $filesystem, $translator);
 
         $this->contaoConsole = $contaoConsole;
         $this->processFactory = $processFactory;
@@ -102,11 +101,11 @@ class UpdateTask extends AbstractPackagesTask
         $operations = [];
 
         if (($required = $changes->getRequiredPackages()) && !empty($required)) {
-            $operations[] = new RequireOperation($this->processFactory, $this->translator, $required);
+            $operations[] = new RequireOperation($this->processFactory, $required);
         }
 
         if (($removed = $changes->getRemovedPackages()) && !empty($removed)) {
-            $operations[] = new RemoveOperation($this->processFactory, $this->translator, $removed);
+            $operations[] = new RemoveOperation($this->processFactory, $removed);
         }
 
         if ($this->environment->useCloudResolver()) {
@@ -131,7 +130,8 @@ class UpdateTask extends AbstractPackagesTask
                 static function ($upload) use ($changes) {
                     return $upload['success']
                         && isset($upload['package']['name'])
-                        && (0 === \count($changes->getUpdates()) ||
+                        && (
+                            0 === \count($changes->getUpdates()) ||
                             \in_array($upload['package']['name'], $changes->getUpdates(), true)
                         );
                 }

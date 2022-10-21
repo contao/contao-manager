@@ -14,7 +14,7 @@ namespace Contao\ManagerApi\Security;
 
 use Contao\ManagerApi\Config\UserConfig;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -49,28 +49,25 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
         return $this->getUser($user->getUsername());
     }
 
-    public function supportsClass($class)
+    public function supportsClass($class): bool
     {
         return User::class === $class;
     }
 
-    public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
+    public function upgradePassword(UserInterface $user, string $newHashedPassword): void
     {
         $this->config->updateUser(
-            new User($user->getUsername(), $newEncodedPassword)
+            new User($user->getUsername(), $newHashedPassword)
         );
     }
 
-    /**
-     * @throws UsernameNotFoundException if user whose given username does not exist
-     */
     private function getUser(string $username): User
     {
         $user = $this->config->getUser($username);
 
         if (null === $user) {
-            $ex = new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
-            $ex->setUsername($username);
+            $ex = new UserNotFoundException(sprintf('Username "%s" does not exist.', $username));
+            $ex->setUserIdentifier($username);
 
             throw $ex;
         }

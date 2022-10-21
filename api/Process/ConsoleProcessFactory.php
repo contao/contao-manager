@@ -179,7 +179,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
             $this->addPhpRuntime($arguments),
             $this->kernel->getProjectDir(),
             $this->serverInfo->getPhpEnv()
-        ))->inheritEnvironmentVariables()->setTimeout(0);
+        ))->setTimeout(0);
     }
 
     /**

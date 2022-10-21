@@ -127,7 +127,7 @@ class PhpExecutableFinder
                 // Silencing against https://bugs.php.net/69240
                 if (@is_dir($path)) {
                     $dirs[] = $path;
-                } elseif (\in_array(basename($path), $this->names, true) && @is_executable($path)) {
+                } elseif (@is_executable($path) && \in_array(basename($path), $this->names, true)) {
                     $results[] = $path;
                 }
             }
@@ -205,8 +205,9 @@ class PhpExecutableFinder
             $vCli = vsprintf('%s.%s', explode('.', $info['version']));
 
             if (
-                null === $fallback
-                || ('cli' !== $sapi && 'cli' === $info['sapi'] && version_compare($vWeb, $vCli, 'eq'))
+                null === $fallback || (
+                    'cli' !== $sapi && 'cli' === $info['sapi'] && version_compare($vWeb, $vCli, 'eq')
+                )
             ) {
                 $fallback = $path;
                 $sapi = $info['sapi'];

@@ -45,7 +45,7 @@ class InstallOperation extends AbstractProcessOperation
             $process = $processFactory->restoreBackgroundProcess('composer-install');
             $retries = $taskConfig->getState('install-retry', 0);
 
-            if ($retry && $process->isTerminated() && !$process->isSuccessful() && $retries < 4) {
+            if ($retry && $retries < 4 && $process->isTerminated() && !$process->isSuccessful()) {
                 $process->delete();
                 $taskConfig->setState('install-retry', ++$retries);
 

@@ -97,7 +97,7 @@ class UploadPackagesController
     /**
      * @Route("/packages/uploads", methods={"POST"}, defaults={"form-data"=true})
      */
-    public function upload(Request $request)
+    public function upload(Request $request): JsonResponse
     {
         $this->validateUploadSupport();
 
@@ -152,7 +152,7 @@ class UploadPackagesController
     /**
      * @Route("/packages/uploads/{id}", methods={"DELETE"})
      */
-    public function delete(string $id)
+    public function delete(string $id): JsonResponse
     {
         $this->validateUploadSupport();
 
@@ -171,7 +171,7 @@ class UploadPackagesController
         return new JsonResponse(['status' => 'success']);
     }
 
-    private function createUpload(string $name, int $size)
+    private function createUpload(string $name, int $size): string
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         $id = bin2hex(random_bytes(8));
@@ -204,7 +204,7 @@ class UploadPackagesController
         fclose($fp);
     }
 
-    private function finishUpload(string $id)
+    private function finishUpload(string $id): JsonResponse
     {
         $uploadFile = $this->uploadPath($id);
         $config = $this->config->get($id);
@@ -292,12 +292,12 @@ class UploadPackagesController
         );
     }
 
-    private function uploadPath(string $id)
+    private function uploadPath(string $id): string
     {
         return $this->environment->getUploadDir().'/'.$id;
     }
 
-    private function installError(string $id, string $error, \Exception $e = null)
+    private function installError(string $id, string $error, \Exception $e = null): JsonResponse
     {
         $config = $this->config->get($id);
 

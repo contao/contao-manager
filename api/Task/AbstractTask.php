@@ -60,7 +60,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
 
                 $operation->run();
 
-                if ($operation->hasError() && null !== $this->logger) {
+                if (null !== $this->logger && $operation->hasError()) {
                     $this->logger->info('Failed operation: '.\get_class($operation));
                 }
 

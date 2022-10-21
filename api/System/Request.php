@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\System;
 
 use Composer\CaBundle\CaBundle;
-use Composer\Util\RemoteFilesystem;
 use Composer\Util\StreamContextFactory;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Exception\RequestException;
@@ -142,7 +141,7 @@ class Request
     }
 
     /**
-     * @see RemoteFilesystem::getTlsDefaults()
+     * @see \Composer\Util\RemoteFilesystem::getTlsDefaults()
      */
     private function getTlsDefaults(array $options): array
     {

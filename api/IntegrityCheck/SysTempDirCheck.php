@@ -31,10 +31,7 @@ class SysTempDirCheck extends AbstractIntegrityCheck
         return null;
     }
 
-    /**
-     * @noinspection MkdirRaceConditionInspection
-     */
-    private function canWriteFileInDirectory(string $path, bool $createDirectory = false)
+    private function canWriteFileInDirectory(string $path, bool $createDirectory = false): bool
     {
         if ($createDirectory) {
             @rmdir($path);

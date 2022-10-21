@@ -34,12 +34,7 @@ class InvalidJsonException extends \InvalidArgumentException
      */
     private $content;
 
-    /**
-     * Constructor.
-     *
-     * @param \Exception $previous
-     */
-    public function __construct(string $filename, string $content = '', int $code = 0, \Exception $previous = null)
+    public function __construct(string $filename, string $content = '', int $code = 0, \Throwable $previous = null)
     {
         parent::__construct(sprintf('File "%s" does not contain valid JSON.', $filename), $code, $previous);
 

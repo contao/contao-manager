@@ -14,7 +14,6 @@ namespace Contao\ManagerApi\Task\Packages;
 
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
-use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\AbstractTask;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\Task\TaskStatus;
@@ -33,17 +32,11 @@ abstract class AbstractPackagesTask extends AbstractTask
     protected $filesystem;
 
     /**
-     * @var ServerInfo
-     */
-    private $serverInfo;
-
-    /**
      * Constructor.
      */
-    public function __construct(Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
+    public function __construct(Environment $environment, Filesystem $filesystem, Translator $translator)
     {
         $this->environment = $environment;
-        $this->serverInfo = $serverInfo;
         $this->filesystem = $filesystem;
 
         parent::__construct($translator);

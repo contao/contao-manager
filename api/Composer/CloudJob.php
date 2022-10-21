@@ -53,7 +53,7 @@ class CloudJob implements \JsonSerializable
         return $this->result['sponsoredBy'];
     }
 
-    public function getWaitingTime()
+    public function getWaitingTime(): int
     {
         if (self::STATUS_QUEUED !== $this->result['status']) {
             return 0;
@@ -68,46 +68,37 @@ class CloudJob implements \JsonSerializable
         );
     }
 
-    /**
-     * @return int
-     */
-    public function getJobsInQueue()
+    public function getJobsInQueue(): int
     {
         return (int) $this->result['queuePosition'] ?: $this->result['stats']['numberOfJobsInQueue'];
     }
 
-    /**
-     * @return int
-     */
-    public function getWorkers()
+    public function getWorkers(): int
     {
         return (int) $this->result['stats']['numberOfWorkers'];
     }
 
-    /**
-     * @return string
-     */
-    public function getVersion()
+    public function getVersion(): string
     {
         return isset($this->result['stats']['appVersion']) ? 'v'.$this->result['stats']['appVersion'] : '';
     }
 
-    public function isQueued()
+    public function isQueued(): bool
     {
         return self::STATUS_QUEUED === $this->getStatus();
     }
 
-    public function isProcessing()
+    public function isProcessing(): bool
     {
         return self::STATUS_PROCESSING === $this->getStatus();
     }
 
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
         return self::STATUS_FINISHED === $this->getStatus();
     }
 
-    public function isFailed()
+    public function isFailed(): bool
     {
         return self::STATUS_ERROR === $this->getStatus();
     }

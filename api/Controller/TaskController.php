@@ -103,12 +103,12 @@ class TaskController
         }
     }
 
-    private function getResponse(TaskStatus $status = null, int $code = Response::HTTP_OK): Response
+    private function getResponse(TaskStatus $status = null): Response
     {
         if (!$status instanceof TaskStatus) {
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
-        return new JsonResponse($status, $code);
+        return new JsonResponse($status);
     }
 }

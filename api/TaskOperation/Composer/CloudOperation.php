@@ -392,8 +392,8 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
         }
 
         if (
-            ($this->job->isSuccessful() || $this->job->isFailed())
-            && !$this->taskConfig->getState('cloud-job-finished')
+            !$this->taskConfig->getState('cloud-job-finished')
+            && ($this->job->isSuccessful() || $this->job->isFailed())
         ) {
             $this->taskConfig->setState('cloud-job-finished', time());
         }

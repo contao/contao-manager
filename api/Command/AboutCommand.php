@@ -93,11 +93,10 @@ class AboutCommand extends Command
         $io->table([], $rows);
     }
 
-    private function collectData()
+    private function collectData(): array
     {
         $version = $this->getManagerVersion($this->kernel);
 
-        /** @noinspection PhpComposerExtensionStubsInspection */
         $data = [
             'app' => [
                 'version' => $version,
@@ -132,7 +131,7 @@ class AboutCommand extends Command
         return $data;
     }
 
-    private function getManagerVersion(ApiKernel $kernel)
+    private function getManagerVersion(ApiKernel $kernel): string
     {
         $version = $kernel->getVersion();
 

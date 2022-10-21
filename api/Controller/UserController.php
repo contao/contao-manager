@@ -13,28 +13,34 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Config\UserConfig;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Controller to handle users.
  */
-class UserController extends Controller
+class UserController
 {
     /**
      * @var UserConfig
      */
     private $config;
 
-    public function __construct(UserConfig $config)
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    public function __construct(UserConfig $config, UrlGeneratorInterface $urlGenerator)
     {
         $this->config = $config;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -200,7 +206,7 @@ class UserController extends Controller
         );
 
         if ($addLocation && $user instanceof UserInterface) {
-            $response->headers->set('Location', $this->generateUrl('user_get', ['username' => $user->getUsername()]));
+            $response->headers->set('Location', $this->urlGenerator->generate('user_get', ['username' => $user->getUsername()]));
         }
 
         return $response;

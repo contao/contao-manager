@@ -113,7 +113,7 @@ class InstallToolLockController
         return $this->getLockStatus();
     }
 
-    private function isLocked()
+    private function isLocked(): bool
     {
         return $this->filesystem->exists($this->lockFile) && @file_get_contents($this->lockFile) >= 3;
     }

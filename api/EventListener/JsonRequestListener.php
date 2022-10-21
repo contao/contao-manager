@@ -28,7 +28,7 @@ class JsonRequestListener implements EventSubscriberInterface
     public function onKernelRequest(KernelEvent $event): void
     {
         $request = $event->getRequest();
-        $content = $content = $request->getContent();
+        $content = $request->getContent();
 
         if ('' === $content && $request->attributes->get('form-data')) {
             return;

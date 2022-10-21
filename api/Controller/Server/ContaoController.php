@@ -267,6 +267,7 @@ class ContaoController
                 }
 
                 if (\defined('VERSION') && \defined('BUILD')) {
+                    /** @noinspection PhpUndefinedConstantInspection */
                     return VERSION.'.'.BUILD;
                 }
 
@@ -293,7 +294,7 @@ class ContaoController
             'conflicts' => [],
             'project_dir' => $this->kernel->getProjectDir(),
             'public_dir' => basename($this->kernel->getPublicDir()),
-            'directory_separator' => DIRECTORY_SEPARATOR,
+            'directory_separator' => \DIRECTORY_SEPARATOR,
         ], $data), $status);
     }
 }

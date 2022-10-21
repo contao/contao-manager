@@ -71,7 +71,7 @@ final class TaskStatus implements \JsonSerializable
         return $this->title;
     }
 
-    public function getConsole()
+    public function getConsole(): string
     {
         $console = new ConsoleOutput();
 
@@ -180,7 +180,7 @@ final class TaskStatus implements \JsonSerializable
         return self::STATUS_ERROR === $this->getStatus();
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $operations = [];
         $sponsor = null;
@@ -230,7 +230,7 @@ final class TaskStatus implements \JsonSerializable
                 return self::STATUS_ERROR;
         }
 
-        if ($operation->isStarted() || $isNext) {
+        if ($isNext || $operation->isStarted()) {
             return self::STATUS_ACTIVE;
         }
 

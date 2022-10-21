@@ -87,7 +87,7 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
     {
         $user = $userProvider->loadUserByUsername($credentials['username']);
 
-        if (null === $user->getPassword() && $userProvider instanceof PasswordUpgraderInterface) {
+        if ($userProvider instanceof PasswordUpgraderInterface && null === $user->getPassword()) {
             $encoder = $this->encoderFactory->getEncoder($user);
             $userProvider->upgradePassword($user, $encoder->encodePassword($credentials['password'], null));
             $user = $userProvider->loadUserByUsername($user->getUsername());
@@ -98,9 +98,11 @@ class LoginAuthenticator extends AbstractGuardAuthenticator implements PasswordA
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        $encoder = $this->encoderFactory->getEncoder($user);
-
-        return $encoder->isPasswordValid($user->getPassword(), $credentials['password'], null);
+        return $this->encoderFactory->getEncoder($user)->isPasswordValid(
+            $user->getPassword(),
+            $credentials['password'],
+            null
+        );
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response

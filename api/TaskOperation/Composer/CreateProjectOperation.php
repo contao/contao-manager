@@ -16,7 +16,6 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
-use Contao\ManagerApi\TaskOperation\ConsoleOutput;
 use Symfony\Component\Filesystem\Filesystem;
 
 class CreateProjectOperation extends AbstractInlineOperation
@@ -79,11 +78,6 @@ class CreateProjectOperation extends AbstractInlineOperation
         return 'composer create-project contao/managed-edition:'.$this->version;
     }
 
-    public function getConsole(): ConsoleOutput
-    {
-        return $this->addConsoleOutput(new ConsoleOutput());
-    }
-
     protected function getName(): string
     {
         return 'create-project';
@@ -112,7 +106,7 @@ class CreateProjectOperation extends AbstractInlineOperation
         return true;
     }
 
-    private function generateComposerJson(string $version, bool $coreOnly = false)
+    private function generateComposerJson(string $version, bool $coreOnly = false): string
     {
         if ($coreOnly) {
             $require = <<<JSON

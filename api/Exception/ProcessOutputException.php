@@ -26,7 +26,7 @@ class ProcessOutputException extends \RuntimeException
      *
      * @param string $message
      */
-    public function __construct($message, Process $process, \Exception $previous = null)
+    public function __construct($message, Process $process, \Throwable $previous = null)
     {
         parent::__construct($message, $process->getExitCode(), $previous);
 
@@ -35,10 +35,8 @@ class ProcessOutputException extends \RuntimeException
 
     /**
      * Gets the process object.
-     *
-     * @return Process
      */
-    public function getProcess()
+    public function getProcess(): Process
     {
         return $this->process;
     }

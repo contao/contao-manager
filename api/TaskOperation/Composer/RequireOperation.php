@@ -12,17 +12,11 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
-use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class RequireOperation extends AbstractProcessOperation
 {
-    /**
-     * @var Translator
-     */
-    private $translator;
-
     /**
      * @var array
      */
@@ -31,9 +25,8 @@ class RequireOperation extends AbstractProcessOperation
     /**
      * Constructor.
      */
-    public function __construct(ConsoleProcessFactory $processFactory, Translator $translator, array $required)
+    public function __construct(ConsoleProcessFactory $processFactory, array $required)
     {
-        $this->translator = $translator;
         $this->required = $required;
 
         try {

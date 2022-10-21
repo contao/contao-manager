@@ -18,7 +18,7 @@ use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 
 return static function (ECSConfig $ecsConfig): void {
-    $ecsConfig->sets([__DIR__.'/tools/ecs/vendor/contao/easy-coding-standard/config/contao.php']);
+    $ecsConfig->sets([__DIR__.'/vendor/contao/easy-coding-standard/config/contao.php']);
 
     $ecsConfig->skip([
         HeredocIndentationFixer::class,

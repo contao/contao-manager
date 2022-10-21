@@ -70,7 +70,7 @@ class JwtManager
      */
     public function hasResponseToken(Response $response): bool
     {
-        return $this->hasCookie($response, self::COOKIE_AUTH);
+        return $this->hasCookie($response);
     }
 
     /**
@@ -86,10 +86,8 @@ class JwtManager
 
         $response->headers->setCookie(
             $this->createCookie(
-                self::COOKIE_AUTH,
-                JWT::encode($payload, $this->users->getSecret(), 'HS256'),
-                $request,
-                true
+                JWT::encode($payload, $this->users->getSecret()),
+                $request
             )
         );
     }
@@ -107,21 +105,19 @@ class JwtManager
             self::COOKIE_AUTH,
             \Phar::running(false) ? $request->getBaseUrl().'/' : '/',
             null,
-            $request->isSecure(),
-            true
+            $request->isSecure()
         );
     }
 
     /**
      * Returns whether the response has a cookie with that name.
      */
-    private function hasCookie(Response $response, string $cookieName): bool
+    private function hasCookie(Response $response): bool
     {
-        /** @var array<Cookie> $cookies */
         $cookies = $response->headers->getCookies();
 
         foreach ($cookies as $cookie) {
-            if ($cookie->getName() === $cookieName) {
+            if (self::COOKIE_AUTH === $cookie->getName()) {
                 return true;
             }
         }
@@ -132,16 +128,16 @@ class JwtManager
     /**
      * Creates a cookie configured for Contao Manager.
      */
-    private function createCookie(string $name, string $value, Request $request, bool $httpOnly): Cookie
+    private function createCookie(string $value, Request $request): Cookie
     {
         return new Cookie(
-            $name,
+            self::COOKIE_AUTH,
             $value,
             0,
             \Phar::running(false) ? $request->getBaseUrl().'/' : '/',
             null,
             $request->isSecure(),
-            $httpOnly,
+            true,
             false,
             Cookie::SAMESITE_STRICT
         );

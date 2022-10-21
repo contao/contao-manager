@@ -12,15 +12,11 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Controller\Server;
 
-use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
-use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Process\ContaoApi;
 use Contao\ManagerApi\Process\ContaoConsole;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,14 +29,20 @@ class DatabaseController
 {
     private const URL_PATTERN = '^([^:]+)://(([^:@]+)(:([^@]+))?@)?([^:/]+(:[0-9]+)?)/([^?]+)(\?.+)?$';
 
-    public function __construct(ApiKernel $kernel, ContaoApi $contaoApi, ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, LoggerInterface $logger = null, Filesystem $filesystem = null)
+    /**
+     * @var ContaoApi
+     */
+    private $contaoApi;
+
+    /**
+     * @var ContaoConsole
+     */
+    private $contaoConsole;
+
+    public function __construct(ContaoApi $contaoApi, ContaoConsole $contaoConsole)
     {
-        $this->kernel = $kernel;
         $this->contaoApi = $contaoApi;
         $this->contaoConsole = $contaoConsole;
-        $this->processFactory = $processFactory;
-        $this->logger = $logger;
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     public function __invoke(Request $request, ServerInfo $serverInfo): Response

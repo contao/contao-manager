@@ -169,6 +169,8 @@ class TaskUpdateCommand extends Command
             $progress = null;
         }
 
+        $icon = '';
+
         if ($operation->isSuccessful()) {
             $icon = sprintf(
                 '<fg=green;options=bold>%s</>',

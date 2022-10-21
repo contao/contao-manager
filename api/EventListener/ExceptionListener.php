@@ -57,7 +57,7 @@ class ExceptionListener implements EventSubscriberInterface
 
         Response::closeOutputBuffers(0, false);
 
-        $exception = $this->convertException($event->getException());
+        $exception = $this->convertException($event->getThrowable());
 
         $this->logException($exception);
 
@@ -78,7 +78,7 @@ class ExceptionListener implements EventSubscriberInterface
     /**
      * Logs the exception if a logger is available.
      */
-    private function logException(\Exception $exception): void
+    private function logException(\Throwable $exception): void
     {
         if (null === $this->logger) {
             return;
@@ -102,7 +102,7 @@ class ExceptionListener implements EventSubscriberInterface
     /**
      * Tries to convert known exceptions to a HttpException.
      */
-    private function convertException(\Exception $exception): \Exception
+    private function convertException(\Throwable $exception): \Throwable
     {
         switch (true) {
             case $exception instanceof AccessDeniedException:

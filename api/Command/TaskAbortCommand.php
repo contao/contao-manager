@@ -12,17 +12,11 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Command;
 
-use Contao\ManagerApi\Task\TaskManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class TaskAbortCommand extends TaskUpdateCommand
 {
-    public function __construct(TaskManager $taskManager)
-    {
-        parent::__construct($taskManager);
-    }
-
     protected function configure(): void
     {
         parent::configure();

@@ -178,13 +178,11 @@ class CloudResolver implements LoggerAwareInterface
             true
         );
 
-        switch ($statusCode) {
-            case 200:
-                return $content;
-
-            default:
-                throw $this->createUnknownResponseException($statusCode, $content);
+        if (200 === $statusCode) {
+            return $content;
         }
+
+        throw $this->createUnknownResponseException($statusCode, $content);
     }
 
     private function createUnknownResponseException($statusCode, $responseBody, $requestBody = null): CloudException

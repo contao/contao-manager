@@ -142,7 +142,7 @@ class SelfUpdate
     /**
      * Updates the current Phar to the latest version available.
      *
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function update(): bool
     {
@@ -190,10 +190,10 @@ class SelfUpdate
         $latestVersion = $this->managerConfig->get('latest_version');
 
         if (
-            !$this->isDev()
+            null !== $latestVersion
             && null !== $lastUpdate
-            && null !== $latestVersion
             && false !== ($lastUpdate = strtotime($lastUpdate))
+            && !$this->isDev()
             && $lastUpdate <= time()
             && $lastUpdate > strtotime('-1 hour')
         ) {

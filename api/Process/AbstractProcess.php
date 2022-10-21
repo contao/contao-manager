@@ -28,16 +28,16 @@ abstract class AbstractProcess
      */
     public function __construct(string $id, string $workDir)
     {
-        $workDir = realpath(rtrim($workDir, '/'));
+        $dir = realpath(rtrim($workDir, '/'));
 
-        if (false === $workDir) {
+        if (false === $dir) {
             throw new \InvalidArgumentException(sprintf('Working directory "%s" does not exist.', $workDir));
         }
 
-        $this->setFile = $workDir.'/'.$id.'.set.json';
-        $this->getFile = $workDir.'/'.$id.'.get.json';
-        $this->inputFile = $workDir.'/'.$id.'.in.log';
-        $this->outputFile = $workDir.'/'.$id.'.out.log';
+        $this->setFile = $dir.'/'.$id.'.set.json';
+        $this->getFile = $dir.'/'.$id.'.get.json';
+        $this->inputFile = $dir.'/'.$id.'.in.log';
+        $this->outputFile = $dir.'/'.$id.'.out.log';
     }
 
     /**

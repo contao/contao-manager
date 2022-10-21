@@ -51,7 +51,7 @@ class SecurityListener implements EventSubscriberInterface
      */
     public function onKernelResponse(ResponseEvent $event): void
     {
-        if (!$event->isMasterRequest() || $this->jwtManager->hasResponseToken($event->getResponse())) {
+        if (!$event->isMainRequest() || $this->jwtManager->hasResponseToken($event->getResponse())) {
             return;
         }
 

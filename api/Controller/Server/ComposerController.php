@@ -114,20 +114,18 @@ class ComposerController
         }
     }
 
-    private function validateLockFile(array &$result): bool
+    private function validateLockFile(array &$result): void
     {
         try {
             $locker = $this->environment->getComposer()->getLocker();
 
-            if ($locker && $locker->isLocked()) {
+            if ($locker->isLocked()) {
                 $result['lock']['found'] = true;
 
                 if ($locker->isFresh()) {
                     $result['lock']['fresh'] = true;
                 }
             }
-
-            return true;
         } catch (ParsingException $e) {
             $result['json']['valid'] = false;
             $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage().' '.$e->getDetails()]);
@@ -135,7 +133,5 @@ class ComposerController
             $result['json']['valid'] = false;
             $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage()]);
         }
-
-        return false;
     }
 }

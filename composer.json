@@ -69,6 +69,6 @@
     },
     "scripts": {
         "phing": "@php tools/phing/vendor/bin/phing",
-        "cs-fixer": "@php tools/ecs/vendor/bin/ecs check api public ecs.php --config ecs.php --fix --ansi"
+        "cs-fixer": "@php tools/ecs/vendor/bin/ecs check api public --config tools/ecs/config.php --fix --ansi"
     }
 }

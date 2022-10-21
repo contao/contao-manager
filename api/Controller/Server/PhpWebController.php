@@ -51,8 +51,6 @@ class PhpWebController
 
     /**
      * Checks system integrity and returns problem if found.
-     *
-     * @return array|null
      */
     private function runIntegrityChecks(): ?array
     {

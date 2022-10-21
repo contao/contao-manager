@@ -208,11 +208,11 @@ CODE
         $routes->import(__DIR__.'/Controller', '/api', 'annotation');
     }
 
-    protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader): void
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
-        $loader->load(__DIR__.'/Resources/config/config_'.$c->getParameter('kernel.environment').'.yml');
+        $loader->load(__DIR__.'/Resources/config/config_'.$container->getParameter('kernel.environment').'.yml');
 
-        $c->registerForAutoconfiguration(TaskInterface::class)
+        $container->registerForAutoconfiguration(TaskInterface::class)
             ->addTag('app.task')
             ->addTag('monolog.logger', ['channel' => 'tasks'])
         ;

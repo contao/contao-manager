@@ -58,7 +58,7 @@ class User implements UserInterface
         return null;
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }

@@ -30,7 +30,7 @@ class MemoryLimitCheck extends AbstractIntegrityCheck
 
     private function hasEnoughMemory(): bool
     {
-        $memoryLimit = (string) trim(\ini_get('memory_limit'));
+        $memoryLimit = trim((string) \ini_get('memory_limit'));
 
         if ('-1' === $memoryLimit) {
             return true;

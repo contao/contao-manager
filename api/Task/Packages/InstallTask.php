@@ -18,7 +18,6 @@ use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Process\ContaoConsole;
-use Contao\ManagerApi\System\ServerInfo;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\Composer\CloudOperation;
 use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
@@ -43,9 +42,9 @@ class InstallTask extends AbstractPackagesTask
      */
     private $cloudResolver;
 
-    public function __construct(ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, ServerInfo $serverInfo, Filesystem $filesystem, Translator $translator)
+    public function __construct(ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, Filesystem $filesystem, Translator $translator)
     {
-        parent::__construct($environment, $serverInfo, $filesystem, $translator);
+        parent::__construct($environment, $filesystem, $translator);
 
         $this->contaoConsole = $contaoConsole;
         $this->processFactory = $processFactory;

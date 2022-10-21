@@ -78,10 +78,11 @@ class ContaoApi
 
     /**
      * @param string|array $arguments
-     * @return mixed
      *
      * @throws ParsingException
      * @throws ProcessFailedException
+     *
+     * @return mixed
      */
     public function runCommand($arguments, bool $parseJson = false)
     {

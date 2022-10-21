@@ -13,12 +13,11 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller\Config;
 
 use Contao\ManagerApi\Config\AbstractConfig;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class AbstractConfigController extends Controller
+abstract class AbstractConfigController
 {
     /**
      * @var AbstractConfig
