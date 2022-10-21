@@ -273,9 +273,9 @@ class SelfUpdate
      */
     private function install(string $tempFile, string $phar): void
     {
-        if ($this->isWindows()) {
+        if (\defined('PHP_WINDOWS_VERSION_BUILD')) {
             $this->filesystem->copy($tempFile, $phar, true);
-            @unlink($tempFile);
+            $this->filesystem->remove($tempFile);
             return;
         }
 
@@ -296,13 +296,5 @@ class SelfUpdate
         }
 
         return [$filename, $extension];
-    }
-
-    /**
-     * Returns whether the host machine is running a Windows OS
-     */
-    private function isWindows(): bool
-    {
-        return \defined('PHP_WINDOWS_VERSION_BUILD');
     }
 }
