@@ -20,7 +20,7 @@ class ContaoManagerDowngrade
         if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI']))
             && (!isset($_SERVER['argv'][1]) || 'downgrade' !== $_SERVER['argv'][1])
         ) {
-            echo 'You are using PHP '.phpversion()." but you need least PHP 7.1.3 to run the Contao Manager.\n";
+            echo 'You are using PHP '.phpversion()." but you need least PHP 7.2.5 to run the Contao Manager.\n";
             echo 'Run "'.$_SERVER['argv'][0]." downgrade\" to downgrade to a PHP 5 compatible version.\n";
             exit;
         }
@@ -39,7 +39,6 @@ class ContaoManagerDowngrade
         }
 
         if (function_exists('opcache_reset')) {
-            /** @noinspection PhpComposerExtensionStubsInspection */
             opcache_reset();
         }
 
@@ -342,6 +341,6 @@ class NoProxyPattern
     }
 }
 
-if (PHP_VERSION_ID < 70103) {
+if (PHP_VERSION_ID < 70205) {
     ContaoManagerDowngrade::run();
 }

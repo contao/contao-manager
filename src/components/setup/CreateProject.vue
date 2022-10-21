@@ -105,18 +105,10 @@ export default {
                 versions.push({
                     value: '4.9',
                     label: `Contao 4.9 (${this.$t('ui.setup.create-project.ltsTitle')})`,
-                    disabled: this.phpVersionId < 70200 || !this.isWeb,
+                    disabled: !this.isWeb,
                     description: this.$t('ui.setup.create-project.pltsText', { year: '2023' }),
-                    problem: this.phpVersionId < 70200 ? this.$t('ui.setup.create-project.requiresPHP', { version: '7.2.0', current: this.phpVersion }) : this.$t('ui.setup.create-project.requiresDocroot', { folder: 'web', }),
+                    problem: this.$t('ui.setup.create-project.requiresDocroot', { folder: 'web', }),
                 });
-
-                if (this.phpVersionId < 70200) {
-                    versions.push({
-                        value: '4.4',
-                        label: 'Contao 4.4',
-                        disabled: false,
-                    });
-                }
 
                 return versions;
             },

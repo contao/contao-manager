@@ -10,7 +10,7 @@ with this repository if you want to help with development of the app.
 
 ## System requirements
 
-- PHP >= 5.5.9 or PHP 7.*
+- PHP >= 7.2.5
 - PHP Intl extension
 - PHP OpenSSL extension
 - *allow_url_fopen* must be enabled in PHP
