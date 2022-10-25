@@ -273,6 +273,12 @@ class SelfUpdate
      */
     private function install(string $tempFile, string $phar): void
     {
+        if (\defined('PHP_WINDOWS_VERSION_BUILD')) {
+            $this->filesystem->copy($tempFile, $phar, true);
+            $this->filesystem->remove($tempFile);
+            return;
+        }
+
         $this->filesystem->rename($tempFile, $phar, true);
     }
 
