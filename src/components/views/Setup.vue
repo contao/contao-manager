@@ -34,7 +34,7 @@
 
 
             <div class="view-setup__funding">
-                <figure><img src="../../../node_modules/contao-package-list/src/assets/images/funding.svg" width="80" height="80" alt=""></figure>
+                <figure><img src="~contao-package-list/src/assets/images/funding.svg" width="80" height="80" alt=""></figure>
                 <div>
                     <p v-for="(line, i) in $t('ui.setup.funding').split('\n')" :key="i">{{ line }}</p>
                     <p><a class="view-setup__funding-link widget-button widget-button--small widget-button--funding widget-button--link" href="https://to.contao.org/donate" target="_blank">{{ $t('ui.setup.fundingLink') }}</a></p>
@@ -59,21 +59,21 @@
 </template>
 
 <script>
-    import views from '../../router/views';
-    import { mapState } from 'vuex';
+import views from '../../router/views';
+import { mapState } from 'vuex';
 
-    import BoxedLayout from '../layouts/Boxed';
-    import DocumentRoot from '../setup/DocumentRoot';
-    import CreateProject from '../setup/CreateProject';
-    import DatabaseConnection from '../setup/DatabaseConnection';
-    import BackendUser from '../setup/BackendUser';
+import BoxedLayout from '../layouts/Boxed';
+import DocumentRoot from '../setup/DocumentRoot';
+import CreateProject from '../setup/CreateProject';
+import DatabaseConnection from '../setup/DatabaseConnection';
+import BackendUser from '../setup/BackendUser';
 
-    import DocumentRootIcon from '../../assets/images/document-root.svg';
-    import CreateProjectIcon from '../../assets/images/create-project.svg';
-    import DatabaseIcon from '../../assets/images/database.svg';
-    import UserIcon from '../../assets/images/user.svg';
+import DocumentRootIcon from '../../assets/images/document-root.svg';
+import CreateProjectIcon from '../../assets/images/create-project.svg';
+import DatabaseIcon from '../../assets/images/database.svg';
+import UserIcon from '../../assets/images/user.svg';
 
-    export default {
+export default {
         components: { BoxedLayout, DocumentRoot, CreateProject, DatabaseConnection, BackendUser },
 
         computed: {

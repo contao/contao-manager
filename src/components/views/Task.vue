@@ -41,23 +41,26 @@
             v-if="hasTask"
         />
 
-        <i18n path="ui.task.sponsor" tag="div" class="view-task__sponsor" v-if="currentTask.sponsor">
-            <template #sponsor><br><a :href="currentTask.sponsor.link" target="_blank" rel="noreferrer noopener">{{ currentTask.sponsor.name }}</a></template>
-        </i18n>
+        <div class="view-task__sponsor" v-if="currentTask.sponsor">
+            <i18n path="ui.task.sponsor" :tag="false">
+                <template #sponsor><br><a :href="currentTask.sponsor.link" target="_blank" rel="noreferrer noopener">{{ currentTask.sponsor.name }}</a></template>
+            </i18n>
+            <a href="https://to.contao.org/donate" target="_blank" class="view-task__donate"><img src="~contao-package-list/src/assets/images/funding.svg" alt="" width="20" height="20"></a>
+        </div>
     </boxed-layout>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-    import task from '../../mixins/task';
+import task from '../../mixins/task';
 
-    import BoxedLayout from '../layouts/Boxed';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import Console from '../fragments/Console';
-    import Checkbox from '../widgets/Checkbox';
+import BoxedLayout from '../layouts/Boxed';
+import Loader from 'contao-package-list/src/components/fragments/Loader';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import Console from '../fragments/Console';
+import Checkbox from '../widgets/Checkbox';
 
-    export default {
+export default {
         name: 'TaskView',
         mixins: [task],
         components: { BoxedLayout, Loader, LoadingButton, Console, Checkbox },
@@ -254,6 +257,13 @@ import { mapGetters, mapState } from 'vuex';
                     display: none;
                 }
             }
+        }
+
+        &__donate {
+            position: relative;
+            top: 5px;
+            margin-left: .5em;
+            line-height: 0;
         }
     }
 </style>
