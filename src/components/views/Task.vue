@@ -45,7 +45,7 @@
             <i18n path="ui.task.sponsor" :tag="false">
                 <template #sponsor><br><a :href="currentTask.sponsor.link" target="_blank" rel="noreferrer noopener">{{ currentTask.sponsor.name }}</a></template>
             </i18n>
-            <a href="https://to.contao.org/donate" target="_blank" class="view-task__donate"><img src="~contao-package-list/src/assets/images/funding.svg" alt="" width="20" height="20"></a>
+            <a href="https://to.contao.org/donate" target="_blank" rel="noreferrer noopener" class="view-task__donate"><img src="~contao-package-list/src/assets/images/funding.svg" alt="" width="20" height="20"></a>
         </div>
     </boxed-layout>
 </template>
