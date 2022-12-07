@@ -219,7 +219,7 @@ class UpdateTask extends AbstractPackagesTask
 
                 $versionParser = new VersionParser();
                 $constraint = $versionParser->parseConstraints($version);
-                $isContao5 = $constraint->matches(new Constraint('>', '4.13.9999'));
+                $isContao5 = $constraint->matches(new Constraint('>=', '5@dev'));
 
                 // Patch composer.json to make sure we have a valid public-dir and install scripts
                 if ($isContao5) {
