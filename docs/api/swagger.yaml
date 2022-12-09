@@ -966,11 +966,11 @@ paths:
                 501:
                     description: If the current Contao version does not support locking the install tool.
         delete:
-            summary: Unlock the instal tool
+            summary: Unlock the install tool
             tags: [Contao API]
             responses:
                 200:
-                    description: Unlock the instal tool
+                    description: Unlock the install tool
                     content:
                         application/json:
                             schema:
