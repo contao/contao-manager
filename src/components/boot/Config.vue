@@ -45,15 +45,15 @@
 </template>
 
 <script>
-    import boot from '../../mixins/boot';
+import boot from '../../mixins/boot';
 
-    import BootCheck from '../fragments/BootCheck';
-    import BoxedLayout from '../layouts/Boxed';
-    import TextField from '../widgets/TextField';
-    import Checkbox from '../widgets/Checkbox';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import BootCheck from '../fragments/BootCheck';
+import BoxedLayout from '../layouts/Boxed';
+import TextField from '../widgets/TextField';
+import Checkbox from '../widgets/Checkbox';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
-    export default {
+export default {
         mixins: [boot],
         components: { BootCheck, BoxedLayout, TextField, Checkbox, LoadingButton },
 
@@ -99,7 +99,7 @@
                 this.$emit('view', 'Config');
             },
 
-            save() {
+            async save() {
                 this.processing = true;
                 this.error = '';
 
@@ -108,15 +108,16 @@
                     cloud: this.cloud,
                 };
 
-                this.$store.dispatch('server/config/set', config).then(() => {
+                try {
+                    await this.$store.dispatch('server/config/set', config);
                     window.location.reload(true);
-                }).catch((problem) => {
-                    if (problem.status === 400 && problem.detail) {
-                        this.error = problem.detail;
+                } catch (response) {
+                    if (response.body.status === 400 && response.body.detail) {
+                        this.error = response.body.detail;
                     }
 
                     this.processing = false;
-                });
+                }
             },
 
             cancel() {

@@ -100,11 +100,15 @@ class PhpExecutableFinder
             return $output;
         } catch (RuntimeException $e) {
             // Do not log every attempt to find a PHP binary (exit code 127 = Command not found)
-            if (null !== $this->logger && 127 !== $process->getExitCode()) {
+            if (127 === $process->getExitCode()) {
+                return null;
+            }
+
+            if (null !== $this->logger) {
                 $this->logger->error($e->getMessage(), ['exception' => $e]);
             }
 
-            return null;
+            throw $e;
         }
     }
 
@@ -183,7 +187,11 @@ class PhpExecutableFinder
                 continue;
             }
 
-            $info = $this->getServerInfo($path);
+            try {
+                $info = $this->getServerInfo($path);
+            } catch (RuntimeException $e) {
+                continue;
+            }
 
             if (!\is_array($info)) {
                 continue;
@@ -197,8 +205,8 @@ class PhpExecutableFinder
             $vCli = vsprintf('%s.%s', explode('.', $info['version']));
 
             if (
-                null === $fallback || ('cli' !== $sapi && 'cli' === $info['sapi'])
-                && version_compare($vWeb, $vCli, 'eq')
+                null === $fallback
+                || ('cli' !== $sapi && 'cli' === $info['sapi'] && version_compare($vWeb, $vCli, 'eq'))
             ) {
                 $fallback = $path;
                 $sapi = $info['sapi'];

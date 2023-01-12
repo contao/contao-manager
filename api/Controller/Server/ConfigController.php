@@ -22,6 +22,7 @@ use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -93,7 +94,11 @@ class ConfigController
 
     private function validatePhpCli($phpCli): ?string
     {
-        $info = $this->serverInfo->getPhpExecutableFinder()->getServerInfo($phpCli);
+        try {
+            $info = $this->serverInfo->getPhpExecutableFinder()->getServerInfo($phpCli);
+        } catch (RuntimeException $e) {
+            return $this->translator->trans('config.php_cli.error')."\n\n".$e->getMessage();
+        }
 
         if (null === $info) {
             return $this->translator->trans('config.php_cli.not_found');
