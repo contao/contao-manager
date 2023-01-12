@@ -121,15 +121,9 @@ class ConsoleProcessFactory implements LoggerAwareInterface
     /**
      * Creates a foreground process for the Contao console.
      */
-    public function createContaoConsoleProcess(array $arguments, bool $debug = false): Process
+    public function createContaoConsoleProcess(array $arguments): Process
     {
         array_unshift($arguments, $this->getContaoConsolePath());
-
-        if ($debug) {
-            array_unshift($arguments, '-ddisplay_errors=1');
-            array_unshift($arguments, '-ddisplay_startup_errors=1');
-            array_unshift($arguments, '-derror_reporting=-1');
-        }
 
         return $this->createForegroundProcess($arguments);
     }
@@ -253,6 +247,8 @@ class ConsoleProcessFactory implements LoggerAwareInterface
         $defaultArgs[] = '-dmax_execution_time=0';
         $defaultArgs[] = '-dmemory_limit=-1';
         $defaultArgs[] = '-ddisplay_errors=0';
+        $defaultArgs[] = '-ddisplay_startup_errors=0';
+        $defaultArgs[] = '-derror_reporting=0';
         $defaultArgs[] = '-dallow_url_fopen=1';
         $defaultArgs[] = '-ddisable_functions=';
         $defaultArgs[] = '-ddate.timezone='.@date_default_timezone_get();
