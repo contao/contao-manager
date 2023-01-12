@@ -53,7 +53,7 @@
                     <loading-button class="database-migration__action" color="primary" :loading="executing" :disabled="closing" @click="execute">{{ $t('ui.migrate.execute') }}</loading-button>
                 </div>
                 <div class="database-migration__actions" v-if="hasDeletes">
-                    <checkbox name="autoclose" :label="$t('ui.migrate.withDeletes')" :disabled="executing" v-model="withDeletes"/>
+                    <checkbox name="withDeletes" :label="$t('ui.migrate.withDeletes')" :disabled="executing" v-model="withDeletes"/>
                 </div>
             </template>
 
@@ -72,16 +72,16 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
-    import views from '../../router/views';
+import { mapGetters, mapState } from 'vuex';
+import views from '../../router/views';
 
-    import BoxedLayout from '../layouts/Boxed';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import Console from '../fragments/Console';
-    import Checkbox from '../widgets/Checkbox';
+import BoxedLayout from '../layouts/Boxed';
+import Loader from 'contao-package-list/src/components/fragments/Loader';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import Console from '../fragments/Console';
+import Checkbox from '../widgets/Checkbox';
 
-    export default {
+export default {
         components: { BoxedLayout, Loader, LoadingButton, Console, Checkbox },
 
         data: () => ({
@@ -90,7 +90,7 @@
             changes: null,
             hasDeletes: false,
             hash: null,
-            withDeletes: true,
+            withDeletes: false,
 
             showConsole: false,
             previousResult: true,
