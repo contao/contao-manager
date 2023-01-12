@@ -39,6 +39,7 @@ de:
         php_cli:
             not_found: 'Der Pfad enthält kein gültiges PHP-Binary.'
             incompatible: 'Dieses Binary beinhaltet PHP {cli}, der Webprozess verwendet jedoch PHP {web}.'
+            error: 'Fehler beim validieren des PHP-Binary.'
         cloud:
             platform: 'Die Plattform darf in der composer.json nicht konfiguriert sein.'
             cache: 'Cache-Einstellungen dürfen in der composer.json nicht konfiguriert sein.'

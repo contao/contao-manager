@@ -227,7 +227,7 @@
     "ui.task.failedDescription1": "バックグラウンドで処理を実行しようとするときに何か問題がありました。",
     "ui.task.failedDescription2": "これが再度起きる場合は、サーバーはサポートされていないかもしれません。",
     "ui.task.reportProblem": "問題を報告",
-    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
+    "ui.task.sponsor": "{sponsor}が後援のComposer Cloud",
     "ui.task.buttonAudit": "データベースを更新",
     "ui.task.buttonClose": "閉じる",
     "ui.task.buttonConfirm": "確認して閉じる",
@@ -398,7 +398,7 @@
     "ui.package.updateLatest": "最新のバージョン",
     "ui.package.updateAvailable": "バージョン{version}を利用可能",
     "ui.package.updateUnknown": "不明なバージョン",
-    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
+    "ui.package.updateConstraint": "バージョンの制約外に利用できる新しいバージョンがあります。",
 
     "ui.cloudStatus.headline": "Composerリゾルバークラウド",
     "ui.cloudStatus.version": "バージョン{version}",

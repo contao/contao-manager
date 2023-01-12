@@ -358,7 +358,7 @@
     "ui.packages.uploadIncomplete": "Diese Datei wurde nicht vollständig hochgeladen. Bitte entferne sie und versuchen es noch einmal.",
     "ui.packages.uploadDuplicate": "Diese Datei scheint mehrfach hochgeladen worden zu sein. Bitte entferne die Duplikate.",
     "ui.packages.uploadInstalled": "Diese Datei ist bereits installiert. Bitte entferne die Duplikate.",
-    "ui.packages.uploadUnsupported": "Uploads werden in deiner Installation nicht unterstützt. Bitte aktualisiere die Abhängigkeiten.",
+    "ui.packages.uploadUnsupported": "Uploads werden in deiner Installation nicht unterstützt. Stelle sicher dass die PHP ZIP-Erweiterung installiert ist und aktualisiere die Abhängigkeiten.",
     "ui.packages.changesMessage": "Du hast eine unbestätigte Änderung. | Du hast {count} unbestätigte Änderungen.",
     "ui.packages.changesDryrun": "Testlauf",
     "ui.packages.changesApply": "Änderungen anwenden",

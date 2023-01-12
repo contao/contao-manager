@@ -227,7 +227,7 @@
     "ui.task.failedDescription1": "İşlemler arka planda yürütülmeye çalışılırken bir sorun çıktı.",
     "ui.task.failedDescription2": "Bu sorun yeniden yaşanırsa sunucunuz desteklenmiyor olabilir.",
     "ui.task.reportProblem": "Sorun bildir",
-    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
+    "ui.task.sponsor": "Composer Cloud {sponsor} tarafından destekleniyor",
     "ui.task.buttonAudit": "Veritabanını güncelle",
     "ui.task.buttonClose": "Kapat",
     "ui.task.buttonConfirm": "Onaylayıp kapat",
@@ -398,7 +398,7 @@
     "ui.package.updateLatest": "güncel sürüm",
     "ui.package.updateAvailable": "{version} yayınlanmış",
     "ui.package.updateUnknown": "sürüm bilinmiyor",
-    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
+    "ui.package.updateConstraint": "Sürüm kısıtlamanızın dışında yeni bir sürüm yayınlanmış.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "{version} sürümü",

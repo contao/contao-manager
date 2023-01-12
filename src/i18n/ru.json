@@ -227,7 +227,7 @@
     "ui.task.failedDescription1": "Что-то пошло не так при попытке выполнения операций в фоновом режиме.",
     "ui.task.failedDescription2": "Если это событие произойдет снова, ваш сервер может не поддерживаться.",
     "ui.task.reportProblem": "Сообщить о проблеме",
-    "ui.task.sponsor": "Composer Cloud sponsored by {sponsor}",
+    "ui.task.sponsor": "Composer Cloud спонсируется {sponsor}",
     "ui.task.buttonAudit": "Обновить базу данных",
     "ui.task.buttonClose": "Закрыть",
     "ui.task.buttonConfirm": "Подтвердить и закрыть",
@@ -398,7 +398,7 @@
     "ui.package.updateLatest": "последняя версия",
     "ui.package.updateAvailable": "{version} доступна",
     "ui.package.updateUnknown": "неизвестная версия",
-    "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
+    "ui.package.updateConstraint": "Доступна более новая версия, выходящая за рамки вашего ограничения версии.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Версия {version}",
