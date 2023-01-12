@@ -67,13 +67,13 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 
-    import TextField from '../widgets/TextField';
-    import SelectMenu from '../widgets/SelectMenu';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import TextField from '../widgets/TextField';
+import SelectMenu from '../widgets/SelectMenu';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
-    export default {
+export default {
         components: { TextField, SelectMenu, LoadingButton },
 
         data: () => ({
@@ -97,7 +97,7 @@
             currentServerVersion: vm => vm.serverVersions.find(v => v.value === vm.serverVersion)?.label || vm.serverVersion,
             serverVersions: (vm) => ([
                 {
-                    value: '8.0',
+                    value: '8.0.0',
                     label: 'MySQL 8.0+',
                 },
                 {
@@ -105,11 +105,11 @@
                     label: 'MySQL 5.7.9+',
                 },
                 {
-                    value: 'mariadb-10.2.7',
+                    value: '10.2.7-MariaDB',
                     label: 'MariaDB 10.2.7+',
                 },
                 {
-                    value: '5.1',
+                    value: '5.1.0',
                     label: vm.$t('ui.setup.database-connection.oldVersion'),
                 },
             ]),
