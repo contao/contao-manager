@@ -358,7 +358,7 @@
     "ui.packages.uploadIncomplete": "This file was not uploaded completely. Please remove it and try again.",
     "ui.packages.uploadDuplicate": "This file seems to be uploaded multiple times. Please remove the duplicates.",
     "ui.packages.uploadInstalled": "This file is already installed. Please remove the duplicates.",
-    "ui.packages.uploadUnsupported": "Uploads are not supported in your installation. Please make sure to update your dependencies.",
+    "ui.packages.uploadUnsupported": "Uploads are not supported in your installation. Please make sure that the PHP ZIP extension is installed and update your dependencies.",
     "ui.packages.changesMessage": "You have one unconfirmed change. | You have {count} unconfirmed changes.",
     "ui.packages.changesDryrun": "Dry Run",
     "ui.packages.changesApply": "Apply Changes",
