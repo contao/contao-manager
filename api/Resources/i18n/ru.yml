@@ -39,6 +39,7 @@ ru:
         php_cli:
             not_found: 'Путь не содержит верный бинарный файл PHP.'
             incompatible: 'Двоичный файл PHP версии {cli}, а веб-сервер версии {web}.'
+            error: 'Ошибка проверки двоичного файла PHP.'
         cloud:
             platform: 'Платформа не должна быть настроена в composer.json.'
             cache: 'Свойства кеша не должны быть настроены в composer.json.'
