@@ -39,6 +39,7 @@ ja:
         php_cli:
             not_found: 'このパスに有効なPHPの実行ファイルがありません。'
             incompatible: 'この実行ファイルはPHPのバージョンは{cli}ですが、ウェブサーバーでのバージョンは{web}です。'
+            error: 'PHPの実行ファイルの有効性確認にエラーがあります。'
         cloud:
             platform: 'プラットフォームはcomposer.jsonに構成してはなりません。'
             cache: 'キャッシュの属性をcomposer.jsonに構成してはなりません。'
