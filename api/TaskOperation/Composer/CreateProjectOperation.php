@@ -24,7 +24,7 @@ class CreateProjectOperation extends AbstractInlineOperation
     /**
      * @var array
      */
-    private static $supportedVersions = ['4.4', '4.9', '4.13', '5.0'];
+    private static $supportedVersions = ['4.4', '4.9', '4.13', '5.1'];
 
     /**
      * @var Environment
@@ -62,6 +62,7 @@ class CreateProjectOperation extends AbstractInlineOperation
             throw new \InvalidArgumentException('Unsupported Contao version');
         }
 
+        /** @noinspection ProjectDirParameter */
         if ($this->kernel->getProjectDir() === $this->kernel->getPublicDir()) {
             throw new \RuntimeException('Cannot install without a public directory.');
         }

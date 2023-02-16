@@ -58,15 +58,15 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 
-    import views from '../../router/views';
+import views from '../../router/views';
 
-    import SelectMenu from '../widgets/SelectMenu';
-    import Checkbox from '../widgets/Checkbox';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import SelectMenu from '../widgets/SelectMenu';
+import Checkbox from '../widgets/Checkbox';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
-    export default {
+export default {
         components: { SelectMenu, Checkbox, LoadingButton },
 
         data: () => ({
@@ -87,10 +87,10 @@
                 const versions = [];
 
                 versions.push({
-                    value: '5.0',
-                    label: `Contao 5.0 (${this.$t('ui.setup.create-project.latestTitle')})`,
+                    value: '5.1',
+                    label: `Contao 5.1 (${this.$t('ui.setup.create-project.latestTitle')})`,
                     disabled: this.phpVersionId < 80100,
-                    description: this.$t('ui.setup.create-project.latestText', { year: '2023' }),
+                    description: this.$t('ui.setup.create-project.latestQ3', { year: '2023' }),
                     problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.1.0', current: this.phpVersion }),
                 });
 
