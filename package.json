@@ -5,7 +5,7 @@
   "private": true,
   "homepage": "https://github.com/contao/contao-manager",
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
