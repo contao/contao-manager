@@ -16,6 +16,7 @@
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showAppDev"><a href="/app_dev.php/" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showPreview"><a href="/preview.php/" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showInstallTool"><a href="/contao/install" target="_blank">{{ $t('ui.navigation.installTool') }}</a></li>
+                    <router-link tag="li" :to="routes.logViewer" class="navigation__item navigation__item--sub"><a>{{ $t('ui.navigation.logViewer') }}</a></router-link>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="phpinfo">{{ $t('ui.navigation.phpinfo') }}</a></li>
                 </ul>
             </li>

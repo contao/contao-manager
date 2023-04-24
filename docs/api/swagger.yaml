@@ -1257,6 +1257,94 @@ paths:
                 400:
                     description: If no constraint is given.
 
+    /api/logs:
+        get:
+            summary: Gets a list of files in the /var/logs directory
+            tags: [Logs]
+            responses:
+                200:
+                    description: The list of log files
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/LogFile'
+
+    /api/logs/{file}:
+        get:
+            summary: Get the content of a log file
+            tags: [Logs]
+            parameters:
+                -   name: file
+                    in: path
+                    description: The filename to handle.
+                    required: true
+                    schema:
+                        type: string
+                -   name: limit
+                    in: query
+                    description: Number of lines to read from the file as JSON.
+                    required: false
+                    schema:
+                        type: integer
+                -   name: offset
+                    in: query
+                    description: Number of lines to skip when reading the file as JSON.
+                    required: false
+                    schema:
+                        type: integer
+                -   name: channels
+                    in: query
+                    description: Comma-separated list of channels to filter the JSON result against.
+                    required: false
+                    schema:
+                        type: string
+                -   name: levels
+                    in: query
+                    description: Comma-separated list of log levels to filter the JSON result against.
+                    required: false
+                    schema:
+                        type: string
+            responses:
+                200:
+                    description: The log file content
+                    content:
+                        text/plain:
+                            schema:
+                                description: The plain file content
+                        application/json:
+                            schema:
+                                allOf:
+                                    -   $ref: '#/components/schemas/LogFile'
+                                    -   type: object
+                                        properties:
+                                            content:
+                                                type: array
+                                                items:
+                                                    type: object
+                                                    oneOf:
+                                                        -   $ref: '#/components/schemas/LogRecord'
+                                                        -   type: string
+                                                            description: If the line could not be parsed, it is returned as plain text
+
+                404:
+                    description: If the file was not found
+
+        delete:
+            summary: Deletes a log file
+            tags: [ Logs ]
+            responses:
+                204:
+                    description: If the log file was successfully deleted.
+                400:
+                    description: If the file name is invalid
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
+                404:
+                    description: If the log file was not found.
 components:
     schemas:
         User:
@@ -1766,6 +1854,43 @@ components:
                                       type: string
                 abandoned:
                     type: boolean
+
+        LogFile:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: The file name
+                size:
+                    type: integer
+                    description: The file size in bytes
+                mtime:
+                    type: string
+                    description: Last modification date of the file
+                lines:
+                    type: integer
+                    description: Number of lines in the log file
+
+        LogRecord:
+            type: object
+            description: A monolog record if the line can be parsed (see http://seldaek.github.io/monolog/doc/message-structure.html).
+            properties:
+                datetime:
+                    type: string
+                channel:
+                    type: string
+                level:
+                    type: string
+                message:
+                    type: string
+                context:
+                    oneOf:
+                        -   type: object
+                        -   type: array
+                extra:
+                    oneOf:
+                        -   type: object
+                        -   type: array
 
         ConstraintValidation:
             type: object

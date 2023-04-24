@@ -7,6 +7,7 @@ import Discover from '../components/routes/Discover';
 import PackagesList from '../components/routes/PackageList';
 import OAuth from '../components/routes/OAuth';
 import Maintenance from '../components/routes/Maintenance';
+import LogViewer from '../components/routes/LogViewer';
 
 Vue.use(Router);
 
@@ -32,6 +33,11 @@ const router = new Router({
             name: routes.maintenance.name,
             path: '/maintenance',
             component: Maintenance,
+        },
+        {
+            name: routes.logViewer.name,
+            path: '/logs',
+            component: LogViewer,
         },
         { path: '*', redirect: '/discover' },
     ],

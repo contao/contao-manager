@@ -293,6 +293,7 @@
     "ui.navigation.installTool": "Install Tool",
     "ui.navigation.backend": "Contao Backend",
     "ui.navigation.debug": "Contao Debug Mode",
+    "ui.navigation.logViewer": "Log Viewer",
     "ui.navigation.phpinfo": "PHP Information",
     "ui.navigation.phpinfoLoading": "Loading PHP Information…",
     "ui.navigation.maintenance": "Maintenance",
@@ -412,5 +413,17 @@
     "ui.cloudStatus.long": "ca. {minutes} min {seconds} sec",
     "ui.cloudStatus.error": "Unable to fetch the status of the Composer Resolver Cloud. It might be down for maintenance or experience issues.",
     "ui.cloudStatus.button": "Cloud Status",
-    "ui.cloudStatus.refresh": "Refresh Cloud Status"
+    "ui.cloudStatus.refresh": "Refresh Cloud Status",
+
+    "ui.log-viewer.empty": "There are no log files on your server.",
+    "ui.log-viewer.file": "Log file",
+    "ui.log-viewer.channel": "Channel",
+    "ui.log-viewer.level": "Level",
+    "ui.log-viewer.timeHeader": "Time",
+    "ui.log-viewer.messageHeader": "Message",
+    "ui.log-viewer.showContext": "Show Context",
+    "ui.log-viewer.hideContext": "Hide Context",
+    "ui.log-viewer.showExtra": "Show Extra",
+    "ui.log-viewer.hideExtra": "Hide Extra",
+    "ui.log-viewer.more": "Load more …"
 }
