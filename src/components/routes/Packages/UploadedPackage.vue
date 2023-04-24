@@ -50,7 +50,6 @@
 
     <composer-package
         :data="pkg"
-        :version="pkg.version"
         v-else
     >
         <template #actions>

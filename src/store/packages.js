@@ -175,16 +175,16 @@ export default {
     },
 
     actions: {
-        async metadata({ state, dispatch }, name) {
+        async metadata({ state, dispatch }, data) {
+            const name = data.name;
             const metadata = await dispatch('algolia/getPackage', name, { root: true });
-            const local = state.installed[name];
 
-            if (!local) {
+            if (!data) {
                 return metadata;
             }
 
             if (!metadata) {
-                return local;
+                return data;
             }
 
             const getVersion = (packageData) => {
@@ -231,25 +231,25 @@ export default {
                 }
             }
 
-            const data = Object.assign(
+            const result = Object.assign(
                 {},
                 metadata,
                 {
-                    dependents: local.dependents,
-                    conflict: local.conflict,
-                    require: local.require,
-                    'require-dev': local['require-dev'],
+                    dependents: data.dependents,
+                    conflict: data.conflict,
+                    require: data.require,
+                    'require-dev': data['require-dev'],
                     suggest: {},
                 },
             );
 
-            if (local.suggest) {
-                Object.keys(local.suggest).forEach(k => {
-                    data.suggest[k] = metadata.suggest && metadata.suggest[k] || local.suggest[k];
+            if (data.suggest) {
+                Object.keys(data.suggest).forEach(k => {
+                    result.suggest[k] = metadata.suggest && metadata.suggest[k] || data.suggest[k];
                 });
             }
 
-            return data;
+            return result;
         },
 
         async load({ commit }) {
