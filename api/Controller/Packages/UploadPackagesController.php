@@ -113,7 +113,7 @@ class UploadPackagesController
 
             $file->move($this->environment->getUploadDir(), $id);
 
-            return $this->finishUpload($id);
+            return $this->finishUpload($id, $request->getPreferredLanguage());
         }
 
         switch ($request->request->get('phase')) {
@@ -143,7 +143,7 @@ class UploadPackagesController
             case 'finish':
                 $id = $request->request->get('session_id');
 
-                return $this->finishUpload($id);
+                return $this->finishUpload($id, $request->getPreferredLanguage());
         }
 
         throw new \RuntimeException(sprintf('Invalid chunk phase "%s"', $request->request->get('phase')));
@@ -204,7 +204,7 @@ class UploadPackagesController
         fclose($fp);
     }
 
-    private function finishUpload(string $id): JsonResponse
+    private function finishUpload(string $id, string $language = null): JsonResponse
     {
         $uploadFile = $this->uploadPath($id);
         $config = $this->config->get($id);
@@ -253,19 +253,12 @@ class UploadPackagesController
             return $this->installError($id, 'schema', $e);
         }
 
-        // The package name should always contain a slash, but the schema does not validate it yet.
-        // TODO: remove this if https://github.com/composer/composer/pull/8262 is merged
-        if (false === strpos($data['name'], '/')) {
-            $vendor = '';
-            $package = $data['name'];
-        } else {
-            [$vendor, $package] = explode('/', $data['name']);
-        }
+        [$vendor, $package] = explode('/', $data['name']);
 
         $config['success'] = true;
         $config['hash'] = sha1_file($uploadFile);
         $config['package'] = array_merge(
-            $data,
+            $this->environment->mergeMetadata($data, $language),
             [
                 'installation-source' => 'dist',
                 'dist' => [

@@ -177,6 +177,11 @@ export default {
     actions: {
         async metadata({ state, dispatch }, data) {
             const name = data.name;
+
+            if (data && !data.source && data.extra && data.extra['contao-metadata-url']) {
+                return data;
+            }
+
             const metadata = await dispatch('algolia/getPackage', name, { root: true });
 
             if (!metadata) {

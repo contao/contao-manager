@@ -21,6 +21,7 @@ use Composer\Repository\RepositoryInterface;
 use Composer\Repository\RootPackageRepository;
 use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,6 +32,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LocalPackagesController
 {
+    /**
+     * @var Environment
+     */
+    private $environment;
+
     /**
      * @var RepositoryInterface
      */
@@ -43,6 +49,8 @@ class LocalPackagesController
 
     public function __construct(Environment $environment)
     {
+        $this->environment = $environment;
+
         $composer = $environment->getComposer();
 
         $this->localRepository = $composer->getRepositoryManager()->getLocalRepository();
@@ -54,24 +62,24 @@ class LocalPackagesController
         ]);
     }
 
-    public function __invoke(string $name = null): Response
+    public function __invoke(Request $request, string $name = null): Response
     {
         if (null !== $name) {
-            return $this->getOnePackage($name);
+            return $this->getOnePackage($name, $request->getPreferredLanguage());
         }
 
         $dumper = new ArrayDumper();
         $packages = [];
 
         foreach ($this->localRepository->getPackages() as $package) {
-            $packages[$package->getName()] = $dumper->dump($package);
+            $packages[$package->getName()] = $this->environment->mergeMetadata($dumper->dump($package), $request->getPreferredLanguage());
             $packages[$package->getName()]['dependents'] = $this->getDependents($package);
         }
 
         return new JsonResponse($packages);
     }
 
-    private function getOnePackage(string $name): Response
+    private function getOnePackage(string $name, string $language = null): Response
     {
         [$package] = array_values($this->localRepository->findPackages($name));
 
@@ -81,7 +89,7 @@ class LocalPackagesController
 
         $dumper = new ArrayDumper();
 
-        $data = $dumper->dump($package);
+        $data = $this->environment->mergeMetadata($dumper->dump($package), $language);
         $data['dependents'] = $this->getDependents($package);
 
         return new JsonResponse($data);

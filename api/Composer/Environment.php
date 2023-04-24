@@ -23,6 +23,7 @@ use Composer\Repository\PlatformRepository;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ComposerConfig;
 use Contao\ManagerApi\Config\ManagerConfig;
+use Contao\ManagerApi\System\Request;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -49,6 +50,11 @@ class Environment
     private $filesystem;
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * @var Composer
      */
     private $composer;
@@ -58,12 +64,13 @@ class Environment
      */
     private $composerFs;
 
-    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, ComposerConfig $composerConfig, Filesystem $filesystem)
+    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, ComposerConfig $composerConfig, Filesystem $filesystem, Request $request)
     {
         $this->kernel = $kernel;
         $this->managerConfig = $managerConfig;
         $this->composerConfig = $composerConfig;
         $this->filesystem = $filesystem;
+        $this->request = $request;
     }
 
     /**
@@ -279,6 +286,54 @@ class Environment
         } catch (\Exception $exception) {
             return false;
         }
+    }
+
+    public function mergeMetadata(array $package, string $language = null): array
+    {
+        if (isset($package['source']) || preg_match('{https?://}', $package['dist']['url'] ?? '') || empty($package['extra']['contao-metadata-url'])) {
+            return $package;
+        }
+
+        try {
+            $headers = [];
+
+            if ($language) {
+                $headers[] = 'Accept-Language: '.$language;
+            }
+
+            if ($package['version'] ?? null) {
+                $headers[] = 'Contao-Package-Version: '.$package['version'];
+            }
+
+            $metadata = JsonFile::parseJson(
+                $this->request->getJson($package['extra']['contao-metadata-url'], $headers),
+                $package['extra']['contao-metadata-url']
+            );
+
+            if (\is_array($metadata)) {
+                // Make sure only allowed keys are preserved in metadata
+                // TODO: should validate against a custom schema
+                $metadata = array_intersect_key($metadata, array_flip([
+                    'title',
+                    'description',
+                    'homepage',
+                    'suggest',
+                    'support',
+                    'funding',
+                    'abandoned',
+                    'logo',
+                ]));
+
+                // Do not allow custom logo URLs since they could track the Contao Manager user/browser
+                if (isset($metadata['logo']) && preg_match('{https?://}i', (string) $metadata['logo'])) {
+                    unset($metadata['logo']);
+                }
+            }
+        } catch (\Exception $e) {
+            return $package;
+        }
+
+        return array_merge($package, $metadata, ['private' => true]);
     }
 
     private function normalizeRepositoryPath(string $path): string
