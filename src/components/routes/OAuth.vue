@@ -32,7 +32,13 @@
         }),
 
         computed: {
-          hostname: vm => new URL(vm.$route.query.return_url).hostname,
+            hostname () {
+                if (this.$route.query.response_type === undefined) {
+                    return this.$route.query.return_url ? new URL(this.$route.query.return_url).hostname : '???';
+                }
+
+                return this.$route.query.redirect_uri ? new URL(this.$route.query.redirect_uri).hostname : '???';
+            }
         },
 
         methods: {
@@ -115,9 +121,18 @@
                 return
             }
 
-            const redirectUri = new URL(this.$route.query.redirect_uri);
+            let error = false;
+            try {
+                const redirectUri = new URL(this.$route.query.redirect_uri);
 
-            if (redirectUri.protocol !== 'https:' && redirectUri.hostname !== 'localhost') {
+                if (redirectUri.protocol !== 'https:' && redirectUri.hostname !== 'localhost') {
+                    error = true;
+                }
+            } catch (err) {
+                error = true;
+            }
+
+            if (error) {
                 this.$store.commit('setError', {
                     title: this.$t('ui.oauth.error'),
                     detail: this.$t('ui.oauth.https'),
