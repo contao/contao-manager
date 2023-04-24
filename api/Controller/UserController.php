@@ -151,12 +151,19 @@ class UserController
 
         $clientId = $request->request->get('client_id');
         $scope = $request->request->get('scope');
+        $oneTimeToken = 'one-time' === $request->request->get('grant_type');
 
         if (!$clientId || 'admin' !== $scope) {
             throw new BadRequestHttpException('Invalid payload for OAuth token.');
         }
 
-        return new JsonResponse($this->config->createToken($username, $clientId, $scope), Response::HTTP_CREATED);
+        $token = $this->config->createToken($username, $clientId, $scope, $oneTimeToken);
+
+        if ($oneTimeToken) {
+            $token['url'] = $request->getUriForPath('/#?token='.$token['token']);
+        }
+
+        return new JsonResponse($token, Response::HTTP_CREATED);
     }
 
     /**
@@ -176,7 +183,7 @@ class UserController
     }
 
     /**
-     * Deletes a user from the configuration file.
+     * Deletes a token from the configuration file.
      *
      * @Route("/users/{username}/tokens/{id}", methods={"DELETE"})
      */

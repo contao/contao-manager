@@ -245,7 +245,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     /**
      * Creates a token for given username.
      */
-    public function createToken(string $username, string $clientId, string $scope = 'admin'): array
+    public function createToken(string $username, string $clientId, string $scope = 'admin', bool $oneTime = false): array
     {
         $this->initialize();
 
@@ -266,11 +266,18 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
             throw new \RuntimeException(sprintf('Token with ID "%s" already exist.', $id));
         }
 
-        $this->data['tokens'][$id] = [
+        $data = [
             'username' => $username,
             'client_id' => $clientId,
             'scope' => $scope,
         ];
+
+        if ($oneTime) {
+            $data['grant_type'] = 'one-time';
+            $data['expires'] = strtotime('+30 seconds');
+        }
+
+        $this->data['tokens'][$id] = $data;
 
         $this->save();
 
@@ -313,6 +320,13 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
             if (!empty($this->data)) {
                 $this->data['version'] = 2;
+                $this->save();
+            }
+        }
+
+        foreach (($this->data['tokens'] ?? []) as $id => $token) {
+            if (isset($token['expires']) && $token['expires'] < time()) {
+                unset($this->data['tokens'][$id]);
                 $this->save();
             }
         }

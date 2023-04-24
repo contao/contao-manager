@@ -20,6 +20,7 @@ security:
             guard:
                 authenticators:
                     - Contao\ManagerApi\Security\LoginAuthenticator
+                    - Contao\ManagerApi\Security\PasswordlessAuthenticator
                     - Contao\ManagerApi\Security\JwtAuthenticator
                     - Contao\ManagerApi\Security\TokenAuthenticator
                 entry_point: Contao\ManagerApi\Security\JwtAuthenticator

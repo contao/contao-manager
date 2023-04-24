@@ -78,7 +78,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     {
         $token = $this->config->findToken($credentials);
 
-        if (null === $token) {
+        if (null === $token || 'one-time' === ($token['grant_type'] ?? null)) {
             return null;
         }
 

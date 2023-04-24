@@ -2,7 +2,7 @@
 openapi: 3.0.0
 info:
     title: Contao Manager API
-    version: "1.6.0"
+    version: "1.7.0"
 
 paths:
 
@@ -20,7 +20,14 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/UserPassword'
+                            oneOf:
+                                - $ref: '#/components/schemas/UserPassword'
+                                -
+                                    type: object
+                                    properties:
+                                        token:
+                                            type: string
+                                            description: A one-time login token.
 
             responses:
                 200:
@@ -1282,6 +1289,11 @@ components:
                     description: Permission scope of the token.
                     enum:
                         - admin
+                grant_type:
+                    type: string
+                    description: Use "one-time" to generate a passwordless login token that expires in 30 seconds.
+                    enum:
+                        - one-time
 
         TokenResponse:
             type: object
@@ -1301,6 +1313,17 @@ components:
                 scope:
                     type: string
                     description: Permission scope of the token.
+                grant_type:
+                    type: string
+                    description: Grant type of the token
+                    enum:
+                        - one-time
+                expires:
+                    type: integer
+                    description: Timestamp when the one-time token expires.
+                url:
+                    type: string
+                    description: Login URL for passwordless authentication tokens.
 
         ConfigManager:
             type: object

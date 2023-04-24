@@ -51,6 +51,7 @@
     import Setup from './views/Setup';
     import Recovery from './views/Recovery';
     import Migration from './views/Migration';
+    import Vue from 'vue';
 
     export default {
         components: { Loader, Error, Task },
@@ -106,6 +107,16 @@
         },
 
         async mounted() {
+            if (this.$route.query.token) {
+                try {
+                    await Vue.http.post('api/session', { token: this.$route.query.token });
+                } catch (err) {
+                    // ignore authentication errors
+                }
+
+                this.$router.replace({ name: this.$route.name, query: null });
+            }
+
             const accountStatus = await this.$store.dispatch('auth/status');
 
             const chunks = location.pathname.split('/').filter(v => v !== '');
