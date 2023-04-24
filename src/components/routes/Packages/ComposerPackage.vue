@@ -10,9 +10,9 @@
         @close-hint="restore"
     >
         <template #additional>
-            <div class="package__version package__version--additional" v-if="packageData.version">
-                <strong :title="packageData.time ? datimFormat(packageData.time) : ''">{{ $t('ui.package.version', { version: packageData.version }) }}</strong>
-                <template v-if="packageData.update">
+            <div class="package__version package__version--additional" v-if="version || packageData.version">
+                <strong :title="packageData.time ? datimFormat(packageData.time) : ''">{{ $t('ui.package.version', { version: version || packageData.version }) }}</strong>
+                <template v-if="!version && packageData.update">
                     <div class="package__version-update package__version-update--error" v-if="!packageData.update.valid">{{ $t('ui.package.updateUnknown') }}</div>
                     <div class="package__version-update package__version-update--available" v-else-if="!packageData.update.latest">{{ $t('ui.package.updateAvailable', { version: packageData.update.version }) }}</div>
                     <div class="package__version-update package__version-update--none" v-else>
@@ -30,9 +30,9 @@
         <template #release>
             <slot name="release">
                 <package-constraint class="package__constraint" :data="data" />
-                <div class="package__version package__version--release" v-if="packageData.version">
-                    <strong :title="packageData.time ? datimFormat(packageData.time) : ''">{{ $t('ui.package.version', { version: packageData.version }) }}</strong>
-                    <template v-if="packageData.update">
+                <div class="package__version package__version--release" v-if="version || packageData.version">
+                    <strong :title="packageData.time ? datimFormat(packageData.time) : ''">{{ $t('ui.package.version', { version: version || packageData.version }) }}</strong>
+                    <template v-if="!version && packageData.update">
                         <div class="package__version-update package__version-update--error" v-if="!packageData.update.valid">{{ $t('ui.package.updateUnknown') }}</div>
                         <div class="package__version-update package__version-update--available" v-else-if="!packageData.update.latest">{{ $t('ui.package.updateAvailable', { version: packageData.update.version }) }}</div>
                         <div class="package__version-update package__version-update--none" v-else>
@@ -92,6 +92,7 @@
                 type: Object,
                 required: true,
             },
+            version: String,
             hint: String,
             uncloseableHint: Boolean,
         },
