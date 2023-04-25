@@ -120,6 +120,10 @@
             },
 
             result(name, state) {
+                if (this.currentStep) {
+                    return;
+                }
+
                 this.$set(this.status, name, state);
 
                 const keys = Object.keys(this.status);
