@@ -4716,20 +4716,20 @@
         },
         {
             "name": "terminal42/service-annotation-bundle",
-            "version": "1.1.4",
+            "version": "1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/terminal42/service-annotation-bundle.git",
-                "reference": "ae6bed637c9e7bab0edc095b2f76b7857035390a"
+                "reference": "f05105b65825d40234efb581f19088da0d843f6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/terminal42/service-annotation-bundle/zipball/ae6bed637c9e7bab0edc095b2f76b7857035390a",
-                "reference": "ae6bed637c9e7bab0edc095b2f76b7857035390a",
+                "url": "https://api.github.com/repos/terminal42/service-annotation-bundle/zipball/f05105b65825d40234efb581f19088da0d843f6e",
+                "reference": "f05105b65825d40234efb581f19088da0d843f6e",
                 "shasum": ""
             },
             "require": {
-                "doctrine/annotations": "^1.6",
+                "doctrine/annotations": "^1.6 || ^2.0",
                 "php": "^7.1 || ^8.0",
                 "symfony/dependency-injection": "^4.0 || ^5.0 || ^6.0",
                 "symfony/http-kernel": "^4.0 || ^5.0 || ^6.0"
@@ -4768,7 +4768,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2022-08-16T15:20:24+00:00"
+            "time": "2023-03-29T06:10:00+00:00"
         }
     ],
     "packages-dev": [
@@ -4894,16 +4894,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.11.0",
+            "version": "1.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "14daed4296fae74d9e3201d2c4925d1acb7aa614"
+                "reference": "7284c22080590fb39f2ffa3e9057f10a4ddd0e0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/14daed4296fae74d9e3201d2c4925d1acb7aa614",
-                "reference": "14daed4296fae74d9e3201d2c4925d1acb7aa614",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/7284c22080590fb39f2ffa3e9057f10a4ddd0e0c",
+                "reference": "7284c22080590fb39f2ffa3e9057f10a4ddd0e0c",
                 "shasum": ""
             },
             "require": {
@@ -4941,7 +4941,7 @@
             ],
             "support": {
                 "issues": "https://github.com/myclabs/DeepCopy/issues",
-                "source": "https://github.com/myclabs/DeepCopy/tree/1.11.0"
+                "source": "https://github.com/myclabs/DeepCopy/tree/1.11.1"
             },
             "funding": [
                 {
@@ -4949,7 +4949,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-03T13:19:32+00:00"
+            "time": "2023-03-08T13:26:56+00:00"
         },
         {
             "name": "phar-io/manifest",
