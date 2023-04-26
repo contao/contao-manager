@@ -70,7 +70,7 @@
         flex-wrap: wrap;
         padding-top: 4px;
         margin: 4px 20px 4px;
-        border-top: 1px solid #e9eef1;
+        border-top: 1px solid $border-light-color;
 
         &:last-child {
             padding-bottom: 0;
