@@ -15,7 +15,7 @@
         <template #release>
             <progress-bar :amount="progress"/>
             <div class="package__version package__version--release">
-                <p><strong>{{ filesize }}</strong></p>
+                <p><strong>{{ upload.size|filesize }}</strong></p>
             </div>
         </template>
 
@@ -110,19 +110,6 @@
                 }
 
                 return '';
-            },
-
-            filesize() {
-                let sizes = ['KB', 'MB', 'GB'];
-                let size = 'Bytes';
-                let bytes = this.upload.size;
-
-                while (bytes > 1024) {
-                    bytes = bytes/1024;
-                    size = sizes.shift();
-                }
-
-                return `${Math.round(bytes * 100) / 100} ${size}`;
             },
 
             additional() {
