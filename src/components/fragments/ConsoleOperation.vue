@@ -262,7 +262,7 @@
             overflow-y: auto;
             max-height: 250px;
             padding: 8px 0 16px;
-            font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+            font-family: $font-monospace;
             color: #f6f8fa;
             line-height: 1.5;
             white-space: pre-wrap;
