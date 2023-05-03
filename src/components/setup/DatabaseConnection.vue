@@ -4,7 +4,7 @@
             <img src="../../assets/images/database.svg" width="80" height="80" class="setup__icon" alt="">
             <h1 class="setup__headline">{{ $t('ui.setup.database-connection.headline') }}</h1>
             <i18n tag="p" path="ui.setup.database-connection.description" class="setup__description">
-                <template #env><code>.env</code></template>
+                <template #env><code>.env.local</code></template>
             </i18n>
         </header>
 
