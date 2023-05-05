@@ -692,9 +692,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/ConfigManager'
+                                $ref: '#/components/schemas/ConfigManager'
         put:
             summary: Replace manager config.
             tags: [Configuration]
@@ -736,9 +734,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/ConfigAuth'
+                                $ref: '#/components/schemas/ConfigAuth'
         put:
             summary: Replace Composer auth config.
             tags: [Configuration]
@@ -805,9 +801,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/ConfigComposer'
+                                $ref: '#/components/schemas/ConfigComposer'
         put:
             summary: Replace Composer config.
             tags: [Configuration]
@@ -1278,13 +1272,20 @@ components:
 
         TokenRequest:
             type: object
+            required: [client_id, scope]
             properties:
                 client_id:
                     type: string
                     description: OAuth client ID of the token.
+                scope:
+                    type: string
+                    description: Permission scope of the token.
+                    enum:
+                        - admin
 
         TokenResponse:
             type: object
+            required: [id, token, username, client_id, scope]
             properties:
                 id:
                     type: string
