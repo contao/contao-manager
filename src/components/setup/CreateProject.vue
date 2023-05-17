@@ -102,13 +102,15 @@ export default {
                     problem: this.$t('ui.setup.create-project.requiresPHP', { version: '7.4.0', current: this.phpVersion }),
                 });
 
-                versions.push({
-                    value: '4.9',
-                    label: `Contao 4.9 (${this.$t('ui.setup.create-project.ltsTitle')})`,
-                    disabled: !this.isWeb,
-                    description: this.$t('ui.setup.create-project.pltsText', { year: '2023' }),
-                    problem: this.$t('ui.setup.create-project.requiresDocroot', { folder: 'web', }),
-                });
+                if (this.phpVersionId < 70400) {
+                    versions.push({
+                        value: '4.9',
+                        label: `Contao 4.9 (${ this.$t('ui.setup.create-project.ltsTitle') })`,
+                        disabled: !this.isWeb,
+                        description: this.$t('ui.setup.create-project.pltsText', { year: '2023' }),
+                        problem: this.$t('ui.setup.create-project.requiresDocroot', { folder: 'web', }),
+                    });
+                }
 
                 return versions;
             },
