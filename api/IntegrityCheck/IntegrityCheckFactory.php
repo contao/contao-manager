@@ -19,8 +19,6 @@ class IntegrityCheckFactory implements ServiceSubscriberInterface
     private static $webChecks = [
         AllowUrlFopenCheck::class,
         SysTempDirCheck::class,
-        PhpExtensionsCheck::class,
-        GraphicsLibCheck::class,
         SymlinkCheck::class,
         SessionCheck::class,
         MemoryLimitCheck::class,
@@ -31,7 +29,6 @@ class IntegrityCheckFactory implements ServiceSubscriberInterface
         MemoryLimitCheck::class,
         AllowUrlFopenCheck::class,
         SysTempDirCheck::class,
-        PhpExtensionsCheck::class,
         SymlinkCheck::class,
         ProcessCheck::class,
     ];
