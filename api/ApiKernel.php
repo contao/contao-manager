@@ -223,6 +223,21 @@ CODE
             $current = dirname($phar);
 
             if ('web' === basename($current)) {
+
+                $filesystem = new Filesystem();
+                $contaoFiles = [
+                    '/vendor/contao/manager-bundle/bin/contao-console',
+                    '/system/constants.php',
+                    '/system/config/constants.php',
+                ];
+
+                // Use current folder if it looks like Contao
+                foreach ($contaoFiles as $file) {
+                    if ($filesystem->exists($current.$file)) {
+                        return $current;
+                    }
+                }
+
                 return dirname($current);
             }
 
