@@ -14,7 +14,7 @@
         <echo message="  phing tx    -  Syncs language files with Transifex" />
     </target>
 
-    <target name="prod" depends="clone, composer, cache, npm, build-prod, box-prod, cleanup, version">
+    <target name="prod" depends="clone, composer, cache, yarn, build-prod, box-prod, cleanup, version">
         <echo message="Contao Manager ${version} build complete" />
     </target>
 
@@ -97,9 +97,9 @@
         </exec>
     </target>
 
-    <target name="npm">
+    <target name="yarn">
         <echo message="Installing UI dependencies" />
-        <exec executable="npm" dir="contao-manager-${version}" checkreturn="true">
+        <exec executable="yarn" dir="contao-manager-${version}" checkreturn="true">
             <arg value="install" />
             <arg value="--no-optional" />
         </exec>
@@ -107,7 +107,7 @@
 
     <target name="build-prod">
         <echo message="Compiling UI files" />
-        <exec executable="npm" dir="contao-manager-${version}" checkreturn="true">
+        <exec executable="yarn" dir="contao-manager-${version}" checkreturn="true">
             <arg value="run" />
             <arg value="build" />
         </exec>
@@ -115,7 +115,7 @@
 
     <target name="build-dev">
         <echo message="Compiling UI files" />
-        <exec executable="npm" passthru="true" checkreturn="true">
+        <exec executable="yarn" passthru="true" checkreturn="true">
             <arg value="run" />
             <arg value="build" />
         </exec>
@@ -123,16 +123,20 @@
 
     <target name="box-prod">
         <echo message="Creating the .phar file" />
-        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://github.com/humbug/box/releases/download/3.5.1/box.phar > box.phar" />
+        <exec executable="php" dir="contao-manager-${version}/tools/phing" checkreturn="true">
+            <arg value="../../composer.phar" />
+            <arg value="install" />
+        </exec>
         <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
-            <arg value="box.phar" />
+            <arg value="tools/phing/vendor/bin/box" />
             <arg value="compile" />
         </exec>
     </target>
 
     <target name="box-dev">
         <echo message="Creating the .phar file" />
-        <exec executable="box" checkreturn="true" passthru="true">
+        <exec executable="php" checkreturn="true" passthru="true">
+            <arg value="tools/phing/vendor/bin/box" />
             <arg value="compile" />
         </exec>
     </target>

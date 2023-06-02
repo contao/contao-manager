@@ -1,0 +1,6 @@
+{
+    "require": {
+        "phing/phing": "^2.17",
+        "humbug/box": "^3.16"
+    }
+}
