@@ -100,7 +100,7 @@
                         </i18n>
                     </div>
                     <div class="setup__fields setup__fields--center">
-                        <button class="widget-button widget-button--inline widget-button--gear" @click="wantsFix = true" v-if="!contaoVersion">{{ $t('ui.setup.document-root.create') }}</button>
+                        <button class="widget-button widget-button--inline widget-button--gear" @click="wantsFix = true" v-if="!contaoVersion">{{ $t('ui.setup.document-root.change') }}</button>
                         <button class="widget-button widget-button--inline widget-button--primary" @click="$emit('continue')">{{ $t('ui.setup.continue') }}</button>
                     </div>
                 </main>

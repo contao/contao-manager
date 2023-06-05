@@ -140,6 +140,7 @@
     "ui.setup.document-root.ignoreConflicts": "I want to install Contao into the non-empty directory. I understand that this might overwrite any existing files on my webspace.",
     "ui.setup.document-root.check": "Check again",
     "ui.setup.document-root.create": "Create directories",
+    "ui.setup.document-root.change": "Change directories",
     "ui.setup.document-root.formTitle": "Directory Setup",
     "ui.setup.document-root.formText1": "The Contao Manager can automatically create a new directory structure on the server.",
     "ui.setup.document-root.formText2": "You will need to manually configure the new document root (e.g. through a hosting admin panel).",
