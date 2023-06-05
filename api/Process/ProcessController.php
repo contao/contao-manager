@@ -64,6 +64,8 @@ class ProcessController extends AbstractProcess
     public function setMeta(array $meta): void
     {
         $this->config['meta'] = $meta;
+
+        $this->saveConfig(true);
     }
 
     /**
