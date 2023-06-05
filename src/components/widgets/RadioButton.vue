@@ -1,5 +1,6 @@
 <template>
-    <div class="widget widget-radio-button" :class="{ 'widget--required': required }">
+    <fieldset class="widget widget-radio-button" :class="{ 'widget--required': required }">
+        <legend v-if="label || $slots.label"><slot name="label">{{ label }}</slot></legend>
         <div v-for="(option, k) in options" :key="k">
             <input
                 ref="input"
@@ -14,7 +15,7 @@
             <label :for="`ctrl_${name}_${option.value}`" v-if="allowHtml" v-html="option.label"></label>
             <label :for="`ctrl_${name}_${option.value}`" v-else>{{ option.label }}</label>
         </div>
-    </div>
+    </fieldset>
 </template>
 
 <script>
@@ -28,6 +29,7 @@
                 type: Array,
                 required: true,
             },
+            label: String,
             value: {
                 required: true,
             },
@@ -43,6 +45,10 @@
 
 <style lang="scss">
     .widget-radio-button {
+        legend {
+            margin-bottom: 2px;
+        }
+
         > div {
             position: relative;
             margin: .25em 0;
