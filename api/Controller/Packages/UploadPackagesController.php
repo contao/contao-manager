@@ -69,13 +69,19 @@ class UploadPackagesController
     /**
      * @Route("/packages/uploads", methods={"GET"})
      */
-    public function __invoke()
+    public function __invoke(): JsonResponse
     {
         $this->validateUploadSupport();
 
         $uploads = $this->config->all();
 
         foreach ($uploads as $id => &$upload) {
+            if (!file_exists($this->uploadPath($id))) {
+                unset($uploads[$id]);
+                $this->config->remove($id);
+                continue;
+            }
+
             $upload['filesize'] = filesize($this->uploadPath($id));
 
             if ($upload['error']) {
