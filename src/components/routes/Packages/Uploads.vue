@@ -32,9 +32,7 @@
 <script>
     import { mapState, mapGetters, mapMutations } from 'vuex';
     import FileUpload from 'vue-upload-component';
-
     import views from '../../../router/views';
-
     import UploadingPackage from './UploadingPackage';
     import UploadedPackage from './UploadedPackage';
 
