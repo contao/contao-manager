@@ -270,6 +270,12 @@ class DatabaseMigrationController
 
     private function getProcessStatus(ProcessController $process): string
     {
+        if (!$process->isStarted()) {
+            $process->start();
+
+            return TaskStatus::STATUS_ACTIVE;
+        }
+
         if ($process->isRunning()) {
             return TaskStatus::STATUS_ACTIVE;
         }
