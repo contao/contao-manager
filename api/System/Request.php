@@ -130,7 +130,7 @@ class Request
 
         $options['http']['header'][] = sprintf(
             'User-Agent: Contao Manager/%s (%s; %s; %s%s)',
-            $this->kernel->getVersion() === ('@'.'package_version'.'@') ? 'source' : $this->kernel->getVersion(),
+            $this->kernel->getVersion() === ('@manager_version'.'@') ? 'source' : $this->kernel->getVersion(),
             \function_exists('php_uname') ? php_uname('s') : 'Unknown',
             \function_exists('php_uname') ? php_uname('r') : 'Unknown',
             'PHP '.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION,

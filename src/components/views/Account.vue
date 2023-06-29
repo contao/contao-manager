@@ -4,7 +4,7 @@
             <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
             <p class="view-account__product">
                 <strong>{{ $t('ui.account.welcome') }}</strong>
-                Contao Manager @package_version@
+                Contao Manager @manager_version@
             </p>
             <p>
                 <i18n :tag="false" path="ui.account.intro1">

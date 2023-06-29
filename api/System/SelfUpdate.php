@@ -89,7 +89,7 @@ class SelfUpdate
      */
     public function isDev(): bool
     {
-        return $this->kernel->getVersion() === '@'.'package_version'.'@'
+        return $this->kernel->getVersion() === '@manager_version'.'@'
             || 'prod' !== $this->kernel->getEnvironment()
             || $this->kernel->isDebug()
         ;

@@ -42,7 +42,7 @@ class ApiKernel extends Kernel
     /**
      * @var string
      */
-    private $version = '@package_version@';
+    private $version = '@manager_version@';
 
     /**
      * @var string

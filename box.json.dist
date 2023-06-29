@@ -16,6 +16,6 @@
             "in": "vendor"
         }
     ],
-    "git-version": "package_version",
+    "git-version": "manager_version",
     "output": "contao-manager.phar"
 }

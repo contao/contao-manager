@@ -135,7 +135,7 @@ class AboutCommand extends Command
     {
         $version = $kernel->getVersion();
 
-        if ($version === ('@'.'package_version'.'@')) {
+        if ($version === ('@manager_version'.'@')) {
             $git = new Process(['git', 'describe', '--tags', '--always']);
 
             try {
