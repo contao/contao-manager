@@ -49,6 +49,10 @@ class LogController
      */
     public function listFiles(): Response
     {
+        if (!$this->filesystem->exists($this->kernel->getProjectDir().'/var/logs')) {
+            return new JsonResponse([]);
+        }
+
         /** @var Finder $finder */
         $finder = Finder::create()
             ->depth(0)

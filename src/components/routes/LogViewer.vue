@@ -1,7 +1,13 @@
 <template>
     <main-layout>
-        <div v-if="files && files.length === 0">
-            <p>{{ $t('ui.log-viewer.empty') }}</p>
+
+        <loader v-if="files === null" class="log-viewer__status log-viewer__status--loader">
+            <p class="log-viewer__title">{{ $t('ui.log-viewer.loading') }}</p>
+        </loader>
+
+        <div v-else-if="files && files.length === 0" class="log-viewer__status log-viewer__status--empty">
+            <p class="log-viewer__title">{{ $t('ui.log-viewer.empty') }}</p>
+            <button class="widget-button widget-button--inline widget-button--update" @click="load">{{ $t('ui.log-viewer.reload') }}</button>
         </div>
 
         <div v-else>
@@ -48,7 +54,7 @@
                 <div class="log-viewer__line log-viewer__more" v-if="current && offset !== 0">
                     <button class="widget-button widget-button--inline widget-button--add" @click="next">{{ $t('ui.log-viewer.more') }}</button>
                 </div>
-                <div class="log-viewer__loading" v-if="files === null || loading">
+                <div class="log-viewer__loading" v-if="loading">
                     <loader></loader>
                 </div>
             </div>
@@ -179,6 +185,14 @@
             next () {
                 this.limit = Math.min(this.offset, 100);
                 this.offset = Math.max(this.offset - 100, 0);
+            },
+
+            async load () {
+                this.files = null;
+                this.file = null;
+
+                this.files = (await this.$http.get('api/logs')).body;
+                this.file = this.files[this.files.length - 1].name;
             }
         },
 
@@ -209,8 +223,7 @@
         },
 
         async created() {
-            this.files = (await this.$http.get('api/logs')).body;
-            this.file = this.files[this.files.length - 1].name;
+            this.load();
         },
     };
 </script>
@@ -219,6 +232,31 @@
 @import "~contao-package-list/src/assets/styles/defaults";
 
 .log-viewer {
+
+    &__status {
+        margin: 100px 0;
+        text-align: center;
+        font-size: 20px;
+        line-height: 1.5em;
+
+        &--empty {
+            padding-top: 140px;
+            background: url('../../../node_modules/contao-package-list/src/assets/images/sad.svg') top center no-repeat;
+            background-size: 100px 100px;
+        }
+
+        &--loader {
+            .sk-circle {
+                width: 100px;
+                height: 100px;
+                margin: 0 auto 40px;
+            }
+        }
+
+        button {
+            margin-top: 2em;
+        }
+    }
 
     &__loading {
         width: 30px;

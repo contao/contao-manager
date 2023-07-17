@@ -415,7 +415,9 @@
     "ui.cloudStatus.button": "Cloud Status",
     "ui.cloudStatus.refresh": "Refresh Cloud Status",
 
+    "ui.log-viewer.loading": "Loading …",
     "ui.log-viewer.empty": "There are no log files on your server.",
+    "ui.log-viewer.reload": "Reload",
     "ui.log-viewer.file": "Log file",
     "ui.log-viewer.channel": "Channel",
     "ui.log-viewer.level": "Level",
