@@ -22,8 +22,10 @@ class ComposerConfig extends AbstractConfig
         parent::__construct('config.json', $kernel, $filesystem);
 
         // Make sure the config is in the correct subkey
-        if (!$this->has('config')) {
-            $this->replace(['config' => $this->all()]);
+        if (!$this->has('config') || [] === $this->get('config')) {
+            $config = $this->all();
+            unset($config['config']);
+            $this->replace(['config' => $config]);
         }
     }
 
