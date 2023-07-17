@@ -46,6 +46,7 @@ class InstallOperation extends AbstractProcessOperation
             $retries = $taskConfig->getState('install-retry', 0);
 
             if ($retry && $process->isTerminated() && !$process->isSuccessful() && $retries < 4) {
+                $process->delete();
                 $taskConfig->setState('install-retry', ++$retries);
 
                 throw new \RuntimeException('Install process failed, restarting');

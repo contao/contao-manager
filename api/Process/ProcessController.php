@@ -71,7 +71,7 @@ class ProcessController extends AbstractProcess
      */
     public function getMeta(): ?array
     {
-        return \array_key_exists('meta', $this->config) ? $this->config['meta'] : null;
+        return $this->config['meta'] ?? null;
     }
 
     public function start(): void
