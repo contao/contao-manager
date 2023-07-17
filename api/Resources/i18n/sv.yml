@@ -39,6 +39,7 @@ sv:
         php_cli:
             not_found: 'Den här sökvägen innehåller inte en giltig PHP-binär.'
             incompatible: 'Den här binära filen är en PHP-version {cli} men din webbserver är version {web}.'
+            error: 'Fel vid validering av PHP-binären.'
         cloud:
             platform: 'Plattform får inte konfigureras i composer.json.'
             cache: 'Cacheegenskaper får inte konfigureras i composer.json.'

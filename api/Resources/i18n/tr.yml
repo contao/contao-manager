@@ -38,7 +38,8 @@ tr:
     config:
         php_cli:
             not_found: 'Bu yolda geçerli bir PHP binary dosyası bulunamadı.'
-            incompatible: 'Bu binary dosyası bir PHP {cli} sürümü. Ancak sunucunuz {web} sürümü.'
+            incompatible: 'Bu binary dosyası bir PHP {cli} sürümü. Ancak site sunucunuzun sürümü {web}.'
+            error: 'PHP binary dosyası doğrulanırken sorun çıktı.'
         cloud:
             platform: 'Platform, composer.json içinden yapılandırılmamalıdır.'
             cache: 'Ön bellek özellikleri composer.json içinde yapılandırılmamalıdır.'
@@ -92,4 +93,4 @@ tr:
             root: 'Contao Manager "{path}" yolundaki kök klasöre yazamadı.'
             directory: 'Contao Manager "{path}" klasörünü oluşturamadı.'
             config-file: 'Contao Manager "{file}" dosyasına yapılandırmayı yazamadı.'
-            detail: 'Sunucunuz doğru yapılandırılmamış gibi görünüyor. Contao kuracaksanız, lütfen web sunucunuzun kök belge klasörüne kurun. Yoksa dosya erişim izinlerinin doğru olduğundan emin olun. Bu sorunu nasıl düzelteceğinizden emin değilseniz, destek almak için barındırma hizmeti sağlayıcınızla görüşün.'
+            detail: 'Sunucunuz doğru yapılandırılmamış gibi görünüyor. Contao kuracaksanız, lütfen site sunucunuzun kök belge klasörüne kurun. Yoksa dosya erişim izinlerinin doğru olduğundan emin olun. Bu sorunu nasıl düzelteceğinizden emin değilseniz, destek almak için barındırma hizmeti sağlayıcınızla görüşün.'
