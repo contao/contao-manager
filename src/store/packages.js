@@ -179,28 +179,24 @@ export default {
             const name = data.name;
             const metadata = await dispatch('algolia/getPackage', name, { root: true });
 
-            if (!data) {
-                return metadata;
-            }
-
             if (!metadata) {
                 return data;
             }
 
             const getVersion = (packageData) => {
-                if (!packageData.version && !packageData.version_normalized) {
-                    return null;
-                }
-
-                if (valid(packageData.version)) {
+                if (packageData.version && valid(packageData.version)) {
                     return parse(packageData.version)
                 }
 
-                return coerce(packageData.version_normalized, { loose: true })
+                if (packageData.version_normalized) {
+                    return coerce(packageData.version_normalized, { loose: true })
+                }
+
+                return null;
             };
 
             const rootConstraint = state.change[name] || state.root.require[name];
-            const rootVersion = getVersion(state.installed[name]);
+            const rootVersion = getVersion(data);
 
             metadata.update = null;
             if (metadata.versions && rootConstraint && rootConstraint.substr(0, 4) !== 'dev-' && rootConstraint.substr(-4) !== '-dev') {
@@ -235,15 +231,16 @@ export default {
                 {},
                 metadata,
                 {
-                    dependents: data.dependents,
-                    conflict: data.conflict,
-                    require: data.require,
-                    'require-dev': data['require-dev'],
-                    suggest: {},
+                    dependents: data.dependents || metadata.dependents,
+                    conflict: data.conflict || metadata.conflict,
+                    require: data.require || metadata.require,
+                    'require-dev': data['require-dev'] || metadata['require-dev'],
+                    suggest: metadata.suggest,
                 },
             );
 
             if (data.suggest) {
+                result.suggest = {};
                 Object.keys(data.suggest).forEach(k => {
                     result.suggest[k] = metadata.suggest && metadata.suggest[k] || data.suggest[k];
                 });
