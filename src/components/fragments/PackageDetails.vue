@@ -1,5 +1,5 @@
 <template>
-    <package-details :dependents="dependents">
+    <package-details :local="data" :dependents="dependents">
         <template #package-actions>
             <template v-if="isInstalled">
                 <package-constraint :data="data" v-if="!isFeature && isVisible"/>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import { mapState } from 'vuex';
     import packageStatus from '../../mixins/packageStatus';
 
     import PackageDetails from 'contao-package-list/src/components/fragments/PackageDetails';
@@ -41,26 +41,20 @@
         components: { PackageConstraint, PackageDetails, InstallButton },
 
         computed: {
-            ...mapState('packages', ['installed']),
+            ...mapState('packages', { allInstalled: 'installed' }),
             ...mapState('packages/details', ['current']),
 
-            ...mapGetters('packages', [
-                'packageInstalled',
-                'packageSuggested',
-                'packageRoot',
-            ]),
-
-            data: vm => ({ name: vm.current }),
+            data: vm => vm.add[vm.current] || vm.allInstalled[vm.current] || ({ name: vm.current }),
 
             dependents() {
-                if (!this.installed[this.data.name]) {
+                if (!this.allInstalled[this.data.name]) {
                     return null;
                 }
 
                 const deps = {};
                 const conditions = ['requires', 'replaces', 'provides', 'conflicts'];
 
-                Object.values(this.installed[this.data.name].dependents).forEach(dep => {
+                Object.values(this.allInstalled[this.data.name].dependents).forEach(dep => {
                     if (dep.source === '__root__'
                         || !conditions.includes(dep.description)
                         || (dep.source === this.data.name && dep.description === 'replaces')
