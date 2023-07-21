@@ -33,10 +33,6 @@
 
         computed: {
             hostname () {
-                if (this.$route.query.response_type === undefined) {
-                    return this.$route.query.return_url ? new URL(this.$route.query.return_url).hostname : '???';
-                }
-
                 return this.$route.query.redirect_uri ? new URL(this.$route.query.redirect_uri).hostname : '???';
             }
         },
@@ -54,16 +50,6 @@
                         },
                     )
 
-                    if (this.$route.query.response_type === undefined) {
-                        // Backwards compatibility
-                        if (this.$route.query.return_url.includes('?')) {
-                            document.location.href = `${this.$route.query.return_url}&token=${response.body.token}`;
-                        } else {
-                            document.location.href = `${this.$route.query.return_url}?token=${response.body.token}`;
-                        }
-                        return
-                    }
-
                     // OAuth Implicit Grant (RFC 6749 section 4.2)
                     this.redirect({
                         access_token: response.body.token,
@@ -77,11 +63,7 @@
             },
 
             denyAccess() {
-                if (this.$route.query.response_type === 'token') {
-                    this.redirect({ error: 'access_denied' })
-                } else {
-                    document.location.href = this.$route.query.return_url;
-                }
+                this.redirect({ error: 'access_denied' })
             },
 
             redirect(query) {
@@ -106,21 +88,6 @@
         },
 
         mounted() {
-            // Backwards compatibility
-            if (this.$route.query.response_type === undefined) {
-                if (!this.$route.query.client_id || !this.$route.query.return_url || this.$route.query.scope !== 'admin') {
-                    this.$store.commit('setError', {
-                        title: this.$t('ui.oauth.error'),
-                        type: 'about:blank',
-                        status: 400,
-                    });
-                } else {
-                    this.valid = true
-                }
-
-                return
-            }
-
             let error = false;
             try {
                 const redirectUri = new URL(this.$route.query.redirect_uri);
