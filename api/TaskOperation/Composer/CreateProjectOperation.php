@@ -32,11 +32,6 @@ class CreateProjectOperation extends AbstractInlineOperation
     private $environment;
 
     /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -47,6 +42,11 @@ class CreateProjectOperation extends AbstractInlineOperation
     private $version;
 
     /**
+     * @var string
+     */
+    private $publicDir;
+
+    /**
      * Constructor.
      */
     public function __construct(TaskConfig $taskConfig, Environment $environment, ApiKernel $kernel, Filesystem $filesystem)
@@ -54,7 +54,6 @@ class CreateProjectOperation extends AbstractInlineOperation
         parent::__construct($taskConfig);
 
         $this->environment = $environment;
-        $this->kernel = $kernel;
         $this->filesystem = $filesystem;
         $this->version = $taskConfig->getOption('version');
 
@@ -62,10 +61,17 @@ class CreateProjectOperation extends AbstractInlineOperation
             throw new \InvalidArgumentException('Unsupported Contao version');
         }
 
-        /** @noinspection ProjectDirParameter */
-        if ($this->kernel->getProjectDir() === $this->kernel->getPublicDir()) {
+        $this->publicDir = $taskConfig->getState('public-dir');
+
+        if (null !== $this->publicDir) {
+            return;
+        }
+
+        if ($kernel->getProjectDir() === $kernel->getPublicDir()) {
             throw new \RuntimeException('Cannot install without a public directory.');
         }
+
+        $taskConfig->setState('public-dir', $this->publicDir = $kernel->getPublicDir());
     }
 
     public function getSummary(): string
@@ -128,7 +134,7 @@ JSON;
 
         // https://github.com/contao/contao-manager/issues/627
         if (version_compare($version, '4.12', '>=')) {
-            $publicDir = basename($this->kernel->getPublicDir());
+            $publicDir = basename($this->publicDir);
             $script = '@php vendor/bin/contao-setup';
         } else {
             $publicDir = 'web';
