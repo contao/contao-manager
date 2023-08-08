@@ -31,15 +31,16 @@
                         <div :class="`log-viewer__line log-viewer__line--${line.level.toLowerCase()}`" :key="k" v-else>
                             <div class="log-viewer__meta">
                                 <time class="log-viewer__datetime" :datetime="line.datetime">{{ line.datetime|datimFormat('medium') }}</time>
-                                <span :class="`log-viewer__badge log-viewer__badge--desktop log-viewer__badge--level-${line.level.toLowerCase()}`">{{ line.level }}</span>
+                                <span :class="`log-viewer__badge log-viewer__badge--desktop log-viewer__badge--level-${line.level.toLowerCase()}`" :title="$t('ui.log-viewer.levelTitle')">{{ line.level }}</span>
+                                <span class="log-viewer__badge log-viewer__badge--desktop log-viewer__badge--channel" :title="$t('ui.log-viewer.channelTitle')">{{ line.channel }}</span>
                             </div>
                             <div class="log-viewer__content">
                                 <div class="log-viewer__message">
                                     <span v-for="(piece, k) in pieces(line.message)" :key="k">{{ piece }}</span>
                                 </div>
                                 <div class="log-viewer__details">
-                                    <span :class="`log-viewer__badge log-viewer__badge--mobile log-viewer__badge--level-${line.level.toLowerCase()}`">{{ line.level }}</span>
-                                    <span class="log-viewer__badge">{{ line.channel }}</span>
+                                    <span :class="`log-viewer__badge log-viewer__badge--mobile log-viewer__badge--level-${line.level.toLowerCase()}`" :title="$t('ui.log-viewer.levelTitle')">{{ line.level }}</span>
+                                    <span class="log-viewer__badge log-viewer__badge--mobile log-viewer__badge--channel" :title="$t('ui.log-viewer.channelTitle')">{{ line.channel }}</span>
                                     <button class="log-viewer__toggle" :class="{ 'log-viewer__toggle--active': showContext[k] }" v-if="canShow(line.context)" @click="toggleContext(k)">{{ $t(`ui.log-viewer.${showContext[k] ? 'hide' : 'show'}Context`) }}</button>
                                     <button class="log-viewer__toggle" :class="{ 'log-viewer__toggle--active': showExtra[k] }" v-if="canShow(line.extra)" @click="toggleExtra(k)">{{ $t(`ui.log-viewer.${showExtra[k] ? 'hide' : 'show'}Extra`) }}</button>
                                 </div>
@@ -192,7 +193,20 @@
                 this.file = null;
 
                 this.files = (await this.$http.get('api/logs')).body;
-                this.file = this.files[this.files.length - 1].name;
+                this.file = this.files.length ? this.files[this.files.length - 1].name : null;
+            },
+
+            async fetch () {
+                if (!this.current) {
+                    return;
+                }
+
+                this.loading = true;
+
+                const response = (await this.$http.get(`api/logs/${this.current.name}?offset=${this.offset}&limit=${this.limit}`)).body;
+
+                this.content = this.content.concat(Array.from(response.content.reverse()));
+                this.loading = false;
             }
         },
 
@@ -206,19 +220,12 @@
 
                 this.limit = 100;
                 this.offset = this.current ? Math.max(this.current.lines - 100, 0) : 0;
+
+                this.fetch();
             },
 
             async offset () {
-                if (!this.current) {
-                    return;
-                }
-
-                this.loading = true;
-
-                const response = (await this.$http.get(`api/logs/${this.current.name}?offset=${this.offset}&limit=${this.limit}`)).body;
-
-                this.content = this.content.concat(Array.from(response.content.reverse()));
-                this.loading = false;
+                this.fetch();
             }
         },
 
@@ -386,7 +393,7 @@
 
         @include screen(600) {
             width: 220px;
-            padding-bottom: 20px;
+            padding-bottom: 10px;
         }
     }
 
@@ -426,13 +433,22 @@
             }
         }
 
+        &--channel {
+            padding-top: 0;
+            padding-bottom: 0;
+            border: 1px solid $border-color;
+            background: #fff;
+        }
+
         &--level-warning {
             background: $orange-button;
             color: #fff;
         }
 
         &--level-error,
-        &--level-critical {
+        &--level-alert,
+        &--level-critical,
+        &--level-emergency {
             background: $red-button;
             color: #fff;
         }
@@ -453,6 +469,7 @@
 
     &__toggle {
         margin-right: 10px;
+        padding: 0;
         border: none;
         background: none;
         color: $link-color;
