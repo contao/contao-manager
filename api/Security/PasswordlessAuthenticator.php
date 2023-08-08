@@ -74,5 +74,4 @@ class PasswordlessAuthenticator extends AbstractBrowserAuthenticator
 
         return parent::onAuthenticationSuccess($request, $token, $providerKey);
     }
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of Contao Manager.
  *
@@ -26,6 +28,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LogController
 {
+    private const MONOLOG_PATTERN = '/^\[(?<datetime>.*)\] (?<channel>[\w-]+).(?<level>\w+): (?<message>.+?)(?:(?<context> (\[.*?\]|\{.*?\}))|)(?:(?<extra> (\[.*\]|\{.*\}))|)\s{0,2}$/';
+
     /**
      * @var ApiKernel
      */
@@ -35,8 +39,6 @@ class LogController
      * @var Filesystem
      */
     private $filesystem;
-
-    private const MONOLOG_PATTERN = '/^\[(?<datetime>.*)\] (?<channel>[\w-]+).(?<level>\w+): (?<message>.+?)(?:(?<context> (\[.*?\]|\{.*?\}))|)(?:(?<extra> (\[.*\]|\{.*\}))|)\s{0,2}$/';
 
     public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
     {
