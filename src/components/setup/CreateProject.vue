@@ -87,10 +87,10 @@ export default {
                 const versions = [];
 
                 versions.push({
-                    value: '5.1',
-                    label: `Contao 5.1 (${this.$t('ui.setup.create-project.latestTitle')})`,
+                    value: '5.2',
+                    label: `Contao 5.2 (${this.$t('ui.setup.create-project.latestTitle')})`,
                     disabled: this.phpVersionId < 80100,
-                    description: this.$t('ui.setup.create-project.latestQ3', { year: '2023' }),
+                    description: this.$t('ui.setup.create-project.latestQ1', { year: '2024' }),
                     problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.1.0', current: this.phpVersion }),
                 });
 
