@@ -69,9 +69,9 @@ class LogController
         foreach ($finder as $file) {
             $files[] = [
                 'name' => $file->getFilename(),
-                'mtime' => \DateTime::createFromFormat('U', $file->getMTime())->format(\DateTime::ATOM),
+                'mtime' => \DateTime::createFromFormat('U', (string) $file->getMTime())->format(\DateTime::ATOM),
                 'size' => $file->getSize(),
-                'lines' => $this->countLines(new \SplFileObject($file)),
+                'lines' => $this->countLines(new \SplFileObject((string) $file)),
             ];
         }
 
@@ -156,7 +156,7 @@ class LogController
         return new JsonResponse(
             [
                 'name' => $file->getFilename(),
-                'mtime' => \DateTime::createFromFormat('U', $file->getMTime())->format(\DateTime::ATOM),
+                'mtime' => \DateTime::createFromFormat('U', (string) $file->getMTime())->format(\DateTime::ATOM),
                 'size' => $file->getSize(),
                 'lines' => $total,
                 'content' => $content,
