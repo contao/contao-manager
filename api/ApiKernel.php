@@ -249,4 +249,14 @@ CODE
 
         return $testDir;
     }
+
+    public function __serialize()
+    {
+        return unserialize($this->serialize());
+    }
+
+    public function __unserialize(array $data)
+    {
+        $this->unserialize(serialize($data));
+    }
 }
