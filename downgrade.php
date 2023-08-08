@@ -44,7 +44,7 @@ class ContaoManagerDowngrade
 
         $reload = '';
         if (!empty($_SERVER['REQUEST_URI'])) {
-            $reload = '<script>setTimeout(function() { window.location.reload(true) }, 1000)</script>';
+            $reload = '<script>setTimeout(function() { window.location.reload(true) }, 5000)</script>';
         }
 
         die("Contao Manager was downgraded to the latest version supported by your PHP version.\n$reload");
