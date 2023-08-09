@@ -98,13 +98,15 @@ class SessionController
             return new JsonResponse(['username' => (string) $this->security->getUser()]);
         }
 
+        if (LoginAuthenticator::isLocked($this->kernel->getConfigDir())) {
+            return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_FORBIDDEN));
+        }
+
         if (0 === $this->config->countUsers()) {
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
-        $status = LoginAuthenticator::isLocked($this->kernel->getConfigDir()) ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
-
-        return new ApiProblemResponse((new ApiProblem())->setStatus($status));
+        return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
     }
 
     /**
