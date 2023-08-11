@@ -39,6 +39,7 @@ cs:
         php_cli:
             not_found: 'Tato cesta neobsahuje platné binární PHP.'
             incompatible: 'Tato verze je verze PHP {cli}, ale Váš server je ve verzi {web}.'
+            error: ''
         cloud:
             platform: 'Platforma nemusí být nastavená v composer.json.'
             cache: 'Položky meziúložiště nemusí být nastavené v composer.json.'

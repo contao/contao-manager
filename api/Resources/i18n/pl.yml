@@ -39,6 +39,7 @@ pl:
         php_cli:
             not_found: 'Ta ścieżka nie zawiera prawidłowego PHP binary.'
             incompatible: 'Ta wersja PHP binary to {cli}, ale wersja na serwerze to {web}.'
+            error: ''
         cloud:
             platform: 'Platforma nie może być skonfigurowana w composer.json.'
             cache: 'Właściwości cache nie mogą być skonfigurowane w composer.json.'

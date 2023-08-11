@@ -39,6 +39,7 @@ it:
         php_cli:
             not_found: 'Questo percorso non contiene un PHP valido.'
             incompatible: 'Il PHP è una versione {cli} ma il tuo server web è una versione {web}.'
+            error: ''
         cloud:
             platform: 'La piattaforma non deve essere configurata in composer.json.'
             cache: 'Le proprietà della cache non devono essere configurate in composer.json.'

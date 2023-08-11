@@ -140,6 +140,7 @@
     "ui.setup.document-root.ignoreConflicts": "Chci nainstalova Contao do nevyprázděné složky. Souhlasím s tím, že budou dané soubory přepsány. ",
     "ui.setup.document-root.check": "Znovu zkontrolovat",
     "ui.setup.document-root.create": "Vytvořit složky",
+    "ui.setup.document-root.change": "Change directories",
     "ui.setup.document-root.formTitle": "Nastavení adresáře",
     "ui.setup.document-root.formText1": "Správce Contaa může automaticky vytvořit novou adresářovou strukturu na tomto webovém serveru.",
     "ui.setup.document-root.formText2": "Budete muset nastavit nový kořenový dokument (např. pomocí správního panelu ve Vašem účtu webových služeb).",
@@ -293,6 +294,7 @@
     "ui.navigation.installTool": "Instalační nástroj",
     "ui.navigation.backend": "Backend Contaa",
     "ui.navigation.debug": "Debugový mód Contaa",
+    "ui.navigation.logViewer": "Log Viewer",
     "ui.navigation.phpinfo": "Informace o PHP",
     "ui.navigation.phpinfoLoading": "Načítání informací o PHP…",
     "ui.navigation.maintenance": "Údržba",
@@ -412,5 +414,21 @@
     "ui.cloudStatus.long": "ca. {minutes} min. {seconds} sek.",
     "ui.cloudStatus.error": "Nebylo možné získat status Composer Resolver Cloud. Může být zrovna neaktivní nebo má nějaké problémy.",
     "ui.cloudStatus.button": "Status Cloudu",
-    "ui.cloudStatus.refresh": "Znovu načíst status Cloudu"
+    "ui.cloudStatus.refresh": "Znovu načíst status Cloudu",
+
+    "ui.log-viewer.loading": "Loading …",
+    "ui.log-viewer.empty": "There are no log files on your server.",
+    "ui.log-viewer.reload": "Reload",
+    "ui.log-viewer.file": "Log file",
+    "ui.log-viewer.channel": "Channel",
+    "ui.log-viewer.channelTitle": "The channel this message was logged to.",
+    "ui.log-viewer.level": "Level",
+    "ui.log-viewer.levelTitle": "Severity of the log message.",
+    "ui.log-viewer.timeHeader": "Time",
+    "ui.log-viewer.messageHeader": "Message",
+    "ui.log-viewer.showContext": "Show Context",
+    "ui.log-viewer.hideContext": "Hide Context",
+    "ui.log-viewer.showExtra": "Show Extra",
+    "ui.log-viewer.hideExtra": "Hide Extra",
+    "ui.log-viewer.more": "Load more …"
 }

@@ -140,6 +140,7 @@
     "ui.setup.document-root.ignoreConflicts": "Ich will Contao in ein nicht-leeres Verzeichnis installieren. Ich verstehe dass dadurch bestehende Dateien auf meinem Server möglicherweise überschrieben werden.",
     "ui.setup.document-root.check": "Erneut prüfen",
     "ui.setup.document-root.create": "Verzeichnisse erstellen",
+    "ui.setup.document-root.change": "Verzeichnisse ändern",
     "ui.setup.document-root.formTitle": "Verzeichnisstruktur einrichten",
     "ui.setup.document-root.formText1": "Der Contao Manager kann automatisch eine neue Verzeichnisstruktur auf dem Server einrichten.",
     "ui.setup.document-root.formText2": "Du musst das Wurzelverzeichnis danach manuell umkonfigurieren (z. B. über die Hosting-Administration).",
@@ -293,6 +294,7 @@
     "ui.navigation.installTool": "Installtool",
     "ui.navigation.backend": "Contao-Backend",
     "ui.navigation.debug": "Contao-Debug-Modus",
+    "ui.navigation.logViewer": "System-Log",
     "ui.navigation.phpinfo": "PHP-Informationen",
     "ui.navigation.phpinfoLoading": "Lade PHP-Informationen…",
     "ui.navigation.maintenance": "Systemwartung",
@@ -412,5 +414,21 @@
     "ui.cloudStatus.long": "ca. {minutes} min {seconds} sek",
     "ui.cloudStatus.error": "Status der Composer Resolver Cloud konnte nicht abgerufen werden. Möglicherweise gibt es ein Wartungsfenster oder Systemprobleme.",
     "ui.cloudStatus.button": "Cloud-Status",
-    "ui.cloudStatus.refresh": "Cloud-Status aktualisieren"
+    "ui.cloudStatus.refresh": "Cloud-Status aktualisieren",
+
+    "ui.log-viewer.loading": "Laden …",
+    "ui.log-viewer.empty": "Auf dem Server sind keine Logdateien vorhanden.",
+    "ui.log-viewer.reload": "Neu laden",
+    "ui.log-viewer.file": "Logdatei",
+    "ui.log-viewer.channel": "Kanal",
+    "ui.log-viewer.channelTitle": "Kanal in welcher die Nachricht geschrieben wurde.",
+    "ui.log-viewer.level": "Stufe",
+    "ui.log-viewer.levelTitle": "Wichtigkeit der Log-Nachricht.",
+    "ui.log-viewer.timeHeader": "Uhrzeit",
+    "ui.log-viewer.messageHeader": "Nachricht",
+    "ui.log-viewer.showContext": "Kontext anzeigen",
+    "ui.log-viewer.hideContext": "Kontext ausblenden",
+    "ui.log-viewer.showExtra": "Extras anzeigen",
+    "ui.log-viewer.hideExtra": "Extras ausblenden",
+    "ui.log-viewer.more": "Mehr laden …"
 }

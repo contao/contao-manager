@@ -39,6 +39,7 @@ lv:
         php_cli:
             not_found: 'Šis ceļš nesatur derīgu PHP bināru.'
             incompatible: 'Šis binārs ir PHP versija {cli}, bet jūsu tīmekļa serveris ir versija {web}.'
+            error: ''
         cloud:
             platform: 'Platforma nedrīkst būt konfigurēta composer.json.'
             cache: 'Kešatmiņas rekvizīti nedrīkst būt konfigurēti composer.json.'

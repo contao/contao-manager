@@ -39,6 +39,7 @@ pt:
         php_cli:
             not_found: 'Este caminho não contém um binário PHP válido. '
             incompatible: 'Este binário é uma versão PHP {cli} mas o seu servidor web é versão {web}.'
+            error: ''
         cloud:
             platform: 'A plataforma não pode estar configurada em composer.json .'
             cache: 'Propriedades de cache não podem estar configuradas em composer.json .'

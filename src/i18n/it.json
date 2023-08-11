@@ -140,6 +140,7 @@
     "ui.setup.document-root.ignoreConflicts": "Voglio installare Contao nella directory non vuota. Capisco che questo potrebbe sovrascrivere qualsiasi file esistente sul mio spazio web.",
     "ui.setup.document-root.check": "Controlla nuovamente",
     "ui.setup.document-root.create": "Creare elenchi",
+    "ui.setup.document-root.change": "Change directories",
     "ui.setup.document-root.formTitle": "Setup cartella",
     "ui.setup.document-root.formText1": "Contao Manager può creare automaticamente una nuova struttura di directory sul server.",
     "ui.setup.document-root.formText2": "Dovrai configurare manualmente la nuova root document (ad es. Tramite un pannello di amministrazione di hosting).",
@@ -293,6 +294,7 @@
     "ui.navigation.installTool": "Strumento di installazione",
     "ui.navigation.backend": "Contao Backend",
     "ui.navigation.debug": "Modalità Debug Contao",
+    "ui.navigation.logViewer": "Log Viewer",
     "ui.navigation.phpinfo": "Informazioni PHP",
     "ui.navigation.phpinfoLoading": "Caricamento informazioni PHP",
     "ui.navigation.maintenance": "Manutenzione",
@@ -412,5 +414,21 @@
     "ui.cloudStatus.long": "circa {minutes} min {seconds} sec",
     "ui.cloudStatus.error": "Impossibile ottenere lo stato del Composer Resolver Cloud. Potrebbe essere inattivo per problemi di manutenzione o di esercizio.",
     "ui.cloudStatus.button": "Stato Cloud",
-    "ui.cloudStatus.refresh": "Aggiorna lo stato del cloud"
+    "ui.cloudStatus.refresh": "Aggiorna lo stato del cloud",
+
+    "ui.log-viewer.loading": "Loading …",
+    "ui.log-viewer.empty": "There are no log files on your server.",
+    "ui.log-viewer.reload": "Reload",
+    "ui.log-viewer.file": "Log file",
+    "ui.log-viewer.channel": "Channel",
+    "ui.log-viewer.channelTitle": "The channel this message was logged to.",
+    "ui.log-viewer.level": "Level",
+    "ui.log-viewer.levelTitle": "Severity of the log message.",
+    "ui.log-viewer.timeHeader": "Time",
+    "ui.log-viewer.messageHeader": "Message",
+    "ui.log-viewer.showContext": "Show Context",
+    "ui.log-viewer.hideContext": "Hide Context",
+    "ui.log-viewer.showExtra": "Show Extra",
+    "ui.log-viewer.hideExtra": "Hide Extra",
+    "ui.log-viewer.more": "Load more …"
 }

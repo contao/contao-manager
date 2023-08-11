@@ -39,6 +39,7 @@ zh:
         php_cli:
             not_found: '该路径没有包含有效的PHP二进制文件'
             incompatible: 'PHP二进制文件版本 {cli} 但是当前服务器版本为 {web}'
+            error: ''
         cloud:
             platform: '不得在composer.json中配置平台。'
             cache: '不得在composer.json中配置缓存属性。'

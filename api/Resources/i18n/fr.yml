@@ -39,6 +39,7 @@ fr:
         php_cli:
             not_found: 'Ce chemin ne contient pas de binaire PHP valide.'
             incompatible: 'Ce binaire est une version PHP {cli} mais votre serveur web est en version {web}.'
+            error: ''
         cloud:
             platform: 'Platform ne doit pas être configurée dans composer.json.'
             cache: 'Les propriétés du cache ne doivent pas être configurées dans composer.json.'
