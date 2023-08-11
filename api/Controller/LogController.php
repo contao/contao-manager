@@ -61,6 +61,7 @@ class LogController
             ->files()
             ->ignoreDotFiles(true)
             ->name('*.log')
+            ->sortByName(true)
             ->in($this->kernel->getProjectDir().'/var/logs')
         ;
 
