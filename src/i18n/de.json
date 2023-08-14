@@ -430,5 +430,7 @@
     "ui.log-viewer.hideContext": "Kontext ausblenden",
     "ui.log-viewer.showExtra": "Extras anzeigen",
     "ui.log-viewer.hideExtra": "Extras ausblenden",
-    "ui.log-viewer.more": "Mehr laden …"
+    "ui.log-viewer.more": "Mehr laden …",
+    "ui.log-viewer.prodEnvironment": "Produktivumgebung",
+    "ui.log-viewer.devEnvironment": "Entwicklungsumgebung (Debug Modus)"
 }

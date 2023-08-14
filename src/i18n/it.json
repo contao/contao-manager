@@ -416,7 +416,7 @@
     "ui.cloudStatus.button": "Stato Cloud",
     "ui.cloudStatus.refresh": "Aggiorna lo stato del cloud",
 
-    "ui.log-viewer.loading": "Loading …",
+    "ui.log-viewer.loading": "Caricamento in corso ...",
     "ui.log-viewer.empty": "There are no log files on your server.",
     "ui.log-viewer.reload": "Reload",
     "ui.log-viewer.file": "Log file",
@@ -430,5 +430,7 @@
     "ui.log-viewer.hideContext": "Hide Context",
     "ui.log-viewer.showExtra": "Show Extra",
     "ui.log-viewer.hideExtra": "Hide Extra",
-    "ui.log-viewer.more": "Load more …"
+    "ui.log-viewer.more": "Load more …",
+    "ui.log-viewer.prodEnvironment": "Production Environment",
+    "ui.log-viewer.devEnvironment": "Development Environment (Debug Mode)"
 }
