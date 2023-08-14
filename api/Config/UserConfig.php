@@ -253,9 +253,11 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
             throw new \RuntimeException(sprintf('Username "%s" does not exist.', $username));
         }
 
-        foreach ($this->getTokens() as $payload) {
-            if ($payload['username'] === $username && $payload['client_id'] === $clientId) {
-                $this->deleteToken($payload['id']);
+        if (!$oneTime) {
+            foreach ($this->getTokens() as $payload) {
+                if ($payload['username'] === $username && $payload['client_id'] === $clientId) {
+                    $this->deleteToken($payload['id']);
+                }
             }
         }
 
