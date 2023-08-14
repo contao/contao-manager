@@ -15,6 +15,7 @@ namespace Contao\ManagerApi\Controller;
 use Contao\ManagerApi\ApiKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,7 +70,7 @@ class LogController
 
         foreach ($finder as $file) {
             $files[] = [
-                'name' => $file->getFilename(),
+                'name' => $this->getFilenameWithoutExtension($file),
                 'mtime' => \DateTime::createFromFormat('U', (string) $file->getMTime())->format(\DateTime::ATOM),
                 'size' => $file->getSize(),
                 'lines' => $this->countLines(new \SplFileObject((string) $file)),
@@ -117,7 +118,7 @@ class LogController
             throw new BadRequestHttpException(sprintf('"%s" is not a valid file name.', $filename));
         }
 
-        $path = $this->kernel->getProjectDir().'/var/logs/'.$filename;
+        $path = $this->kernel->getProjectDir().'/var/logs/'.$filename.'.log';
 
         if (!is_file($path)) {
             throw new NotFoundHttpException(sprintf('Log file "%s" does not exist.', $filename));
@@ -156,7 +157,7 @@ class LogController
 
         return new JsonResponse(
             [
-                'name' => $file->getFilename(),
+                'name' => $this->getFilenameWithoutExtension($file),
                 'mtime' => \DateTime::createFromFormat('U', (string) $file->getMTime())->format(\DateTime::ATOM),
                 'size' => $file->getSize(),
                 'lines' => $total,
@@ -201,5 +202,16 @@ class LogController
         $file->rewind();
 
         return $lines;
+    }
+
+    /**
+     * We use the file name without extension as REST object name,
+     * because some hosters block *.log files for security reasons.
+     *
+     * @param SplFileInfo|\SplFileObject $file
+     */
+    private function getFilenameWithoutExtension($file): string
+    {
+        return pathinfo($file->getFilename(), \PATHINFO_FILENAME);
     }
 }

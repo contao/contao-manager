@@ -1278,7 +1278,7 @@ paths:
             parameters:
                 -   name: file
                     in: path
-                    description: The filename to handle.
+                    description: The filename (without .log extension) to handle.
                     required: true
                     schema:
                         type: string
@@ -1860,7 +1860,7 @@ components:
             properties:
                 name:
                     type: string
-                    description: The file name
+                    description: The file name without extension.
                 size:
                     type: integer
                     description: The file size in bytes
