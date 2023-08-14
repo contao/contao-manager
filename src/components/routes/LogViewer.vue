@@ -74,6 +74,7 @@
     import MainLayout from '../layouts/Main';
     import Loader from 'contao-package-list/src/components/fragments/Loader';
     import SelectMenu from '../widgets/SelectMenu.vue';
+    import datimFormat from 'contao-package-list/src/filters/datimFormat';
 
     export default {
         components: { MainLayout, Loader, SelectMenu, VueJsonPretty },
@@ -93,9 +94,36 @@
         }),
 
         computed: {
-            fileOptions: (vm) => vm.files && vm.files.map(f => ({ value: f.name, label: `${f.name} (${filesize(f.size)})` })) || [],
             channelOptions: (vm) => vm.countOptions('channel'),
             levelOptions: (vm) => vm.countOptions('level', { 'emergency': 0, 'alert': 0, 'critical': 0, 'error': 0, 'warning': 0, 'notice': 0, 'info': 0, 'debug': 0 }),
+
+            fileOptions () {
+                if (!this.files) {
+                    return []
+                }
+
+                const optgroups = {};
+                const options = [];
+
+                this.files.forEach((file) => {
+                    const match = file.name.match(/^([a-z]+)-(\d{4}-\d{2}-\d{2})$/i);
+
+                    if (match) {
+                        if (!optgroups[match[1]]) {
+                            optgroups[match[1]] = {
+                                label: this.$te(`ui.log-viewer.${match[1]}Environment`) ? this.$t(`ui.log-viewer.${match[1]}Environment`) : match[1],
+                                options: []
+                            };
+                        }
+
+                        optgroups[match[1]].options.push({ value: file.name, label: `${datimFormat(match[2], null, 'long')} (${filesize(file.size)})` });
+                    } else {
+                        options.push({ value: file.name, label: `${file.name} (${filesize(file.size)})` });
+                    }
+                });
+
+                return [...Object.values(optgroups), ...options];
+            },
 
             current: (vm) => vm.files?.find(f => f.name === vm.file),
 
@@ -193,7 +221,7 @@
                 this.file = null;
 
                 this.files = (await this.$http.get('api/logs')).body;
-                this.file = this.files.length ? this.files[this.files.length - 1].name : null;
+                this.file = this.files.length ? this.files[0].name : null;
             },
 
             async fetch () {

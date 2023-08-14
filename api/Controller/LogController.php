@@ -77,7 +77,8 @@ class LogController
             ];
         }
 
-        return new JsonResponse($files);
+        // Reverse files order to sort by date descending
+        return new JsonResponse(array_reverse($files));
     }
 
     /**
