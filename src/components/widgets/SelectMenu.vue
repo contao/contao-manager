@@ -10,7 +10,12 @@
             @change="input($event.target.value)"
         >
             <option value="" v-if="includeBlank">{{ $t('ui.widget.blankOption') }}</option>
-            <option v-for="option in options" :value="option.value" :disabled="option.disabled" :selected="option.value === value" :key="option.value">{{ option.label }}</option>
+            <template v-for="(group, key) in options">
+                <optgroup v-if="group.options" :label="group.label" :key="key">
+                    <option v-for="option in group.options" :value="option.value" :disabled="option.disabled" :selected="option.value === value" :key="option.value">{{ option.label }}</option>
+                </optgroup>
+                <option :value="group.value" :disabled="group.disabled" :selected="group.value === value" :key="group.value" v-else>{{ group.label }}</option>
+            </template>
         </select>
         <p class="widget__error" v-if="error">{{ error }}</p>
     </div>
