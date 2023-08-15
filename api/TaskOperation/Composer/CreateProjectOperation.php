@@ -168,6 +168,6 @@ JSON;
 
     private function isDevVersion(string $version): bool
     {
-        return '5.2' === $version;
+        return false;
     }
 }
