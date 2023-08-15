@@ -168,6 +168,7 @@
         'cloud-off',
         'console',
         'database',
+        'download',
         'edit',
         'gear',
         'hide',

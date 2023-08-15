@@ -12,9 +12,14 @@
 
         <div v-else>
             <div class="log-viewer__filters">
-                <select-menu :options="fileOptions" name="file" :label="$t('ui.log-viewer.file')" v-model="file"/>
-                <select-menu :options="channelOptions" name="channel" :label="$t('ui.log-viewer.channel')" v-model="channel"/>
-                <select-menu :options="levelOptions" name="level" :label="$t('ui.log-viewer.level')" v-model="level"/>
+                <div>
+                    <select-menu :options="fileOptions" name="file" :label="$t('ui.log-viewer.file')" v-model="file"/>
+                    <a :href="`api/logs/${file}`" :download="`${file}.log`" target="_blank" class="widget-button widget-button--inline widget-button--download" :class="{ 'disabled': !file }" :title="$t('ui.log-viewer.downloadTitle', { file: `${file}.log` })">{{ $t('ui.log-viewer.download') }}</a>
+                </div>
+                <div>
+                    <select-menu :options="channelOptions" name="channel" :label="$t('ui.log-viewer.channel')" v-model="channel"/>
+                    <select-menu :options="levelOptions" name="level" :label="$t('ui.log-viewer.level')" v-model="level"/>
+                </div>
             </div>
 
             <div class="log-viewer__list" ref="list">
@@ -305,7 +310,15 @@
 
     &__filters {
         display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
         gap: 20px;
+
+        > div {
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+        }
     }
 
     &__list {
