@@ -1,6 +1,6 @@
 {
     "ui.app.httpsHeadline": "!! この接続は安全ではありません !!",
-    "ui.app.httpsDescription": "HTTPSでないと秘密のデータも暗号化しないで送信してしまいます。",
+    "ui.app.httpsDescription": "HTTPSなしでは秘密のデータも暗号化しないで送信してしまいます。",
     "ui.app.httpsLink": "詳細な情報",
     "ui.app.httpsHref": "https://https.cio.gov/everything/",
     "ui.app.safeModeHeadline": "!! セーフモードが有効です !!",
@@ -431,6 +431,8 @@
     "ui.log-viewer.showExtra": "追加を表示",
     "ui.log-viewer.hideExtra": "追加を非表示",
     "ui.log-viewer.more": " さらに読み込む...",
-    "ui.log-viewer.prodEnvironment": "Production Environment",
-    "ui.log-viewer.devEnvironment": "Development Environment (Debug Mode)"
+    "ui.log-viewer.download": "ダウンロード",
+    "ui.log-viewer.downloadTitle": "\"{file}\"をダウンロード",
+    "ui.log-viewer.prodEnvironment": "実運用環境",
+    "ui.log-viewer.devEnvironment": "開発環境(デバッグモード)"
 }

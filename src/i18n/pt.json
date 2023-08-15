@@ -431,6 +431,8 @@
     "ui.log-viewer.showExtra": "Show Extra",
     "ui.log-viewer.hideExtra": "Hide Extra",
     "ui.log-viewer.more": "Load more …",
+    "ui.log-viewer.download": "Download",
+    "ui.log-viewer.downloadTitle": "Download file \"{file}\"",
     "ui.log-viewer.prodEnvironment": "Production Environment",
     "ui.log-viewer.devEnvironment": "Development Environment (Debug Mode)"
 }
