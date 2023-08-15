@@ -281,7 +281,7 @@
 
         &--empty {
             padding-top: 140px;
-            background: url('../../../node_modules/contao-package-list/src/assets/images/sad.svg') top center no-repeat;
+            background: url('../../assets/images/warning.svg') top center no-repeat;
             background-size: 100px 100px;
         }
 
