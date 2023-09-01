@@ -931,7 +931,7 @@ paths:
                 501:
                     description: If the current Contao version does not support the database migration API.
         delete:
-            summary: Removes the access key.
+            summary: Delete the current migration task.
             tags: [Contao API]
             responses:
                 200:
