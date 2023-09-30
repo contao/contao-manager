@@ -19,7 +19,8 @@ if (PHP_VERSION_ID < 50509) {
 }
 
 if (!extension_loaded('Phar')) {
-    die('The PHP Phar extension is not enabled.');
+    echo 'PHP\'s phar extension is missing. Contao Manager requires it to run. Enable the extension or recompile php without --disable-phar then try again.' . PHP_EOL;
+    exit(1);
 }
 
 if (PHP_VERSION_ID < 70205) {
