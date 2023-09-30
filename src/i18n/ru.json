@@ -431,8 +431,8 @@
     "ui.log-viewer.showExtra": "Показать дополнительное",
     "ui.log-viewer.hideExtra": "Скрыть дополнительное",
     "ui.log-viewer.more": "Загрузить больше...",
-    "ui.log-viewer.download": "Download",
-    "ui.log-viewer.downloadTitle": "Download file \"{file}\"",
+    "ui.log-viewer.download": "Загрузка",
+    "ui.log-viewer.downloadTitle": "Загрузка файла \"{file}\"",
     "ui.log-viewer.prodEnvironment": "Рабочая среда",
     "ui.log-viewer.devEnvironment": "Среда разработки (режим отладки)"
 }

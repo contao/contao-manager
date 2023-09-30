@@ -431,8 +431,8 @@
     "ui.log-viewer.showExtra": "Visa extra",
     "ui.log-viewer.hideExtra": "Dölj extra",
     "ui.log-viewer.more": "Ladda mer …",
-    "ui.log-viewer.download": "Download",
-    "ui.log-viewer.downloadTitle": "Download file \"{file}\"",
-    "ui.log-viewer.prodEnvironment": "Production Environment",
-    "ui.log-viewer.devEnvironment": "Development Environment (Debug Mode)"
+    "ui.log-viewer.download": "Ladda ner",
+    "ui.log-viewer.downloadTitle": "Nedladdning fil \"{file}\"",
+    "ui.log-viewer.prodEnvironment": "Produktionsmiljö",
+    "ui.log-viewer.devEnvironment": "Utvecklingsmiljö (felsökningsläge)"
 }
