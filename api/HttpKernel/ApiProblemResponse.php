@@ -13,10 +13,12 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\HttpKernel;
 
 use Contao\ManagerApi\Exception\ApiProblemException;
+use Contao\ManagerApi\Exception\ProcessOutputException;
 use Crell\ApiProblem\ApiProblem;
 use Crell\ApiProblem\JsonException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ApiProblemResponse extends Response
 {
@@ -62,6 +64,11 @@ class ApiProblemResponse extends Response
 
             if ($exception instanceof HttpExceptionInterface) {
                 $problem->setStatus($exception->getStatusCode());
+            }
+
+            if ($exception instanceof ProcessOutputException || $exception instanceof ProcessFailedException) {
+                $problem->setStatus(Response::HTTP_BAD_GATEWAY);
+                $problem->setDetail($exception->getProcess()->getErrorOutput() ?: $exception->getProcess()->getOutput());
             }
 
             if ($debug) {

@@ -197,7 +197,7 @@ class ContaoConsole
         ];
     }
 
-    public function getUsers(): ?array
+    public function getUsers(bool $throw = false): ?array
     {
         $commands = $this->getCommandList();
 
@@ -224,12 +224,24 @@ class ContaoConsole
         $process->run();
 
         if (!$process->isSuccessful()) {
+            if ($throw) {
+                throw new ProcessFailedException($process);
+            }
+
             return null;
         }
 
         $data = json_decode($process->getOutput(), true);
 
-        return \is_array($data) ? $data : null;
+        if (!\is_array($data)) {
+            if ($throw) {
+                throw new ProcessOutputException('Unable to list Contao users', $process);
+            }
+
+            return null;
+        }
+
+        return $data;
     }
 
     /**

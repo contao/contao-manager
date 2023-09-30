@@ -90,27 +90,14 @@ class AdminUserController
 
     private function getUserResponse(int $status = Response::HTTP_OK)
     {
-        $hasAdmin = $this->hasAdminUser();
-
-        if (null === $hasAdmin) {
-            return new ApiProblemResponse(
-                (new ApiProblem('Unable to retrieve user list.'))
-                    ->setStatus(Response::HTTP_BAD_GATEWAY)
-            );
-        }
-
         return new JsonResponse([
-            'hasUser' => $hasAdmin,
+            'hasUser' => $this->hasAdminUser(true),
         ], $status);
     }
 
-    private function hasAdminUser(): ?bool
+    private function hasAdminUser(bool $throw = false): bool
     {
-        $users = $this->contaoConsole->getUsers();
-
-        if (null === $users) {
-            return null;
-        }
+        $users = $this->contaoConsole->getUsers($throw);
 
         foreach ($users as $user) {
             if ($user['admin']) {

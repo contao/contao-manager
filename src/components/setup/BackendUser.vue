@@ -7,7 +7,21 @@
             <p class="setup__description">{{ $t('ui.setup.backend-user.description') }}</p>
         </header>
 
-        <transition name="animate-flip" type="transition" mode="out-in" v-if="hasUser !== null">
+            <main class="setup__form setup__form--center" v-if="hasUser === null">
+                <div class="setup__fields">
+                    <p class="setup__warning">{{ $t('ui.setup.backend-user.error') }}</p>
+                    <console
+                        class="view-recovery__console"
+                        :title="$t('ui.recovery.console')"
+                        :operations="[{ status: 'error', summary: 'vendor/bin/contao-console contao:user:list', console: response.body.detail }]"
+                        :console-output="response.body.detail"
+                        show-console force-console
+                        v-if="response.status === 502"
+                    />
+                </div>
+            </main>
+
+        <transition name="animate-flip" type="transition" mode="out-in" v-else>
 
             <main class="setup__form setup__form--center" v-if="hasUser" v-bind:key="'confirmation'">
                 <div class="setup__fields setup__fields--center">
@@ -58,10 +72,11 @@
 <script>
     import TextField from '../widgets/TextField';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+    import Console from '../fragments/Console.vue';
     import { mapState } from 'vuex';
 
     export default {
-        components: { TextField, LoadingButton },
+        components: { TextField, LoadingButton, Console },
 
         data: () => ({
             processing: false,
@@ -79,7 +94,7 @@
         }),
 
         computed: {
-            ...mapState('server/adminUser', ['hasUser']),
+            ...mapState('server/adminUser', { hasUser: 'hasUser', response: 'cache' }),
         },
 
         methods: {
