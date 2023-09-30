@@ -17,6 +17,7 @@ setlocale(LC_ALL, 'C');
 require __DIR__.'/../vendor/autoload.php';
 
 use Composer\Console\Application as ComposerApplication;
+use Composer\Util\Platform;
 use Composer\XdebugHandler\XdebugHandler;
 use Contao\ManagerApi\ApiApplication;
 use Contao\ManagerApi\ApiKernel;
