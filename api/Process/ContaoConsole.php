@@ -53,7 +53,7 @@ class ContaoConsole
             return $this->version;
         }
 
-        $this->getCommandList();
+        $this->getCommandList(true);
 
         if (null !== $this->version) {
             return $this->version;
@@ -75,7 +75,7 @@ class ContaoConsole
         return $this->version = $version;
     }
 
-    public function getCommandList(): array
+    public function getCommandList(bool $throw = false): array
     {
         if (null !== $this->commands) {
             return $this->commands;
@@ -86,6 +86,10 @@ class ContaoConsole
 
         // If the console does not work, we don't have any command support.
         if (!$process->isSuccessful() || !\is_array($data = json_decode(trim($process->getOutput()), true))) {
+            if ($throw) {
+                throw new ProcessOutputException('Unable to retrieve console commands.', $process);
+            }
+
             return $this->commands = [];
         }
 
