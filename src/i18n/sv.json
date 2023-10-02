@@ -204,6 +204,7 @@
     "ui.setup.database-connection.save": "Spara",
     "ui.setup.database-connection.change": "Ändra autentiseringsuppgifter",
     "ui.setup.backend-user.success": "Ett administratörskonto för Contao backend hittades i din databas. Använd Contaos backend för att lägga till fler användare.",
+    "ui.setup.backend-user.error": "Unable to retrieve user list. Check the console output for details.",
     "ui.setup.backend-user.headline": "Backend-konto",
     "ui.setup.backend-user.description": "För att hantera din webbplats måste du ha minst ett administratörskonto för Contaos backend. Var medveten om att detta konto inte är relaterat till Contao Manager.",
     "ui.setup.backend-user.formTitle": "Skapa konto",

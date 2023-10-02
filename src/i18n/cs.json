@@ -204,6 +204,7 @@
     "ui.setup.database-connection.save": "Uložit",
     "ui.setup.database-connection.change": "Změnit pověření",
     "ui.setup.backend-user.success": "Ve vaší databázi byl nalezen jeden administrátorský účet pro backend Contaa. Pokud si přejete přidat další účty, přihlašte se do backendu Contaa a vytvořte je v sekci Uživatelé.",
+    "ui.setup.backend-user.error": "Unable to retrieve user list. Check the console output for details.",
     "ui.setup.backend-user.headline": "Účet backendu",
     "ui.setup.backend-user.description": "Abyste mohli spravovat Vaši webovou stránku, musíte vytvořit alespoň jeden administrativní účet. Uvědomte si prosím, že tento účet není stejný pro přihlášení do Správce Contaa. ",
     "ui.setup.backend-user.formTitle": "Vytvořit účet",

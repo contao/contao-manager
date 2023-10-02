@@ -204,6 +204,7 @@
     "ui.setup.database-connection.save": "Speichern",
     "ui.setup.database-connection.change": "Zugangsdaten ändern",
     "ui.setup.backend-user.success": "Es ist bereits ein Benutzerkonto in der Datenbank vorhanden. Weitere Konten können über das Backend hinzugefügt werden.",
+    "ui.setup.backend-user.error": "Die Benutzerliste konnte nicht gelesen werden. Weitere Details findest du in der Konsolen-Ausgabe.",
     "ui.setup.backend-user.headline": "Backend-Konto",
     "ui.setup.backend-user.description": "Um deine Webseite zu verwalten benötigst du mindestens ein Administratorkonto für das Contao Backend. Beachte dass dieses Konto nicht mit dem Contao Manager zusammenhängt.",
     "ui.setup.backend-user.formTitle": "Benutzerkonto erstellen",

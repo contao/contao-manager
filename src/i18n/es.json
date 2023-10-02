@@ -204,6 +204,7 @@
     "ui.setup.database-connection.save": "Guardar",
     "ui.setup.database-connection.change": "Cambiar credenciales",
     "ui.setup.backend-user.success": "Se encontró una cuenta de administrador para el back-end de Contao en su base de datos. Use el back-end de Contao para agregar más usuarios.",
+    "ui.setup.backend-user.error": "Unable to retrieve user list. Check the console output for details.",
     "ui.setup.backend-user.headline": "Cuenta back-end",
     "ui.setup.backend-user.description": "Para administrar su sitio web, debe tener al menos una cuenta de administrador para el back-end de Contao. Tenga en cuenta que esta cuenta no está relacionada con Contao Manager.",
     "ui.setup.backend-user.formTitle": "Crear una cuenta",

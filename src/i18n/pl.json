@@ -204,6 +204,7 @@
     "ui.setup.database-connection.save": "Zapisz",
     "ui.setup.database-connection.change": "Zmień dane dostępowe",
     "ui.setup.backend-user.success": "W Twojej bazie danych znaleziono konto administratora Contao. Użyj Contao, aby dodać więcej użytkowników.",
+    "ui.setup.backend-user.error": "Unable to retrieve user list. Check the console output for details.",
     "ui.setup.backend-user.headline": "Konto użytkownika",
     "ui.setup.backend-user.description": "Aby zarządzać swoją stroną internetową, musisz mieć co najmniej jedno konto administratora w Contao. Należy pamiętać, że to konto nie jest powiązane z Contao Manager.",
     "ui.setup.backend-user.formTitle": "Utwórz konto",

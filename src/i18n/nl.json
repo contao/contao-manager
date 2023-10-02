@@ -204,6 +204,7 @@
     "ui.setup.database-connection.save": "Bewaar",
     "ui.setup.database-connection.change": "Inloggegevens wijzigen",
     "ui.setup.backend-user.success": "Er is een beheerdersaccount voor de Contao-backend gevonden in uw database. Gebruik de Contao-backend om meer gebruikers toe te voegen.",
+    "ui.setup.backend-user.error": "Unable to retrieve user list. Check the console output for details.",
     "ui.setup.backend-user.headline": "Backend Account",
     "ui.setup.backend-user.description": "Om uw website te beheren, moet u ten minste één beheerdersaccount hebben voor de Contao-backend. Houd er rekening mee dat dit account niet gerelateerd is aan de Contao Manager.",
     "ui.setup.backend-user.formTitle": "Maak een Account",

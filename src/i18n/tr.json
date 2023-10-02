@@ -204,6 +204,7 @@
     "ui.setup.database-connection.save": "Kaydet",
     "ui.setup.database-connection.change": "Kimlik doğrulama bilgilerini değiştir",
     "ui.setup.backend-user.success": "Veri tabanınızda Contao yönetim bölümü için bir yönetici hesabı bulundu. Daha fazla kullanıcı eklemek için Contao yönetim bölümünü kullanın.",
+    "ui.setup.backend-user.error": "Unable to retrieve user list. Check the console output for details.",
     "ui.setup.backend-user.headline": "Yönetim bölümü hesabı",
     "ui.setup.backend-user.description": "Sitenizi yönetmek için Contao yönetim bölümüne erişebilecek en az bir yönetici hesabınızın olması gerekir. Bu hesabın Contao yöneticisi ile ilgili olmadığını unutmayın.",
     "ui.setup.backend-user.formTitle": "Hesap aç",
@@ -431,8 +432,8 @@
     "ui.log-viewer.showExtra": "Ekleri görüntüle",
     "ui.log-viewer.hideExtra": "Ekleri gizle",
     "ui.log-viewer.more": "Sonrakileri yükle…",
-    "ui.log-viewer.download": "Download",
-    "ui.log-viewer.downloadTitle": "Download file \"{file}\"",
+    "ui.log-viewer.download": "İndir",
+    "ui.log-viewer.downloadTitle": "\"{file}\" dosyasını indir",
     "ui.log-viewer.prodEnvironment": "Üretim ortamı",
     "ui.log-viewer.devEnvironment": "Geliştirme ortamı (hata ayıklama kipi)"
 }

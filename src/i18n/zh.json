@@ -204,6 +204,7 @@
     "ui.setup.database-connection.save": "保存",
     "ui.setup.database-connection.change": "Change credentials",
     "ui.setup.backend-user.success": "An admin account for the Contao back end was found in your database. Use the Contao back end to add more users.",
+    "ui.setup.backend-user.error": "Unable to retrieve user list. Check the console output for details.",
     "ui.setup.backend-user.headline": "Backend Account",
     "ui.setup.backend-user.description": "To manage your website, you need to have at least one admin account for the Contao back end. Be aware that this account is not related to the Contao Manager.",
     "ui.setup.backend-user.formTitle": "创建账号",

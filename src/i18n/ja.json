@@ -204,6 +204,7 @@
     "ui.setup.database-connection.save": "保存",
     "ui.setup.database-connection.change": "認証情報を変更",
     "ui.setup.backend-user.success": "データベースにContaoのバックエンドの管理者のアカウントがあります。さらにユーザーを追加するにはContaoのバックエンドを使用してください。",
+    "ui.setup.backend-user.error": "ユーザーのリストを取り出せません。詳細はコンソールの出力を確認してください。",
     "ui.setup.backend-user.headline": "バックエンドのアカウント",
     "ui.setup.backend-user.description": "ウェブサイトを管理するには、少なくともContaoのバックエンドの管理者のアカウントが1つ必要です。このアカウントはContao Managerと無関係なことに注意してください。",
     "ui.setup.backend-user.formTitle": "アカウントを作成",
