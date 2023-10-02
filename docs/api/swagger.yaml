@@ -1483,6 +1483,9 @@ components:
                                 type: array
                             commands:
                                 type: array
+                    config:
+                        type: object
+                        description: Bundle configuration of Contao. Only available for Symfony 6.3.1+ (Contao 5.1+) and if the application is working correctly.
                     supported:
                         type: boolean
                     conflicts:

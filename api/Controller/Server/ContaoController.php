@@ -131,13 +131,14 @@ class ContaoController
             [
                 'version' => $contaoVersion,
                 'cli' => [
-                    'commands' => $this->contaoConsole->getCommandList(),
+                    'commands' => (object) $this->contaoConsole->getCommandList(),
                 ],
                 'api' => [
                     'version' => $this->contaoApi->getVersion(),
                     'features' => $this->contaoApi->getFeatures(),
                     'commands' => $this->contaoApi->getCommands(),
                 ],
+                'config' => (object) $this->contaoConsole->getConfig(),
                 'supported' => version_compare($contaoVersion, '4.0.0', '>=') || 0 === strpos($contaoVersion, 'dev-'),
             ]
         );
@@ -290,6 +291,7 @@ class ContaoController
                 'features' => [],
                 'commands' => [],
             ],
+            'config' => new \stdClass(),
             'supported' => false,
             'conflicts' => [],
             'project_dir' => $this->kernel->getProjectDir(),

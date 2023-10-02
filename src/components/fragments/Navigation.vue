@@ -12,10 +12,10 @@
             <li class="navigation__item navigation__item--main">
                 <a tabindex="0" aria-haspopup="true" onclick="">{{ $t('ui.navigation.tools') }}</a>
                 <ul class="navigation__group navigation__group--sub">
-                    <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a href="/contao">{{ $t('ui.navigation.backend') }}</a></li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a :href="backendUrl">{{ $t('ui.navigation.backend') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showAppDev"><a href="/app_dev.php/" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
-                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showPreview"><a href="/preview.php/" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
-                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showInstallTool"><a href="/contao/install" target="_blank">{{ $t('ui.navigation.installTool') }}</a></li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showPreview"><a :href="previewUrl" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showInstallTool"><a :href="installToolUrl" target="_blank">{{ $t('ui.navigation.installTool') }}</a></li>
                     <router-link tag="li" :to="routes.logViewer" class="navigation__item navigation__item--sub"><a>{{ $t('ui.navigation.logViewer') }}</a></router-link>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="phpinfo">{{ $t('ui.navigation.phpinfo') }}</a></li>
                 </ul>
@@ -51,11 +51,16 @@
             ...mapState('contao/install-tool', { showInstallTool: 'isSupported' }),
             ...mapState('contao/access-key', { showAppDev: 'isEnabled' }),
             ...mapState('contao/jwt-cookie', { showPreview: 'isDebugEnabled' }),
+            ...mapState('server/contao', ['contaoConfig']),
             ...mapGetters('packages', ['totalChanges']),
             ...mapGetters('packages/uploads', ['totalUploads']),
             ...mapGetters('server/database', { hasDatabaseChanges: 'hasChanges', hasDatabaseWarning: 'hasWarning', hasDatabaseError: 'hasError' }),
 
             packageChanges: vm => vm.totalChanges + vm.totalUploads,
+
+            backendUrl: vm => vm.contaoConfig?.backend?.route_prefix || '/contao',
+            previewUrl: vm => `${vm.contaoConfig?.backend?.preview_script || '/preview.php'}/`,
+            installToolUrl: vm => `${vm.contaoConfig?.backend?.route_prefix || '/contao'}/install`,
         },
 
         methods: {

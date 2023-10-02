@@ -35,6 +35,11 @@ class ContaoConsole
     private $commands;
 
     /**
+     * @var @array|null
+     */
+    private $config;
+
+    /**
      * Constructor.
      */
     public function __construct(ConsoleProcessFactory $processFactory)
@@ -109,6 +114,32 @@ class ContaoConsole
         }
 
         return $this->commands = $this->normalizeCommands($data['commands'] ?? []);
+    }
+
+    public function getConfig(): ?array
+    {
+        if (null !== $this->config) {
+            return $this->config;
+        }
+
+        $commands = $this->getCommandList();
+
+        if (
+            !isset($commands['debug:config']['options'])
+            || !\in_array('format', $commands['debug:config']['options'], true)
+        ) {
+            return $this->config = [];
+        }
+
+        $process = $this->processFactory->createContaoConsoleProcess(['debug:config', 'contao', '--format=json']);
+        $process->run();
+
+        // If the console does not work, we don't have any command support.
+        if (!$process->isSuccessful() || !\is_array($data = json_decode(trim($process->getOutput()), true))) {
+            return $this->config = [];
+        }
+
+        return $this->config = $data['contao'] ?? [];
     }
 
     public function checkDatabaseMigrations(): ?array

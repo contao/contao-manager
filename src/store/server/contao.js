@@ -9,6 +9,7 @@ export default {
         cache: null,
         contaoVersion: null,
         contaoApi: null,
+        contaoConfig: null,
     },
 
     mutations: {
@@ -16,10 +17,12 @@ export default {
             state.cache = response;
             state.contaoVersion = null;
             state.contaoApi = null;
+            state.contaoConfig = null;
 
             if (response) {
                 state.contaoVersion = response.body.version;
                 state.contaoApi = response.body.api;
+                state.contaoConfig = response.body.config;
             }
         },
     },
