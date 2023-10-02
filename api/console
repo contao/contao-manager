@@ -8,7 +8,7 @@
  * @license LGPL-3.0+
  */
 
-if (0 === strpos(__FILE__, 'phar:') && ini_get('register_argc_argv')) {
+if (PHP_SAPI !== 'cli' && 0 === strpos(__FILE__, 'phar:') && ini_get('register_argc_argv')) {
     echo 'Contao Manager cannot be run safely on non-CLI SAPIs with register_argc_argv=On. Aborting.'.PHP_EOL;
     exit(1);
 }

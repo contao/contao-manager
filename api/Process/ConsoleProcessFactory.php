@@ -251,6 +251,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
         $defaultArgs[] = '-derror_reporting=0';
         $defaultArgs[] = '-dallow_url_fopen=1';
         $defaultArgs[] = '-ddisable_functions=';
+        $defaultArgs[] = '-dregister_argc_argv=0';
         $defaultArgs[] = '-ddate.timezone='.@date_default_timezone_get();
 
         return array_merge($defaultArgs, $arguments);
