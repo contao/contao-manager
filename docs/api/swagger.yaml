@@ -941,6 +941,23 @@ paths:
                 501:
                     description: If the current Contao version does not support the database migration API.
 
+    /api/contao/backup:
+        get:
+            summary: Gets a list of database backups on the server.
+            tags: [Contao API]
+            responses:
+                200:
+                    description: List of database backups.
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/ContaoBackup'
+
+                501:
+                    description: If the current Contao version does not support database backups.
+
     /api/contao/install-tool/lock:
         get:
             summary: Get install tool lock status
@@ -978,7 +995,6 @@ paths:
                                 $ref: '#/components/schemas/ContaoInstallToolLock'
                 501:
                     description: If the current Contao version does not support locking the install tool.
-
 
     /api/contao/jwt-cookie:
         get:
@@ -1593,6 +1609,19 @@ components:
                 hash:
                     type: string
 
+        ContaoBackup:
+            type: object
+            properties:
+                name:
+                    type: string
+                    description: The backup file name (unique).
+                createdAt:
+                    type: string
+                    description: ISO 8601 date when the file was created.
+                size:
+                    type: number
+                    description: The backup file size in bytes.
+
         ContaoInstallToolLock:
             type: object
             properties:
@@ -1635,6 +1664,8 @@ components:
                     composer/install: '#/components/schemas/TaskPackagesInstall'
                     contao/install: '#/components/schemas/TaskPackagesSetup'
                     contao/rebuild-cache: '#/components/schemas/TaskContaoRebuildCache'
+                    contao/backup-create: '#/components/schemas/TaskContaoBackupCreate'
+                    contao/backup-restore: '#/components/schemas/TaskContaoBackupRestore'
                     composer/clear-cache: '#/components/schemas/TaskComposerClearCache'
                     composer/dump-autoload: '#/components/schemas/TaskComposerDumpAutoload'
                     manager/self-update: '#/components/schemas/TaskManagerSelfUpdate'
@@ -1647,6 +1678,8 @@ components:
                 - $ref: '#/components/schemas/TaskPackagesInstall'
                 - $ref: '#/components/schemas/TaskPackagesSetup'
                 - $ref: '#/components/schemas/TaskContaoRebuildCache'
+                - $ref: '#/components/schemas/TaskContaoBackupCreate'
+                - $ref: '#/components/schemas/TaskContaoBackupRestore'
                 - $ref: '#/components/schemas/TaskComposerClearCache'
                 - $ref: '#/components/schemas/TaskComposerDumpAutoload'
                 - $ref: '#/components/schemas/TaskManagerSelfUpdate'
@@ -1658,6 +1691,8 @@ components:
                 -   type: object
                     properties:
                         name:
+                            type: string
+                            default: 'composer/clear-cache'
                             description: Clears the Composer cache.
 
         TaskComposerDumpAutoload:
@@ -1666,6 +1701,8 @@ components:
                 -   type: object
                     properties:
                         name:
+                            type: string
+                            default: 'composer/dump-autoload'
                             description: Dumps the Composer autoloader.
 
         TaskContaoRebuildCache:
@@ -1674,6 +1711,8 @@ components:
                 -   type: object
                     properties:
                         name:
+                            type: string
+                            default: 'contao/rebuild-cache'
                             description: Clears the Contao/Symfony cache and optionally rebuilds it.
                         environment:
                             type: string
@@ -1682,12 +1721,41 @@ components:
                             type: boolean
                             default: true
 
+        TaskContaoBackupCreate:
+            allOf:
+                -   $ref: '#/components/schemas/TaskSet'
+                -   type: object
+                    properties:
+                        name:
+                            type: string
+                            default: 'contao/backup-create'
+                            description: Creates a full backup of the current database.
+
+        TaskContaoBackupRestore:
+            allOf:
+                -   $ref: '#/components/schemas/TaskSet'
+                -   type: object
+                    properties:
+                        name:
+                            type: string
+                            default: 'contao/backup-restore'
+                            description: Restore a database backup from file.
+                        file:
+                            type: string
+                            description: The database backup file name from /var/backups.
+                        backup:
+                            type: boolean
+                            default: false
+                            description: Whether to create a new backup before restore (and therefore overwriting the database content).
+
         TaskManagerSelfUpdate:
             allOf:
                 -   $ref: '#/components/schemas/TaskSet'
                 -   type: object
                     properties:
                         name:
+                            type: string
+                            default: 'manager/self-update'
                             description: Updated the Contao Manager to the latest version.
 
         TaskPackagesSetup:
@@ -1697,6 +1765,8 @@ components:
                 -   type: object
                     properties:
                         name:
+                            type: string
+                            default: 'contao/install'
                             description: Creates a `composer.json` for the Contao Managed Edition.
                         version:
                             type: string
@@ -1717,6 +1787,8 @@ components:
                 -   type: object
                     properties:
                         name:
+                            type: string
+                            default: 'composer/install'
                             description: Installs Composer packages from lock file (`composer install`).
                               This automatically runs an update if there is no `composer.lock` file and uses
                               the Composer Resolver Cloud if enabled.
@@ -1734,6 +1806,8 @@ components:
                 -   type: object
                     properties:
                         name:
+                            type: string
+                            default: 'composer/update'
                             description: Updates the installed Composer packages (`composer update`).
                         dry_run:
                             type: boolean

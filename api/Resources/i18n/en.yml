@@ -59,6 +59,10 @@ en:
             title: 'Rebuilding Contao Cache'
         self_update:
             title: 'Contao Manager Self-Update'
+        backup_create:
+            title: 'Creating database backup'
+        backup_restore:
+            title: 'Restoring database backup'
 
     taskoperation:
         self-update:

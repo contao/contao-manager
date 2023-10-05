@@ -4,12 +4,14 @@ import accessKey from './contao/accessKey';
 import installTool from './contao/installTool';
 import jwtCookie from './contao/jwtCookie';
 import maintenanceMode from './contao/maintenanceMode';
+import backup from './contao/backup';
 
 export default {
     namespaced: true,
 
     modules: {
         'access-key': accessKey,
+        backup,
         'install-tool': installTool,
         'jwt-cookie': jwtCookie,
         'maintenance-mode': maintenanceMode,
