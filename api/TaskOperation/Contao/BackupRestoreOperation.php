@@ -22,7 +22,7 @@ class BackupRestoreOperation extends AbstractProcessOperation
      */
     private $file;
 
-    public function __construct(ConsoleProcessFactory $processFactory, string $file, $processId = 'backup-create')
+    public function __construct(ConsoleProcessFactory $processFactory, string $file, $processId = 'backup-restore')
     {
         $this->file = $file;
 

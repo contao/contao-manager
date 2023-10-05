@@ -3,6 +3,7 @@
         <div class="layout-boxed__cell">
             <div :class="'layout-boxed__container ' + (wide ? ' layout-boxed__container--wide ' : '') + slotClass">
                 <slot></slot>
+                <div class="clearfix"></div>
                 <footer-fragment :display="wide ? 'boxed' : ''"></footer-fragment>
             </div>
         </div>

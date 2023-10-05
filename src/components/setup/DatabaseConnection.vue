@@ -74,183 +74,183 @@ import SelectMenu from '../widgets/SelectMenu';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
 export default {
-        components: { TextField, SelectMenu, LoadingButton },
+    components: { TextField, SelectMenu, LoadingButton },
 
-        data: () => ({
-            processing: false,
-            validUrl: true,
-            valid: false,
-            currentState: null,
+    data: () => ({
+        processing: false,
+        validUrl: true,
+        valid: false,
+        currentState: null,
 
-            url: '',
-            user: '',
-            password: '',
-            server: 'localhost',
-            database: '',
-            serverVersion: ''
-        }),
+        url: '',
+        user: '',
+        password: '',
+        server: 'localhost',
+        database: '',
+        serverVersion: ''
+    }),
 
-        computed: {
-            ...mapState('server/database', { currentUrl: 'url', urlPattern: 'pattern', status: 'status' }),
+    computed: {
+        ...mapState('server/database', { currentUrl: 'url', urlPattern: 'pattern', status: 'status' }),
 
-            unknownServerVersion: vm => vm.serverVersion && !vm.serverVersions.find(v => v.value === vm.serverVersion),
-            currentServerVersion: vm => vm.serverVersions.find(v => v.value === vm.serverVersion)?.label || vm.serverVersion,
-            serverVersions: (vm) => ([
-                {
-                    value: '8.0.0',
-                    label: 'MySQL 8.0+',
-                },
-                {
-                    value: '5.7.9',
-                    label: 'MySQL 5.7.9+',
-                },
-                {
-                    value: '10.2.7-MariaDB',
-                    label: 'MariaDB 10.2.7+',
-                },
-                {
-                    value: '5.1.0',
-                    label: vm.$t('ui.setup.database-connection.oldVersion'),
-                },
-            ]),
+        unknownServerVersion: vm => vm.serverVersion && !vm.serverVersions.find(v => v.value === vm.serverVersion),
+        currentServerVersion: vm => vm.serverVersions.find(v => v.value === vm.serverVersion)?.label || vm.serverVersion,
+        serverVersions: (vm) => ([
+            {
+                value: '8.0.0',
+                label: 'MySQL 8.0+',
+            },
+            {
+                value: '5.7.9',
+                label: 'MySQL 5.7.9+',
+            },
+            {
+                value: '10.2.7-MariaDB',
+                label: 'MariaDB 10.2.7+',
+            },
+            {
+                value: '5.1.0',
+                label: vm.$t('ui.setup.database-connection.oldVersion'),
+            },
+        ]),
+    },
+
+    methods: {
+        checkMigrations() {
+            this.$store.commit('checkMigrations');
         },
 
-        methods: {
-            checkMigrations() {
-                this.$store.commit('checkMigrations');
-            },
+        parseUrl() {
+            if (!this.validateUrl()) {
+                return;
+            }
 
-            parseUrl() {
-                if (!this.validateUrl()) {
-                    return;
-                }
+            const match = new RegExp(this.urlPattern, 'i').exec(this.url)
 
-                const match = new RegExp(this.urlPattern, 'i').exec(this.url)
+            this.user = match[3] ? decodeURIComponent(match[3]) : '';
+            this.password = match[5] ? decodeURIComponent(match[5]) : '';
+            this.server = decodeURIComponent(match[6]);
+            this.database = decodeURIComponent(match[8]);
+            this.serverVersion = '';
 
-                this.user = match[3] ? decodeURIComponent(match[3]) : '';
-                this.password = match[5] ? decodeURIComponent(match[5]) : '';
-                this.server = decodeURIComponent(match[6]);
-                this.database = decodeURIComponent(match[8]);
-                this.serverVersion = '';
+            if (this.server.substring(this.server.length - 5) === ':3306') {
+                this.server = this.server.substring(0, this.server.length - 5);
+            } else if (!this.server.includes(':')) {
+                this.server = `${this.server}:3306`;
+            }
 
-                if (this.server.substring(this.server.length - 5) === ':3306') {
-                    this.server = this.server.substring(0, this.server.length - 5);
-                } else if (!this.server.includes(':')) {
-                    this.server = `${this.server}:3306`;
-                }
+            if (match[9]) {
+                const params = new URLSearchParams(match[9]);
+                this.serverVersion = params.get('serverVersion');
+            }
 
-                if (match[9]) {
-                    const params = new URLSearchParams(match[9]);
-                    this.serverVersion = params.get('serverVersion');
-                }
-
-                this.valid = this.validateUrl();
-            },
-
-            updateUrl() {
-                this.valid = false;
-
-                if (!this.server) {
-                    return;
-                }
-
-                const serverParts = this.server.split(':', 2);
-                const server = `${encodeURIComponent(serverParts[0])}:${serverParts[1] || '3306'}`;
-
-                let url = 'mysql://';
-
-                if (this.user) {
-                    url += encodeURIComponent(this.user);
-
-                    if (this.password) {
-                        url += ':'+encodeURIComponent(this.password);
-                    }
-
-                    url += '@';
-                }
-
-                url += server;
-
-                if (this.database) {
-                    url += '/'+encodeURIComponent(this.database);
-                }
-
-                if (this.serverVersion) {
-                    url += `?serverVersion=${this.serverVersion}`;
-                }
-
-                this.url = url;
-                this.valid = this.validateUrl();
-            },
-
-            validateUrl() {
-                this.validUrl = true;
-                this.valid = false;
-
-                if (this.url === '') {
-                    return false;
-                }
-
-                this.validUrl = new RegExp(this.urlPattern, 'i').test(this.url);
-
-                return this.validUrl;
-            },
-
-            async load() {
-                this.url = (await this.$store.dispatch('server/database/get')).body.url;
-                this.currentState = this.status?.type;
-                this.parseUrl();
-
-                if (this.currentState === 'error' && this.currentUrl) {
-                    this.validUrl = false;
-                    this.valid = false;
-                }
-            },
-
-            async save() {
-                this.processing = true;
-
-                const response = await this.$store.dispatch('server/database/set', this.url);
-
-                if (response.body.status.type === 'error') {
-                    this.processing = false;
-                    this.validUrl = false;
-                    this.valid = false;
-                    return;
-                }
-
-                await this.$store.dispatch('server/adminUser/get', false)
-
-                this.processing = false;
-            },
+            this.valid = this.validateUrl();
         },
 
-        watch: {
-            user() {
-                this.updateUrl();
-            },
-            password() {
-                this.updateUrl();
-            },
-            server() {
-                this.updateUrl();
-            },
-            database() {
-                this.updateUrl();
-            },
-            serverVersion() {
-                this.updateUrl();
-            },
+        updateUrl() {
+            this.valid = false;
 
-            status() {
-                this.currentState = this.status?.type;
+            if (!this.server) {
+                return;
+            }
+
+            const serverParts = this.server.split(':', 2);
+            const server = `${encodeURIComponent(serverParts[0])}:${serverParts[1] || '3306'}`;
+
+            let url = 'mysql://';
+
+            if (this.user) {
+                url += encodeURIComponent(this.user);
+
+                if (this.password) {
+                    url += ':'+encodeURIComponent(this.password);
+                }
+
+                url += '@';
+            }
+
+            url += server;
+
+            if (this.database) {
+                url += '/'+encodeURIComponent(this.database);
+            }
+
+            if (this.serverVersion) {
+                url += `?serverVersion=${this.serverVersion}`;
+            }
+
+            this.url = url;
+            this.valid = this.validateUrl();
+        },
+
+        validateUrl() {
+            this.validUrl = true;
+            this.valid = false;
+
+            if (this.url === '') {
+                return false;
+            }
+
+            this.validUrl = new RegExp(this.urlPattern, 'i').test(this.url);
+
+            return this.validUrl;
+        },
+
+        async load() {
+            this.url = (await this.$store.dispatch('server/database/get')).body.url;
+            this.currentState = this.status?.type;
+            this.parseUrl();
+
+            if (this.currentState === 'error' && this.currentUrl) {
+                this.validUrl = false;
+                this.valid = false;
             }
         },
 
-        mounted() {
-            this.load();
+        async save() {
+            this.processing = true;
+
+            const response = await this.$store.dispatch('server/database/set', this.url);
+
+            if (response.body.status.type === 'error') {
+                this.processing = false;
+                this.validUrl = false;
+                this.valid = false;
+                return;
+            }
+
+            await this.$store.dispatch('server/adminUser/get', false)
+
+            this.processing = false;
         },
-    };
+    },
+
+    watch: {
+        user() {
+            this.updateUrl();
+        },
+        password() {
+            this.updateUrl();
+        },
+        server() {
+            this.updateUrl();
+        },
+        database() {
+            this.updateUrl();
+        },
+        serverVersion() {
+            this.updateUrl();
+        },
+
+        status() {
+            this.currentState = this.status?.type;
+        }
+    },
+
+    mounted() {
+        this.load();
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

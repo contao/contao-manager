@@ -12,7 +12,7 @@
                         <span class="maintenance__warning" v-else-if="totalSchemaUpdates">{{ $tc('ui.maintenance.database.schemaUpdates', totalSchemaUpdates) }}</span>
                     </h1>
                     <p>{{ $t('ui.maintenance.database.description') }}</p><br>
-                    <p v-if="!supportsBackups && !loadingBackups">{{ $tc('ui.maintenance.database.backupUnsupported', backupFiles.length, { date: datimFormat(backupFiles[0].createdAt) }) }}</p>
+                    <p v-if="!supportsBackups && !loadingBackups">{{ $t('ui.maintenance.database.backupUnsupported') }}</p>
                     <p v-else-if="supportsBackups && backupFiles.length">{{ $tc('ui.maintenance.database.backupList', backupFiles.length, { date: datimFormat(backupFiles[0].createdAt) }) }}</p>
                     <p v-else-if="supportsBackups">{{ $t('ui.maintenance.database.backupEmpty') }}</p>
                 </div>

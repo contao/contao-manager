@@ -92,6 +92,7 @@ const store = new Vuex.Store({
             commit('server/php-web/setCache');
             commit('server/self-update/setCache');
             commit('contao/install-tool/setCache');
+            commit('contao/backup/setCache');
             commit('tasks/setInitialized', false);
             commit('cloud/setStatus', null);
             commit('setSafeMode', false);
