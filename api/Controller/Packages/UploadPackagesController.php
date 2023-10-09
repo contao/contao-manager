@@ -223,9 +223,13 @@ class UploadPackagesController
             throw new \RuntimeException(sprintf('Incomplete upload ID "%s": %s instead of %s bytes', $id, $size, $config['size']));
         }
 
-        $json = Zip::getComposerJson($uploadFile);
+        try {
+            $json = Zip::getComposerJson($uploadFile);
 
-        if (null === $json) {
+            if (null === $json) {
+                return $this->installError($id, 'file');
+            }
+        } catch (\RuntimeException $e) {
             return $this->installError($id, 'file');
         }
 
@@ -308,6 +312,10 @@ class UploadPackagesController
 
     private function validateUploadSupport(): void
     {
+        if (!file_exists($this->environment->getJsonFile())) {
+            return;
+        }
+
         if (!\extension_loaded('zip')) {
             throw new ApiProblemException((new ApiProblem('The artifact repository requires PHP\'s zip extension'))->setStatus(Response::HTTP_NOT_IMPLEMENTED));
         }
