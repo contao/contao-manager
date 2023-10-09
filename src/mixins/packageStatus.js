@@ -42,6 +42,7 @@ export default {
         isDependency: vm => vm.metadata && !!vm.metadata.dependency,
         isFeature: vm => vm.packageFeature(vm.data.name),
         isVisible: vm => vm.packageVisible(vm.data.name),
+        isTheme: vm => vm.data.type === 'contao-theme',
         isContao: vm => vm.data.name === 'contao/manager-bundle',
 
         isUpload: vm => {
@@ -52,7 +53,7 @@ export default {
         installedVersion: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].version : null,
         installedTime: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].time : null,
 
-        canBeInstalled: vm => !vm.isPrivate && (!vm.isDependency || vm.isSuggested),
+        canBeInstalled: vm => !vm.isPrivate && !vm.isTheme && (!vm.isDependency || vm.isSuggested),
 
         constraintInstalled() {
             if (!this.isRootInstalled) {

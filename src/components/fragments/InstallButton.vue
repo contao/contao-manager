@@ -4,18 +4,18 @@
         icon="add"
         :small="small"
         :inline="inline"
-        :disabled="isInstalled || disabled"
+        :disabled="disabled || isRootInstalled || isAdded || isRequired || !canBeInstalled"
         @click="install"
     >{{ $t(small ? 'ui.package.installButtonShort' : 'ui.package.installButton') }}</confirm-button>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-
+    import packageStatus from '../../mixins/packageStatus';
     import ConfirmButton from '../widgets/ConfirmButton';
 
     export default {
         components: { ConfirmButton },
+        mixins: [packageStatus],
 
         props: {
             data: {
@@ -25,14 +25,6 @@
             small: Boolean,
             inline: Boolean,
             disabled: Boolean,
-        },
-
-        computed: {
-            ...mapGetters('packages', ['packageInstalled', 'packageRoot', 'packageAdded', 'packageRequired']),
-
-            isInstalled: vm => (vm.packageInstalled(vm.data.name) && vm.packageRoot(vm.data.name))
-                || vm.packageAdded(vm.data.name)
-                || vm.packageRequired(vm.data.name),
         },
 
         methods: {

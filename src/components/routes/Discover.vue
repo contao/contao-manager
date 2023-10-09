@@ -1,5 +1,5 @@
 <template>
-    <discover :wrapper="wrapper">
+    <discover :wrapper="wrapper" hide-themes>
 
         <template #package-actions="{ data }">
             <a class="widget-button widget-button--small widget-button--primary widget-button--link" target="_blank" :href="data.homepage" v-if="data && data.private">{{ $t('ui.package.homepage') }}</a>
