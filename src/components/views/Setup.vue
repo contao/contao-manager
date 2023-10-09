@@ -1,7 +1,7 @@
 <template>
     <boxed-layout :wide="true" slotClass="view-setup">
 
-        <section class="view-setup__steps" :class="{ 'view-setup__steps--installtool': hasInstallTool }" v-if="currentStep > 0">
+        <section class="view-setup__steps" v-if="currentStep > 0">
             <ul>
                 <li :class="{ 'active': currentStep > i }" v-for="(step, i) in steps" :key="step.name">
                     <button @click="currentStep = (i+1)" :disabled="currentStep <= (i+1)">
@@ -21,7 +21,7 @@
             <h1 class="view-setup__headline">{{ $t('ui.setup.complete') }}</h1>
             <p class="view-setup__description">{{ $t('ui.setup.complete1', { version: contaoVersion }) }}</p>
 
-            <template v-if="hasInstallTool">
+            <template v-if="!databaseSupported || !userSupported">
                 <p class="view-setup__description">{{ $t('ui.setup.complete2') }}</p>
                 <button class="widget-button widget-button--inline" @click="launch">{{ $t('ui.setup.manager') }}</button>
                 <a href="/contao/install" class="widget-button widget-button--primary view-setup__continue">{{ $t('ui.setup.installTool') }}</a>
@@ -79,7 +79,8 @@ export default {
         computed: {
             ...mapState(['setupStep']),
             ...mapState('server/contao', ['contaoVersion']),
-            ...mapState('contao/install-tool', { hasInstallTool: 'isSupported' }),
+            ...mapState('server/database', { databaseSupported: 'supported' }),
+            ...mapState('server/adminUser', { userSupported: 'supported' }),
 
             currentStep: {
                 get() {
@@ -105,19 +106,21 @@ export default {
                     component: CreateProject
                 });
 
-                if (!this.hasInstallTool) {
+                if (this.databaseSupported) {
                     steps.push({
                         name: 'database-connection',
                         icon: DatabaseIcon,
                         component: DatabaseConnection
                     });
+            }
 
-                    steps.push({
-                        name: 'backend-user',
-                        icon: UserIcon,
-                        component: BackendUser
-                    })
-                }
+                if (this.userSupported) {
+                steps.push({
+                    name: 'backend-user',
+                    icon: UserIcon,
+                    component: BackendUser
+                })
+            }
 
                 return steps;
             }
@@ -127,8 +130,13 @@ export default {
             launch() {
                 this.$store.commit('setView', views.READY);
             }
-        }
-    };
+        },
+
+    mounted () {
+        this.$store.dispatch('server/adminUser/get');
+        this.$store.dispatch('contao/backup/fetch');
+    }
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -155,9 +163,9 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                flex-grow: 1;
                 position: relative;
                 height: 6px;
-                width: calc(100% / 5);
                 margin: 0;
                 padding: 0;
 
@@ -186,10 +194,6 @@ export default {
                     border-radius: 50%;
                     z-index: 1;
                 }
-            }
-
-            &--installtool li {
-                width: calc(100% / 3);
             }
 
             li:first-child:before {
@@ -420,7 +424,7 @@ export default {
                 float: left;
                 width: 470px;
                 max-width: none;
-                padding: 0 60px 100px;
+                padding: 0 60px;
             }
 
             &__form {
@@ -428,7 +432,6 @@ export default {
                 width: 370px;
                 max-width: none;
                 margin: 0 50px;
-                padding-bottom: 50px;
 
                 .widget-select,
                 .widget-text {
@@ -446,21 +449,9 @@ export default {
                     }
                 }
 
-                .widget-checkbox {
-                    margin-left: 120px;
-                }
-
-                .widget-button {
-                    width: 250px;
-                    margin-left: 120px;
-                }
-
-                &--center {
-                    .widget-checkbox,
-                    .widget-button {
-                        margin-left: 5px;
-                        margin-right: 5px;
-                    }
+                .widget-button--inline {
+                    margin-left: 5px;
+                    margin-right: 5px;
                 }
             }
         }

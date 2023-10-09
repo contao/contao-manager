@@ -18,7 +18,7 @@
                 </div>
                 <fieldset class="maintenance__actions">
                     <loader class="maintenance__loader" v-if="loading"/>
-                    <a class="widget-button widget-button--alert" href="/contao/install" v-else-if="hasError && hasInstallTool">{{ $t('ui.maintenance.database.installTool') }}</a>
+                    <a class="widget-button widget-button--alert" href="/contao/install" v-else-if="hasError && !supported">{{ $t('ui.maintenance.database.installTool') }}</a>
                     <button class="widget-button widget-button--alert" v-else-if="hasError" @click="checkMigrations">{{ $t('ui.maintenance.database.button') }}</button>
                     <button-group
                         :label="$t('ui.maintenance.database.button')"
@@ -50,7 +50,6 @@
 
         computed: {
             ...mapState(['safeMode']),
-            ...mapState('contao/install-tool', { hasInstallTool: 'isSupported' }),
             ...mapState('server/database', ['loading', 'supported', 'status']),
             ...mapState('contao/backup', { supportsBackups: 'supported', backupFiles: 'files', loadingBackups: 'loading' }),
             ...mapGetters('server/database', ['hasError', 'hasChanges', 'hasWarning', 'totalMigrations', 'totalSchemaUpdates']),

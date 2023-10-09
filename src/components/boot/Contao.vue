@@ -2,7 +2,7 @@
     <boot-check :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription">
         <button v-if="bootState === 'action'" @click="setup" class="widget-button widget-button--primary widget-button--run">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
         <button v-if="bootState === 'warning'" @click="setup" class="widget-button widget-button--alert">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
-        <button v-if="bootState === 'success' && !hasInstallTool" @click="setup" class="widget-button">{{ $t('ui.server.contao.setup') }}</button>
+        <button v-if="bootState === 'success' && databaseSupported" @click="setup" class="widget-button">{{ $t('ui.server.contao.setup') }}</button>
     </boot-check>
 </template>
 
@@ -22,12 +22,11 @@
         }),
 
         computed: {
-            ...mapState('server/database', { databaseStatus: 'status' }),
-            ...mapState('server/adminUser', ['hasUser']),
-            ...mapState('contao/install-tool', { hasInstallTool: 'isSupported' }),
+            ...mapState('server/database', { databaseSupported: 'supported', databaseStatus: 'status' }),
+            ...mapState('server/adminUser', { userSupported: 'supported', hasUser: 'hasUser' }),
 
             databaseAccessProblem: vm => vm.databaseStatus?.type === 'error' && vm.databaseStatus?.message.toLowerCase().includes('access denied'),
-            databaseProblem: vm => ['error', 'problem'].includes(vm.databaseStatus?.type)
+            databaseProblem: vm => ['error', 'problem'].includes(vm.databaseStatus?.type),
         },
 
         methods: {
@@ -68,7 +67,7 @@
                         this.$store.dispatch('server/database/get', false)
                     ])
 
-                    if (!this.hasInstallTool) {
+                    if (this.databaseSupported) {
                         if (this.databaseAccessProblem) {
                             bootState = 'warning';
                             bootDescription += ` ${this.$t('ui.server.contao.connectionError')}`;
@@ -78,7 +77,7 @@
                         } else {
                             await this.$store.dispatch('server/adminUser/get', false)
 
-                            if (!this.hasUser) {
+                            if (this.userSupported && !this.hasUser) {
                                 bootState = 'warning';
                                 bootDescription += ` ${this.$t('ui.server.contao.missingUser')}`;
                             }
