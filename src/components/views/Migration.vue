@@ -279,7 +279,7 @@ export default {
                                 return;
                             }
 
-                            operation.summary.push(part);
+                            operation.summary.push(`ALTER TABLE ${table} ${part}`);
                             operation.details.push('');
                         })
 
