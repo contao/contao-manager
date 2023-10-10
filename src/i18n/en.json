@@ -194,7 +194,7 @@
     "ui.setup.database-connection.database": "Database Name",
     "ui.setup.database-connection.serverVersion": "Server Version",
     "ui.setup.database-connection.oldVersion": "Older MySQL or MariaDB",
-    "ui.setup.database-connection.connected": "Successfully connected to database {database} on {server} {version}.",
+    "ui.setup.database-connection.connected": "Successfully connected to database {database} on {server}.",
     "ui.setup.database-connection.error": "Error connecting to the database.",
     "ui.setup.database-connection.problem": "Contao has detected a problem with your database server.",
     "ui.setup.database-connection.migration": "There is one pending migration. | There are {count} pending migrations.",

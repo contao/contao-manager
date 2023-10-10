@@ -11,7 +11,7 @@
     import boot from '../../mixins/boot';
 
     import BootCheck from '../fragments/BootCheck';
-    import { mapState } from 'vuex';
+    import { mapGetters, mapState } from 'vuex';
 
     export default {
         mixins: [boot],
@@ -24,9 +24,7 @@
         computed: {
             ...mapState('server/database', { databaseSupported: 'supported', databaseStatus: 'status' }),
             ...mapState('server/adminUser', { userSupported: 'supported', hasUser: 'hasUser' }),
-
-            databaseAccessProblem: vm => vm.databaseStatus?.type === 'error' && vm.databaseStatus?.message.toLowerCase().includes('access denied'),
-            databaseProblem: vm => ['error', 'problem'].includes(vm.databaseStatus?.type),
+            ...mapGetters('server/database', { databaseProblem: 'hasError', databaseAccessProblem: 'accessProblem' }),
         },
 
         methods: {

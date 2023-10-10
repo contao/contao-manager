@@ -19,6 +19,7 @@ export default {
         hasWarning: state => !!state.status && state.status.warnings > 0,
         hasChanges: (state, getters) => !!getters.totalMigrations || !!getters.totalSchemaUpdates,
         totalChanges: (state, getters) => getters.totalMigrations + getters.totalSchemaUpdates,
+        accessProblem: state => !!state.status && state.status.type === 'error' && state.status.message.toLowerCase().includes('access denied'),
     },
 
     mutations: {

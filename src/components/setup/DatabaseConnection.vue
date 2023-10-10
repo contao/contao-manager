@@ -33,12 +33,9 @@
                         <text-field name="password" type="password" :label="$t('ui.setup.database-connection.password')" :disabled="processing" v-model="password"/>
                         <text-field name="server" :label="$t('ui.setup.database-connection.server')" :disabled="processing" required v-model="server"/>
                         <text-field name="database" :label="$t('ui.setup.database-connection.database')" :disabled="processing" required v-model="database"/>
-
-                        <text-field name="serverVersion" :label="$t('ui.setup.database-connection.serverVersion')" :disabled="processing" required v-model="serverVersion" v-if="unknownServerVersion"/>
-                        <select-menu name="serverVersion" :label="$t('ui.setup.database-connection.serverVersion')" :disabled="processing" required include-blank :options="serverVersions" v-model="serverVersion" v-else/>
                     </div>
                     <div class="setup__fields">
-                        <loading-button submit color="primary" icon="save" :loading="processing" :disabled="!valid || !serverVersion">{{ $t('ui.setup.database-connection.save') }}</loading-button>
+                        <loading-button submit color="primary" icon="save" :loading="processing" :disabled="!valid">{{ $t('ui.setup.database-connection.save') }}</loading-button>
                         <button type="button" class="widget-button" :disabled="processing" @click="load" v-if="currentState === 'edit'">{{ $t('ui.setup.cancel') }}</button>
                     </div>
                 </form>
@@ -47,10 +44,9 @@
             <main class="setup__form setup__form--center" v-else v-bind:key="'confirmation'">
                 <div class="setup__fields setup__fields--center">
                     <svg class="setup__check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" /></svg>
-                    <i18n tag="p" path="ui.setup.database-connection.connected" class="setup__fielddesc">
+                    <i18n tag="p" path="ui.setup.database-connection.connected" class="setup__fielddesc" v-if="url">
                         <template #database><i>{{ database }}</i></template>
                         <template #server><i>{{ server }}</i></template>
-                        <template #version>({{ currentServerVersion }})</template>
                     </i18n>
 
                     <p class="setup__fielddesc setup__warning" v-if="status && status.total > 0">{{ $tc(`ui.setup.database-connection.${currentState}`, status.total) }}</p>
@@ -70,16 +66,16 @@
 import { mapState } from 'vuex';
 
 import TextField from '../widgets/TextField';
-import SelectMenu from '../widgets/SelectMenu';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
 export default {
-    components: { TextField, SelectMenu, LoadingButton },
+    components: { TextField, LoadingButton },
 
     data: () => ({
         processing: false,
         validUrl: true,
         valid: false,
+        validating: false,
         currentState: null,
 
         url: '',
@@ -87,32 +83,10 @@ export default {
         password: '',
         server: 'localhost',
         database: '',
-        serverVersion: ''
     }),
 
     computed: {
         ...mapState('server/database', { currentUrl: 'url', urlPattern: 'pattern', status: 'status' }),
-
-        unknownServerVersion: vm => vm.serverVersion && !vm.serverVersions.find(v => v.value === vm.serverVersion),
-        currentServerVersion: vm => vm.serverVersions.find(v => v.value === vm.serverVersion)?.label || vm.serverVersion,
-        serverVersions: (vm) => ([
-            {
-                value: '8.0.0',
-                label: 'MySQL 8.0+',
-            },
-            {
-                value: '5.7.9',
-                label: 'MySQL 5.7.9+',
-            },
-            {
-                value: '10.2.7-MariaDB',
-                label: 'MariaDB 10.2.7+',
-            },
-            {
-                value: '5.1.0',
-                label: vm.$t('ui.setup.database-connection.oldVersion'),
-            },
-        ]),
     },
 
     methods: {
@@ -125,13 +99,14 @@ export default {
                 return;
             }
 
+            this.validating = true;
+
             const match = new RegExp(this.urlPattern, 'i').exec(this.url)
 
             this.user = match[3] ? decodeURIComponent(match[3]) : '';
             this.password = match[5] ? decodeURIComponent(match[5]) : '';
             this.server = decodeURIComponent(match[6]);
             this.database = decodeURIComponent(match[8]);
-            this.serverVersion = '';
 
             if (this.server.substring(this.server.length - 5) === ':3306') {
                 this.server = this.server.substring(0, this.server.length - 5);
@@ -139,15 +114,15 @@ export default {
                 this.server = `${this.server}:3306`;
             }
 
-            if (match[9]) {
-                const params = new URLSearchParams(match[9]);
-                this.serverVersion = params.get('serverVersion');
-            }
-
             this.valid = this.validateUrl();
+            this.validating = false;
         },
 
         updateUrl() {
+            if (this.validating) {
+                return;
+            }
+
             this.valid = false;
 
             if (!this.server) {
@@ -175,10 +150,6 @@ export default {
                 url += '/'+encodeURIComponent(this.database);
             }
 
-            if (this.serverVersion) {
-                url += `?serverVersion=${this.serverVersion}`;
-            }
-
             this.url = url;
             this.valid = this.validateUrl();
         },
@@ -201,7 +172,7 @@ export default {
             this.currentState = this.status?.type;
             this.parseUrl();
 
-            if (this.currentState === 'error' && this.currentUrl) {
+            if (this.currentState === 'error') {
                 this.validUrl = false;
                 this.valid = false;
             }
@@ -236,9 +207,6 @@ export default {
             this.updateUrl();
         },
         database() {
-            this.updateUrl();
-        },
-        serverVersion() {
             this.updateUrl();
         },
 
