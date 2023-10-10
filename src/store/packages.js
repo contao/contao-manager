@@ -41,7 +41,7 @@ export default {
         packageFeatures: () => name => features[name] ? features[name] : [],
         packageFeature: (s, g) => name => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
         packageVisible: (s, g) => name => isVisible(name, g),
-        packageSuggested: state => name => !!Object.values(state.local).find(
+        packageSuggested: state => name => !!Object.values(state.local).concat(Object.values(state.add || {})).find(
             pkg => ((pkg.type.substr(0, 7) === 'contao-' || pkg.name.substr(0, 7) === 'contao/') && pkg.suggest && pkg.suggest.hasOwnProperty(name))
         ),
 
