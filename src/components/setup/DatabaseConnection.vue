@@ -42,34 +42,74 @@
             </main>
 
             <main class="setup__form setup__form--center" v-else v-bind:key="'confirmation'">
-                <div class="setup__fields setup__fields--center">
-                    <svg class="setup__check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" /></svg>
+                <div class="setup__fields">
+                    <h2 class="setup__fieldtitle">{{ $t('ui.setup.database-connection.formTitle') }}</h2>
                     <i18n tag="p" path="ui.setup.database-connection.connected" class="setup__fielddesc" v-if="url">
                         <template #database><i>{{ database }}</i></template>
                         <template #server><i>{{ server }}</i></template>
                     </i18n>
+                    <button type="button" class="widget-button widget-button--edit widget-button--small" @click="currentState = 'edit'">{{ $t('ui.setup.database-connection.change') }}</button>
+                </div>
 
-                    <p class="setup__fielddesc setup__warning" v-if="status && status.total > 0">{{ $tc(`ui.setup.database-connection.${currentState}`, status.total) }}</p>
-                    <p class="setup__fielddesc" v-else>{{ $t('ui.setup.database-connection.noChanges') }}</p>
-                </div>
-                <div class="setup__fields setup__fields--center">
-                    <button type="button" class="widget-button widget-button--inline" @click="currentState = 'edit'">{{ $t('ui.setup.database-connection.change') }}</button>
-                    <button type="button" class="widget-button widget-button--inline widget-button--primary" @click="checkMigrations" v-if="status && status.total > 0">{{ $t('ui.setup.database-connection.check') }}</button>
-                    <button type="button" class="widget-button widget-button--inline widget-button--primary" @click="$emit('continue')" v-else>{{ $t('ui.setup.continue') }}</button>
-                </div>
+                <transition name="animate-flip" type="transition" mode="out-in">
+
+                    <div v-if="hasDatabaseError || !backupRestore || !hasBackups" v-bind:key="'migrate'">
+                        <div class="setup__fields">
+                            <h2 class="setup__fieldtitle">{{ $t('ui.setup.database-connection.schemaTitle') }}</h2>
+                            <p class="setup__fielddesc setup__warning" v-if="status && status.total > 0">{{ $tc(`ui.setup.database-connection.${currentState}`, status.total) }}</p>
+                            <p class="setup__fielddesc" v-else>{{ $t('ui.setup.database-connection.noChanges') }}</p>
+                        </div>
+                        <div class="setup__fields setup__fields--center">
+                            <template v-if="status && status.total > 0">
+                                <button type="button" class="widget-button widget-button--inline" @click="$emit('continue')" v-if="!hasDatabaseError">{{ $t('ui.setup.database-connection.skip') }}</button>
+                                <button type="button" class="widget-button widget-button--inline widget-button--primary" @click="checkMigrations">{{ $t('ui.setup.database-connection.check') }}</button>
+                            </template>
+                            <button type="button" class="widget-button widget-button--primary" @click="$emit('continue')" v-else>{{ $t('ui.setup.continue') }}</button>
+                        </div>
+                    </div>
+
+                    <div v-else-if="backupRestored" v-bind:key="'restored'">
+                        <div class="setup__fields">
+                            <h2 class="setup__fieldtitle">{{ $t('ui.setup.database-connection.restoreTitle') }}</h2>
+                            <svg class="setup__check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" /></svg>
+                            <p class="setup__fielddesc">{{ $t('ui.setup.database-connection.restored') }}</p>
+                        </div>
+                        <div class="setup__fields setup__fields--center">
+                            <button type="button" class="widget-button widget-button--primary" @click="$store.commit('contao/backup/setRestore', false)">{{ $t('ui.setup.continue') }}</button>
+                        </div>
+                    </div>
+
+                    <div v-else v-bind:key="'backup'">
+                        <div class="setup__fields">
+                            <h2 class="setup__fieldtitle">{{ $t('ui.setup.database-connection.restoreTitle') }}</h2>
+                            <p class="setup__fielddesc">{{ $tc('ui.setup.database-connection.restoreText', files.length) }}</p>
+                            <radio-button required allow-html :options="fileOptions" name="selection" v-model="selection" v-if="files.length > 1"/>
+                            <checkbox :label="$t('ui.setup.database-connection.backup')" name="backup" v-model="backup"/>
+                        </div>
+
+                        <div class="setup__fields setup__fields--center">
+                            <button type="button" class="widget-button widget-button--inline" :disabled="files.length > 1 && !selection" @click="restore">{{ $t('ui.setup.database-connection.restore') }}</button>
+                            <button type="button" class="widget-button widget-button--inline widget-button--primary" @click="$store.commit('contao/backup/setRestore', false)">{{ $t('ui.setup.database-connection.skip') }}</button>
+                        </div>
+                    </div>
+                </transition>
             </main>
         </transition>
     </section>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 import TextField from '../widgets/TextField';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import RadioButton from '../widgets/RadioButton.vue';
+import Checkbox from '../widgets/Checkbox.vue';
+import datimFormat from 'contao-package-list/src/filters/datimFormat';
+import filesize from '../../filters/filesize';
 
 export default {
-    components: { TextField, LoadingButton },
+    components: { Checkbox, RadioButton, TextField, LoadingButton },
 
     data: () => ({
         processing: false,
@@ -83,13 +123,31 @@ export default {
         password: '',
         server: 'localhost',
         database: '',
+
+        backup: true,
+        selection: null,
     }),
 
     computed: {
+        ...mapState('contao/backup', { backupRestored: 'restored', backupRestore: 'restore' }),
         ...mapState('server/database', { currentUrl: 'url', urlPattern: 'pattern', status: 'status' }),
+        ...mapState('contao/backup', ['files']),
+        ...mapGetters('contao/database', { hasDatabaseError: 'hasError' }),
+        ...mapGetters('contao/backup', ['hasBackups']),
+
+        fileOptions () {
+            return this.files.map((f) => ({
+                value: f.name,
+                label: this.$t('ui.setup.database-connection.restoreOption', { date: datimFormat(f.createdAt), size: filesize(f.size) }),
+            }));
+        }
     },
 
     methods: {
+        datimFormat(value) {
+            return datimFormat(value, 'short', 'long');
+        },
+
         checkMigrations() {
             this.$store.commit('checkMigrations');
         },
@@ -194,6 +252,23 @@ export default {
 
             this.processing = false;
         },
+
+        async restore () {
+            await this.$store.dispatch('tasks/execute', {
+                name: 'contao/backup-restore',
+                config: {
+                    file: this.files.length > 1 ? this.selection : this.files[0].name,
+                    backup: this.backup
+                }
+            });
+
+            // if (this.taskStatus !== 'complete') {
+            //     return;
+            // }
+
+            this.$store.commit('contao/backup/setRestored');
+            await this.$store.dispatch('tasks/deleteCurrent');
+        }
     },
 
     watch: {
@@ -217,6 +292,9 @@ export default {
 
     mounted() {
         this.load();
+
+        this.selection = null;
+        this.backup = true;
     },
 };
 </script>

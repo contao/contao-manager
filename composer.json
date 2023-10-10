@@ -40,7 +40,7 @@
         "symfony/monolog-bundle": "^3.3",
         "firebase/php-jwt": "^4.0",
         "crell/api-problem": "^3.1",
-        "composer/composer": "^2.4",
+        "composer/composer": "^2.6.2",
         "studio24/rotate": "^1.0",
         "ramsey/uuid": "^3.9"
     },

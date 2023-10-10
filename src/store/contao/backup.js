@@ -8,6 +8,14 @@ export default {
         loading: false,
         supported: false,
         files: [],
+
+        // Enable backup restore if a theme was installed
+        restore: false,
+        restored: false,
+    },
+
+    getters: {
+        hasBackups: state => state.supported && state.files && state.files.length > 0,
     },
 
     mutations: {
@@ -26,6 +34,14 @@ export default {
                 state.files = response.data
             }
         },
+
+        setRestore(state, value) {
+            state.restore = value;
+        },
+
+        setRestored(state) {
+            state.restored = true;
+        }
     },
 
     actions: {

@@ -399,6 +399,10 @@ export default {
             .widget-button {
                 margin-bottom: 10px;
             }
+
+            .button-group .widget-button {
+                margin-bottom: 1px;
+            }
         }
 
         &__fieldtitle {

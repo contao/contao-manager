@@ -1686,83 +1686,101 @@ components:
 
         TaskComposerClearCache:
             description: Clears the Contao (Symfony) Cache
-            allOf:
-                -   $ref: '#/components/schemas/TaskSet'
-                -   type: object
-                    properties:
-                        name:
-                            type: string
-                            default: 'composer/clear-cache'
-                            description: Clears the Composer cache.
+            type: object
+            properties:
+                name:
+                    type: string
+                    default: 'composer/clear-cache'
+                    description: Clears the Composer cache.
 
         TaskComposerDumpAutoload:
-            allOf:
-                -   $ref: '#/components/schemas/TaskSet'
-                -   type: object
-                    properties:
-                        name:
-                            type: string
-                            default: 'composer/dump-autoload'
-                            description: Dumps the Composer autoloader.
+            type: object
+            properties:
+                name:
+                    type: string
+                    default: 'composer/dump-autoload'
+                    description: Dumps the Composer autoloader.
 
         TaskContaoRebuildCache:
-            allOf:
-                -   $ref: '#/components/schemas/TaskSet'
-                -   type: object
-                    properties:
-                        name:
-                            type: string
-                            default: 'contao/rebuild-cache'
-                            description: Clears the Contao/Symfony cache and optionally rebuilds it.
-                        environment:
-                            type: string
-                            default: prod
-                        warmup:
-                            type: boolean
-                            default: true
+            type: object
+            properties:
+                name:
+                    type: string
+                    default: 'contao/rebuild-cache'
+                    description: Clears the Contao/Symfony cache and optionally rebuilds it.
+                environment:
+                    type: string
+                    default: prod
+                warmup:
+                    type: boolean
+                    default: true
 
         TaskContaoBackupCreate:
-            allOf:
-                -   $ref: '#/components/schemas/TaskSet'
-                -   type: object
-                    properties:
-                        name:
-                            type: string
-                            default: 'contao/backup-create'
-                            description: Creates a full backup of the current database.
+            type: object
+            properties:
+                name:
+                    type: string
+                    default: 'contao/backup-create'
+                    description: Creates a full backup of the current database.
 
         TaskContaoBackupRestore:
-            allOf:
-                -   $ref: '#/components/schemas/TaskSet'
-                -   type: object
-                    properties:
-                        name:
-                            type: string
-                            default: 'contao/backup-restore'
-                            description: Restore a database backup from file.
-                        file:
-                            type: string
-                            description: The database backup file name from /var/backups.
-                        backup:
-                            type: boolean
-                            default: false
-                            description: Whether to create a new backup before restore (and therefore overwriting the database content).
+            type: object
+            properties:
+                name:
+                    type: string
+                    default: 'contao/backup-restore'
+                    description: Restore a database backup from file.
+                file:
+                    type: string
+                    description: The database backup file name from /var/backups.
+                backup:
+                    type: boolean
+                    default: false
+                    description: Whether to create a new backup before restore (and therefore overwriting the database content).
 
         TaskManagerSelfUpdate:
-            allOf:
-                -   $ref: '#/components/schemas/TaskSet'
+            type: object
+            properties:
+                name:
+                    type: string
+                    default: 'manager/self-update'
+                    description: Updated the Contao Manager to the latest version.
+
+        TaskPackagesSetup:
+            oneOf:
                 -   type: object
+                    required: [name, theme]
                     properties:
                         name:
                             type: string
-                            default: 'manager/self-update'
-                            description: Updated the Contao Manager to the latest version.
-
-        TaskPackagesSetup:
-            required: [name, version]
-            allOf:
-                -   $ref: '#/components/schemas/TaskSet'
+                            default: 'contao/install'
+                            description: Creates a Contao project from an uploaded theme file.
+                        upload:
+                            type: string
+                            description: ID of a theme file that was uploaded.
+                        no-update:
+                            type: boolean
+                            default: false
+                            description: Only create the project files but do not run a `composer update`.
                 -   type: object
+                    required: [name, package]
+                    properties:
+                        name:
+                            type: string
+                            default: 'contao/install'
+                            description: Installs a Contao project through Composer.
+                        package:
+                            type: string
+                            description: A composer package to use with `create-project` (e.g. `contao/contao-demo`).
+                        version:
+                            type: string
+                            description: Version of the package to install.
+                        no-update:
+                            type: boolean
+                            default: false
+                            description: Only create the project files but do not run a `composer update`.
+                -   type: object
+                    required: [name, version]
                     properties:
                         name:
                             type: string
@@ -1770,65 +1788,56 @@ components:
                             description: Creates a `composer.json` for the Contao Managed Edition.
                         version:
                             type: string
-                            enum: [4.4, 4.9, 4.13]
-                            required: true
-                        core-only:
-                            type: boolean
-                            default: false
-                            description: Do not add Contao bundles like news and calendar to the `composer.json`
+                            enum: [4.9, 4.13, 5.2]
                         no-update:
                             type: boolean
                             default: false
                             description: Only create the `composer.json` but do not run a `composer update`.
 
         TaskPackagesInstall:
-            allOf:
-                -   $ref: '#/components/schemas/TaskSet'
-                -   type: object
-                    properties:
-                        name:
-                            type: string
-                            default: 'composer/install'
-                            description: Installs Composer packages from lock file (`composer install`).
-                              This automatically runs an update if there is no `composer.lock` file and uses
-                              the Composer Resolver Cloud if enabled.
-                        dry_run:
-                            type: boolean
-                            default: false
-                        remove-vendor:
-                            type: boolean
-                            default: false
-                            description: Removes the `vendor` folder before installation (clean install).
+            type: object
+            properties:
+                name:
+                    type: string
+                    default: 'composer/install'
+                    description: Installs Composer packages from lock file (`composer install`).
+                      This automatically runs an update if there is no `composer.lock` file and uses
+                      the Composer Resolver Cloud if enabled.
+                dry_run:
+                    type: boolean
+                    default: false
+                remove-vendor:
+                    type: boolean
+                    default: false
+                    description: Removes the `vendor` folder before installation (clean install).
 
         TaskPackagesUpdate:
-            allOf:
-                -   $ref: '#/components/schemas/TaskSet'
-                -   type: object
-                    properties:
-                        name:
-                            type: string
-                            default: 'composer/update'
-                            description: Updates the installed Composer packages (`composer update`).
-                        dry_run:
-                            type: boolean
-                            default: false
-                        uploads:
-                            type: boolean
-                            default: false
-                            description: Install uploaded packages that are in the list of packages to update
-                        require:
-                            type: object
-                            description: List of packages to require. Key is package name and value is version, which can be empty.
-                        remove:
-                            type: array
-                            description: List of packages to remove.
-                            items:
-                                type: string
-                        update:
-                            type: array
-                            description: List of package names to include in the update. If not set, all packages will be updated.
-                            items:
-                                type: string
+            type: object
+            properties:
+                name:
+                    type: string
+                    default: 'composer/update'
+                    description: Updates the installed Composer packages (`composer update`).
+                dry_run:
+                    type: boolean
+                    default: false
+                uploads:
+                    type: boolean
+                    default: false
+                    description: Install uploaded packages that are in the list of packages to update
+                require:
+                    type: object
+                    description: List of packages to require. Key is package name and value is version, which can be empty.
+                remove:
+                    type: array
+                    description: List of packages to remove.
+                    items:
+                        type: string
+                update:
+                    type: array
+                    description: List of package names to include in the update. If not set, all packages will be updated.
+                    items:
+                        type: string
 
         TaskStatus:
             type: object

@@ -29,9 +29,10 @@ export default {
     },
 
     getters: {
+        hasRoot: (state) => !!state.root,
         packageInstalled: (state, g) => name => Object.keys(state.installed).includes(name) && !g.packageMissing(name),
         versionInstalled: state => (name, version) => Object.keys(state.installed).includes(name) && state.installed[name].version === version,
-        packageRoot: state => name => Object.keys(state.root.require).includes(name),
+        packageRoot: state => name => !!state.root && Object.keys(state.root.require).includes(name),
         packageRequired: state => name => Object.keys(state.required).includes(name) && !!state.required[name].constraint,
         packageMissing: state => name => Object.keys(state.required).includes(name) && !state.required[name].constraint,
         packageAdded: state => name => Object.keys(state.add).includes(name),
@@ -41,8 +42,8 @@ export default {
         packageFeatures: () => name => features[name] ? features[name] : [],
         packageFeature: (s, g) => name => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
         packageVisible: (s, g) => name => isVisible(name, g),
-        packageSuggested: state => name => !!Object.values(state.local).concat(Object.values(state.add || {})).find(
-            pkg => ((pkg.type.substr(0, 7) === 'contao-' || pkg.name.substr(0, 7) === 'contao/') && pkg.suggest && pkg.suggest.hasOwnProperty(name))
+        packageSuggested: state => name => !!Object.values(state.local || {}).concat(Object.values(state.add || {})).find(
+            pkg => (pkg.type && (pkg.type.substr(0, 7) === 'contao-' || pkg.name.substr(0, 7) === 'contao/') && pkg.suggest && pkg.suggest.hasOwnProperty(name))
         ),
 
         totalChanges: state => Object.keys(state.add).filter(isCountable).length
@@ -97,23 +98,27 @@ export default {
             const installed = {};
             const required = {};
 
-            Object.keys(packages).forEach((name) => {
-                if (packages[name].version === false) {
-                    required[name] = packages[name];
-                } else {
-                    installed[name] = packages[name];
-                }
-            });
+            if (packages) {
+                Object.keys(packages).forEach((name) => {
+                    if (packages[name].version === false) {
+                        required[name] = packages[name];
+                    } else {
+                        installed[name] = packages[name];
+                    }
+                });
+            }
 
-            Object.keys(root.require).forEach((name) => {
-                if (!name.includes('/')) {
-                    return;
-                }
+            if (root) {
+                Object.keys(root.require).forEach((name) => {
+                    if (!name.includes('/')) {
+                        return;
+                    }
 
-                if (!installed.hasOwnProperty(name) && !required.hasOwnProperty(name)) {
-                    required[name] = { name, constraint: root.require[name] };
-                }
-            });
+                    if (!installed.hasOwnProperty(name) && !required.hasOwnProperty(name)) {
+                        required[name] = { name, constraint: root.require[name] };
+                    }
+                });
+            }
 
             if (missing) {
                 missing.forEach((name) => {
@@ -200,8 +205,8 @@ export default {
                 return null;
             };
 
-            const rootConstraint = state.change[name] || state.root.require[name];
-            const rootVersion = getVersion(data);
+            const rootConstraint = state.change[name] || state.root?.require[name];
+            const rootVersion = state.installed ? getVersion(data) : null;
 
             metadata.update = null;
             if (metadata.versions && rootConstraint && rootConstraint.substr(0, 4) !== 'dev-' && rootConstraint.substr(-4) !== '-dev') {
@@ -291,7 +296,7 @@ export default {
 
             Object.keys(features).forEach((pkg) => {
                 features[pkg].forEach((feature) => {
-                    if (Object.keys(state.root.require).includes(feature) || Object.keys(state.installed).includes(feature)) {
+                    if ((state.root && Object.keys(state.root.require).includes(feature)) || (state.installed && Object.keys(state.installed).includes(feature))) {
                         if (update.includes(pkg)) {
                             update.push(feature);
                         }
@@ -314,7 +319,7 @@ export default {
                     }
 
                     // Feature was added, make sure it's the same version as the parent
-                    if (!require.hasOwnProperty(pkg) && state.root.require[pkg]) {
+                    if (!require.hasOwnProperty(pkg) && state.root?.require[pkg]) {
                         require[feature] = state.root.require[pkg];
                     } else if (require.hasOwnProperty(pkg)) {
                         require[feature] = require[pkg];

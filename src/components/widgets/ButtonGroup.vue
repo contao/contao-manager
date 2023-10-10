@@ -23,6 +23,7 @@
             href: String,
             to: [String, Object],
             icon: String,
+            color: String,
             disabled: Boolean,
             loading: Boolean,
             moreDisabled: Boolean,
@@ -45,6 +46,10 @@
                     className += ` widget-button--${this.icon}`;
                 }
 
+                if (this.color) {
+                    className += ` widget-button--${this.color}`;
+                }
+
                 return className;
             },
 
@@ -53,6 +58,10 @@
 
                 if (this.type) {
                     className += ` widget-button--${this.type}`;
+                }
+
+                if (this.color) {
+                    className += ` widget-button--${this.color}`;
                 }
 
                 return className;

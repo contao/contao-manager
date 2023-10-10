@@ -12,31 +12,28 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation\Composer;
 
+use Composer\Util\Filesystem;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Composer\Environment;
+use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
-use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
-use Symfony\Component\Filesystem\Filesystem;
+use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
+use Symfony\Component\Finder\Finder;
 
-class CreateProjectOperation extends AbstractInlineOperation
+class CreateProjectOperation extends AbstractProcessOperation
 {
-    /**
-     * @var array
-     */
-    private static $supportedVersions = ['4.9', '4.13', '5.2'];
-
     /**
      * @var Environment
      */
     private $environment;
 
     /**
-     * @var Filesystem
+     * @var string
      */
-    private $filesystem;
+    private $package;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $version;
 
@@ -45,19 +42,46 @@ class CreateProjectOperation extends AbstractInlineOperation
      */
     private $publicDir;
 
-    /**
-     * Constructor.
-     */
-    public function __construct(TaskConfig $taskConfig, Environment $environment, ApiKernel $kernel, Filesystem $filesystem)
+    public function __construct(TaskConfig $taskConfig, ConsoleProcessFactory $processFactory, ApiKernel $kernel, Environment $environment, string $package, string $version = null, bool $isUpload = false)
     {
-        parent::__construct($taskConfig);
-
         $this->environment = $environment;
-        $this->filesystem = $filesystem;
-        $this->version = $taskConfig->getOption('version');
+        $this->package = $package;
+        $this->version = $version;
 
-        if (!\in_array($this->version, static::$supportedVersions, true)) {
-            throw new \InvalidArgumentException('Unsupported Contao version');
+        try {
+            parent::__construct($processFactory->restoreBackgroundProcess('composer-create-project'));
+        } catch (\Exception $e) {
+            $folder = uniqid('contao-');
+
+            $arguments = [
+                'composer',
+                'create-project',
+                $package.($version ? ':'.$version : ''),
+                $folder,
+                '--no-install',
+                '--no-scripts',
+                '--no-dev',
+                '--no-progress',
+                '--no-ansi',
+                '--no-interaction',
+            ];
+
+            if ($isUpload) {
+                $arguments[] = '--repository='.json_encode(['type' => 'artifact', 'url' => $environment->getArtifactDir()]);
+            }
+
+            if ($environment->isDebug()) {
+                $arguments[] = '--profile';
+                $arguments[] = '-vvv';
+            }
+
+            $process = $processFactory->createManagerConsoleBackgroundProcess(
+                $arguments,
+                'composer-create-project'
+            );
+            $process->setMeta(['folder' => $folder]);
+
+            parent::__construct($process);
         }
 
         $this->publicDir = $taskConfig->getState('public-dir');
@@ -75,99 +99,63 @@ class CreateProjectOperation extends AbstractInlineOperation
 
     public function getSummary(): string
     {
-        return 'composer create-project contao/managed-edition:'.$this->version;
+        return 'composer create-project '.$this->package.($this->version ? ':'.$this->version : '');
     }
 
-    protected function getName(): string
+    public function run(): void
     {
-        return 'create-project';
+        parent::run();
+
+        if ($this->process->isSuccessful() && !$this->isInstalled()) {
+            $folder = $this->process->getMeta()['folder'] ?? null;
+
+            if ($folder) {
+                $fs = new Filesystem();
+                $files = Finder::create()
+                    ->exclude(['__MACOSX'])
+                    ->notName(['theme.xml', '.DS_Store'])
+                    ->ignoreVCS(true)
+                    ->ignoreDotFiles(true)
+                    ->depth(0)
+                    ->in($folder)
+                ;
+
+                foreach ($files as $file) {
+                    $fs->copy(
+                        $file->getPathname(),
+                        \dirname($file->getPath()).\DIRECTORY_SEPARATOR.$file->getFilename()
+                    );
+                }
+
+                $fs->removeDirectory($folder);
+
+                // write public-dir in composer.json
+                try {
+                    $file = $this->environment->getComposerJsonFile();
+                    $json = $file->read();
+                    $json['extra']['public-dir'] = basename($this->publicDir);
+                    $file->write($json);
+                } catch (\RuntimeException $e) {
+                    // ignore
+                }
+
+                $this->process->setMeta(['installed' => true]);
+            }
+        }
     }
 
-    protected function doRun(): bool
+    public function isRunning(): bool
     {
-        $protected = [
-            $this->environment->getJsonFile(),
-            $this->environment->getLockFile(),
-            $this->environment->getVendorDir(),
-        ];
-
-        if ($this->filesystem->exists($protected)) {
-            throw new \RuntimeException('Cannot install into existing application');
-        }
-
-        $this->filesystem->dumpFile(
-            $this->environment->getJsonFile(),
-            $this->generateComposerJson(
-                $this->taskConfig->getOption('version'),
-                (bool) $this->taskConfig->getOption('core-only', false)
-            )
-        );
-
-        return true;
+        return parent::isRunning() || ($this->isStarted() && !$this->isInstalled());
     }
 
-    private function generateComposerJson(string $version, bool $coreOnly = false): string
+    public function isSuccessful(): bool
     {
-        $coreBundle = '';
-        if ($this->isDevVersion($version)) {
-            $version .= '.x-dev';
-            $coreBundle = ',
-        "contao/core-bundle": "'.$version.'"';
-        } else {
-            $version .= '.*';
-        }
-
-        if ($coreOnly) {
-            $require = <<<JSON
-        "contao/conflicts": "*@dev",
-        "contao/manager-bundle": "$version"$coreBundle
-JSON;
-        } else {
-            $require = <<<JSON
-        "contao/conflicts": "*@dev",
-        "contao/manager-bundle": "$version"$coreBundle,
-        "contao/calendar-bundle": "$version",
-        "contao/comments-bundle": "$version",
-        "contao/faq-bundle": "$version",
-        "contao/listing-bundle": "$version",
-        "contao/news-bundle": "$version",
-        "contao/newsletter-bundle": "$version"
-JSON;
-        }
-
-        // https://github.com/contao/contao-manager/issues/627
-        if (version_compare($version, '4.12', '>=')) {
-            $publicDir = basename($this->publicDir);
-            $script = '@php vendor/bin/contao-setup';
-        } else {
-            $publicDir = 'web';
-            $script = 'Contao\\\\ManagerBundle\\\\Composer\\\\ScriptHandler::initializeApplication';
-        }
-
-        return <<<JSON
-{
-    "type": "project",
-    "require": {
-$require
-    },
-    "extra": {
-        "public-dir": "$publicDir",
-        "contao-component-dir": "assets"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "$script"
-        ],
-        "post-update-cmd": [
-            "$script"
-        ]
-    }
-}
-JSON;
+        return parent::isSuccessful() && $this->isInstalled();
     }
 
-    private function isDevVersion(string $version): bool
+    private function isInstalled(): bool
     {
-        return false;
+        return (bool) ($this->process->getMeta()['installed'] ?? false);
     }
 }

@@ -1,20 +1,22 @@
 <template>
     <package-details :local="data" :dependents="dependents">
         <template #package-actions>
-            <template v-if="isInstalled">
-                <package-constraint :data="data" v-if="!isFeature && isVisible"/>
-                <p class="package-popup__installed">
-                    <strong>{{ $t('ui.package.installed') }}</strong>
-                    <time :dateTime="installedTime" v-if="installedTime" :title="installedTime | datimFormat">{{ $t('ui.package.version', { version: installedVersion }) }}</time>
-                    <template v-else>{{ $t('ui.package.version', { version: installedVersion }) }}</template>
-                </p>
-            </template>
-            <template v-else-if="canBeInstalled || isRequired">
-                <install-button :data="data"/>
-                <package-constraint :data="data" v-if="isAdded || isRequired"/>
-            </template>
-            <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">{{ $t('ui.package.homepage') }}</a>
-            <div v-else></div>
+            <slot name="package-actions">
+                <template v-if="isInstalled">
+                    <package-constraint :data="data" v-if="!isFeature && isVisible"/>
+                    <p class="package-popup__installed">
+                        <strong>{{ $t('ui.package.installed') }}</strong>
+                        <time :dateTime="installedTime" v-if="installedTime" :title="installedTime | datimFormat">{{ $t('ui.package.version', { version: installedVersion }) }}</time>
+                        <template v-else>{{ $t('ui.package.version', { version: installedVersion }) }}</template>
+                    </p>
+                </template>
+                <template v-else-if="canBeInstalled || isRequired">
+                    <install-button :data="data"/>
+                    <package-constraint :data="data" v-if="isAdded || isRequired"/>
+                </template>
+                <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">{{ $t('ui.package.homepage') }}</a>
+                <div v-else></div>
+            </slot>
         </template>
         <template #package-update v-if="metadata.update && metadata.update.valid && !metadata.update.latest">
             <p class="package-popup__update"><strong>{{ $t('ui.package.update') }}:</strong> {{ $t('ui.package.version', { version: metadata.update.version}) }} ({{ $t('ui.package-details.released') }} {{ metadata.update.time | datimFormat('short', 'long') }})</p>
@@ -23,7 +25,7 @@
             <install-button inline small :data="{ name }" v-if="packageSuggested(name)"/>
         </template>
         <template #features-actions="{ name }">
-            <install-button inline small :data="{ name }" v-if="!packageInstalled(name) || !packageRoot(name)"/>
+            <install-button inline small :data="{ name }" v-if="hasRoot && !packageInstalled(name) && !packageRoot(name)"/>
         </template>
     </package-details>
 </template>
@@ -47,7 +49,7 @@
             data: vm => vm.add[vm.current] || vm.allInstalled[vm.current] || ({ name: vm.current }),
 
             dependents() {
-                if (!this.allInstalled[this.data.name]) {
+                if (!this.allInstalled[this.data.name]?.dependents) {
                     return null;
                 }
 

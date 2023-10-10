@@ -213,6 +213,6 @@ class LogController
      */
     private function getFilenameWithoutExtension($file): string
     {
-        return pathinfo($file->getFilename(), \PATHINFO_FILENAME);
+        return pathinfo($file->getFilename(), PATHINFO_FILENAME);
     }
 }

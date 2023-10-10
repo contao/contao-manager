@@ -6,8 +6,8 @@
             :placeholder="inputPlaceholder"
             :title="inputTitle"
             v-model="inputValue"
-            :class="{ disabled: willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload, error: constraintError }"
-            :disabled="!constraintEditable || willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload"
+            :class="{ disabled: !emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload), error: constraintError }"
+            :disabled="!constraintEditable || willBeRemoved || (!emit && !isInstalled && !willBeInstalled && !isRequired) || isUpload"
             @keypress.enter.prevent="saveConstraint"
             @keypress.esc.prevent="resetConstraint"
             @blur="saveConstraint"
@@ -16,7 +16,7 @@
             :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
             :title="buttonTitle"
             @click="editConstraint"
-            :disabled="willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload"
+            :disabled="!emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload)"
         >{{ buttonValue }}</button>
     </fieldset>
 </template>
@@ -34,6 +34,14 @@
                 type: Object,
                 required: true,
             },
+            emit: {
+                type: Boolean,
+                default: false,
+            },
+            value: {
+                type: String,
+                default: '',
+            }
         },
 
         data: () => ({
@@ -47,7 +55,7 @@
             buttonTitle: vm => vm.isUpload ? vm.$t('ui.package.uploadConstraint') : '',
             buttonValue: vm => vm.isUpload ? vm.$t('ui.package.editConstraint') : vm.$t('ui.package.private'),
             inputTitle: vm => vm.isUpload ? vm.$t('ui.package.privateTitle') : vm.constraint,
-            inputPlaceholder: vm => (!vm.isUpload && !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name)) ? vm.$t('ui.package.latestConstraint') : '',
+            inputPlaceholder: vm => (!vm.isUpload && (!vm.$store.state.packages.root || !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name))) ? vm.$t('ui.package.latestConstraint') : '',
 
             inputValue: {
                 get: vm => vm.isUpload ? vm.$t('ui.package.private') : vm.constraint,
@@ -80,8 +88,11 @@
                 this.constraintEditable = false;
                 this.constraintError = false;
 
-                if ((this.isInstalled && (!this.constraint || this.constraintInstalled === this.constraint))
-                    || (this.isRequired && (!this.constraint || this.constraintRequired === this.constraint))
+                if (!this.emit
+                    && (
+                        (this.isInstalled && (!this.constraint || this.constraintInstalled === this.constraint))
+                        || (this.isRequired && (!this.constraint || this.constraintRequired === this.constraint))
+                    )
                 ) {
                     this.$store.commit('packages/restore', this.data.name);
                     this.$store.commit('packages/uploads/unconfirm', this.data.name);
@@ -89,11 +100,17 @@
                     return;
                 }
 
-                if (!this.isRequired && this.willBeInstalled && !this.constraint) {
+                if (!this.emit && !this.isRequired && this.willBeInstalled && !this.constraint) {
                     this.$store.commit(
                         'packages/add',
                         Object.assign({}, this.data, { constraint: null }),
                     );
+                    this.resetConstraint();
+                    return;
+                }
+
+                if (this.emit && !this.constraint) {
+                    this.$emit('value', this.constraint);
                     this.resetConstraint();
                     return;
                 }
@@ -105,7 +122,9 @@
                     (response) => {
                         this.constraintValidating = false;
                         if (response.body.valid) {
-                            if (this.isRootInstalled || this.isRequired) {
+                            if (this.emit) {
+                                this.$emit('value', this.constraint);
+                            } else if (this.isRootInstalled || this.isRequired) {
                                 this.$store.commit('packages/change', { name: this.data.name, version: this.constraint });
                             } else {
                                 this.$store.commit(
@@ -122,7 +141,10 @@
             },
 
             resetConstraint() {
-                if (this.willBeInstalled) {
+
+                if (this.emit) {
+                    this.constraint = this.value;
+                } else if (this.willBeInstalled) {
                     this.constraint = this.constraintAdded;
                 } else if (this.isChanged) {
                     this.constraint = this.constraintChanged;
@@ -143,6 +165,10 @@
         },
 
         watch: {
+            value(value) {
+                this.constraint = value;
+            },
+
             constraintAdded(value) {
                 this.constraint = value;
             },

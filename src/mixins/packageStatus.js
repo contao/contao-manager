@@ -13,6 +13,7 @@ export default {
         ]),
         ...mapGetters('packages', [
             'installed',
+            'hasRoot',
             'packageInstalled',
             'packageRoot',
             'packageRequired',
@@ -91,8 +92,8 @@ export default {
             return this.change[this.data.name];
         },
 
-        targetConstraint: vm => vm.$store.state.packages.change[vm.data.name]
-            || vm.$store.state.packages.root.require[vm.data.name],
+        targetConstraint: vm => vm.$store.state.packages?.change[vm.data.name]
+            || vm.$store.state.packages?.root?.require[vm.data.name],
     },
 
     methods: {

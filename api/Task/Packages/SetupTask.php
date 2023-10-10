@@ -16,12 +16,16 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Composer\CloudChanges;
 use Contao\ManagerApi\Composer\CloudResolver;
 use Contao\ManagerApi\Composer\Environment;
+use Contao\ManagerApi\Config\UploadsConfig;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\Composer\CloudOperation;
 use Contao\ManagerApi\TaskOperation\Composer\CreateProjectOperation;
 use Contao\ManagerApi\TaskOperation\Composer\InstallOperation;
+use Contao\ManagerApi\TaskOperation\Contao\CreateContaoOperation;
+use Contao\ManagerApi\TaskOperation\Filesystem\InstallUploadsOperation;
+use Contao\ManagerApi\TaskOperation\Filesystem\RemoveUploadsOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
 class SetupTask extends AbstractPackagesTask
@@ -41,13 +45,19 @@ class SetupTask extends AbstractPackagesTask
      */
     private $kernel;
 
-    public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, ApiKernel $kernel, Filesystem $filesystem, Translator $translator)
+    /**
+     * @var UploadsConfig
+     */
+    private $uploads;
+
+    public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, ApiKernel $kernel, UploadsConfig $uploads, Environment $environment, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $filesystem, $translator);
 
         $this->processFactory = $processFactory;
         $this->cloudResolver = $cloudResolver;
         $this->kernel = $kernel;
+        $this->uploads = $uploads;
     }
 
     public function getName(): string
@@ -62,7 +72,31 @@ class SetupTask extends AbstractPackagesTask
 
     protected function buildOperations(TaskConfig $config): array
     {
-        $operations = [new CreateProjectOperation($config, $this->environment, $this->kernel, $this->filesystem)];
+        $upload = null;
+
+        if ($uploadId = $config->getOption('upload')) {
+            $upload = $config->getState('upload');
+
+            if (!$upload) {
+                $upload = $this->uploads->get($uploadId);
+                $config->setState('upload', $upload);
+            }
+
+            $operations = [
+                new InstallUploadsOperation(
+                    [$upload],
+                    $config,
+                    $this->environment,
+                    $this->translator,
+                    $this->filesystem
+                ),
+                new CreateProjectOperation($config, $this->processFactory, $this->kernel, $this->environment, $upload['package']['name'], null, true),
+            ];
+        } elseif ($package = $config->getOption('package')) {
+            $operations = [new CreateProjectOperation($config, $this->processFactory, $this->kernel, $this->environment, $package, $config->getOption('version'))];
+        } else {
+            $operations = [new CreateContaoOperation($config, $this->environment, $this->kernel, $this->filesystem)];
+        }
 
         if ($config->getOption('no-update')) {
             return $operations;
@@ -80,6 +114,17 @@ class SetupTask extends AbstractPackagesTask
         }
 
         $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, false, !$config->isCancelled());
+
+        if ($upload) {
+            $operations[] = new RemoveUploadsOperation(
+                [$upload],
+                $this->uploads,
+                $config,
+                $this->environment,
+                $this->translator,
+                $this->filesystem
+            );
+        }
 
         return $operations;
     }

@@ -17,15 +17,23 @@ export default {
         'maintenance-mode': maintenanceMode,
     },
 
+    state: {
+        package: null,
+        version: null,
+    },
+
+    mutations: {
+        installTheme(state, { package: pkg, version }) {
+            state.package = pkg;
+            state.version = version;
+        },
+    },
+
     actions: {
-        install({ dispatch }, { version, coreOnly, noUpdate }) {
+        install({ dispatch }, config) {
             const task = {
                 name: 'contao/install',
-                config: {
-                    version,
-                    'core-only': coreOnly ? '1' : '0',
-                    'no-update': noUpdate ? '1' : '0',
-                },
+                config,
             };
 
             return dispatch('config/composer/writeDefaults', null, { root: true })
