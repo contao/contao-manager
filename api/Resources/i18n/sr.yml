@@ -59,6 +59,10 @@ sr:
             title: 'Поновно креирање кеша'
         self_update:
             title: 'Contao Manager аутоматско ажурирање'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

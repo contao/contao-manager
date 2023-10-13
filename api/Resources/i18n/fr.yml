@@ -59,6 +59,10 @@ fr:
             title: 'Reconstruction du cache de Contao'
         self_update:
             title: ''
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

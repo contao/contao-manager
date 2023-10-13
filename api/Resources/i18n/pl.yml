@@ -59,6 +59,10 @@ pl:
             title: 'Przebudowywanie Contao cache'
         self_update:
             title: 'Auto-Aktualizacja Contao Manager'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

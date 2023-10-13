@@ -59,6 +59,10 @@ lv:
             title: 'Pārbūvē Contao kešatmiņu'
         self_update:
             title: 'Contao Manager pašatjaunināšana'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

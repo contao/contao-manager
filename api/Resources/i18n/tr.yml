@@ -59,6 +59,10 @@ tr:
             title: 'Contao ön belleği yeniden oluşturuluyor'
         self_update:
             title: 'Contao Manager kendi kendine güncelleme'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

@@ -59,6 +59,10 @@ pt:
             title: 'A reconstruir Cache Composer'
         self_update:
             title: 'Contao Manager Auto-atualização'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

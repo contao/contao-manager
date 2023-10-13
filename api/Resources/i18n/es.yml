@@ -59,6 +59,10 @@ es:
             title: 'Reconstruyendo de caché de Contao'
         self_update:
             title: 'Autoactualización de Contao Manager '
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

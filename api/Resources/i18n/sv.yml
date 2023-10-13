@@ -59,6 +59,10 @@ sv:
             title: 'Bygger om Contao Cache'
         self_update:
             title: 'Självuppdatering för Contao Manager'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

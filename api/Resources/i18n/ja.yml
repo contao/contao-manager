@@ -59,6 +59,10 @@ ja:
             title: 'Contaoのキャッシュを再作成'
         self_update:
             title: 'Contao Managerの自己更新'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

@@ -59,6 +59,10 @@ nl:
             title: 'Contao Cache opnieuw opbouwen'
         self_update:
             title: 'Contao Manager Zelf-update'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

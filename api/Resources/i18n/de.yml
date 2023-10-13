@@ -52,13 +52,17 @@ de:
         update_packages:
             title: 'Pakete werden aktualisiert'
         dump_autoload:
-            title: 'Composer-Autoloader schreiben'
+            title: 'Schreibe Composer-Autoloader'
         clear_cache:
-            title: 'Leere den Composer-Cache'
+            title: 'Leeren des Composer-Caches'
         rebuild_cache:
-            title: 'Contao-Cache neu erstellen'
+            title: 'Neuerstellung des Contao-Caches'
         self_update:
-            title: 'Contao Manager aktualisieren'
+            title: 'Aktualisiere Contao Manager'
+        backup_create:
+            title: 'Erstelle Datenbank-Backup'
+        backup_restore:
+            title: 'Datenbank-Backup wird wiederhergestellt'
 
     taskoperation:
         self-update:

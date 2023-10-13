@@ -59,6 +59,10 @@ cs:
             title: 'Přetváří se meziúložiště Contaa.'
         self_update:
             title: 'Spustit samoaktualizaci Správce Contaa'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

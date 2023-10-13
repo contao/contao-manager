@@ -59,6 +59,10 @@ it:
             title: 'Ricostruzione di Contao Cache'
         self_update:
             title: 'Auto-aggiornamento del Contao Manager'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

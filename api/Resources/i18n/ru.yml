@@ -59,6 +59,10 @@ ru:
             title: 'Перестроение кеша Contao'
         self_update:
             title: 'Автоматическое обновление Contao Manager'
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:

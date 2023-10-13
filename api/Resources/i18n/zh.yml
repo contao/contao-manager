@@ -59,6 +59,10 @@ zh:
             title: 'Contao 缓存重建中'
         self_update:
             title: ''
+        backup_create:
+            title: ''
+        backup_restore:
+            title: ''
 
     taskoperation:
         self-update:
