@@ -189,9 +189,9 @@ export default {
             try {
                 await Vue.http.delete('api/task');
                 commit('setCurrent', null);
-                commit('server/database/setCache');
-                commit('server/adminUser/setCache');
-                commit('contao/install-tool/setCache');
+                commit('server/database/setCache', null, { root: true });
+                commit('server/adminUser/setCache', null, { root: true });
+                commit('contao/install-tool/setCache', null, { root: true });
                 await dispatch('server/contao/get', false, { root: true });
             } catch (response) {
                 // Bad request, there are no tasks
