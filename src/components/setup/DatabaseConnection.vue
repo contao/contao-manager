@@ -84,7 +84,10 @@
                             <h2 class="setup__fieldtitle">{{ $t('ui.setup.database-connection.restoreTitle') }}</h2>
                             <p class="setup__fielddesc">{{ $tc('ui.setup.database-connection.restoreText', files.length) }}</p>
                             <radio-button required allow-html :options="fileOptions" name="selection" v-model="selection" v-if="files.length > 1"/>
+<!--
+                            TODO: re-enable when we fix the restore deleting file problem
                             <checkbox :label="$t('ui.setup.database-connection.backup')" name="backup" v-model="backup"/>
+-->
                         </div>
 
                         <div class="setup__fields setup__fields--center">
@@ -258,13 +261,13 @@ export default {
                 name: 'contao/backup-restore',
                 config: {
                     file: this.files.length > 1 ? this.selection : this.files[0].name,
-                    backup: this.backup
+                    backup: false, // TODO this.backup when we fix the restore deleting file problem
                 }
             });
 
-            // if (this.taskStatus !== 'complete') {
-            //     return;
-            // }
+            if (this.taskStatus !== 'complete') {
+                return;
+            }
 
             this.$store.commit('contao/backup/setRestored');
             await this.$store.dispatch('tasks/deleteCurrent');
