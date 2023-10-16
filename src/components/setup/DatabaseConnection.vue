@@ -59,7 +59,7 @@
                             <p class="setup__fielddesc setup__warning" v-if="status && status.total > 0">{{ $tc(`ui.setup.database-connection.${currentState}`, status.total) }}</p>
                             <p class="setup__fielddesc" v-else>{{ $t('ui.setup.database-connection.noChanges') }}</p>
                         </div>
-                        <div class="setup__fields setup__fields--center">
+                        <div class="setup__fields">
                             <template v-if="status && status.total > 0">
                                 <button type="button" class="widget-button widget-button--inline" @click="$emit('continue')" v-if="!hasDatabaseError">{{ $t('ui.setup.database-connection.skip') }}</button>
                                 <button type="button" class="widget-button widget-button--inline widget-button--primary" @click="checkMigrations">{{ $t('ui.setup.database-connection.check') }}</button>
@@ -74,7 +74,7 @@
                             <svg class="setup__check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" /></svg>
                             <p class="setup__fielddesc">{{ $t('ui.setup.database-connection.restored') }}</p>
                         </div>
-                        <div class="setup__fields setup__fields--center">
+                        <div class="setup__fields">
                             <button type="button" class="widget-button widget-button--primary" @click="$store.commit('contao/backup/setRestore', false)">{{ $t('ui.setup.continue') }}</button>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
 -->
                         </div>
 
-                        <div class="setup__fields setup__fields--center">
+                        <div class="setup__fields">
                             <button type="button" class="widget-button widget-button--inline" @click="$store.commit('contao/backup/setRestore', false)">{{ $t('ui.setup.database-connection.skip') }}</button>
                             <button type="button" class="widget-button widget-button--inline widget-button--primary" :disabled="files.length > 1 && !selection" @click="restore">{{ $t('ui.setup.database-connection.restore') }}</button>
                         </div>
