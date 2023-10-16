@@ -43,7 +43,7 @@ export default {
         isDependency: vm => vm.metadata && !!vm.metadata.dependency,
         isFeature: vm => vm.packageFeature(vm.data.name),
         isVisible: vm => vm.packageVisible(vm.data.name),
-        isTheme: vm => vm.data.type === 'contao-theme',
+        isTheme: vm => vm.data.type === 'contao-theme' || (vm.metadata && vm.metadata.type === 'contao-theme'),
         isContao: vm => vm.data.name === 'contao/manager-bundle',
 
         isUpload: vm => {

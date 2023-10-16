@@ -110,7 +110,7 @@
                 }
 
                 if (this.emit && !this.constraint) {
-                    this.$emit('value', this.constraint);
+                    this.$emit('input', this.constraint);
                     this.resetConstraint();
                     return;
                 }
@@ -123,7 +123,7 @@
                         this.constraintValidating = false;
                         if (response.body.valid) {
                             if (this.emit) {
-                                this.$emit('value', this.constraint);
+                                this.$emit('input', this.constraint);
                             } else if (this.isRootInstalled || this.isRequired) {
                                 this.$store.commit('packages/change', { name: this.data.name, version: this.constraint });
                             } else {
