@@ -60,9 +60,9 @@ ja:
         self_update:
             title: 'Contao Managerの自己更新'
         backup_create:
-            title: ''
+            title: 'データベースのバックアップを作成中'
         backup_restore:
-            title: ''
+            title: 'データベースのバックアップを復元中'
 
     taskoperation:
         self-update:

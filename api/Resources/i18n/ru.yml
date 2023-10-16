@@ -60,9 +60,9 @@ ru:
         self_update:
             title: 'Автоматическое обновление Contao Manager'
         backup_create:
-            title: ''
+            title: 'Создание резервной копии базы данных'
         backup_restore:
-            title: ''
+            title: 'Восстановление резервной копии базы данных'
 
     taskoperation:
         self-update:

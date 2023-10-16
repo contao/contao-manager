@@ -60,9 +60,9 @@ nl:
         self_update:
             title: 'Contao Manager Zelf-update'
         backup_create:
-            title: ''
+            title: 'Databaseback-up maken'
         backup_restore:
-            title: ''
+            title: 'Databaseback-up herstellen'
 
     taskoperation:
         self-update:
