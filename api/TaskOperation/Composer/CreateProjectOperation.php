@@ -146,7 +146,7 @@ class CreateProjectOperation extends AbstractProcessOperation
 
     public function isRunning(): bool
     {
-        return parent::isRunning() || ($this->isStarted() && !$this->isInstalled());
+        return parent::isRunning() || ($this->isStarted() && !$this->hasError() && !$this->isInstalled());
     }
 
     public function isSuccessful(): bool
