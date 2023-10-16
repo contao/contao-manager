@@ -132,6 +132,7 @@ export default {
     }),
 
     computed: {
+        ...mapState('tasks', { taskStatus: 'status' }),
         ...mapState('contao/backup', { backupRestored: 'restored', backupRestore: 'restore' }),
         ...mapState('server/database', { currentUrl: 'url', urlPattern: 'pattern', status: 'status' }),
         ...mapState('contao/backup', ['files']),
