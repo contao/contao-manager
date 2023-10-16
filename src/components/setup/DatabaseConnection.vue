@@ -84,6 +84,8 @@
                             <h2 class="setup__fieldtitle">{{ $t('ui.setup.database-connection.restoreTitle') }}</h2>
                             <p class="setup__fielddesc">{{ $tc('ui.setup.database-connection.restoreText', files.length) }}</p>
                             <radio-button required allow-html :options="fileOptions" name="selection" v-model="selection" v-if="files.length > 1"/>
+
+                            <p class="setup__fielddesc setup__warning">{{ $t('ui.setup.database-connection.backupWarning') }}</p>
 <!--
                             TODO: re-enable when we fix the restore deleting file problem
                             <checkbox :label="$t('ui.setup.database-connection.backup')" name="backup" v-model="backup"/>
@@ -91,8 +93,8 @@
                         </div>
 
                         <div class="setup__fields setup__fields--center">
-                            <button type="button" class="widget-button widget-button--inline" :disabled="files.length > 1 && !selection" @click="restore">{{ $t('ui.setup.database-connection.restore') }}</button>
-                            <button type="button" class="widget-button widget-button--inline widget-button--primary" @click="$store.commit('contao/backup/setRestore', false)">{{ $t('ui.setup.database-connection.skip') }}</button>
+                            <button type="button" class="widget-button widget-button--inline" @click="$store.commit('contao/backup/setRestore', false)">{{ $t('ui.setup.database-connection.skip') }}</button>
+                            <button type="button" class="widget-button widget-button--inline widget-button--primary" :disabled="files.length > 1 && !selection" @click="restore">{{ $t('ui.setup.database-connection.restore') }}</button>
                         </div>
                     </div>
                 </transition>
