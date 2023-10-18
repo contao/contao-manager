@@ -394,9 +394,9 @@
         }
 
         &--raw {
-            padding: 20px;
+            padding: 5px 10px;
             background: #24292e;
-            border-bottom-color: #fff;
+            border-bottom: none;
             font-family: $font-monospace;
             color: #f6f8fa;
             font-size: .8em;

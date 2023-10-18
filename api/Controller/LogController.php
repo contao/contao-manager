@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LogController
 {
-    private const MONOLOG_PATTERN = '/^\[(?<datetime>.*)\] (?<channel>[\w-]+).(?<level>\w+): (?<message>.+?)(?:(?<context> (\[.*?\]|\{.*?\}))|)(?:(?<extra> (\[.*\]|\{.*\}))|)\s{0,2}$/';
+    private const MONOLOG_PATTERN = '/^\[(?<datetime>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d+.*)\] (?<channel>[\w-]+).(?<level>\w+): (?<message>.+?)(?:(?<context> (\[.*?\]|\{.*?\}))|)(?:(?<extra> (\[.*\]|\{.*\}))|)\s{0,2}$/';
 
     /**
      * @var ApiKernel
@@ -181,8 +181,8 @@ class LogController
             return null;
         }
 
-        $matches['context'] = json_decode(trim($matches['context']), true);
-        $matches['extra'] = json_decode(trim($matches['extra']), true);
+        $matches['context'] = json_decode(trim($matches['context'] ?? ''), true);
+        $matches['extra'] = json_decode(trim($matches['extra'] ?? ''), true);
 
         return array_intersect_key($matches, array_flip(['datetime', 'channel', 'level', 'message', 'context', 'extra']));
     }
