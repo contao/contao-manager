@@ -7,7 +7,7 @@
             <p class="setup__description">{{ $t('ui.setup.backend-user.description') }}</p>
         </header>
 
-            <main class="setup__form setup__form--center" v-if="hasUser === null">
+            <main class="setup__form" v-if="hasUser === null">
                 <div class="setup__fields">
                     <p class="setup__warning">{{ $t('ui.setup.backend-user.error') }}</p>
                     <console
@@ -24,11 +24,11 @@
         <transition name="animate-flip" type="transition" mode="out-in" v-else>
 
             <main class="setup__form setup__form--center" v-if="hasUser" v-bind:key="'confirmation'">
-                <div class="setup__fields setup__fields--center">
+                <div class="setup__fields">
                     <svg class="setup__check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" /></svg>
                     <p class="setup__fielddesc">{{ $t('ui.setup.backend-user.success') }}</p>
                 </div>
-                <div class="setup__fields setup__fields--center">
+                <div class="setup__actions setup__actions--center">
                     <button type="button" class="widget-button widget-button--inline widget-button--primary" @click="$emit('continue')">{{ $t('ui.setup.continue') }}</button>
                 </div>
             </main>
@@ -60,7 +60,7 @@
                             v-model="password"
                         />
                     </div>
-                    <div class="setup__fields">
+                    <div class="setup__actions setup__actions--center">
                         <loading-button submit color="primary" :loading="processing" :disabled="!valid">{{ $t('ui.setup.backend-user.create') }}</loading-button>
                     </div>
                 </form>

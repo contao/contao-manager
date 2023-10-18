@@ -50,7 +50,7 @@
 
             </header>
 
-            <main class="setup__form setup__form--center">
+            <main class="setup__form">
 
                 <div class="setup__fields" v-if="theme.files">
                     <h2 class="setup__fieldtitle">{{ $t('ui.setup.create-project.themeTitle') }}</h2>
@@ -81,7 +81,7 @@
                     <p class="setup__fielddesc setup__fielddesc--warning">{{ $t('ui.setup.create-project.themeWarning') }}</p>
                 </div>
 
-                <div class="setup__fields">
+                <div class="setup__actions">
                     <loading-button color="primary" icon="run" :loading="processing" @click="installTheme">{{ $t('ui.setup.create-project.install') }}</loading-button>
                     <button class="widget-button" @click="cancelTheme" :disabled="processing">{{ $t('ui.setup.create-project.cancel') }}</button>
                 </div>
@@ -120,14 +120,14 @@
                 </i18n>
             </header>
 
-            <main class="setup__form setup__form--center" v-if="!!contaoVersion">
+            <main class="setup__form" v-if="!!contaoVersion">
                 <div class="setup__fields setup__fields--center">
                     <svg class="setup__check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z"/>
                     </svg>
                     <p class="setup__fielddesc">{{ $t('ui.setup.create-project.installed', { version: contaoVersion }) }}</p>
                 </div>
-                <div class="setup__fields setup__fields--center">
+                <div class="setup__actions setup__actions--center">
                     <button class="widget-button widget-button--inline" @click="launch">{{ $t('ui.setup.manager') }}</button>
                     <button class="widget-button widget-button--inline widget-button--primary" @click="$emit('continue')">{{ $t('ui.setup.continue') }}</button>
                 </div>
@@ -164,7 +164,7 @@
                     </template>
                 </div>
 
-                <div class="setup__fields setup__fields--center">
+                <div class="setup__fields">
                     <template v-if="version === 'theme'">
                         <loading-button color="primary" icon="upload" :loading="processing" @click="openFileSelector">{{ $t('ui.setup.create-project.themeUpload') }}</loading-button>
                         <div class="setup__or"><span>{{ $t('ui.setup.create-project.theme.or') }}</span></div>

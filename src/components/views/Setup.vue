@@ -396,10 +396,6 @@ export default {
                 text-align: center;
             }
 
-            .widget-button {
-                margin-bottom: 10px;
-            }
-
             .button-group .widget-button {
                 margin-bottom: 1px;
             }
@@ -418,6 +414,25 @@ export default {
 
             code {
                 word-break: break-word;
+            }
+        }
+
+        &__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            &--center {
+                justify-content: center;
+            }
+
+            .widget-button,
+            .button-group {
+                flex-grow: 1;
+
+                &--inline {
+                    flex-grow: 0;
+                }
             }
         }
 
@@ -451,11 +466,6 @@ export default {
                     input {
                         width: 250px !important;
                     }
-                }
-
-                .widget-button--inline {
-                    margin-left: 5px;
-                    margin-right: 5px;
                 }
             }
         }
