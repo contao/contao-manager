@@ -1970,6 +1970,7 @@ components:
                 message:
                     type: string
                 context:
+                    nullable: true
                     oneOf:
                         -   type: object
                         -   type: array
