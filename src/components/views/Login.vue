@@ -17,7 +17,7 @@
                 <text-field ref="username" name="username" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
                 <text-field type="password" name="password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
 
-                <a :href="`https://to.contao.org/manager-password?lang=${$i18n.locale}`" target="_blank" class="view-login__link">{{ $t('ui.login.forgotPassword') }}</a>
+                <a :href="`https://to.contao.org/docs/manager-password?lang=${$i18n.locale}`" target="_blank" class="view-login__link">{{ $t('ui.login.forgotPassword') }}</a>
 
                 <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in">
                     {{ $t('ui.login.button') }}
