@@ -10,7 +10,7 @@
                 <i18n :tag="false" path="ui.account.intro1">
                     <template #readTheManualToGetStarted>
                         <i18n tag="strong" path="ui.account.introGetStarted">
-                            <template #readTheManual><a href="https://docs.contao.org/manual/de/installation/contao-manager/" target="_blank">{{ $t('ui.account.introManual') }}</a></template>
+                            <template #readTheManual><a :href="`https://to.contao.org/docs/contao-manager?lang=${$i18n.locale}`" target="_blank">{{ $t('ui.account.introManual') }}</a></template>
                         </i18n>
                     </template>
                 </i18n>
