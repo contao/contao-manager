@@ -7,7 +7,7 @@
             <p class="setup__warning" v-if="needsFix">{{ $t('ui.setup.document-root.warning') }}</p>
             <p class="setup__description">{{ $t('ui.setup.document-root.description1') }}</p>
             <p class="setup__description">{{ $t('ui.setup.document-root.description2') }}</p>
-            <a class="widget-button widget-button--inline widget-button--info widget-button--link" href="https://to.contao.org/docs/webroot" target="_blank">{{ $t('ui.setup.document-root.documentation') }}</a>
+            <a class="widget-button widget-button--inline widget-button--info widget-button--link" :href="`https://to.contao.org/docs/webroot?lang=${$i18n.locale}`" target="_blank">{{ $t('ui.setup.document-root.documentation') }}</a>
         </header>
 
         <transition :name="forceInstall ? 'none' : 'animate-flip'" type="transition" mode="out-in" v-if="projectDir !== null">
