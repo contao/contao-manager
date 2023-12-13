@@ -16,6 +16,9 @@
             "in": "vendor"
         }
     ],
+    "compactors": [
+        "KevinGH\\Box\\Compactor\\PhpScoper"
+    ],
     "git-version": "manager_version",
     "output": "contao-manager.phar"
 }
