@@ -67,6 +67,14 @@ export default {
                 this.commit('packages/add', Object.assign({}, pkg, { constraint: pkg.version }));
             }
 
+            if (pkg.suggest) {
+                Object.keys(pkg.suggest).forEach((name) => {
+                    if (!this.getters['packages/packageInstalled'](pkg.name)) {
+                        this.commit('packages/add', { name });
+                    }
+                });
+            }
+
             state.confirmed.push(id);
         },
 
