@@ -60,9 +60,9 @@ cs:
         self_update:
             title: 'Spustit samoaktualizaci Správce Contaa'
         backup_create:
-            title: ''
+            title: 'Vytváření uložení databáze'
         backup_restore:
-            title: ''
+            title: 'Obnovení uložené databáze'
 
     taskoperation:
         self-update:

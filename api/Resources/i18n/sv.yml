@@ -60,9 +60,9 @@ sv:
         self_update:
             title: 'Självuppdatering för Contao Manager'
         backup_create:
-            title: ''
+            title: 'Skapar säkerhetskopiering av databas'
         backup_restore:
-            title: ''
+            title: 'Återställer säkerhetskopiering av databas'
 
     taskoperation:
         self-update:

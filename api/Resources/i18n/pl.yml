@@ -39,7 +39,7 @@ pl:
         php_cli:
             not_found: 'Ta ścieżka nie zawiera prawidłowego PHP binary.'
             incompatible: 'Ta wersja PHP binary to {cli}, ale wersja na serwerze to {web}.'
-            error: ''
+            error: 'Błąd podczas sprawdzania poprawności pliku wykonywalnego PHP.'
         cloud:
             platform: 'Platforma nie może być skonfigurowana w composer.json.'
             cache: 'Właściwości cache nie mogą być skonfigurowane w composer.json.'
@@ -60,9 +60,9 @@ pl:
         self_update:
             title: 'Auto-Aktualizacja Contao Manager'
         backup_create:
-            title: ''
+            title: 'Tworzenie kopii zapasowej bazy danych'
         backup_restore:
-            title: ''
+            title: 'Przywracanie kopii zapasowej bazy danych'
 
     taskoperation:
         self-update:

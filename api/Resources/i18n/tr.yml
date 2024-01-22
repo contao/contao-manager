@@ -60,9 +60,9 @@ tr:
         self_update:
             title: 'Contao Manager kendi kendine güncelleme'
         backup_create:
-            title: ''
+            title: 'Veri tabanı yedeği oluşturuluyor'
         backup_restore:
-            title: ''
+            title: 'Veri tabanı yedeği geri yükleniyor'
 
     taskoperation:
         self-update:

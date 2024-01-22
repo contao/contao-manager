@@ -39,7 +39,7 @@ es:
         php_cli:
             not_found: 'Esta ruta no contiene un binario PHP válido.'
             incompatible: 'Este binario es una versión de PHP {cli}, pero su servidor web es la versión {web}.'
-            error: ''
+            error: 'Error al validar el binario PHP.'
         cloud:
             platform: 'La plataforma no debe configurarse en composer.json.'
             cache: 'Las propiedades de caché no deben configurarse en composer.json.'
@@ -60,9 +60,9 @@ es:
         self_update:
             title: 'Autoactualización de Contao Manager '
         backup_create:
-            title: ''
+            title: 'Creando una copia de seguridad de la base de datos'
         backup_restore:
-            title: ''
+            title: 'Restaurar la copia de seguridad de la base de datos'
 
     taskoperation:
         self-update:
