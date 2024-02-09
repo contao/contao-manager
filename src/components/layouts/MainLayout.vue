@@ -2,7 +2,7 @@
     <div class="layout-main">
         <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.subheader }">
             <div class="layout-main__logo"><img src="../../assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />Contao Manager</div>
-            <navigation></navigation>
+            <navigation-fragment/>
         </header>
 
         <div class="layout-main__subheader" v-if="$slots.search">
@@ -27,11 +27,11 @@
 <script>
     import { mapState } from 'vuex';
 
-    import Navigation from '../fragments/Navigation';
-    import FooterFragment from '../fragments/Footer';
+    import NavigationFragment from '../fragments/NavigationFragment';
+    import FooterFragment from '../fragments/FooterFragment';
 
     export default {
-        components: { Navigation, FooterFragment },
+        components: { NavigationFragment, FooterFragment },
 
         computed: {
             ...mapState('algolia', ['news']),

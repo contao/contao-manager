@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import BoxedLayout from '../layouts/Boxed';
+    import BoxedLayout from '../layouts/BoxedLayout';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {

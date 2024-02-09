@@ -8,7 +8,7 @@
                     <p>{{ $t('ui.maintenance.maintenanceMode.description') }}</p>
                 </div>
                 <fieldset class="maintenance__actions">
-                    <loader class="maintenance__loader" v-if="loading && !supported"/>
+                    <loading-spinner class="maintenance__loader" v-if="loading && !supported"/>
                     <loading-button class="widget-button widget-button--primary widget-button--maintenance" :loading="loading" :disabled="!supported" v-else-if="!enabled" @click="enableMaintenanceMode">{{ $t('ui.maintenance.maintenanceMode.enable') }}</loading-button>
                     <loading-button class="widget-button widget-button--alert widget-button--maintenance" :loading="loading" :disabled="!supported" v-else @click="disableMaintenanceMode">{{ $t('ui.maintenance.maintenanceMode.disable') }}</loading-button>
                 </fieldset>
@@ -21,11 +21,11 @@
     import { mapState } from 'vuex';
 
     import MessageOverlay from '../../fragments/MessageOverlay';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
+    import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
-        components: { MessageOverlay, Loader, LoadingButton },
+        components: { MessageOverlay, LoadingSpinner, LoadingButton },
 
         data: () => ({
             loading: true,

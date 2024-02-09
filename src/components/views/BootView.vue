@@ -26,7 +26,7 @@
             </div>
         </main>
         <main v-else class="view-boot__loading">
-            <loader/>
+            <loading-spinner/>
         </main>
     </boxed-layout>
 </template>
@@ -38,17 +38,17 @@
     import views from '../../router/views';
     import routes from '../../router/routes';
 
-    import BoxedLayout from '../layouts/Boxed';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
-    import SelfUpdate from '../boot/SelfUpdate';
-    import Config from '../boot/Config';
-    import PhpWeb from '../boot/PhpWeb';
-    import PhpCli from '../boot/PhpCli';
-    import Composer from '../boot/Composer';
-    import Contao from '../boot/Contao';
+    import BoxedLayout from '../layouts/BoxedLayout';
+    import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
+    import SelfUpdate from '../boot/BootSelfUpdate';
+    import Config from '../boot/BootConfig';
+    import PhpWeb from '../boot/BootPhpWeb';
+    import PhpCli from '../boot/BootPhpCli';
+    import Composer from '../boot/BootComposer';
+    import Contao from '../boot/BootContao';
 
     export default {
-        components: { BoxedLayout, Loader },
+        components: { BoxedLayout, LoadingSpinner },
 
         data: () => ({
             steps: [],

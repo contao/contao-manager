@@ -8,7 +8,7 @@
         <main class="view-recovery__content">
             <p class="view-recovery__description">{{ $t('ui.recovery.description') }}</p>
 
-            <console
+            <console-output
                 class="view-recovery__console"
                 :title="$t('ui.recovery.console')"
                 :operations="[{ status: 'error', summary: 'vendor/bin/contao-console list', console }]"
@@ -42,12 +42,12 @@
 
     import views from '../../router/views';
 
-    import BoxedLayout from '../layouts/Boxed';
+    import BoxedLayout from '../layouts/BoxedLayout';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import Console from '../fragments/Console';
+    import ConsoleOutput from '../fragments/ConsoleOutput';
 
     export default {
-        components: { BoxedLayout, LoadingButton, Console },
+        components: { BoxedLayout, LoadingButton, ConsoleOutput },
 
         data: () => ({
             repairStarted: false,

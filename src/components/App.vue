@@ -12,7 +12,7 @@
             <a :href="$t('ui.app.httpsHref')" target="_blank" class="https-warning__link">{{ $t('ui.app.httpsLink') }}</a>
         </div>
 
-        <error v-if="error"/>
+        <error-view v-if="error"/>
 
         <transition name="animate-fade" mode="out-in" style="height:100%">
 
@@ -23,7 +23,7 @@
                 </div>
             </div>
 
-            <task :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="username && taskStatus"/>
+            <task-view :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="username && taskStatus"/>
             <component :is="currentView" :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="currentView"/>
 
             <div v-else>
@@ -41,29 +41,28 @@
     import views from '../router/views';
 
     import PackageDetails from './fragments/PackageDetails';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
 
-    import Error from './views/Error';
-    import Account from './views/Account';
-    import Login from './views/Login';
-    import Task from './views/Task';
-    import Boot from './views/Boot';
-    import Setup from './views/Setup';
-    import Recovery from './views/Recovery';
-    import Migration from './views/Migration';
+    import ErrorView from './views/ErrorView';
+    import AccountView from './views/AccountView';
+    import LoginView from './views/LoginView';
+    import TaskView from './views/TaskView';
+    import BootView from './views/BootView';
+    import SetupView from './views/SetupView';
+    import RecoveryView from './views/RecoveryView';
+    import MigrationView from './views/MigrationView';
     import Vue from 'vue';
 
     export default {
-        components: { Loader, Error, Task },
+        components: { ErrorView, TaskView },
 
         data: () => ({
             views: {
-                [views.ACCOUNT]: Account,
-                [views.LOGIN]: Login,
-                [views.BOOT]: Boot,
-                [views.SETUP]: Setup,
-                [views.RECOVERY]: Recovery,
-                [views.MIGRATION]: Migration,
+                [views.ACCOUNT]: AccountView,
+                [views.LOGIN]: LoginView,
+                [views.BOOT]: BootView,
+                [views.SETUP]: SetupView,
+                [views.RECOVERY]: RecoveryView,
+                [views.MIGRATION]: MigrationView,
             },
             loaded: false,
         }),
@@ -126,7 +125,7 @@
                 try {
                     const config = (await this.$http.get(`${chunks.join('/')}/contao-manager/users.json`, { responseType: 'json' })).body;
 
-                    if (!config.hasOwnProperty('users') && !config.hasOwnProperty('version')) {
+                    if (!config.users && !config.version) {
                         continue;
                     }
 

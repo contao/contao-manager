@@ -1,9 +1,9 @@
 <template>
     <main-layout>
 
-        <loader v-if="files === null" class="log-viewer__status log-viewer__status--loader">
+        <loading-spinner v-if="files === null" class="log-viewer__status log-viewer__status--loader">
             <p class="log-viewer__title">{{ $t('ui.log-viewer.loading') }}</p>
-        </loader>
+        </loading-spinner>
 
         <div v-else-if="files && files.length === 0" class="log-viewer__status log-viewer__status--empty">
             <p class="log-viewer__title">{{ $t('ui.log-viewer.empty') }}</p>
@@ -61,7 +61,7 @@
                     <button class="widget-button widget-button--inline widget-button--add" @click="next">{{ $t('ui.log-viewer.more') }}</button>
                 </div>
                 <div class="log-viewer__loading" v-if="loading">
-                    <loader></loader>
+                    <loading-spinner/>
                 </div>
             </div>
 
@@ -76,13 +76,13 @@
     import VueJsonPretty from 'vue-json-pretty';
     import 'vue-json-pretty/lib/styles.css';
 
-    import MainLayout from '../layouts/Main';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
+    import MainLayout from '../layouts/MainLayout';
+    import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
     import SelectMenu from '../widgets/SelectMenu.vue';
     import datimFormat from 'contao-package-list/src/filters/datimFormat';
 
     export default {
-        components: { MainLayout, Loader, SelectMenu, VueJsonPretty },
+        components: { MainLayout, LoadingSpinner, SelectMenu, VueJsonPretty },
 
         data: () => ({
             files: null,

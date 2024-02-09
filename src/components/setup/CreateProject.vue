@@ -154,13 +154,13 @@
                     </div>
 
                     <template v-else>
-                        <checkbox name="demo" :label="$t('ui.setup.create-project.demo')" :disabled="processing" v-model="demo">
+                        <check-box name="demo" :label="$t('ui.setup.create-project.demo')" :disabled="processing" v-model="demo">
                             <template #description>
                                 <i18n tag="p" path="ui.setup.create-project.demoDescription">
                                     <template #store><a href="https://themes.contao.org" target="_blank">{{ $t('ui.setup.create-project.themeStore') }}</a></template>
                                 </i18n>
                             </template>
-                        </checkbox>
+                        </check-box>
                     </template>
                 </div>
 
@@ -180,9 +180,9 @@
 
             <div class="clearfix"></div>
             <div class="setup__themes" v-if="searching || results || offline">
-                <loader v-if="searching && !results" class="setup__theme-search setup__theme-search--loader">
+                <loading-spinner v-if="searching && !results" class="setup__theme-search setup__theme-search--loader">
                     <p>{{ $t('ui.discover.loading') }}</p>
-                </loader>
+                </loading-spinner>
 
                 <div v-else-if="offline" class="setup__theme-search setup__theme-search--offline">
                     <p>{{ $t('ui.discover.offline') }}</p>
@@ -215,20 +215,20 @@ import { mapMutations, mapState } from 'vuex';
 import treeifyPaths from 'treeify-paths';
 import views from '../../router/views';
 import search from 'contao-package-list/src/mixins/search';
-import Checkbox from '../widgets/Checkbox';
+import CheckBox from '../widgets/CheckBox';
 import FileUpload from 'vue-upload-component';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-import RadioButton from '../widgets/RadioButton.vue';
-import ThemeDetails from '../fragments/ThemeDetails.vue';
-import SearchInput from 'contao-package-list/src/components/fragments/SearchInput.vue';
-import Loader from 'contao-package-list/src/components/fragments/Loader.vue';
-import DiscoverPackage from 'contao-package-list/src/components/fragments/DiscoverPackage.vue';
+import RadioButton from '../widgets/RadioButton';
+import ThemeDetails from '../fragments/ThemeDetails';
+import SearchInput from 'contao-package-list/src/components/fragments/SearchInput';
+import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
+import DiscoverPackage from 'contao-package-list/src/components/fragments/DiscoverPackage';
 import FileTree from '../fragments/FileTree.vue';
 import ButtonGroup from '../widgets/ButtonGroup.vue';
 
 export default {
     mixins: [search],
-    components: { ButtonGroup, FileTree, DiscoverPackage, Loader, SearchInput, FileUpload, RadioButton, Checkbox, LoadingButton },
+    components: { ButtonGroup, FileTree, DiscoverPackage, LoadingSpinner, SearchInput, FileUpload, RadioButton, CheckBox, LoadingButton },
 
     data: () => ({
         processing: false,

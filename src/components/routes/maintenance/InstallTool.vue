@@ -10,7 +10,7 @@
                 </div>
 
                 <fieldset class="maintenance__actions" v-if="!safeMode && isSupported !== false">
-                    <loader class="maintenance__loader" v-if="isLocked === null"/>
+                    <loading-spinner class="maintenance__loader" v-if="isLocked === null"/>
                     <loading-button class="widget-button widget-button--primary widget-button--unlock" :loading="loading" :disabled="!isSupported" v-else-if="isLocked" @click="unlock">{{ $t('ui.maintenance.installTool.unlock') }}</loading-button>
                     <loading-button class="widget-button widget-button--primary widget-button--lock" :loading="loading" :disabled="!isSupported" v-else @click="lock">{{ $t('ui.maintenance.installTool.lock') }}</loading-button>
                 </fieldset>
@@ -23,11 +23,11 @@
     import { mapState } from 'vuex';
 
     import MessageOverlay from '../../fragments/MessageOverlay';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
+    import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
-        components: { MessageOverlay, Loader, LoadingButton },
+        components: { MessageOverlay, LoadingSpinner, LoadingButton },
 
         data: () => ({
             loading: false,

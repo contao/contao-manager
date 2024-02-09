@@ -9,11 +9,11 @@
             <template v-if="checking">
                 <p class="database-migration__description">{{ $t('ui.migrate.loading') }}</p>
                 <div class="database-migration__loading">
-                    <loader/>
+                    <loading-spinner/>
                 </div>
             </template>
 
-            <template class="database-migration__summary" v-else-if="isEmpty">
+            <template v-else-if="isEmpty">
                 <p class="database-migration__description" v-if="type === 'migrations-only'">{{ $t('ui.migrate.emptyMigrations') }}</p>
                 <p class="database-migration__description" v-else-if="type === 'schema-only'">{{ $t('ui.migrate.emptySchema') }}</p>
                 <p class="database-migration__description" v-else>{{ $t('ui.migrate.empty') }}</p>
@@ -53,13 +53,13 @@
                     <loading-button class="database-migration__action" color="primary" :loading="executing" :disabled="closing" @click="execute">{{ $t('ui.migrate.execute') }}</loading-button>
                 </div>
                 <div class="database-migration__actions" v-if="hasDeletes">
-                    <checkbox name="withDeletes" :label="$t('ui.migrate.withDeletes')" :disabled="executing" v-model="withDeletes"/>
+                    <check-box name="withDeletes" :label="$t('ui.migrate.withDeletes')" :disabled="executing" v-model="withDeletes"/>
                 </div>
             </template>
 
         </header>
 
-        <console
+        <console-output
             class="database-migration__main"
             :title="consoleTitle"
             :operations="operations"
@@ -75,14 +75,14 @@
 import { mapGetters, mapState } from 'vuex';
 import views from '../../router/views';
 
-import BoxedLayout from '../layouts/Boxed';
-import Loader from 'contao-package-list/src/components/fragments/Loader';
+import BoxedLayout from '../layouts/BoxedLayout';
+import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-import Console from '../fragments/Console';
-import Checkbox from '../widgets/Checkbox';
+import ConsoleOutput from '../fragments/ConsoleOutput';
+import CheckBox from '../widgets/CheckBox';
 
 export default {
-        components: { BoxedLayout, Loader, LoadingButton, Console, Checkbox },
+        components: { BoxedLayout, LoadingSpinner, LoadingButton, ConsoleOutput, CheckBox },
 
         data: () => ({
             type: null,
@@ -172,7 +172,7 @@ export default {
             },
 
             operations () {
-                this.hasDeletes = false;
+                // this.hasDeletes = false;
 
                 if (!this.changes) {
                     return null;
@@ -215,7 +215,7 @@ export default {
                             summary: this.generateStatus(this.$t('ui.migrate.dropTable', { table: result[1] }), !this.withDeletes),
                             console: change.name,
                         });
-                        this.hasDeletes = true;
+                        // this.hasDeletes = true;
                         return;
                     }
 
@@ -238,7 +238,7 @@ export default {
                             details: result[3],
                             console: change.name,
                         });
-                        this.hasDeletes = true;
+                        // this.hasDeletes = true;
                         return;
                     }
 
@@ -274,7 +274,7 @@ export default {
                             if (alter) {
                                 operation.summary.push(this.generateStatus(this.$t('ui.migrate.dropField', { table, field: alter[1] }), !this.withDeletes));
                                 operation.details.push('');
-                                this.hasDeletes = true;
+                                // this.hasDeletes = true;
                                 deleteOps++;
                                 return;
                             }
@@ -298,7 +298,7 @@ export default {
                     });
 
                     // Unknown operation, assume it could be a DROP
-                    this.hasDeletes = true;
+                    // this.hasDeletes = true;
                 })
 
                 return operations;

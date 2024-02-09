@@ -48,7 +48,7 @@
 </template>
 
 <script>
-    import PackageLogo from 'contao-package-list/src/components/fragments/Logo';
+    import PackageLogo from 'contao-package-list/src/components/fragments/PackageLogo';
 
     export default {
         components: { PackageLogo },

@@ -9,7 +9,7 @@
             </div>
 
             <fieldset class="maintenance__actions">
-                <loader class="maintenance__loader" v-if="loading "/>
+                <loading-spinner class="maintenance__loader" v-if="loading "/>
                 <button class="widget-button widget-button--primary widget-button--trash" v-else @click="execute">{{ $t('ui.maintenance.opcodeCache.button') }}</button>
             </fieldset>
         </div>
@@ -17,10 +17,10 @@
 </template>
 
 <script>
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
+    import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
 
     export default {
-        components: { Loader },
+        components: { LoadingSpinner },
 
         data: () => ({
             opcodeEnabled: false,

@@ -10,7 +10,7 @@
             <main class="setup__form" v-if="hasUser === null">
                 <div class="setup__fields">
                     <p class="setup__warning">{{ $t('ui.setup.backend-user.error') }}</p>
-                    <console
+                    <console-output
                         class="view-recovery__console"
                         :title="$t('ui.recovery.console')"
                         :operations="[{ status: 'error', summary: 'vendor/bin/contao-console contao:user:list', console: response.body.detail }]"
@@ -72,11 +72,11 @@
 <script>
     import TextField from '../widgets/TextField';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import Console from '../fragments/Console.vue';
+    import ConsoleOutput from '../fragments/ConsoleOutput';
     import { mapState } from 'vuex';
 
     export default {
-        components: { TextField, LoadingButton, Console },
+        components: { TextField, LoadingButton, ConsoleOutput },
 
         data: () => ({
             processing: false,

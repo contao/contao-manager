@@ -88,7 +88,7 @@
                             <p class="setup__fielddesc setup__warning">{{ $t('ui.setup.database-connection.backupWarning') }}</p>
 <!--
                             TODO: re-enable when we fix the restore deleting file problem
-                            <checkbox :label="$t('ui.setup.database-connection.backup')" name="backup" v-model="backup"/>
+                            <check-box :label="$t('ui.setup.database-connection.backup')" name="backup" v-model="backup"/>
 -->
                         </div>
 
@@ -108,13 +108,13 @@ import { mapState, mapGetters } from 'vuex';
 
 import TextField from '../widgets/TextField';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-import RadioButton from '../widgets/RadioButton.vue';
-import Checkbox from '../widgets/Checkbox.vue';
+import RadioButton from '../widgets/RadioButton';
+// import CheckBox from '../widgets/CheckBox';
 import datimFormat from 'contao-package-list/src/filters/datimFormat';
 import filesize from '../../filters/filesize';
 
 export default {
-    components: { Checkbox, RadioButton, TextField, LoadingButton },
+    components: { /*CheckBox,*/ RadioButton, TextField, LoadingButton },
 
     data: () => ({
         processing: false,

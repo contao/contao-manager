@@ -43,7 +43,7 @@
                             <li v-for="file in conflicts.slice(0, 5)" :key="file">{{ file }}</li>
                             <li v-if="conflicts.length > 5">...</li>
                         </ul>
-                        <checkbox name="ignoreConflicts" :label="$t('ui.setup.document-root.ignoreConflicts')" :disabled="processing" v-if="isPublic || isWeb" v-model="forceInstall"/>
+                        <check-box name="ignoreConflicts" :label="$t('ui.setup.document-root.ignoreConflicts')" :disabled="processing" v-if="isPublic || isWeb" v-model="forceInstall"/>
                     </div>
                     <div class="setup__actions setup__actions--center">
                         <button class="widget-button widget-button--alert widget-button--run" v-if="forceInstall" @click="$emit('continue')">{{ $t('ui.server.contao.setup') }}</button>
@@ -79,7 +79,7 @@
                             <dd v-else-if="canUsePublicDir && usePublicDir">{{ projectDir }}<span>{{ directorySeparator }}{{ directory }}{{ directorySeparator }}public</span></dd>
                             <dd v-else>{{ projectDir }}<span>{{ directorySeparator }}{{ directory }}{{ directorySeparator }}web</span></dd>
                         </dl>
-                        <checkbox name="autoconfig" :label="$t('ui.setup.document-root.autoconfig')" :disabled="processing" v-model="autoconfig"/>
+                        <check-box name="autoconfig" :label="$t('ui.setup.document-root.autoconfig')" :disabled="processing" v-model="autoconfig"/>
                     </div>
                     <div class="setup__actions setup__actions--center">
                         <loading-button color="primary" icon="run" :loading="processing" :disabled="!autoconfig || !!directoryError || (wantsFix && !directory && ((isPublic && usePublicDir) || (isWeb && !usePublicDir)))" @click="setupDocroot">{{ $t('ui.setup.document-root.finish') }}</loading-button>
@@ -117,11 +117,11 @@
 
     import TextField from '../widgets/TextField';
     import RadioButton from '../widgets/RadioButton';
-    import Checkbox from '../widgets/Checkbox';
+    import CheckBox from '../widgets/CheckBox';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
-        components: { TextField, RadioButton, Checkbox, LoadingButton },
+        components: { TextField, RadioButton, CheckBox, LoadingButton },
 
         data: () => ({
             processing: false,

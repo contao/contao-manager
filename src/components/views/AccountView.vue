@@ -63,7 +63,7 @@
 <script>
 import views from '../../router/views';
 
-import BoxedLayout from '../layouts/Boxed';
+import BoxedLayout from '../layouts/BoxedLayout';
 import TextField from '../widgets/TextField';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 

@@ -29,7 +29,7 @@
                         </ul>
                     </div>
 
-                    <checkbox name="cloud" :label="$t('ui.server.config.cloud')" :disabled="processing" v-model="cloud"/>
+                    <check-box name="cloud" :label="$t('ui.server.config.cloud')" :disabled="processing" v-model="cloud"/>
                 </fieldset>
 
                 <loading-button submit color="primary" :disabled="!php_cli" :loading="processing">{{ $t('ui.server.config.save') }}</loading-button>
@@ -48,14 +48,14 @@
 import boot from '../../mixins/boot';
 
 import BootCheck from '../fragments/BootCheck';
-import BoxedLayout from '../layouts/Boxed';
+import BoxedLayout from '../layouts/BoxedLayout';
 import TextField from '../widgets/TextField';
-import Checkbox from '../widgets/Checkbox';
+import CheckBox from '../widgets/CheckBox';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
 export default {
         mixins: [boot],
-        components: { BootCheck, BoxedLayout, TextField, Checkbox, LoadingButton },
+        components: { BootCheck, BoxedLayout, TextField, CheckBox, LoadingButton },
 
 
         data: () => ({

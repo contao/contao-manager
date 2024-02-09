@@ -62,7 +62,7 @@
 import views from '../../router/views';
 import { mapState } from 'vuex';
 
-import BoxedLayout from '../layouts/Boxed';
+import BoxedLayout from '../layouts/BoxedLayout';
 import DocumentRoot from '../setup/DocumentRoot';
 import CreateProject from '../setup/CreateProject';
 import DatabaseConnection from '../setup/DatabaseConnection';

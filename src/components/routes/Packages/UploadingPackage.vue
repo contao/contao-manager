@@ -1,5 +1,5 @@
 <template>
-    <package
+    <base-package
         :title="file.name"
     >
         <template #release>
@@ -8,15 +8,15 @@
                 <p><strong>{{ filesize }}</strong></p>
             </div>
         </template>
-    </package>
+    </base-package>
 </template>
 
 <script>
-    import Package from './Package';
+    import BasePackage from './BasePackage';
     import ProgressBar from '../../fragments/ProgressBar';
 
     export default {
-        components: { ProgressBar, Package },
+        components: { ProgressBar, BasePackage },
 
         props: {
             file: {

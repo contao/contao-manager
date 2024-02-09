@@ -47,11 +47,9 @@
 
 <script>
     import 'details-element-polyfill';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
 
     export default {
         name: 'ConsoleOperation',
-        components: { Loader },
 
         props: {
             status: String,

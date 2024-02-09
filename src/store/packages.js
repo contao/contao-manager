@@ -43,7 +43,7 @@ export default {
         packageFeature: (s, g) => name => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
         packageVisible: (s, g) => name => isVisible(name, g),
         packageSuggested: state => name => !!Object.values(state.local || {}).concat(Object.values(state.add || {})).find(
-            pkg => (pkg.type && (pkg.type.substr(0, 7) === 'contao-' || pkg.name.substr(0, 7) === 'contao/') && pkg.suggest && pkg.suggest.hasOwnProperty(name))
+            pkg => (pkg.type && (pkg.type.substr(0, 7) === 'contao-' || pkg.name.substr(0, 7) === 'contao/') && pkg.suggest && pkg.suggest[name])
         ),
 
         totalChanges: state => Object.keys(state.add).filter(isCountable).length
@@ -114,7 +114,7 @@ export default {
                         return;
                     }
 
-                    if (!installed.hasOwnProperty(name) && !required.hasOwnProperty(name)) {
+                    if (!installed[name] && !required[name]) {
                         required[name] = { name, constraint: root.require[name] };
                     }
                 });
@@ -310,7 +310,7 @@ export default {
                         return;
                     }
 
-                    if (!require.hasOwnProperty(feature)) {
+                    if (!require[feature]) {
                         return;
                     }
 
@@ -319,9 +319,9 @@ export default {
                     }
 
                     // Feature was added, make sure it's the same version as the parent
-                    if (!require.hasOwnProperty(pkg) && state.root?.require[pkg]) {
+                    if (!require[pkg] && state.root?.require[pkg]) {
                         require[feature] = state.root.require[pkg];
-                    } else if (require.hasOwnProperty(pkg)) {
+                    } else if (require[pkg]) {
                         require[feature] = require[pkg];
                     }
                 });

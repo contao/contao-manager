@@ -2,7 +2,7 @@
     <main-layout>
 
         <rebuild-cache/>
-        <database/>
+        <database-status/>
         <maintenance-mode/>
         <install-tool/>
         <debug-mode/>
@@ -15,8 +15,8 @@
 </template>
 
 <script>
-    import MainLayout from '../layouts/Main';
-    import Database from './maintenance/Database';
+    import MainLayout from '../layouts/MainLayout';
+    import DatabaseStatus from './maintenance/DatabaseStatus';
     import RebuildCache from './maintenance/RebuildCache';
     import InstallTool from './maintenance/InstallTool';
     import DebugMode from './maintenance/DebugMode';
@@ -29,7 +29,7 @@
     export default {
         components: {
             MainLayout,
-            Database,
+            DatabaseStatus,
             RebuildCache,
             InstallTool,
             MaintenanceMode,

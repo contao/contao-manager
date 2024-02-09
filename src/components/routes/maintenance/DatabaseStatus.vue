@@ -17,7 +17,7 @@
                     <p v-else-if="supportsBackups">{{ $t('ui.maintenance.database.backupEmpty') }}</p>
                 </div>
                 <fieldset class="maintenance__actions">
-                    <loader class="maintenance__loader" v-if="loading"/>
+                    <loading-spinner class="maintenance__loader" v-if="loading"/>
                     <a class="widget-button widget-button--alert" href="/contao/install" v-else-if="hasError && !supported">{{ $t('ui.maintenance.database.installTool') }}</a>
                     <button class="widget-button widget-button--alert" v-else-if="hasError" @click="checkMigrations">{{ $t('ui.maintenance.database.button') }}</button>
                     <button-group
@@ -40,13 +40,13 @@
     import datimFormat from 'contao-package-list/src/filters/datimFormat';
 
     import MessageOverlay from '../../fragments/MessageOverlay';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
+    import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
     import ButtonGroup from '../../widgets/ButtonGroup';
     import LinkMenu from 'contao-package-list/src/components/fragments/LinkMenu';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
-        components: { MessageOverlay, Loader, ButtonGroup, LinkMenu, LoadingButton },
+        components: { MessageOverlay, LoadingSpinner, ButtonGroup, LinkMenu, LoadingButton },
 
         computed: {
             ...mapState(['safeMode']),

@@ -34,7 +34,7 @@
             data: vm => ({ name: vm.name, }),
 
             packageTitle() {
-                if (!this.metadata || !this.metadata.hasOwnProperty('name')) {
+                if (!this.metadata?.name) {
                     return this.data.name;
                 }
 

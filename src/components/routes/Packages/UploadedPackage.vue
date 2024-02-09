@@ -1,5 +1,5 @@
 <template>
-    <package
+    <base-package
         :title="upload.name"
         :hint="hintUploading"
 
@@ -22,7 +22,7 @@
         <template #actions>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
-    </package>
+    </base-package>
 
     <composer-package
         uncloseable-hint
@@ -64,14 +64,14 @@
     import { mapGetters } from 'vuex';
 
     import metadata from 'contao-package-list/src/mixins/metadata';
-    import Package from './Package';
+    import BasePackage from './BasePackage';
     import ComposerPackage from './ComposerPackage';
     import ProgressBar from '../../fragments/ProgressBar';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
         mixins: [metadata],
-        components: { ProgressBar, Package, ComposerPackage, LoadingButton },
+        components: { ProgressBar, BasePackage, ComposerPackage, LoadingButton },
 
         props: {
             upload: {

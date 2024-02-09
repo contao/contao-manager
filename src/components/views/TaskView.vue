@@ -6,7 +6,7 @@
             <!--<p class="view-task__description">{{ $t('ui.task.description') }}</p>-->
             <p class="view-task__description" v-if="taskStatus">{{ $t(`ui.task.${taskStatus}`) }}</p>
 
-            <template class="view-task__summary" v-if="isFailed && !awaitTask">
+            <template v-if="isFailed && !awaitTask">
                 <p class="view-task__text">
                     {{ $t('ui.task.failedDescription1') }}<br>
                     {{ $t('ui.task.failedDescription2') }}
@@ -24,15 +24,15 @@
                     <loading-button class="view-task__action" color="primary" :loading="loadingMigrations" :disabled="(supportsMigrations && !hasDatabaseChanges) || deletingTask" @click="updateDatabase" v-if="requiresAudit">{{ $t('ui.task.buttonAudit') }}</loading-button>
 
                     <loading-button class="view-task__action" :loading="deletingTask" @click="deleteTask" v-if="!isActive && !isAborting">{{ $t('ui.task.buttonConfirm') }}</loading-button>
-                    <checkbox name="autoclose" :label="$t('ui.task.autoclose')" v-model="autoClose" v-if="isActive && allowAutoClose"/>
+                    <check-box name="autoclose" :label="$t('ui.task.autoclose')" v-model="autoClose" v-if="isActive && allowAutoClose"/>
                 </div>
             </template>
             <div class="view-task__loading" v-else>
-                <loader/>
+                <loading-spinner/>
             </div>
         </header>
 
-        <console
+        <console-output
             class="view-task__main"
             :title="hasTask ? currentTask.title : $t('ui.task.loading')"
             :operations="currentTask.operations"
@@ -54,16 +54,16 @@
 import { mapGetters, mapState } from 'vuex';
 import task from '../../mixins/task';
 
-import BoxedLayout from '../layouts/Boxed';
-import Loader from 'contao-package-list/src/components/fragments/Loader';
+import BoxedLayout from '../layouts/BoxedLayout';
+import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-import Console from '../fragments/Console';
-import Checkbox from '../widgets/Checkbox';
+import ConsoleOutput from '../fragments/ConsoleOutput';
+import CheckBox from '../widgets/CheckBox';
 
 export default {
         name: 'TaskView',
         mixins: [task],
-        components: { BoxedLayout, Loader, LoadingButton, Console, Checkbox },
+        components: { BoxedLayout, LoadingSpinner, LoadingButton, ConsoleOutput, CheckBox },
 
         data: () => ({
             showConsole: false,

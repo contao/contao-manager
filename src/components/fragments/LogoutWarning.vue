@@ -1,5 +1,5 @@
 <template>
-    <popup :popup-class="popupClass">
+    <popup-overlay :popup-class="popupClass">
         <h1 :class="headlineClass">{{$t('ui.logout.headline')}}</h1>
 
         <template v-if="countdown > 0">
@@ -13,17 +13,17 @@
             <p class="logout-warning__text">{{$t('ui.logout.expired')}}</p>
             <loading-button @click="close">{{$t('ui.logout.login')}}</loading-button>
         </template>
-    </popup>
+    </popup-overlay>
 </template>
 
 <script>
     import { mapState } from 'vuex';
 
-    import Popup from 'contao-package-list/src/components/fragments/Popup';
+    import PopupOverlay from 'contao-package-list/src/components/fragments/PopupOverlay';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
-        components: { Popup, LoadingButton },
+        components: { PopupOverlay, LoadingButton },
 
         data: () => ({
             renew: false,

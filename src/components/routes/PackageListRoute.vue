@@ -31,8 +31,8 @@
 <script>
     import { mapState, mapGetters } from 'vuex';
 
-    import PackageBase from './Packages/Base';
-    import PackageUploads from './Packages/Uploads';
+    import PackageBase from './Packages/PackageBase';
+    import PackageUploads from './Packages/PackageUploads';
     import ComposerPackage from './Packages/ComposerPackage';
     import CloudStatus from '../fragments/CloudStatus';
     import ButtonGroup from '../widgets/ButtonGroup';

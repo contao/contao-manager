@@ -37,7 +37,6 @@
     import ConsoleOperation from './ConsoleOperation';
 
     export default {
-        name: 'Console',
         components: { ConsoleOperation, ButtonMenu },
 
         props: {

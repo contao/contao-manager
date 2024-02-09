@@ -1,5 +1,5 @@
 <template>
-    <package
+    <base-package
         :class="{ 'package--contao': isContao }"
         :title="packageData.title || data.name"
         :logo="packageData.logo"
@@ -68,7 +68,7 @@
             </section>
         </template>
 
-    </package>
+    </base-package>
 </template>
 
 <script>
@@ -77,7 +77,7 @@
     import datimFormat from 'contao-package-list/src/filters/datimFormat'
     import packageStatus from '../../../mixins/packageStatus';
 
-    import Package from './Package';
+    import BasePackage from './BasePackage';
     import FeaturePackage from './FeaturePackage';
     import PackageConstraint from '../../fragments/PackageConstraint';
     import ButtonGroup from '../../widgets/ButtonGroup';
@@ -85,7 +85,7 @@
 
     export default {
         mixins: [packageStatus],
-        components: { Package, FeaturePackage, PackageConstraint, ButtonGroup, DetailsButton },
+        components: { BasePackage, FeaturePackage, PackageConstraint, ButtonGroup, DetailsButton },
 
         props: {
             data: {

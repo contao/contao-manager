@@ -11,7 +11,7 @@
                     </i18n>
                 </div>
                 <fieldset class="maintenance__actions" v-if="loading && !supportsJwtCookie && !supportsAccessKey">
-                    <loader class="maintenance__loader"/>
+                    <loading-spinner class="maintenance__loader"/>
                 </fieldset>
                 <fieldset class="maintenance__actions" v-else-if="supportsJwtCookie">
                     <loading-button class="widget-button widget-button--primary widget-button--show" :loading="loading" v-if="!hasJwtDebug" @click="enableJwtDebugMode">{{ $t('ui.maintenance.debugMode.activate') }}</loading-button>
@@ -31,11 +31,11 @@
     import { mapState } from 'vuex';
 
     import MessageOverlay from '../../fragments/MessageOverlay';
-    import Loader from 'contao-package-list/src/components/fragments/Loader';
+    import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
     export default {
-        components: { MessageOverlay, Loader, LoadingButton },
+        components: { MessageOverlay, LoadingSpinner, LoadingButton },
 
         data: () => ({
             supportsJwtCookie: false,

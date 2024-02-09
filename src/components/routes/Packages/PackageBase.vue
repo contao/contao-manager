@@ -20,7 +20,7 @@
 <script>
     import { mapState, mapGetters, mapActions } from 'vuex';
 
-    import MainLayout from '../../layouts/Main';
+    import MainLayout from '../../layouts/MainLayout';
 
     export default {
         components: { MainLayout },
