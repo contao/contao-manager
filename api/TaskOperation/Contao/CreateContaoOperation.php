@@ -23,7 +23,7 @@ class CreateContaoOperation extends AbstractInlineOperation
     /**
      * @var array
      */
-    private static $supportedVersions = ['4.9', '4.13', '5.3'];
+    private static $supportedVersions = ['4.9', '4.13', '5.2'];
 
     /**
      * @var Environment
@@ -170,6 +170,6 @@ JSON;
 
     private function isDevVersion(string $version): bool
     {
-        return '5.3' === $version;
+        return false;
     }
 }
