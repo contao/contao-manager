@@ -66,6 +66,8 @@ class InstallOperation extends AbstractProcessOperation
 
             if ($dryRun) {
                 $arguments[] = '--dry-run';
+                $arguments[] = '--no-scripts';
+                $arguments[] = '--no-plugins';
             }
 
             if ($environment->isDebug()) {
