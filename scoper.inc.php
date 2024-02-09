@@ -116,5 +116,35 @@ return [
 
             return $contents;
         },
+
+        // Fix error templates (e.g. /vendor/symfony/error-handler/Resources/views)
+        static function (string $filePath, string $prefix, string $contents): string {
+            if (!str_starts_with($filePath, 'vendor/symfony/error-handler/Resources/')) {
+                return $contents;
+            }
+
+            return str_replace(
+                [
+                    "namespace $prefix;",
+                    'echo Symfony\Component\HttpKernel\Kernel::VERSION',
+                ],
+                [
+                    '',
+                    "echo \\$prefix\Symfony\Component\HttpKernel\Kernel::VERSION"
+                ],
+                $contents
+            );
+        },
+
+        // Fix error templates (e.g. /vendor/symfony/error-handler/Resources/views)
+        static function (string $filePath, string $prefix, string $contents): string {
+            if (!str_starts_with($filePath, 'vendor/symfony/error-handler/ErrorRenderer/HtmlErrorRenderer.php')) {
+                return $contents;
+            }
+
+            return str_replace('private function fileExcerpt(string $file, int $line, int $srcContext = 3) : string
+    {', "private function fileExcerpt(string \$file, int \$line, int \$srcContext = 3) : string
+    { return '';", $contents);
+        },
     ],
 ];
