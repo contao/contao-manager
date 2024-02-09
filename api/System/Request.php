@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\System;
 
 use Composer\CaBundle\CaBundle;
+use Composer\Util\Platform;
 use Composer\Util\StreamContextFactory;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Exception\RequestException;
@@ -134,7 +135,7 @@ class Request
             \function_exists('php_uname') ? php_uname('s') : 'Unknown',
             \function_exists('php_uname') ? php_uname('r') : 'Unknown',
             'PHP '.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION,
-            getenv('CI') ? '; CI' : ''
+            Platform::getEnv('CI') ? '; CI' : ''
         );
 
         return StreamContextFactory::getContext($url, $options);
