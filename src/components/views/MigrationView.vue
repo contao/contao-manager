@@ -89,6 +89,7 @@ export default {
             status: '',
             changes: null,
             hasDeletes: false,
+            operations: null,
             hash: null,
             withDeletes: false,
 
@@ -169,139 +170,6 @@ export default {
                 });
 
                 return console;
-            },
-
-            operations () {
-                // this.hasDeletes = false;
-
-                if (!this.changes) {
-                    return null;
-                }
-
-                if (this.hasProblem) {
-                    return this.changes.map(change => ({
-                        status: change.status,
-                        summary: change.name,
-                        console: change.message,
-                    }));
-                }
-
-                if (this.type === 'migrations' || this.type === 'migrations-only') {
-                    return this.changes.map(change => ({
-                        status: change.status,
-                        summary: change.name,
-                        details: change.message,
-                    }));
-                }
-
-                const operations = [];
-                this.changes.forEach((change) => {
-                    let result;
-
-                    result = new RegExp('^CREATE TABLE ([^ ]+) .+$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.addTable', { table: result[1] }),
-                            console: change.name,
-                        });
-                        return;
-                    }
-
-                    result = new RegExp('^DROP TABLE (.+)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: this.withDeletes ? change.status : 'skipped',
-                            summary: this.generateStatus(this.$t('ui.migrate.dropTable', { table: result[1] }), !this.withDeletes),
-                            console: change.name,
-                        });
-                        // this.hasDeletes = true;
-                        return;
-                    }
-
-                    result = new RegExp('^CREATE INDEX ([^ ]+) ON ([^ ]+) \\(([^)]+)\\)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.createIndex', { name: result[1], table: result[2] }),
-                            details: result[3],
-                            console: change.name,
-                        });
-                        return;
-                    }
-
-                    result = new RegExp('^DROP INDEX ([^ ]+) ON ([^ ]+)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: this.withDeletes ? change.status : 'skipped',
-                            summary: this.generateStatus(this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }), !this.withDeletes),
-                            details: result[3],
-                            console: change.name,
-                        });
-                        // this.hasDeletes = true;
-                        return;
-                    }
-
-                    result = new RegExp('^ALTER TABLE ([^ ]+) (.+)$').exec(change.name);
-                    if (result) {
-                        const table = result[1];
-                        const operation = {
-                            status: change.status,
-                            summary: [],
-                            details: [],
-                            console: change.name,
-                        };
-
-                        const ops = result[2].split(',').map(p => p.trim())
-                        let deleteOps = 0;
-                        ops.forEach((part) => {
-                            let alter;
-                            alter = new RegExp('^ADD ([^ ]+) (.+)$').exec(part);
-                            if (alter) {
-                                operation.summary.push(this.$t('ui.migrate.addField', { table, field: alter[1] }));
-                                operation.details.push(alter[2]);
-                                return;
-                            }
-
-                            alter = new RegExp('^CHANGE ([^ ]+) ([^ ]+) (.+)$').exec(part);
-                            if (alter) {
-                                operation.summary.push(this.$t('ui.migrate.changeField', { table, field: alter[1] }));
-                                operation.details.push(alter[3]);
-                                return;
-                            }
-
-                            alter = new RegExp('^DROP (.+)$').exec(part);
-                            if (alter) {
-                                operation.summary.push(this.generateStatus(this.$t('ui.migrate.dropField', { table, field: alter[1] }), !this.withDeletes));
-                                operation.details.push('');
-                                // this.hasDeletes = true;
-                                deleteOps++;
-                                return;
-                            }
-
-                            operation.summary.push(`ALTER TABLE ${table} ${part}`);
-                            operation.details.push('');
-                        })
-
-                        if (deleteOps === ops.length) {
-                            operation.status = this.withDeletes ? change.status : 'skipped'
-                        }
-
-                        operations.push(operation);
-                        return;
-                    }
-
-                    operations.push({
-                        status: change.status,
-                        summary: change.name,
-                        console: change.name,
-                    });
-
-                    // Unknown operation, assume it could be a DROP
-                    // this.hasDeletes = true;
-                })
-
-                return operations;
             },
         },
 
@@ -403,6 +271,160 @@ export default {
 
             async setup () {
                 this.$store.commit('setup', 3);
+            },
+
+            updateOperations () {
+                this.hasDeletes = false;
+                this.operations = null;
+
+                if (!this.changes) {
+                    return;
+                }
+
+                if (this.hasProblem) {
+                    return this.changes.map(change => ({
+                        status: change.status,
+                        summary: change.name,
+                        console: change.message,
+                    }));
+                }
+
+                if (this.type === 'migrations' || this.type === 'migrations-only') {
+                    this.operations = this.changes.map(change => ({
+                        status: change.status,
+                        summary: change.name,
+                        details: change.message,
+                    }));
+                    return;
+                }
+
+                const operations = [];
+                this.changes.forEach((change) => {
+                    let result;
+
+                    result = new RegExp('^CREATE TABLE ([^ ]+) .+$').exec(change.name);
+                    if (result) {
+                        operations.push({
+                            status: change.status,
+                            summary: this.$t('ui.migrate.addTable', { table: result[1] }),
+                            console: change.name,
+                        });
+                        return;
+                    }
+
+                    result = new RegExp('^DROP TABLE (.+)$').exec(change.name);
+                    if (result) {
+                        operations.push({
+                            status: this.withDeletes ? change.status : 'skipped',
+                            summary: this.generateStatus(this.$t('ui.migrate.dropTable', { table: result[1] }), !this.withDeletes),
+                            console: change.name,
+                        });
+                        this.hasDeletes = true;
+                        return;
+                    }
+
+                    result = new RegExp('^CREATE INDEX ([^ ]+) ON ([^ ]+) \\(([^)]+)\\)$').exec(change.name);
+                    if (result) {
+                        operations.push({
+                            status: change.status,
+                            summary: this.$t('ui.migrate.createIndex', { name: result[1], table: result[2] }),
+                            details: result[3],
+                            console: change.name,
+                        });
+                        return;
+                    }
+
+                    result = new RegExp('^DROP INDEX ([^ ]+) ON ([^ ]+)$').exec(change.name);
+                    if (result) {
+                        operations.push({
+                            status: this.withDeletes ? change.status : 'skipped',
+                            summary: this.generateStatus(this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }), !this.withDeletes),
+                            details: result[3],
+                            console: change.name,
+                        });
+                        this.hasDeletes = true;
+                        return;
+                    }
+
+                    result = new RegExp('^ALTER TABLE ([^ ]+) (.+)$').exec(change.name);
+                    if (result) {
+                        const table = result[1];
+                        const operation = {
+                            status: change.status,
+                            summary: [],
+                            details: [],
+                            console: change.name,
+                        };
+
+                        let stm = '';
+                        result[2].split("'").forEach((ex, i) => {
+                            if (i % 2) {
+                                stm = `${stm}'${ex.replace(',', '%comma%')}'`;
+                            } else {
+                                stm = `${stm}${ex}`;
+                            }
+                        });
+
+                        const ops = stm.split(',').map(p => p.trim().replace('%comma%', ','))
+                        let deleteOps = 0;
+                        ops.forEach((part) => {
+                            let alter;
+                            alter = new RegExp('^ADD ([^ ]+) (.+)$').exec(part);
+                            if (alter) {
+                                operation.summary.push(this.$t('ui.migrate.addField', { table, field: alter[1] }));
+                                operation.details.push(alter[2]);
+                                return;
+                            }
+
+                            alter = new RegExp('^CHANGE ([^ ]+) ([^ ]+) (.+)$').exec(part);
+                            if (alter) {
+                                operation.summary.push(this.$t('ui.migrate.changeField', { table, field: alter[1] }));
+                                operation.details.push(alter[3]);
+                                return;
+                            }
+
+                            alter = new RegExp('^DROP (.+)$').exec(part);
+                            if (alter) {
+                                operation.summary.push(this.generateStatus(this.$t('ui.migrate.dropField', { table, field: alter[1] }), !this.withDeletes));
+                                operation.details.push('');
+                                this.hasDeletes = true;
+                                deleteOps++;
+                                return;
+                            }
+
+                            operation.summary.push(`ALTER TABLE ${table} ${part}`);
+                            operation.details.push('');
+                        })
+
+                        if (deleteOps === ops.length) {
+                            operation.status = this.withDeletes ? change.status : 'skipped'
+                        }
+
+                        operations.push(operation);
+                        return;
+                    }
+
+                    operations.push({
+                        status: change.status,
+                        summary: change.name,
+                        console: change.name,
+                    });
+
+                    // Unknown operation, assume it could be a DROP
+                    this.hasDeletes = true;
+                })
+
+                this.operations = operations;
+            },
+        },
+
+        watch: {
+            changes () {
+                this.updateOperations();
+            },
+
+            withDeletes () {
+                this.updateOperations();
             },
         },
 
