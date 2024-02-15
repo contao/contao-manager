@@ -449,6 +449,7 @@ export default {
             // New file has been added
             if (newFile && !oldFile) {
                 if (!/(\.cto|\.zip)$/i.test(newFile.name)) {
+                    console && console.debug(`${newFile.name} is not a .zip or .cto`);
                     alert(this.$t('ui.setup.create-project.themeInvalid'));
 
                     return prevent();
@@ -477,7 +478,7 @@ export default {
 
             try {
                 const file = new File([newFile.file], newFile.name, { type: newFile.type });
-                const JSZip = await import('jszip');
+                const JSZip = (await import('jszip')).default;
                 const zip = await JSZip.loadAsync(file);
                 const files = zip.filter((path) => {
                     return !['composer.json', 'theme.xml'].includes(path) && !path.startsWith('__MACOSX/') && !path.includes('.DS_Store') && !path.endsWith('/');
@@ -505,13 +506,14 @@ export default {
 
                 if (this.theme.screenshot && this.theme.screenshot !== 'NULL') {
                     try {
-                        const image = await zip.file(`${ root }${ this.theme.screenshot }`);
+                        const image = await zip.file(`${root}${ this.theme.screenshot }`);
                         this.themeImage = image ? URL.createObjectURL(await image.async('blob')) : null;
                     } catch (err) {
                         // Ignore invalid theme image
                     }
                 }
             } catch (err) {
+                console && console.debug(err);
                 alert(this.$t('ui.setup.create-project.themeInvalid'));
                 this.cancelTheme();
             }
