@@ -146,5 +146,14 @@ return [
     {', "private function fileExcerpt(string \$file, int \$line, int \$srcContext = 3) : string
     { return '';", $contents);
         },
+
+        // Fix prod container cache path
+        static function (string $filePath, string $prefix, string $contents): string {
+            if (!str_starts_with($filePath, 'vendor/symfony/http-kernel/Kernel.php')) {
+                return $contents;
+            }
+
+            return str_replace("\$buildDir . '/' . \$class . '.php'", "\$buildDir.'/'.str_replace('".$prefix."_', '', \$class).'.php'", $contents);
+        },
     ],
 ];
