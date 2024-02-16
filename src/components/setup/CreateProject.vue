@@ -234,7 +234,7 @@ export default {
         processing: false,
         isWeb: true,
 
-        version: '5.2',
+        version: '5.3',
         demo: false,
 
         view: 'require',
@@ -259,10 +259,10 @@ export default {
             const versions = [];
 
             versions.push({
-                value: '5.2',
-                label: `Contao 5.2 (${ this.$t('ui.setup.create-project.latestTitle') })`,
+                value: '5.3',
+                label: `Contao 5.3 (${ this.$t('ui.setup.create-project.latestTitle') } & ${ this.$t('ui.setup.create-project.ltsTitle') })`,
                 disabled: this.phpVersionId < 80100,
-                description: this.$t('ui.setup.create-project.latestQ1', { year: '2024' }),
+                description: this.$t('ui.setup.create-project.latestQ1', { year: '2027' }),
                 problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.1.0', current: this.phpVersion }),
             });
 
@@ -270,7 +270,7 @@ export default {
                 value: '4.13',
                 label: `Contao 4.13 (${ this.$t('ui.setup.create-project.ltsTitle') })`,
                 disabled: this.phpVersionId < 70400,
-                description: this.$t('ui.setup.create-project.ltsText', { year: '2025' }),
+                description: this.$t('ui.setup.create-project.pltsText', { year: '2025' }),
                 problem: this.$t('ui.setup.create-project.requiresPHP', { version: '7.4.0', current: this.phpVersion }),
             });
 
