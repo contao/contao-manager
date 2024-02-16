@@ -136,9 +136,9 @@ return [
             );
         },
 
-        // Fix error templates (e.g. /vendor/symfony/error-handler/Resources/views)
+        // Disable HtmlErrorRenderer::fileExcerpt breaking due to high memory load
         static function (string $filePath, string $prefix, string $contents): string {
-            if (!str_starts_with($filePath, 'vendor/symfony/error-handler/ErrorRenderer/HtmlErrorRenderer.php')) {
+            if ('vendor/symfony/error-handler/ErrorRenderer/HtmlErrorRenderer.php' !== $filePath) {
                 return $contents;
             }
 
@@ -149,11 +149,20 @@ return [
 
         // Fix prod container cache path
         static function (string $filePath, string $prefix, string $contents): string {
-            if (!str_starts_with($filePath, 'vendor/symfony/http-kernel/Kernel.php')) {
+            if ('vendor/symfony/http-kernel/Kernel.php' !== $filePath) {
                 return $contents;
             }
 
             return str_replace("\$buildDir . '/' . \$class . '.php'", "\$buildDir.'/'.str_replace('".$prefix."_', '', \$class).'.php'", $contents);
+        },
+
+        // Fix routes controllers with method argument
+        static function (string $filePath, string $prefix, string $contents): string {
+            if (!str_starts_with($filePath, 'api/Resources/cache/')) {
+                return $contents;
+            }
+
+            return str_replace("'Contao\\\\ManagerApi\\\\", "'$prefix\\\\Contao\\\\ManagerApi\\\\", $contents);
         },
     ],
 ];
