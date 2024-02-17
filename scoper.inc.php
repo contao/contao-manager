@@ -44,6 +44,7 @@ return [
     ],
     'exclude-namespaces' => [
         'Symfony\Polyfill',
+        'React\Promise',
         '/^Composer/',
     ],
     'exclude-constants' => [
