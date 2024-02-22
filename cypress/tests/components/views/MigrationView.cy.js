@@ -1,4 +1,4 @@
-import MigrationView from '../../../src/components/views/MigrationView.vue'
+import MigrationView from '../../../../src/components/views/MigrationView.vue'
 
 describe('<MigrationView />', () => {
     it('renders', () => {
