@@ -21,7 +21,7 @@
     "vue-i18n": "^8.24.3",
     "vue-json-pretty": "^1.9.4",
     "vue-resource": "^1.5.2",
-    "vue-router": "^2.8.1",
+    "vue-router": "^3.6",
     "vue-upload-component": "^2.8.22",
     "vueperslides": "^2.13.0",
     "vuex": "^2.5.0"
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
-    "@babel/plugin-proposal-optional-chaining": "^7.13.12",
+    "@babel/preset-env": "^7.23.9",
     "@vue/cli-plugin-babel": "~5.0.8",
     "@vue/cli-plugin-eslint": "~5.0.8",
     "@vue/cli-service": "~5.0.8",
