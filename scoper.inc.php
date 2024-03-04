@@ -165,5 +165,14 @@ return [
 
             return str_replace("'Contao\\\\ManagerApi\\\\", "'$prefix\\\\Contao\\\\ManagerApi\\\\", $contents);
         },
+
+        // Fix route redirects if API is called with a slash
+        static function (string $filePath, string $prefix, string $contents): string {
+            if ('vendor/symfony/framework-bundle/Routing/RedirectableCompiledUrlMatcher.php' !== $filePath) {
+                return $contents;
+            }
+
+            return str_replace("'Symfony\\\\Bundle\\\\FrameworkBundle\\\\Controller\\\\RedirectController::", "'$prefix\\\\Symfony\\\\Bundle\\\\FrameworkBundle\\\\Controller\\\\RedirectController::", $contents);
+        },
     ],
 ];
