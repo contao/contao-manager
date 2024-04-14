@@ -260,7 +260,7 @@
 
         @include screen(1024) {
             &__toggle {
-                //display: none;
+                display: none;
             }
 
             &__group {
