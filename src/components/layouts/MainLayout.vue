@@ -56,16 +56,17 @@
             background: var(--header-bg); // ToDo + NavigationFragment
             border-bottom: 1px solid var(--header-bdr);
 
+            // ToDo: Do not use margin for subheader on main page
             &--margin {
                 margin-bottom: 30px;
             }
         }
 
         &__subheader {
-            margin: 30px 0 45px;
+            margin: 0 0 45px;
             padding: 20px 0;
-            background: #e5dfcf;
-            border-bottom: 1px solid #dcd8cc;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--header-bdr);
 
             &-inside {
                 display: flex;
