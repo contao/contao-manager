@@ -236,8 +236,8 @@
             text-indent: -999em;
 
             &:hover {
-                background: darken(var(--btn-warning), 5);
-                border-color: darken(var(--btn-warning), 10);
+                background: var(--btn-warning-active);
+                border-color: var(--btn-warning-active);
             }
 
             &:before {
