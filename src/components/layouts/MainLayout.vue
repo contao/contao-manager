@@ -45,7 +45,6 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
-    // ToDo:
     .layout-main {
         overflow: hidden;
         min-height:100vh;

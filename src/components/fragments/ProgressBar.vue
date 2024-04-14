@@ -43,12 +43,11 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
-    // ToDo:
     .progress-bar {
         position: relative;
         width: 100%;
         height: 30px;
-        background: #fff;
+        background: var(--clr-btn);
         border: 2px solid var(--btn-warning);
         color: #000;
         font-weight: $font-weight-bold;
@@ -66,7 +65,7 @@
 
             span {
                 display: block;
-                color: #fff;
+                color: var(--clr-btn);
                 text-align: center;
             }
         }

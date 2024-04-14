@@ -560,7 +560,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 @import "~contao-package-list/src/assets/styles/defaults";
 
-// ToDo:
 .setup {
     &__versions {
         margin: 0;

@@ -162,7 +162,7 @@
             }
 
             &--error {
-                color: #fff;
+                color: var(--clr-btn);
                 text-align: center;
                 background-color: var(--btn-alert);
                 border-color: var(--btn-alert);

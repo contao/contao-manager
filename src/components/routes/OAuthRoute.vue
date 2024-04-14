@@ -129,7 +129,7 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
-    // ToDo:
+    // ToDo: Check dark mode for oAuth
     .view-oauth {
         &__header {
             max-width: 280px;

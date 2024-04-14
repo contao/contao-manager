@@ -207,10 +207,10 @@
             }
 
             &:disabled {
-                color: #fff;
+                color: var(--clr-btn);
                 opacity: 1;
                 background: var(--btn-warning);
-                -webkit-text-fill-color: #fff;
+                -webkit-text-fill-color: var(--clr-btn);
             }
 
             &.disabled {

@@ -235,7 +235,6 @@
 <style rel="stylesheet/scss" lang="scss">
 @import "~contao-package-list/src/assets/styles/defaults";
 
-// ToDo:
 .setup {
     &__directories {
         margin-top: 2em;

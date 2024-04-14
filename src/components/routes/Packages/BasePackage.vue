@@ -67,11 +67,11 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
-    // ToDo:
+    // ToDo: Check dark mode for Base-package
     .package {
         margin-bottom: 14px;
         background: #fff;
-        border-bottom: 3px solid #ddd3bc; // ToDo:
+        border-bottom: 3px solid #ddd3bc;
         border-radius: 2px;
 
         &--contao {

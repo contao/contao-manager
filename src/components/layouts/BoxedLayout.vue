@@ -24,7 +24,6 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
-    // ToDo:
     .layout-boxed,
     .animate-blur-out,
     .animate-blur-in {

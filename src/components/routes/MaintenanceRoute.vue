@@ -45,7 +45,6 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
-    // ToDo:
     .maintenance {
         margin-bottom: 14px;
         background: var(--tiles-bg);
@@ -112,7 +111,7 @@
             line-height: 1em;
             font-weight: $font-weight-normal;
             background: var(--btn-warning);
-            color: #fff;
+            color: var(--clr-btn);
         }
 
         &__error {
