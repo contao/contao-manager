@@ -1,6 +1,6 @@
 <template>
     <nav role="navigation" class="navigation">
-        <a class="navigation__toggle" @click.prevent="toggleNavigation"><span></span><span></span><span></span></a>
+        <a class="navigation__toggle" @click.prevent="toggleNavigation"><span></span></a>
         <ul class="navigation__group navigation__group--main">
             <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.discover"><a>{{ $t('ui.navigation.discover') }}</a></router-link>
             <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.packages">
@@ -132,7 +132,6 @@
             display: block;
             float: right;
             position: relative;
-            transition: transform .4s cubic-bezier(.55, 0, .1, 1);
             margin: 5px 15px;
             padding: 0;
             width: 30px;
@@ -140,21 +139,54 @@
             cursor: pointer;
             z-index: 20;
 
-            @include screen(1024) {
-                display: none;
-            }
-
-            .nav-active & {
-                transform: rotate(90deg);
+            span,
+            span:before,
+            span:after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 4px;
+                background: var(--text);
+                border-radius: 4px;
+                position: absolute;
             }
 
             span {
-                display: block;
-                height: 3px;
-                width: 25px;
-                margin: 5px auto;
-                background: var(--text);
-                pointer-events: none;
+                transition-duration: 0.075s;
+                transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+                top: 50%;
+                margin-top: -2px;
+
+                &:before {
+                    top: -10px;
+                    transition: top 0.075s 0.12s ease, opacity 0.075s ease;
+                }
+
+                &:after {
+                    bottom: -10px;
+                    transition: bottom 0.075s 0.12s ease, transform 0.075s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+                }
+            }
+
+            .nav-active & {
+
+                span {
+                    transform: rotate(45deg);
+                    transition-delay: 0.12s;
+                    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+                    &:before {
+                        top: 0;
+                        opacity: 0;
+                        transition: top 0.075s ease, opacity 0.075s 0.12s ease;
+                    }
+
+                    &:after {
+                        transition: bottom 0.075s ease, transform 0.075s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+                        bottom: 0;
+                        transform: rotate(-90deg);
+                    }
+                }
             }
         }
 
@@ -220,13 +252,17 @@
             margin-left: 8px;
             padding: 2px 5px;
             font-size: 10px;
-            color: #fff;
+            color: var(--clr-btn);
             font-weight: $font-weight-bold;
             background: var(--contao);
-            border-radius: 5px;
+            border-radius: 40%;
         }
 
         @include screen(1024) {
+            &__toggle {
+                //display: none;
+            }
+
             &__group {
                 &--main {
                     position: inherit;

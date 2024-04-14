@@ -122,6 +122,7 @@
 <style lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
+    // ToDo: Check cloud status styles for dark mode
     .cloud-status {
         margin-left: 8px;
         position: relative;
@@ -144,7 +145,7 @@
             background: #fff;
             color: var(--text);
             border-bottom: 3px solid var(--contao);
-            box-shadow: var(--shadow) 0 -1px 2px; // ToDo:
+            box-shadow: var(--shadow) 0 -1px 2px;
             z-index: 100;
 
             &:after {

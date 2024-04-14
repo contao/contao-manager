@@ -194,10 +194,12 @@
             margin-right: 2px;
             background: #fff;
             border: 2px solid var(--btn-warning);
-            color: #000;
+            color: var(--black);
             font-weight: $font-weight-bold;
             text-align: center;
             line-height: 30px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
 
             &::placeholder {
                 color: #fff;
@@ -234,6 +236,8 @@
             background: var(--btn-warning);
             line-height: 20px;
             text-indent: -999em;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
 
             &:hover {
                 background: var(--btn-warning-active);
