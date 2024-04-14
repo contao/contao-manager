@@ -102,7 +102,7 @@
             right: 0;
             width: auto;
             z-index: 100;
-            background: #fff;
+            background: var(--form-bg);
             border-radius: 2px;
 
             &:before {
@@ -116,7 +116,7 @@
                 border-bottom: none;
                 border-left: 5px solid transparent;
                 border-right: 5px solid transparent;
-                border-bottom: 5px solid #fff;
+                border-bottom: 5px solid var(--form-bg);
             }
 
             &:focus {
@@ -129,11 +129,12 @@
                 border: none;
                 text-align: left;
                 white-space: nowrap;
-                border-bottom: 1px solid $border-color;
+                border-bottom: 1px solid var(--border);
                 cursor: pointer;
 
                 &:hover {
-                    background: #f0f0f0;
+                    color: var(--text);
+                    background: var(--focus);
                 }
 
                 &:first-child {

@@ -70,7 +70,7 @@
         flex-wrap: wrap;
         padding-top: 4px;
         margin: 4px 20px 4px;
-        border-top: 1px solid $border-light-color;
+        border-top: 1px solid var(--border--light);
 
         &:last-child {
             padding-bottom: 0;
@@ -105,7 +105,7 @@
         &__badge {
             margin-left: 5px;
             padding: 2px 8px;
-            background: $red-button;
+            background: var(--btn-alert);
             border-radius: 2px;
             font-size: 12px;
             font-weight: $font-weight-bold;
@@ -117,7 +117,7 @@
         &__hint {
             line-height: 1.2;
             padding: 2px 5px;
-            background: $hint-background;
+            background: var(--hint-bg);
             font-size: 12px;
         }
 
@@ -135,7 +135,7 @@
         &__restore {
             padding-left: 18px;
             font-size: 12px;
-            color: $hint-link;
+            color: var(--hint-link);
             background: url('../../../assets/images/close.svg') left center no-repeat;
             background-size: 14px 14px;
             border: none;
@@ -154,7 +154,7 @@
         @include screen(1024) {
             &__hint {
                 padding: 8px 10px 8px 36px;
-                background: $hint-background url('~contao-package-list/src/assets/images/hint.svg') 10px 5px no-repeat;
+                background: var(--hint-bg) url('~contao-package-list/src/assets/images/hint.svg') 10px 5px no-repeat;
                 background-size: 20px 20px;
             }
 

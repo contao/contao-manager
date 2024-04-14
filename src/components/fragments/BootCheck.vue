@@ -1,10 +1,10 @@
 <template>
     <div class="boot-check">
         <loading-spinner v-if="progress === 'loading'" class="boot-check__icon"></loading-spinner>
-        <div v-else-if="progress === 'success'" class="boot-check__icon boot-check__icon--success"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
-        <div v-else-if="progress === 'info' || progress === 'action'" class="boot-check__icon boot-check__icon--info"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
-        <div v-else-if="progress === 'warning'" class="boot-check__icon boot-check__icon--warning"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
-        <div v-else class="boot-check__icon boot-check__icon--error"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+        <div v-else-if="progress === 'success'" class="boot-check__icon boot-check__icon--success"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8" fill="#fff"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+        <div v-else-if="progress === 'info' || progress === 'action'" class="boot-check__icon boot-check__icon--info"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8" fill="#fff"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
+        <div v-else-if="progress === 'warning'" class="boot-check__icon boot-check__icon--warning"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 19h15L12 5" fill="#fff"/><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+        <div v-else class="boot-check__icon boot-check__icon--error"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8" fill="#fff"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
 
         <div class="boot-check__label">
             <h2 class="boot-check__title">{{ title }}</h2>
@@ -63,16 +63,16 @@
             }
 
             &--success svg {
-                fill: $green-button;
+                fill: var(--btn-primary);
             }
 
             &--info svg,
             &--warning svg {
-                fill: $orange-button;
+                fill: var(--btn-warning);
             }
 
             &--error svg {
-                fill: $red-button;
+                fill: var(--btn-alert);
             }
         }
 
@@ -113,7 +113,7 @@
 
             &__action {
                 float: right;
-                margin: 0 10px;
+                margin: 0 0 0 10px;
                 width: 140px;
                 text-align: center;
 

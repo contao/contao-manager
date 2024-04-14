@@ -67,20 +67,21 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
+    // ToDo:
     .package {
         margin-bottom: 14px;
         background: #fff;
-        border-bottom: 3px solid #ddd3bc;
+        border-bottom: 3px solid #ddd3bc; // ToDo:
         border-radius: 2px;
 
         &--contao {
-            border-bottom-color: $contao-color;
+            border-bottom-color: var(--contao);
         }
 
         &__hint {
             position: relative;
             padding: 8px 20px 8px 20px;
-            background: $hint-background;
+            background: var(--hint-bg);
             font-weight: $font-weight-medium;
             font-size: 12px;
             line-height: 1.8;
@@ -88,7 +89,7 @@
 
             @include screen(800) {
                 padding-left: 56px;
-                background: $hint-background url('~contao-package-list/src/assets/images/hint.svg') 20px 5px no-repeat;
+                background: var(--hint-bg) url('~contao-package-list/src/assets/images/hint.svg') 20px 5px no-repeat;
                 background-size: 28px 28px;
             }
 
@@ -110,7 +111,7 @@
         &__hint-close {
             float: right;
             padding-left: 18px;
-            color: $hint-link;
+            color: var(--hint-link);
             background: url('../../../assets/images/close.svg') left center no-repeat;
             background-size: 14px 14px;
         }
@@ -165,7 +166,7 @@
             margin-bottom: 5px;
 
             em {
-                background-color: $highlight-color;
+                background-color: var(--highlight);
                 font-style: normal;
             }
 
@@ -187,7 +188,7 @@
             top: 6px;
             right: 0;
             padding: 0 8px;
-            background: $red-button;
+            background: var(--btn-alert);
             border-radius: 2px;
             font-size: 12px;
             line-height: 19px;
@@ -210,7 +211,8 @@
             margin-bottom: 1em;
 
             em {
-                background-color: $highlight-color;
+                background-color: var(--highlight-bg);
+                color: var(--highlight-color);
                 font-style: normal;
             }
         }
@@ -265,7 +267,7 @@
 
             &--missing {
                 padding: 4px 8px;
-                background: $red-button;
+                background: var(--btn-alert);
                 border-radius: 2px;
                 color: #fff;
                 font-weight: bold;
@@ -279,15 +281,15 @@
             color: #fff;
 
             &--available {
-                background: $green-button;
+                background: var(--btn-primary);
             }
 
             &--error {
-                background: $red-button;
+                background: var(--btn-alert);
             }
 
             &--none {
-                background: $border-color;
+                background: var(--border);
             }
 
             @include screen(1024) {
@@ -302,7 +304,7 @@
             right: -7px;
             width: 24px;
             height: 20px;
-            background: $green-button url('../../../assets/images/button-update.svg') center center/20px 20px no-repeat;
+            background: var(--btn-primary) url('../../../assets/images/button-update.svg') center center/20px 20px no-repeat;
         }
 
         &__actions {

@@ -140,7 +140,7 @@ export default {
         }
 
         &__icon {
-            background: $contao-color;
+            background: var(--contao);
             border-radius: 10px;
             padding:10px;
         }
@@ -191,7 +191,7 @@ export default {
 
         &__issues {
             margin-bottom: 1em;
-            color: $red-button;
+            color: var(--btn-alert);
 
             p {
                 font-weight: $font-weight-bold;
@@ -238,16 +238,6 @@ export default {
                         padding-top: 10px;
                         font-weight: $font-weight-medium;
                     }
-
-                    select,
-                    input[type=text] {
-                        width: 250px;
-                    }
-                }
-
-                .widget-button {
-                    width: 250px;
-                    margin-left: 120px;
                 }
             }
         }

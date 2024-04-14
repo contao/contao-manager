@@ -142,9 +142,9 @@
             padding: 0 0 15px;
             outline: none;
             background: #fff;
-            color: $text-color;
-            border-bottom: 3px solid $contao-color;
-            box-shadow: $shadow-color 0 -1px 2px;
+            color: var(--text);
+            border-bottom: 3px solid var(--contao);
+            box-shadow: var(--shadow) 0 -1px 2px; // ToDo:
             z-index: 100;
 
             &:after {
@@ -156,19 +156,19 @@
                 margin-left: -4px;
                 border-style: solid;
                 border-width: 4px 3.5px 0 3.5px;
-                border-color: $contao-color transparent transparent transparent;
+                border-color: var(--contao) transparent transparent transparent;
                 content: "";
             }
 
             &--error {
                 color: #fff;
                 text-align: center;
-                background-color: $red-button;
-                border-color: $red-button;
+                background-color: var(--btn-alert);
+                border-color: var(--btn-alert);
 
                 &:after {
                     left: 27px;
-                    border-color: $red-button transparent transparent transparent;
+                    border-color: var(--btn-alert) transparent transparent transparent;
                 }
             }
         }
@@ -212,7 +212,7 @@
         }
 
         tr:nth-child(odd) {
-            background: #f0f0f0;
+            background: var(--table-odd-bg);
         }
     }
 </style>

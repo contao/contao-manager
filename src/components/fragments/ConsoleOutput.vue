@@ -77,6 +77,7 @@
 <style lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
+    // ToDo:
     .console {
         background: #24292e;
 

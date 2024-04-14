@@ -118,7 +118,7 @@
         }
 
         &__icon {
-            background: $contao-color;
+            background: var(--contao);
             border-radius: 10px;
             padding:10px;
         }
@@ -171,7 +171,7 @@
 
         &__failed {
             margin: 10px 0;
-            color: $red-button;
+            color: var(--btn-alert);
             font-weight: $font-weight-bold;
         }
     }

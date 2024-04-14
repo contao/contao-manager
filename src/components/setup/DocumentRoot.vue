@@ -235,6 +235,7 @@
 <style rel="stylesheet/scss" lang="scss">
 @import "~contao-package-list/src/assets/styles/defaults";
 
+// ToDo:
 .setup {
     &__directories {
         margin-top: 2em;
@@ -249,7 +250,8 @@
             word-break: break-all;
 
             span {
-                background-color: $highlight-color;
+                background-color: var(--highlight-bg);
+                color: var(--highlight-color);
                 font-weight: $font-weight-medium;
             }
         }

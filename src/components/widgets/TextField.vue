@@ -108,11 +108,11 @@
         cursor: pointer;
 
         &--hidden svg {
-            fill: $green-button;
+            fill: var(--btn-primary);
         }
 
         &--visible svg {
-            fill: $default-button;
+            fill: var(--btn);
         }
     }
 }

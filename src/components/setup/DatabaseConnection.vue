@@ -323,14 +323,14 @@ export default {
                 right: 0;
                 display: block;
                 height: 1px;
-                background: $border-color;
+                background: var(--border);
                 z-index: 1;
             }
 
             span {
                 position: relative;
                 padding: 0 10px;
-                background: #fff;
+                background: var(--popup-bg);
                 z-index: 2;
             }
         }

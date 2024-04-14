@@ -88,32 +88,31 @@
     .logout-warning {
         position: fixed;
         display: block;
-        top: 20%;
+        top: 50%;
         left: 50%;
         width: 500px;
         max-width: 90%;
         text-align: center;
-        background: #ffffff;
+        background: var(--tiles-bg);
         z-index: 10;
         opacity: 1;
-        transform: translateX(-50%);
-        border-bottom: 2px solid #ddd3bc;
-        border-radius: 2px;
+        transform: translate(-50%, -50%);
+        border-radius: var(--border-radius);
 
         &__headline {
             position: relative;
-            background: $contao-color;
+            background: var(--contao);
             color: #fff;
             font-weight: $font-weight-normal;
             line-height: 40px;
             border-radius: 2px 2px 0 0;
 
             &--complete {
-                background-color: $green-button;
+                background-color: var(--btn-primary);
             }
 
             &--error {
-                background-color: $red-button;
+                background-color: var(--btn-alert);
             }
         }
 
@@ -124,7 +123,7 @@
         &__countdown {
             margin: -20px 0 20px;
             font: $font-weight-bold 4em/1.6 $font-monospace;
-            color: $orange-button;
+            color: var(--btn-warning);
         }
 
         .widget-button {

@@ -218,7 +218,7 @@
         }
 
         &__icon {
-            background: $contao-color;
+            background: var(--contao);
             border-radius: 10px;
             padding:10px;
         }
@@ -246,10 +246,11 @@
         }
 
         &__checks {
-            margin: 0 20px 50px;
+            margin: 0 16px 50px;
 
             .boot-check:nth-child(odd) {
-                background: #f5f9fa;
+                border-radius: var(--border-radius);
+                background: var(--table-odd-bg);
             }
         }
 
@@ -259,7 +260,7 @@
             &--error svg {
                 width: 100%;
                 height: 40px;
-                fill: $red-button;
+                fill: var(--btn-alert);
             }
         }
 
@@ -267,7 +268,7 @@
             max-width: 60%;
             margin: 10px auto;
             text-align: center;
-            color: $red-button;
+            color: var(--btn-alert);
             line-height: 1.2em;
         }
 

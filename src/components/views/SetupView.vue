@@ -141,6 +141,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
+    @import "../../assets/styles/defaults";
 
     .view-setup {
         padding-top: 40px;
@@ -174,7 +175,7 @@ export default {
                     position: absolute;
                     left: -50%;
                     right: 50%;
-                    background: $border-color;
+                    background: var(--border);
                     height: 5px;
                 }
 
@@ -190,7 +191,7 @@ export default {
                     text-indent: 0;
                     text-align: center;
                     line-height: 35px;
-                    background: $border-color;
+                    background:  var(--border);
                     border-radius: 50%;
                     z-index: 1;
                 }
@@ -202,7 +203,7 @@ export default {
 
             li.active:before,
             li.active:after {
-                background: $contao-color;
+                background: var(--contao);
             }
 
             button {
@@ -261,7 +262,10 @@ export default {
             width: 80%;
             margin: 50px auto 0;
             padding: 20px 25px;
-            border: 2px solid $funding-color;
+            border: 2px solid var(--funding);
+            border-radius: var(--border-radius);
+            background: rgba(var(--funding-rgb), .025);
+            font-weight: 400;
 
             figure {
                 margin-bottom: 1em;
@@ -272,7 +276,7 @@ export default {
             }
 
             &-link {
-                margin: 1em 0 0 !important;
+                margin: 1em 0 0;
             }
         }
 
@@ -330,7 +334,7 @@ export default {
         }
 
         &__icon {
-            background: $contao-color;
+            background: var(--contao);
             border-radius: 10px;
             padding:10px;
         }
@@ -350,7 +354,7 @@ export default {
         }
 
         &__warning {
-            color: $red-button;
+            color: var(--btn-alert);
             font-weight: $font-weight-bold;
         }
 
@@ -365,7 +369,7 @@ export default {
                 width: 80px;
                 height: 80px;
                 margin: 0 auto 2em;
-                fill: $green-button;
+                fill: var(--btn-primary);
             }
 
             .widget-select,
@@ -443,14 +447,14 @@ export default {
                 float: left;
                 width: 470px;
                 max-width: none;
-                padding: 0 60px;
+                padding: 0 60px 50px;
             }
 
             &__form {
                 float: left;
                 width: 370px;
                 max-width: none;
-                margin: 0 50px;
+                margin: 0 50px 50px;
 
                 .widget-select,
                 .widget-text {

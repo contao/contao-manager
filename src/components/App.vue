@@ -106,6 +106,8 @@
         },
 
         async mounted() {
+            this.initColorMode();
+
             if (this.$route.query.token) {
                 try {
                     await Vue.http.post('api/session', { token: this.$route.query.token });
@@ -156,6 +158,18 @@
         created() {
             document.title = `Contao Manager | ${location.hostname}`;
         },
+
+        methods: {
+            initColorMode() {
+                this.colorMode = localStorage.getItem("theme")
+
+                if (!this.colorMode) {
+                    this.colorMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light';
+                }
+
+                document.documentElement.setAttribute('data-theme', this.colorMode);
+            },
+        },
     };
 </script>
 
@@ -198,7 +212,7 @@
         right: 0;
         height: 27px;
         padding: 4px 8px;
-        background: $orange-button;
+        background: var(--btn-warning);
         color: #fff;
         text-align: center;
         z-index: 100;
@@ -228,7 +242,7 @@
         right: 0;
         height: 27px;
         padding: 4px 8px;
-        background: $red-button;
+        background: var(--btn-alert);
         color: #fff;
         text-align: center;
         z-index: 100;

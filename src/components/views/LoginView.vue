@@ -14,14 +14,14 @@
                 <h1 class="view-login__headline">{{ $t('ui.login.headline') }}</h1>
                 <p class="view-login__description">{{ $t('ui.login.description') }}</p>
 
-                <text-field ref="username" name="username" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
-                <text-field type="password" name="password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
-
-                <a :href="`https://to.contao.org/docs/manager-password?lang=${$i18n.locale}`" target="_blank" class="view-login__link">{{ $t('ui.login.forgotPassword') }}</a>
+                <text-field ref="username" name="username" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
+                <text-field type="password" name="password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
 
                 <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in">
                     {{ $t('ui.login.button') }}
                 </loading-button>
+
+                <a :href="`https://to.contao.org/docs/manager-password?lang=${$i18n.locale}`" target="_blank" class="view-login__link">{{ $t('ui.login.forgotPassword') }}</a>
             </form>
         </main>
     </boxed-layout>
@@ -103,14 +103,14 @@
 
         &__product {
             margin-top: 15px;
-            font-size: 36px;
+            font-size: 38px;
             font-weight: $font-weight-light;
             line-height: 1;
         }
 
         &__form {
             position: relative;
-            max-width: 250px;
+            max-width: 280px;
             margin: 0 auto 80px;
 
             input {
@@ -123,7 +123,7 @@
             max-width: 290px;
             margin: -20px auto 60px;
             padding: 20px;
-            background: $red-button;
+            background: var(--btn-alert);
             color: #fff;
             text-align: center;
 
@@ -147,7 +147,9 @@
             text-indent: -999em;
 
             &[for=ctrl_username] {
-                top: 17px;
+                top: 0;
+                bottom: 0;
+                margin: auto;
                 right: 13px;
                 width: 16px;
                 height: 16px;
@@ -157,13 +159,36 @@
             }
 
             &[for=ctrl_password] {
-                top: 17px;
+                top: 0;
+                bottom: 0;
+                margin: auto;
                 right: 12px;
                 width: 16px;
                 height: 16px;
                 background: url("../../assets/images/lock.svg") left top no-repeat;
                 background-size: 14px 14px;
                 z-index: 10;
+            }
+        }
+
+        &__user,
+        &__password {
+            input {
+                margin: 0;
+            }
+        }
+
+        &__user {
+            input {
+                border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+            }
+        }
+
+        &__password {
+            margin-top: -1px;
+
+            input {
+                border-radius: 0 0 var(--border-radius) var(--border-radius) !important;
             }
         }
 
@@ -174,15 +199,20 @@
         &__link {
             display: block;
             font-size: 12px;
+            text-align: right;
         }
 
         &__button {
-            margin-top: 20px;
+            margin: 12px 0 6px;
 
             .sk-circle {
                 color: #fff;
                 text-align: center;
             }
+        }
+
+        .fragment-footer {
+            display: block;
         }
     }
 </style>

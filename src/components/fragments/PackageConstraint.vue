@@ -193,7 +193,7 @@
             height: 30px;
             margin-right: 2px;
             background: #fff;
-            border: 2px solid $orange-button;
+            border: 2px solid var(--btn-warning);
             color: #000;
             font-weight: $font-weight-bold;
             text-align: center;
@@ -207,13 +207,13 @@
             &:disabled {
                 color: #fff;
                 opacity: 1;
-                background: $orange-button;
+                background: var(--btn-warning);
                 -webkit-text-fill-color: #fff;
             }
 
             &.disabled {
-                background: $border-color;
-                border-color: $border-color;
+                background: var(--border);
+                border-color: var(--border);
             }
 
             &.error {
@@ -231,13 +231,13 @@
             position: relative;
             width: 30px;
             height: 30px;
-            background: $orange-button;
+            background: var(--btn-warning);
             line-height: 20px;
             text-indent: -999em;
 
             &:hover {
-                background: darken($orange-button, 5);
-                border-color: darken($orange-button, 10);
+                background: darken(var(--btn-warning), 5);
+                border-color: darken(var(--btn-warning), 10);
             }
 
             &:before {

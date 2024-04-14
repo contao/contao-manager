@@ -45,6 +45,7 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
+    // ToDo:
     .layout-main {
         overflow: hidden;
         min-height:100vh;
@@ -52,8 +53,8 @@
         &__header {
             height: 56px;
             padding: 8px;
-            background: #ffffff;
-            box-shadow: $shadow-color 0 1px;
+            background: var(--header-bg); // ToDo + NavigationFragment
+            border-bottom: 1px solid var(--header-bdr);
 
             &--margin {
                 margin-bottom: 30px;
@@ -87,7 +88,7 @@
 
         &__logo {
             display: inline;
-            color: $text-color;
+            color: var(--text);
             text-decoration: none;
             font-weight: $font-weight-light;
             font-size: 27px;

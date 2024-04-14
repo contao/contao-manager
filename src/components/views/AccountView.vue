@@ -48,7 +48,6 @@
             </form>
         </main>
 
-        <div class="clearfix"></div>
         <aside class="view-account__contribute">
             <p>
                 {{ $t('ui.account.contribute1') }}<br>
@@ -201,8 +200,8 @@ export default {
         }
 
         &__contribute {
-            max-width: 250px;
-            margin: 80px auto 0;
+            max-width: 280px;
+            margin: 60px auto 0;
             font-size: 12px;
             text-align: center;
 
@@ -212,20 +211,19 @@ export default {
         }
 
         @include screen(960) {
-            padding-top: 100px;
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;
+            padding-top: 50px;
 
-            &__header {
-                float: left;
-                width: 470px;
+            &__header,
+            &__form {
+                padding: 50px;
+                width: 50%;
                 max-width: none;
-                padding: 0 60px;
             }
 
             &__form {
-                float: left;
-                width: 370px;
-                max-width: none;
-                margin: 20px 50px 0;
 
                 .widget-text label {
                     float: left;

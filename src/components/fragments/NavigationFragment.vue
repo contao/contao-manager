@@ -106,7 +106,7 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
-    $nav-offset: 250px;
+    $nav-offset: 280px;
 
     body.nav-active {
         overflow: hidden !important;
@@ -153,7 +153,7 @@
                 height: 3px;
                 width: 25px;
                 margin: 5px auto;
-                background: $text-color;
+                background: var(--text);
                 pointer-events: none;
             }
         }
@@ -174,8 +174,7 @@
             padding: 20px;
             overflow-y: auto;
             overflow-scrolling: touch;
-            background: #fff;
-            box-shadow: $shadow-color -1px 0;
+            background: var(--header-bg);
             z-index: 10;
         }
 
@@ -184,7 +183,7 @@
                 display: block;
                 padding: 12px 10px;
                 font-size: 16px;
-                color: $text-color;
+                color: var(--text);
                 white-space: pre;
 
                 &:hover {
@@ -192,7 +191,7 @@
                 }
 
                 &[href]:hover {
-                    color: $link-color;
+                    color: var(--link);
                 }
             }
 
@@ -223,7 +222,7 @@
             font-size: 10px;
             color: #fff;
             font-weight: $font-weight-bold;
-            background: $contao-color;
+            background: var(--contao);
             border-radius: 5px;
         }
 
@@ -250,11 +249,11 @@
                     min-width: 180px;
                     margin-top: -3px;
                     text-align: center;
-                    background: #fff;
-                    border-top: 3px solid $link-color;
+                    background: var(--form-bg);
+                    border-top: 3px solid var(--link);
                     transform: translateX(-50%);
                     z-index: 100;
-                    box-shadow: $shadow-color 0 1px 2px;
+                    box-shadow: 0 0 1px var(--shadow);
 
                     &:before {
                         position: absolute;
@@ -265,7 +264,7 @@
                         margin-left: -4px;
                         border-style: solid;
                         border-width: 0 3.5px 4px 3.5px;
-                        border-color: transparent transparent $link-color transparent;
+                        border-color: transparent transparent var(--link) transparent;
                         content: "";
                     }
                 }
@@ -289,8 +288,8 @@
 
                 &.router-link-active > a,
                 &:hover > a {
-                    color: $link-color !important;
-                    border-bottom: 3px solid $link-color;
+                    color: var(--link) !important;
+                    border-bottom: 3px solid var(--link);
                 }
 
                 &:hover > .navigation__group--sub {
@@ -299,19 +298,24 @@
 
                 &--sub {
                     display: block;
-                    border-top: 1px solid #e5dfd0;
+                    border-top: 1px solid var(--border);
 
                     a {
                         margin: 0;
                         border: none !important;
-
-                        &:hover {
-                            color: #000 !important;
-                        }
                     }
 
                     &:first-child {
                         border-top: none;
+                    }
+
+                    &.router-link-active,
+                    &:hover {
+                        background: var(--focus);
+
+                        a {
+                            color: var(--text) !important;
+                        }
                     }
                 }
 
@@ -324,11 +328,11 @@
                         top: 4px;
                         width: 22px;
                         height: 22px;
-                        fill: $text-color;
+                        fill: var(--text);
                     }
 
                     &:hover svg {
-                        fill: $link-color;
+                        fill: var(--link);
                     }
 
                     span {
@@ -343,10 +347,10 @@
                 }
 
                 li:hover > a {
-                    border-bottom: 3px solid $link-color;
+                    border-bottom: 3px solid var(--link);
 
                     svg {
-                        fill: $link-color;
+                        fill: var(--link);
                     }
                 }
             }

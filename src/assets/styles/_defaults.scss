@@ -1,0 +1,13 @@
+// Custom properties
+:root {
+  --footer-fragment-bdr: #eee;
+  --table-odd-bg: #f5f9fa;
+  --border-radius: 6px;
+}
+
+// Dark-mode
+html[data-theme=dark] {
+  --footer-fragment-bdr: var(--footer-bdr);
+  --table-odd-bg: var(--tiles-bg);
+  --link-footer: #fff;
+}
