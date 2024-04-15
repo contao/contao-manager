@@ -1,6 +1,6 @@
 <template>
     <div class="layout-main">
-        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.subheader }">
+        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.search }">
             <div class="layout-main__logo"><img src="../../assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />Contao Manager</div>
             <navigation-fragment/>
         </header>
@@ -52,10 +52,8 @@
         &__header {
             height: 56px;
             padding: 8px;
-            background: var(--header-bg); // ToDo + NavigationFragment
-            border-bottom: 1px solid var(--header-bdr);
+            background: var(--header-main-bg);
 
-            // ToDo: Do not use margin for subheader on main page
             &--margin {
                 margin-bottom: 30px;
             }
