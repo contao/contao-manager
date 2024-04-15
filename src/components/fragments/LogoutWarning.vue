@@ -93,7 +93,7 @@
         width: 500px;
         max-width: 90%;
         text-align: center;
-        background: var(--tiles-bg);
+        background: var(--popup-bg);
         z-index: 10;
         opacity: 1;
         transform: translate(-50%, -50%);

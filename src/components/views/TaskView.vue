@@ -235,7 +235,6 @@ export default {
 
         &__main {
             margin: 0 50px 50px;
-            background: #24292e;
         }
 
         &__loading {
