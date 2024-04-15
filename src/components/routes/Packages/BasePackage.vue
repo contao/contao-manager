@@ -69,13 +69,15 @@
 
     // ToDo: Check dark mode for Base-package
     .package {
-        margin-bottom: 14px;
-        background: #fff;
-        border-bottom: 3px solid #ddd3bc;
-        border-radius: 2px;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 20px;
+        background: var(--tiles-bg);
+        border: 1px solid var(--tiles-bdr);
+        border-radius: 14px;
 
         &--contao {
-            border-bottom-color: var(--contao);
+            border-color: var(--contao);
         }
 
         &__hint {
@@ -318,7 +320,7 @@
             }
 
             @include screen(1024) {
-                width: 180px;
+                width: 178px;
                 margin-left: 40px;
                 padding-left: 0;
             }
@@ -334,11 +336,11 @@
         }
 
         &__features {
-            padding: 0 0 10px 0;
-            margin: -20px 0 0;
+            padding: 0 0 20px;
+            //margin: -20px 0 0;
 
             @include screen(1024) {
-                margin-top: -10px;
+                //margin-top: -10px;
             }
         }
     }

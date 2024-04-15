@@ -60,7 +60,7 @@
             </slot>
         </template>
 
-        <template #features v-if="packageFeatures(data.name)">
+        <template #features v-if="packageFeatures(data.name)?.length">
             <section class="package__features">
                 <template v-for="name in packageFeatures(data.name)">
                     <feature-package :key="name" :name="name" />
