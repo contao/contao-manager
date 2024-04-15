@@ -307,6 +307,7 @@ export default {
                         operations.push({
                             status: change.status,
                             summary: this.$t('ui.migrate.addTable', { table: result[1] }),
+                            details: change.message,
                             console: change.name,
                         });
                         return;
@@ -317,6 +318,7 @@ export default {
                         operations.push({
                             status: this.withDeletes ? change.status : 'skipped',
                             summary: this.generateStatus(this.$t('ui.migrate.dropTable', { table: result[1] }), !this.withDeletes),
+                            details: change.message,
                             console: change.name,
                         });
                         this.hasDeletes = true;
@@ -328,7 +330,7 @@ export default {
                         operations.push({
                             status: change.status,
                             summary: this.$t('ui.migrate.createIndex', { name: result[1], table: result[2] }),
-                            details: result[3],
+                            details: result[3] + ' ' + change.message,
                             console: change.name,
                         });
                         return;
@@ -339,7 +341,7 @@ export default {
                         operations.push({
                             status: this.withDeletes ? change.status : 'skipped',
                             summary: this.generateStatus(this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }), !this.withDeletes),
-                            details: result[3],
+                            details: change.message,
                             console: change.name,
                         });
                         this.hasDeletes = true;
@@ -355,6 +357,10 @@ export default {
                             details: [],
                             console: change.name,
                         };
+
+                        if (change.message) {
+                            operation.details.push(change.message);
+                        }
 
                         let stm = '';
                         result[2].split("'").forEach((ex, i) => {
@@ -407,6 +413,7 @@ export default {
                     operations.push({
                         status: change.status,
                         summary: change.name,
+                        details: change.message,
                         console: change.name,
                     });
 

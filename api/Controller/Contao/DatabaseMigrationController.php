@@ -243,6 +243,7 @@ class DatabaseMigrationController
             $operations[$name] = [
                 'name' => $name,
                 'status' => !$process->isRunning() && !$process->isSuccessful() ? TaskStatus::STATUS_ERROR : 'pending',
+                'message' => '',
             ];
         }
 
@@ -258,6 +259,7 @@ class DatabaseMigrationController
 
             if ('schema-result' === $type) {
                 $operations[$name]['status'] = ($data['isSuccessful'] ? TaskStatus::STATUS_COMPLETE : TaskStatus::STATUS_ERROR);
+                $operations[$name]['message'] = $data['message'] ?? '';
             }
         }
 
