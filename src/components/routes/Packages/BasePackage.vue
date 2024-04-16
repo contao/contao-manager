@@ -67,7 +67,6 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
-    // ToDo: Check dark mode for Base-package
     .package {
         position: relative;
         overflow: hidden;
@@ -76,17 +75,17 @@
         border: 1px solid var(--tiles-bdr);
         border-radius: 14px;
 
-        &--contao {
-            border-color: var(--contao);
-        }
-
         &.is--hint {
             border-color: var(--btn-alert);
         }
 
+        &--contao {
+            border-color: var(--contao);
+        }
+
         &__hint {
             position: relative;
-            padding: 8px 20px 8px 20px;
+            padding: 8px 20px;
             background: var(--hint-bg);
             font-weight: $font-weight-medium;
             font-size: 12px;
@@ -228,6 +227,7 @@
         }
 
         // Fixes CSS override with basic input styling
+        // ToDo: Always show version input to enable editing on mobile
         .package__release {
             display: none;
             text-align: right;
@@ -341,11 +341,6 @@
 
         &__features {
             padding: 0 0 20px;
-            //margin: -20px 0 0;
-
-            @include screen(1024) {
-                //margin-top: -10px;
-            }
         }
     }
 
