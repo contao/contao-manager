@@ -271,7 +271,6 @@
 <style rel="stylesheet/scss" lang="scss">
 @import "~contao-package-list/src/assets/styles/defaults";
 
-// ToDo: Check dark mode for log viewer
 .log-viewer {
 
     &__status {
