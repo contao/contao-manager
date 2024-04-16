@@ -1,5 +1,5 @@
 <template>
-    <article class="package">
+    <article class="package" :class="(hint || !!$slots.hint) ? 'is--hint' : ''">
 
         <transition name="package__hint">
             <div class="package__hint" v-if="hint || !!$slots.hint">
@@ -78,6 +78,10 @@
 
         &--contao {
             border-color: var(--contao);
+        }
+
+        &.is--hint {
+            border-color: var(--btn-alert);
         }
 
         &__hint {
