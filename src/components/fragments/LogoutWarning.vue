@@ -98,6 +98,7 @@
         opacity: 1;
         transform: translate(-50%, -50%);
         border-radius: var(--border-radius);
+        overflow: hidden;
 
         &__headline {
             position: relative;
@@ -105,7 +106,6 @@
             color: #fff;
             font-weight: $font-weight-normal;
             line-height: 40px;
-            border-radius: 2px 2px 0 0;
 
             &--complete {
                 background-color: var(--btn-primary);

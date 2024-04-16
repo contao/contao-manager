@@ -325,8 +325,8 @@
     &__list {
         margin-top: 2em;
         padding-bottom: 1px;
-        background: #fff;
-        border-radius: 2px;
+        background: var(--form-bg);
+        border-radius: var(--border-radius);
 
         @include screen(600) {
             overflow-y: scroll;
@@ -360,15 +360,11 @@
                 top: 0;
                 z-index: 1;
                 font-weight: $font-weight-bold;
-                background: var(--shadow);
+                background: var(--log-header-bg) !important;
                 color: #FFF;
                 border-top-left-radius: 2px;
                 border-top-right-radius: 2px;
-                border-bottom-color: #FFF;
-
-                &:hover {
-                    background: var(--shadow);
-                }
+                border-bottom-color: var(--border);
             }
         }
 
@@ -456,7 +452,7 @@
         margin-right: 10px;
         padding: 1px 4px;
         background: var(--border);
-        border-radius: 2px;
+        border-radius: var(--border-radius);
         font-size: .9em;
         font-weight: $font-weight-medium;
         text-transform: lowercase;
@@ -479,7 +475,7 @@
             padding-top: 0;
             padding-bottom: 0;
             border: 1px solid var(--border);
-            background: #fff;
+            background: var(--white);
         }
 
         &--level-warning {
@@ -499,7 +495,7 @@
     &__message {
         span:nth-child(even) {
             font-weight: $font-weight-bold;
-            color: #000;
+            color: var(--black);
         }
     }
 
