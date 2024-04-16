@@ -330,7 +330,7 @@ export default {
                         operations.push({
                             status: change.status,
                             summary: this.$t('ui.migrate.createIndex', { name: result[1], table: result[2] }),
-                            details: result[3] + ' ' + change.message,
+                            details: change.message || result[3],
                             console: change.name,
                         });
                         return;
