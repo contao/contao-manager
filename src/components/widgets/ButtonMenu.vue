@@ -103,7 +103,7 @@
             width: auto;
             z-index: 100;
             background: var(--form-bg);
-            border-radius: 2px;
+            border-radius: var(--border-radius);
 
             &:before {
                 content: "";

@@ -194,7 +194,7 @@
             right: 0;
             padding: 0 8px;
             background: var(--btn-alert);
-            border-radius: 2px;
+            border-radius: var(--border-radius);
             font-size: 12px;
             line-height: 19px;
             color: #fff;
@@ -274,7 +274,7 @@
             &--missing {
                 padding: 4px 8px;
                 background: var(--btn-alert);
-                border-radius: 2px;
+                border-radius: var(--border-radius);
                 color: #fff;
                 font-weight: bold;
             }

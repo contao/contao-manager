@@ -106,7 +106,7 @@
             margin-left: 5px;
             padding: 2px 8px;
             background: var(--btn-alert);
-            border-radius: 2px;
+            border-radius: var(--border-radius);
             font-size: 12px;
             font-weight: $font-weight-bold;
             line-height: 19px;

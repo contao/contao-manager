@@ -117,7 +117,7 @@
             margin-bottom: 1em;
             padding: 2px 4px;
             background-color: #E36049;
-            border-radius: 2px;
+            border-radius: var(--border-radius);
         }
 
         &__headline {
