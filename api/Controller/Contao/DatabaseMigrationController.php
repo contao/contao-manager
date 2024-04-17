@@ -212,6 +212,7 @@ class DatabaseMigrationController
             $operations[] = [
                 'name' => $name,
                 'status' => 'pending',
+                'message' => '',
             ];
         }
 

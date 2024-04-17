@@ -1604,8 +1604,7 @@ components:
                                     - error
                             message:
                                 type: string
-                                required: false
-                                description: Result message of an executed migration (not available for schema updates).
+                                description: Result message of an executed migration or error message for failed schema updates.
                 hash:
                     type: string
 
