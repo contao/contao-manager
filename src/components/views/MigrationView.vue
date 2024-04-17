@@ -378,14 +378,18 @@ export default {
                             alter = new RegExp('^ADD ([^ ]+) (.+)$').exec(part);
                             if (alter) {
                                 operation.summary.push(this.$t('ui.migrate.addField', { table, field: alter[1] }));
-                                operation.details.push(alter[2]);
+                                if (!change.message) {
+                                    operation.details.push(alter[2]);
+                                }
                                 return;
                             }
 
                             alter = new RegExp('^CHANGE ([^ ]+) ([^ ]+) (.+)$').exec(part);
                             if (alter) {
                                 operation.summary.push(this.$t('ui.migrate.changeField', { table, field: alter[1] }));
-                                operation.details.push(alter[3]);
+                                if (!change.message) {
+                                    operation.details.push(alter[3]);
+                                }
                                 return;
                             }
 
