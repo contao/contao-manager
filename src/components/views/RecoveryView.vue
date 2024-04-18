@@ -153,7 +153,7 @@
         &__option {
             margin: 50px 0 0;
             padding: 20px 20px 30px;
-            background: #f5f9fa;
+            background: var(--table-odd-bg);
             text-align: center;
 
             h3 {

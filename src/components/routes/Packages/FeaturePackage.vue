@@ -10,8 +10,8 @@
 
         <div class="feature-package__actions">
             <button class="feature-package__restore" @click="restore" v-if="packageHint">{{ $t('ui.package.hintRevert') }}</button>
-            <button class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isRootInstalled) && !willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
             <details-button small :name="name"/>
+            <button :title="$t('ui.package.removeButton')" class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isRootInstalled) && !willBeRemoved"></button>
         </div>
     </article>
 </template>
