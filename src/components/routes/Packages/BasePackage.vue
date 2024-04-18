@@ -227,11 +227,9 @@
         }
 
         // Fixes CSS override with basic input styling
-        // ToDo: Always show version input to enable editing on mobile
         .package__release {
-            display: none;
             text-align: right;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
 
             @include screen(600) {
                 display: block;
@@ -285,6 +283,7 @@
             margin: 0 0 2px;
             padding: 1px 8px;
             color: #fff;
+            border-radius: var(--border-radius);
 
             &--available {
                 background: var(--btn-primary);
