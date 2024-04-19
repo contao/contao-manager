@@ -17,29 +17,33 @@
             <!--suppress HtmlUnknownTarget -->
             <package-logo class="package__icon" :src="logo"/>
 
-            <div class="package__about">
-                <h1 :class="{ package__headline: true, 'package__headline--badge': badge }">
-                    <span class="package__title">{{ title }}</span>
-                    <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
-                </h1>
+            <div class="package__details">
 
-                <p class="package__description">{{ description }}</p>
-                <p class="package__additional">
-                    <slot name="additional"/>
-                </p>
+                <div class="package__about">
+                    <h1 :class="{ package__headline: true, 'package__headline--badge': badge }">
+                        <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
+                        <span class="package__title">{{ title }}</span>
+                    </h1>
+
+                    <p class="package__description">{{ description }}</p>
+                    <p class="package__additional">
+                        <slot name="additional"/>
+                    </p>
+                </div>
+
+                <div class="package__release">
+                    <slot name="release">
+                        <div></div>
+                    </slot>
+                </div>
+
+                <fieldset class="package__actions">
+                    <slot name="actions">
+                        <div></div>
+                    </slot>
+                </fieldset>
+
             </div>
-
-            <div class="package__release">
-                <slot name="release">
-                    <div></div>
-                </slot>
-            </div>
-
-            <fieldset class="package__actions">
-                <slot name="actions">
-                    <div></div>
-                </slot>
-            </fieldset>
 
         </div>
 
@@ -67,15 +71,17 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
+    $package-padding: 16px;
+
     .package {
         position: relative;
-        overflow: hidden;
         margin-bottom: 20px;
         background: var(--tiles-bg);
         border: 1px solid var(--tiles-bdr);
         border-radius: 14px;
 
         &.is--hint {
+            overflow: hidden;
             border-color: var(--btn-alert);
         }
 
@@ -85,18 +91,13 @@
 
         &__hint {
             position: relative;
-            padding: 8px 20px;
             background: var(--hint-bg);
+            padding: 8px $package-padding;
             font-weight: $font-weight-medium;
             font-size: 12px;
             line-height: 1.8;
             border-radius: 2px 2px 0 0;
-
-            @include screen(800) {
-                padding-left: 56px;
-                background: var(--hint-bg) url('~contao-package-list/src/assets/images/hint.svg') 20px 5px no-repeat;
-                background-size: 28px 28px;
-            }
+            z-index: 1;
 
             p a {
                 display: inline-block;
@@ -122,90 +123,82 @@
         }
 
         &__inside {
+            position: relative;
+            padding: $package-padding;
+
             &:after {
                 display: table;
                 clear: both;
                 content: "";
             }
+        }
 
-            padding: 10px 20px 25px;
-
-            @include screen(1024) {
-                padding: 25px 20px;
-            }
+        &__badge {
+            display: inline-block;
+            margin-bottom: .5em;
+            padding: 2px 5px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: $font-weight-bold;
+            background: var(--btn-alert);
+            border-radius: var(--border-radius);
+            cursor: help;
         }
 
         &__icon {
-            display: none;
+            border-radius: 6px;
+            height: 60px;
+            width: 60px;
+            background: #f7f7f7;
+            margin: 0 auto 10px;
+            position: absolute;
+            right: $package-padding;
 
-            img {
-                width: 100%;
+            > figure {
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 height: 100%;
             }
 
-            @include screen(1024) {
-                display: block;
-                float: left;
-                width: 90px;
-                height: 90px;
-                margin-right: 20px;
+            img {
+                border-radius: 4px;
+                width: 50px;
+                height: 50px;
+                max-height: 100%;
+                object-fit: contain;
             }
+        }
+
+        &__details {
+            //display: flex;
+            //flex-direction: column;
+            //justify-content: space-between;
+
+            min-height: 96px;
         }
 
         &__about {
             margin-bottom: 20px;
-
-            @include screen(1024) {
-                float: left;
-                width: 370px;
-                margin-bottom: 0;
-            }
-
-            @include screen(1200) {
-                width: 590px;
-            }
         }
 
         &__headline {
             position: relative;
-            margin-bottom: 5px;
+            margin-bottom: .2em;
+            line-height: 1;
+            overflow-wrap: break-word;
+            margin-right: 70px;
 
             em {
-                background-color: var(--highlight);
+                background-color: var(--highlight-bg);
+                color: var(--highlight-color);
                 font-style: normal;
-            }
-
-            &--badge {
-                padding-right: 100px;
-
-                @include screen(1024) {
-                    padding-right: 0;
-                }
             }
         }
 
         &__title {
+            display: block;
             margin-right: 10px;
-        }
-
-        &__badge {
-            position: absolute;
-            top: 6px;
-            right: 0;
-            padding: 0 8px;
-            background: var(--btn-alert);
-            border-radius: var(--border-radius);
-            font-size: 12px;
-            line-height: 19px;
-            color: #fff;
-            cursor: help;
-
-            @include screen(800) {
-                position: relative;
-                display: inline-block;
-                top: -3px;
-                right: auto;
-            }
         }
 
         &__description {
@@ -214,6 +207,7 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             margin-bottom: 1em;
+            margin-right: 70px;
 
             em {
                 background-color: var(--highlight-bg);
@@ -230,39 +224,19 @@
         .package__release {
             text-align: right;
             margin-bottom: 5px;
-
-            @include screen(600) {
-                display: block;
-                float: left;
-                width: 50%;
-            }
-
-            @include screen(1024) {
-                width: 180px;
-                margin-left: 40px;
-                margin-bottom: 0;
-            }
         }
 
         &__version {
             &--additional {
+                margin-bottom: 5px;
+
                 strong {
                     margin-right: 10px;
-                }
-
-                @include screen(1024) {
-                    display: none;
                 }
             }
 
             &--release {
                 display: none;
-
-                @include screen(1024) {
-                    display: block;
-                    margin-top: 20px;
-                    text-align: center;
-                }
 
                 time {
                     display: block;
@@ -296,11 +270,6 @@
             &--none {
                 background: var(--border);
             }
-
-            @include screen(1024) {
-                display: block;
-                margin: 2px 0 0;
-            }
         }
 
         &__version-latest {
@@ -313,25 +282,9 @@
         }
 
         &__actions {
-            @include screen(600) {
-                float: right;
-                width: 50%;
-                max-width: 500px;
-                margin-top: -5px;
-                padding-left: 40px;
-                text-align: right;
-            }
-
-            @include screen(1024) {
-                width: 178px;
-                margin-left: 40px;
-                padding-left: 0;
-            }
-
-            .widget-button:not(:last-child),
-            .button-group:not(:last-child) {
-                margin-bottom: 5px;
-            }
+            display: flex;
+            flex-flow: column;
+            gap: 5px;
 
             .button-group button {
                 margin-bottom: 0 !important;
@@ -339,18 +292,162 @@
         }
 
         &__features {
-            padding: 0 0 20px;
+            padding: 0 $package-padding $package-padding;
         }
     }
 
-    @include screen(960) {
-        .package__hint {
-            overflow: hidden;
-            height: 37px;
-            transition: height .4s ease;
+    @include screen(600) {
+        .package {
+
+            &__title,
+            &__description {
+                margin-right: 0;
+            }
+
+            &__hint {
+                position: absolute;
+                overflow: hidden;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 37px;
+                transition: height .4s ease;
+
+                padding-left: 52px;
+                background: rgba(var(--hint-rgb), 0.9) url('~contao-package-list/src/assets/images/hint.svg') 12px 5px no-repeat;
+                background-size: 28px 28px;
+
+                &-enter,
+                &-leave-to {
+                    height: 0;
+                }
+            }
+
+            &__inside {
+                display: flex;
+                align-items: stretch;
+                padding: 0;
+            }
+
+            &__headline--badge {
+                display: flex;
+                gap: 6px;
+                align-items: start;
+            }
+
+            &__headline {
+                margin: 0 0 8px;
+            }
+
+            &__badge {
+                order: 1;
+                margin: 0 0 0 2px;
+            }
+
+            &__icon {
+                width: 130px;
+                height: auto;
+                min-height: 130px;
+                margin: 0;
+                border-radius: 12px 0 0 12px;
+
+                position: revert;
+                right: revert;
+
+                img {
+                    width: 110px;
+                    height: 110px;
+                }
+            }
+
+            &--contao {
+                overflow: hidden;
+
+                .package__icon {
+                    border-radius: 0;
+                }
+            }
+
+            &__details {
+                padding: $package-padding;
+                height: 100%;
+                min-height: 90px;
+                max-width: calc(100% - 130px);
+                flex: 1;
+            }
         }
-        .package__hint-enter, .package__hint-leave-to {
-            height: 0;
+    }
+
+    @include screen(680) {
+        .package {
+
+            .package__release {
+                display: block;
+                float: left;
+                width: 33%;
+            }
+
+            &__actions {
+                float: right;
+                width: 64%;
+                flex-flow: row;
+                gap: 4%;
+                text-align: right;
+
+                > * {
+                    flex: 1;
+                }
+            }
+        }
+    }
+
+    @include screen(1024) {
+        .package {
+
+            &__version {
+                &--additional {
+                    display: none;
+                }
+
+                &--release {
+                    display: block;
+                    margin-top: 15px;
+                    text-align: center;
+                }
+            }
+
+            &__version-update {
+                display: block;
+                margin: 2px 0 0;
+            }
+
+            &__about {
+                float: left;
+                width: 396px;
+                margin-bottom: 0;
+            }
+
+            .package__release {
+                width: 180px;
+                margin-left: 20px;
+                margin-bottom: 0;
+            }
+
+            &__actions {
+                flex-flow: column;
+                gap: 20px;
+                width: 180px;
+                margin-left: 20px;
+            }
+        }
+    }
+
+    @include screen(1200) {
+
+        .package {
+            &__about {
+                width: 616px;
+            }
         }
     }
 </style>

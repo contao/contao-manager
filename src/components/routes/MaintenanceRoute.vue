@@ -70,6 +70,8 @@
             img {
                 width: 100%;
                 height: 100%;
+                border-radius: var(--border-radius);
+                overflow: hidden;
             }
 
             @include screen(1024) {
@@ -112,6 +114,7 @@
             font-weight: $font-weight-normal;
             background: var(--btn-warning);
             color: var(--clr-btn);
+            border-radius: var(--border-radius);
         }
 
         &__error {

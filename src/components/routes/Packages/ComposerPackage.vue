@@ -21,7 +21,7 @@
                     </div>
                 </template>
             </div>
-            <span class="composer-package__stats composer-package__stats--license">{{ license }}</span>
+            <span class="composer-package__stats composer-package__stats--license" v-if="license">{{ license }}</span>
             <span class="composer-package__stats composer-package__stats--downloads" v-if="packageData.downloads">{{ packageData.downloads | numberFormat }}</span>
             <span class="composer-package__stats composer-package__stats--favers" v-if="packageData.favers">{{ packageData.favers | numberFormat }}</span>
             <router-link class="composer-package__stats composer-package__stats--funding" :to="{ query: { p: data.name } }" v-if="packageData.funding">&nbsp;</router-link>
@@ -223,11 +223,11 @@
             }
 
             &--downloads {
-                background-image: url("~contao-package-list/src/assets/images/downloads.svg");
+                background-image: var(--svg--downloads);
             }
 
             &--favers {
-                background-image: url("~contao-package-list/src/assets/images/favers.svg");
+                background-image: var(--svg--favers);
             }
 
             &--funding {

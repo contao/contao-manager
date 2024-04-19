@@ -14,9 +14,22 @@ html[data-theme=dark] {
   --table-odd-bg: var(--tiles-bg);
   --link-footer: #fff;
   --hint-bg: #151619;
+  --hint-rgb: 21, 22, 25;
   --log-header-bg: var(--btn);
 
   .vjs-tree-node:hover {
     background-color: #2b3439;
   }
+}
+
+// Dark/Light images
+
+.color-scheme--light,
+html[data-theme="dark"] .color-scheme--dark {
+  display: initial;
+}
+
+.color-scheme--dark,
+html[data-theme="dark"] .color-scheme--light {
+  display: none;
 }

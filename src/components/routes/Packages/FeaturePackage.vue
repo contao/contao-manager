@@ -69,8 +69,12 @@
         display: flex;
         flex-wrap: wrap;
         padding-top: 4px;
-        margin: 4px 20px 4px;
+        margin: 4px 0;
         border-top: 1px solid var(--border--light);
+
+        &:first-child {
+            margin-top: 0;
+        }
 
         &:last-child {
             padding-bottom: 0;

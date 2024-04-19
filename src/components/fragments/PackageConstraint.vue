@@ -190,14 +190,12 @@
     .package-constraint {
 
         input[type=text] {
-            height: 30px;
             margin-right: 2px;
             background: #fff;
             border: 2px solid var(--btn-warning);
             color: var(--black);
             font-weight: $font-weight-bold;
             text-align: center;
-            line-height: 30px;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
 
@@ -232,7 +230,6 @@
         button {
             position: relative;
             width: 30px;
-            height: 30px;
             background: var(--btn-warning);
             line-height: 20px;
             text-indent: -999em;

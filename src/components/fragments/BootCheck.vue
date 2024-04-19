@@ -125,7 +125,7 @@
                     display: inline-block;
                     margin: 10px 0;
                     padding-left: 20px;
-                    background: url('../../assets/images/link-blank.svg') left center no-repeat;
+                    background: var(--svg--link-blank);
                     background-size: 16px 16px;
                 }
             }
