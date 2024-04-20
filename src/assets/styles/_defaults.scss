@@ -8,7 +8,7 @@
 }
 
 // Dark-mode
-html[data-theme=dark] {
+html[data-color-scheme=dark] {
   --header-main-bg: #292c32;
   --footer-fragment-bdr: var(--footer-bdr);
   --table-odd-bg: var(--tiles-bg);
@@ -25,11 +25,11 @@ html[data-theme=dark] {
 // Dark/Light images
 
 .color-scheme--light,
-html[data-theme="dark"] .color-scheme--dark {
+html[data-color-scheme=dark] .color-scheme--dark {
   display: initial;
 }
 
 .color-scheme--dark,
-html[data-theme="dark"] .color-scheme--light {
+html[data-color-scheme=dark] .color-scheme--light {
   display: none;
 }

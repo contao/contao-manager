@@ -81,6 +81,18 @@
             currentView: vm => vm.views[vm.view] || null,
         },
 
+        methods: {
+            initColorMode() {
+                let prefersDark = localStorage.getItem('contao--prefers-dark');
+
+                if (null === prefersDark) {
+                    prefersDark = String(window.matchMedia('(prefers-color-scheme: dark)').matches);
+                }
+
+                document.documentElement.dataset.colorScheme = prefersDark === 'true' ? 'dark' : 'light';
+            },
+        },
+
         watch: {
             async isReady(ready) {
                 if (ready) {
@@ -157,18 +169,6 @@
 
         created() {
             document.title = `Contao Manager | ${location.hostname}`;
-        },
-
-        methods: {
-            initColorMode() {
-                this.colorMode = localStorage.getItem("theme")
-
-                if (!this.colorMode) {
-                    this.colorMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light';
-                }
-
-                document.documentElement.setAttribute('data-theme', this.colorMode);
-            },
         },
     };
 </script>

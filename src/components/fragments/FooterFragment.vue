@@ -7,7 +7,7 @@
         </ul>
         <div class="fragment-footer__settings">
             <div class="fragment-footer__language">
-                <button @click="toggle">{{ languageOptions[currentLanguage] }}</button>
+                <button :title="$t('ui.app.language')" @click="toggle">{{ languageOptions[currentLanguage] }}</button>
                 <ul class="link-more__menu" ref="menu" v-show="visible" tabindex="-1" @blur="close" @click="close">
                     <li v-for="(label, code) in languageOptions" :key="code">
                         <a :class="{ active: code === currentLanguage }" @click="updateLanguage(code)" @touchstart.stop="">{{ label }}</a>
