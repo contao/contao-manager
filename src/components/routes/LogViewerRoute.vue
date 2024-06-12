@@ -223,11 +223,13 @@
             },
 
             async load () {
+                const current = this.file;
+
                 this.files = null;
                 this.file = null;
 
                 this.files = (await this.$http.get('api/logs')).body;
-                this.file = this.files.length ? this.files[0].name : null;
+                this.file = this.files.find(f => f.name === current)?.name || (this.files.length ? this.files[0].name : null);
             },
 
             async fetch () {
@@ -255,16 +257,16 @@
                 this.limit = 100;
                 this.offset = this.current ? Math.max(this.current.lines - 100, 0) : 0;
 
-                this.fetch();
+                await this.fetch();
             },
 
             async offset () {
-                this.fetch();
+                await this.fetch();
             }
         },
 
         async created() {
-            this.load();
+            await this.load();
         },
     };
 </script>
