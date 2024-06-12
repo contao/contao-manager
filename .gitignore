@@ -1,7 +1,8 @@
 # Dependencies
-/vendor
+/.yarn
 /node_modules
 /tools/*/vendor
+/vendor
 
 # Generated
 /api/Resources/cache
