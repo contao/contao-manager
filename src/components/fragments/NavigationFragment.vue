@@ -1,6 +1,6 @@
 <template>
     <nav role="navigation" class="navigation">
-        <a class="navigation__toggle" @click.prevent="toggleNavigation"><span></span><span></span><span></span></a>
+        <a class="navigation__toggle" @click.prevent="toggleNavigation"><span></span></a>
         <ul class="navigation__group navigation__group--main">
             <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.discover"><a>{{ $t('ui.navigation.discover') }}</a></router-link>
             <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.packages">
@@ -106,7 +106,7 @@
 <style rel="stylesheet/scss" lang="scss">
     @import "~contao-package-list/src/assets/styles/defaults";
 
-    $nav-offset: 250px;
+    $nav-offset: 280px;
 
     body.nav-active {
         overflow: hidden !important;
@@ -132,7 +132,6 @@
             display: block;
             float: right;
             position: relative;
-            transition: transform .4s cubic-bezier(.55, 0, .1, 1);
             margin: 5px 15px;
             padding: 0;
             width: 30px;
@@ -140,21 +139,54 @@
             cursor: pointer;
             z-index: 20;
 
-            @include screen(1024) {
-                display: none;
-            }
-
-            .nav-active & {
-                transform: rotate(90deg);
+            span,
+            span:before,
+            span:after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 4px;
+                background: var(--text);
+                border-radius: 4px;
+                position: absolute;
             }
 
             span {
-                display: block;
-                height: 3px;
-                width: 25px;
-                margin: 5px auto;
-                background: $text-color;
-                pointer-events: none;
+                transition-duration: 0.075s;
+                transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+                top: 50%;
+                margin-top: -2px;
+
+                &:before {
+                    top: -10px;
+                    transition: top 0.075s 0.12s ease, opacity 0.075s ease;
+                }
+
+                &:after {
+                    bottom: -10px;
+                    transition: bottom 0.075s 0.12s ease, transform 0.075s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+                }
+            }
+
+            .nav-active & {
+
+                span {
+                    transform: rotate(45deg);
+                    transition-delay: 0.12s;
+                    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+                    &:before {
+                        top: 0;
+                        opacity: 0;
+                        transition: top 0.075s ease, opacity 0.075s 0.12s ease;
+                    }
+
+                    &:after {
+                        transition: bottom 0.075s ease, transform 0.075s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+                        bottom: 0;
+                        transform: rotate(-90deg);
+                    }
+                }
             }
         }
 
@@ -174,8 +206,7 @@
             padding: 20px;
             overflow-y: auto;
             overflow-scrolling: touch;
-            background: #fff;
-            box-shadow: $shadow-color -1px 0;
+            background: var(--header-bg);
             z-index: 10;
         }
 
@@ -184,7 +215,7 @@
                 display: block;
                 padding: 12px 10px;
                 font-size: 16px;
-                color: $text-color;
+                color: var(--text);
                 white-space: pre;
 
                 &:hover {
@@ -192,7 +223,7 @@
                 }
 
                 &[href]:hover {
-                    color: $link-color;
+                    color: var(--link);
                 }
             }
 
@@ -221,13 +252,17 @@
             margin-left: 8px;
             padding: 2px 5px;
             font-size: 10px;
-            color: #fff;
+            color: var(--clr-btn);
             font-weight: $font-weight-bold;
-            background: $contao-color;
-            border-radius: 5px;
+            background: var(--contao);
+            border-radius: 40%;
         }
 
         @include screen(1024) {
+            &__toggle {
+                display: none;
+            }
+
             &__group {
                 &--main {
                     position: inherit;
@@ -250,11 +285,11 @@
                     min-width: 180px;
                     margin-top: -3px;
                     text-align: center;
-                    background: #fff;
-                    border-top: 3px solid $link-color;
+                    background: var(--form-bg);
+                    border-top: 3px solid var(--link);
                     transform: translateX(-50%);
                     z-index: 100;
-                    box-shadow: $shadow-color 0 1px 2px;
+                    box-shadow: 0 0 1px var(--shadow);
 
                     &:before {
                         position: absolute;
@@ -265,7 +300,7 @@
                         margin-left: -4px;
                         border-style: solid;
                         border-width: 0 3.5px 4px 3.5px;
-                        border-color: transparent transparent $link-color transparent;
+                        border-color: transparent transparent var(--link) transparent;
                         content: "";
                     }
                 }
@@ -289,8 +324,8 @@
 
                 &.router-link-active > a,
                 &:hover > a {
-                    color: $link-color !important;
-                    border-bottom: 3px solid $link-color;
+                    color: var(--link) !important;
+                    border-bottom: 3px solid var(--link);
                 }
 
                 &:hover > .navigation__group--sub {
@@ -299,19 +334,24 @@
 
                 &--sub {
                     display: block;
-                    border-top: 1px solid #e5dfd0;
+                    border-top: 1px solid var(--border);
 
                     a {
                         margin: 0;
                         border: none !important;
-
-                        &:hover {
-                            color: #000 !important;
-                        }
                     }
 
                     &:first-child {
                         border-top: none;
+                    }
+
+                    &.router-link-active,
+                    &:hover {
+                        background: var(--focus);
+
+                        a {
+                            color: var(--text) !important;
+                        }
                     }
                 }
 
@@ -324,11 +364,11 @@
                         top: 4px;
                         width: 22px;
                         height: 22px;
-                        fill: $text-color;
+                        fill: var(--text);
                     }
 
                     &:hover svg {
-                        fill: $link-color;
+                        fill: var(--link);
                     }
 
                     span {
@@ -343,10 +383,10 @@
                 }
 
                 li:hover > a {
-                    border-bottom: 3px solid $link-color;
+                    border-bottom: 3px solid var(--link);
 
                     svg {
-                        fill: $link-color;
+                        fill: var(--link);
                     }
                 }
             }

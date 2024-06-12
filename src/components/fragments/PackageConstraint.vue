@@ -190,14 +190,14 @@
     .package-constraint {
 
         input[type=text] {
-            height: 30px;
             margin-right: 2px;
             background: #fff;
-            border: 2px solid $orange-button;
-            color: #000;
+            border: 2px solid var(--btn-warning);
+            color: var(--black);
             font-weight: $font-weight-bold;
             text-align: center;
-            line-height: 30px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
 
             &::placeholder {
                 color: #fff;
@@ -205,15 +205,15 @@
             }
 
             &:disabled {
-                color: #fff;
+                color: var(--clr-btn);
                 opacity: 1;
-                background: $orange-button;
-                -webkit-text-fill-color: #fff;
+                background: var(--btn-warning);
+                -webkit-text-fill-color: var(--clr-btn);
             }
 
             &.disabled {
-                background: $border-color;
-                border-color: $border-color;
+                background: var(--border);
+                border-color: var(--border);
             }
 
             &.error {
@@ -230,14 +230,15 @@
         button {
             position: relative;
             width: 30px;
-            height: 30px;
-            background: $orange-button;
+            background: var(--btn-warning);
             line-height: 20px;
             text-indent: -999em;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
 
             &:hover {
-                background: darken($orange-button, 5);
-                border-color: darken($orange-button, 10);
+                background: var(--btn-warning-active);
+                border-color: var(--btn-warning-active);
             }
 
             &:before {

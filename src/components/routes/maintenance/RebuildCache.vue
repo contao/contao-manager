@@ -1,7 +1,10 @@
 <template>
     <section class="maintenance">
         <div class="maintenance__inside">
-            <figure class="maintenance__image"><img src="../../../assets/images/symfony-logo.svg" alt=""></figure>
+            <figure class="maintenance__image">
+                <img class="color-scheme--light" src="../../../assets/images/symfony-logo.svg" alt="">
+                <img class="color-scheme--dark" src="../../../assets/images/symfony-logo--dark.svg" alt="">
+            </figure>
 
             <div class="maintenance__about">
                 <h1>{{ $t('ui.maintenance.rebuildCache.title') }}</h1>

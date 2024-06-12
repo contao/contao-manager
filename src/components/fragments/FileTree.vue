@@ -70,7 +70,7 @@
                 height: 0;
                 border-top: 5px solid transparent;
                 border-bottom: 5px solid transparent;
-                border-left: 5px solid $text-color;
+                border-left: 5px solid var(--text);
                 transition: transform .1s ease-in-out;
             }
 

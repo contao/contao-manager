@@ -350,8 +350,8 @@
     &__list {
         margin-top: 2em;
         padding-bottom: 1px;
-        background: #fff;
-        border-radius: 2px;
+        background: var(--form-bg);
+        border-radius: var(--border-radius);
 
         @include screen(600) {
             overflow-y: scroll;
@@ -362,14 +362,14 @@
     &__line {
         position: relative;
         padding: 10px 0;
-        border-bottom: 1px solid $border-light-color;
+        border-bottom: 1px solid var(--border--light);
 
         @include screen(600) {
             display: flex;
         }
 
         &:hover {
-            background: $focus-color;
+            background: var(--focus);
         }
 
         &:last-child {
@@ -385,15 +385,11 @@
                 top: 0;
                 z-index: 1;
                 font-weight: $font-weight-bold;
-                background: $shadow-color;
+                background: var(--log-header-bg) !important;
                 color: #FFF;
                 border-top-left-radius: 2px;
                 border-top-right-radius: 2px;
-                border-bottom-color: #FFF;
-
-                &:hover {
-                    background: $shadow-color;
-                }
+                border-bottom-color: var(--border);
             }
         }
 
@@ -409,13 +405,13 @@
                 top: -1px;
                 bottom: -1px;
                 width: 4px;
-                background: $red-button;
+                background: var(--btn-alert);
             }
         }
 
         &--warning {
             &:before {
-                background: $orange-button;
+                background: var(--btn-warning);
             }
         }
 
@@ -480,8 +476,8 @@
         display: inline-block;
         margin-right: 10px;
         padding: 1px 4px;
-        background: $border-color;
-        border-radius: 2px;
+        background: var(--border);
+        border-radius: var(--border-radius);
         font-size: .9em;
         font-weight: $font-weight-medium;
         text-transform: lowercase;
@@ -503,12 +499,12 @@
         &--channel {
             padding-top: 0;
             padding-bottom: 0;
-            border: 1px solid $border-color;
-            background: #fff;
+            border: 1px solid var(--border);
+            background: var(--white);
         }
 
         &--level-warning {
-            background: $orange-button;
+            background: var(--btn-warning);
             color: #fff;
         }
 
@@ -516,7 +512,7 @@
         &--level-alert,
         &--level-critical,
         &--level-emergency {
-            background: $red-button;
+            background: var(--btn-alert);
             color: #fff;
         }
     }
@@ -524,7 +520,7 @@
     &__message {
         span:nth-child(even) {
             font-weight: $font-weight-bold;
-            color: #000;
+            color: var(--black);
         }
     }
 
@@ -539,7 +535,7 @@
         padding: 0;
         border: none;
         background: none;
-        color: $link-color;
+        color: var(--link);
         text-decoration: none;
         cursor: pointer;
 

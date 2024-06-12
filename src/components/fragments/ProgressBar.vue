@@ -47,8 +47,8 @@
         position: relative;
         width: 100%;
         height: 30px;
-        background: #fff;
-        border: 2px solid $orange-button;
+        background: var(--clr-btn);
+        border: 2px solid var(--btn-warning);
         color: #000;
         font-weight: $font-weight-bold;
         text-align: center;
@@ -61,11 +61,11 @@
             right: 0;
             top: 0;
             bottom: 0;
-            background: $orange-button;
+            background: var(--btn-warning);
 
             span {
                 display: block;
-                color: #fff;
+                color: var(--clr-btn);
                 text-align: center;
             }
         }

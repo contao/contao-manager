@@ -249,7 +249,8 @@
             word-break: break-all;
 
             span {
-                background-color: $highlight-color;
+                background-color: var(--highlight-bg);
+                color: var(--highlight-color);
                 font-weight: $font-weight-medium;
             }
         }

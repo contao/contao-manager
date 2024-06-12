@@ -1,6 +1,6 @@
 <template>
     <div class="layout-main">
-        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.subheader }">
+        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.search }">
             <div class="layout-main__logo"><img src="../../assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />Contao Manager</div>
             <navigation-fragment/>
         </header>
@@ -52,8 +52,7 @@
         &__header {
             height: 56px;
             padding: 8px;
-            background: #ffffff;
-            box-shadow: $shadow-color 0 1px;
+            background: var(--header-main-bg);
 
             &--margin {
                 margin-bottom: 30px;
@@ -61,10 +60,10 @@
         }
 
         &__subheader {
-            margin: 30px 0 45px;
+            margin: 0 0 45px;
             padding: 20px 0;
-            background: #e5dfcf;
-            border-bottom: 1px solid #dcd8cc;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--header-bdr);
 
             &-inside {
                 display: flex;
@@ -87,7 +86,7 @@
 
         &__logo {
             display: inline;
-            color: $text-color;
+            color: var(--text);
             text-decoration: none;
             font-weight: $font-weight-light;
             font-size: 27px;

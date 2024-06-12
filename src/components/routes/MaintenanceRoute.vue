@@ -47,9 +47,8 @@
 
     .maintenance {
         margin-bottom: 14px;
-        background: #fff;
-        border-bottom: 3px solid #ddd3bc;
-        border-radius: 2px;
+        background: var(--tiles-bg);
+        border-radius: var(--border-radius);
 
         &__inside {
             &:after {
@@ -71,6 +70,8 @@
             img {
                 width: 100%;
                 height: 100%;
+                border-radius: var(--border-radius);
+                overflow: hidden;
             }
 
             @include screen(1024) {
@@ -111,12 +112,13 @@
             font-size: 14px;
             line-height: 1em;
             font-weight: $font-weight-normal;
-            background: $orange-button;
-            color: #fff;
+            background: var(--btn-warning);
+            color: var(--clr-btn);
+            border-radius: var(--border-radius);
         }
 
         &__error {
-            background: $red-button;
+            background: var(--btn-alert);
         }
 
         &__actions {
@@ -126,7 +128,7 @@
 
             @include screen(1024) {
                 float: right;
-                width: 250px;
+                width: 280px;
                 margin: 0 0 0 40px;
             }
 

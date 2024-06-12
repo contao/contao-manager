@@ -81,6 +81,18 @@
             currentView: vm => vm.views[vm.view] || null,
         },
 
+        methods: {
+            initColorMode() {
+                let prefersDark = localStorage.getItem('contao--prefers-dark');
+
+                if (null === prefersDark) {
+                    prefersDark = String(window.matchMedia('(prefers-color-scheme: dark)').matches);
+                }
+
+                document.documentElement.dataset.colorScheme = prefersDark === 'true' ? 'dark' : 'light';
+            },
+        },
+
         watch: {
             async isReady(ready) {
                 if (ready) {
@@ -106,6 +118,8 @@
         },
 
         async mounted() {
+            this.initColorMode();
+
             if (this.$route.query.token) {
                 try {
                     await Vue.http.post('api/session', { token: this.$route.query.token });
@@ -198,7 +212,7 @@
         right: 0;
         height: 27px;
         padding: 4px 8px;
-        background: $orange-button;
+        background: var(--btn-warning);
         color: #fff;
         text-align: center;
         z-index: 100;
@@ -228,7 +242,7 @@
         right: 0;
         height: 27px;
         padding: 4px 8px;
-        background: $red-button;
+        background: var(--btn-alert);
         color: #fff;
         text-align: center;
         z-index: 100;

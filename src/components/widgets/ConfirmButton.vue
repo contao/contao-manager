@@ -75,7 +75,7 @@
             }
 
             svg {
-                fill: $green-button;
+                fill: var(--btn-primary);
                 width: 100%;
                 height: 100%;
             }

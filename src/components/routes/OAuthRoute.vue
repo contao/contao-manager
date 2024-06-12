@@ -146,7 +146,7 @@
 
         &__form {
             position: relative;
-            max-width: 250px;
+            max-width: 280px;
             margin: 0 auto 80px;
             text-align: center;
 
@@ -171,7 +171,7 @@
         }
 
         &__warning {
-          color: $red-button;
+          color: var(--btn-alert);
           margin-top: .5em;
           margin-bottom: 2em;
         }

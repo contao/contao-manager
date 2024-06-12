@@ -222,11 +222,11 @@
             }
 
             &--success {
-                fill: $green-button;
+                fill: var(--btn-primary);
             }
 
             &--error {
-                fill: $red-button;
+                fill: var(--btn-alert);
             }
         }
 
@@ -258,7 +258,7 @@
 
         &__lines {
             overflow-y: auto;
-            max-height: 250px;
+            max-height: 280px;
             padding: 8px 0 16px;
             font-family: $font-monospace;
             color: #f6f8fa;

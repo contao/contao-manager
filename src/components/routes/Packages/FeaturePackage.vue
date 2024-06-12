@@ -10,8 +10,8 @@
 
         <div class="feature-package__actions">
             <button class="feature-package__restore" @click="restore" v-if="packageHint">{{ $t('ui.package.hintRevert') }}</button>
-            <button class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isRootInstalled) && !willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
             <details-button small :name="name"/>
+            <button :title="$t('ui.package.removeButton')" class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isRootInstalled) && !willBeRemoved"></button>
         </div>
     </article>
 </template>
@@ -69,8 +69,12 @@
         display: flex;
         flex-wrap: wrap;
         padding-top: 4px;
-        margin: 4px 20px 4px;
-        border-top: 1px solid $border-light-color;
+        margin: 4px 0;
+        border-top: 1px solid var(--border--light);
+
+        &:first-child {
+            margin-top: 0;
+        }
 
         &:last-child {
             padding-bottom: 0;
@@ -105,8 +109,8 @@
         &__badge {
             margin-left: 5px;
             padding: 2px 8px;
-            background: $red-button;
-            border-radius: 2px;
+            background: var(--btn-alert);
+            border-radius: var(--border-radius);
             font-size: 12px;
             font-weight: $font-weight-bold;
             line-height: 19px;
@@ -117,7 +121,7 @@
         &__hint {
             line-height: 1.2;
             padding: 2px 5px;
-            background: $hint-background;
+            background: var(--hint-bg);
             font-size: 12px;
         }
 
@@ -135,7 +139,7 @@
         &__restore {
             padding-left: 18px;
             font-size: 12px;
-            color: $hint-link;
+            color: var(--hint-link);
             background: url('../../../assets/images/close.svg') left center no-repeat;
             background-size: 14px 14px;
             border: none;
@@ -154,7 +158,7 @@
         @include screen(1024) {
             &__hint {
                 padding: 8px 10px 8px 36px;
-                background: $hint-background url('~contao-package-list/src/assets/images/hint.svg') 10px 5px no-repeat;
+                background: var(--hint-bg) url('~contao-package-list/src/assets/images/hint.svg') 10px 5px no-repeat;
                 background-size: 20px 20px;
             }
 

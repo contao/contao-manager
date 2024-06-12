@@ -457,7 +457,7 @@ export default {
         }
 
         &__icon {
-            background: $contao-color;
+            background: var(--contao);
             border-radius: 10px;
             padding:10px;
         }
@@ -489,7 +489,7 @@ export default {
         }
 
         .widget-button {
-            width: 250px;
+            width: 280px;
             height: 35px;
             margin: 5px;
             padding: 0 30px;

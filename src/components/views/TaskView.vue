@@ -19,7 +19,7 @@
             </template>
             <template v-else-if="hasTask && !awaitTask">
                 <div class="view-task__actions">
-                    <loading-button class="view-task__action" :loading="isAborting" @click="cancelTask" v-if="allowCancel && (isActive || isAborting)">{{ $t('ui.task.buttonCancel') }}</loading-button>
+                    <loading-button class="view-task__action" color="alert" :loading="isAborting" @click="cancelTask" v-if="allowCancel && (isActive || isAborting)">{{ $t('ui.task.buttonCancel') }}</loading-button>
 
                     <loading-button class="view-task__action" color="primary" :loading="loadingMigrations" :disabled="(supportsMigrations && !hasDatabaseChanges) || deletingTask" @click="updateDatabase" v-if="requiresAudit">{{ $t('ui.task.buttonAudit') }}</loading-button>
 
@@ -192,7 +192,7 @@ export default {
         }
 
         &__icon {
-            background: $contao-color;
+            background: var(--contao);
             border-radius: 10px;
             padding:10px;
         }
@@ -222,7 +222,7 @@ export default {
         }
 
         .widget-button {
-            width: 250px;
+            width: 280px;
             height: 35px;
             margin: 5px;
             padding: 0 30px;
@@ -235,7 +235,6 @@ export default {
 
         &__main {
             margin: 0 50px 50px;
-            background: #24292e;
         }
 
         &__loading {

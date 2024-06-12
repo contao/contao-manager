@@ -79,6 +79,7 @@
 
     .console {
         background: #24292e;
+        border-radius: 8px;
 
         &__header {
             display: flex;

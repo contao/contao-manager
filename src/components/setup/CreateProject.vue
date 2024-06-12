@@ -571,7 +571,7 @@ export default {
         text-align: left;
 
         &--warning {
-            color: $red-button;
+            color: var(--btn-alert);
         }
     }
 
@@ -591,7 +591,7 @@ export default {
     &__theme-image {
         max-width: 100%;
         height: auto;
-        border: 1px solid $border-color;
+        border: 1px solid var(--border);
     }
 
     &__theme {
@@ -608,28 +608,28 @@ export default {
     &__themes {
         padding: 0 14px;
 
+        &-results {
+            display: grid;
+            gap: 14px;
+
+            @include screen(1024) {
+                grid-template-columns: repeat(2, 1fr);
+
+                &-item {
+                    flex-basis: calc(50% - 16px);
+                    margin-left: 8px;
+                    margin-right: 8px;
+                }
+            }
+        }
+
         &-item {
-            border: 1px solid #ddd3bc;
+            border: 1px solid var(--tiles-bdr);
         }
 
         &-more {
             margin-top: 20px;
             text-align: center;
-        }
-
-        @include screen(960) {
-            padding: 20px 12px 0;
-
-            &-results {
-                display: flex;
-                flex-wrap: wrap;
-            }
-
-            &-item {
-                flex-basis: calc(50% - 16px);
-                margin-left: 8px;
-                margin-right: 8px;
-            }
         }
     }
 
@@ -664,7 +664,7 @@ export default {
 
     &__fielddesc--warning {
         padding: 10px 10px 10px 40px;
-        background: $hint-background url('~contao-package-list/src/assets/images/hint.svg') 10px 10px no-repeat;
+        background: var(--hint-bg) url('~contao-package-list/src/assets/images/hint.svg') 10px 10px no-repeat;
     }
 
     &__tabs {
@@ -679,24 +679,24 @@ export default {
         flex-grow: 1;
         padding: 4px 10px;
         border: none;
-        border-top: 1px solid $border-color;
-        border-left: 1px solid $border-color;
+        border-top: 1px solid var(--border);
+        border-left: 1px solid var(--border);
         background: none;
         cursor: pointer;
 
         &:last-child {
-            border-right: 1px solid $border-color;
+            border-right: 1px solid var(--border);
         }
 
         &--active {
-            border-color: $default-button;
-            background: $default-button;
+            border-color: var(--btn);
+            background: var(--btn);
             color: #fff;
         }
     }
 
     &__tab {
-        border: 1px solid $border-color;
+        border: 1px solid var(--border);
 
         &--files {
             white-space:pre;
@@ -717,12 +717,12 @@ export default {
         }
 
         th {
-            background: $default-button;
+            background: var(--btn);
             color: #fff;
         }
 
         td {
-            border-bottom: 1px solid $border-color;
+            border-bottom: 1px solid var(--border);
         }
 
         tr:last-child td {
@@ -730,7 +730,7 @@ export default {
         }
 
         tr:nth-child(odd) td {
-            background: #f5f5f5;
+            background: var(--table-odd-bg);
         }
     }
 }
