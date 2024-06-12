@@ -305,11 +305,7 @@
             }
 
             &__hint {
-                position: absolute;
                 overflow: hidden;
-                top: 0;
-                left: 0;
-                width: 100%;
                 height: 37px;
                 transition: height .4s ease;
 
@@ -374,6 +370,13 @@
                 min-height: 90px;
                 max-width: calc(100% - 130px);
                 flex: 1;
+            }
+
+            &.is--hint {
+
+                .package__icon {
+                    border-top-left-radius: 0;
+                }
             }
         }
     }
