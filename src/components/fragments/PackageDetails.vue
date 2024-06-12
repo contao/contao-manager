@@ -108,6 +108,11 @@
             color: var(--clr-btn);
             background: var(--btn-primary) url('../../assets/images/button-update.svg') 15px 50% no-repeat;
             background-size: 23px 23px;
+            border-radius: var(--border-radius);
+        }
+
+        &__funding + .package-popup__update {
+            margin-top: -10px;
         }
     }
 </style>

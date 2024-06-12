@@ -1,20 +1,14 @@
 <template>
     <article class="package" :class="(hint || !!$slots.hint) ? 'is--hint' : ''">
 
-        <transition name="package__hint">
-            <div class="package__hint" v-if="hint || !!$slots.hint">
-                <slot name="hint">
-                    <a href="#" class="package__hint-close" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
-                    <p>
-                        {{ hint }}
-                        <!--<a href="#">Help</a>-->
-                    </p>
-                </slot>
-            </div>
-        </transition>
+        <div class="package__hint" v-if="hint || !!$slots.hint">
+            <slot name="hint">
+                <a href="#" class="package__hint-close" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
+                <p>{{ hint }}</p>
+            </slot>
+        </div>
 
         <div class="package__inside">
-            <!--suppress HtmlUnknownTarget -->
             <package-logo class="package__icon" :src="logo"/>
 
             <div class="package__details">
@@ -81,7 +75,6 @@
         border-radius: 14px;
 
         &.is--hint {
-            overflow: hidden;
             border-color: var(--btn-alert);
         }
 
@@ -96,7 +89,7 @@
             font-weight: $font-weight-medium;
             font-size: 12px;
             line-height: 1.8;
-            border-radius: 2px 2px 0 0;
+            border-radius: 14px 14px 0 0;
             z-index: 1;
 
             p a {
@@ -161,7 +154,8 @@
                 height: 100%;
             }
 
-            img {
+            img,
+            svg {
                 border-radius: 4px;
                 width: 50px;
                 height: 50px;
@@ -292,7 +286,7 @@
         }
 
         &__features {
-            padding: 0 $package-padding $package-padding;
+            border-top: 1px solid var(--contao);
         }
     }
 
@@ -305,18 +299,9 @@
             }
 
             &__hint {
-                overflow: hidden;
-                height: 37px;
-                transition: height .4s ease;
-
                 padding-left: 52px;
                 background: rgba(var(--hint-rgb), 0.9) url('~contao-package-list/src/assets/images/hint.svg') 12px 5px no-repeat;
                 background-size: 28px 28px;
-
-                &-enter,
-                &-leave-to {
-                    height: 0;
-                }
             }
 
             &__inside {
@@ -328,7 +313,7 @@
             &__headline--badge {
                 display: flex;
                 gap: 6px;
-                align-items: start;
+                align-items: flex-start;
             }
 
             &__headline {
@@ -350,9 +335,14 @@
                 position: revert;
                 right: revert;
 
-                img {
+                img,
+                svg {
                     width: 110px;
                     height: 110px;
+                }
+
+                .is--hint & {
+                    border-top-left-radius: 0;
                 }
             }
 
@@ -373,7 +363,6 @@
             }
 
             &.is--hint {
-
                 .package__icon {
                     border-top-left-radius: 0;
                 }
@@ -438,7 +427,7 @@
 
             &__actions {
                 flex-flow: column;
-                gap: 20px;
+                gap: 10px;
                 width: 180px;
                 margin-left: 20px;
             }

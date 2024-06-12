@@ -96,17 +96,18 @@
     @import "~contao-package-list/src/assets/styles/defaults";
 
     .button-group {
+        display: flex;
+        gap: 1px;
         position: relative;
 
         &__primary.widget-button {
-            float: left;
-            width: calc(100% - 39px);
+            flex-grow: 1;
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
         }
 
         &__more.widget-button {
-            float: right;
+            flex-shrink: 0;
             width: 38px;
             padding: 7px;
             border-top-left-radius: 0;
@@ -130,7 +131,6 @@
 
             .widget-button {
                 margin-top: 1px;
-                /*border-radius: 0;*/
             }
 
             .link-menu {

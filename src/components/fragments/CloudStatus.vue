@@ -22,7 +22,7 @@
                 </tr>
             </table>
             <a
-                class="cloud-status__link"
+                class="widget-button widget-button--info widget-button--link widget-button--small cloud-status__link"
                 href="https://composer-resolver-cloud.statuspage.io/"
                 target="_blank"
                 rel="noreferrer noopener"
@@ -135,7 +135,7 @@
 
         &__popup {
             position: absolute;
-            text-align: left;
+            text-align: center;
             left: 0;
             bottom: 55px;
             margin: 0;
@@ -143,9 +143,9 @@
             outline: none;
             background: var(--form-bg);
             color: var(--text);
-            border: 1px solid var(--tiles-bdr);
-            border-bottom: 2px solid var(--contao);
-            box-shadow: 0 -1px 2px var(--shadow);
+            border-bottom: 3px solid var(--contao);
+            border-radius: 5px;
+            box-shadow: 0 0 2px var(--shadow);
             z-index: 100;
 
             &:after {
@@ -163,7 +163,6 @@
 
             &--error {
                 color: var(--clr-btn);
-                text-align: center;
                 background-color: var(--btn-alert);
                 border-color: var(--btn-alert);
 
@@ -181,15 +180,13 @@
         }
 
         &__version {
-            text-align: center;
             margin: 0 0 8px;
             font-size: 12px;
         }
 
         &__link {
-            display: block;
+            display: inline-block;
             margin: 15px 10px 0;
-            text-align: center;
         }
 
         &__error {
@@ -200,6 +197,7 @@
         table {
             width: 100%;
             margin-top: 12px;
+            text-align: left;
             border-spacing: 0;
             border-collapse: collapse;
         }

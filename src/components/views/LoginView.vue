@@ -145,6 +145,7 @@
         label {
             position: absolute;
             text-indent: -999em;
+            pointer-events: none;
 
             &[for=ctrl_username] {
                 top: 0;
@@ -193,11 +194,12 @@
         }
 
         .widget-text--password button {
-            display: none;
+            opacity: 0;
         }
 
         &__link {
             display: block;
+            margin-top: 1em;
             font-size: 12px;
             text-align: right;
         }

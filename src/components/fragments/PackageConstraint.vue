@@ -188,7 +188,6 @@
     @import "~contao-package-list/src/assets/styles/defaults";
 
     .package-constraint {
-
         input[type=text] {
             margin-right: 2px;
             background: #fff;
@@ -256,6 +255,13 @@
         @keyframes release-validating {
             100% {
                 transform: rotate(360deg);
+            }
+        }
+
+        @include screen(1024) {
+            input[type=text],
+            button {
+                height: 30px;
             }
         }
     }

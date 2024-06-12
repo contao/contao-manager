@@ -206,7 +206,8 @@
             padding: 20px;
             overflow-y: auto;
             overflow-scrolling: touch;
-            background: var(--header-bg);
+            background: var(--header-main-bg);
+            border-left: 1px solid var(--header-bdr);
             z-index: 10;
         }
 
@@ -273,6 +274,7 @@
                     padding: 0;
                     overflow: visible;
                     background: none;
+                    border: none;
                     box-shadow: none;
                     transform: none;
                     transition: none;
@@ -287,9 +289,10 @@
                     text-align: center;
                     background: var(--form-bg);
                     border-top: 3px solid var(--link);
+                    border-radius: 5px;
                     transform: translateX(-50%);
                     z-index: 100;
-                    box-shadow: 0 0 1px var(--shadow);
+                    box-shadow: 0 0 2px var(--shadow);
 
                     &:before {
                         position: absolute;
@@ -334,15 +337,12 @@
 
                 &--sub {
                     display: block;
-                    border-top: 1px solid var(--border);
+                    margin: calc(var(--border-radius) / 2);
+                    border-radius: var(--border-radius);
 
                     a {
                         margin: 0;
                         border: none !important;
-                    }
-
-                    &:first-child {
-                        border-top: none;
                     }
 
                     &.router-link-active,
