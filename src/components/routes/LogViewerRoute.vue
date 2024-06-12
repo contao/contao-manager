@@ -13,7 +13,10 @@
         <div v-else>
             <div class="log-viewer__filters">
                 <div>
-                    <select-menu :options="fileOptions" name="file" :label="$t('ui.log-viewer.file')" v-model="file"/>
+                    <div class="log-viewer__file">
+                        <select-menu :options="fileOptions" name="file" :label="$t('ui.log-viewer.file')" v-model="file"/>
+                        <button class="widget-button widget-button--inline widget-button--update" :title="$t('ui.log-viewer.reload')" @click="load"></button>
+                    </div>
                     <a :href="`api/logs/${file}`" :download="`${file}.log`" target="_blank" class="widget-button widget-button--inline widget-button--download" :class="{ 'disabled': !file }" :title="$t('ui.log-viewer.downloadTitle', { file: `${file}.log` })">{{ $t('ui.log-viewer.download') }}</a>
                 </div>
                 <div>
@@ -222,11 +225,13 @@
             },
 
             async load () {
+                const current = this.file;
+
                 this.files = null;
                 this.file = null;
 
                 this.files = (await this.$http.get('api/logs')).body;
-                this.file = this.files.length ? this.files[0].name : null;
+                this.file = this.files.find(f => f.name === current)?.name || (this.files.length ? this.files[0].name : null);
             },
 
             async fetch () {
@@ -254,16 +259,16 @@
                 this.limit = 100;
                 this.offset = this.current ? Math.max(this.current.lines - 100, 0) : 0;
 
-                this.fetch();
+                await this.fetch();
             },
 
             async offset () {
-                this.fetch();
+                await this.fetch();
             }
         },
 
         async created() {
-            this.load();
+            await this.load();
         },
     };
 </script>
@@ -318,6 +323,27 @@
             display: flex;
             align-items: flex-end;
             gap: 20px;
+        }
+
+        a {
+            flex-shrink: 0;
+        }
+    }
+
+    &__file {
+        flex-shrink: 1;
+        display: flex;
+        align-items: flex-end;
+
+        select {
+            border-right: none;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        button {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
         }
     }
 
