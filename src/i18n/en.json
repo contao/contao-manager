@@ -451,7 +451,6 @@
     "ui.log-viewer.loading": "Loading …",
     "ui.log-viewer.empty": "There are no log files on your server.",
     "ui.log-viewer.reload": "Reload",
-    "ui.log-viewer.reloadTitle": "Reload log file",
     "ui.log-viewer.file": "Log file",
     "ui.log-viewer.channel": "Channel",
     "ui.log-viewer.channelTitle": "The channel this message was logged to.",

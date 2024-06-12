@@ -13,8 +13,10 @@
         <div v-else>
             <div class="log-viewer__filters">
                 <div>
-                    <select-menu :options="fileOptions" name="file" :label="$t('ui.log-viewer.file')" v-model="file"/>
-                    <button class="widget-button widget-button--inline widget-button--update" :title="$t('ui.log-viewer.reloadTitle')" @click="load">{{ $t('ui.log-viewer.reload') }}</button>
+                    <div class="log-viewer__file">
+                        <select-menu :options="fileOptions" name="file" :label="$t('ui.log-viewer.file')" v-model="file"/>
+                        <button class="widget-button widget-button--inline widget-button--update" :title="$t('ui.log-viewer.reload')" @click="load"></button>
+                    </div>
                     <a :href="`api/logs/${file}`" :download="`${file}.log`" target="_blank" class="widget-button widget-button--inline widget-button--download" :class="{ 'disabled': !file }" :title="$t('ui.log-viewer.downloadTitle', { file: `${file}.log` })">{{ $t('ui.log-viewer.download') }}</a>
                 </div>
                 <div>
@@ -320,8 +322,28 @@
         > div {
             display: flex;
             align-items: flex-end;
-            flex-wrap: wrap;
             gap: 20px;
+        }
+
+        a {
+            flex-shrink: 0;
+        }
+    }
+
+    &__file {
+        flex-shrink: 1;
+        display: flex;
+        align-items: flex-end;
+
+        select {
+            border-right: none;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        button {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
         }
     }
 
