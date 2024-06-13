@@ -71,10 +71,6 @@
         padding: 6px 16px;
         border-top: 1px solid var(--border--light);
 
-        &:first-child {
-            border-top: none;
-        }
-
         &__name {
             font-weight: $font-weight-bold;
             white-space: nowrap;

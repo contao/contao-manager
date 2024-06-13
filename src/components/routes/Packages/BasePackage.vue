@@ -284,10 +284,6 @@
                 margin-bottom: 0 !important;
             }
         }
-
-        &__features {
-            border-top: 1px solid var(--contao);
-        }
     }
 
     @include screen(600) {

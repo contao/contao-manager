@@ -14,7 +14,7 @@
                     </li>
                 </ul>
             </div>
-            <theme-toggle></theme-toggle>
+            <theme-toggle/>
         </div>
     </footer>
 </template>
