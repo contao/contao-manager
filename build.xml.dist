@@ -79,7 +79,9 @@
 
     <target name="composer">
         <echo message="Installing API dependencies" />
-        <exec escape="false" dir="contao-manager-${version}" command="curl -LSs https://getcomposer.org/installer | php" />
+        <exec escape="false" dir="contao-manager-${version}" executable="curl">
+            <arg line="-LSs https://getcomposer.org/installer | php" />
+        </exec>
         <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
             <arg value="composer.phar" />
             <arg value="install" />
@@ -103,7 +105,6 @@
         <echo message="Installing UI dependencies" />
         <exec executable="yarn" dir="contao-manager-${version}" checkreturn="true">
             <arg value="install" />
-            <arg value="--no-optional" />
         </exec>
     </target>
 
