@@ -354,9 +354,6 @@
             }
 
             &__details {
-                display: flex;
-                align-self: center;
-                align-items: center;
                 padding: $package-padding;
                 height: 100%;
                 min-height: 90px;
@@ -432,6 +429,11 @@
                 gap: 10px;
                 width: 180px;
                 margin-left: 20px;
+            }
+            &__details {
+                display: flex;
+                align-self: center;
+                align-items: center;
             }
         }
     }
