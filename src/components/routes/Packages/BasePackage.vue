@@ -354,6 +354,9 @@
             }
 
             &__details {
+                display: flex;
+                align-self: center;
+                align-items: center;
                 padding: $package-padding;
                 height: 100%;
                 min-height: 90px;
