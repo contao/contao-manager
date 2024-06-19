@@ -79,7 +79,10 @@
         }
 
         &--contao {
-            border-color: var(--contao);
+
+            &:not(:last-child) {
+                margin-bottom: 5em;
+            }
         }
 
         &__hint {
