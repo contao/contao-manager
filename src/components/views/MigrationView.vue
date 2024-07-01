@@ -112,7 +112,7 @@ export default {
 
             description () {
                 if (this.type === 'problem') {
-                    return this.$tc('ui.migrate.problem', this.operations.length);
+                    return this.$tc('ui.migrate.problem', this.operations?.length || 0);
                 }
 
                 if (this.type === 'warning') {
@@ -282,11 +282,13 @@ export default {
                 }
 
                 if (this.hasProblem) {
-                    return this.changes.map(change => ({
+                    this.operations = this.changes.map(change => ({
                         status: change.status,
                         summary: change.name,
-                        console: change.message,
+                        details: change.message,
+                        console: change.trace,
                     }));
+                    return;
                 }
 
                 if (this.type === 'migrations' || this.type === 'migrations-only') {

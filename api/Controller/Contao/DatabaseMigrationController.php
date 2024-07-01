@@ -182,12 +182,24 @@ class DatabaseMigrationController
         foreach ($lines as $line) {
             $data = json_decode($line, true);
             $type = $data['type'] ?? null;
-            $message = explode("\n", $data['message'] ?? '', 2) + ['', ''];
 
-            if (\in_array($type, ['error', 'problem', 'warning'], true)) {
-                if ('warning' !== $type) {
-                    $responseType = 'problem';
-                }
+            if (!\in_array($type, ['error', 'problem', 'warning'], true)) {
+                continue;
+            }
+
+            if ('warning' !== $type) {
+                $responseType = 'problem';
+            }
+
+            if ('error' === $type && isset($data['message'], $data['file'], $data['line'], $data['trace'])) {
+                $operations[] = [
+                    'status' => 'error',
+                    'name' => sprintf('Exception in file %s on line %s', $data['file'], $data['line']),
+                    'message' => $data['message'],
+                    'trace' => $data['trace'],
+                ];
+            } else {
+                $message = explode("\n", $data['message'] ?? '', 2) + ['', ''];
 
                 $operations[] = [
                     'status' => 'error',
