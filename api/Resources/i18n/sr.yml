@@ -39,7 +39,7 @@ sr:
         php_cli:
             not_found: 'Ова путања не садржи валидан PHP binary.'
             incompatible: 'Овај binary је намењен верзији PHP {cli} док је на вашем веб серверу верзија {web}.'
-            error: ''
+            error: 'Грешка приликом валидације PHP binary.'
         cloud:
             platform: 'Платформа не сме бити конфигурисана у composer.json.'
             cache: 'Подешавања Cache-а не смеју бити конфигурисана у composer.json.'
@@ -60,9 +60,9 @@ sr:
         self_update:
             title: 'Contao Manager аутоматско ажурирање'
         backup_create:
-            title: ''
+            title: 'Креирање резервне копије базе података'
         backup_restore:
-            title: ''
+            title: 'Обнављање копије базе података'
 
     taskoperation:
         self-update:
