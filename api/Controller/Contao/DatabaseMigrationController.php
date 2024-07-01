@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Controller\Contao;
 
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Process\ContaoConsole;
@@ -39,10 +40,16 @@ class DatabaseMigrationController
      */
     private $processFactory;
 
-    public function __construct(ContaoConsole $console, ConsoleProcessFactory $processFactory)
+    /**
+     * @var ApiKernel
+     */
+    private $kernel;
+
+    public function __construct(ContaoConsole $console, ConsoleProcessFactory $processFactory, ApiKernel $kernel)
     {
         $this->processFactory = $processFactory;
         $this->console = $console;
+        $this->kernel = $kernel;
     }
 
     public function __invoke(Request $request): Response
@@ -194,9 +201,13 @@ class DatabaseMigrationController
             if ('error' === $type && isset($data['message'], $data['file'], $data['line'], $data['trace'])) {
                 $operations[] = [
                     'status' => 'error',
-                    'name' => sprintf('Exception in file %s on line %s', $data['file'], $data['line']),
+                    'name' => sprintf(
+                        'Exception in file %s on line %s',
+                        str_replace($this->kernel->getProjectDir().'/', '', $data['file']),
+                        $data['line']
+                    ),
                     'message' => $data['message'],
-                    'trace' => $data['trace'],
+                    'trace' => str_replace($this->kernel->getProjectDir().'/', '', $data['trace']),
                 ];
             } else {
                 $message = explode("\n", $data['message'] ?? '', 2) + ['', ''];
