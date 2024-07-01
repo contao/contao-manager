@@ -430,6 +430,11 @@
                 width: 180px;
                 margin-left: 20px;
             }
+            &__details {
+                display: flex;
+                align-self: center;
+                align-items: center;
+            }
         }
     }
 
