@@ -42,9 +42,9 @@ class ProcessRunnerCommand extends Command
             $process->addOutput((string) $e);
             $process->stop();
 
-            return 1;
+            return Command::FAILURE;
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

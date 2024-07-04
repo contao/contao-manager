@@ -56,17 +56,17 @@ class TaskUpdateCommand extends Command
         if (!$this->taskManager->hasTask()) {
             $output->writeln('No task is currently active.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $status = $this->taskManager->updateTask();
 
         if (null === $status) {
-            return 1;
+            return Command::FAILURE;
         }
 
         if (!$output instanceof ConsoleOutput) {
-            return 1;
+            return Command::FAILURE;
         }
 
         $style = new SymfonyStyle($input, $output);
@@ -93,7 +93,7 @@ class TaskUpdateCommand extends Command
                 $newStatus = $this->taskManager->updateTask();
 
                 if (null === $newStatus) {
-                    return 1;
+                    return Command::FAILURE;
                 }
 
                 if ($this->updateOperations($newStatus->getOperations(), $sections, $progresses)) {
@@ -116,7 +116,7 @@ class TaskUpdateCommand extends Command
                 break;
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**
