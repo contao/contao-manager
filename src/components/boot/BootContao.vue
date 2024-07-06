@@ -93,6 +93,15 @@
                     }
                 }
 
+                const managerConfig = await this.$store.dispatch('config/manager/get');
+
+                if (Object.entries(managerConfig).length > 0) {
+
+                    if (managerConfig.badge) {
+                        this.$store.commit('setBadgeTitle', managerConfig.badge);
+                    }
+                }
+
                 this.bootState = bootState;
                 this.bootDescription = bootDescription;
                 this.$emit('result', 'Contao', this.bootState);
