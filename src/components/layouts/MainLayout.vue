@@ -1,10 +1,10 @@
 <template>
     <div class="layout-main">
-        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.search, 'layout-main__has-badge-title': badgeTitle }">
+        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.search, 'layout-main__has-badge-title': getBadgeTitle() }">
             <div class="layout-main__logo"><img src="../../assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />
                 <span class="layout-main__title">
                     <span class="layout-main__manager-title">Contao Manager</span>
-                    <span v-if="badgeTitle" class="layout-main__badge-title">{{ badgeTitle }}</span>
+                    <span v-if="getBadgeTitle()" class="layout-main__badge-title">{{ getBadgeTitle() }}</span>
                 </span>
             </div>
             <navigation-fragment/>
@@ -38,14 +38,16 @@
     export default {
         components: { NavigationFragment, FooterFragment },
 
-        data: () => ({
-            badgeTitle: process.env.VUE_APP_CONTAO_MANAGER_BADGE_TITLE
-        }),
-
         computed: {
             ...mapState('algolia', ['news']),
 
             currentNews: vm => vm.news.length ? vm.news[0] : null,
+        },
+
+        methods: {
+            getBadgeTitle() {
+                return this.$store.state.badgeTitle ?? '';
+            }
         },
     };
 </script>
