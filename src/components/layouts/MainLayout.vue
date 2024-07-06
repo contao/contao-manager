@@ -1,7 +1,12 @@
 <template>
     <div class="layout-main">
-        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.search }">
-            <div class="layout-main__logo"><img src="../../assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />Contao Manager</div>
+        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.search, 'layout-main__has-badge-title': badgeTitle }">
+            <div class="layout-main__logo"><img src="../../assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />
+                <span class="layout-main__title">
+                    <span class="layout-main__manager-title">Contao Manager</span>
+                    <span v-if="badgeTitle" class="layout-main__badge-title">{{ badgeTitle }}</span>
+                </span>
+            </div>
             <navigation-fragment/>
         </header>
 
@@ -33,6 +38,10 @@
     export default {
         components: { NavigationFragment, FooterFragment },
 
+        data: () => ({
+            badgeTitle: process.env.VUE_APP_CONTAO_MANAGER_BADGE_TITLE
+        }),
+
         computed: {
             ...mapState('algolia', ['news']),
 
@@ -57,6 +66,24 @@
             &--margin {
                 margin-bottom: 30px;
             }
+        }
+
+        &__badge-title {
+            background: var(--border);
+            color: var(--text);
+            padding: 2px 5px;
+            position: relative;
+            top: -5px;
+            border-radius: 8px;
+            font-size: .75rem;
+            font-weight: 600;
+            line-height: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         &__subheader {
@@ -107,6 +134,36 @@
         footer {
             position: relative;
             margin: 0 20px;
+        }
+
+        &__has-badge-title {
+            display: flex;
+            justify-content: space-between;
+
+            .layout-main__logo {
+                display: flex;
+            }
+
+            .layout-main__title {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                line-height: 1;
+                column-gap: 10px;
+                // Counter top positioning for row-wrap
+                row-gap: 5px;
+            }
+
+            // Do not allow wrapping navigation items
+            .navigation__group--main {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 600px) {
+            &__badge-title {
+                max-width: 220px;
+            }
         }
 
         @include screen(700) {
