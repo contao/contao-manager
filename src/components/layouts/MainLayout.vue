@@ -155,11 +155,6 @@
                 // Counter top positioning for row-wrap
                 row-gap: 5px;
             }
-
-            // Do not allow wrapping navigation items
-            .navigation__group--main {
-                display: flex;
-            }
         }
 
         @media (max-width: 600px) {
@@ -179,6 +174,13 @@
         }
 
         @include screen(1024) {
+            &__has-badge-title {
+                // Do not allow wrapping navigation items
+                .navigation__group--main {
+                    display: flex;
+                }
+            }
+
             &__subheader-inside,
             &__content,
             footer {
