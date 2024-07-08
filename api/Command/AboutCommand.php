@@ -49,11 +49,13 @@ class AboutCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $data = $this->collectData();
 
         $this->outputTable($input, $output, $data);
+
+        return Command::SUCCESS;
     }
 
     private function outputTable(InputInterface $input, OutputInterface $output, array $data): void

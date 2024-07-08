@@ -64,12 +64,12 @@ class IntegrityCheckCommand extends Command
                 $output->writeln($detail);
             }
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $output->writeln('<info>Running PHP '.PHP_VERSION.', all checks successful.</info>');
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function writeJson(OutputInterface $output, ApiProblem $problem = null): int
@@ -85,6 +85,6 @@ class IntegrityCheckCommand extends Command
             )
         );
 
-        return $problem ? 1 : 0;
+        return $problem ? Command::FAILURE : Command::SUCCESS;
     }
 }

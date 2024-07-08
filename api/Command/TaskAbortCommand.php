@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -32,7 +33,7 @@ class TaskAbortCommand extends TaskUpdateCommand
         if (!$this->taskManager->hasTask()) {
             $output->writeln('No task is currently active.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $this->taskManager->abortTask();

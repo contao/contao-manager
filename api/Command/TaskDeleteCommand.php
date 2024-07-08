@@ -44,7 +44,7 @@ class TaskDeleteCommand extends Command
         if (!$this->taskManager->hasTask()) {
             $output->writeln('No task is currently active.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $status = $this->taskManager->deleteTask();
@@ -52,9 +52,9 @@ class TaskDeleteCommand extends Command
         if (null === $status || $status->isActive()) {
             $output->writeln('Task could not be deleted.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
