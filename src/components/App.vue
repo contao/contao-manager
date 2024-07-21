@@ -91,6 +91,14 @@
 
                 document.documentElement.dataset.colorScheme = prefersDark === 'true' ? 'dark' : 'light';
             },
+            async readConfig(cache = true) {
+                const serverResponse = await this.$store.dispatch('server/contao/get', cache);
+                const contaoConfiguration = serverResponse.body;
+
+                if (contaoConfiguration?.config?.backend?.badge_title !== null) {
+                    this.$store.commit('setBadgeTitle', contaoConfiguration.config.backend.badge_title);
+                }
+            }
         },
 
         watch: {
@@ -157,6 +165,7 @@
             }
 
             if (accountStatus === 200) {
+                await this.readConfig();
                 this.$store.commit('setView', views.BOOT);
             } else if (accountStatus === 204) {
                 this.$store.commit('setView', views.ACCOUNT);

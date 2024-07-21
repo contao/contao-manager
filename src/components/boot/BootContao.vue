@@ -93,10 +93,6 @@
                     }
                 }
 
-                if (result?.config?.backend?.badge_title !== null) {
-                    this.$store.commit('setBadgeTitle', result.config.backend.badge_title);
-                }
-
                 this.bootState = bootState;
                 this.bootDescription = bootDescription;
                 this.$emit('result', 'Contao', this.bootState);
