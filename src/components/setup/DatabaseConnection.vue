@@ -138,7 +138,7 @@ export default {
         ...mapState('contao/backup', { backupRestored: 'restored', backupRestore: 'restore' }),
         ...mapState('server/database', { currentUrl: 'url', urlPattern: 'pattern', status: 'status' }),
         ...mapState('contao/backup', ['files']),
-        ...mapGetters('contao/database', { hasDatabaseError: 'hasError' }),
+        ...mapGetters('server/database', { hasDatabaseError: 'hasError' }),
         ...mapGetters('contao/backup', ['hasBackups']),
 
         fileOptions () {

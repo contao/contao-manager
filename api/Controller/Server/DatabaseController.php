@@ -27,7 +27,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DatabaseController
 {
-    private const URL_PATTERN = '^([^:]+)://(([^:@]+)(:([^@]+))?@)?([^:/]+(:[0-9]+)?)/([^?]+)(\?.+)?$';
+    // double escaping is necessary for JavaScript validation
+    private const URL_PATTERN = '^([^:]+)://(([^:@]+)(:([^@]+))?@)?([^:\/]+(:[0-9]+)?)/([^?]+)(\\?.+)?$';
 
     /**
      * @var ContaoApi
