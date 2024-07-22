@@ -24,7 +24,6 @@ const store = new Vuex.Store({
         view: views.INIT,
         setupStep: 0,
         migrationsType: '',
-        badgeTitle: '',
         error: null,
         locked: false,
         safeMode: false,
@@ -54,10 +53,6 @@ const store = new Vuex.Store({
 
         setSafeMode(state, value) {
             state.safeMode = !!value;
-        },
-
-        setBadgeTitle(state, value) {
-            state.badgeTitle = value;
         },
 
         setup(state, step) {

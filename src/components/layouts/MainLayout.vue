@@ -1,10 +1,10 @@
 <template>
     <div class="layout-main">
-        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.search, 'layout-main__has-badge-title': getBadgeTitle() }">
+        <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.search, 'layout-main__has-badge-title': badgeTitle }">
             <div class="layout-main__logo"><img src="../../assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />
                 <span class="layout-main__title">
                     <span class="layout-main__manager-title">Contao Manager</span>
-                    <span v-if="getBadgeTitle()" class="layout-main__badge-title">{{ getBadgeTitle() }}</span>
+                    <span v-if="badgeTitle" class="layout-main__badge-title">{{ badgeTitle }}</span>
                 </span>
             </div>
             <navigation-fragment/>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
 
     import NavigationFragment from '../fragments/NavigationFragment';
     import FooterFragment from '../fragments/FooterFragment';
@@ -40,15 +40,16 @@
 
         computed: {
             ...mapState('algolia', ['news']),
+            ...mapGetters('server/contao', ['badgeTitle']),
 
             currentNews: vm => vm.news.length ? vm.news[0] : null,
         },
 
-        methods: {
-            getBadgeTitle() {
-                return this.$store.state.badgeTitle ?? '';
-            }
-        },
+        mounted () {
+            // Fetch the Contao config for the badge title.
+            // This is most likely already done by the boot process.
+            this.$store.dispatch('server/contao/get');
+        }
     };
 </script>
 

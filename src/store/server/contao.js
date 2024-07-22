@@ -12,6 +12,10 @@ export default {
         contaoConfig: null,
     },
 
+    getters: {
+        badgeTitle: state => state.contaoConfig?.backend?.badge_title,
+    },
+
     mutations: {
         setCache(state, response) {
             state.cache = response;
