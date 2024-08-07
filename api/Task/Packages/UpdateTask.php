@@ -239,6 +239,8 @@ class UpdateTask extends AbstractPackagesTask
                                         break;
                                     }
                                 }
+                            } elseif (isset($json['scripts'][$group]) && 'Contao\ManagerBundle\Composer\ScriptHandler::initializeApplication' === $json['scripts'][$group]) {
+                                $json['scripts'][$group] = '@php vendor/bin/contao-setup';
                             }
                         }
 
