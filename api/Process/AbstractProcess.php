@@ -71,7 +71,7 @@ abstract class AbstractProcess
         try {
             (new Filesystem())->dumpFile($filename, json_encode($config));
         } catch (IOException $e) {
-            throw new \RuntimeException(sprintf('Unable to write config file to %s', $filename));
+            throw new \RuntimeException(sprintf('Unable to write config file to %s. '.$e->getMessage(), $filename), 0, $e);
         }
     }
 }
