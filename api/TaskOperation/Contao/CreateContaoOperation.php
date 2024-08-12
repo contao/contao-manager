@@ -23,7 +23,7 @@ class CreateContaoOperation extends AbstractInlineOperation
     /**
      * @var array
      */
-    private static $supportedVersions = ['4.9', '4.13', '5.3'];
+    private static $supportedVersions = ['4.9', '4.13', '5.3', '5.4'];
 
     /**
      * @var Environment
