@@ -171,8 +171,8 @@ class PhpExecutableFinder
 
     private function findBestBinary(array $paths): ?string
     {
-        $fallback = null;
-        $sapi = null;
+        $fallbackPath = null;
+        $fallbackSapi = null;
 
         if ($openBasedir = \ini_get('open_basedir')) {
             $openBasedir = explode(PATH_SEPARATOR, $openBasedir);
@@ -204,17 +204,18 @@ class PhpExecutableFinder
             $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
             $vCli = vsprintf('%s.%s', explode('.', $info['version']));
 
+            // Allow fallback to another patch version of the same PHP major/minor
+            // and prefer a CLI SAPI over e.g. a CGI SAPI.
             if (
-                null === $fallback || (
-                    'cli' !== $sapi && 'cli' === $info['sapi'] && version_compare($vWeb, $vCli, 'eq')
-                )
+                (null === $fallbackPath || ('cli' !== $fallbackSapi && 'cli' === $info['sapi']))
+                && version_compare($vWeb, $vCli, 'eq')
             ) {
-                $fallback = $path;
-                $sapi = $info['sapi'];
+                $fallbackPath = $path;
+                $fallbackSapi = $info['sapi'];
             }
         }
 
-        return $fallback;
+        return $fallbackPath;
     }
 
     /**
