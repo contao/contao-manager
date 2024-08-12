@@ -1,5 +1,11 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.selfUpdate.title')" :description="bootDescription">
+        <template #description v-if="latestDownload">
+            <i18n :tag="false" path="ui.server.selfUpdate.manualUpdate">
+                <template #latest>{{ latestDownload }}</template>
+                <template #download><a href="https://to.contao.org/download?lang=${this.$i18n.locale}" target="_blank" rel="noreferrer noopener">https://to.contao.org/download</a></template>
+            </i18n>
+        </template>
         <button class="widget-button widget-button--warning" v-if="!isSupported && bootState === 'action'" @click="next">{{ $t('ui.server.selfUpdate.continue') }}</button>
         <button class="widget-button widget-button--alert" v-else-if="hasUpdate" @click="update">{{ $t('ui.server.selfUpdate.button') }}</button>
     </boot-check>
@@ -17,6 +23,7 @@
         data: () => ({
             hasUpdate: false,
             isSupported: true,
+            latestDownload: null,
         }),
 
         methods: {
@@ -50,6 +57,7 @@
                         if (latest === result.current_version) {
                             this.emitState('success', this.$t('ui.server.selfUpdate.latest', context));
                         } else {
+                            this.latestDownload = latest;
                             this.emitState('error', this.$t('ui.server.selfUpdate.manualUpdate', {
                                 latest,
                                 download: `<a href="https://to.contao.org/download?lang=${this.$i18n.locale}" target="_blank" rel="noreferrer noopener">https://to.contao.org/download</a>`
