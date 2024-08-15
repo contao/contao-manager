@@ -9,6 +9,7 @@
         :hint-close="packageHintClose"
         @close-hint="restore"
     >
+        <template #hint><slot name="hint"/></template>
         <template #additional>
             <div class="package__version package__version--additional" v-if="packageData.version">
                 <strong :title="packageData.time ? datimFormat(packageData.time) : ''">{{ $t('ui.package.version', { version: packageData.version }) }}</strong>

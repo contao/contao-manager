@@ -25,6 +25,11 @@ export default {
             'packageFeature',
             'packageVisible',
             'packageSuggested',
+            'packageConstraintAdded',
+            'packageConstraintChanged',
+            'packageConstraintInstalled',
+            'packageConstraintRequired',
+            'contaoSupported',
         ]),
 
         isInstalled: vm => vm.packageInstalled(vm.data.name),
@@ -54,43 +59,13 @@ export default {
         installedVersion: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].version : null,
         installedTime: vm => vm.installed[vm.data.name] ? vm.installed[vm.data.name].time : null,
 
-        canBeInstalled: vm => (!vm.isPrivate || vm.isSuggested) && !vm.isTheme && (!vm.isDependency || vm.isSuggested),
+        isCompatible: vm => vm.contaoSupported(vm.metadata.contaoConstraint),
+        canBeInstalled: vm => (!vm.isPrivate || vm.isSuggested) && !vm.isTheme && (!vm.isDependency || vm.isSuggested) && vm.isCompatible,
 
-        constraintInstalled() {
-            if (!this.isRootInstalled) {
-                return null;
-            }
-
-            return this.installed[this.data.name].constraint;
-        },
-
-        constraintRequired() {
-            if (!this.isRequired) {
-                return null;
-            }
-
-            if (this.isChanged) {
-                return this.constraintChanged;
-            }
-
-            return this.required[this.data.name].constraint;
-        },
-
-        constraintAdded() {
-            if (!this.willBeInstalled) {
-                return null;
-            }
-
-            return this.add[this.data.name].constraint;
-        },
-
-        constraintChanged() {
-            if (!this.isChanged) {
-                return null;
-            }
-
-            return this.change[this.data.name];
-        },
+        constraintInstalled: vm => vm.packageConstraintInstalled(vm.data.name),
+        constraintRequired: vm => vm.packageConstraintRequired(vm.data.name),
+        constraintAdded: vm => vm.packageConstraintAdded(vm.data.name),
+        constraintChanged: vm => vm.packageConstraintChanged(vm.data.name),
 
         targetConstraint: vm => vm.$store.state.packages?.change[vm.data.name]
             || vm.$store.state.packages?.root?.require[vm.data.name],

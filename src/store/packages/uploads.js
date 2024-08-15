@@ -32,12 +32,12 @@ export default {
         totalUploads: (state, get) => state.uploads ? get.unconfirmedUploads.length : 0,
         unconfirmedUploads: state => Object.values(state.uploads).filter(item => !state.confirmed.includes(item.id)),
 
-        canConfirmUploads: (state, get, rootState) => state.uploads
-            ? Object.values(state.uploads).find(item => !item.success || item.error) === undefined
-                && !hasDuplicates(state.uploads)
-                && Object.values(state.uploads).find(
-                    item => (Object.keys(rootState.packages.installed).includes(item.package.name) && rootState.packages.installed[item.package.name].version === item.package.version)
-                ) === undefined
+        canConfirmUploads: (state, get, rootState, rootGet) => state.uploads
+            ? Object.values(state.uploads).find(
+                item => !item.success || item.error
+                    || (Object.keys(rootState.packages.installed).includes(item.package.name) && rootState.packages.installed[item.package.name].version === item.package.version)
+                    || !rootGet['packages/contaoSupported'](item.package.require['contao/core-bundle'] || item.package.require['contao/manager-bundle'])
+            ) === undefined && !hasDuplicates(state.uploads)
             : false,
     },
 

@@ -21,6 +21,9 @@
         <template #package-update v-if="metadata.update && metadata.update.valid && !metadata.update.latest">
             <p class="package-popup__update"><strong>{{ $t('ui.package.update') }}:</strong> {{ $t('ui.package.version', { version: metadata.update.version}) }} ({{ $t('ui.package-details.released') }} {{ metadata.update.time | datimFormat('short', 'long') }})</p>
         </template>
+        <template #package-update v-else-if="!isCompatible">
+            <p class="package-popup__incompatible">{{ $t('ui.package.incompatible', { package: data.name, constraint: packageConstraint('contao/manager-bundle') }) }}</p>
+        </template>
         <template #suggest-actions="{ name }">
             <install-button inline small :data="{ name }" v-if="packageSuggested(name)"/>
         </template>
@@ -31,7 +34,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapGetters, mapState } from 'vuex';
     import packageStatus from '../../mixins/packageStatus';
 
     import PackageDetails from 'contao-package-list/src/components/fragments/PackageDetails';
@@ -45,6 +48,7 @@
         computed: {
             ...mapState('packages', { allInstalled: 'installed' }),
             ...mapState('packages/details', ['current']),
+            ...mapGetters('packages', ['packageConstraint']),
 
             data: vm => vm.add[vm.current] || vm.allInstalled[vm.current] || ({ name: vm.current }),
 
@@ -107,6 +111,15 @@
             padding: 10px 20px 10px 50px;
             color: var(--clr-btn);
             background: var(--btn-primary) url('../../assets/images/button-update.svg') 15px 50% no-repeat;
+            background-size: 23px 23px;
+            border-radius: var(--border-radius);
+        }
+
+        &__incompatible {
+            margin: 0 0 20px;
+            padding: 10px 20px 10px 50px;
+            color: var(--clr-btn);
+            background: var(--contao) url('../../assets/images/button-incompatible.svg') 15px 50% no-repeat;
             background-size: 23px 23px;
             border-radius: var(--border-radius);
         }

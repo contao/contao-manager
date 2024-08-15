@@ -15,6 +15,7 @@
     "core-js": "^3.37.1",
     "details-element-polyfill": "^2.4.0",
     "jszip": "^3.10.1",
+    "semver": "^7.6.3",
     "treeify-paths": "^1.0",
     "v-clipboard": "^2.2.3",
     "vue": "^2.6.12",

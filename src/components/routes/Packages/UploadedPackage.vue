@@ -2,7 +2,6 @@
     <base-package
         :title="upload.name"
         :hint="hintUploading"
-
         v-if="!upload.success || upload.error"
     >
         <template #hint v-if="upload.error">
@@ -27,33 +26,15 @@
     <composer-package
         uncloseable-hint
         :data="pkg"
-        :hint="$t('ui.packages.uploadDuplicate')"
-        v-else-if="isDuplicate(upload.id, pkg.name)"
-    >
-        <template #actions>
-            <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
-            <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
-        </template>
-    </composer-package>
-
-    <composer-package
-        uncloseable-hint
-        :data="pkg"
-        :hint="$t('ui.packages.uploadInstalled')"
-        v-else-if="versionInstalled(pkg.name, pkg.version)"
-    >
-        <template #actions>
-            <button class="widget-button widget-button--primary widget-button--add" disabled>{{ $t('ui.package.installButton') }}</button>
-            <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
-        </template>
-    </composer-package>
-
-    <composer-package
-        :data="pkg"
         v-else
     >
+        <template #hint>
+            <p v-if="isDuplicate(upload.id, pkg.name)">{{ $t('ui.packages.uploadDuplicate') }}</p>
+            <p v-else-if="versionInstalled(pkg.name, pkg.version)">{{ $t('ui.packages.uploadInstalled') }}</p>
+            <p v-else-if="!isCompatible">{{ $t('ui.package.incompatible', { package: pkg.name, constraint: packageConstraint('contao/manager-bundle') }) }}</p>
+        </template>
         <template #actions>
-            <button class="widget-button widget-button--primary widget-button--add" :disabled="!canBeAdded" @click="addPackage">{{ $t('ui.package.installButton') }}</button>
+            <button class="widget-button widget-button--primary widget-button--add" :disabled="!canBeInstalled" @click="addPackage">{{ $t('ui.package.installButton') }}</button>
             <loading-button color="alert" icon="trash" :loading="removing" @click="removeUpload">{{ $t('ui.package.removeButton') }}</loading-button>
         </template>
     </composer-package>
@@ -85,13 +66,21 @@
         },
 
         computed: {
-            ...mapGetters('packages', ['packageRemoved', 'versionInstalled']),
+            ...mapGetters('packages', ['packageRemoved', 'versionInstalled', 'contaoSupported', 'packageConstraint']),
             ...mapGetters('packages/uploads', ['isDuplicate', 'isRemoving']),
 
             removing: vm => vm.isRemoving(vm.upload.id),
             progress: vm => 100 / vm.upload.size * vm.upload.filesize,
 
-            canBeAdded: vm => !vm.removing && !vm.packageRemoved(vm.pkg.name),
+            isTheme: vm => vm.data.type === 'contao-theme' || (vm.metadata && vm.metadata.type === 'contao-theme'),
+            isCompatible: vm => vm.contaoSupported(vm.data.require['contao/core-bundle'] || vm.data.require['contao/manager-bundle'] || '0'),
+
+            canBeInstalled: vm => !vm.isDuplicate(vm.upload.id, vm.pkg.name)
+                && !vm.versionInstalled(vm.pkg.name, vm.pkg.version)
+                && !vm.removing
+                && !vm.packageRemoved(vm.pkg.name)
+                && !vm.isTheme
+                && vm.isCompatible,
 
             data: vm => vm.upload.package || { name: '' },
 

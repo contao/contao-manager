@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { coerce, satisfies, eq, valid, parse } from 'semver';
+import { coerce, satisfies, intersects, eq, valid, parse } from 'semver';
 
 import details from 'contao-package-list/src/store/packages/details';
 import features from 'contao-package-list/src/store/packages/features';
@@ -91,6 +91,14 @@ export default {
 
             return packages;
         },
+
+        packageConstraint: (s, g) => name => g.packageConstraintAdded(name) || g.packageConstraintChanged(name) || g.packageConstraintInstalled(name) || g.packageConstraintRequired(name),
+        packageConstraintAdded: (s, g) => name => g.packageAdded(name) ? s.add[name].constraint : null,
+        packageConstraintChanged: (s, g) => name => g.packageChanged(name) ? s.change[name] : null,
+        packageConstraintInstalled: (s, g) => name => (g.packageInstalled(name) && g.packageRoot(name)) ? g.installed[name].constraint : null,
+        packageConstraintRequired: (s, g) => name => g.packageRequired(name) ? (g.packageChanged(name) ? g.constraintChanged(name) : s.required[name].constraint) : null,
+
+        contaoSupported: (s, g) => constraint => constraint ? intersects(constraint, g.packageConstraint('contao/manager-bundle'), true) : true,
     },
 
     mutations: {

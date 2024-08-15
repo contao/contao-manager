@@ -433,7 +433,7 @@
             &__details {
                 display: flex;
                 align-self: center;
-                align-items: center;
+                align-items: flex-start;
             }
         }
     }
