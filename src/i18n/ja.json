@@ -434,6 +434,7 @@
     "ui.package.updateAvailable": "バージョン{version}を利用可能",
     "ui.package.updateUnknown": "不明なバージョン",
     "ui.package.updateConstraint": "バージョンの制約外に利用できる新しいバージョンがあります。",
+    "ui.package.incompatible": "{package}はContao {constraint}では動作しません。",
 
     "ui.cloudStatus.headline": "Composerリゾルバークラウド",
     "ui.cloudStatus.version": "バージョン{version}",

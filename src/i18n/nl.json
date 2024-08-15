@@ -8,7 +8,7 @@
     "ui.app.safeModeExit": "Verlaat veilige modus",
     "ui.app.loading": "Contao Manager laden",
     "ui.app.apiError": "Onverwachte API status",
-    "ui.app.configSecurity1": "WAARSCHUWING !!! De configuratie-map is niet beveiligd",
+    "ui.app.configSecurity1": "VEILIGHEIDSWAARSCHUWING !!! De configuratie-map is niet beveiligd",
     "ui.app.configSecurity2": "Contao Manager heeft vastgesteld dat de configuratiebestanden openbaar toegankelijk zijn. Alle bewerkingen zijn geblokkeerd totdat de map is beveiligd, anders zou een aanvaller toegang kunnen krijgen tot gevoelige gegevens van uw installatie.\n\nOm dit probleem op te lossen, moet u ervoor zorgen dat er geen toegang tot de map \"contao-manager\" is op uw server. Raadpleeg de handleiding van uw webserver voor meer informatie of neem contact op met uw hostingprovider.",
     "ui.account.welcome": "Welkom",
     "ui.account.intro1": "Welkom bij de Contao Manager, een universeel hulpmiddel om Contao Open Source CMS te installeren en te beheren. Bent u hier nieuw? {ReadthemanualTogetStarted}.",
@@ -434,6 +434,7 @@
     "ui.package.updateAvailable": "{version} beschikbaar",
     "ui.package.updateUnknown": "Onbekende versie",
     "ui.package.updateConstraint": "Er is een nieuwere versie beschikbaar buiten uw versiebeperking.",
+    "ui.package.incompatible": "{package} does not work with Contao {constraint}.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Versie {version}",

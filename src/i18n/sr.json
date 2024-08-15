@@ -434,6 +434,7 @@
     "ui.package.updateAvailable": "{version} доступна",
     "ui.package.updateUnknown": "непозната верзија",
     "ui.package.updateConstraint": "Новија верзија изван вашег опсега верзија је доступна.",
+    "ui.package.incompatible": "{package} does not work with Contao {constraint}.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Верзија {version}",
