@@ -156,7 +156,7 @@ class ApiKernel extends Kernel
         if (!$this->filesystem->exists($this->configDir)) {
             $parentDir = \dirname($this->getProjectDir()).\DIRECTORY_SEPARATOR.'contao-manager';
 
-            if ($this->filesystem->exists($parentDir)) {
+            if ($this->filesystem->exists($parentDir.'/manager.json')) {
                 $this->filesystem->mirror($parentDir, $this->configDir);
             }
 
