@@ -181,7 +181,7 @@
 
                         if (level === 0) {
                             result[result.length - 1] += ' "';
-                            const pos = piece.lastIndexOf('"');
+                            const pos = piece.indexOf('" ') || piece.lastIndexOf('"');
 
                             result.push(piece.slice(0, pos));
                             result.push(piece.slice(pos));
