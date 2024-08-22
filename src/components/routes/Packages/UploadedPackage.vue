@@ -126,7 +126,7 @@
 
         methods: {
             addPackage() {
-                this.$store.commit('packages/uploads/confirm', this.upload.id);
+                this.$store.dispatch('packages/uploads/confirm', this.upload.id);
             },
 
             removeUpload() {

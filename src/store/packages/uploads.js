@@ -54,52 +54,12 @@ export default {
             state.files = value;
         },
 
-        confirm(state, id) {
-            const pkg = state.uploads[id].package;
-
-            if (!pkg) {
-                return;
-            }
-
-            if (this.getters['packages/packageInstalled'](pkg.name)) {
-                this.commit('packages/change', pkg);
-            } else {
-                this.commit('packages/add', Object.assign({}, pkg, { constraint: pkg.version }));
-            }
-
-            if (pkg.suggest) {
-                Object.keys(pkg.suggest).forEach((name) => {
-                    if (!this.getters['packages/packageInstalled'](pkg.name)) {
-                        this.commit('packages/add', { name });
-                    }
-                });
-            }
-
+        setConfirmed(state, id) {
             state.confirmed.push(id);
         },
 
-        unconfirm(state, idOrName) {
-            if (state.confirmed.includes[idOrName]) {
-                Vue.delete(state.confirmed, state.confirmed.indexOf(idOrName));
-                return;
-            }
-
-            Object.keys(state.uploads).forEach((id) => {
-                if (state.uploads[id].package
-                    && state.uploads[id].package.name === idOrName
-                    && state.confirmed.includes(id)
-                ) {
-                    Vue.delete(state.confirmed, state.confirmed.indexOf(id));
-                }
-            });
-        },
-
-        confirmAll(state) {
-            Object.keys(state.uploads).forEach(id => this.commit('packages/uploads/confirm', id));
-        },
-
-        unconfirmAll(state) {
-            state.confirmed = [];
+        setUnconfirmed(state, id) {
+            Vue.delete(state.confirmed, state.confirmed.indexOf(id));
         },
 
         setRemoving(state, id) {
@@ -124,12 +84,74 @@ export default {
             }
         },
 
+        async confirm({ state, commit }, id) {
+            const pkg = state.uploads[id].package;
+
+            if (!pkg) {
+                return;
+            }
+
+            if (this.getters['packages/packageInstalled'](pkg.name)) {
+                this.commit('packages/change', pkg);
+            } else {
+                this.commit('packages/add', Object.assign({}, pkg, { constraint: pkg.version }));
+            }
+
+            if (pkg.suggest) {
+                await Promise.all(Object.keys(pkg.suggest).map(
+                    async (name) => {
+                        if (!this.getters['packages/packageInstalled'](name)) {
+                            const metadata = await this.dispatch('packages/metadata', { name });
+
+                            if (!metadata.contaoConstraint || this.getters['packages/contaoSupported'](metadata.contaoConstraint)) {
+                                this.commit('packages/add', { name });
+                            }
+                        }
+                    }
+                ));
+            }
+
+            commit('setConfirmed', id);
+        },
+
+        confirmAll({ state, dispatch }) {
+            Object.keys(state.uploads).forEach(id => dispatch('confirm', id));
+        },
+
+        unconfirm({ state, commit }, idOrName) {
+            const id = state.confirmed.includes(idOrName)
+                ? idOrName
+                : Object.keys(state.uploads).find(
+                    (id) => state.uploads[id].package && state.uploads[id].package.name === idOrName && state.confirmed.includes(id)
+                );
+
+            if (!id) {
+                return;
+            }
+
+            commit('setUnconfirmed', id);
+
+            const pkg = state.uploads[id].package;
+
+            if (pkg && pkg.suggest) {
+                Object.keys(pkg.suggest).forEach((name) => {
+                    if (this.getters['packages/packageAdded'](name)) {
+                        this.commit('packages/restore', name);
+                    }
+                });
+            }
+        },
+
+        unconfirmAll({ state, dispatch }) {
+            Object.keys(state.uploads).forEach(id => dispatch('unconfirm', id));
+        },
+
         async remove({ commit, dispatch }, id) {
             commit('setRemoving', id);
             await Vue.http.delete(`api/packages/uploads/${id}`);
             await dispatch('load');
             commit('setRemoved', id);
-            commit('unconfirm', id);
+            await dispatch('unconfirm', id);
         },
 
         async removeAll({ state, commit, dispatch }) {

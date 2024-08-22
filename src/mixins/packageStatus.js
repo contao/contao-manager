@@ -85,7 +85,7 @@ export default {
                 this.$store.commit('packages/restore', this.data.name);
             } else {
                 this.$store.commit('packages/restore', this.data.name);
-                this.$store.commit('packages/uploads/unconfirm', this.data.name);
+                this.$store.dispatch('packages/uploads/unconfirm', this.data.name);
                 this.$store.commit('packages/remove', this.data.name);
             }
         },

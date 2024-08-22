@@ -118,7 +118,7 @@
             },
 
             confirmUploads() {
-                this.$store.commit('packages/uploads/confirmAll');
+                this.$store.dispatch('packages/uploads/confirmAll');
             },
 
             async removeUploads() {
@@ -145,7 +145,7 @@
 
             resetChanges() {
                 this.$store.commit('packages/reset');
-                this.$store.commit('packages/uploads/unconfirmAll');
+                this.$store.dispatch('packages/uploads/unconfirmAll');
             },
         },
 
