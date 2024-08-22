@@ -36,7 +36,7 @@ export default {
             ? Object.values(state.uploads).find(
                 item => !item.success || item.error
                     || (Object.keys(rootState.packages.installed).includes(item.package.name) && rootState.packages.installed[item.package.name].version === item.package.version)
-                    || !rootGet['packages/contaoSupported'](item.package.require['contao/core-bundle'] || item.package.require['contao/manager-bundle'])
+                    || (item.package.require && !rootGet['packages/contaoSupported'](item.package.require['contao/core-bundle'] || item.package.require['contao/manager-bundle']))
             ) === undefined && !hasDuplicates(state.uploads)
             : false,
     },
