@@ -5867,7 +5867,7 @@ __metadata:
 
 "contao-package-list@git+https://github.com/contao/package-list.git":
   version: 1.0.0
-  resolution: "contao-package-list@https://github.com/contao/package-list.git#commit=13ab298e74c7a25b0483f9c7746a8d9d273c8efb"
+  resolution: "contao-package-list@https://github.com/contao/package-list.git#commit=cb97b37deb2fbfc9198fbb01ae504960476a74b0"
   dependencies:
     algoliasearch: ^4.23.3
     core-js: ^3.37.1
@@ -5878,7 +5878,7 @@ __metadata:
     vue-router: ^3.6
     vueperslides: ^2.13.0
     vuex: ^2.5.0
-  checksum: b4572e9d1863b1032972f7f2fb6511c4b446110ea05d04ef1742a1f288d351923c76055667c891c5c69bce266b7c4e648b1be2d95e0b4e8fc212ea83fc58f580
+  checksum: d11f3da0c23b8dc6139194412e37f8ab8cd535a56ffd48185ed18ddc98634848f2ca1ca54fcbb406cd9843a33c11a9afeedb9a3212f0e2806e70cfa644e4b91f
   languageName: node
   linkType: hard
 
