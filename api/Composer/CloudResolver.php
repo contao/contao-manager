@@ -16,11 +16,9 @@ use Composer\Json\JsonFile;
 use Contao\ManagerApi\System\Request;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-/**
- * @ServiceTag("monolog.logger", channel="tasks")
- */
+#[AutoconfigureTag('monolog.logger', ['channel' => 'tasks'])]
 class CloudResolver implements LoggerAwareInterface
 {
     use LoggerAwareTrait;

@@ -17,12 +17,10 @@ use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use studio24\Rotate\Rotate;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Filesystem\Filesystem;
-use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
 
-/**
- * @ServiceTag("monolog.logger", channel="tasks")
- */
+#[AutoconfigureTag('monolog.logger', ['channel' => 'tasks'])]
 class TaskManager implements LoggerAwareInterface
 {
     use LoggerAwareTrait;

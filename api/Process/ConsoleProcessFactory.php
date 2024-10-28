@@ -20,15 +20,14 @@ use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
-use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
 
 /**
  * Creates foreground and background processes for the Contao or Manager console.
- *
- * @ServiceTag("monolog.logger", channel="tasks")
  */
+#[AutoconfigureTag('monolog.logger', ['channel' => 'tasks'])]
 class ConsoleProcessFactory implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
