@@ -17,9 +17,9 @@ use Contao\ManagerApi\System\SelfUpdate;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/server/self-update', methods: ['GET'])]
+#[Route(path: '/server/self-update', methods: ['GET'])]
 class SelfUpdateController
 {
     /**
@@ -30,7 +30,7 @@ class SelfUpdateController
         if (!$updater->canUpdate()) {
             return new ApiProblemResponse(
                 (new ApiProblem('This version cannot be updated.'))
-                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED),
             );
         }
 
@@ -51,7 +51,7 @@ class SelfUpdateController
                 'channel' => $updater->getChannel(),
                 'supported' => $supportsUpdate,
                 'error' => $error,
-            ]
+            ],
         );
     }
 }

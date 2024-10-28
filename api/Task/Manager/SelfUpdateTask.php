@@ -21,8 +21,10 @@ use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 
 class SelfUpdateTask extends AbstractTask
 {
-    public function __construct(private readonly SelfUpdate $updater, Translator $translator)
-    {
+    public function __construct(
+        private readonly SelfUpdate $updater,
+        Translator $translator,
+    ) {
         parent::__construct($translator);
     }
 

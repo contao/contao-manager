@@ -29,12 +29,17 @@ use Symfony\Component\Finder\Finder;
 
 class Environment
 {
-    private ?\Composer\Composer $composer = null;
+    private Composer|null $composer = null;
 
-    private ?\Composer\Util\Filesystem $composerFs = null;
+    private \Composer\Util\Filesystem|null $composerFs = null;
 
-    public function __construct(private readonly ApiKernel $kernel, private readonly ManagerConfig $managerConfig, private readonly ComposerConfig $composerConfig, private readonly Filesystem $filesystem, private readonly Request $request)
-    {
+    public function __construct(
+        private readonly ApiKernel $kernel,
+        private readonly ManagerConfig $managerConfig,
+        private readonly ComposerConfig $composerConfig,
+        private readonly Filesystem $filesystem,
+        private readonly Request $request,
+    ) {
     }
 
     /**
@@ -86,8 +91,8 @@ class Environment
     }
 
     /**
-     * Gets the directory where uploads are stored to.
-     * These are temporary and only until they are installed as artifact or provider.
+     * Gets the directory where uploads are stored to. These are temporary and only
+     * until they are installed as artifact or provider.
      */
     public function getUploadDir(): string
     {
@@ -99,8 +104,8 @@ class Environment
     }
 
     /**
-     * Gets the path where artifacts are installed to.
-     * Artifacts are ZIP files that contain Composer packages.
+     * Gets the path where artifacts are installed to. Artifacts are ZIP files that
+     * contain Composer packages.
      *
      * @see https://getcomposer.org/doc/05-repositories.md#artifact
      */
@@ -168,7 +173,7 @@ class Environment
         $repositories = $this->getComposer()->getConfig()->getRepositories();
         unset($repositories['packagist.org']);
 
-        if ($repositories !== [] || !empty($json['repositories'])) {
+        if ([] !== $repositories || !empty($json['repositories'])) {
             $json['repositories'] = [];
 
             foreach ($repositories as $repository) {
@@ -252,7 +257,7 @@ class Environment
         }
     }
 
-    public function mergeMetadata(array $package, string $language = null): array
+    public function mergeMetadata(array $package, string|null $language = null): array
     {
         if (isset($package['source']) || preg_match('{https?://}', $package['dist']['url'] ?? '') || empty($package['extra']['contao-metadata-url'])) {
             return $package;
@@ -271,7 +276,7 @@ class Environment
 
             $metadata = JsonFile::parseJson(
                 $this->request->getJson($package['extra']['contao-metadata-url'], $headers),
-                $package['extra']['contao-metadata-url']
+                $package['extra']['contao-metadata-url'],
             );
 
             if (\is_array($metadata)) {

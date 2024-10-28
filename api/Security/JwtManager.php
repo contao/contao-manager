@@ -76,8 +76,8 @@ class JwtManager
         $response->headers->setCookie(
             $this->createCookie(
                 JWT::encode($payload, $this->users->getSecret(), 'HS256'),
-                $request
-            )
+                $request,
+            ),
         );
     }
 
@@ -94,7 +94,7 @@ class JwtManager
             self::COOKIE_AUTH,
             \Phar::running(false) ? $request->getBaseUrl().'/' : '/',
             null,
-            $request->isSecure()
+            $request->isSecure(),
         );
     }
 
@@ -128,7 +128,7 @@ class JwtManager
             $request->isSecure(),
             true,
             false,
-            Cookie::SAMESITE_STRICT
+            Cookie::SAMESITE_STRICT,
         );
     }
 }

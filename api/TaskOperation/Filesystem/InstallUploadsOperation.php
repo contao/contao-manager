@@ -21,10 +21,15 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class InstallUploadsOperation extends AbstractInlineOperation
 {
-    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
+    private readonly Filesystem $filesystem;
 
-    public function __construct(private readonly array $uploads, TaskConfig $config, private readonly Environment $environment, private readonly Translator $translator, Filesystem $filesystem = null)
-    {
+    public function __construct(
+        private readonly array $uploads,
+        TaskConfig $config,
+        private readonly Environment $environment,
+        private readonly Translator $translator,
+        Filesystem|null $filesystem = null,
+    ) {
         parent::__construct($config);
         $this->filesystem = $filesystem ?: new Filesystem();
     }
@@ -34,11 +39,11 @@ class InstallUploadsOperation extends AbstractInlineOperation
         return $this->translator->trans('taskoperation.install-uploads.summary');
     }
 
-    public function getDetails(): ?string
+    public function getDetails(): string|null
     {
         $files = array_map(
-            static fn($config) => $config['name'],
-            $this->uploads
+            static fn ($config) => $config['name'],
+            $this->uploads,
         );
 
         return implode(', ', $files);
@@ -57,9 +62,9 @@ class InstallUploadsOperation extends AbstractInlineOperation
         if (!empty($installed)) {
             $console->add(
                 implode('', array_map(
-                    fn($upload): string => '- '.$this->translator->trans('taskoperation.install-uploads.console', $upload),
-                    $installed
-                ))
+                    fn ($upload): string => '- '.$this->translator->trans('taskoperation.install-uploads.console', $upload),
+                    $installed,
+                )),
             );
         }
 
@@ -80,7 +85,7 @@ class InstallUploadsOperation extends AbstractInlineOperation
 
             $this->filesystem->copy(
                 $this->environment->getUploadDir().'/'.$config['id'],
-                $this->environment->getArtifactDir().'/'.$target
+                $this->environment->getArtifactDir().'/'.$target,
             );
 
             $installed[$target] = [

@@ -19,8 +19,11 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class RemoveVendorOperation extends AbstractInlineOperation
 {
-    public function __construct(TaskConfig $taskConfig, private readonly Environment $environment, private readonly Filesystem $filesystem)
-    {
+    public function __construct(
+        TaskConfig $taskConfig,
+        private readonly Environment $environment,
+        private readonly Filesystem $filesystem,
+    ) {
         parent::__construct($taskConfig);
     }
 

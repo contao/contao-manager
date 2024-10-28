@@ -23,8 +23,10 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class BackupRestoreTask extends AbstractTask
 {
-    public function __construct(private readonly ConsoleProcessFactory $processFactory, Translator $translator)
-    {
+    public function __construct(
+        private readonly ConsoleProcessFactory $processFactory,
+        Translator $translator,
+    ) {
         parent::__construct($translator);
     }
 

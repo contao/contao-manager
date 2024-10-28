@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class AuthController extends AbstractConfigController
 {
@@ -26,13 +26,13 @@ class AuthController extends AbstractConfigController
         parent::__construct($config);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/config/auth', methods: ['GET', 'PUT', 'PATCH'])]
+    #[Route(path: '/config/auth', methods: ['GET', 'PUT', 'PATCH'])]
     public function __invoke(Request $request): Response
     {
         return parent::__invoke($request);
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/config/auth/github-oauth', methods: ['PUT'])]
+    #[Route(path: '/config/auth/github-oauth', methods: ['PUT'])]
     public function putGithubToken(Request $request): Response
     {
         if (!$this->config instanceof AuthConfig || !$request->request->has('token')) {

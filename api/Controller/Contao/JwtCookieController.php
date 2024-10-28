@@ -20,16 +20,13 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/contao/jwt-cookie', methods: ['GET', 'PUT', 'DELETE'])]
+#[Route(path: '/contao/jwt-cookie', methods: ['GET', 'PUT', 'DELETE'])]
 class JwtCookieController
 {
     public const COOKIE_NAME = 'contao_settings';
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly ContaoApi $api)
     {
     }
@@ -39,12 +36,12 @@ class JwtCookieController
      *
      * @throws ParsingException
      */
-    public function __invoke(Request $request): \Contao\ManagerApi\HttpKernel\ApiProblemResponse|\Symfony\Component\HttpFoundation\Response
+    public function __invoke(Request $request): ApiProblemResponse|Response
     {
         if (!$this->isSupported()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Contao does not support the jwt-token API.'))
-                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED),
             );
         }
 
@@ -86,7 +83,7 @@ class JwtCookieController
         $response = new JsonResponse(
             [
                 'debug' => $request->request->get('debug', false),
-            ]
+            ],
         );
 
         $response->headers->setCookie($cookie);

@@ -42,9 +42,8 @@ final class TaskStatus implements \JsonSerializable
         /**
          * @var array<TaskOperationInterface>
          */
-        private readonly array $operations
-    )
-    {
+        private readonly array $operations,
+    ) {
     }
 
     public function getTitle(): string

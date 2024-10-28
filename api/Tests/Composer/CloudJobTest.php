@@ -35,7 +35,7 @@ class CloudJobTest extends TestCase
         $this->assertSame($expected, $job->getWaitingTime());
     }
 
-    public function waitingTime(): \Generator
+    public static function waitingTime(): iterable
     {
         yield [12, 30, 6, 60];
 

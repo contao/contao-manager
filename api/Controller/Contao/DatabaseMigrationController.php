@@ -23,13 +23,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/contao/database-migration', methods: ['GET', 'PUT', 'DELETE'])]
+#[Route(path: '/contao/database-migration', methods: ['GET', 'PUT', 'DELETE'])]
 class DatabaseMigrationController
 {
-    public function __construct(private readonly ContaoConsole $console, private readonly ConsoleProcessFactory $processFactory, private readonly ApiKernel $kernel)
-    {
+    public function __construct(
+        private readonly ContaoConsole $console,
+        private readonly ConsoleProcessFactory $processFactory,
+        private readonly ApiKernel $kernel,
+    ) {
     }
 
     public function __invoke(Request $request): Response
@@ -44,7 +47,7 @@ class DatabaseMigrationController
         ) {
             return new ApiProblemResponse(
                 (new ApiProblem('Contao does not support database migrations.'))
-                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED),
             );
         }
 
@@ -60,7 +63,7 @@ class DatabaseMigrationController
                 $process = $this->createProcess(
                     $request->request->get('hash'),
                     $request->request->get('type'),
-                    $request->request->getBoolean('withDeletes')
+                    $request->request->getBoolean('withDeletes'),
                 );
                 $process->setMeta(['skip_warnings' => $request->request->getBoolean('skipWarnings')]);
                 $process->start();
@@ -126,7 +129,7 @@ class DatabaseMigrationController
         ]);
     }
 
-    private function createProcess(?string $hash, ?string $type, bool $withDeletes): ProcessController
+    private function createProcess(string|null $hash, string|null $type, bool $withDeletes): ProcessController
     {
         $args = [
             'contao:migrate',
@@ -152,7 +155,7 @@ class DatabaseMigrationController
         return $this->processFactory->createContaoConsoleBackgroundProcess($args, 'database-migration');
     }
 
-    private function getBackgroundProcess(): ?ProcessController
+    private function getBackgroundProcess(): ProcessController|null
     {
         try {
             return $this->processFactory->restoreBackgroundProcess('database-migration');
@@ -181,10 +184,10 @@ class DatabaseMigrationController
             if ('error' === $type && isset($data['message'], $data['file'], $data['line'], $data['trace'])) {
                 $operations[] = [
                     'status' => 'error',
-                    'name' => sprintf(
+                    'name' => \sprintf(
                         'Exception in file %s on line %s',
                         str_replace($this->kernel->getProjectDir().'/', '', $data['file']),
-                        $data['line']
+                        $data['line'],
                     ),
                     'message' => $data['message'],
                     'trace' => str_replace($this->kernel->getProjectDir().'/', '', $data['trace']),

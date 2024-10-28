@@ -14,5 +14,5 @@ namespace Contao\ManagerApi\TaskOperation;
 
 interface SponsoredOperationInterface
 {
-    public function getSponsor(): ?array;
+    public function getSponsor(): array|null;
 }

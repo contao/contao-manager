@@ -18,9 +18,13 @@ class InvalidJsonException extends \InvalidArgumentException
 
     private readonly string $jsonErrorMsg;
 
-    public function __construct(private readonly string $filename, private readonly string $content = '', int $code = 0, \Throwable $previous = null)
-    {
-        parent::__construct(sprintf('File "%s" does not contain valid JSON.', $this->filename), $code, $previous);
+    public function __construct(
+        private readonly string $filename,
+        private readonly string $content = '',
+        int $code = 0,
+        \Throwable|null $previous = null,
+    ) {
+        parent::__construct(\sprintf('File "%s" does not contain valid JSON.', $this->filename), $code, $previous);
 
         $this->jsonError = json_last_error();
         $this->jsonErrorMsg = json_last_error_msg();

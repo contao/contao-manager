@@ -32,7 +32,7 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
     public function __construct(
         private readonly string $fileName,
         private readonly ApiKernel $kernel,
-        Filesystem $filesystem = null,
+        Filesystem|null $filesystem = null,
     ) {
         $this->filesystem = $filesystem ?: new Filesystem();
     }
@@ -155,13 +155,13 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
         try {
             $this->filesystem->dumpFile(
                 $file,
-                json_encode($this->data, JSON_PRETTY_PRINT)
+                json_encode($this->data, JSON_PRETTY_PRINT),
             );
         } catch (IOException $exception) {
             $translator = $this->kernel->getTranslator();
             $problem = (new ApiProblem(
                 $translator->trans('error.writable.config-file', ['file' => $file]),
-                'https://php.net/is_writable'
+                'https://php.net/is_writable',
             ))->setDetail($translator->trans('error.writable.detail'));
 
             throw new ApiProblemException($problem, $exception);

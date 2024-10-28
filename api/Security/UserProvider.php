@@ -43,7 +43,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
     public function refreshUser(UserInterface $user): UserInterface
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
         return $this->loadUserByIdentifier($user->getUserIdentifier());
@@ -57,7 +57,21 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         $this->config->updateUser(
-            new User($user->getUserIdentifier(), $newHashedPassword)
+            new User($user->getUserIdentifier(), $newHashedPassword),
         );
+    }
+
+    private function getUser(string $username): User
+    {
+        $user = $this->config->getUser($username);
+
+        if (null === $user) {
+            $ex = new UserNotFoundException(sprintf('Username "%s" does not exist.', $username));
+            $ex->setUserIdentifier($username);
+
+            throw $ex;
+        }
+
+        return $user;
     }
 }

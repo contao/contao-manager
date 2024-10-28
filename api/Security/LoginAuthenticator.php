@@ -30,7 +30,7 @@ class LoginAuthenticator extends AbstractBrowserAuthenticator
         private readonly UserConfig $userConfig,
         JwtManager $jwtManager,
         Filesystem $filesystem,
-        ApiKernel $kernel
+        ApiKernel $kernel,
     ) {
         parent::__construct($jwtManager, $filesystem, $kernel);
     }

@@ -16,7 +16,7 @@ interface TaskOperationInterface
 {
     public function getSummary(): string;
 
-    public function getDetails(): ?string;
+    public function getDetails(): string|null;
 
     public function getConsole(): ConsoleOutput;
 

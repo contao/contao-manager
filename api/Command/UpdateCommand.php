@@ -13,11 +13,12 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Command;
 
 use Contao\ManagerApi\System\SelfUpdate;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[\Symfony\Component\Console\Attribute\AsCommand(name: 'self-update', description: 'Updates Contao Manager to the latest version')]
+#[AsCommand(name: 'self-update', description: 'Updates Contao Manager to the latest version')]
 class UpdateCommand extends Command
 {
     public function __construct(private readonly SelfUpdate $updater)
@@ -55,11 +56,11 @@ class UpdateCommand extends Command
             $output->writeln('<info>Already up-to-date.</info>');
         } else {
             $output->writeln(
-                sprintf(
+                \sprintf(
                     'Updated from version %s to version %s.',
                     $this->updater->getOldVersion(),
-                    $this->updater->getNewVersion()
-                )
+                    $this->updater->getNewVersion(),
+                ),
             );
         }
 

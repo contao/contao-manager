@@ -27,8 +27,15 @@ class CreateProjectOperation extends AbstractProcessOperation
      */
     private $publicDir;
 
-    public function __construct(TaskConfig $taskConfig, ConsoleProcessFactory $processFactory, ApiKernel $kernel, private readonly Environment $environment, private readonly string $package, private readonly ?string $version = null, bool $isUpload = false)
-    {
+    public function __construct(
+        TaskConfig $taskConfig,
+        ConsoleProcessFactory $processFactory,
+        ApiKernel $kernel,
+        private readonly Environment $environment,
+        private readonly string $package,
+        private readonly string|null $version = null,
+        bool $isUpload = false,
+    ) {
         try {
             parent::__construct($processFactory->restoreBackgroundProcess('composer-create-project'));
         } catch (\Exception) {
@@ -58,7 +65,7 @@ class CreateProjectOperation extends AbstractProcessOperation
 
             $process = $processFactory->createManagerConsoleBackgroundProcess(
                 $arguments,
-                'composer-create-project'
+                'composer-create-project',
             );
             $process->setMeta(['folder' => $folder]);
 
@@ -104,7 +111,7 @@ class CreateProjectOperation extends AbstractProcessOperation
                 foreach ($files as $file) {
                     $fs->copy(
                         $file->getPathname(),
-                        \dirname($file->getPath()).\DIRECTORY_SEPARATOR.$file->getFilename()
+                        \dirname($file->getPath()).\DIRECTORY_SEPARATOR.$file->getFilename(),
                     );
                 }
 

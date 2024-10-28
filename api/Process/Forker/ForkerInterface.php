@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 
 interface ForkerInterface
 {
-    public function __construct(array $arguments, array $env = null, LoggerInterface $logger = null);
+    public function __construct(array $arguments, array|null $env = null, LoggerInterface|null $logger = null);
 
     /**
      * Sets the command to use for the background process.

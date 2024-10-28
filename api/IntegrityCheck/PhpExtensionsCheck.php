@@ -23,7 +23,7 @@ class PhpExtensionsCheck extends AbstractIntegrityCheck
         'openssl',
     ];
 
-    public function run(): ?ApiProblem
+    public function run(): ApiProblem|null
     {
         foreach (self::$extensions as $extension) {
             if (null !== ($problem = $this->checkExtension($extension))) {
@@ -34,7 +34,7 @@ class PhpExtensionsCheck extends AbstractIntegrityCheck
         return null;
     }
 
-    private function checkExtension(string $extension): ?ApiProblem
+    private function checkExtension(string $extension): ApiProblem|null
     {
         if (\extension_loaded($extension)) {
             return null;
@@ -42,7 +42,7 @@ class PhpExtensionsCheck extends AbstractIntegrityCheck
 
         return (new ApiProblem(
             $this->trans($extension.'.title'),
-            'https://php.net/'.$extension
+            'https://php.net/'.$extension,
         ))->setDetail($this->trans($extension.'.detail'));
     }
 }

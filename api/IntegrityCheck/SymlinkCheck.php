@@ -19,15 +19,14 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class SymlinkCheck extends AbstractIntegrityCheck
 {
-    /**
-     * Constructor.
-     */
-    public function __construct(private readonly ApiKernel $kernel, Translator $translator)
-    {
+    public function __construct(
+        private readonly ApiKernel $kernel,
+        Translator $translator,
+    ) {
         parent::__construct($translator);
     }
 
-    public function run(): ?ApiProblem
+    public function run(): ApiProblem|null
     {
         if (null === ($error = $this->canCreateSymlinks())) {
             return null;
@@ -35,11 +34,11 @@ class SymlinkCheck extends AbstractIntegrityCheck
 
         return (new ApiProblem(
             $this->trans('symlink.title'),
-            'https://php.net/symlink'
+            'https://php.net/symlink',
         ))->setDetail($error);
     }
 
-    private function canCreateSymlinks(): ?string
+    private function canCreateSymlinks(): string|null
     {
         if (!\function_exists('symlink')) {
             return '';

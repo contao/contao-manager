@@ -21,7 +21,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    public function __construct(protected \Contao\ManagerApi\I18n\Translator $translator)
+    public function __construct(protected Translator $translator)
     {
     }
 

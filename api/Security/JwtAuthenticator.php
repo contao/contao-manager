@@ -27,7 +27,7 @@ class JwtAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
         private readonly UserProviderInterface $userProvider,
-        private readonly JwtManager $jwtManager
+        private readonly JwtManager $jwtManager,
     ) {
     }
 
@@ -49,14 +49,14 @@ class JwtAuthenticator extends AbstractAuthenticator
         return new SelfValidatingPassport($userBadge);
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response|null
     {
         $token->setAttribute('authenticator', static::class);
 
         return null;
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response|null
     {
         return null;
     }

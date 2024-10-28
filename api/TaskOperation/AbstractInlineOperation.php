@@ -21,14 +21,11 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
 {
     use LoggerAwareTrait;
 
-    /**
-     * Constructor.
-     */
-    public function __construct(protected \Contao\ManagerApi\Task\TaskConfig $taskConfig)
+    public function __construct(protected TaskConfig $taskConfig)
     {
     }
 
-    public function getDetails(): ?string
+    public function getDetails(): string|null
     {
         return '';
     }
@@ -60,7 +57,8 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
 
     public function run(): void
     {
-        // Inline task should never need more than 60secs to complete. Assume something went wrong.
+        // Inline task should never need more than 60secs to complete. Assume something
+        // went wrong.
         $started = $this->taskConfig->getState($this->getName().'.started', 0);
 
         if ($started > 0 && ($started + 60) < time()) {
@@ -85,7 +83,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
                 if (null === $success) {
                     $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ERROR);
                 }
-            }
+            },
         );
 
         try {

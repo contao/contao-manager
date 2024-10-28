@@ -31,15 +31,13 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
     ];
 
     /**
-     * Constructor.
-     *
      * @param Process|ProcessController $process
      */
     public function __construct(protected $process)
     {
     }
 
-    public function getDetails(): ?string
+    public function getDetails(): string|null
     {
         return '';
     }
@@ -54,7 +52,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
 
         $console->add(
             $this->process->getOutput().$this->getProcessError(),
-            '$ '.$this->process->getCommandLine()
+            '$ '.$this->process->getCommandLine(),
         );
 
         return $console;
@@ -115,18 +113,18 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
             if ($this->process instanceof ProcessController && $this->process->getForker() instanceof InlineForker) {
                 $output = <<<'OUTPUT'
 
-# WARNING: INLINE PROCESS EXECUTION
-# Background processes are not support by your server/shell.
-# The operation might have be affected by script runtime (e.g. stop after 30 seconds).
-#
-OUTPUT;
+                    # WARNING: INLINE PROCESS EXECUTION
+                    # Background processes are not support by your server/shell.
+                    # The operation might have be affected by script runtime (e.g. stop after 30 seconds).
+                    #
+                    OUTPUT;
             }
 
-            $output .= sprintf(
+            $output .= \sprintf(
                 "\n# Process terminated with exit code %s\n# Result: %s%s\n",
                 $this->process->getExitCode(),
                 $this->process->getExitCodeText(),
-                $signal
+                $signal,
             );
         }
 
@@ -139,9 +137,9 @@ OUTPUT;
     private function getSignalText($signal): string
     {
         if (isset(static::$signals[$signal])) {
-            return sprintf(' [%s]', static::$signals[$signal]);
+            return \sprintf(' [%s]', static::$signals[$signal]);
         }
 
-        return sprintf(' [signal %s]', $signal);
+        return \sprintf(' [signal %s]', $signal);
     }
 }

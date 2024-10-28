@@ -14,20 +14,20 @@ namespace Contao\ManagerApi\Controller\Packages;
 
 use Composer\Package\Link;
 use Composer\Repository\InstalledRepository;
+use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Repository\PlatformRepository;
-use Composer\Repository\RepositoryInterface;
 use Composer\Repository\RootPackageRepository;
 use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/packages/missing', methods: ['GET'])]
+#[Route(path: '/packages/missing', methods: ['GET'])]
 class MissingPackagesController
 {
-    private readonly \Composer\Repository\InstalledRepositoryInterface $localRepository;
+    private readonly InstalledRepositoryInterface $localRepository;
 
-    private readonly \Composer\Repository\InstalledRepository $compositeRepository;
+    private readonly InstalledRepository $compositeRepository;
 
     public function __construct(Environment $environment)
     {

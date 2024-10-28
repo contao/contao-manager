@@ -22,10 +22,16 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class RemoveUploadsOperation extends AbstractInlineOperation
 {
-    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
+    private readonly Filesystem $filesystem;
 
-    public function __construct(private readonly array $uploads, private readonly UploadsConfig $uploadsConfig, TaskConfig $taskConfig, private readonly Environment $environment, private readonly Translator $translator, Filesystem $filesystem = null)
-    {
+    public function __construct(
+        private readonly array $uploads,
+        private readonly UploadsConfig $uploadsConfig,
+        TaskConfig $taskConfig,
+        private readonly Environment $environment,
+        private readonly Translator $translator,
+        Filesystem|null $filesystem = null,
+    ) {
         parent::__construct($taskConfig);
         $this->filesystem = $filesystem ?: new Filesystem();
     }
@@ -35,11 +41,11 @@ class RemoveUploadsOperation extends AbstractInlineOperation
         return $this->translator->trans('taskoperation.remove-uploads.summary');
     }
 
-    public function getDetails(): ?string
+    public function getDetails(): string|null
     {
         $files = array_map(
-            static fn($config) => $config['name'],
-            $this->uploads
+            static fn ($config) => $config['name'],
+            $this->uploads,
         );
 
         return implode(', ', $files);

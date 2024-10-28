@@ -67,7 +67,7 @@ class ProcessController extends AbstractProcess
     /**
      * Gets meta information of the process.
      */
-    public function getMeta(): ?array
+    public function getMeta(): array|null
     {
         return $this->config['meta'] ?? null;
     }
@@ -86,14 +86,14 @@ class ProcessController extends AbstractProcess
         $forker->run($this->setFile);
     }
 
-    public function getPid(): ?int
+    public function getPid(): int|null
     {
         $this->updateStatus();
 
         return isset($this->config['pid']) ? (int) $this->config['pid'] : null;
     }
 
-    public function getExitCode(): ?int
+    public function getExitCode(): int|null
     {
         $this->updateStatus();
 
@@ -119,7 +119,7 @@ class ProcessController extends AbstractProcess
         return isset($this->config['signaled']) && $this->config['signaled'];
     }
 
-    public function getTermSignal(): ?int
+    public function getTermSignal(): int|null
     {
         return isset($this->config['termsig']) ? (int) $this->config['termsig'] : null;
     }
@@ -129,7 +129,7 @@ class ProcessController extends AbstractProcess
         return isset($this->config['stopped']) && $this->config['stopped'];
     }
 
-    public function getStopSignal(): ?int
+    public function getStopSignal(): int|null
     {
         return isset($this->config['stopsig']) ? (int) $this->config['stopsig'] : null;
     }
@@ -238,7 +238,7 @@ class ProcessController extends AbstractProcess
         throw new \RuntimeException('No forker found for your current platform.');
     }
 
-    public static function create(string $workDir, array $commandline, string $cwd = null, string $id = null): self
+    public static function create(string $workDir, array $commandline, string|null $cwd = null, string|null $id = null): self
     {
         return new static(
             [
@@ -246,7 +246,7 @@ class ProcessController extends AbstractProcess
                 'commandline' => $commandline,
                 'cwd' => $cwd ?: getcwd(),
             ],
-            $workDir
+            $workDir,
         );
     }
 

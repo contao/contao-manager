@@ -15,6 +15,7 @@ namespace Contao\ManagerApi\Command;
 use Contao\ManagerApi\Task\TaskManager;
 use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressIndicator;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,13 +25,10 @@ use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[\Symfony\Component\Console\Attribute\AsCommand(name: 'task:update', description: 'Updates the current task and returns the status information.')]
+#[AsCommand(name: 'task:update', description: 'Updates the current task and returns the status information.')]
 class TaskUpdateCommand extends Command
 {
-    /**
-     * Constructor.
-     */
-    public function __construct(protected \Contao\ManagerApi\Task\TaskManager $taskManager)
+    public function __construct(protected TaskManager $taskManager)
     {
         parent::__construct();
     }
@@ -157,14 +155,14 @@ class TaskUpdateCommand extends Command
         $icon = '';
 
         if ($operation->isSuccessful()) {
-            $icon = sprintf(
+            $icon = \sprintf(
                 '<fg=green;options=bold>%s</>',
-                '\\' === \DIRECTORY_SEPARATOR ? 'OK' : "\xE2\x9C\x94" // HEAVY CHECK MARK (U+2714)
+                '\\' === \DIRECTORY_SEPARATOR ? 'OK' : "\xE2\x9C\x94", // HEAVY CHECK MARK (U+2714)
             );
         } elseif ($operation->hasError()) {
-            $icon = sprintf(
+            $icon = \sprintf(
                 '<fg=red;options=bold>%s</>',
-                '\\' === \DIRECTORY_SEPARATOR ? 'ERROR' : "\xE2\x9C\x98" // HEAVY BALLOT X (U+2718)
+                '\\' === \DIRECTORY_SEPARATOR ? 'ERROR' : "\xE2\x9C\x98", // HEAVY BALLOT X (U+2718)
             );
         }
 

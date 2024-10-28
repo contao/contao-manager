@@ -32,7 +32,7 @@ class PasswordlessAuthenticator extends AbstractBrowserAuthenticator
         private readonly UserConfig $config,
         JwtManager $jwtManager,
         Filesystem $filesystem,
-        ApiKernel $kernel
+        ApiKernel $kernel,
     ) {
         parent::__construct($jwtManager, $filesystem, $kernel);
     }

@@ -16,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class SysTempDirCheck extends AbstractIntegrityCheck
 {
-    public function run(): ?ApiProblem
+    public function run(): ApiProblem|null
     {
         $tempdir = rtrim(sys_get_temp_dir(), '/');
         $subdir = $tempdir.'/'.md5(__DIR__);
@@ -24,7 +24,7 @@ class SysTempDirCheck extends AbstractIntegrityCheck
         if (!$this->canWriteFileInDirectory($tempdir) || !$this->canWriteFileInDirectory($subdir, true)) {
             return (new ApiProblem(
                 $this->trans('systempdir.title'),
-                'https://php.net/open_basedir'
+                'https://php.net/open_basedir',
             ))->setDetail($this->trans('systempdir.detail'));
         }
 

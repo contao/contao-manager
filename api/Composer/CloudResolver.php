@@ -60,10 +60,13 @@ class CloudResolver implements LoggerAwareInterface
         ];
 
         if (null !== $this->logger) {
-            $this->logger->info('Creating Composer Cloud job', [
-                'headers' => $headers,
-                'body' => $body,
-            ]);
+            $this->logger->info(
+                'Creating Composer Cloud job',
+                [
+                    'headers' => $headers,
+                    'body' => $body,
+                ],
+            );
         }
 
         $content = $this->request->postJson(self::API_URL.'/jobs', $body, $headers, $statusCode);
@@ -78,7 +81,6 @@ class CloudResolver implements LoggerAwareInterface
                 throw new CloudException('Composer Resolver did not accept the API call', $statusCode, $content, $body);
             case 503:
                 throw new CloudException('Too many jobs on the Composer Resolver queue.', $statusCode, $content, $body);
-
             default:
                 throw $this->createUnknownResponseException($statusCode, $content, $body);
         }
@@ -87,7 +89,7 @@ class CloudResolver implements LoggerAwareInterface
     /**
      * Gets job information from the Composer Cloud.
      */
-    public function getJob(string $jobId): ?CloudJob
+    public function getJob(string $jobId): CloudJob|null
     {
         if (!$jobId) {
             return null;
@@ -96,7 +98,7 @@ class CloudResolver implements LoggerAwareInterface
         $content = $this->request->getJson(
             self::API_URL.'/jobs/'.$jobId,
             ['Composer-Resolver-Client: contao'],
-            $statusCode
+            $statusCode,
         );
 
         return match ($statusCode) {
@@ -117,7 +119,7 @@ class CloudResolver implements LoggerAwareInterface
         $content = $this->request->deleteJson(
             self::API_URL.'/jobs/'.$jobId,
             ['Composer-Resolver-Client: contao'],
-            $statusCode
+            $statusCode,
         );
 
         if (204 === $statusCode) {
@@ -138,7 +140,7 @@ class CloudResolver implements LoggerAwareInterface
     /**
      * Gets the composer.lock file or null if the cloud job was not successful.
      */
-    public function getComposerLock(CloudJob $job): ?string
+    public function getComposerLock(CloudJob $job): string|null
     {
         if (!$job->isSuccessful()) {
             return null;
@@ -150,7 +152,7 @@ class CloudResolver implements LoggerAwareInterface
     /**
      * Gets the console output for a cloud job.
      */
-    public function getOutput(CloudJob $job): ?string
+    public function getOutput(CloudJob $job): string|null
     {
         if ($job->isQueued()) {
             return null;
@@ -165,7 +167,7 @@ class CloudResolver implements LoggerAwareInterface
             self::API_URL.$link,
             ['Composer-Resolver-Client: contao'],
             $statusCode,
-            true
+            true,
         );
 
         if (200 === $statusCode) {
@@ -175,7 +177,7 @@ class CloudResolver implements LoggerAwareInterface
         throw $this->createUnknownResponseException($statusCode, $content);
     }
 
-    private function createUnknownResponseException($statusCode, ?string $responseBody, $requestBody = null): CloudException
+    private function createUnknownResponseException($statusCode, string|null $responseBody, $requestBody = null): CloudException
     {
         return new CloudException('Composer Resolver returned an unexpected status code', (int) $statusCode, (string) $responseBody, $requestBody);
     }

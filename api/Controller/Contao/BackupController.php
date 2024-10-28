@@ -20,13 +20,15 @@ use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/contao/backup', methods: ['GET'])]
+#[Route(path: '/contao/backup', methods: ['GET'])]
 class BackupController
 {
-    public function __construct(private readonly ContaoConsole $console, private readonly ConsoleProcessFactory $processFactory)
-    {
+    public function __construct(
+        private readonly ContaoConsole $console,
+        private readonly ConsoleProcessFactory $processFactory,
+    ) {
     }
 
     public function __invoke(Request $request): Response
@@ -40,7 +42,7 @@ class BackupController
         ) {
             return new ApiProblemResponse(
                 (new ApiProblem('Contao does not support backups.'))
-                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED),
             );
         }
 

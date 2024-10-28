@@ -20,16 +20,16 @@ class PhpExecutableFinder
 {
     private array $names = ['php-cli', 'php'];
 
-    public function __construct(private readonly ?\Psr\Log\LoggerInterface $logger = null)
+    public function __construct(private readonly LoggerInterface|null $logger = null)
     {
     }
 
     /**
-     * Finds the best matching PHP executable on the system.
-     * Contrary to symfony/process PhpExecutableFinder we actually test if the binary is
-     * the same version as the currently running web process.
+     * Finds the best matching PHP executable on the system. Contrary to
+     * symfony/process PhpExecutableFinder we actually test if the binary is the same
+     * version as the currently running web process.
      */
-    public function find(array $paths = [], bool $discover = true): ?string
+    public function find(array $paths = [], bool $discover = true): string|null
     {
         if (!$discover) {
             return $this->findBestBinary($paths);
@@ -70,7 +70,7 @@ class PhpExecutableFinder
         return $this->findBestBinary($paths);
     }
 
-    public function getServerInfo(string $cli): ?array
+    public function getServerInfo(string $cli): array|null
     {
         $arguments = [$cli, '-q'];
 
@@ -84,7 +84,7 @@ class PhpExecutableFinder
 
         try {
             $process = new Process($arguments);
-            $process->mustRun(null, array_map(static fn(): bool => false, $_ENV));
+            $process->mustRun(null, array_map(static fn (): bool => false, $_ENV));
             $output = @json_decode(trim($process->getOutput()), true);
 
             if (null === $output) {
@@ -143,7 +143,7 @@ class PhpExecutableFinder
             $pathExt = getenv('PATHEXT');
             $suffixes = array_merge(
                 $suffixes,
-                $pathExt ? explode(PATH_SEPARATOR, $pathExt) : ['.exe', '.bat', '.cmd', '.com']
+                $pathExt ? explode(PATH_SEPARATOR, $pathExt) : ['.exe', '.bat', '.cmd', '.com'],
             );
         }
 
@@ -163,7 +163,7 @@ class PhpExecutableFinder
         return $results;
     }
 
-    private function findBestBinary(array $paths): ?string
+    private function findBestBinary(array $paths): string|null
     {
         $fallbackPath = null;
         $fallbackSapi = null;
@@ -173,9 +173,9 @@ class PhpExecutableFinder
         }
 
         foreach ($paths as $path) {
-            // we only test for is_executable if no open_basedir restrictions are set
-            // or the target is within allowed paths. If the path is not within open_basedir
-            // we can still execute the binary on the command line and check the version.
+            // we only test for is_executable if no open_basedir restrictions are set or the
+            // target is within allowed paths. If the path is not within open_basedir we can
+            // still execute the binary on the command line and check the version.
 
             if ((!$openBasedir || $this->isAllowed($path, $openBasedir)) && !is_executable($path)) {
                 continue;
@@ -198,8 +198,8 @@ class PhpExecutableFinder
             $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
             $vCli = vsprintf('%s.%s', explode('.', (string) $info['version']));
 
-            // Allow fallback to another patch version of the same PHP major/minor
-            // and prefer a CLI SAPI over e.g. a CGI SAPI.
+            // Allow fallback to another patch version of the same PHP major/minor and prefer
+            // a CLI SAPI over e.g. a CGI SAPI.
             if (
                 (null === $fallbackPath || ('cli' !== $fallbackSapi && 'cli' === $info['sapi']))
                 && version_compare($vWeb, $vCli, 'eq')

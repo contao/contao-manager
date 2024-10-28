@@ -20,9 +20,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/server/admin-user', methods: ['GET', 'POST'])]
+#[Route(path: '/server/admin-user', methods: ['GET', 'POST'])]
 class AdminUserController
 {
     public function __construct(private readonly ContaoConsole $contaoConsole)
@@ -34,7 +34,7 @@ class AdminUserController
         if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
-                    ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE)
+                    ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE),
             );
         }
 
@@ -47,7 +47,7 @@ class AdminUserController
         ) {
             return new ApiProblemResponse(
                 (new ApiProblem('Contao console does not support the necessary contao:user:list and/or contao:user:create commands/options.'))
-                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED),
             );
         }
 
@@ -55,17 +55,20 @@ class AdminUserController
             if ($this->hasAdminUser()) {
                 return new ApiProblemResponse(
                     (new ApiProblem('An admin user already exists.'))
-                        ->setStatus(Response::HTTP_METHOD_NOT_ALLOWED)
+                        ->setStatus(Response::HTTP_METHOD_NOT_ALLOWED),
                 );
             }
 
             try {
-                $this->contaoConsole->createBackendUser([
-                    'username' => $request->request->get('username'),
-                    'name' => $request->request->get('name'),
-                    'email' => $request->request->get('email'),
-                    'language' => $request->getPreferredLanguage(),
-                ], $request->request->get('password'));
+                $this->contaoConsole->createBackendUser(
+                    [
+                        'username' => $request->request->get('username'),
+                        'name' => $request->request->get('name'),
+                        'email' => $request->request->get('email'),
+                        'language' => $request->getPreferredLanguage(),
+                    ],
+                    $request->request->get('password'),
+                );
 
                 return $this->getUserResponse(Response::HTTP_CREATED);
             } catch (ProcessFailedException $exception) {
@@ -80,11 +83,14 @@ class AdminUserController
         return $this->getUserResponse();
     }
 
-    private function getUserResponse(int $status = Response::HTTP_OK): \Symfony\Component\HttpFoundation\JsonResponse
+    private function getUserResponse(int $status = Response::HTTP_OK): JsonResponse
     {
-        return new JsonResponse([
-            'hasUser' => $this->hasAdminUser(true),
-        ], $status);
+        return new JsonResponse(
+            [
+                'hasUser' => $this->hasAdminUser(true),
+            ],
+            $status,
+        );
     }
 
     private function hasAdminUser(bool $throw = false): bool

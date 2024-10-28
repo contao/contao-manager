@@ -35,11 +35,11 @@ class Utf8Process extends Process
 
         return implode("\n", array_filter(
             preg_split('/\r\n|\r|\n/', $output),
-            static fn(string $line): bool => !str_starts_with($line, 'PHP Warning:')
+            static fn (string $line): bool => !str_starts_with($line, 'PHP Warning:')
                 && !str_starts_with($line, 'Warning:')
                 && !str_starts_with($line, 'Deprecated:')
                 && !str_starts_with($line, 'Runtime Notice:')
-                && !str_starts_with($line, 'Failed loading ')
+                && !str_starts_with($line, 'Failed loading '),
         ));
     }
 

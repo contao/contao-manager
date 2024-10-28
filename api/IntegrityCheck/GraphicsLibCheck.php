@@ -16,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class GraphicsLibCheck extends AbstractIntegrityCheck
 {
-    public function run(): ?ApiProblem
+    public function run(): ApiProblem|null
     {
         if ($this->hasGraphicsLib()) {
             return null;
@@ -24,7 +24,7 @@ class GraphicsLibCheck extends AbstractIntegrityCheck
 
         return (new ApiProblem(
             $this->trans('graphics_lib.title'),
-            'https://php.net/gd'
+            'https://php.net/gd',
         ))->setDetail($this->trans('graphics_lib.detail'));
     }
 

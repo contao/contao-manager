@@ -36,8 +36,16 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class UpdateTask extends AbstractPackagesTask
 {
-    public function __construct(private readonly ContaoConsole $contaoConsole, private readonly ConsoleProcessFactory $processFactory, private readonly CloudResolver $cloudResolver, private readonly UploadsConfig $uploads, private readonly ApiKernel $kernel, Environment $environment, Filesystem $filesystem, Translator $translator)
-    {
+    public function __construct(
+        private readonly ContaoConsole $contaoConsole,
+        private readonly ConsoleProcessFactory $processFactory,
+        private readonly CloudResolver $cloudResolver,
+        private readonly UploadsConfig $uploads,
+        private readonly ApiKernel $kernel,
+        Environment $environment,
+        Filesystem $filesystem,
+        Translator $translator,
+    ) {
         parent::__construct($environment, $filesystem, $translator);
     }
 
@@ -69,11 +77,11 @@ class UpdateTask extends AbstractPackagesTask
 
         $operations = [];
 
-        if (($required = $changes->getRequiredPackages()) && $required !== []) {
+        if (($required = $changes->getRequiredPackages()) && [] !== $required) {
             $operations[] = new RequireOperation($this->processFactory, $required);
         }
 
-        if (($removed = $changes->getRemovedPackages()) && $removed !== []) {
+        if (($removed = $changes->getRemovedPackages()) && [] !== $removed) {
             $operations[] = new RemoveOperation($this->processFactory, $removed);
         }
 
@@ -96,12 +104,12 @@ class UpdateTask extends AbstractPackagesTask
         if ($config->getOption('uploads', false) && \count($this->uploads)) {
             $uploads = array_filter(
                 $this->uploads->all(),
-                static fn($upload): bool => $upload['success']
+                static fn ($upload): bool => $upload['success']
                     && isset($upload['package']['name'])
                     && (
-                        [] === $changes->getUpdates() ||
-                        \in_array($upload['package']['name'], $changes->getUpdates(), true)
-                    )
+                        [] === $changes->getUpdates()
+                        || \in_array($upload['package']['name'], $changes->getUpdates(), true)
+                    ),
             );
 
             array_unshift($operations, new InstallUploadsOperation(
@@ -109,7 +117,7 @@ class UpdateTask extends AbstractPackagesTask
                 $config,
                 $this->environment,
                 $this->translator,
-                $this->filesystem
+                $this->filesystem,
             ));
 
             if (!$config->getOption('dry_run', false)) {
@@ -119,7 +127,7 @@ class UpdateTask extends AbstractPackagesTask
                     $config,
                     $this->environment,
                     $this->translator,
-                    $this->filesystem
+                    $this->filesystem,
                 );
             }
         }
@@ -162,7 +170,7 @@ class UpdateTask extends AbstractPackagesTask
             isset($rootRequires['contao/conflicts'])
             && '*@dev' === $rootRequires['contao/conflicts']->getPrettyConstraint()
         ) {
-            if ($definition->getUpdates() !== []) {
+            if ([] !== $definition->getUpdates()) {
                 $definition->addUpdate('contao/conflicts');
             }
 
@@ -179,8 +187,9 @@ class UpdateTask extends AbstractPackagesTask
             $packageName = $require[0];
             $version = $require[1] ?? null;
 
-            // Automatically require core-bundle and installation-bundle if the manager-bundle is not stable
-            // otherwise the dependency would not be resolved because we don't set minimum-stability
+            // Automatically require core-bundle and installation-bundle if the
+            // manager-bundle is not stable otherwise the dependency would not be resolved
+            // because we don't set minimum-stability
             if ('contao/manager-bundle' === $packageName && null !== $version) {
                 $rootRequires = $this->environment->getComposer()->getPackage()->getRequires();
 

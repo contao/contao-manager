@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Controller to handle log files.
@@ -31,14 +31,16 @@ class LogController
 {
     public const MONOLOG_PATTERN = '/^\[(?<datetime>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+.*)\] (?<channel>[\w-]+(?:\.[\w-]+)?)\.(?<level>\w+): (?<message>.+)(?: (?<context>(?:\[.*?\]|\{.*?\})))(?: (?<extra>(?:\[.*\]|\{.*\})))\s{0,2}$/';
 
-    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
+    private readonly Filesystem $filesystem;
 
-    public function __construct(private readonly ApiKernel $kernel, Filesystem $filesystem = null)
-    {
+    public function __construct(
+        private readonly ApiKernel $kernel,
+        Filesystem|null $filesystem = null,
+    ) {
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/logs', methods: ['GET'])]
+    #[Route(path: '/logs', methods: ['GET'])]
     public function listFiles(): Response
     {
         if (!$this->filesystem->exists($this->kernel->getProjectDir().'/var/logs')) {
@@ -70,7 +72,7 @@ class LogController
         return new JsonResponse(array_reverse($files));
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/logs/{filename}', methods: ['GET'])]
+    #[Route(path: '/logs/{filename}', methods: ['GET'])]
     public function retrieveFile(string $filename, Request $request): Response
     {
         $file = $this->getFile($filename);
@@ -85,7 +87,7 @@ class LogController
         return $response;
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/logs/{filename}', methods: ['DELETE'])]
+    #[Route(path: '/logs/{filename}', methods: ['DELETE'])]
     public function deleteFile(string $filename): Response
     {
         $file = $this->getFile($filename);
@@ -101,13 +103,13 @@ class LogController
     private function getFile(string $filename): \SplFileObject
     {
         if (str_contains($filename, '/')) {
-            throw new BadRequestHttpException(sprintf('"%s" is not a valid file name.', $filename));
+            throw new BadRequestHttpException(\sprintf('"%s" is not a valid file name.', $filename));
         }
 
         $path = $this->kernel->getProjectDir().'/var/logs/'.$filename.'.log';
 
         if (!is_file($path)) {
-            throw new NotFoundHttpException(sprintf('Log file "%s" does not exist.', $filename));
+            throw new NotFoundHttpException(\sprintf('Log file "%s" does not exist.', $filename));
         }
 
         return new \SplFileObject($path);
@@ -148,11 +150,11 @@ class LogController
                 'size' => $file->getSize(),
                 'lines' => $total,
                 'content' => $content,
-            ]
+            ],
         );
     }
 
-    private function parseJsonLine(string $line, array $channels = null, array $levels = null): string|null|array
+    private function parseJsonLine(string $line, array|null $channels = null, array|null $levels = null): array|string|null
     {
         if (!preg_match(self::MONOLOG_PATTERN, $line, $matches)) {
             return $line;
@@ -191,8 +193,8 @@ class LogController
     }
 
     /**
-     * We use the file name without extension as REST object name,
-     * because some hosters block *.log files for security reasons.
+     * We use the file name without extension as REST object name, because some
+     * hosters block *.log files for security reasons.
      *
      * @param SplFileInfo|\SplFileObject $file
      */

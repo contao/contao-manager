@@ -16,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class SessionCheck extends AbstractIntegrityCheck
 {
-    public function run(): ?ApiProblem
+    public function run(): ApiProblem|null
     {
         $detail = '';
 
@@ -35,7 +35,7 @@ class SessionCheck extends AbstractIntegrityCheck
 
         return (new ApiProblem(
             $this->trans('session.title'),
-            'https://php.net/session_start'
+            'https://php.net/session_start',
         ))->setDetail($detail);
     }
 }

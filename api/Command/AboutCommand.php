@@ -14,6 +14,7 @@ namespace Contao\ManagerApi\Command;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\System\ServerInfo;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,11 +23,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-#[\Symfony\Component\Console\Attribute\AsCommand(name: 'about', description: 'Displays information about Contao Manager and the current server')]
+#[AsCommand(name: 'about', description: 'Displays information about Contao Manager and the current server')]
 class AboutCommand extends Command
 {
-    public function __construct(private readonly ApiKernel $kernel, private readonly ServerInfo $serverInfo)
-    {
+    public function __construct(
+        private readonly ApiKernel $kernel,
+        private readonly ServerInfo $serverInfo,
+    ) {
         parent::__construct();
     }
 
@@ -122,7 +125,7 @@ class AboutCommand extends Command
     {
         $version = $kernel->getVersion();
 
-        if ($version === '@manager_version'.'@') {
+        if ('@manager_version'.'@' === $version) {
             $git = new Process(['git', 'describe', '--tags', '--always']);
 
             try {

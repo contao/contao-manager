@@ -18,8 +18,12 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class UpdateOperation extends AbstractProcessOperation
 {
-    public function __construct(ConsoleProcessFactory $processFactory, Environment $environment, private readonly array $packages = [], private readonly bool $dryRun = false)
-    {
+    public function __construct(
+        ConsoleProcessFactory $processFactory,
+        Environment $environment,
+        private readonly array $packages = [],
+        private readonly bool $dryRun = false,
+    ) {
         try {
             parent::__construct($processFactory->restoreBackgroundProcess('composer-update'));
         } catch (\Exception) {
@@ -38,7 +42,7 @@ class UpdateOperation extends AbstractProcessOperation
                     '--no-ansi',
                     '--no-interaction',
                     '--optimize-autoloader',
-                ]
+                ],
             );
 
             if ($this->dryRun) {
@@ -55,8 +59,8 @@ class UpdateOperation extends AbstractProcessOperation
             parent::__construct(
                 $processFactory->createManagerConsoleBackgroundProcess(
                     $arguments,
-                    'composer-update'
-                )
+                    'composer-update',
+                ),
             );
         }
     }
@@ -65,7 +69,7 @@ class UpdateOperation extends AbstractProcessOperation
     {
         $summary = 'composer update';
 
-        if ($this->packages !== []) {
+        if ([] !== $this->packages) {
             $summary .= ' '.implode(' ', $this->packages);
         }
 

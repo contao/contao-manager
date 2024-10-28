@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller\Config;
 
 use Contao\ManagerApi\Config\ComposerConfig;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/config/composer', methods: ['GET', 'PUT', 'PATCH'])]
+#[Route(path: '/config/composer', methods: ['GET', 'PUT', 'PATCH'])]
 class ComposerController extends AbstractConfigController
 {
     public function __construct(ComposerConfig $config)

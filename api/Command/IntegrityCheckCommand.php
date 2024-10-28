@@ -14,12 +14,13 @@ namespace Contao\ManagerApi\Command;
 
 use Contao\ManagerApi\IntegrityCheck\IntegrityCheckFactory;
 use Crell\ApiProblem\ApiProblem;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[\Symfony\Component\Console\Attribute\AsCommand(name: 'integrity-check', description: 'Performs integrity check for the Contao Manager')]
+#[AsCommand(name: 'integrity-check', description: 'Performs integrity check for the Contao Manager')]
 class IntegrityCheckCommand extends Command
 {
     public function __construct(private readonly IntegrityCheckFactory $integrity)
@@ -44,7 +45,7 @@ class IntegrityCheckCommand extends Command
         }
 
         if ('text' !== $format) {
-            throw new \InvalidArgumentException(sprintf('Unknown output format "%s"', $format));
+            throw new \InvalidArgumentException(\sprintf('Unknown output format "%s"', $format));
         }
 
         if ($problem) {
@@ -64,7 +65,7 @@ class IntegrityCheckCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function writeJson(OutputInterface $output, ApiProblem $problem = null): int
+    private function writeJson(OutputInterface $output, ApiProblem|null $problem = null): int
     {
         $output->write(
             json_encode(
@@ -73,8 +74,8 @@ class IntegrityCheckCommand extends Command
                     'version_id' => \PHP_VERSION_ID,
                     'problem' => $problem ? $problem->asArray() : null,
                 ],
-                JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
-            )
+                JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT,
+            ),
         );
 
         return $problem ? Command::FAILURE : Command::SUCCESS;

@@ -90,7 +90,7 @@ return [
         },
         static function (string $filePath, string $prefix, string $contents): string {
             $files = ['vendor/symfony/dependency-injection/Loader/Configurator/Traits/ParentTrait.php', 'vendor/symfony/dependency-injection/Compiler/ResolveInstanceofConditionalsPass.php'];
-            if (!\in_array($filePath, $files, true)) {
+            if (!in_array($filePath, $files, true)) {
                 return $contents;
             }
 
@@ -101,9 +101,9 @@ return [
                 ],
                 [
                     '$definition = \substr_replace($definition, \''.(53 + strlen($prefix.'\\')).'\', 2, 2);',
-                    '$definition = \substr_replace($definition, \'Child\', '.(44 + strlen($prefix.'\\')).', 0);'
+                    '$definition = \substr_replace($definition, \'Child\', '.(44 + strlen($prefix.'\\')).', 0);',
                 ],
-                $contents
+                $contents,
             );
         },
         static function (string $filePath, string $prefix, string $contents): string {
@@ -127,9 +127,9 @@ return [
                 ],
                 [
                     '',
-                    "echo \\$prefix\Symfony\Component\HttpKernel\Kernel::VERSION"
+                    "echo \\$prefix\\Symfony\\Component\\HttpKernel\\Kernel::VERSION",
                 ],
-                $contents
+                $contents,
             );
         },
 

@@ -13,6 +13,15 @@ return ECSConfig::configure()
         __DIR__.'/api',
         __DIR__.'/public',
     ])
+    ->withSkip([
+        __DIR__.'/downgrade.php',
+        __DIR__.'/stub.php',
+        HeaderCommentFixer::class => [
+            __DIR__.'/ecs.php',
+            __DIR__.'/rector.php',
+            __DIR__.'/scoper.inc.php',
+        ],
+    ])
     ->withRootFiles()
     ->withParallel()
     ->withSpacing(Option::INDENTATION_SPACES, "\n")

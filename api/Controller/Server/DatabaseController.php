@@ -20,16 +20,18 @@ use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/server/database', methods: ['GET', 'POST'])]
+#[Route(path: '/server/database', methods: ['GET', 'POST'])]
 class DatabaseController
 {
     // double escaping is necessary for JavaScript validation
     private const URL_PATTERN = '^([^:]+)://(([^:@]+)(:([^@]+))?@)?([^:\/]+(:[0-9]+)?)/([^?]+)(\\?.+)?$';
 
-    public function __construct(private readonly ContaoApi $contaoApi, private readonly ContaoConsole $contaoConsole)
-    {
+    public function __construct(
+        private readonly ContaoApi $contaoApi,
+        private readonly ContaoConsole $contaoConsole,
+    ) {
     }
 
     public function __invoke(Request $request, ServerInfo $serverInfo): Response
@@ -37,7 +39,7 @@ class DatabaseController
         if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
-                    ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE)
+                    ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE),
             );
         }
 
@@ -53,7 +55,7 @@ class DatabaseController
         ) {
             return new ApiProblemResponse(
                 (new ApiProblem('Contao console does not support the necessary contao:migrate command/arguments or CLI API features.'))
-                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED),
             );
         }
 
@@ -63,7 +65,7 @@ class DatabaseController
             if (empty($url) || !preg_match('{'.self::URL_PATTERN.'}i', $url)) {
                 return new ApiProblemResponse(
                     (new ApiProblem('Invalid URL'))
-                        ->setStatus(Response::HTTP_BAD_REQUEST)
+                        ->setStatus(Response::HTTP_BAD_REQUEST),
                 );
             }
 

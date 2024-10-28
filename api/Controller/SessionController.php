@@ -19,17 +19,21 @@ use Contao\ManagerApi\Security\JwtManager;
 use Contao\ManagerApi\Security\LoginAuthenticator;
 use Contao\ManagerApi\Security\TokenAuthenticator;
 use Crell\ApiProblem\ApiProblem;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/session', methods: ['GET', 'POST', 'DELETE'])]
+#[Route(path: '/session', methods: ['GET', 'POST', 'DELETE'])]
 class SessionController
 {
-    public function __construct(private readonly UserConfig $config, private readonly \Symfony\Bundle\SecurityBundle\Security $security, private readonly JwtManager $jwtManager, private readonly ApiKernel $kernel)
-    {
+    public function __construct(
+        private readonly UserConfig $config,
+        private readonly Security $security,
+        private readonly JwtManager $jwtManager,
+        private readonly ApiKernel $kernel,
+    ) {
     }
 
     public function __invoke(Request $request): Response
@@ -90,7 +94,7 @@ class SessionController
     {
         if (!$this->security->isGranted('ROLE_USER')) {
             return new ApiProblemResponse(
-                (new ApiProblem('User is not logged in'))->setStatus(Response::HTTP_UNAUTHORIZED)
+                (new ApiProblem('User is not logged in'))->setStatus(Response::HTTP_UNAUTHORIZED),
             );
         }
 

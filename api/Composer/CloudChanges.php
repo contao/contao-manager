@@ -22,7 +22,7 @@ class CloudChanges
 
     private bool $dryRun = false;
 
-    public function requirePackage(string $packageName, string $version = null): void
+    public function requirePackage(string $packageName, string|null $version = null): void
     {
         unset($this->remove[$packageName]);
 

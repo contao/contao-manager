@@ -19,11 +19,11 @@ class InlineForker extends AbstractForker
         $arguments = $this->command;
         $binary = array_shift($arguments);
 
-        $commandline = sprintf(
+        $commandline = \sprintf(
             '%s %s %s',
             escapeshellcmd($binary),
             implode(' ', array_map([$this, 'escapeArgument'], $arguments)),
-            $this->escapeArgument($configFile)
+            $this->escapeArgument($configFile),
         );
 
         $process = $this->startCommand($commandline);

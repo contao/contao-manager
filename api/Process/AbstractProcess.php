@@ -34,7 +34,7 @@ abstract class AbstractProcess
         $dir = realpath(rtrim($workDir, '/'));
 
         if (false === $dir) {
-            throw new \InvalidArgumentException(sprintf('Working directory "%s" does not exist.', $workDir));
+            throw new \InvalidArgumentException(\sprintf('Working directory "%s" does not exist.', $workDir));
         }
 
         $this->setFile = $dir.'/'.$id.'.set.json';
@@ -48,13 +48,14 @@ abstract class AbstractProcess
      */
     protected static function readConfig(string $filename): array
     {
-        // Make sure new process files are found (see https://github.com/contao/contao-manager/issues/438)
+        // Make sure new process files are found (see
+        // https://github.com/contao/contao-manager/issues/438)
         clearstatcache();
 
         $content = @file_get_contents($filename);
 
         if (false === $content) {
-            throw new \InvalidArgumentException(sprintf('Config file "%s" is not readable or does not exist.', $filename));
+            throw new \InvalidArgumentException(\sprintf('Config file "%s" is not readable or does not exist.', $filename));
         }
 
         $config = json_decode($content, true);
@@ -74,7 +75,7 @@ abstract class AbstractProcess
         try {
             (new Filesystem())->dumpFile($filename, json_encode($config));
         } catch (IOException $ioException) {
-            throw new \RuntimeException(sprintf('Unable to write config file to %s. '.$ioException->getMessage(), $filename), 0, $ioException);
+            throw new \RuntimeException(\sprintf('Unable to write config file to %s. '.$ioException->getMessage(), $filename), 0, $ioException);
         }
     }
 }

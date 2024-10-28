@@ -24,16 +24,13 @@ class ContaoConsole
      */
     private $version;
 
-    private ?array $commands = null;
+    private array|null $commands = null;
 
     /**
      * @var @array|null
      */
     private $config;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly ConsoleProcessFactory $processFactory)
     {
     }
@@ -107,7 +104,7 @@ class ContaoConsole
         return $this->commands = $this->normalizeCommands($data['commands'] ?? []);
     }
 
-    public function getConfig(): ?array
+    public function getConfig(): array|null
     {
         if (null !== $this->config) {
             return $this->config;
@@ -133,7 +130,7 @@ class ContaoConsole
         return $this->config = $data['contao'] ?? [];
     }
 
-    public function checkDatabaseMigrations(): ?array
+    public function checkDatabaseMigrations(): array|null
     {
         $commands = $this->getCommandList();
 
@@ -219,7 +216,7 @@ class ContaoConsole
         ];
     }
 
-    public function getUsers(bool $throw = false): ?array
+    public function getUsers(bool $throw = false): array|null
     {
         $commands = $this->getCommandList();
 
@@ -277,7 +274,7 @@ class ContaoConsole
         if (
             !isset($commands['contao:user:create']['options'])
             || ($admin && !\in_array('admin', $commands['contao:user:create']['options'], true))
-            || array_diff(array_keys($user), $commands['contao:user:create']['options']) !== []
+            || [] !== array_diff(array_keys($user), $commands['contao:user:create']['options'])
         ) {
             throw new \RuntimeException('Unsupported argument to the contao:user:create command.');
         }

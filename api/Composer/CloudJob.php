@@ -63,7 +63,7 @@ class CloudJob implements \JsonSerializable
         return (int) round(
             $currentPos
             * $this->result['stats']['averageProcessingTimeInMs'] / 1000
-            / max($this->result['stats']['numberOfWorkers'], 1)
+            / max($this->result['stats']['numberOfWorkers'], 1),
         );
     }
 

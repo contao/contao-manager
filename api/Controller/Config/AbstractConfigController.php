@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractConfigController
 {
-    public function __construct(protected \Contao\ManagerApi\Config\AbstractConfig $config)
+    public function __construct(protected AbstractConfig $config)
     {
     }
 

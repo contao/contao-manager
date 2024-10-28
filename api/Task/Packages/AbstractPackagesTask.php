@@ -21,11 +21,11 @@ use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractPackagesTask extends AbstractTask
 {
-    /**
-     * Constructor.
-     */
-    public function __construct(protected \Contao\ManagerApi\Composer\Environment $environment, protected \Symfony\Component\Filesystem\Filesystem $filesystem, Translator $translator)
-    {
+    public function __construct(
+        protected Environment $environment,
+        protected Filesystem $filesystem,
+        Translator $translator,
+    ) {
         parent::__construct($translator);
     }
 
@@ -59,7 +59,8 @@ abstract class AbstractPackagesTask extends AbstractTask
     }
 
     /**
-     * Creates a backup of the composer.json and composer.lock file and stores the currently installed artifacts.
+     * Creates a backup of the composer.json and composer.lock file and stores the
+     * currently installed artifacts.
      */
     protected function createBackup(TaskConfig $config): void
     {
@@ -84,10 +85,10 @@ abstract class AbstractPackagesTask extends AbstractTask
                 $this->filesystem->copy($source, $target, true);
 
                 if (null !== $this->logger) {
-                    $this->logger->info(sprintf('Copied "%s" to "%s"', $source, $target));
+                    $this->logger->info(\sprintf('Copied "%s" to "%s"', $source, $target));
                 }
             } elseif (null !== $this->logger) {
-                $this->logger->info(sprintf('File "%s" does not exist', $source));
+                $this->logger->info(\sprintf('File "%s" does not exist', $source));
             }
         }
 
@@ -111,10 +112,10 @@ abstract class AbstractPackagesTask extends AbstractTask
                     $this->filesystem->remove($source);
 
                     if (null !== $this->logger) {
-                        $this->logger->info(sprintf('Copied "%s" to "%s"', $source, $target));
+                        $this->logger->info(\sprintf('Copied "%s" to "%s"', $source, $target));
                     }
                 } elseif (null !== $this->logger) {
-                    $this->logger->info(sprintf('File "%s" does not exist', $source));
+                    $this->logger->info(\sprintf('File "%s" does not exist', $source));
                 }
             }
 
@@ -134,8 +135,8 @@ abstract class AbstractPackagesTask extends AbstractTask
     private function getBackupPaths(): array
     {
         return [
-            $this->environment->getJsonFile() => sprintf('%s/%s~', $this->environment->getBackupDir(), basename($this->environment->getJsonFile())),
-            $this->environment->getLockFile() => sprintf('%s/%s~', $this->environment->getBackupDir(), basename($this->environment->getLockFile())),
+            $this->environment->getJsonFile() => \sprintf('%s/%s~', $this->environment->getBackupDir(), basename($this->environment->getJsonFile())),
+            $this->environment->getLockFile() => \sprintf('%s/%s~', $this->environment->getBackupDir(), basename($this->environment->getLockFile())),
         ];
     }
 }

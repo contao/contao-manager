@@ -17,7 +17,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ManagerConfig extends AbstractConfig
 {
-    public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
+    public function __construct(ApiKernel $kernel, Filesystem|null $filesystem = null)
     {
         parent::__construct('manager.json', $kernel, $filesystem);
     }

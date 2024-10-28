@@ -17,8 +17,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface, \Stringable
 {
-    public function __construct(private readonly string $username, private ?string $password, private readonly array $roles = ['ROLE_ADMIN', 'ROLE_USER'])
-    {
+    public function __construct(
+        private readonly string $username,
+        private string|null $password,
+        private readonly array $roles = ['ROLE_ADMIN', 'ROLE_USER'],
+    ) {
     }
 
     public function __toString(): string
@@ -31,12 +34,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         return $this->roles;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string|null
     {
         return $this->password;
     }
 
-    public function getSalt(): ?string
+    public function getSalt(): string|null
     {
         return null;
     }

@@ -18,9 +18,9 @@ use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/server/php-cli', methods: ['GET'])]
+#[Route(path: '/server/php-cli', methods: ['GET'])]
 class PhpCliController
 {
     public function __invoke(ServerInfo $serverInfo, ConsoleProcessFactory $processFactory): Response
@@ -28,7 +28,7 @@ class PhpCliController
         if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
-                    ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE)
+                    ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE),
             );
         }
 
@@ -41,7 +41,7 @@ class PhpCliController
             [
                 'integrity-check',
                 '--format=json',
-            ]
+            ],
         );
 
         $process->run();

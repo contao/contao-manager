@@ -14,8 +14,12 @@ namespace Contao\ManagerApi\Composer;
 
 class CloudException extends \RuntimeException
 {
-    public function __construct(string $message, int $code, private readonly string $responseBody, private readonly ?string $requestBody = null)
-    {
+    public function __construct(
+        string $message,
+        int $code,
+        private readonly string $responseBody,
+        private readonly string|null $requestBody = null,
+    ) {
         parent::__construct($message, $code);
     }
 

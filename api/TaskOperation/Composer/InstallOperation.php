@@ -20,8 +20,14 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class InstallOperation extends AbstractProcessOperation
 {
-    public function __construct(ConsoleProcessFactory $processFactory, private readonly TaskConfig $taskConfig, Environment $environment, private readonly Translator $translator, private readonly bool $dryRun = false, bool $retry = true)
-    {
+    public function __construct(
+        ConsoleProcessFactory $processFactory,
+        private readonly TaskConfig $taskConfig,
+        Environment $environment,
+        private readonly Translator $translator,
+        private readonly bool $dryRun = false,
+        bool $retry = true,
+    ) {
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-install');
             $retries = $this->taskConfig->getState('install-retry', 0);
@@ -58,7 +64,7 @@ class InstallOperation extends AbstractProcessOperation
 
             $process = $processFactory->createManagerConsoleBackgroundProcess(
                 $arguments,
-                'composer-install'
+                'composer-install',
             );
 
             // An install task should never need 5min to install
@@ -79,7 +85,7 @@ class InstallOperation extends AbstractProcessOperation
         return $summary;
     }
 
-    public function getDetails(): ?string
+    public function getDetails(): string|null
     {
         if (!$this->isStarted()) {
             return null;
@@ -88,7 +94,7 @@ class InstallOperation extends AbstractProcessOperation
         if ($this->isRunning() && ($attempt = $this->taskConfig->getState('install-retry', 0)) > 0) {
             return $this->translator->trans(
                 'taskoperation.composer-install.retry',
-                ['current' => $attempt + 1, 'max' => 5]
+                ['current' => $attempt + 1, 'max' => 5],
             );
         }
 
@@ -109,7 +115,7 @@ class InstallOperation extends AbstractProcessOperation
         return '';
     }
 
-    private function getPackageOperations(string $output): ?array
+    private function getPackageOperations(string $output): array|null
     {
         // Package operations: 6 installs, 85 updates, 0 removals
 

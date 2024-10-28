@@ -19,8 +19,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class RemoveCacheOperation extends AbstractInlineOperation
 {
-    public function __construct(private readonly string $environment, private readonly ApiKernel $kernel, TaskConfig $taskConfig, private readonly Filesystem $filesystem, private readonly string $name = 'remove-cache')
-    {
+    public function __construct(
+        private readonly string $environment,
+        private readonly ApiKernel $kernel,
+        TaskConfig $taskConfig,
+        private readonly Filesystem $filesystem,
+        private readonly string $name = 'remove-cache',
+    ) {
         parent::__construct($taskConfig);
     }
 

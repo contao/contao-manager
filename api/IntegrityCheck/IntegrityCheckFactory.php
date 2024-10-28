@@ -42,12 +42,12 @@ class IntegrityCheckFactory implements ServiceSubscriberInterface
     {
     }
 
-    public function runWebChecks(): ?ApiProblem
+    public function runWebChecks(): ApiProblem|null
     {
         return $this->runChecks(self::$webChecks);
     }
 
-    public function runCliCheck(): ?ApiProblem
+    public function runCliCheck(): ApiProblem|null
     {
         return $this->runChecks(self::$cliChecks);
     }
@@ -57,7 +57,7 @@ class IntegrityCheckFactory implements ServiceSubscriberInterface
         return array_unique(array_merge(self::$cliChecks, self::$webChecks));
     }
 
-    private function runChecks(array $classes): ?ApiProblem
+    private function runChecks(array $classes): ApiProblem|null
     {
         foreach ($classes as $class) {
             /** @var IntegrityCheckInterface $check */

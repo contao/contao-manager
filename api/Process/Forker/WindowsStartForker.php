@@ -19,10 +19,10 @@ class WindowsStartForker extends AbstractForker
 {
     public function run(string $configFile): void
     {
-        $commandline = sprintf(
+        $commandline = \sprintf(
             'start /b %s %s 2>&1 >nul <nul',
             implode(' ', array_map([$this, 'escapeArgument'], $this->command)),
-            $this->escapeArgument($configFile)
+            $this->escapeArgument($configFile),
         );
 
         $this->startCommand($commandline);

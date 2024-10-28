@@ -20,9 +20,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/task', methods: ['GET', 'PUT', 'PATCH', 'DELETE'])]
+#[Route(path: '/task', methods: ['GET', 'PUT', 'PATCH', 'DELETE'])]
 class TaskController
 {
     public function __construct(private readonly TaskManager $taskManager)
@@ -87,7 +87,7 @@ class TaskController
         }
     }
 
-    private function getResponse(TaskStatus $status = null): Response
+    private function getResponse(TaskStatus|null $status = null): Response
     {
         if (!$status instanceof TaskStatus) {
             return new Response('', Response::HTTP_NO_CONTENT);

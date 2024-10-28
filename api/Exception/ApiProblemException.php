@@ -20,14 +20,18 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class ApiProblemException extends HttpException
 {
-    public function __construct(private readonly ApiProblem $problem, \Throwable $previous = null, array $headers = [], int $code = 0)
-    {
+    public function __construct(
+        private readonly ApiProblem $problem,
+        \Throwable|null $previous = null,
+        array $headers = [],
+        int $code = 0,
+    ) {
         parent::__construct(
             $this->problem->getStatus(),
             $this->problem->getTitle(),
             $previous,
             $headers,
-            $code
+            $code,
         );
     }
 

@@ -24,13 +24,16 @@ use Seld\JsonLint\ParsingException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/server/composer', methods: ['GET'])]
+#[Route(path: '/server/composer', methods: ['GET'])]
 class ComposerController
 {
-    public function __construct(private readonly Environment $environment, private readonly Translator $translator, private readonly Filesystem $filesystem)
-    {
+    public function __construct(
+        private readonly Environment $environment,
+        private readonly Translator $translator,
+        private readonly Filesystem $filesystem,
+    ) {
     }
 
     public function __invoke(ServerInfo $serverInfo): Response
@@ -38,7 +41,7 @@ class ComposerController
         if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
-                    ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE)
+                    ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE),
             );
         }
 
@@ -54,8 +57,8 @@ class ComposerController
             $result['vendor']['found'] = is_dir($this->environment->getVendorDir());
 
             if ($this->validateSchema($result)) {
-                // If schema is valid but does not contain contao/manager-bundle,
-                // mark as "not found" so the install screen will conflict with the file.
+                // If schema is valid but does not contain contao/manager-bundle, mark as "not
+                // found" so the install screen will conflict with the file.
                 if (!$this->environment->hasPackage('contao/manager-bundle')) {
                     $result['json']['found'] = false;
                     $result['json']['valid'] = false;

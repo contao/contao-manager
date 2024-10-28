@@ -19,11 +19,11 @@ use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 
 class SelfUpdateOperation extends AbstractInlineOperation
 {
-    /**
-     * Constructor.
-     */
-    public function __construct(private readonly SelfUpdate $updater, TaskConfig $taskConfig, private readonly Translator $translator)
-    {
+    public function __construct(
+        private readonly SelfUpdate $updater,
+        TaskConfig $taskConfig,
+        private readonly Translator $translator,
+    ) {
         parent::__construct($taskConfig);
     }
 
@@ -32,18 +32,18 @@ class SelfUpdateOperation extends AbstractInlineOperation
         return basename(\Phar::running()).' self-update';
     }
 
-    public function getDetails(): ?string
+    public function getDetails(): string|null
     {
         if ($this->isSuccessful()) {
             return $this->translator->trans(
                 'taskoperation.self-update.success',
-                ['new' => $this->updater->getOldVersion()]
+                ['new' => $this->updater->getOldVersion()],
             );
         }
 
         return $this->translator->trans(
             'taskoperation.self-update.detail',
-            ['old' => $this->updater->getOldVersion(), 'new' => $this->updater->getNewVersion()]
+            ['old' => $this->updater->getOldVersion(), 'new' => $this->updater->getNewVersion()],
         );
     }
 

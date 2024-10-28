@@ -59,12 +59,12 @@ class TokenAuthenticator extends AbstractAuthenticator
         return new SelfValidatingPassport($userBadge);
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response|null
     {
         return null;
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response|null
     {
         $token->setAttribute('authenticator', static::class);
         $token->setAttribute('token_id', $this->tokenId);
@@ -75,7 +75,7 @@ class TokenAuthenticator extends AbstractAuthenticator
     /**
      * Gets the authentication header from request or HTTP headers.
      */
-    private function getAuthenticationHeader(Request $request): ?string
+    private function getAuthenticationHeader(Request $request): string|null
     {
         if ($request->server->has('HTTP_AUTHORIZATION')) {
             return $request->server->get('HTTP_AUTHORIZATION');

@@ -17,7 +17,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class AuthConfig extends AbstractConfig
 {
-    public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
+    public function __construct(ApiKernel $kernel, Filesystem|null $filesystem = null)
     {
         parent::__construct('auth.json', $kernel, $filesystem);
     }
@@ -25,7 +25,7 @@ class AuthConfig extends AbstractConfig
     /**
      * Returns the GitHub OAuth token from the config file.
      */
-    public function getGithubToken(): ?string
+    public function getGithubToken(): string|null
     {
         $this->initialize();
 

@@ -32,20 +32,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class UploadPackagesController
 {
     public const CHUNK_SIZE = 1048576;
 
-    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
+    private readonly Filesystem $filesystem;
 
-    public function __construct(private readonly UploadsConfig $config, private readonly Environment $environment, private readonly Translator $translator, Filesystem $filesystem = null)
-    {
+    public function __construct(
+        private readonly UploadsConfig $config,
+        private readonly Environment $environment,
+        private readonly Translator $translator,
+        Filesystem|null $filesystem = null,
+    ) {
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/packages/uploads', methods: ['GET'])]
+    #[Route(path: '/packages/uploads', methods: ['GET'])]
     public function __invoke(): JsonResponse
     {
         $this->validateUploadSupport();
@@ -71,7 +75,7 @@ class UploadPackagesController
         return new JsonResponse(array_reverse($uploads));
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/packages/uploads', methods: ['POST'], defaults: ['form-data' => true])]
+    #[Route(path: '/packages/uploads', methods: ['POST'], defaults: ['form-data' => true])]
     public function upload(Request $request): JsonResponse
     {
         $this->validateUploadSupport();
@@ -83,7 +87,7 @@ class UploadPackagesController
 
             $id = $this->createUpload(
                 $file->getClientOriginalName(),
-                $file->getSize()
+                $file->getSize(),
             );
 
             $file->move($this->environment->getUploadDir(), $id);
@@ -95,22 +99,25 @@ class UploadPackagesController
             case 'start':
                 $id = $this->createUpload(
                     $request->request->get('name'),
-                    $request->request->getInt('size')
+                    $request->request->getInt('size'),
                 );
 
-                return new JsonResponse([
-                    'status' => 'success',
-                    'data' => [
-                        'session_id' => $id,
-                        'end_offset' => self::CHUNK_SIZE,
+                return new JsonResponse(
+                    [
+                        'status' => 'success',
+                        'data' => [
+                            'session_id' => $id,
+                            'end_offset' => self::CHUNK_SIZE,
+                        ],
                     ],
-                ], Response::HTTP_CREATED);
+                    Response::HTTP_CREATED,
+                );
 
             case 'upload':
                 $this->addChunk(
                     $request->request->get('session_id'),
                     $request->request->getInt('start_offset'),
-                    $request->files->get('chunk')
+                    $request->files->get('chunk'),
                 );
 
                 return new JsonResponse(['status' => 'success']);
@@ -121,16 +128,16 @@ class UploadPackagesController
                 return $this->finishUpload($id, $request->getPreferredLanguage());
         }
 
-        throw new \RuntimeException(sprintf('Invalid chunk phase "%s"', $request->request->get('phase')));
+        throw new \RuntimeException(\sprintf('Invalid chunk phase "%s"', $request->request->get('phase')));
     }
 
-    #[\Symfony\Component\Routing\Attribute\Route(path: '/packages/uploads/{id}', methods: ['DELETE'])]
+    #[Route(path: '/packages/uploads/{id}', methods: ['DELETE'])]
     public function delete(string $id): JsonResponse
     {
         $this->validateUploadSupport();
 
         if (!$this->config->has($id)) {
-            throw new NotFoundHttpException(sprintf('Unknown file ID "%s"', $id));
+            throw new NotFoundHttpException(\sprintf('Unknown file ID "%s"', $id));
         }
 
         try {
@@ -166,7 +173,7 @@ class UploadPackagesController
     private function addChunk(string $id, int $offset, UploadedFile $file): void
     {
         if (!$this->config->has($id)) {
-            throw new NotFoundHttpException(sprintf('Unknown file ID "%s"', $id));
+            throw new NotFoundHttpException(\sprintf('Unknown file ID "%s"', $id));
         }
 
         $fp = fopen($this->uploadPath($id), 'cb+');
@@ -177,13 +184,13 @@ class UploadPackagesController
         fclose($fp);
     }
 
-    private function finishUpload(string $id, string $language = null): JsonResponse
+    private function finishUpload(string $id, string|null $language = null): JsonResponse
     {
         $uploadFile = $this->uploadPath($id);
         $config = $this->config->get($id);
 
         if (null === $config || !$this->filesystem->exists($uploadFile)) {
-            throw new NotFoundHttpException(sprintf('Unknown file ID "%s"', $id));
+            throw new NotFoundHttpException(\sprintf('Unknown file ID "%s"', $id));
         }
 
         $size = filesize($uploadFile);
@@ -193,7 +200,7 @@ class UploadPackagesController
         }
 
         if ($size !== $config['size']) {
-            throw new \RuntimeException(sprintf('Incomplete upload ID "%s": %s instead of %s bytes', $id, $size, $config['size']));
+            throw new \RuntimeException(\sprintf('Incomplete upload ID "%s": %s instead of %s bytes', $id, $size, $config['size']));
         }
 
         try {
@@ -241,15 +248,15 @@ class UploadPackagesController
                 'dist' => [
                     'shasum' => $config['hash'],
                     'type' => 'zip',
-                    'url' => sprintf(
+                    'url' => \sprintf(
                         '/contao-manager/packages/%s__%s__%s__%s.zip',
                         $vendor,
                         $package,
                         (new VersionParser())->normalize($data['version']),
-                        substr(sha1_file($uploadFile), 0, 8)
+                        substr(sha1_file($uploadFile), 0, 8),
                     ),
                 ],
-            ]
+            ],
         );
 
         $this->config->set($id, $config);
@@ -258,7 +265,7 @@ class UploadPackagesController
             [
                 'status' => 'success',
                 'data' => $this->config->get($id),
-            ]
+            ],
         );
     }
 
@@ -267,7 +274,7 @@ class UploadPackagesController
         return $this->environment->getUploadDir().'/'.$id;
     }
 
-    private function installError(string $id, string $error, \Exception $e = null): JsonResponse
+    private function installError(string $id, string $error, \Exception|null $e = null): JsonResponse
     {
         $config = $this->config->get($id);
 
@@ -302,10 +309,13 @@ class UploadPackagesController
 
         foreach ($packages as $package) {
             if ('contao/manager-plugin' === $package->getName()) {
-                $require = new MultiConstraint([
-                    new Constraint('>=', '2.7'),
-                    new Constraint('=', 'dev-main'),
-                ], false);
+                $require = new MultiConstraint(
+                    [
+                        new Constraint('>=', '2.7'),
+                        new Constraint('=', 'dev-main'),
+                    ],
+                    false,
+                );
 
                 if ($require->matches(new Constraint('=', $package->getVersion()))) {
                     return;

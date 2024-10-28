@@ -19,9 +19,9 @@ use Symfony\Component\Process\Process;
 
 class ProcessRunner extends AbstractProcess
 {
-    private readonly \Contao\ManagerApi\Process\Utf8Process $process;
+    private readonly Utf8Process $process;
 
-    private ?\Symfony\Component\Process\Exception\ProcessTimedOutException $timeout = null;
+    private ProcessTimedOutException|null $timeout = null;
 
     private $stdin;
 
@@ -82,7 +82,7 @@ class ProcessRunner extends AbstractProcess
         $this->process->start(
             function ($type, $data): void {
                 $this->addOutput($data);
-            }
+            },
         );
 
         $this->saveConfig();
@@ -154,7 +154,7 @@ class ProcessRunner extends AbstractProcess
         $this->stop(15 === $signo ? 0 : 10);
     }
 
-    private function loadConfig(array $config = null): array
+    private function loadConfig(array|null $config = null): array
     {
         if (null === $config) {
             $config = static::readConfig($this->setFile);

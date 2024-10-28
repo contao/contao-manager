@@ -18,11 +18,10 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class DumpAutoloadOperation extends AbstractProcessOperation
 {
-    /**
-     * Constructor.
-     */
-    public function __construct(ConsoleProcessFactory $processFactory, private readonly Translator $translator)
-    {
+    public function __construct(
+        ConsoleProcessFactory $processFactory,
+        private readonly Translator $translator,
+    ) {
         try {
             parent::__construct($processFactory->restoreBackgroundProcess('dump-autoload'));
         } catch (\Exception) {
@@ -33,8 +32,8 @@ class DumpAutoloadOperation extends AbstractProcessOperation
                         'dump-autoload',
                         '--optimize',
                     ],
-                    'dump-autoload'
-                )
+                    'dump-autoload',
+                ),
             );
         }
     }
@@ -44,7 +43,7 @@ class DumpAutoloadOperation extends AbstractProcessOperation
         return 'composer dump-autoload';
     }
 
-    public function getDetails(): ?string
+    public function getDetails(): string|null
     {
         $total = $this->getTotalClasses($this->process->getOutput());
 
@@ -55,7 +54,7 @@ class DumpAutoloadOperation extends AbstractProcessOperation
         return '';
     }
 
-    private function getTotalClasses(string $output): ?string
+    private function getTotalClasses(string $output): string|null
     {
         $lines = explode("\n", $output);
 

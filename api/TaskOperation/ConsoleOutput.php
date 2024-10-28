@@ -24,10 +24,10 @@ class ConsoleOutput implements \Stringable
     /**
      * Adds output to the console log.
      */
-    public function add(string $output, string $title = null): self
+    public function add(string $output, string|null $title = null): self
     {
         if (null !== $title) {
-            $output = sprintf("%s\n\n%s", $title, $output);
+            $output = \sprintf("%s\n\n%s", $title, $output);
         }
 
         if (!$output) {

@@ -30,7 +30,7 @@ abstract class AbstractBrowserAuthenticator extends AbstractAuthenticator
     public function __construct(
         private readonly JwtManager $jwtManager,
         private readonly Filesystem $filesystem,
-        private readonly ApiKernel $kernel
+        private readonly ApiKernel $kernel,
     ) {
     }
 
@@ -63,7 +63,7 @@ abstract class AbstractBrowserAuthenticator extends AbstractAuthenticator
         // Increase lock counter
         $this->filesystem->dumpFile(
             $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.self::LOCK_FILE,
-            (string) (self::getLockCount($this->kernel->getConfigDir()) + 1)
+            (string) (self::getLockCount($this->kernel->getConfigDir()) + 1),
         );
 
         return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));

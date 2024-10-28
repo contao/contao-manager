@@ -42,9 +42,9 @@ class ApiKernel extends Kernel
 
     private string|null $projectDir = null;
 
-    private ?string $configDir = null;
+    private string|null $configDir = null;
 
-    private ?string $publicDir = null;
+    private string|null $publicDir = null;
 
     private Filesystem $filesystem;
 
@@ -151,14 +151,14 @@ class ApiKernel extends Kernel
             $this->filesystem->dumpFile(
                 $this->configDir.\DIRECTORY_SEPARATOR.'.htaccess',
                 <<<'CODE'
-<IfModule !mod_authz_core.c>
-    Order deny,allow
-    Deny from all
-</IfModule>
-<IfModule mod_authz_core.c>
-    Require all denied
-</IfModule>
-CODE
+                    <IfModule !mod_authz_core.c>
+                        Order deny,allow
+                        Deny from all
+                    </IfModule>
+                    <IfModule mod_authz_core.c>
+                        Require all denied
+                    </IfModule>
+                    CODE,
             );
         }
 
@@ -216,7 +216,8 @@ CODE
     }
 
     /**
-     * Finds the Contao installation directory depending on the Phar file or development mode.
+     * Finds the Contao installation directory depending on the Phar file or
+     * development mode.
      */
     private function findProjectDir(): void
     {
@@ -225,6 +226,7 @@ CODE
             // We don't know the public dir when running on command line, but it shouldn't matter
             $this->projectDir = \dirname($composer);
             $this->publicDir = $this->projectDir;
+
             return;
         }
 
@@ -244,6 +246,7 @@ CODE
             // We don't know the public dir when running on command line, but it shouldn't matter
             $this->projectDir = $_SERVER['PWD'];
             $this->publicDir = $_SERVER['PWD'];
+
             return;
         }
 
@@ -257,6 +260,7 @@ CODE
         if ('web' !== basename($current) && 'public' !== basename($current)) {
             $this->projectDir = $current;
             $this->publicDir = $current;
+
             return;
         }
 
@@ -275,6 +279,7 @@ CODE
             if ($this->filesystem->exists($current.$file)) {
                 $this->projectDir = $current;
                 $this->publicDir = $current;
+
                 return;
             }
         }
@@ -296,7 +301,7 @@ CODE
                     $translator = $this->getTranslator();
                     $problem = (new ApiProblem(
                         $translator->trans('error.writable.root', ['path' => \dirname($current)]),
-                        'https://php.net/is_writable'
+                        'https://php.net/is_writable',
                     ))->setDetail($translator->trans('error.writable.detail'));
 
                     throw new ApiProblemException($problem);

@@ -17,9 +17,9 @@ use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/server/php-web', methods: ['GET'])]
+#[Route(path: '/server/php-web', methods: ['GET'])]
 class PhpWebController
 {
     public function __construct(private readonly IntegrityCheckFactory $integrity)
@@ -37,14 +37,14 @@ class PhpWebController
                 'version_id' => \PHP_VERSION_ID,
                 'platform' => $serverInfo->getPlatform(),
                 'problem' => $this->runIntegrityChecks(),
-            ]
+            ],
         );
     }
 
     /**
      * Checks system integrity and returns problem if found.
      */
-    private function runIntegrityChecks(): ?array
+    private function runIntegrityChecks(): array|null
     {
         $problem = $this->integrity->runWebChecks();
 

@@ -12,30 +12,28 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Controller;
 
-use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/files/{file}', methods: ['GET', 'PUT'])]
+#[Route(path: '/files/{file}', methods: ['GET', 'PUT'])]
 class FileController
 {
-    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
+    private readonly Filesystem $filesystem;
 
     private array $allowedFiles = [
         'composer.json',
         'composer.lock',
     ];
 
-    /**
-     * Constructor.
-     */
-    public function __construct(private readonly KernelInterface $kernel, Filesystem $filesystem = null)
-    {
+    public function __construct(
+        private readonly KernelInterface $kernel,
+        Filesystem|null $filesystem = null,
+    ) {
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 

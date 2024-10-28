@@ -22,9 +22,6 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ApiProblemResponse extends Response
 {
-    /**
-     * Constructor.
-     */
     public function __construct(ApiProblem $problem, array $headers = [])
     {
         if (!$problem->getStatus()) {
@@ -46,7 +43,7 @@ class ApiProblemResponse extends Response
         parent::__construct(
             $content,
             $problem->getStatus(),
-            array_merge($headers, ['Content-Type' => 'application/problem+json'])
+            array_merge($headers, ['Content-Type' => 'application/problem+json']),
         );
     }
 

@@ -16,23 +16,23 @@ use Composer\Package\Dumper\ArrayDumper;
 use Composer\Package\Link;
 use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledRepository;
+use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Repository\PlatformRepository;
-use Composer\Repository\RepositoryInterface;
 use Composer\Repository\RootPackageRepository;
 use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/packages/local', methods: ['GET'])]
-#[\Symfony\Component\Routing\Attribute\Route(path: '/packages/local/{name}', methods: ['GET'], requirements: ['name' => '.+'])]
+#[Route(path: '/packages/local', methods: ['GET'])]
+#[Route(path: '/packages/local/{name}', methods: ['GET'], requirements: ['name' => '.+'])]
 class LocalPackagesController
 {
-    private readonly \Composer\Repository\InstalledRepositoryInterface $localRepository;
+    private readonly InstalledRepositoryInterface $localRepository;
 
-    private readonly \Composer\Repository\InstalledRepository $compositeRepository;
+    private readonly InstalledRepository $compositeRepository;
 
     public function __construct(private readonly Environment $environment)
     {
@@ -47,7 +47,7 @@ class LocalPackagesController
         ]);
     }
 
-    public function __invoke(Request $request, string $name = null): Response
+    public function __invoke(Request $request, string|null $name = null): Response
     {
         if (null !== $name) {
             return $this->getOnePackage($name, $request->getPreferredLanguage());
@@ -64,7 +64,7 @@ class LocalPackagesController
         return new JsonResponse($packages);
     }
 
-    private function getOnePackage(string $name, string $language = null): Response
+    private function getOnePackage(string $name, string|null $language = null): Response
     {
         [$package] = array_values($this->localRepository->findPackages($name));
 
@@ -84,7 +84,7 @@ class LocalPackagesController
     {
         $dependents = $this->parseDependents([$package->getName()]);
 
-        if ($dependents === [] && [] !== ($replaces = array_keys($package->getReplaces()))) {
+        if ([] === $dependents && [] !== ($replaces = array_keys($package->getReplaces()))) {
             $dependents = $this->parseDependents($replaces, true);
         }
 

@@ -22,7 +22,7 @@ class UserConfig extends AbstractConfig
     public function __construct(
         private readonly PasswordHasherFactoryInterface $passwordHasherFactory,
         ApiKernel $kernel,
-        Filesystem $filesystem = null
+        Filesystem|null $filesystem = null,
     ) {
         parent::__construct('users.json', $kernel, $filesystem);
     }
@@ -84,7 +84,7 @@ class UserConfig extends AbstractConfig
         foreach ($this->data['users'] as $user) {
             $users[] = new User(
                 $user['username'],
-                $user['password']
+                $user['password'],
             );
         }
 
@@ -104,7 +104,7 @@ class UserConfig extends AbstractConfig
     /**
      * Gets the user by username or null if it does not exist.
      */
-    public function getUser(string $username): ?User
+    public function getUser(string $username): User|null
     {
         $this->initialize();
 
@@ -114,7 +114,7 @@ class UserConfig extends AbstractConfig
 
         return new User(
             $this->data['users'][$username]['username'],
-            $this->data['users'][$username]['password']
+            $this->data['users'][$username]['password'],
         );
     }
 
@@ -144,7 +144,7 @@ class UserConfig extends AbstractConfig
         $username = $user->getUserIdentifier();
 
         if (isset($this->data['users'][$username])) {
-            throw new \RuntimeException(sprintf('Username "%s" already exists.', $username));
+            throw new \RuntimeException(\sprintf('Username "%s" already exists.', $username));
         }
 
         $this->data['users'][$username] = [
@@ -195,7 +195,7 @@ class UserConfig extends AbstractConfig
         foreach ($this->data['tokens'] as $id => $payload) {
             $data[] = array_merge(
                 ['id' => $id],
-                $payload
+                $payload,
             );
         }
 
@@ -205,7 +205,7 @@ class UserConfig extends AbstractConfig
     /**
      * Gets token payload by ID (hashed token value).
      */
-    public function getToken(string $id): ?array
+    public function getToken(string $id): array|null
     {
         $this->initialize();
 
@@ -215,14 +215,14 @@ class UserConfig extends AbstractConfig
 
         return array_merge(
             ['id' => $id],
-            $this->data['tokens'][$id]
+            $this->data['tokens'][$id],
         );
     }
 
     /**
      * Finds token payload by unhashed token value.
      */
-    public function findToken(string $token): ?array
+    public function findToken(string $token): array|null
     {
         $this->initialize();
 
@@ -237,7 +237,7 @@ class UserConfig extends AbstractConfig
         $this->initialize();
 
         if (!$this->hasUser($username)) {
-            throw new \RuntimeException(sprintf('Username "%s" does not exist.', $username));
+            throw new \RuntimeException(\sprintf('Username "%s" does not exist.', $username));
         }
 
         if (!$oneTime) {
@@ -252,7 +252,7 @@ class UserConfig extends AbstractConfig
         $id = hash('sha256', $token);
 
         if (isset($this->data['tokens'][$id])) {
-            throw new \RuntimeException(sprintf('Token with ID "%s" already exist.', $id));
+            throw new \RuntimeException(\sprintf('Token with ID "%s" already exist.', $id));
         }
 
         $data = [
@@ -275,7 +275,7 @@ class UserConfig extends AbstractConfig
                 'id' => $id,
                 'token' => $token,
             ],
-            $this->data['tokens'][$id]
+            $this->data['tokens'][$id],
         );
     }
 
@@ -295,7 +295,7 @@ class UserConfig extends AbstractConfig
     {
         parent::initialize();
 
-        if ($this->data !== [] && (!isset($this->data['version']) || $this->data['version'] < 2)) {
+        if ([] !== $this->data && (!isset($this->data['version']) || $this->data['version'] < 2)) {
             throw new \RuntimeException('Unsupported user.json version');
         }
 

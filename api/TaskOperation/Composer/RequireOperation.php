@@ -17,11 +17,10 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class RequireOperation extends AbstractProcessOperation
 {
-    /**
-     * Constructor.
-     */
-    public function __construct(ConsoleProcessFactory $processFactory, private readonly array $required)
-    {
+    public function __construct(
+        ConsoleProcessFactory $processFactory,
+        private readonly array $required,
+    ) {
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-require');
 
@@ -40,12 +39,12 @@ class RequireOperation extends AbstractProcessOperation
                     '--sort-packages',
                     '--no-ansi',
                     '--no-interaction',
-                ]
+                ],
             );
 
             $process = $processFactory->createManagerConsoleBackgroundProcess(
                 $arguments,
-                'composer-require'
+                'composer-require',
             );
 
             parent::__construct($process);

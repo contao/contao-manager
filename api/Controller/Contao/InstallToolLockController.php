@@ -22,15 +22,18 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/contao/install-tool/lock', methods: ['GET', 'PUT', 'DELETE'])]
+#[Route(path: '/contao/install-tool/lock', methods: ['GET', 'PUT', 'DELETE'])]
 class InstallToolLockController
 {
     private readonly string $lockFile;
 
-    public function __construct(private readonly ContaoConsole $console, ApiKernel $kernel, private readonly Filesystem $filesystem)
-    {
+    public function __construct(
+        private readonly ContaoConsole $console,
+        ApiKernel $kernel,
+        private readonly Filesystem $filesystem,
+    ) {
         $this->lockFile = $kernel->getProjectDir().'/var/install_lock';
     }
 
@@ -49,12 +52,12 @@ class InstallToolLockController
                     new Constraint('<', '4.4.9'),
                     new Constraint('>', '4.13.9999'), // 5.0 including dev versions
                 ],
-                false
+                false,
             ))->matches(new Constraint('=', $contaoVersion))
         ) {
             return new ApiProblemResponse(
                 (new ApiProblem('Contao does not support locking the install tool.'))
-                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED),
             );
         }
 
@@ -71,7 +74,7 @@ class InstallToolLockController
         return new JsonResponse(
             [
                 'locked' => $this->isLocked(),
-            ]
+            ],
         );
     }
 

@@ -17,11 +17,10 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class RemoveOperation extends AbstractProcessOperation
 {
-    /**
-     * Constructor.
-     */
-    public function __construct(ConsoleProcessFactory $processFactory, private readonly array $removed)
-    {
+    public function __construct(
+        ConsoleProcessFactory $processFactory,
+        private readonly array $removed,
+    ) {
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-remove');
 
@@ -38,12 +37,12 @@ class RemoveOperation extends AbstractProcessOperation
                     '--no-scripts',
                     '--no-ansi',
                     '--no-interaction',
-                ]
+                ],
             );
 
             $process = $processFactory->createManagerConsoleBackgroundProcess(
                 $arguments,
-                'composer-remove'
+                'composer-remove',
             );
 
             parent::__construct($process);

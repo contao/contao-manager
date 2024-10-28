@@ -29,8 +29,8 @@ class ClearCacheOperation extends AbstractProcessOperation
                         'clear-cache',
                         '--no-interaction',
                     ],
-                    'clear-cache'
-                )
+                    'clear-cache',
+                ),
             );
         }
     }

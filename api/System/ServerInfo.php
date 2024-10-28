@@ -67,8 +67,10 @@ class ServerInfo
         'C:\laragon\bin\php\php-{major}.{minor}.{release}-Win32-VC15-x64\php.EXE',
     ];
 
-    public function __construct(private readonly PhpExecutableFinder $phpExecutableFinder, private readonly ManagerConfig $managerConfig)
-    {
+    public function __construct(
+        private readonly PhpExecutableFinder $phpExecutableFinder,
+        private readonly ManagerConfig $managerConfig,
+    ) {
     }
 
     public function getPhpExecutableFinder(): PhpExecutableFinder
@@ -79,7 +81,7 @@ class ServerInfo
     /**
      * Gets PHP executable by detecting known server paths.
      */
-    public function getPhpExecutable(): ?string
+    public function getPhpExecutable(): string|null
     {
         $paths = [];
 
@@ -146,7 +148,7 @@ class ServerInfo
                 PHP_RELEASE_VERSION,
                 PHP_EXTRA_VERSION,
             ],
-            $path
+            $path,
         );
     }
 }

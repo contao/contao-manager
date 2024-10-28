@@ -26,8 +26,10 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 #[AsEventListener(priority: 10)]
 class ExceptionListener
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly bool $debug = false)
-    {
+    public function __construct(
+        private readonly LoggerInterface $logger,
+        private readonly bool $debug = false,
+    ) {
     }
 
     /**
@@ -59,12 +61,12 @@ class ExceptionListener
      */
     private function logException(\Throwable $exception): void
     {
-        $message = sprintf(
+        $message = \sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
             $exception::class,
             $exception->getMessage(),
             $exception->getFile(),
-            $exception->getLine()
+            $exception->getLine(),
         );
 
         if (!$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500) {

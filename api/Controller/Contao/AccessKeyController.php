@@ -19,9 +19,9 @@ use Seld\JsonLint\ParsingException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/contao/access-key', methods: ['GET', 'PUT', 'DELETE'])]
+#[Route(path: '/contao/access-key', methods: ['GET', 'PUT', 'DELETE'])]
 class AccessKeyController
 {
     public function __construct(private readonly ContaoApi $api)
@@ -51,7 +51,7 @@ class AccessKeyController
         if (!$this->isSupported('get')) {
             return new ApiProblemResponse(
                 (new ApiProblem('Contao does not support the access-key API.'))
-                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED),
             );
         }
 
@@ -76,7 +76,7 @@ class AccessKeyController
 
         $accessKey = password_hash(
             $user.':'.$password,
-            PASSWORD_DEFAULT
+            PASSWORD_DEFAULT,
         );
 
         $this->api->runCommand(array_merge($this->getAccessKeyArguments('set'), [$accessKey]));

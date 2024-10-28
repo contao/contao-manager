@@ -23,13 +23,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\RuntimeException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/server/config', methods: ['GET', 'PUT'])]
+#[Route(path: '/server/config', methods: ['GET', 'PUT'])]
 class ConfigController
 {
-    public function __construct(private readonly ManagerConfig $config, private readonly ServerInfo $serverInfo, private readonly Environment $environment, private readonly Translator $translator)
-    {
+    public function __construct(
+        private readonly ManagerConfig $config,
+        private readonly ServerInfo $serverInfo,
+        private readonly Environment $environment,
+        private readonly Translator $translator,
+    ) {
     }
 
     public function __invoke(Request $request): Response
@@ -62,11 +66,11 @@ class ConfigController
             [
                 'php_cli' => (string) $this->serverInfo->getPhpExecutable(),
                 'cloud' => $this->getCloudConfig(),
-            ]
+            ],
         );
     }
 
-    private function validatePhpCli(string $phpCli): ?string
+    private function validatePhpCli(string $phpCli): string|null
     {
         try {
             $info = $this->serverInfo->getPhpExecutableFinder()->getServerInfo($phpCli);
@@ -84,7 +88,7 @@ class ConfigController
         if (version_compare($vWeb, $vCli, '<>')) {
             return $this->translator->trans(
                 'config.php_cli.incompatible',
-                ['cli' => $vCli, 'web' => $vWeb]
+                ['cli' => $vCli, 'web' => $vWeb],
             );
         }
 

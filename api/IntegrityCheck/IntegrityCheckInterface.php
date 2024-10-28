@@ -19,5 +19,5 @@ interface IntegrityCheckInterface
     /**
      * Runs the integrity check.
      */
-    public function run(): ?ApiProblem;
+    public function run(): ApiProblem|null;
 }

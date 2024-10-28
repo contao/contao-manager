@@ -35,18 +35,21 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
 
     private string $output = '';
 
-    /**
-     * Constructor.
-     */
-    public function __construct(private readonly CloudResolver $cloud, private readonly CloudChanges $changes, private readonly TaskConfig $taskConfig, private readonly Environment $environment, private readonly Translator $translator, private readonly Filesystem $filesystem)
-    {
+    public function __construct(
+        private readonly CloudResolver $cloud,
+        private readonly CloudChanges $changes,
+        private readonly TaskConfig $taskConfig,
+        private readonly Environment $environment,
+        private readonly Translator $translator,
+        private readonly Filesystem $filesystem,
+    ) {
     }
 
     public function getSummary(): string
     {
         $summary = 'composer update ';
 
-        if ($this->changes->getUpdates() !== []) {
+        if ([] !== $this->changes->getUpdates()) {
             $summary .= implode(' ', $this->changes->getUpdates());
         }
 
@@ -59,7 +62,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
         return $summary;
     }
 
-    public function getDetails(): ?string
+    public function getDetails(): string|null
     {
         $job = $this->getCurrentJob();
 
@@ -69,14 +72,11 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
 
         switch ($job->getStatus()) {
             case CloudJob::STATUS_QUEUED:
-                return $this->translator->trans(
-                    'taskoperation.cloud.queued',
-                    [
-                        'seconds' => $job->getWaitingTime(),
-                        'jobs' => $job->getJobsInQueue() + $job->getWorkers(),
-                        'workers' => $job->getWorkers(),
-                    ]
-                );
+                return $this->translator->trans('taskoperation.cloud.queued', [
+                    'seconds' => $job->getWaitingTime(),
+                    'jobs' => $job->getJobsInQueue() + $job->getWorkers(),
+                    'workers' => $job->getWorkers(),
+                ]);
 
             case CloudJob::STATUS_PROCESSING:
                 $seconds = $this->taskConfig->getState('cloud-job-processing');
@@ -89,7 +89,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
 
                 return $this->translator->trans(
                     'taskoperation.cloud.processing',
-                    ['seconds' => $seconds]
+                    ['seconds' => $seconds],
                 );
 
             case CloudJob::STATUS_ERROR:
@@ -100,16 +100,13 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
                 $profile = $this->getFinalProfile($this->getOutput());
                 preg_match('{Memory usage: ([^ ]+) \(peak: ([^)]+)\), time: ([0-9.]+s)\.}', $profile, $match);
 
-                return $this->translator->trans(
-                    'taskoperation.cloud.finished',
-                    [
-                        'job' => $job->getId(),
-                        'memory' => $match[1] ?? '',
-                        'peak' => $match[2] ?? '',
-                        'time' => $match[3] ?? '',
-                        'seconds' => $seconds,
-                    ]
-                );
+                return $this->translator->trans('taskoperation.cloud.finished', [
+                    'job' => $job->getId(),
+                    'memory' => $match[1] ?? '',
+                    'peak' => $match[2] ?? '',
+                    'time' => $match[3] ?? '',
+                    'seconds' => $seconds,
+                ]);
         }
 
         return '';
@@ -122,11 +119,11 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
 
         if ($this->exception instanceof CloudException) {
             return $console->add(
-                sprintf(
+                \sprintf(
                     "> The Composer Resolver Cloud failed with status code %s\n\n  %s",
                     $this->exception->getStatusCode(),
-                    $this->exception->getErrorMessage()
-                )
+                    $this->exception->getErrorMessage(),
+                ),
             );
         }
 
@@ -163,8 +160,8 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
 
             case CloudJob::STATUS_ERROR:
                 $console->add(
-                    sprintf("%s\n\n# Cloud Job ID %s failed", $this->getOutput(), $job->getId()),
-                    $title
+                    \sprintf("%s\n\n# Cloud Job ID %s failed", $this->getOutput(), $job->getId()),
+                    $title,
                 );
                 break;
 
@@ -180,7 +177,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
                 break;
 
             default:
-                throw new \RuntimeException(sprintf('Unknown cloud status "%s"', $job->getStatus()));
+                throw new \RuntimeException(\sprintf('Unknown cloud status "%s"', $job->getStatus()));
         }
 
         return $console;
@@ -222,7 +219,8 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
     {
         try {
             if (null === $this->taskConfig->getState('cloud-job')) {
-                // Retry to create Cloud job, the first request always fails on XAMPP for unknown reason
+                // Retry to create Cloud job, the first request always fails on XAMPP for
+                // unknown reason
                 $attempts = $this->taskConfig->getState('cloud-job-attempts', 0);
 
                 if ($attempts >= 5) {
@@ -249,7 +247,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
             if ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-successful', false)) {
                 $this->filesystem->dumpFile(
                     $this->environment->getLockFile(),
-                    $this->cloud->getComposerLock($job)
+                    $this->cloud->getComposerLock($job),
                 );
 
                 $this->taskConfig->setState('cloud-job-successful', true);
@@ -279,7 +277,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
         }
     }
 
-    public function getSponsor(): ?array
+    public function getSponsor(): array|null
     {
         if (!$this->job instanceof CloudJob) {
             return null;
@@ -288,7 +286,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
         return $this->job->getSponsor();
     }
 
-    private function getCurrentJob(): ?CloudJob
+    private function getCurrentJob(): CloudJob|null
     {
         if ($this->job instanceof CloudJob) {
             return $this->job;

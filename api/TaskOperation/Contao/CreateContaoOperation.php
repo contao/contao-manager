@@ -32,11 +32,12 @@ class CreateContaoOperation extends AbstractInlineOperation
      */
     private $publicDir;
 
-    /**
-     * Constructor.
-     */
-    public function __construct(TaskConfig $taskConfig, private readonly Environment $environment, ApiKernel $kernel, private readonly Filesystem $filesystem)
-    {
+    public function __construct(
+        TaskConfig $taskConfig,
+        private readonly Environment $environment,
+        ApiKernel $kernel,
+        private readonly Filesystem $filesystem,
+    ) {
         parent::__construct($taskConfig);
         $this->version = $taskConfig->getOption('version');
 
@@ -83,8 +84,8 @@ class CreateContaoOperation extends AbstractInlineOperation
             $this->environment->getJsonFile(),
             $this->generateComposerJson(
                 $this->taskConfig->getOption('version'),
-                (bool) $this->taskConfig->getOption('core-only', false)
-            )
+                (bool) $this->taskConfig->getOption('core-only', false),
+            ),
         );
 
         return true;
@@ -104,24 +105,24 @@ class CreateContaoOperation extends AbstractInlineOperation
 
         if ($coreOnly) {
             $require = <<<JSON
-        "contao/conflicts": "*@dev",
-        "contao/manager-bundle": "{$version}"{$coreBundle}
-JSON;
+                        "contao/conflicts": "*@dev",
+                        "contao/manager-bundle": "{$version}"{$coreBundle}
+                JSON;
         } else {
             $require = <<<JSON
-        "contao/conflicts": "*@dev",
-        "contao/manager-bundle": "{$version}"{$coreBundle},
-        "contao/calendar-bundle": "{$version}",
-        "contao/comments-bundle": "{$version}",
-        "contao/faq-bundle": "{$version}",
-        "contao/listing-bundle": "{$version}",
-        "contao/news-bundle": "{$version}",
-        "contao/newsletter-bundle": "{$version}"
-JSON;
+                        "contao/conflicts": "*@dev",
+                        "contao/manager-bundle": "{$version}"{$coreBundle},
+                        "contao/calendar-bundle": "{$version}",
+                        "contao/comments-bundle": "{$version}",
+                        "contao/faq-bundle": "{$version}",
+                        "contao/listing-bundle": "{$version}",
+                        "contao/news-bundle": "{$version}",
+                        "contao/newsletter-bundle": "{$version}"
+                JSON;
         }
 
-        // https://github.com/contao/contao-manager/issues/627
-        // Still needed since we allow Contao 4.9 for PHP < 7.4
+        // https://github.com/contao/contao-manager/issues/627 Still needed since we
+        // allow Contao 4.9 for PHP < 7.4
         if (version_compare($version, '4.12', '>=')) {
             $publicDir = basename($this->publicDir);
             $script = '@php vendor/bin/contao-setup';
@@ -131,25 +132,25 @@ JSON;
         }
 
         return <<<JSON
-{
-    "type": "project",
-    "require": {
-{$require}
-    },
-    "extra": {
-        "public-dir": "{$publicDir}",
-        "contao-component-dir": "assets"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "{$script}"
-        ],
-        "post-update-cmd": [
-            "{$script}"
-        ]
-    }
-}
-JSON;
+            {
+                "type": "project",
+                "require": {
+            {$require}
+                },
+                "extra": {
+                    "public-dir": "{$publicDir}",
+                    "contao-component-dir": "assets"
+                },
+                "scripts": {
+                    "post-install-cmd": [
+                        "{$script}"
+                    ],
+                    "post-update-cmd": [
+                        "{$script}"
+                    ]
+                }
+            }
+            JSON;
     }
 
     private function isDevVersion(string $version): bool

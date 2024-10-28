@@ -27,8 +27,14 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class InstallTask extends AbstractPackagesTask
 {
-    public function __construct(private readonly ContaoConsole $contaoConsole, private readonly ConsoleProcessFactory $processFactory, private readonly CloudResolver $cloudResolver, Environment $environment, Filesystem $filesystem, Translator $translator)
-    {
+    public function __construct(
+        private readonly ContaoConsole $contaoConsole,
+        private readonly ConsoleProcessFactory $processFactory,
+        private readonly CloudResolver $cloudResolver,
+        Environment $environment,
+        Filesystem $filesystem,
+        Translator $translator,
+    ) {
         parent::__construct($environment, $filesystem, $translator);
     }
 
@@ -68,7 +74,7 @@ class InstallTask extends AbstractPackagesTask
                 $config,
                 $this->environment,
                 $this->translator,
-                $this->filesystem
+                $this->filesystem,
             );
         }
 

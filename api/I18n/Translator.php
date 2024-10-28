@@ -19,9 +19,6 @@ class Translator
 {
     private array $labels = [];
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly RequestStack $requestStack)
     {
     }
@@ -67,7 +64,7 @@ class Translator
      */
     private function replaceParameters(string $label, array $params): string
     {
-        if ($params === []) {
+        if ([] === $params) {
             return $label;
         }
 

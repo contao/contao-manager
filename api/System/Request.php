@@ -23,16 +23,18 @@ class Request
 {
     private const DEFAULT_TIMEOUT = 5;
 
-    public function __construct(private readonly ApiKernel $kernel, private readonly ?\Psr\Log\LoggerInterface $logger = null)
-    {
+    public function __construct(
+        private readonly ApiKernel $kernel,
+        private readonly LoggerInterface|null $logger = null,
+    ) {
     }
 
-    public function get(string $url, int &$statusCode = null, bool $catch = false, int $timeout = self::DEFAULT_TIMEOUT): ?string
+    public function get(string $url, ?int &$statusCode = null, bool $catch = false, int $timeout = self::DEFAULT_TIMEOUT): string|null
     {
         return $this->getContent($url, $statusCode, [], $catch, $timeout);
     }
 
-    public function getStream(string $url, int &$statusCode = null, bool $catch = false)
+    public function getStream(string $url, ?int &$statusCode = null, bool $catch = false)
     {
         $context = $this->createStreamContext($url, 0);
 
@@ -50,14 +52,14 @@ class Request
         return $stream;
     }
 
-    public function getJson(string $url, array $headers = [], int &$statusCode = null, bool $catch = false): ?string
+    public function getJson(string $url, array $headers = [], ?int &$statusCode = null, bool $catch = false): string|null
     {
         $headers[] = 'Accept: application/json';
 
         return $this->getContent($url, $statusCode, ['http' => ['header' => $headers]], $catch);
     }
 
-    public function postJson(string $url, string $content, array $headers = [], int &$statusCode = null, bool $catch = false): ?string
+    public function postJson(string $url, string $content, array $headers = [], ?int &$statusCode = null, bool $catch = false): string|null
     {
         $headers[] = 'Accept: application/json';
         $headers[] = 'Content-Type: application/json';
@@ -70,7 +72,7 @@ class Request
         return $this->getContent($url, $statusCode, $options, $catch);
     }
 
-    public function deleteJson(string $url, array $headers = [], int &$statusCode = null, bool $catch = false): ?string
+    public function deleteJson(string $url, array $headers = [], ?int &$statusCode = null, bool $catch = false): string|null
     {
         $headers[] = 'Accept: application/json';
         $options = ['http' => [
@@ -81,7 +83,7 @@ class Request
         return $this->getContent($url, $statusCode, $options, $catch);
     }
 
-    private function getContent(string $url, ?int &$statusCode, array $options, bool $catch, int $timeout = self::DEFAULT_TIMEOUT): ?string
+    private function getContent(string $url, ?int &$statusCode, array $options, bool $catch, int $timeout = self::DEFAULT_TIMEOUT): string|null
     {
         $context = $this->createStreamContext($url, $timeout, $options);
 
@@ -117,13 +119,13 @@ class Request
             $options['http']['header'] = [$options['http']['header']];
         }
 
-        $options['http']['header'][] = sprintf(
+        $options['http']['header'][] = \sprintf(
             'User-Agent: Contao Manager/%s (%s; %s; %s%s)',
-            $this->kernel->getVersion() === '@manager_version'.'@' ? 'source' : $this->kernel->getVersion(),
+            '@manager_version'.'@' === $this->kernel->getVersion() ? 'source' : $this->kernel->getVersion(),
             \function_exists('php_uname') ? php_uname('s') : 'Unknown',
             \function_exists('php_uname') ? php_uname('r') : 'Unknown',
             'PHP '.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION,
-            Platform::getEnv('CI') ? '; CI' : ''
+            Platform::getEnv('CI') ? '; CI' : '',
         );
 
         return StreamContextFactory::getContext($url, $options);
@@ -179,8 +181,8 @@ class Request
         ]);
 
         /**
-         * CN_match and SNI_server_name are only known once a URL is passed.
-         * They will be set in the getOptionsForUrl() method which receives a URL.
+         * CN_match and SNI_server_name are only known once a URL is passed. They will be
+         * set in the getOptionsForUrl() method which receives a URL.
          *
          * cafile or capath can be overridden by passing in those options to constructor.
          */
@@ -219,14 +221,15 @@ class Request
         return $defaults;
     }
 
-    private function getLastStatusCode(?array $http_response_header): int
+    private function getLastStatusCode(array|null $http_response_header): int
     {
         if (!\is_array($http_response_header)) {
             return 500;
         }
 
-        // Reverse the headers so we find the last HTTP status code if the request was redirected
-        // See http://php.net/manual/en/reserved.variables.httpresponseheader.php#122362
+        // Reverse the headers so we find the last HTTP status code if the request
+        // was redirected See
+        // http://php.net/manual/en/reserved.variables.httpresponseheader.php#122362
         $http_response_header = array_reverse($http_response_header);
 
         foreach ($http_response_header as $header) {

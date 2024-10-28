@@ -30,8 +30,15 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class SetupTask extends AbstractPackagesTask
 {
-    public function __construct(private readonly ConsoleProcessFactory $processFactory, private readonly CloudResolver $cloudResolver, private readonly ApiKernel $kernel, private readonly UploadsConfig $uploads, Environment $environment, Filesystem $filesystem, Translator $translator)
-    {
+    public function __construct(
+        private readonly ConsoleProcessFactory $processFactory,
+        private readonly CloudResolver $cloudResolver,
+        private readonly ApiKernel $kernel,
+        private readonly UploadsConfig $uploads,
+        Environment $environment,
+        Filesystem $filesystem,
+        Translator $translator,
+    ) {
         parent::__construct($environment, $filesystem, $translator);
     }
 
@@ -63,7 +70,7 @@ class SetupTask extends AbstractPackagesTask
                     $config,
                     $this->environment,
                     $this->translator,
-                    $this->filesystem
+                    $this->filesystem,
                 ),
                 new CreateProjectOperation($config, $this->processFactory, $this->kernel, $this->environment, $upload['package']['name'], null, true),
             ];
@@ -84,7 +91,7 @@ class SetupTask extends AbstractPackagesTask
                 $config,
                 $this->environment,
                 $this->translator,
-                $this->filesystem
+                $this->filesystem,
             );
         }
 
@@ -97,7 +104,7 @@ class SetupTask extends AbstractPackagesTask
                 $config,
                 $this->environment,
                 $this->translator,
-                $this->filesystem
+                $this->filesystem,
             );
         }
 

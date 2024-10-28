@@ -34,7 +34,7 @@ class LogPatternTest extends TestCase
         $this->assertSame($extra, $matches['extra'], 'Extra does not match');
     }
 
-    public function logMessages(): \Generator
+    public static function logMessages(): iterable
     {
         yield [
             '[2024-08-20T00:41:04.411801+02:00] request.INFO: Matched route "tl_page.32". {"route":"tl_page.32","route_parameters":{"_controller":"Contao\\FrontendIndex::renderPage","_scope":"frontend","_locale":"de","_format":"html","_canonical_route":"tl_page.32","pageModel":{"Contao\\PageModel":[]},"_route":"tl_page.32","_route_object":{"Contao\\CoreBundle\\Routing\\Page\\PageRoute":[]}}} []',

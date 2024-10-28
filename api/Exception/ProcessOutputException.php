@@ -16,9 +16,9 @@ use Symfony\Component\Process\Process;
 
 class ProcessOutputException extends \RuntimeException
 {
-    private readonly \Symfony\Component\Process\Process $process;
+    private readonly Process $process;
 
-    public function __construct(string $message, Process $process, \Throwable $previous = null)
+    public function __construct(string $message, Process $process, \Throwable|null $previous = null)
     {
         parent::__construct($message, $process->getExitCode(), $previous);
 

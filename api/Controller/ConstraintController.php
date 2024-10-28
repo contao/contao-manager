@@ -16,9 +16,9 @@ use Composer\Semver\VersionParser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/constraint', methods: ['POST'])]
+#[Route(path: '/constraint', methods: ['POST'])]
 class ConstraintController
 {
     public function __invoke(Request $request): Response

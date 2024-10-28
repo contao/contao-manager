@@ -19,8 +19,11 @@ abstract class AbstractForker implements ForkerInterface
 {
     private int $timeout = 500;
 
-    public function __construct(protected array $command, protected ?array $env = null, protected ?\Psr\Log\LoggerInterface $logger = null)
-    {
+    public function __construct(
+        protected array $command,
+        protected array|null $env = null,
+        protected LoggerInterface|null $logger = null,
+    ) {
     }
 
     public function setCommand(array $command): ForkerInterface
@@ -55,7 +58,7 @@ abstract class AbstractForker implements ForkerInterface
                 [
                     'commandline' => $commandline,
                     'forker_class' => static::class,
-                ]
+                ],
             );
         }
 
@@ -79,7 +82,7 @@ abstract class AbstractForker implements ForkerInterface
                     'signaled' => $process->hasBeenSignaled(),
                     'stopsignal' => $process->getStopSignal(),
                     'termsignal' => $process->getTermSignal(),
-                ]
+                ],
             );
         }
 
@@ -91,7 +94,7 @@ abstract class AbstractForker implements ForkerInterface
      *
      * @see Process::escapeArgument()
      */
-    protected function escapeArgument(?string $argument): string
+    protected function escapeArgument(string|null $argument): string
     {
         if ('' === $argument || null === $argument) {
             return '""';

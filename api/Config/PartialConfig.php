@@ -14,8 +14,10 @@ namespace Contao\ManagerApi\Config;
 
 class PartialConfig implements \IteratorAggregate, \Countable
 {
-    public function __construct(private readonly AbstractConfig $parent, private readonly string $key)
-    {
+    public function __construct(
+        private readonly AbstractConfig $parent,
+        private readonly string $key,
+    ) {
     }
 
     /**
@@ -48,7 +50,7 @@ class PartialConfig implements \IteratorAggregate, \Countable
     public function add(array $data = []): void
     {
         $this->replace(
-            array_replace($this->all(), $data)
+            array_replace($this->all(), $data),
         );
     }
 

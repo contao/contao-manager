@@ -37,12 +37,14 @@ class TaskManager implements LoggerAwareInterface
     private array $tasks = [];
 
     /**
-     * Constructor.
-     *
      * @param iterable<TaskInterface> $tasks
      */
-    public function __construct(iterable $tasks, ApiKernel $kernel, private ConsoleProcessFactory $processFactory, private ?\Symfony\Component\Filesystem\Filesystem $filesystem = null)
-    {
+    public function __construct(
+        iterable $tasks,
+        ApiKernel $kernel,
+        private ConsoleProcessFactory $processFactory,
+        private Filesystem|null $filesystem = null,
+    ) {
         $this->configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'task.json';
         $this->logFile = $kernel->getLogDir().'/task-output.log';
 
@@ -81,11 +83,11 @@ class TaskManager implements LoggerAwareInterface
         return $task->create($config);
     }
 
-    public function updateTask(): ?TaskStatus
+    public function updateTask(): TaskStatus|null
     {
         $config = $this->getTaskConfig();
 
-        if ($config === null) {
+        if (null === $config) {
             return null;
         }
 
@@ -104,11 +106,11 @@ class TaskManager implements LoggerAwareInterface
         return $status;
     }
 
-    public function abortTask(): ?TaskStatus
+    public function abortTask(): TaskStatus|null
     {
         $config = $this->getTaskConfig();
 
-        if ($config === null) {
+        if (null === $config) {
             return null;
         }
 
@@ -121,11 +123,11 @@ class TaskManager implements LoggerAwareInterface
         return $task->abort($config);
     }
 
-    public function deleteTask(): ?TaskStatus
+    public function deleteTask(): TaskStatus|null
     {
         $config = $this->getTaskConfig();
 
-        if ($config === null) {
+        if (null === $config) {
             return null;
         }
 
@@ -151,19 +153,19 @@ class TaskManager implements LoggerAwareInterface
         $name = $config->getName();
 
         if (!isset($this->tasks[$name])) {
-            throw new \InvalidArgumentException(sprintf('Unable to get task "%s".', $name));
+            throw new \InvalidArgumentException(\sprintf('Unable to get task "%s".', $name));
         }
 
         $task = $this->tasks[$name];
 
         if (!$task instanceof TaskInterface) {
-            throw new \RuntimeException(sprintf('"%s" is not an instance of "%s"', $task::class, TaskInterface::class));
+            throw new \RuntimeException(\sprintf('"%s" is not an instance of "%s"', $task::class, TaskInterface::class));
         }
 
         return $task;
     }
 
-    private function getTaskConfig(): ?TaskConfig
+    private function getTaskConfig(): TaskConfig|null
     {
         if ($this->filesystem->exists($this->configFile)) {
             try {

@@ -33,13 +33,13 @@ class ConsoleProcessFactory implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private \Symfony\Component\Filesystem\Filesystem $filesystem;
+    private Filesystem $filesystem;
 
-    /**
-     * Constructor.
-     */
-    public function __construct(private ApiKernel $kernel, private ServerInfo $serverInfo, Filesystem $filesystem = null)
-    {
+    public function __construct(
+        private ApiKernel $kernel,
+        private ServerInfo $serverInfo,
+        Filesystem|null $filesystem = null,
+    ) {
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -96,7 +96,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
     /**
      * Creates a background process for the Manager console.
      */
-    public function createManagerConsoleBackgroundProcess(array $arguments, string $id = null): ProcessController
+    public function createManagerConsoleBackgroundProcess(array $arguments, string|null $id = null): ProcessController
     {
         array_unshift($arguments, $this->getManagerConsolePath());
 
@@ -116,7 +116,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
     /**
      * Creates a background process for the Contao console.
      */
-    public function createContaoConsoleBackgroundProcess(array $arguments, string $id = null): ProcessController
+    public function createContaoConsoleBackgroundProcess(array $arguments, string|null $id = null): ProcessController
     {
         array_unshift($arguments, $this->getContaoConsolePath());
 
@@ -163,20 +163,20 @@ class ConsoleProcessFactory implements LoggerAwareInterface
         return (new Utf8Process(
             $this->addPhpRuntime($arguments),
             $this->kernel->getProjectDir(),
-            $this->serverInfo->getPhpEnv()
+            $this->serverInfo->getPhpEnv(),
         ))->setTimeout(0);
     }
 
     /**
      * Creates a background process controller.
      */
-    private function createBackgroundProcess(array $arguments, string $id = null): ProcessController
+    private function createBackgroundProcess(array $arguments, string|null $id = null): ProcessController
     {
         $process = ProcessController::create(
             $this->kernel->getConfigDir(),
             $this->addPhpRuntime($arguments),
             $this->kernel->getProjectDir(),
-            $id
+            $id,
         );
 
         $process->setTimeout(0);
@@ -196,7 +196,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
                 $this->getManagerConsolePath(),
                 '--no-interaction',
                 'run',
-            ]
+            ],
         );
 
         foreach ($this->serverInfo->getProcessForkers() as $class) {
@@ -204,7 +204,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
             $forker = new $class(
                 $backgroundCommand,
                 $this->serverInfo->getPhpEnv(),
-                $this->logger
+                $this->logger,
             );
 
             $forker->setTimeout(5000);

@@ -16,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class AllowUrlFopenCheck extends AbstractIntegrityCheck
 {
-    public function run(): ?ApiProblem
+    public function run(): ApiProblem|null
     {
         if (\ini_get('allow_url_fopen')) {
             return null;
@@ -24,7 +24,7 @@ class AllowUrlFopenCheck extends AbstractIntegrityCheck
 
         return new ApiProblem(
             $this->trans('allow_url_fopen.title'),
-            'https://php.net/allow_url_fopen'
+            'https://php.net/allow_url_fopen',
         );
     }
 }

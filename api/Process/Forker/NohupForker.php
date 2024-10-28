@@ -19,10 +19,10 @@ class NohupForker extends AbstractForker
 {
     public function run(string $configFile): void
     {
-        $commandline = sprintf(
+        $commandline = \sprintf(
             'exec nohup %s %s >/dev/null </dev/null 2>&1 &',
             implode(' ', array_map([$this, 'escapeArgument'], $this->command)),
-            $this->escapeArgument($configFile)
+            $this->escapeArgument($configFile),
         );
 
         $this->startCommand($commandline);

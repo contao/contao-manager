@@ -23,7 +23,7 @@ class SelfUpdate
 
     private const VERSION_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.version';
 
-    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
+    private readonly Filesystem $filesystem;
 
     /**
      * @var array
@@ -32,8 +32,12 @@ class SelfUpdate
 
     private bool $checkedForUpdates = false;
 
-    public function __construct(private readonly ApiKernel $kernel, private readonly ManagerConfig $managerConfig, private readonly Request $request, Filesystem $filesystem = null)
-    {
+    public function __construct(
+        private readonly ApiKernel $kernel,
+        private readonly ManagerConfig $managerConfig,
+        private readonly Request $request,
+        Filesystem|null $filesystem = null,
+    ) {
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -69,10 +73,9 @@ class SelfUpdate
      */
     public function isDev(): bool
     {
-        return $this->kernel->getVersion() === '@manager_version'.'@'
+        return '@manager_version'.'@' === $this->kernel->getVersion()
             || 'prod' !== $this->kernel->getEnvironment()
-            || $this->kernel->isDebug()
-        ;
+            || $this->kernel->isDebug();
     }
 
     /**
@@ -102,7 +105,7 @@ class SelfUpdate
     /**
      * Returns version of remotely available Phar.
      */
-    public function getNewVersion(): ?string
+    public function getNewVersion(): string|null
     {
         $this->checkForUpdate();
 
@@ -149,9 +152,9 @@ class SelfUpdate
             throw $throwable;
         }
 
-        // Check the update server after update.
-        // This might be necessary if an updated version contains a new update URL,
-        // which will be the case one the PHP version is no longer supported.
+        // Check the update server after update. This might be necessary if an updated
+        // version contains a new update URL, which will be the case one the PHP version
+        // is no longer supported.
         $this->managerConfig->remove('last_update');
 
         return true;
@@ -194,7 +197,7 @@ class SelfUpdate
     private function getRemoteInfo(): array
     {
         if (null === $this->remote) {
-            $url = sprintf(self::VERSION_URL, $this->getChannel());
+            $url = \sprintf(self::VERSION_URL, $this->getChannel());
             $content = trim((string) $this->request->get($url, $statusCode, false, 0));
             $data = json_decode($content, true);
 
@@ -225,12 +228,12 @@ class SelfUpdate
      */
     private function download(string $target): void
     {
-        $url = sprintf(self::DOWNLOAD_URL, $this->getChannel());
+        $url = \sprintf(self::DOWNLOAD_URL, $this->getChannel());
 
         $result = $this->request->getStream($url);
 
         if (null === $result) {
-            throw new \RuntimeException(sprintf('Request to URL failed: %s', $url));
+            throw new \RuntimeException(\sprintf('Request to URL failed: %s', $url));
         }
 
         $this->filesystem->dumpFile($target, $result);
@@ -244,7 +247,7 @@ class SelfUpdate
         $tmpVersion = sha1_file($tempFile);
 
         if ($tmpVersion !== $sha1) {
-            throw new \RuntimeException(sprintf('Download file appears to be corrupted or outdated. The file received does not have the expected SHA-1 hash: %s.', $sha1));
+            throw new \RuntimeException(\sprintf('Download file appears to be corrupted or outdated. The file received does not have the expected SHA-1 hash: %s.', $sha1));
         }
     }
 

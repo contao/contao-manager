@@ -16,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class ProcessCheck extends AbstractIntegrityCheck
 {
-    public function run(): ?ApiProblem
+    public function run(): ApiProblem|null
     {
         if (
             \function_exists('proc_open')
@@ -29,7 +29,7 @@ class ProcessCheck extends AbstractIntegrityCheck
 
         return (new ApiProblem(
             $this->trans('process.title'),
-            'https://php.net/proc_open'
+            'https://php.net/proc_open',
         ))->setDetail($this->trans('process.detail'));
     }
 }

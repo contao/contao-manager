@@ -21,13 +21,17 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/contao/maintenance-mode', methods: ['GET', 'PUT', 'DELETE'])]
+#[Route(path: '/contao/maintenance-mode', methods: ['GET', 'PUT', 'DELETE'])]
 class MaintenanceModeController
 {
-    public function __construct(private readonly ContaoConsole $console, private readonly ConsoleProcessFactory $processFactory, private readonly ApiKernel $kernel, private readonly Filesystem $filesystem)
-    {
+    public function __construct(
+        private readonly ContaoConsole $console,
+        private readonly ConsoleProcessFactory $processFactory,
+        private readonly ApiKernel $kernel,
+        private readonly Filesystem $filesystem,
+    ) {
     }
 
     public function __invoke(Request $request): Response
@@ -43,7 +47,7 @@ class MaintenanceModeController
         if (!$hasLexik && !\array_key_exists('contao:maintenance-mode', $commands)) {
             return new ApiProblemResponse(
                 (new ApiProblem('Contao does not support maintenance mode.'))
-                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED)
+                    ->setStatus(Response::HTTP_NOT_IMPLEMENTED),
             );
         }
 
@@ -88,7 +92,7 @@ class MaintenanceModeController
         return new JsonResponse($this->runContaoCommand('disable'));
     }
 
-    private function runContaoCommand(string $state = null): array
+    private function runContaoCommand(string|null $state = null): array
     {
         $arguments = ['contao:maintenance'];
 

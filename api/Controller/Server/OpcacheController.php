@@ -15,9 +15,9 @@ namespace Contao\ManagerApi\Controller\Server;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[\Symfony\Component\Routing\Attribute\Route(path: '/server/opcache', methods: ['GET', 'DELETE'])]
+#[Route(path: '/server/opcache', methods: ['GET', 'DELETE'])]
 class OpcacheController
 {
     public function __invoke(Request $request): Response
