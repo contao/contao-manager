@@ -1,0 +1,51 @@
+includes:
+    - vendor-bin/phpstan/config/config.php
+    - vendor-bin/phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor-bin/phpstan/vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor-bin/phpstan/vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor-bin/phpstan/vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor-bin/phpstan/vendor/phpstan/phpstan-symfony/rules.neon
+    - vendor-bin/phpstan/vendor/slam/phpstan-extensions/conf/symfony-rules.neon
+
+rules:
+    - TheCodingMachine\PHPStan\Rules\Exceptions\DoNotThrowExceptionBaseClassRule
+    - TheCodingMachine\PHPStan\Rules\Exceptions\ThrowMustBundlePreviousExceptionRule
+
+parameters:
+    level: 6
+
+    featureToggles:
+        alwaysTrueAlwaysReported: false
+        detectDeadTypeInMultiCatch: false
+        disableCheckMissingIterableValueType: false
+
+    paths:
+        - %currentWorkingDirectory%/api
+        - %currentWorkingDirectory%/public
+
+#    universalObjectCratesClasses:
+#        - Contao\BackendUser
+#        - Contao\Database\Result
+#        - Contao\Model
+#        - Contao\Template
+
+#    excludePaths:
+#        - %currentWorkingDirectory%/core-bundle/tests/Fixtures/*
+#        - %currentWorkingDirectory%/core-bundle/tests/Functional/app/*
+#        - %currentWorkingDirectory%/core-bundle/tests/Functional/var/*
+
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+
+    treatPhpDocTypesAsCertain: false
+    rememberPossiblyImpureFunctionValues: false
+
+#services:
+#    - class: Contao\Tools\PHPStan\HelperReturnTypeExtension
+#      tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+#
+#    - class: Contao\Tools\PHPStan\ExtensionReturnTypeExtension
+#      tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+#
+#    - class: Contao\Tools\PHPStan\GraphReturnTypeExtension
+#      tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

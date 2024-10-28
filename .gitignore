@@ -1,7 +1,7 @@
 # Dependencies
 /.yarn
 /node_modules
-/tools/*/vendor
+/vendor-bin/*/vendor
 /vendor
 
 # Generated
@@ -15,4 +15,3 @@
 # Local
 /box.json
 /build.xml
-/.php_cs

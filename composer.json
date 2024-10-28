@@ -61,11 +61,14 @@
     "extra": {
         "bamarni-bin": {
             "bin-links": false,
-            "target-directory": "tools"
+            "forward-command": false
         }
     },
     "scripts": {
-        "phing": "@php tools/phing/vendor/bin/phing",
-        "cs-fixer": "@php tools/ecs/vendor/bin/ecs check api public --config tools/ecs/config.php --fix --ansi"
+        "phing": "@php vendor-bin/phing/vendor/bin/phing",
+        "ecs": "@php vendor-bin/ecs/vendor/bin/ecs check --fix",
+        "phpstan": "@php vendor-bin/phpstan/vendor/bin/phpstan analyze",
+        "rector": "@php vendor-bin/rector/vendor/bin/rector",
+        "depcheck": "@php vendor-bin/composer-dependency-analyser/vendor/bin/composer-dependency-analyser --config=tools/composer-dependency-analyser/config.php"
     }
 }

@@ -126,12 +126,12 @@
 
     <target name="box-prod">
         <echo message="Creating the .phar file" />
-        <exec executable="php" dir="contao-manager-${version}/tools/phing" checkreturn="true">
+        <exec executable="php" dir="contao-manager-${version}/vendor-bin/phing" checkreturn="true">
             <arg value="../../composer.phar" />
             <arg value="install" />
         </exec>
         <exec executable="php" dir="contao-manager-${version}" checkreturn="true">
-            <arg value="tools/phing/vendor/bin/box" />
+            <arg value="vendor-bin/phing/vendor/bin/box" />
             <arg value="compile" />
         </exec>
     </target>
@@ -139,7 +139,7 @@
     <target name="box-dev">
         <echo message="Creating the .phar file" />
         <exec executable="php" checkreturn="true" passthru="true">
-            <arg value="tools/phing/vendor/bin/box" />
+            <arg value="vendor-bin/phing/vendor/bin/box" />
             <arg value="compile" />
         </exec>
     </target>
