@@ -20,14 +20,14 @@ class ContaoManagerDowngrade
         if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI']))
             && (!isset($_SERVER['argv'][1]) || 'downgrade' !== $_SERVER['argv'][1])
         ) {
-            echo 'You are using PHP '.phpversion()." but you need least PHP 7.2.5 to run the Contao Manager.\n";
-            echo 'Run "'.$_SERVER['argv'][0]." downgrade\" to downgrade to a PHP 5 compatible version.\n";
+            echo 'You are using PHP '.phpversion()." but you need least PHP 8.1.0 to run the Contao Manager.\n";
+            echo 'Run "'.$_SERVER['argv'][0]." downgrade\" to downgrade to a PHP 7.2 compatible version.\n";
             exit;
         }
 
         $phar = Phar::running(false);
         $tempFile = $phar.'.downgrade';
-        $url = 'https://download.contao.org/contao-manager/1.1/contao-manager.phar';
+        $url = 'https://download.contao.org/contao-manager/1.8/contao-manager.phar';
 
         $stream = @fopen($url, 'rb', false, StreamContextFactory::getContext($url));
 
@@ -35,7 +35,7 @@ class ContaoManagerDowngrade
             || false === file_put_contents($tempFile, $stream)
             || false === rename($tempFile, $phar)
         ) {
-            die('You are using PHP '.phpversion()." which is not supported by this Contao Manager. Automatic downgrade to version 1.1 was not successful.\n");
+            die('You are using PHP '.phpversion()." which is not supported by this Contao Manager. Automatic downgrade to version 1.8 was not successful.\n");
         }
 
         if (function_exists('opcache_reset')) {
@@ -341,6 +341,6 @@ class NoProxyPattern
     }
 }
 
-if (PHP_VERSION_ID < 70205) {
+if (PHP_VERSION_ID < 80100) {
     ContaoManagerDowngrade::run();
 }

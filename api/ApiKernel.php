@@ -30,7 +30,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
-use Terminal42\ServiceAnnotationBundle\Terminal42ServiceAnnotationBundle;
 
 /**
  * @property ContainerInterface $container
@@ -87,7 +86,6 @@ class ApiKernel extends Kernel
             new FrameworkBundle(),
             new SecurityBundle(),
             new MonologBundle(),
-            new Terminal42ServiceAnnotationBundle(),
         ];
     }
 
