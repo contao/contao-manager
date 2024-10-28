@@ -21,16 +21,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class IntegrityCheckCommand extends Command
 {
-    /**
-     * @var IntegrityCheckFactory
-     */
-    private $integrity;
-
-    public function __construct(IntegrityCheckFactory $integrity)
+    public function __construct(private readonly IntegrityCheckFactory $integrity)
     {
         parent::__construct();
-
-        $this->integrity = $integrity;
     }
 
     protected function configure(): void

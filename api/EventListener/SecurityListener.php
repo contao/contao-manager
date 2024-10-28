@@ -22,28 +22,10 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class SecurityListener implements EventSubscriberInterface
 {
     /**
-     * @var JwtManager
-     */
-    private $jwtManager;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-
-    /**
      * Constructor.
      */
-    public function __construct(JwtManager $jwtManager, TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(private readonly JwtManager $jwtManager, private readonly TokenStorageInterface $tokenStorage, private readonly AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->jwtManager = $jwtManager;
-        $this->tokenStorage = $tokenStorage;
-        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**

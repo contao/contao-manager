@@ -23,16 +23,10 @@ class JwtManager
     public const COOKIE_AUTH = 'contao_manager_auth';
 
     /**
-     * @var UserConfig
-     */
-    private $users;
-
-    /**
      * Constructor.
      */
-    public function __construct(UserConfig $users)
+    public function __construct(private readonly UserConfig $users)
     {
-        $this->users = $users;
     }
 
     /**
@@ -52,7 +46,7 @@ class JwtManager
                 $this->users->getSecret(),
                 ['HS256']
             );
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return null;
         }
     }

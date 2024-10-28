@@ -19,17 +19,12 @@ use Symfony\Component\Process\Process;
 
 class ProcessRunner extends AbstractProcess
 {
-    /**
-     * @var Utf8Process
-     */
-    private $process;
+    private readonly \Contao\ManagerApi\Process\Utf8Process $process;
 
-    /**
-     * @var ProcessTimedOutException|null
-     */
-    private $timeout;
+    private ?\Symfony\Component\Process\Exception\ProcessTimedOutException $timeout = null;
 
     private $stdin;
+
     private $stdout;
 
     public function __construct(string $configFile)

@@ -27,20 +27,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserController
 {
-    /**
-     * @var UserConfig
-     */
-    private $config;
-
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    public function __construct(UserConfig $config, UrlGeneratorInterface $urlGenerator)
+    public function __construct(private readonly UserConfig $config, private readonly UrlGeneratorInterface $urlGenerator)
     {
-        $this->config = $config;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -130,9 +118,7 @@ class UserController
     {
         $tokens = array_filter(
             $this->config->getTokens(),
-            static function ($token) use ($username) {
-                return $token['user'] === $username;
-            }
+            static fn($token): bool => $token['user'] === $username
         );
 
         return new JsonResponse($tokens);
@@ -230,7 +216,7 @@ class UserController
     {
         if ($user instanceof UserInterface) {
             return [
-                'username' => $user->getUsername(),
+                'username' => $user->getUserIdentifier(),
             ];
         }
 
@@ -238,7 +224,7 @@ class UserController
             throw new \InvalidArgumentException('Can only convert UserInterface or array of UserInterface');
         }
 
-        foreach ((array) $user as $k => $item) {
+        foreach ($user as $k => $item) {
             $user[$k] = $this->convertToJson($item);
         }
 

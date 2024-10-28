@@ -24,14 +24,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class PhpWebController
 {
-    /**
-     * @var IntegrityCheckFactory
-     */
-    private $integrity;
-
-    public function __construct(IntegrityCheckFactory $integrity)
+    public function __construct(private readonly IntegrityCheckFactory $integrity)
     {
-        $this->integrity = $integrity;
     }
 
     /**

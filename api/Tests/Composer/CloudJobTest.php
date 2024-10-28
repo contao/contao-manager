@@ -20,7 +20,7 @@ class CloudJobTest extends TestCase
     /**
      * @dataProvider waitingTime
      */
-    public function testCalculatesTheWaitingTime(int $queuePosition, int $avgTime, int $workers, $expected): void
+    public function testCalculatesTheWaitingTime(int $queuePosition, int $avgTime, int $workers, int $expected): void
     {
         $job = new CloudJob([
             'status' => CloudJob::STATUS_QUEUED,
@@ -35,7 +35,7 @@ class CloudJobTest extends TestCase
         $this->assertSame($expected, $job->getWaitingTime());
     }
 
-    public function waitingTime(): ?\Generator
+    public function waitingTime(): \Generator
     {
         yield [12, 30, 6, 60];
 

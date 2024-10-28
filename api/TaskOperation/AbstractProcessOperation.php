@@ -22,15 +22,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var Process|ProcessController
-     */
-    protected $process;
-
-    /**
-     * @var array
-     */
-    private static $signals = [
+    private static array $signals = [
         1 => 'SIGHUP',
         2 => 'SIGINT',
         3 => 'SIGQUIT',
@@ -43,9 +35,8 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
      *
      * @param Process|ProcessController $process
      */
-    public function __construct($process)
+    public function __construct(protected $process)
     {
-        $this->process = $process;
     }
 
     public function getDetails(): ?string

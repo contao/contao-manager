@@ -18,10 +18,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractProcess
 {
-    protected $setFile;
-    protected $getFile;
-    protected $inputFile;
-    protected $outputFile;
+    protected string $setFile;
+
+    protected string $getFile;
+
+    protected string $inputFile;
+
+    protected string $outputFile;
 
     /**
      * @throws \InvalidArgumentException If the working directory does not exist
@@ -70,8 +73,8 @@ abstract class AbstractProcess
     {
         try {
             (new Filesystem())->dumpFile($filename, json_encode($config));
-        } catch (IOException $e) {
-            throw new \RuntimeException(sprintf('Unable to write config file to %s. '.$e->getMessage(), $filename), 0, $e);
+        } catch (IOException $ioException) {
+            throw new \RuntimeException(sprintf('Unable to write config file to %s. '.$ioException->getMessage(), $filename), 0, $ioException);
         }
     }
 }

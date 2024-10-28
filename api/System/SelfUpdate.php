@@ -20,40 +20,20 @@ use Symfony\Component\Filesystem\Filesystem;
 class SelfUpdate
 {
     private const DOWNLOAD_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.phar';
+
     private const VERSION_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.version';
 
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    /**
-     * @var ManagerConfig
-     */
-    private $managerConfig;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
+    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
 
     /**
      * @var array
      */
     private $remote;
 
-    private $checkedForUpdates = false;
+    private bool $checkedForUpdates = false;
 
-    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, Request $request, Filesystem $filesystem = null)
+    public function __construct(private readonly ApiKernel $kernel, private readonly ManagerConfig $managerConfig, private readonly Request $request, Filesystem $filesystem = null)
     {
-        $this->kernel = $kernel;
-        $this->managerConfig = $managerConfig;
-        $this->request = $request;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -163,10 +143,10 @@ class SelfUpdate
             $this->download($tempFile);
             $this->validate($tempFile, $remote['sha1']);
             $this->install($tempFile, $phar);
-        } catch (\Throwable $e) {
+        } catch (\Throwable $throwable) {
             $this->filesystem->remove($tempFile);
 
-            throw $e;
+            throw $throwable;
         }
 
         // Check the update server after update.
@@ -192,7 +172,7 @@ class SelfUpdate
         if (
             null !== $latestVersion
             && null !== $lastUpdate
-            && false !== ($lastUpdate = strtotime($lastUpdate))
+            && false !== ($lastUpdate = strtotime((string) $lastUpdate))
             && !$this->isDev()
             && $lastUpdate <= time()
             && $lastUpdate > strtotime('-1 hour')
@@ -215,13 +195,13 @@ class SelfUpdate
     {
         if (null === $this->remote) {
             $url = sprintf(self::VERSION_URL, $this->getChannel());
-            $content = trim($this->request->get($url, $statusCode, false, 0));
+            $content = trim((string) $this->request->get($url, $statusCode, false, 0));
             $data = json_decode($content, true);
 
             if (
                 !isset($data['version'], $data['sha1'])
-                || !preg_match('@^\d+\.\d+\.\d+(-[a-z0-9\-]+)?$@', $data['version'])
-                || !preg_match('%^[a-z0-9]{40}%', $data['sha1'])
+                || !preg_match('@^\d+\.\d+\.\d+(-[a-z0-9\-]+)?$@', (string) $data['version'])
+                || !preg_match('%^[a-z0-9]{40}%', (string) $data['sha1'])
             ) {
                 throw new \RuntimeException('Version request returned incorrectly formatted response.');
             }

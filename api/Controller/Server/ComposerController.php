@@ -31,26 +31,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ComposerController
 {
-    /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    public function __construct(Environment $environment, Translator $translator, Filesystem $filesystem)
+    public function __construct(private readonly Environment $environment, private readonly Translator $translator, private readonly Filesystem $filesystem)
     {
-        $this->environment = $environment;
-        $this->translator = $translator;
-        $this->filesystem = $filesystem;
     }
 
     public function __invoke(ServerInfo $serverInfo): Response
@@ -94,7 +76,7 @@ class ComposerController
             $schemaFile = __DIR__.'/../../../vendor/composer/composer/res/composer-schema.json';
 
             // Prepend with file:// only when not using a special schema already (e.g. in the phar)
-            if (false === strpos($schemaFile, '://')) {
+            if (!str_contains($schemaFile, '://')) {
                 $schemaFile = 'file://'.$schemaFile;
             }
 
@@ -106,9 +88,9 @@ class ComposerController
             $validator->validate($value, $schema, Constraint::CHECK_MODE_EXCEPTIONS);
 
             return true;
-        } catch (ValidationException $e) {
+        } catch (ValidationException $exception) {
             $result['json']['valid'] = false;
-            $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage()]);
+            $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $exception->getMessage()]);
 
             return false;
         }

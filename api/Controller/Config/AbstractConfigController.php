@@ -19,27 +19,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractConfigController
 {
-    /**
-     * @var AbstractConfig
-     */
-    protected $config;
-
-    public function __construct(AbstractConfig $config)
+    public function __construct(protected \Contao\ManagerApi\Config\AbstractConfig $config)
     {
-        $this->config = $config;
     }
 
     public function __invoke(Request $request): Response
     {
-        switch ($request->getMethod()) {
-            case 'PUT':
-                $this->config->replace($request->request->all());
-                break;
-
-            case 'PATCH':
-                $this->config->add($request->request->all());
-                break;
-        }
+        match ($request->getMethod()) {
+            'PUT' => $this->config->replace($request->request->all()),
+            'PATCH' => $this->config->add($request->request->all()),
+            default => new JsonResponse($this->config->all()),
+        };
 
         return new JsonResponse($this->config->all());
     }

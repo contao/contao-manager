@@ -14,25 +14,15 @@ namespace Contao\ManagerApi\Exception;
 
 class RequestException extends \RuntimeException
 {
-    /**
-     * @var string
-     */
-    private $url;
-
-    /**
-     * @var int
-     */
-    private $statusCode;
-
-    public function __construct(string $url, ?int $statusCode, \Throwable $previous = null)
+    public function __construct(private readonly string $url, private readonly int|null $statusCode, \Throwable $previous = null)
     {
-        $message = "HTTP request to $url failed ";
+        $message = sprintf('HTTP request to %s failed ', $this->url);
 
-        if (null !== $statusCode) {
-            $message .= "with status code $statusCode";
+        if (null !== $this->statusCode) {
+            $message .= 'with status code ' . $this->statusCode;
         }
 
-        if ($previous) {
+        if ($previous !== null) {
             $message .= ' ('.$previous->getMessage().')';
         }
 
@@ -41,9 +31,6 @@ class RequestException extends \RuntimeException
             $previous ? $previous->getCode() : 0,
             $previous
         );
-
-        $this->url = $url;
-        $this->statusCode = $statusCode;
     }
 
     public function getUrl(): string

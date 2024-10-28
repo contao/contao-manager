@@ -27,33 +27,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class RebuildCacheTask extends AbstractTask
 {
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
-     * @var ContaoConsole
-     */
-    private $contaoConsole;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    public function __construct(ApiKernel $kernel, ConsoleProcessFactory $processFactory, ContaoConsole $contaoConsole, Translator $translator, Filesystem $filesystem)
+    public function __construct(private readonly ApiKernel $kernel, private readonly ConsoleProcessFactory $processFactory, private readonly ContaoConsole $contaoConsole, Translator $translator, private readonly Filesystem $filesystem)
     {
-        $this->kernel = $kernel;
-        $this->processFactory = $processFactory;
-        $this->contaoConsole = $contaoConsole;
-        $this->filesystem = $filesystem;
-
         parent::__construct($translator);
     }
 

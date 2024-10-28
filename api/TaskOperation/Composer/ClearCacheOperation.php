@@ -21,7 +21,7 @@ class ClearCacheOperation extends AbstractProcessOperation
     {
         try {
             parent::__construct($processFactory->restoreBackgroundProcess('clear-cache'));
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             parent::__construct(
                 $processFactory->createManagerConsoleBackgroundProcess(
                     [

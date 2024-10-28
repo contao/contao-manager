@@ -27,26 +27,8 @@ abstract class AbstractBrowserAuthenticator extends AbstractGuardAuthenticator
 {
     private const LOCK_FILE = 'login.lock';
 
-    /**
-     * @var JwtManager
-     */
-    private $jwtManager;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    public function __construct(JwtManager $jwtManager, Filesystem $filesystem, ApiKernel $kernel)
+    public function __construct(private readonly JwtManager $jwtManager, private readonly Filesystem $filesystem, private readonly ApiKernel $kernel)
     {
-        $this->jwtManager = $jwtManager;
-        $this->filesystem = $filesystem;
-        $this->kernel = $kernel;
     }
 
     public function supports(Request $request): bool

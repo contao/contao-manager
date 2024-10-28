@@ -19,16 +19,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TaskDeleteCommand extends Command
 {
-    /**
-     * @var TaskManager
-     */
-    private $taskManager;
-
-    public function __construct(TaskManager $taskManager)
+    public function __construct(private readonly TaskManager $taskManager)
     {
         parent::__construct();
-
-        $this->taskManager = $taskManager;
     }
 
     protected function configure(): void

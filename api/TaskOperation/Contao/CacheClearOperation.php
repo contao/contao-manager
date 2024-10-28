@@ -21,7 +21,7 @@ class CacheClearOperation extends AbstractProcessOperation
     {
         try {
             parent::__construct($processFactory->restoreBackgroundProcess($processId));
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             parent::__construct($processFactory->createContaoConsoleBackgroundProcess(['cache:clear', '--env='.$environment, '--no-warmup'], $processId));
         }
     }

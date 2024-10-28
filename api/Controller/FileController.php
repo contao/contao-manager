@@ -26,20 +26,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class FileController
 {
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
+    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var array
-     */
-    private $allowedFiles = [
+    private array $allowedFiles = [
         'composer.json',
         'composer.lock',
     ];
@@ -47,9 +36,8 @@ class FileController
     /**
      * Constructor.
      */
-    public function __construct(KernelInterface $kernel, Filesystem $filesystem = null)
+    public function __construct(private readonly KernelInterface $kernel, Filesystem $filesystem = null)
     {
-        $this->kernel = $kernel;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 

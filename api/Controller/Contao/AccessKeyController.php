@@ -26,14 +26,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AccessKeyController
 {
-    /**
-     * @var ContaoApi
-     */
-    private $api;
-
-    public function __construct(ContaoApi $api)
+    public function __construct(private readonly ContaoApi $api)
     {
-        $this->api = $api;
     }
 
     /**
@@ -43,18 +37,12 @@ class AccessKeyController
      */
     public function __invoke(Request $request): Response
     {
-        switch ($request->getMethod()) {
-            case 'GET':
-                return $this->getAccessKey();
-
-            case 'PUT':
-                return $this->setAccessKey($request);
-
-            case 'DELETE':
-                return $this->removeAccessKey();
-        }
-
-        return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+        return match ($request->getMethod()) {
+            'GET' => $this->getAccessKey(),
+            'PUT' => $this->setAccessKey($request),
+            'DELETE' => $this->removeAccessKey(),
+            default => new Response(null, Response::HTTP_METHOD_NOT_ALLOWED),
+        };
     }
 
     /**

@@ -19,22 +19,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class RemoveVendorOperation extends AbstractInlineOperation
 {
-    /**
-     * @var Environment|string
-     */
-    private $environment;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    public function __construct(TaskConfig $taskConfig, Environment $environment, Filesystem $filesystem)
+    public function __construct(TaskConfig $taskConfig, private readonly Environment $environment, private readonly Filesystem $filesystem)
     {
         parent::__construct($taskConfig);
-
-        $this->environment = $environment;
-        $this->filesystem = $filesystem;
     }
 
     public function getSummary(): string
@@ -42,7 +29,7 @@ class RemoveVendorOperation extends AbstractInlineOperation
         return 'rm -rf vendor';
     }
 
-    public function doRun(): bool
+    protected function doRun(): bool
     {
         $this->filesystem->remove($this->environment->getVendorDir());
 

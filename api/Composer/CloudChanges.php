@@ -14,35 +14,19 @@ namespace Contao\ManagerApi\Composer;
 
 class CloudChanges
 {
-    /**
-     * @var array
-     */
-    private $require = [];
+    private array $require = [];
 
-    /**
-     * @var array
-     */
-    private $remove = [];
+    private array $remove = [];
 
-    /**
-     * @var array
-     */
-    private $updates = [];
+    private array $updates = [];
 
-    /**
-     * @var bool
-     */
-    private $dryRun = false;
+    private bool $dryRun = false;
 
     public function requirePackage(string $packageName, string $version = null): void
     {
         unset($this->remove[$packageName]);
 
-        if ($version) {
-            $this->require[$packageName] = $packageName.'='.$version;
-        } else {
-            $this->require[$packageName] = $packageName;
-        }
+        $this->require[$packageName] = $version ? $packageName.'='.$version : $packageName;
 
         $this->addUpdate($packageName);
     }

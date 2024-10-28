@@ -18,28 +18,21 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 class RequireOperation extends AbstractProcessOperation
 {
     /**
-     * @var array
-     */
-    private $required;
-
-    /**
      * Constructor.
      */
-    public function __construct(ConsoleProcessFactory $processFactory, array $required)
+    public function __construct(ConsoleProcessFactory $processFactory, private readonly array $required)
     {
-        $this->required = $required;
-
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-require');
 
             parent::__construct($process);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $arguments = array_merge(
                 [
                     'composer',
                     'require',
                 ],
-                $required,
+                $this->required,
                 [
                     '--no-update',
                     '--no-scripts',

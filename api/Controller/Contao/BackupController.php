@@ -27,20 +27,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BackupController
 {
-    /**
-     * @var ContaoConsole
-     */
-    private $console;
-
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    public function __construct(ContaoConsole $console, ConsoleProcessFactory $processFactory)
+    public function __construct(private readonly ContaoConsole $console, private readonly ConsoleProcessFactory $processFactory)
     {
-        $this->processFactory = $processFactory;
-        $this->console = $console;
     }
 
     public function __invoke(Request $request): Response
@@ -63,6 +51,7 @@ class BackupController
         $process = $this->processFactory->createContaoConsoleProcess($arguments);
 
         $process->run();
+
         $data = json_decode(trim($process->getOutput()), true);
 
         if (!\is_array($data)) {

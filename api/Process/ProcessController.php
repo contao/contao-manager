@@ -25,16 +25,12 @@ class ProcessController extends AbstractProcess
     /**
      * @var array<ForkerInterface>
      */
-    private $forkers = [];
+    private array $forkers = [];
 
     /**
-     * Constructor.
-     *
-     * @param string $workDir
-     *
      * @throws \InvalidArgumentException If the working directory does not exist
      */
-    public function __construct(array $config, $workDir)
+    public function __construct(array $config, string $workDir)
     {
         if (!isset($config['status'])) {
             $config['status'] = Process::STATUS_READY;
@@ -233,7 +229,7 @@ class ProcessController extends AbstractProcess
 
         foreach ($this->forkers as $forker) {
             if (null === $class ? $forker->isSupported() : is_a($forker, $class)) {
-                $this->config['forker'] = \get_class($forker);
+                $this->config['forker'] = $forker::class;
 
                 return $forker;
             }

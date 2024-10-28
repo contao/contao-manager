@@ -15,22 +15,21 @@ namespace Contao\ManagerApi\Composer;
 class CloudJob implements \JsonSerializable
 {
     public const STATUS_QUEUED = 'queued';
+
     public const STATUS_PROCESSING = 'processing';
+
     public const STATUS_FINISHED = 'finished';
+
     public const STATUS_ERROR = 'finished_with_errors';
 
     public const LINK_JSON = 'composerJson';
+
     public const LINK_LOCK = 'composerLock';
+
     public const LINK_OUTPUT = 'composerOutput';
 
-    /**
-     * @var array
-     */
-    private $result;
-
-    public function __construct(array $result)
+    public function __construct(private array $result)
     {
-        $this->result = $result;
     }
 
     public function getId()

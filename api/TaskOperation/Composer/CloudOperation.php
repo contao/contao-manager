@@ -29,69 +29,24 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
 {
     private const CLOUD_ERROR = 'Error handling the Composer Resolver Cloud. Please try again later.';
 
-    /**
-     * @var CloudResolver
-     */
-    private $cloud;
+    private CloudJob|null $job = null;
 
-    /**
-     * @var CloudChanges
-     */
-    private $changes;
+    private \Throwable|null $exception = null;
 
-    /**
-     * @var TaskConfig
-     */
-    private $taskConfig;
-
-    /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var CloudJob
-     */
-    private $job;
-
-    /**
-     * @var \Exception
-     */
-    private $exception;
-
-    /**
-     * @var string
-     */
-    private $output;
+    private string $output = '';
 
     /**
      * Constructor.
      */
-    public function __construct(CloudResolver $cloud, CloudChanges $changes, TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem)
+    public function __construct(private readonly CloudResolver $cloud, private readonly CloudChanges $changes, private readonly TaskConfig $taskConfig, private readonly Environment $environment, private readonly Translator $translator, private readonly Filesystem $filesystem)
     {
-        $this->cloud = $cloud;
-        $this->changes = $changes;
-        $this->taskConfig = $taskConfig;
-        $this->environment = $environment;
-        $this->translator = $translator;
-        $this->filesystem = $filesystem;
     }
 
     public function getSummary(): string
     {
         $summary = 'composer update ';
 
-        if (!empty($this->changes->getUpdates())) {
+        if ($this->changes->getUpdates() !== []) {
             $summary .= implode(' ', $this->changes->getUpdates());
         }
 
@@ -203,6 +158,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
                 } else {
                     $console->add($title);
                 }
+
                 break;
 
             case CloudJob::STATUS_ERROR:
@@ -220,7 +176,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
                 preg_match('{Memory usage: ([^ ]+) \(peak: ([^)]+)\), time: ([0-9.]+s)\.}', $profile, $match);
 
                 $console->add($output, $title);
-                $console->add("# Job ID {$job->getId()} completed in $seconds seconds\n# ".$profile);
+                $console->add("# Job ID {$job->getId()} completed in {$seconds} seconds\n# ".$profile);
                 break;
 
             default:
@@ -234,8 +190,8 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
     {
         try {
             return null !== $this->taskConfig->getState('cloud-job');
-        } catch (\Exception $e) {
-            $this->exception = $e;
+        } catch (\Exception $exception) {
+            $this->exception = $exception;
 
             return true;
         }
@@ -245,8 +201,8 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
     {
         try {
             return $this->isStarted() && null === $this->taskConfig->getState('cloud-job-successful');
-        } catch (\Exception $e) {
-            $this->exception = $e;
+        } catch (\Exception $exception) {
+            $this->exception = $exception;
 
             return false;
         }
@@ -302,8 +258,8 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
             if ($job->isFailed()) {
                 $this->taskConfig->setState('cloud-job-successful', false);
             }
-        } catch (\Exception $e) {
-            $this->exception = $e;
+        } catch (\Exception $exception) {
+            $this->exception = $exception;
             $this->output = self::CLOUD_ERROR;
         }
     }
@@ -318,8 +274,8 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
         try {
             $this->output = $this->taskConfig->getState('cloud-job-output');
             $this->cloud->deleteJob((string) $this->taskConfig->getState('cloud-job'));
-        } catch (\Exception $e) {
-            $this->exception = $e;
+        } catch (\Exception $exception) {
+            $this->exception = $exception;
         }
     }
 
@@ -361,16 +317,16 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
                     return $this->job;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             // do nothing
         }
 
         try {
             $this->job = $this->cloud->getJob((string) $this->taskConfig->getState('cloud-job'));
-        } catch (\Exception $e) {
-            $this->exception = $e;
+        } catch (\Exception $exception) {
+            $this->exception = $exception;
 
-            if ($e instanceof CloudException && $e->isClientError()) {
+            if ($exception instanceof CloudException && $exception->isClientError()) {
                 $this->taskConfig->setState('cloud-job-successful', false);
             }
 
@@ -438,7 +394,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
             }
 
             return $this->output;
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             return $this->output = self::CLOUD_ERROR;
         }
     }

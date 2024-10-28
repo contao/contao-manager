@@ -32,26 +32,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LocalPackagesController
 {
-    /**
-     * @var Environment
-     */
-    private $environment;
+    private readonly \Composer\Repository\InstalledRepositoryInterface $localRepository;
 
-    /**
-     * @var RepositoryInterface
-     */
-    private $localRepository;
+    private readonly \Composer\Repository\InstalledRepository $compositeRepository;
 
-    /**
-     * @var InstalledRepository
-     */
-    private $compositeRepository;
-
-    public function __construct(Environment $environment)
+    public function __construct(private readonly Environment $environment)
     {
-        $this->environment = $environment;
-
-        $composer = $environment->getComposer();
+        $composer = $this->environment->getComposer();
 
         $this->localRepository = $composer->getRepositoryManager()->getLocalRepository();
 
@@ -99,7 +86,7 @@ class LocalPackagesController
     {
         $dependents = $this->parseDependents([$package->getName()]);
 
-        if (empty($dependents) && 0 !== \count($replaces = array_keys($package->getReplaces()))) {
+        if ($dependents === [] && [] !== ($replaces = array_keys($package->getReplaces()))) {
             $dependents = $this->parseDependents($replaces, true);
         }
 

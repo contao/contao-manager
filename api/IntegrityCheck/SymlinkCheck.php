@@ -20,18 +20,11 @@ use Symfony\Component\Filesystem\Filesystem;
 class SymlinkCheck extends AbstractIntegrityCheck
 {
     /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    /**
      * Constructor.
      */
-    public function __construct(ApiKernel $kernel, Translator $translator)
+    public function __construct(private readonly ApiKernel $kernel, Translator $translator)
     {
         parent::__construct($translator);
-
-        $this->kernel = $kernel;
     }
 
     public function run(): ?ApiProblem
@@ -59,8 +52,8 @@ class SymlinkCheck extends AbstractIntegrityCheck
             $filesystem->remove($tempname);
             $filesystem->symlink($this->kernel->getProjectDir(), $tempname);
             $filesystem->remove($tempname);
-        } catch (\Exception $e) {
-            return $e->getMessage();
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
         }
 
         return null;

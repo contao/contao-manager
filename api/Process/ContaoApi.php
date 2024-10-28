@@ -20,15 +20,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ContaoApi
 {
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
-     * @var Filesystem|null
-     */
-    private $filesystem;
+    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
 
     /**
      * @var array
@@ -38,9 +30,8 @@ class ContaoApi
     /**
      * Constructor.
      */
-    public function __construct(ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
+    public function __construct(private readonly ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
     {
-        $this->processFactory = $processFactory;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -122,7 +113,7 @@ class ContaoApi
         try {
             $process = $this->processFactory->createContaoApiProcess(['version']);
             $process->mustRun();
-        } catch (ExceptionInterface $exception) {
+        } catch (ExceptionInterface) {
             return $default;
         }
 
@@ -136,8 +127,8 @@ class ContaoApi
 
         try {
             return $this->apiInfo = $this->parseJson($version);
-        } catch (ParsingException $e) {
-            $default['error'] = $e->getMessage();
+        } catch (ParsingException $exception) {
+            $default['error'] = $exception->getMessage();
 
             return $this->apiInfo = $default;
         }

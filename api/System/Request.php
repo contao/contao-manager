@@ -23,20 +23,8 @@ class Request
 {
     private const DEFAULT_TIMEOUT = 5;
 
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    public function __construct(ApiKernel $kernel, LoggerInterface $logger = null)
+    public function __construct(private readonly ApiKernel $kernel, private readonly ?\Psr\Log\LoggerInterface $logger = null)
     {
-        $this->kernel = $kernel;
-        $this->logger = $logger;
     }
 
     public function get(string $url, int &$statusCode = null, bool $catch = false, int $timeout = self::DEFAULT_TIMEOUT): ?string
@@ -51,12 +39,12 @@ class Request
         try {
             $stream = fopen($url, 'r', false, $context);
             $statusCode = $this->getLastStatusCode($http_response_header ?? null);
-        } catch (\Throwable $e) {
+        } catch (\Throwable $throwable) {
             if ($catch) {
                 return false;
             }
 
-            throw new RequestException($url, $this->getLastStatusCode($http_response_header ?? null), $e);
+            throw new RequestException($url, $this->getLastStatusCode($http_response_header ?? null), $throwable);
         }
 
         return $stream;
@@ -103,12 +91,12 @@ class Request
             }
 
             $statusCode = $this->getLastStatusCode($http_response_header ?? null);
-        } catch (\Throwable $e) {
+        } catch (\Throwable $throwable) {
             if ($catch) {
                 return null;
             }
 
-            throw new RequestException($url, $this->getLastStatusCode($http_response_header ?? null), $e);
+            throw new RequestException($url, $this->getLastStatusCode($http_response_header ?? null), $throwable);
         }
 
         return $content;
@@ -120,10 +108,10 @@ class Request
         $options = array_replace_recursive($tlsDefaults, $options);
 
         if ($timeout > 0) {
-            $options['http']['timeout'] = $options['http']['timeout'] ?? $timeout;
+            $options['http']['timeout'] ??= $timeout;
         }
 
-        $options['http']['ignore_errors'] = $options['http']['ignore_errors'] ?? true;
+        $options['http']['ignore_errors'] ??= true;
 
         if (isset($options['http']['header']) && !\is_array($options['http']['header'])) {
             $options['http']['header'] = [$options['http']['header']];
@@ -231,7 +219,7 @@ class Request
         return $defaults;
     }
 
-    private function getLastStatusCode($http_response_header): int
+    private function getLastStatusCode(?array $http_response_header): int
     {
         if (!\is_array($http_response_header)) {
             return 500;
@@ -242,7 +230,7 @@ class Request
         $http_response_header = array_reverse($http_response_header);
 
         foreach ($http_response_header as $header) {
-            if (preg_match('{^HTTP/.+ (\d{3}) }i', $header, $matches)) {
+            if (preg_match('{^HTTP/.+ (\d{3}) }i', (string) $header, $matches)) {
                 return (int) $matches[1];
             }
         }

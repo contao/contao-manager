@@ -12,14 +12,11 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\TaskOperation;
 
-class ConsoleOutput
+class ConsoleOutput implements \Stringable
 {
-    /**
-     * @var string
-     */
-    private $output = '';
+    private string $output = '';
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->output;
     }

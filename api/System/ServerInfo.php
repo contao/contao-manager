@@ -22,6 +22,7 @@ use Contao\ManagerApi\Process\PhpExecutableFinder;
 class ServerInfo
 {
     public const PLATFORM_WINDOWS = 'windows';
+
     public const PLATFORM_UNIX = 'unix';
 
     private const PHP_BINARIES = [
@@ -66,20 +67,8 @@ class ServerInfo
         'C:\laragon\bin\php\php-{major}.{minor}.{release}-Win32-VC15-x64\php.EXE',
     ];
 
-    /**
-     * @var ManagerConfig
-     */
-    private $managerConfig;
-
-    /**
-     * @var PhpExecutableFinder
-     */
-    private $phpExecutableFinder;
-
-    public function __construct(PhpExecutableFinder $phpExecutableFinder, ManagerConfig $managerConfig)
+    public function __construct(private readonly PhpExecutableFinder $phpExecutableFinder, private readonly ManagerConfig $managerConfig)
     {
-        $this->phpExecutableFinder = $phpExecutableFinder;
-        $this->managerConfig = $managerConfig;
     }
 
     public function getPhpExecutableFinder(): PhpExecutableFinder

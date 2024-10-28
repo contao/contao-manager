@@ -23,6 +23,6 @@ try {
     $response = $kernel->handle($request);
     $response->send();
     $kernel->terminate($request, $response);
-} catch (Throwable $e) {
-    ApiProblemResponse::createFromException($e, '@symfony_env@' !== 'prod')->send();
+} catch (Throwable $throwable) {
+    ApiProblemResponse::createFromException($throwable, '@symfony_env@' !== 'prod')->send();
 }

@@ -20,19 +20,11 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 class ContaoConsole
 {
     /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
      * @var string|null
      */
     private $version;
 
-    /**
-     * @var array|null
-     */
-    private $commands;
+    private ?array $commands = null;
 
     /**
      * @var @array|null
@@ -42,9 +34,8 @@ class ContaoConsole
     /**
      * Constructor.
      */
-    public function __construct(ConsoleProcessFactory $processFactory)
+    public function __construct(private readonly ConsoleProcessFactory $processFactory)
     {
-        $this->processFactory = $processFactory;
     }
 
     /**
@@ -73,7 +64,7 @@ class ContaoConsole
             // Run parser to check whether a valid version was returned
             $parser = new VersionParser();
             $parser->normalize($version);
-        } catch (\UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException) {
             throw new ProcessOutputException('Console output is not a valid version string.', $process);
         }
 
@@ -108,7 +99,7 @@ class ContaoConsole
                 $parser->normalize($data['application']['version']);
 
                 $this->version = $data['application']['version'];
-            } catch (\UnexpectedValueException $e) {
+            } catch (\UnexpectedValueException) {
                 // ignore version from command list
             }
         }
@@ -286,7 +277,7 @@ class ContaoConsole
         if (
             !isset($commands['contao:user:create']['options'])
             || ($admin && !\in_array('admin', $commands['contao:user:create']['options'], true))
-            || !empty(array_diff(array_keys($user), $commands['contao:user:create']['options']))
+            || array_diff(array_keys($user), $commands['contao:user:create']['options']) !== []
         ) {
             throw new \RuntimeException('Unsupported argument to the contao:user:create command.');
         }

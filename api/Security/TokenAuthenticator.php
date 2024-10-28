@@ -26,11 +26,6 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
     /**
-     * @var UserConfig
-     */
-    private $config;
-
-    /**
      * @var string
      */
     private $tokenId;
@@ -38,9 +33,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * Constructor.
      */
-    public function __construct(UserConfig $config)
+    public function __construct(private readonly UserConfig $config)
     {
-        $this->config = $config;
     }
 
     public function supports(Request $request): bool

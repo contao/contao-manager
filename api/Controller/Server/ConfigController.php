@@ -30,32 +30,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ConfigController
 {
-    /**
-     * @var ManagerConfig
-     */
-    private $config;
-
-    /**
-     * @var ServerInfo
-     */
-    private $serverInfo;
-
-    /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    public function __construct(ManagerConfig $config, ServerInfo $serverInfo, Environment $environment, Translator $translator)
+    public function __construct(private readonly ManagerConfig $config, private readonly ServerInfo $serverInfo, private readonly Environment $environment, private readonly Translator $translator)
     {
-        $this->config = $config;
-        $this->serverInfo = $serverInfo;
-        $this->environment = $environment;
-        $this->translator = $translator;
     }
 
     public function __invoke(Request $request): Response
@@ -92,7 +68,7 @@ class ConfigController
         );
     }
 
-    private function validatePhpCli($phpCli): ?string
+    private function validatePhpCli(string $phpCli): ?string
     {
         try {
             $info = $this->serverInfo->getPhpExecutableFinder()->getServerInfo($phpCli);
@@ -105,7 +81,7 @@ class ConfigController
         }
 
         $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
-        $vCli = vsprintf('%s.%s', explode('.', $info['version']));
+        $vCli = vsprintf('%s.%s', explode('.', (string) $info['version']));
 
         if (version_compare($vWeb, $vCli, '<>')) {
             return $this->translator->trans(

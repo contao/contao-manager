@@ -36,40 +36,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class UpdateTask extends AbstractPackagesTask
 {
-    /**
-     * @var ContaoConsole
-     */
-    private $contaoConsole;
-
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
-     * @var CloudResolver
-     */
-    private $cloudResolver;
-
-    /**
-     * @var UploadsConfig
-     */
-    private $uploads;
-
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    public function __construct(ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, UploadsConfig $uploads, ApiKernel $kernel, Environment $environment, Filesystem $filesystem, Translator $translator)
+    public function __construct(private readonly ContaoConsole $contaoConsole, private readonly ConsoleProcessFactory $processFactory, private readonly CloudResolver $cloudResolver, private readonly UploadsConfig $uploads, private readonly ApiKernel $kernel, Environment $environment, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $filesystem, $translator);
-
-        $this->contaoConsole = $contaoConsole;
-        $this->processFactory = $processFactory;
-        $this->cloudResolver = $cloudResolver;
-        $this->uploads = $uploads;
-        $this->kernel = $kernel;
     }
 
     public function getName(): string
@@ -100,11 +69,11 @@ class UpdateTask extends AbstractPackagesTask
 
         $operations = [];
 
-        if (($required = $changes->getRequiredPackages()) && !empty($required)) {
+        if (($required = $changes->getRequiredPackages()) && $required !== []) {
             $operations[] = new RequireOperation($this->processFactory, $required);
         }
 
-        if (($removed = $changes->getRemovedPackages()) && !empty($removed)) {
+        if (($removed = $changes->getRemovedPackages()) && $removed !== []) {
             $operations[] = new RemoveOperation($this->processFactory, $removed);
         }
 
@@ -127,14 +96,12 @@ class UpdateTask extends AbstractPackagesTask
         if ($config->getOption('uploads', false) && \count($this->uploads)) {
             $uploads = array_filter(
                 $this->uploads->all(),
-                static function ($upload) use ($changes) {
-                    return $upload['success']
-                        && isset($upload['package']['name'])
-                        && (
-                            0 === \count($changes->getUpdates()) ||
-                            \in_array($upload['package']['name'], $changes->getUpdates(), true)
-                        );
-                }
+                static fn($upload): bool => $upload['success']
+                    && isset($upload['package']['name'])
+                    && (
+                        [] === $changes->getUpdates() ||
+                        \in_array($upload['package']['name'], $changes->getUpdates(), true)
+                    )
             );
 
             array_unshift($operations, new InstallUploadsOperation(
@@ -195,7 +162,7 @@ class UpdateTask extends AbstractPackagesTask
             isset($rootRequires['contao/conflicts'])
             && '*@dev' === $rootRequires['contao/conflicts']->getPrettyConstraint()
         ) {
-            if (!empty($definition->getUpdates())) {
+            if ($definition->getUpdates() !== []) {
                 $definition->addUpdate('contao/conflicts');
             }
 
@@ -208,7 +175,7 @@ class UpdateTask extends AbstractPackagesTask
     private function handleContaoRequirement(CloudChanges $definition): void
     {
         foreach ($definition->getRequiredPackages() as $require) {
-            $require = explode('=', $require, 2);
+            $require = explode('=', (string) $require, 2);
             $packageName = $require[0];
             $version = $require[1] ?? null;
 
@@ -245,7 +212,7 @@ class UpdateTask extends AbstractPackagesTask
                         }
 
                         $jsonFile->write($json);
-                    } catch (\Exception $e) {
+                    } catch (\Exception) {
                         // Ignore
                     }
                 }

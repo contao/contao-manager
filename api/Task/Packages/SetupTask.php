@@ -30,34 +30,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class SetupTask extends AbstractPackagesTask
 {
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
-     * @var CloudResolver
-     */
-    private $cloudResolver;
-
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    /**
-     * @var UploadsConfig
-     */
-    private $uploads;
-
-    public function __construct(ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, ApiKernel $kernel, UploadsConfig $uploads, Environment $environment, Filesystem $filesystem, Translator $translator)
+    public function __construct(private readonly ConsoleProcessFactory $processFactory, private readonly CloudResolver $cloudResolver, private readonly ApiKernel $kernel, private readonly UploadsConfig $uploads, Environment $environment, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $filesystem, $translator);
-
-        $this->processFactory = $processFactory;
-        $this->cloudResolver = $cloudResolver;
-        $this->kernel = $kernel;
-        $this->uploads = $uploads;
     }
 
     public function getName(): string

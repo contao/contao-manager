@@ -27,14 +27,8 @@ class CloudResolver implements LoggerAwareInterface
 
     private const API_URL = 'https://www.composer-resolver.cloud';
 
-    /**
-     * @var Request
-     */
-    private $request;
-
-    public function __construct(Request $request)
+    public function __construct(private Request $request)
     {
-        $this->request = $request;
     }
 
     /**
@@ -105,14 +99,10 @@ class CloudResolver implements LoggerAwareInterface
             $statusCode
         );
 
-        switch ($statusCode) {
-            case 200:
-            case 202:
-                return new CloudJob(JsonFile::parseJson($content));
-
-            default:
-                throw $this->createUnknownResponseException($statusCode, $content);
-        }
+        return match ($statusCode) {
+            200, 202 => new CloudJob(JsonFile::parseJson($content)),
+            default => throw $this->createUnknownResponseException($statusCode, $content),
+        };
     }
 
     /**
@@ -169,7 +159,7 @@ class CloudResolver implements LoggerAwareInterface
         return $this->getContent($job->getLink(CloudJob::LINK_OUTPUT));
     }
 
-    private function getContent($link): string
+    private function getContent(string $link): string
     {
         $content = $this->request->getJson(
             self::API_URL.$link,
@@ -185,7 +175,7 @@ class CloudResolver implements LoggerAwareInterface
         throw $this->createUnknownResponseException($statusCode, $content);
     }
 
-    private function createUnknownResponseException($statusCode, $responseBody, $requestBody = null): CloudException
+    private function createUnknownResponseException($statusCode, ?string $responseBody, $requestBody = null): CloudException
     {
         return new CloudException('Composer Resolver returned an unexpected status code', (int) $statusCode, (string) $responseBody, $requestBody);
     }

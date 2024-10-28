@@ -21,15 +21,8 @@ use Contao\ManagerApi\TaskOperation\Contao\BackupCreateOperation;
 
 class BackupCreateTask extends AbstractTask
 {
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    public function __construct(ConsoleProcessFactory $processFactory, Translator $translator)
+    public function __construct(private readonly ConsoleProcessFactory $processFactory, Translator $translator)
     {
-        $this->processFactory = $processFactory;
-
         parent::__construct($translator);
     }
 

@@ -24,20 +24,13 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class PasswordlessAuthenticator extends AbstractBrowserAuthenticator
 {
     /**
-     * @var UserConfig
-     */
-    private $config;
-
-    /**
      * @var string
      */
     private $tokenId;
 
-    public function __construct(UserConfig $config, JwtManager $jwtManager, Filesystem $filesystem, ApiKernel $kernel)
+    public function __construct(private readonly UserConfig $config, JwtManager $jwtManager, Filesystem $filesystem, ApiKernel $kernel)
     {
         parent::__construct($jwtManager, $filesystem, $kernel);
-
-        $this->config = $config;
     }
 
     public function supports(Request $request): bool

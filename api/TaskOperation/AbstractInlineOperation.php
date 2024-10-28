@@ -22,16 +22,10 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
     use LoggerAwareTrait;
 
     /**
-     * @var TaskConfig
-     */
-    protected $taskConfig;
-
-    /**
      * Constructor.
      */
-    public function __construct(TaskConfig $taskConfig)
+    public function __construct(protected \Contao\ManagerApi\Task\TaskConfig $taskConfig)
     {
-        $this->taskConfig = $taskConfig;
     }
 
     public function getDetails(): ?string
@@ -83,6 +77,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
 
         $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ACTIVE);
         $this->taskConfig->setState($this->getName().'.started', time());
+
         $success = null;
 
         register_shutdown_function(
@@ -95,8 +90,8 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
 
         try {
             $success = $this->doRun();
-        } catch (\Throwable $e) {
-            $this->taskConfig->setState($this->getName().'.error', $e->getMessage());
+        } catch (\Throwable $throwable) {
+            $this->taskConfig->setState($this->getName().'.error', $throwable->getMessage());
             $success = false;
         }
 

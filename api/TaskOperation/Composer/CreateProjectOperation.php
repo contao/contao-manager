@@ -23,40 +23,21 @@ use Symfony\Component\Finder\Finder;
 class CreateProjectOperation extends AbstractProcessOperation
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * @var string
-     */
-    private $package;
-
-    /**
-     * @var string|null
-     */
-    private $version;
-
-    /**
      * @var string
      */
     private $publicDir;
 
-    public function __construct(TaskConfig $taskConfig, ConsoleProcessFactory $processFactory, ApiKernel $kernel, Environment $environment, string $package, string $version = null, bool $isUpload = false)
+    public function __construct(TaskConfig $taskConfig, ConsoleProcessFactory $processFactory, ApiKernel $kernel, private readonly Environment $environment, private readonly string $package, private readonly ?string $version = null, bool $isUpload = false)
     {
-        $this->environment = $environment;
-        $this->package = $package;
-        $this->version = $version;
-
         try {
             parent::__construct($processFactory->restoreBackgroundProcess('composer-create-project'));
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $folder = uniqid('contao-');
 
             $arguments = [
                 'composer',
                 'create-project',
-                $package.($version ? ':'.$version : ''),
+                $this->package.($this->version ? ':'.$this->version : ''),
                 $folder,
                 '--no-install',
                 '--no-scripts',
@@ -67,10 +48,10 @@ class CreateProjectOperation extends AbstractProcessOperation
             ];
 
             if ($isUpload) {
-                $arguments[] = '--repository='.json_encode(['type' => 'artifact', 'url' => $environment->getArtifactDir()]);
+                $arguments[] = '--repository='.json_encode(['type' => 'artifact', 'url' => $this->environment->getArtifactDir()]);
             }
 
-            if ($environment->isDebug()) {
+            if ($this->environment->isDebug()) {
                 $arguments[] = '--profile';
                 $arguments[] = '-vvv';
             }
@@ -135,7 +116,7 @@ class CreateProjectOperation extends AbstractProcessOperation
                     $json = $file->read();
                     $json['extra']['public-dir'] = basename($this->publicDir);
                     $file->write($json);
-                } catch (\RuntimeException $e) {
+                } catch (\RuntimeException) {
                     // ignore
                 }
 

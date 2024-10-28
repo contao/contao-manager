@@ -40,8 +40,8 @@ class SelfUpdateController
             $error = null;
             $supportsUpdate = $updater->supportsUpdate();
             $latestVersion = $updater->getNewVersion();
-        } catch (\Throwable $e) {
-            $error = $e->getMessage();
+        } catch (\Throwable $throwable) {
+            $error = $throwable->getMessage();
             $supportsUpdate = true;
             $latestVersion = $updater->getOldVersion();
         }

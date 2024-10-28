@@ -27,15 +27,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MissingPackagesController
 {
-    /**
-     * @var RepositoryInterface
-     */
-    private $localRepository;
+    private readonly \Composer\Repository\InstalledRepositoryInterface $localRepository;
 
-    /**
-     * @var InstalledRepository
-     */
-    private $compositeRepository;
+    private readonly \Composer\Repository\InstalledRepository $compositeRepository;
 
     public function __construct(Environment $environment)
     {
@@ -61,14 +55,14 @@ class MissingPackagesController
 
             $replaces = array_keys($package->getReplaces());
 
-            if (0 !== \count($replaces) && $this->hasDependents($replaces)) {
+            if ([] !== $replaces && $this->hasDependents($replaces)) {
                 continue;
             }
 
             $missing[] = $package->getName();
         }
 
-        if (0 === \count($missing)) {
+        if ([] === $missing) {
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 

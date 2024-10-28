@@ -27,28 +27,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class InstallTask extends AbstractPackagesTask
 {
-    /**
-     * @var ContaoConsole
-     */
-    private $contaoConsole;
-
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
-     * @var CloudResolver
-     */
-    private $cloudResolver;
-
-    public function __construct(ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, CloudResolver $cloudResolver, Environment $environment, Filesystem $filesystem, Translator $translator)
+    public function __construct(private readonly ContaoConsole $contaoConsole, private readonly ConsoleProcessFactory $processFactory, private readonly CloudResolver $cloudResolver, Environment $environment, Filesystem $filesystem, Translator $translator)
     {
         parent::__construct($environment, $filesystem, $translator);
-
-        $this->contaoConsole = $contaoConsole;
-        $this->processFactory = $processFactory;
-        $this->cloudResolver = $cloudResolver;
     }
 
     public function getName(): string

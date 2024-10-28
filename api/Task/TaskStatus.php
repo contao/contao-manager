@@ -19,51 +19,32 @@ use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 final class TaskStatus implements \JsonSerializable
 {
     public const STATUS_ACTIVE = 'active';
+
     public const STATUS_COMPLETE = 'complete';
+
     public const STATUS_ERROR = 'error';
+
     public const STATUS_ABORTING = 'aborting';
+
     public const STATUS_STOPPED = 'stopped';
 
-    /**
-     * @var string
-     */
-    private $id;
+    private bool $cancellable = false;
 
-    /**
-     * @var string
-     */
-    private $title;
+    private bool $autoClose = false;
 
-    /**
-     * @var array<TaskOperationInterface>
-     */
-    private $operations;
+    private bool $audit = false;
 
-    /**
-     * @var bool
-     */
-    private $cancellable = false;
+    private bool $abort = false;
 
-    /**
-     * @var bool
-     */
-    private $autoClose = false;
-
-    /**
-     * @var bool
-     */
-    private $audit = false;
-
-    /**
-     * @var bool
-     */
-    private $abort = false;
-
-    public function __construct(string $id, string $title, array $operations)
+    public function __construct(
+        private readonly string $id,
+        private readonly string $title,
+        /**
+         * @var array<TaskOperationInterface>
+         */
+        private readonly array $operations
+    )
     {
-        $this->id = $id;
-        $this->title = $title;
-        $this->operations = $operations;
     }
 
     public function getTitle(): string
@@ -219,21 +200,12 @@ final class TaskStatus implements \JsonSerializable
 
     private function getOperationStatus(TaskOperationInterface $operation, bool $isNext = false): string
     {
-        switch (true) {
-            case $operation->isRunning():
-                return self::STATUS_ACTIVE;
-
-            case $operation->isSuccessful():
-                return self::STATUS_COMPLETE;
-
-            case $operation->hasError():
-                return self::STATUS_ERROR;
-        }
-
-        if ($isNext || $operation->isStarted()) {
-            return self::STATUS_ACTIVE;
-        }
-
-        return 'pending';
+        return match (true) {
+            $operation->isRunning() => self::STATUS_ACTIVE,
+            $operation->isSuccessful() => self::STATUS_COMPLETE,
+            $operation->hasError() => self::STATUS_ERROR,
+            $isNext || $operation->isStarted() => self::STATUS_ACTIVE,
+            default => 'pending',
+        };
     }
 }

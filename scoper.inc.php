@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Isolated\Symfony\Component\Finder\Finder;
 
 $polyfillsBootstraps = array_map(
-    static fn (SplFileInfo $fileInfo) => $fileInfo->getPathname(),
+    static fn (SplFileInfo $fileInfo): string => $fileInfo->getPathname(),
     iterator_to_array(
         Finder::create()
             ->files()
@@ -16,7 +16,7 @@ $polyfillsBootstraps = array_map(
 );
 
 $polyfillsStubs = array_map(
-    static fn (SplFileInfo $fileInfo) => $fileInfo->getPathname(),
+    static fn (SplFileInfo $fileInfo): string => $fileInfo->getPathname(),
     iterator_to_array(
         Finder::create()
             ->files()
@@ -27,7 +27,7 @@ $polyfillsStubs = array_map(
 );
 
 $symfonyDeprecationContracts = array_map(
-    static fn (SplFileInfo $fileInfo) => $fileInfo->getPathname(),
+    static fn (SplFileInfo $fileInfo): string => $fileInfo->getPathname(),
     iterator_to_array(
         Finder::create()
             ->files()
@@ -94,7 +94,7 @@ return [
                 return $contents;
             }
 
-            $contents = str_replace(
+            return str_replace(
                 [
                     '$definition = \substr_replace($definition, \'53\', 2, 2);',
                     '$definition = \substr_replace($definition, \'Child\', 44, 0);',
@@ -105,17 +105,13 @@ return [
                 ],
                 $contents
             );
-
-            return $contents;
         },
         static function (string $filePath, string $prefix, string $contents): string {
             if (!str_starts_with($filePath, 'vendor/composer/composer/src/Composer/Package')) {
                 return $contents;
             }
 
-            $contents = str_replace("'$prefix\\\\", "'", $contents);
-
-            return $contents;
+            return str_replace("'$prefix\\\\", "'", $contents);
         },
 
         // Fix error templates (e.g. /vendor/symfony/error-handler/Resources/views)

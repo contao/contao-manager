@@ -28,15 +28,11 @@ class OpcacheController
             return new JsonResponse(null, Response::HTTP_NOT_IMPLEMENTED);
         }
 
-        switch ($request->getMethod()) {
-            case 'GET':
-                return $this->getOpcache();
-
-            case 'DELETE':
-                return $this->deleteOpcache();
-        }
-
-        return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+        return match ($request->getMethod()) {
+            'GET' => $this->getOpcache(),
+            'DELETE' => $this->deleteOpcache(),
+            default => new Response(null, Response::HTTP_METHOD_NOT_ALLOWED),
+        };
     }
 
     private function getOpcache(): Response

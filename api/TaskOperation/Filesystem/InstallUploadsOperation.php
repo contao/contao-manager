@@ -21,33 +21,11 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class InstallUploadsOperation extends AbstractInlineOperation
 {
-    /**
-     * @var array
-     */
-    private $uploads;
+    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
 
-    /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    public function __construct(array $uploads, TaskConfig $config, Environment $environment, Translator $translator, Filesystem $filesystem = null)
+    public function __construct(private readonly array $uploads, TaskConfig $config, private readonly Environment $environment, private readonly Translator $translator, Filesystem $filesystem = null)
     {
         parent::__construct($config);
-
-        $this->uploads = $uploads;
-        $this->environment = $environment;
-        $this->translator = $translator;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -59,9 +37,7 @@ class InstallUploadsOperation extends AbstractInlineOperation
     public function getDetails(): ?string
     {
         $files = array_map(
-            static function ($config) {
-                return $config['name'];
-            },
+            static fn($config) => $config['name'],
             $this->uploads
         );
 
@@ -81,9 +57,7 @@ class InstallUploadsOperation extends AbstractInlineOperation
         if (!empty($installed)) {
             $console->add(
                 implode('', array_map(
-                    function ($upload) {
-                        return '- '.$this->translator->trans('taskoperation.install-uploads.console', $upload);
-                    },
+                    fn($upload): string => '- '.$this->translator->trans('taskoperation.install-uploads.console', $upload),
                     $installed
                 ))
             );
@@ -97,7 +71,7 @@ class InstallUploadsOperation extends AbstractInlineOperation
         $installed = [];
 
         foreach ($this->uploads as $config) {
-            $target = basename($config['package']['dist']['url']);
+            $target = basename((string) $config['package']['dist']['url']);
 
             // Ignore if a file is already installed, so it's not deleted on failed operation
             if ($this->filesystem->exists($this->environment->getArtifactDir().'/'.$target)) {

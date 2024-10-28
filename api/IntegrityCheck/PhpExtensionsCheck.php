@@ -16,7 +16,7 @@ use Crell\ApiProblem\ApiProblem;
 
 class PhpExtensionsCheck extends AbstractIntegrityCheck
 {
-    private static $extensions = [
+    private static array $extensions = [
         'intl',
         'dom',
         'xmlreader',
@@ -34,7 +34,7 @@ class PhpExtensionsCheck extends AbstractIntegrityCheck
         return null;
     }
 
-    private function checkExtension($extension): ?ApiProblem
+    private function checkExtension(string $extension): ?ApiProblem
     {
         if (\extension_loaded($extension)) {
             return null;

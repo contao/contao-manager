@@ -22,23 +22,10 @@ use Symfony\Component\Filesystem\Filesystem;
 abstract class AbstractPackagesTask extends AbstractTask
 {
     /**
-     * @var Environment
-     */
-    protected $environment;
-
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
-
-    /**
      * Constructor.
      */
-    public function __construct(Environment $environment, Filesystem $filesystem, Translator $translator)
+    public function __construct(protected \Contao\ManagerApi\Composer\Environment $environment, protected \Symfony\Component\Filesystem\Filesystem $filesystem, Translator $translator)
     {
-        $this->environment = $environment;
-        $this->filesystem = $filesystem;
-
         parent::__construct($translator);
     }
 

@@ -17,22 +17,13 @@ use Symfony\Component\Yaml\Yaml;
 
 class Translator
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
-     * @var array
-     */
-    private $labels = [];
+    private array $labels = [];
 
     /**
      * Constructor.
      */
-    public function __construct(RequestStack $requestStack)
+    public function __construct(private readonly RequestStack $requestStack)
     {
-        $this->requestStack = $requestStack;
     }
 
     /**
@@ -76,7 +67,7 @@ class Translator
      */
     private function replaceParameters(string $label, array $params): string
     {
-        if (empty($params)) {
+        if ($params === []) {
             return $label;
         }
 

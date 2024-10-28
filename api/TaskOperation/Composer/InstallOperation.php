@@ -20,40 +20,21 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class InstallOperation extends AbstractProcessOperation
 {
-    /**
-     * @var TaskConfig
-     */
-    private $taskConfig;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @var bool
-     */
-    private $dryRun;
-
-    public function __construct(ConsoleProcessFactory $processFactory, TaskConfig $taskConfig, Environment $environment, Translator $translator, bool $dryRun = false, bool $retry = true)
+    public function __construct(ConsoleProcessFactory $processFactory, private readonly TaskConfig $taskConfig, Environment $environment, private readonly Translator $translator, private readonly bool $dryRun = false, bool $retry = true)
     {
-        $this->taskConfig = $taskConfig;
-        $this->translator = $translator;
-        $this->dryRun = $dryRun;
-
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-install');
-            $retries = $taskConfig->getState('install-retry', 0);
+            $retries = $this->taskConfig->getState('install-retry', 0);
 
             if ($retry && $retries < 4 && $process->isTerminated() && !$process->isSuccessful()) {
                 $process->delete();
-                $taskConfig->setState('install-retry', ++$retries);
+                $this->taskConfig->setState('install-retry', ++$retries);
 
                 throw new \RuntimeException('Install process failed, restarting');
             }
 
             parent::__construct($process);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $arguments = [
                 'composer',
                 'install',
@@ -64,7 +45,7 @@ class InstallOperation extends AbstractProcessOperation
                 '--optimize-autoloader',
             ];
 
-            if ($dryRun) {
+            if ($this->dryRun) {
                 $arguments[] = '--dry-run';
                 $arguments[] = '--no-scripts';
                 $arguments[] = '--no-plugins';
@@ -114,7 +95,7 @@ class InstallOperation extends AbstractProcessOperation
         if ($this->isSuccessful()) {
             $output = $this->process->getOutput();
 
-            if (false !== strpos($output, 'Nothing to install or update')) {
+            if (str_contains($output, 'Nothing to install or update')) {
                 return $this->translator->trans('taskoperation.composer-install.nothing');
             }
 

@@ -19,16 +19,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateCommand extends Command
 {
-    /**
-     * @var SelfUpdate
-     */
-    private $updater;
-
-    public function __construct(SelfUpdate $selfUpdate)
+    public function __construct(private readonly SelfUpdate $updater)
     {
         parent::__construct();
-
-        $this->updater = $selfUpdate;
     }
 
     public function isEnabled(): bool
@@ -36,7 +29,7 @@ class UpdateCommand extends Command
         return '' !== \Phar::running(false) && parent::isEnabled();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->updater->supportsUpdate()) {
             throw new \RuntimeException('Your server does not meet the requirements of the next Contao Manager version.');

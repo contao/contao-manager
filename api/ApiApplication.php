@@ -27,21 +27,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ApiApplication extends Application
 {
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
+    private bool $commandsRegistered = false;
 
-    /**
-     * @var bool
-     */
-    private $commandsRegistered = false;
-
-    public function __construct(ApiKernel $kernel)
+    public function __construct(private readonly ApiKernel $kernel)
     {
-        $this->kernel = $kernel;
-
-        parent::__construct('Contao Manager', $kernel->getVersion());
+        parent::__construct('Contao Manager', $this->kernel->getVersion());
 
         $this->getDefinition()->addOption(new InputOption('disable-events', null, InputOption::VALUE_NONE, 'Disables the event dispatcher.'));
     }

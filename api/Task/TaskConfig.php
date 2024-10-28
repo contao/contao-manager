@@ -17,34 +17,24 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class TaskConfig
 {
-    /**
-     * @var string
-     */
-    private $file;
+    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
 
-    /**
-     * @var Filesystem|null
-     */
-    private $filesystem;
+    private array $data;
 
-    /**
-     * @var array
-     */
-    private $data;
+    private bool $isDeleted = false;
 
-    private $isDeleted = false;
-
-    public function __construct(string $file, string $name = null, array $options = null, Filesystem $filesystem = null)
+    public function __construct(private readonly string $file, string $name = null, array $options = null, Filesystem $filesystem = null)
     {
-        $this->file = $file;
         $this->filesystem = $filesystem ?: new Filesystem();
 
         if (null === $name && null === $options) {
-            $this->data = json_decode(file_get_contents($file), true);
+            $data = json_decode(file_get_contents($this->file), true);
 
-            if (!\is_array($this->data)) {
-                throw new \RuntimeException(sprintf('Invalid task data in file "%s"', $file));
+            if (!\is_array($data)) {
+                throw new \RuntimeException(sprintf('Invalid task data in file "%s"', $this->file));
             }
+
+            $this->data = $data;
 
             return;
         }

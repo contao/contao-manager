@@ -19,20 +19,13 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 class DumpAutoloadOperation extends AbstractProcessOperation
 {
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * Constructor.
      */
-    public function __construct(ConsoleProcessFactory $processFactory, Translator $translator)
+    public function __construct(ConsoleProcessFactory $processFactory, private readonly Translator $translator)
     {
-        $this->translator = $translator;
-
         try {
             parent::__construct($processFactory->restoreBackgroundProcess('dump-autoload'));
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             parent::__construct(
                 $processFactory->createManagerConsoleBackgroundProcess(
                     [
@@ -62,7 +55,7 @@ class DumpAutoloadOperation extends AbstractProcessOperation
         return '';
     }
 
-    private function getTotalClasses(string $output)
+    private function getTotalClasses(string $output): ?string
     {
         $lines = explode("\n", $output);
 

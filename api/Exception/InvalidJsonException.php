@@ -14,32 +14,13 @@ namespace Contao\ManagerApi\Exception;
 
 class InvalidJsonException extends \InvalidArgumentException
 {
-    /**
-     * @var string
-     */
-    private $filename;
+    private readonly int $jsonError;
 
-    /**
-     * @var int
-     */
-    private $jsonError;
+    private readonly string $jsonErrorMsg;
 
-    /**
-     * @var string
-     */
-    private $jsonErrorMsg;
-
-    /**
-     * @var string
-     */
-    private $content;
-
-    public function __construct(string $filename, string $content = '', int $code = 0, \Throwable $previous = null)
+    public function __construct(private readonly string $filename, private readonly string $content = '', int $code = 0, \Throwable $previous = null)
     {
-        parent::__construct(sprintf('File "%s" does not contain valid JSON.', $filename), $code, $previous);
-
-        $this->filename = $filename;
-        $this->content = $content;
+        parent::__construct(sprintf('File "%s" does not contain valid JSON.', $this->filename), $code, $previous);
 
         $this->jsonError = json_last_error();
         $this->jsonErrorMsg = json_last_error_msg();

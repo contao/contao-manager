@@ -30,26 +30,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DatabaseMigrationController
 {
-    /**
-     * @var ContaoConsole
-     */
-    private $console;
-
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    public function __construct(ContaoConsole $console, ConsoleProcessFactory $processFactory, ApiKernel $kernel)
+    public function __construct(private readonly ContaoConsole $console, private readonly ConsoleProcessFactory $processFactory, private readonly ApiKernel $kernel)
     {
-        $this->processFactory = $processFactory;
-        $this->console = $console;
-        $this->kernel = $kernel;
     }
 
     public function __invoke(Request $request): Response
@@ -176,7 +158,7 @@ class DatabaseMigrationController
     {
         try {
             return $this->processFactory->restoreBackgroundProcess('database-migration');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return null;
         }
     }
@@ -187,7 +169,7 @@ class DatabaseMigrationController
         $operations = [];
 
         foreach ($lines as $line) {
-            $data = json_decode($line, true);
+            $data = json_decode((string) $line, true);
             $type = $data['type'] ?? null;
 
             if (!\in_array($type, ['error', 'problem', 'warning'], true)) {
@@ -242,7 +224,7 @@ class DatabaseMigrationController
         $c = 0;
 
         foreach ($lines as $line) {
-            $data = json_decode($line, true);
+            $data = json_decode((string) $line, true);
 
             if ('migration-result' === ($data['type'] ?? '')) {
                 $operations[$c]['message'] = $data['message'];
@@ -272,7 +254,7 @@ class DatabaseMigrationController
         }
 
         foreach ($lines as $line) {
-            $data = json_decode($line, true);
+            $data = json_decode((string) $line, true);
             $type = $data['type'] ?? '';
             $name = $data['command'] ?? '';
 
@@ -308,7 +290,7 @@ class DatabaseMigrationController
         }
 
         if ($process->isSuccessful()) {
-            if (false !== strpos($process->getCommandLine(), '--dry-run')) {
+            if (str_contains($process->getCommandLine(), '--dry-run')) {
                 return 'pending';
             }
 
@@ -320,11 +302,11 @@ class DatabaseMigrationController
 
     private function getProcessType(ProcessController $process, string $default = ''): string
     {
-        if (false !== strpos($process->getCommandLine(), '--schema-only')) {
+        if (str_contains($process->getCommandLine(), '--schema-only')) {
             return 'schema-only';
         }
 
-        if (false !== strpos($process->getCommandLine(), '--migrations-only')) {
+        if (str_contains($process->getCommandLine(), '--migrations-only')) {
             return 'migrations-only';
         }
 

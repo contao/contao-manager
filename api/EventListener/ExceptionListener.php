@@ -26,24 +26,12 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class ExceptionListener implements EventSubscriberInterface
 {
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var bool
-     */
-    private $debug;
-
-    /**
      * Constructor.
      *
      * @param bool $debug
      */
-    public function __construct(LoggerInterface $logger, $debug = false)
+    public function __construct(private readonly LoggerInterface $logger, private $debug = false)
     {
-        $this->logger = $logger;
-        $this->debug = $debug;
     }
 
     /**
@@ -80,13 +68,9 @@ class ExceptionListener implements EventSubscriberInterface
      */
     private function logException(\Throwable $exception): void
     {
-        if (null === $this->logger) {
-            return;
-        }
-
         $message = sprintf(
             'Uncaught PHP Exception %s: "%s" at %s line %s',
-            \get_class($exception),
+            $exception::class,
             $exception->getMessage(),
             $exception->getFile(),
             $exception->getLine()
@@ -104,12 +88,9 @@ class ExceptionListener implements EventSubscriberInterface
      */
     private function convertException(\Throwable $exception): \Throwable
     {
-        switch (true) {
-            case $exception instanceof AccessDeniedException:
-            case $exception instanceof AuthenticationException:
-                return new AccessDeniedHttpException($exception->getMessage(), $exception);
-        }
-
-        return $exception;
+        return match (true) {
+            $exception instanceof AccessDeniedException, $exception instanceof AuthenticationException => new AccessDeniedHttpException($exception->getMessage(), $exception),
+            default => $exception,
+        };
     }
 }

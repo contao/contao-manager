@@ -24,14 +24,8 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class JwtAuthenticator extends AbstractGuardAuthenticator
 {
-    /**
-     * @var JwtManager
-     */
-    private $jwtManager;
-
-    public function __construct(JwtManager $jwtManager)
+    public function __construct(private readonly JwtManager $jwtManager)
     {
-        $this->jwtManager = $jwtManager;
     }
 
     public function supports(Request $request): bool

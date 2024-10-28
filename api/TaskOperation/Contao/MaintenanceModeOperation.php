@@ -18,25 +18,12 @@ use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 
 class MaintenanceModeOperation extends AbstractInlineOperation
 {
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
-     * @var string
-     */
-    private $state;
-
-    public function __construct(TaskConfig $taskConfig, ConsoleProcessFactory $processFactory, string $state)
+    public function __construct(TaskConfig $taskConfig, private readonly ConsoleProcessFactory $processFactory, private readonly string $state)
     {
-        $this->processFactory = $processFactory;
-        $this->state = $state;
-
         parent::__construct($taskConfig);
     }
 
-    public function getName(): string
+    protected function getName(): string
     {
         return 'maintenance-'.$this->state;
     }

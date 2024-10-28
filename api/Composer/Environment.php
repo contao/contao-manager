@@ -29,48 +29,12 @@ use Symfony\Component\Finder\Finder;
 
 class Environment
 {
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
+    private ?\Composer\Composer $composer = null;
 
-    /**
-     * @var ManagerConfig
-     */
-    private $managerConfig;
+    private ?\Composer\Util\Filesystem $composerFs = null;
 
-    /**
-     * @var ComposerConfig
-     */
-    private $composerConfig;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Composer
-     */
-    private $composer;
-
-    /**
-     * @var \Composer\Util\Filesystem
-     */
-    private $composerFs;
-
-    public function __construct(ApiKernel $kernel, ManagerConfig $managerConfig, ComposerConfig $composerConfig, Filesystem $filesystem, Request $request)
+    public function __construct(private readonly ApiKernel $kernel, private readonly ManagerConfig $managerConfig, private readonly ComposerConfig $composerConfig, private readonly Filesystem $filesystem, private readonly Request $request)
     {
-        $this->kernel = $kernel;
-        $this->managerConfig = $managerConfig;
-        $this->composerConfig = $composerConfig;
-        $this->filesystem = $filesystem;
-        $this->request = $request;
     }
 
     /**
@@ -204,7 +168,7 @@ class Environment
         $repositories = $this->getComposer()->getConfig()->getRepositories();
         unset($repositories['packagist.org']);
 
-        if (!empty($repositories) || !empty($json['repositories'])) {
+        if ($repositories !== [] || !empty($json['repositories'])) {
             $json['repositories'] = [];
 
             foreach ($repositories as $repository) {
@@ -283,7 +247,7 @@ class Environment
             $json = $this->getComposerJson();
 
             return isset($json['require'][$packageName]);
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             return false;
         }
     }
@@ -329,7 +293,7 @@ class Environment
                     unset($metadata['logo']);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return $package;
         }
 
@@ -344,7 +308,7 @@ class Environment
 
         $normalizedPath = $this->composerFs->normalizePath($path);
 
-        if (0 === strpos($path, './')) {
+        if (str_starts_with($path, './')) {
             $normalizedPath = './'.$normalizedPath;
         }
 

@@ -23,14 +23,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RootPackageController
 {
-    /**
-     * @var Environment
-     */
-    private $environment;
-
-    public function __construct(Environment $environment)
+    public function __construct(private readonly Environment $environment)
     {
-        $this->environment = $environment;
     }
 
     public function __invoke(): Response

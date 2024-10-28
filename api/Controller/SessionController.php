@@ -30,32 +30,8 @@ use Symfony\Component\Security\Core\Security;
  */
 class SessionController
 {
-    /**
-     * @var UserConfig
-     */
-    private $config;
-
-    /**
-     * @var Security
-     */
-    private $security;
-
-    /**
-     * @var JwtManager
-     */
-    private $jwtManager;
-
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    public function __construct(UserConfig $config, Security $security, JwtManager $jwtManager, ApiKernel $kernel)
+    public function __construct(private readonly UserConfig $config, private readonly Security $security, private readonly JwtManager $jwtManager, private readonly ApiKernel $kernel)
     {
-        $this->config = $config;
-        $this->security = $security;
-        $this->jwtManager = $jwtManager;
-        $this->kernel = $kernel;
     }
 
     public function __invoke(Request $request): Response

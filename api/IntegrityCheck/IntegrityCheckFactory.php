@@ -18,7 +18,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 class IntegrityCheckFactory implements ServiceSubscriberInterface
 {
-    private static $webChecks = [
+    private static array $webChecks = [
         AllowUrlFopenCheck::class,
         SysTempDirCheck::class,
         PhpExtensionsCheck::class,
@@ -29,7 +29,7 @@ class IntegrityCheckFactory implements ServiceSubscriberInterface
         ProcessCheck::class,
     ];
 
-    private static $cliChecks = [
+    private static array $cliChecks = [
         MemoryLimitCheck::class,
         AllowUrlFopenCheck::class,
         SysTempDirCheck::class,
@@ -38,14 +38,8 @@ class IntegrityCheckFactory implements ServiceSubscriberInterface
         ProcessCheck::class,
     ];
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(private readonly ContainerInterface $container)
     {
-        $this->container = $container;
     }
 
     public function runWebChecks(): ?ApiProblem

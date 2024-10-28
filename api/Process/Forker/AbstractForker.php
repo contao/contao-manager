@@ -17,31 +17,10 @@ use Symfony\Component\Process\Process;
 
 abstract class AbstractForker implements ForkerInterface
 {
-    /**
-     * @var array
-     */
-    protected $command;
+    private int $timeout = 500;
 
-    /**
-     * @var array|null
-     */
-    protected $env;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var int
-     */
-    private $timeout = 500;
-
-    public function __construct(array $command, array $env = null, LoggerInterface $logger = null)
+    public function __construct(protected array $command, protected ?array $env = null, protected ?\Psr\Log\LoggerInterface $logger = null)
     {
-        $this->command = $command;
-        $this->env = $env;
-        $this->logger = $logger;
     }
 
     public function setCommand(array $command): ForkerInterface
@@ -122,13 +101,14 @@ abstract class AbstractForker implements ForkerInterface
             return "'".str_replace("'", "'\\''", $argument)."'";
         }
 
-        if (false !== strpos($argument, "\0")) {
+        if (str_contains($argument, "\0")) {
             $argument = str_replace("\0", '?', $argument);
         }
 
         if (!preg_match('/[\/()%!^"<>&|\s]/', $argument)) {
             return $argument;
         }
+
         $argument = preg_replace('/(\\\\+)$/', '$1$1', $argument);
 
         return '"'.str_replace(['"', '^', '%', '!', "\n"], ['""', '"^^"', '"^%"', '"^!"', '!LF!'], $argument).'"';

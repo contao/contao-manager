@@ -32,7 +32,7 @@ class DisownForker extends AbstractForker
     {
         try {
             Process::fromShellCommandline("exec echo '' & disown")->mustRun(null, $this->env);
-        } catch (ProcessFailedException $e) {
+        } catch (ProcessFailedException) {
             return false;
         }
 

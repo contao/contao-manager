@@ -36,33 +36,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UploadPackagesController
 {
-    public const CHUNK_SIZE = 1048576; // 1MB
+    public const CHUNK_SIZE = 1048576;
 
-    /**
-     * @var UploadsConfig
-     */
-    private $config;
+    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
 
-    /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    public function __construct(UploadsConfig $config, Environment $environment, Translator $translator, Filesystem $filesystem = null)
+    public function __construct(private readonly UploadsConfig $config, private readonly Environment $environment, private readonly Translator $translator, Filesystem $filesystem = null)
     {
-        $this->config = $config;
-        $this->environment = $environment;
-        $this->translator = $translator;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -162,7 +141,7 @@ class UploadPackagesController
 
         try {
             $this->filesystem->remove($this->uploadPath($id));
-        } catch (IOException $e) {
+        } catch (IOException) {
             // Ignore if file could not be deleted
         }
 
@@ -229,21 +208,21 @@ class UploadPackagesController
             if (null === $json) {
                 return $this->installError($id, 'file');
             }
-        } catch (\RuntimeException $e) {
+        } catch (\RuntimeException) {
             return $this->installError($id, 'file');
         }
 
         try {
             $data = JsonFile::parseJson($json, $uploadFile.'#composer.json');
-        } catch (ParsingException $e) {
-            return $this->installError($id, 'json', $e);
+        } catch (ParsingException $exception) {
+            return $this->installError($id, 'json', $exception);
         }
 
         try {
             $schemaFile = __DIR__.'/../../../vendor/composer/composer/res/composer-schema.json';
 
             // Prepend with file:// only when not using a special schema already (e.g. in the phar)
-            if (false === strpos($schemaFile, '://')) {
+            if (!str_contains($schemaFile, '://')) {
                 $schemaFile = 'file://'.$schemaFile;
             }
 
@@ -253,11 +232,11 @@ class UploadPackagesController
             $value = json_decode(json_encode($data), false);
             $validator = new Validator();
             $validator->validate($value, $schema, \JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS);
-        } catch (ValidationException $e) {
-            return $this->installError($id, 'schema', $e);
+        } catch (ValidationException $exception) {
+            return $this->installError($id, 'schema', $exception);
         }
 
-        [$vendor, $package] = explode('/', $data['name']);
+        [$vendor, $package] = explode('/', (string) $data['name']);
 
         $config['success'] = true;
         $config['hash'] = sha1_file($uploadFile);
@@ -301,7 +280,7 @@ class UploadPackagesController
         $config['success'] = false;
         $config['error'] = $error;
 
-        if ($e) {
+        if ($e instanceof \Exception) {
             $config['exception'] = $e->getMessage();
         }
 
@@ -317,7 +296,7 @@ class UploadPackagesController
         }
 
         if (!\extension_loaded('zip')) {
-            throw new ApiProblemException((new ApiProblem('The artifact repository requires PHP\'s zip extension'))->setStatus(Response::HTTP_NOT_IMPLEMENTED));
+            throw new ApiProblemException((new ApiProblem("The artifact repository requires PHP's zip extension"))->setStatus(Response::HTTP_NOT_IMPLEMENTED));
         }
 
         $packages = $this->environment

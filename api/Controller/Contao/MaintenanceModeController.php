@@ -28,38 +28,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MaintenanceModeController
 {
-    /**
-     * @var ContaoConsole
-     */
-    private $console;
-
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    public function __construct(ContaoConsole $console, ConsoleProcessFactory $processFactory, ApiKernel $kernel, Filesystem $filesystem)
+    public function __construct(private readonly ContaoConsole $console, private readonly ConsoleProcessFactory $processFactory, private readonly ApiKernel $kernel, private readonly Filesystem $filesystem)
     {
-        $this->console = $console;
-        $this->processFactory = $processFactory;
-        $this->kernel = $kernel;
-        $this->filesystem = $filesystem;
     }
 
     public function __invoke(Request $request): Response
     {
         try {
             $commands = $this->console->getCommandList();
-        } catch (\RuntimeException $e) {
+        } catch (\RuntimeException) {
             $commands = [];
         }
 
@@ -72,18 +49,12 @@ class MaintenanceModeController
             );
         }
 
-        switch ($request->getMethod()) {
-            case 'GET':
-                return $this->getStatus($hasLexik);
-
-            case 'PUT':
-                return $this->enable($hasLexik);
-
-            case 'DELETE':
-                return $this->disable($hasLexik);
-        }
-
-        return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+        return match ($request->getMethod()) {
+            'GET' => $this->getStatus($hasLexik),
+            'PUT' => $this->enable($hasLexik),
+            'DELETE' => $this->disable($hasLexik),
+            default => new Response(null, Response::HTTP_METHOD_NOT_ALLOWED),
+        };
     }
 
     private function getStatus(bool $lexik): Response
@@ -133,6 +104,7 @@ class MaintenanceModeController
         $process = $this->processFactory->createContaoConsoleProcess($arguments);
 
         $process->run();
+
         $data = json_decode(trim($process->getOutput()), true);
 
         if (!\is_array($data)) {

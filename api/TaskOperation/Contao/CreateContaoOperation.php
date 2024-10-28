@@ -20,20 +20,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class CreateContaoOperation extends AbstractInlineOperation
 {
-    /**
-     * @var array
-     */
-    private static $supportedVersions = ['4.9', '4.13', '5.3', '5.4'];
-
-    /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
+    private static array $supportedVersions = ['4.9', '4.13', '5.3', '5.4'];
 
     /**
      * @var string
@@ -48,12 +35,9 @@ class CreateContaoOperation extends AbstractInlineOperation
     /**
      * Constructor.
      */
-    public function __construct(TaskConfig $taskConfig, Environment $environment, ApiKernel $kernel, Filesystem $filesystem)
+    public function __construct(TaskConfig $taskConfig, private readonly Environment $environment, ApiKernel $kernel, private readonly Filesystem $filesystem)
     {
         parent::__construct($taskConfig);
-
-        $this->environment = $environment;
-        $this->filesystem = $filesystem;
         $this->version = $taskConfig->getOption('version');
 
         if (!\in_array($this->version, static::$supportedVersions, true)) {
@@ -121,18 +105,18 @@ class CreateContaoOperation extends AbstractInlineOperation
         if ($coreOnly) {
             $require = <<<JSON
         "contao/conflicts": "*@dev",
-        "contao/manager-bundle": "$version"$coreBundle
+        "contao/manager-bundle": "{$version}"{$coreBundle}
 JSON;
         } else {
             $require = <<<JSON
         "contao/conflicts": "*@dev",
-        "contao/manager-bundle": "$version"$coreBundle,
-        "contao/calendar-bundle": "$version",
-        "contao/comments-bundle": "$version",
-        "contao/faq-bundle": "$version",
-        "contao/listing-bundle": "$version",
-        "contao/news-bundle": "$version",
-        "contao/newsletter-bundle": "$version"
+        "contao/manager-bundle": "{$version}"{$coreBundle},
+        "contao/calendar-bundle": "{$version}",
+        "contao/comments-bundle": "{$version}",
+        "contao/faq-bundle": "{$version}",
+        "contao/listing-bundle": "{$version}",
+        "contao/news-bundle": "{$version}",
+        "contao/newsletter-bundle": "{$version}"
 JSON;
         }
 
@@ -150,18 +134,18 @@ JSON;
 {
     "type": "project",
     "require": {
-$require
+{$require}
     },
     "extra": {
-        "public-dir": "$publicDir",
+        "public-dir": "{$publicDir}",
         "contao-component-dir": "assets"
     },
     "scripts": {
         "post-install-cmd": [
-            "$script"
+            "{$script}"
         ],
         "post-update-cmd": [
-            "$script"
+            "{$script}"
         ]
     }
 }

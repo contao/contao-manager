@@ -30,26 +30,18 @@ class JwtCookieController
     public const COOKIE_NAME = 'contao_settings';
 
     /**
-     * @var ContaoApi
-     */
-    private $api;
-
-    /**
      * Constructor.
      */
-    public function __construct(ContaoApi $api)
+    public function __construct(private readonly ContaoApi $api)
     {
-        $this->api = $api;
     }
 
     /**
      * Handles the controller action.
      *
      * @throws ParsingException
-     *
-     * @return Response
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): \Contao\ManagerApi\HttpKernel\ApiProblemResponse|\Symfony\Component\HttpFoundation\Response
     {
         if (!$this->isSupported()) {
             return new ApiProblemResponse(
@@ -58,18 +50,12 @@ class JwtCookieController
             );
         }
 
-        switch ($request->getMethod()) {
-            case 'GET':
-                return $this->getJwtPayload($request);
-
-            case 'PUT':
-                return $this->setJwtToken($request);
-
-            case 'DELETE':
-                return $this->removeJwtToken();
-        }
-
-        return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+        return match ($request->getMethod()) {
+            'GET' => $this->getJwtPayload($request),
+            'PUT' => $this->setJwtToken($request),
+            'DELETE' => $this->removeJwtToken(),
+            default => new Response(null, Response::HTTP_METHOD_NOT_ALLOWED),
+        };
     }
 
     /**

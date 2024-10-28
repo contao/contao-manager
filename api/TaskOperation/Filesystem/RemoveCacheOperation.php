@@ -19,33 +19,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class RemoveCacheOperation extends AbstractInlineOperation
 {
-    /**
-     * @var string
-     */
-    private $environment;
-
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var string
-     */
-    private $name;
-
-    public function __construct(string $environment, ApiKernel $kernel, TaskConfig $taskConfig, Filesystem $filesystem, string $name = 'remove-cache')
+    public function __construct(private readonly string $environment, private readonly ApiKernel $kernel, TaskConfig $taskConfig, private readonly Filesystem $filesystem, private readonly string $name = 'remove-cache')
     {
-        $this->environment = $environment;
-        $this->kernel = $kernel;
-        $this->filesystem = $filesystem;
-        $this->name = $name;
-
         parent::__construct($taskConfig);
     }
 
@@ -54,7 +29,7 @@ class RemoveCacheOperation extends AbstractInlineOperation
         return 'rm -rf var/cache/'.$this->environment;
     }
 
-    public function doRun(): bool
+    protected function doRun(): bool
     {
         $this->filesystem->remove($this->getCacheDir());
 

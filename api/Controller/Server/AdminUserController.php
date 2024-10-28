@@ -27,14 +27,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AdminUserController
 {
-    /**
-     * @var ContaoConsole
-     */
-    private $contaoConsole;
-
-    public function __construct(ContaoConsole $contaoConsole)
+    public function __construct(private readonly ContaoConsole $contaoConsole)
     {
-        $this->contaoConsole = $contaoConsole;
     }
 
     public function __invoke(Request $request, ServerInfo $serverInfo): Response
@@ -88,7 +82,7 @@ class AdminUserController
         return $this->getUserResponse();
     }
 
-    private function getUserResponse(int $status = Response::HTTP_OK)
+    private function getUserResponse(int $status = Response::HTTP_OK): \Symfony\Component\HttpFoundation\JsonResponse
     {
         return new JsonResponse([
             'hasUser' => $this->hasAdminUser(true),

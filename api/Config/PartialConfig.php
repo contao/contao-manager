@@ -14,20 +14,8 @@ namespace Contao\ManagerApi\Config;
 
 class PartialConfig implements \IteratorAggregate, \Countable
 {
-    /**
-     * @var AbstractConfig
-     */
-    private $parent;
-
-    /**
-     * @var string
-     */
-    private $key;
-
-    public function __construct(AbstractConfig $parent, string $key)
+    public function __construct(private readonly AbstractConfig $parent, private readonly string $key)
     {
-        $this->parent = $parent;
-        $this->key = $key;
     }
 
     /**

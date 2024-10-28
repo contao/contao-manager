@@ -31,19 +31,10 @@ class LogController
 {
     public const MONOLOG_PATTERN = '/^\[(?<datetime>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+.*)\] (?<channel>[\w-]+(?:\.[\w-]+)?)\.(?<level>\w+): (?<message>.+)(?: (?<context>(?:\[.*?\]|\{.*?\})))(?: (?<extra>(?:\[.*\]|\{.*\})))\s{0,2}$/';
 
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
+    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    public function __construct(ApiKernel $kernel, Filesystem $filesystem = null)
+    public function __construct(private readonly ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $this->kernel = $kernel;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -115,7 +106,7 @@ class LogController
      */
     private function getFile(string $filename): \SplFileObject
     {
-        if (false !== strpos($filename, '/')) {
+        if (str_contains($filename, '/')) {
             throw new BadRequestHttpException(sprintf('"%s" is not a valid file name.', $filename));
         }
 
@@ -167,7 +158,7 @@ class LogController
         );
     }
 
-    private function parseJsonLine(string $line, array $channels = null, array $levels = null)
+    private function parseJsonLine(string $line, array $channels = null, array $levels = null): string|null|array
     {
         if (!preg_match(self::MONOLOG_PATTERN, $line, $matches)) {
             return $line;

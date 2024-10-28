@@ -22,16 +22,9 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    public function __construct(ContainerInterface $container, ApiKernel $kernel, Filesystem $filesystem = null)
+    public function __construct(private readonly ContainerInterface $container, ApiKernel $kernel, Filesystem $filesystem = null)
     {
         parent::__construct('users.json', $kernel, $filesystem);
-
-        $this->container = $container;
     }
 
     /**
@@ -320,7 +313,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
             $this->migrateSecret();
             $this->hashTokens();
 
-            if (!empty($this->data)) {
+            if ($this->data !== []) {
                 $this->data['version'] = 2;
                 $this->save();
             }
@@ -342,7 +335,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
         if (!isset($this->data['secret'])) {
             $config = $this->container->get(ManagerConfig::class);
 
-            if (!empty($this->data) && !isset($this->data['users'])) {
+            if ($this->data !== [] && !isset($this->data['users'])) {
                 $this->data = ['users' => $this->data];
             }
 
@@ -361,7 +354,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
 
         foreach ($this->data['tokens'] as $k => $payload) {
             if (!isset($payload['id']) && isset($payload['token'])) {
-                $id = hash('sha256', $payload['token']);
+                $id = hash('sha256', (string) $payload['token']);
                 unset($this->data['tokens'][$k], $payload['token']);
 
                 $this->data['tokens'][$id] = $payload;

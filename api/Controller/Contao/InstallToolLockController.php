@@ -29,26 +29,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class InstallToolLockController
 {
-    /**
-     * @var ContaoConsole
-     */
-    private $console;
+    private readonly string $lockFile;
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var string
-     */
-    private $lockFile;
-
-    public function __construct(ContaoConsole $console, ApiKernel $kernel, Filesystem $filesystem)
+    public function __construct(private readonly ContaoConsole $console, ApiKernel $kernel, private readonly Filesystem $filesystem)
     {
-        $this->console = $console;
-        $this->filesystem = $filesystem;
-
         $this->lockFile = $kernel->getProjectDir().'/var/install_lock';
     }
 
@@ -56,7 +40,7 @@ class InstallToolLockController
     {
         try {
             $contaoVersion = $this->console->getVersion();
-        } catch (\RuntimeException $e) {
+        } catch (\RuntimeException) {
             $contaoVersion = null;
         }
 
@@ -76,18 +60,12 @@ class InstallToolLockController
             );
         }
 
-        switch ($request->getMethod()) {
-            case 'GET':
-                return $this->getLockStatus();
-
-            case 'PUT':
-                return $this->lockInstallTool();
-
-            case 'DELETE':
-                return $this->unlockInstallTool();
-        }
-
-        return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+        return match ($request->getMethod()) {
+            'GET' => $this->getLockStatus(),
+            'PUT' => $this->lockInstallTool(),
+            'DELETE' => $this->unlockInstallTool(),
+            default => new Response(null, Response::HTTP_METHOD_NOT_ALLOWED),
+        };
     }
 
     private function getLockStatus(): Response

@@ -20,23 +20,10 @@ use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 class SelfUpdateOperation extends AbstractInlineOperation
 {
     /**
-     * @var SelfUpdate
-     */
-    private $updater;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * Constructor.
      */
-    public function __construct(SelfUpdate $updater, TaskConfig $taskConfig, Translator $translator)
+    public function __construct(private readonly SelfUpdate $updater, TaskConfig $taskConfig, private readonly Translator $translator)
     {
-        $this->updater = $updater;
-        $this->translator = $translator;
-
         parent::__construct($taskConfig);
     }
 

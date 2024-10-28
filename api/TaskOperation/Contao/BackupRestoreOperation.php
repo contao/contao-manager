@@ -17,19 +17,12 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class BackupRestoreOperation extends AbstractProcessOperation
 {
-    /**
-     * @var string
-     */
-    private $file;
-
-    public function __construct(ConsoleProcessFactory $processFactory, string $file, $processId = 'backup-restore')
+    public function __construct(ConsoleProcessFactory $processFactory, private readonly string $file, $processId = 'backup-restore')
     {
-        $this->file = $file;
-
         try {
             parent::__construct($processFactory->restoreBackgroundProcess($processId));
-        } catch (\Exception $e) {
-            parent::__construct($processFactory->createContaoConsoleBackgroundProcess(['contao:backup:restore', $file], $processId));
+        } catch (\Exception) {
+            parent::__construct($processFactory->createContaoConsoleBackgroundProcess(['contao:backup:restore', $this->file], $processId));
         }
     }
 

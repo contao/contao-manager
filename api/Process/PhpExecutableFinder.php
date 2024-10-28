@@ -18,16 +18,10 @@ use Symfony\Component\Process\Process;
 
 class PhpExecutableFinder
 {
-    private $names = ['php-cli', 'php'];
+    private array $names = ['php-cli', 'php'];
 
-    /**
-     * @var LoggerInterface|null
-     */
-    private $logger;
-
-    public function __construct(LoggerInterface $logger = null)
+    public function __construct(private readonly ?\Psr\Log\LoggerInterface $logger = null)
     {
-        $this->logger = $logger;
     }
 
     /**
@@ -90,7 +84,7 @@ class PhpExecutableFinder
 
         try {
             $process = new Process($arguments);
-            $process->mustRun(null, array_map(static function () { return false; }, $_ENV));
+            $process->mustRun(null, array_map(static fn(): bool => false, $_ENV));
             $output = @json_decode(trim($process->getOutput()), true);
 
             if (null === $output) {
@@ -98,17 +92,17 @@ class PhpExecutableFinder
             }
 
             return $output;
-        } catch (RuntimeException $e) {
+        } catch (RuntimeException $exception) {
             // Do not log every attempt to find a PHP binary (exit code 127 = Command not found)
             if (127 === $process->getExitCode()) {
                 return null;
             }
 
             if (null !== $this->logger) {
-                $this->logger->error($e->getMessage(), ['exception' => $e]);
+                $this->logger->error($exception->getMessage(), ['exception' => $exception]);
             }
 
-            throw $e;
+            throw $exception;
         }
     }
 
@@ -189,7 +183,7 @@ class PhpExecutableFinder
 
             try {
                 $info = $this->getServerInfo($path);
-            } catch (RuntimeException $e) {
+            } catch (RuntimeException) {
                 continue;
             }
 
@@ -202,7 +196,7 @@ class PhpExecutableFinder
             }
 
             $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
-            $vCli = vsprintf('%s.%s', explode('.', $info['version']));
+            $vCli = vsprintf('%s.%s', explode('.', (string) $info['version']));
 
             // Allow fallback to another patch version of the same PHP major/minor
             // and prefer a CLI SAPI over e.g. a CGI SAPI.
@@ -224,7 +218,7 @@ class PhpExecutableFinder
     private function isAllowed(string $path, array $dirs): bool
     {
         foreach ($dirs as $dir) {
-            if (0 === strpos($path, $dir)) {
+            if (str_starts_with($path, (string) $dir)) {
                 return true;
             }
         }

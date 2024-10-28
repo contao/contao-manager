@@ -38,8 +38,8 @@ class ProcessRunnerCommand extends Command
 
         try {
             $process->run();
-        } catch (\Exception $e) {
-            $process->addOutput((string) $e);
+        } catch (\Exception $exception) {
+            $process->addOutput((string) $exception);
             $process->stop();
 
             return Command::FAILURE;

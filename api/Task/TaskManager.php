@@ -27,40 +27,22 @@ class TaskManager implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var Filesystem|null
-     */
-    private $filesystem;
+    private string $configFile;
 
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
-     * @var string
-     */
-    private $configFile;
-
-    /**
-     * @var string
-     */
-    private $logFile;
+    private string $logFile;
 
     /**
      * @var array<TaskInterface>
      */
-    private $tasks = [];
+    private array $tasks = [];
 
     /**
      * Constructor.
      *
      * @param iterable<TaskInterface> $tasks
      */
-    public function __construct(iterable $tasks, ApiKernel $kernel, ConsoleProcessFactory $processFactory, Filesystem $filesystem = null)
+    public function __construct(iterable $tasks, ApiKernel $kernel, private ConsoleProcessFactory $processFactory, private ?\Symfony\Component\Filesystem\Filesystem $filesystem = null)
     {
-        $this->filesystem = $filesystem;
-        $this->processFactory = $processFactory;
         $this->configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'task.json';
         $this->logFile = $kernel->getLogDir().'/task-output.log';
 
@@ -91,7 +73,7 @@ class TaskManager implements LoggerAwareInterface
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->info('Created new task', ['name' => $name, 'options' => $options, 'class' => \get_class($task)]);
+            $this->logger->info('Created new task', ['name' => $name, 'options' => $options, 'class' => $task::class]);
         }
 
         $this->processFactory->createManagerConsoleBackgroundProcess(['task:update', '--poll']);
@@ -103,20 +85,20 @@ class TaskManager implements LoggerAwareInterface
     {
         $config = $this->getTaskConfig();
 
-        if (!$config) {
+        if ($config === null) {
             return null;
         }
 
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->info('Updating task status', ['name' => $task->getName(), 'class' => \get_class($task)]);
+            $this->logger->info('Updating task status', ['name' => $task->getName(), 'class' => $task::class]);
         }
 
         $status = $task->update($config);
 
         if (null !== $this->logger && $status->isComplete()) {
-            $this->logger->info('Task has been completed', ['name' => $task->getName(), 'class' => \get_class($task)]);
+            $this->logger->info('Task has been completed', ['name' => $task->getName(), 'class' => $task::class]);
         }
 
         return $status;
@@ -126,14 +108,14 @@ class TaskManager implements LoggerAwareInterface
     {
         $config = $this->getTaskConfig();
 
-        if (!$config) {
+        if ($config === null) {
             return null;
         }
 
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->info('Aborting task', ['name' => $task->getName(), 'class' => \get_class($task)]);
+            $this->logger->info('Aborting task', ['name' => $task->getName(), 'class' => $task::class]);
         }
 
         return $task->abort($config);
@@ -143,14 +125,14 @@ class TaskManager implements LoggerAwareInterface
     {
         $config = $this->getTaskConfig();
 
-        if (!$config) {
+        if ($config === null) {
             return null;
         }
 
         $task = $this->loadTask($config);
 
         if (null !== $this->logger) {
-            $this->logger->info('Deleting task', ['name' => $task->getName(), 'class' => \get_class($task)]);
+            $this->logger->info('Deleting task', ['name' => $task->getName(), 'class' => $task::class]);
         }
 
         $status = $task->create($config);
@@ -175,7 +157,7 @@ class TaskManager implements LoggerAwareInterface
         $task = $this->tasks[$name];
 
         if (!$task instanceof TaskInterface) {
-            throw new \RuntimeException(sprintf('"%s" is not an instance of "%s"', \get_class($task), TaskInterface::class));
+            throw new \RuntimeException(sprintf('"%s" is not an instance of "%s"', $task::class, TaskInterface::class));
         }
 
         return $task;
@@ -186,7 +168,7 @@ class TaskManager implements LoggerAwareInterface
         if ($this->filesystem->exists($this->configFile)) {
             try {
                 return new TaskConfig($this->configFile, null, null, $this->filesystem);
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 $this->filesystem->remove($this->configFile);
             }
         }

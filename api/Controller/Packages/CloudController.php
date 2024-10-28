@@ -27,33 +27,17 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CloudController
 {
-    /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * @var TaskManager
-     */
-    private $taskManager;
-
-    public function __construct(Environment $environment, TaskManager $taskManager)
+    public function __construct(private readonly Environment $environment, private readonly TaskManager $taskManager)
     {
-        $this->environment = $environment;
-        $this->taskManager = $taskManager;
     }
 
     public function __invoke(Request $request): Response
     {
-        switch ($request->getMethod()) {
-            case 'GET':
-                return $this->getCloudData();
-
-            case 'PUT':
-                return $this->writeAndInstall($request);
-        }
-
-        return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
+        return match ($request->getMethod()) {
+            'GET' => $this->getCloudData(),
+            'PUT' => $this->writeAndInstall($request),
+            default => new Response(null, Response::HTTP_METHOD_NOT_ALLOWED),
+        };
     }
 
     private function getCloudData(): Response
@@ -92,8 +76,8 @@ class CloudController
 
             // Only write after composer.json was validated
             $this->environment->getComposerLockFile()->write($lockContent);
-        } catch (\Throwable $exception) {
-            return ApiProblemResponse::createFromException($exception);
+        } catch (\Throwable $throwable) {
+            return ApiProblemResponse::createFromException($throwable);
         }
 
         return new JsonResponse($this->taskManager->createTask('composer/install', []));

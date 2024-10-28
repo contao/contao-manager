@@ -18,28 +18,21 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 class RemoveOperation extends AbstractProcessOperation
 {
     /**
-     * @var array
-     */
-    private $removed;
-
-    /**
      * Constructor.
      */
-    public function __construct(ConsoleProcessFactory $processFactory, array $removed)
+    public function __construct(ConsoleProcessFactory $processFactory, private readonly array $removed)
     {
-        $this->removed = $removed;
-
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-remove');
 
             parent::__construct($process);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $arguments = array_merge(
                 [
                     'composer',
                     'remove',
                 ],
-                $removed,
+                $this->removed,
                 [
                     '--no-update',
                     '--no-scripts',

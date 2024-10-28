@@ -25,30 +25,12 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
      */
     protected $data = [];
 
-    /**
-     * @var string
-     */
-    private $fileName;
+    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
 
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
+    private bool $initialized = false;
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var bool
-     */
-    private $initialized = false;
-
-    public function __construct(string $fileName, ApiKernel $kernel, Filesystem $filesystem = null)
+    public function __construct(private readonly string $fileName, private readonly ApiKernel $kernel, Filesystem $filesystem = null)
     {
-        $this->fileName = $fileName;
-        $this->kernel = $kernel;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 

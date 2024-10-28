@@ -38,32 +38,17 @@ class ApiKernel extends Kernel
 {
     use MicroKernelTrait;
 
-    /**
-     * @var string
-     */
-    private $version = '@manager_version@';
+    private string $version = '@manager_version@';
 
-    /**
-     * @var string
-     */
-    private $projectDir;
+    private string|null $projectDir = null;
 
-    /**
-     * @var string
-     */
-    private $configDir;
+    private ?string $configDir = null;
 
-    /**
-     * @var string
-     */
-    private $publicDir;
+    private ?string $publicDir = null;
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
+    private \Symfony\Component\Filesystem\Filesystem $filesystem;
 
-    public function __construct($environment)
+    public function __construct(string $environment)
     {
         $this->filesystem = new Filesystem();
 
@@ -238,8 +223,8 @@ CODE
         // @see https://getcomposer.org/doc/03-cli.md#composer
         if (false !== ($composer = getenv('COMPOSER'))) {
             // We don't know the public dir when running on command line, but it shouldn't matter
-            $this->projectDir = $this->publicDir = \dirname($composer);
-
+            $this->projectDir = \dirname($composer);
+            $this->publicDir = $this->projectDir;
             return;
         }
 
@@ -257,8 +242,8 @@ CODE
         // Use the current working directory in CLI mode
         if (('cli' === \PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && !empty($_SERVER['PWD'])) {
             // We don't know the public dir when running on command line, but it shouldn't matter
-            $this->projectDir = $this->publicDir = $_SERVER['PWD'];
-
+            $this->projectDir = $_SERVER['PWD'];
+            $this->publicDir = $_SERVER['PWD'];
             return;
         }
 
@@ -270,8 +255,8 @@ CODE
 
         // Always use current folder if it is not named "web" or "public"
         if ('web' !== basename($current) && 'public' !== basename($current)) {
-            $this->projectDir = $this->publicDir = $current;
-
+            $this->projectDir = $current;
+            $this->publicDir = $current;
             return;
         }
 
@@ -288,8 +273,8 @@ CODE
         // Use current folder if it looks like Contao
         foreach ($contaoFiles as $file) {
             if ($this->filesystem->exists($current.$file)) {
-                $this->projectDir = $this->publicDir = $current;
-
+                $this->projectDir = $current;
+                $this->publicDir = $current;
                 return;
             }
         }

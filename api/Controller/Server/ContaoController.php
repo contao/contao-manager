@@ -33,43 +33,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ContaoController
 {
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
+    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
 
-    /**
-     * @var ContaoApi
-     */
-    private $contaoApi;
-
-    /**
-     * @var ContaoConsole
-     */
-    private $contaoConsole;
-
-    /**
-     * @var ConsoleProcessFactory
-     */
-    private $processFactory;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    public function __construct(ApiKernel $kernel, ContaoApi $contaoApi, ContaoConsole $contaoConsole, ConsoleProcessFactory $processFactory, LoggerInterface $logger = null, Filesystem $filesystem = null)
+    public function __construct(private readonly ApiKernel $kernel, private readonly ContaoApi $contaoApi, private readonly ContaoConsole $contaoConsole, private readonly ConsoleProcessFactory $processFactory, private readonly ?\Psr\Log\LoggerInterface $logger = null, Filesystem $filesystem = null)
     {
-        $this->kernel = $kernel;
-        $this->contaoApi = $contaoApi;
-        $this->contaoConsole = $contaoConsole;
-        $this->processFactory = $processFactory;
-        $this->logger = $logger;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -139,7 +106,7 @@ class ContaoController
                     'commands' => $this->contaoApi->getCommands(),
                 ],
                 'config' => (object) $this->contaoConsole->getConfig(),
-                'supported' => version_compare($contaoVersion, '4.0.0', '>=') || 0 === strpos($contaoVersion, 'dev-'),
+                'supported' => version_compare($contaoVersion, '4.0.0', '>=') || str_starts_with($contaoVersion, 'dev-'),
             ]
         );
     }
@@ -155,7 +122,7 @@ class ContaoController
         $publicDir = $currentRoot.'/'.($usePublicDir ? 'public' : 'web');
 
         if (null !== $directory) {
-            if (false !== strpos($directory, '..')) {
+            if (str_contains($directory, '..')) {
                 return new Response('', Response::HTTP_BAD_REQUEST);
             }
 
@@ -189,7 +156,7 @@ class ContaoController
             $this->filesystem->rename(\dirname($phar).'/.htaccess', $publicDir.'/.htaccess');
         }
 
-        if (0 === \count(array_diff(scandir(\dirname($phar), SCANDIR_SORT_NONE), ['.', '..']))) {
+        if ([] === array_diff(scandir(\dirname($phar), SCANDIR_SORT_NONE), ['.', '..'])) {
             $this->filesystem->remove(\dirname($phar));
         }
 
@@ -263,7 +230,7 @@ class ContaoController
             if ($this->filesystem->exists($file)) {
                 try {
                     @include $file;
-                } catch (\Throwable $e) {
+                } catch (\Throwable) {
                     // do nothing on error or exception
                 }
 

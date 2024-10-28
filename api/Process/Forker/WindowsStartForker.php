@@ -36,7 +36,7 @@ class WindowsStartForker extends AbstractForker
 
         try {
             Process::fromShellCommandline('start /b dir')->mustRun(null, $this->env);
-        } catch (ProcessFailedException $e) {
+        } catch (ProcessFailedException) {
             return false;
         }
 

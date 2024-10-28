@@ -30,20 +30,8 @@ class DatabaseController
     // double escaping is necessary for JavaScript validation
     private const URL_PATTERN = '^([^:]+)://(([^:@]+)(:([^@]+))?@)?([^:\/]+(:[0-9]+)?)/([^?]+)(\\?.+)?$';
 
-    /**
-     * @var ContaoApi
-     */
-    private $contaoApi;
-
-    /**
-     * @var ContaoConsole
-     */
-    private $contaoConsole;
-
-    public function __construct(ContaoApi $contaoApi, ContaoConsole $contaoConsole)
+    public function __construct(private readonly ContaoApi $contaoApi, private readonly ContaoConsole $contaoConsole)
     {
-        $this->contaoApi = $contaoApi;
-        $this->contaoConsole = $contaoConsole;
     }
 
     public function __invoke(Request $request, ServerInfo $serverInfo): Response

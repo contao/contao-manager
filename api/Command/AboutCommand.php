@@ -24,21 +24,9 @@ use Symfony\Component\Process\Process;
 
 class AboutCommand extends Command
 {
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-    /**
-     * @var ServerInfo
-     */
-    private $serverInfo;
-
-    public function __construct(ApiKernel $kernel, ServerInfo $serverInfo)
+    public function __construct(private readonly ApiKernel $kernel, private readonly ServerInfo $serverInfo)
     {
         parent::__construct();
-
-        $this->kernel = $kernel;
-        $this->serverInfo = $serverInfo;
     }
 
     protected function configure(): void
@@ -143,7 +131,7 @@ class AboutCommand extends Command
             try {
                 $git->mustRun();
                 $version = trim($git->getOutput());
-            } catch (ProcessFailedException $e) {
+            } catch (ProcessFailedException) {
                 return 'n/a';
             }
         }

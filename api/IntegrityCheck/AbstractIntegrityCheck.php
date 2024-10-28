@@ -16,14 +16,8 @@ use Contao\ManagerApi\I18n\Translator;
 
 abstract class AbstractIntegrityCheck implements IntegrityCheckInterface
 {
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    public function __construct(Translator $translator)
+    public function __construct(private readonly Translator $translator)
     {
-        $this->translator = $translator;
     }
 
     /**

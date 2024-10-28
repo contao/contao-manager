@@ -26,7 +26,7 @@ class SessionCheck extends AbstractIntegrityCheck
                 'use_cookies' => '0',
             ];
 
-            if (false !== session_start($options)) {
+            if (session_start($options)) {
                 return null;
             }
         } catch (\Exception $exception) {

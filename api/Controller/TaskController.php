@@ -27,33 +27,19 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TaskController
 {
-    /**
-     * @var TaskManager
-     */
-    private $taskManager;
-
-    public function __construct(TaskManager $taskManager)
+    public function __construct(private readonly TaskManager $taskManager)
     {
-        $this->taskManager = $taskManager;
     }
 
     public function __invoke(Request $request): Response
     {
-        switch ($request->getMethod()) {
-            case 'GET':
-                return $this->getTask();
-
-            case 'PUT':
-                return $this->putTask($request);
-
-            case 'PATCH':
-                return $this->patchTask($request);
-
-            case 'DELETE':
-                return $this->deleteTask();
-        }
-
-        return new Response('', Response::HTTP_METHOD_NOT_ALLOWED);
+        return match ($request->getMethod()) {
+            'GET' => $this->getTask(),
+            'PUT' => $this->putTask($request),
+            'PATCH' => $this->patchTask($request),
+            'DELETE' => $this->deleteTask(),
+            default => new Response('', Response::HTTP_METHOD_NOT_ALLOWED),
+        };
     }
 
     private function getTask(): Response

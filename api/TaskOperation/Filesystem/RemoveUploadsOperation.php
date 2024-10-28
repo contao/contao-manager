@@ -22,39 +22,11 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class RemoveUploadsOperation extends AbstractInlineOperation
 {
-    /**
-     * @var array
-     */
-    private $uploads;
+    private readonly \Symfony\Component\Filesystem\Filesystem $filesystem;
 
-    /**
-     * @var UploadsConfig
-     */
-    private $uploadsConfig;
-
-    /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    public function __construct(array $uploads, UploadsConfig $uploadsConfig, TaskConfig $taskConfig, Environment $environment, Translator $translator, Filesystem $filesystem = null)
+    public function __construct(private readonly array $uploads, private readonly UploadsConfig $uploadsConfig, TaskConfig $taskConfig, private readonly Environment $environment, private readonly Translator $translator, Filesystem $filesystem = null)
     {
         parent::__construct($taskConfig);
-
-        $this->uploads = $uploads;
-        $this->uploadsConfig = $uploadsConfig;
-        $this->environment = $environment;
-        $this->translator = $translator;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -66,9 +38,7 @@ class RemoveUploadsOperation extends AbstractInlineOperation
     public function getDetails(): ?string
     {
         $files = array_map(
-            static function ($config) {
-                return $config['name'];
-            },
+            static fn($config) => $config['name'],
             $this->uploads
         );
 
@@ -82,7 +52,7 @@ class RemoveUploadsOperation extends AbstractInlineOperation
 
             try {
                 $this->filesystem->remove($this->environment->getUploadDir().'/'.$config['id']);
-            } catch (IOException $e) {
+            } catch (IOException) {
                 // Ignore if file could not be deleted
             }
         }

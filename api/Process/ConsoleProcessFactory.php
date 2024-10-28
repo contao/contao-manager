@@ -33,28 +33,13 @@ class ConsoleProcessFactory implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var ApiKernel
-     */
-    private $kernel;
-
-    /**
-     * @var ServerInfo
-     */
-    private $serverInfo;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
+    private \Symfony\Component\Filesystem\Filesystem $filesystem;
 
     /**
      * Constructor.
      */
-    public function __construct(ApiKernel $kernel, ServerInfo $serverInfo, Filesystem $filesystem = null)
+    public function __construct(private ApiKernel $kernel, private ServerInfo $serverInfo, Filesystem $filesystem = null)
     {
-        $this->kernel = $kernel;
-        $this->serverInfo = $serverInfo;
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
@@ -157,12 +142,12 @@ class ConsoleProcessFactory implements LoggerAwareInterface
     {
         try {
             $process = ProcessController::restore($this->kernel->getConfigDir(), $id);
-        } catch (InvalidJsonException $e) {
-            $problem = (new ApiProblem($e->getMessage()))
-                ->setDetail($e->getJsonErrorMessage()."\n\n".$e->getContent())
+        } catch (InvalidJsonException $exception) {
+            $problem = (new ApiProblem($exception->getMessage()))
+                ->setDetail($exception->getJsonErrorMessage()."\n\n".$exception->getContent())
             ;
 
-            throw new ApiProblemException($problem, $e);
+            throw new ApiProblemException($problem, $exception);
         }
 
         $this->addForkers($process);

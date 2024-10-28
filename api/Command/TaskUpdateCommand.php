@@ -27,18 +27,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class TaskUpdateCommand extends Command
 {
     /**
-     * @var TaskManager
-     */
-    protected $taskManager;
-
-    /**
      * Constructor.
      */
-    public function __construct(TaskManager $taskManager)
+    public function __construct(protected \Contao\ManagerApi\Task\TaskManager $taskManager)
     {
         parent::__construct();
-
-        $this->taskManager = $taskManager;
     }
 
     protected function configure(): void
@@ -102,19 +95,12 @@ class TaskUpdateCommand extends Command
             }
         }
 
-        switch ($status->getStatus()) {
-            case TaskStatus::STATUS_COMPLETE:
-                $style->success('Operations completed successfully');
-                break;
-
-            case TaskStatus::STATUS_ERROR:
-                $style->error('Task terminated unexpectedly');
-                break;
-
-            case TaskStatus::STATUS_STOPPED:
-                $style->warning('Task has been stopped');
-                break;
-        }
+        match ($status->getStatus()) {
+            TaskStatus::STATUS_COMPLETE => $style->success('Operations completed successfully'),
+            TaskStatus::STATUS_ERROR => $style->error('Task terminated unexpectedly'),
+            TaskStatus::STATUS_STOPPED => $style->warning('Task has been stopped'),
+            default => Command::SUCCESS,
+        };
 
         return Command::SUCCESS;
     }
