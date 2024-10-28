@@ -15,6 +15,7 @@ namespace Contao\ManagerApi\Security;
 use Contao\ManagerApi\Config\UserConfig;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -25,13 +26,18 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
     {
     }
 
-    public function loadUserByUsername(string $username): UserInterface
+    public function loadUserByIdentifier(string $identifier): UserInterface
     {
-        if (0 === $this->config->countUsers()) {
-            return new User($username, null);
+        $user = $this->config->getUser($identifier);
+
+        if (null === $user) {
+            $ex = new UserNotFoundException(\sprintf('Username "%s" does not exist.', $identifier));
+            $ex->setUserIdentifier($identifier);
+
+            throw $ex;
         }
 
-        return $this->getUser($username);
+        return $user;
     }
 
     public function refreshUser(UserInterface $user): UserInterface
@@ -40,7 +46,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
-        return $this->getUser($user->getUsername());
+        return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
     public function supportsClass($class): bool
@@ -48,24 +54,10 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
         return User::class === $class;
     }
 
-    public function upgradePassword(UserInterface $user, string $newHashedPassword): void
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         $this->config->updateUser(
-            new User($user->getUsername(), $newHashedPassword)
+            new User($user->getUserIdentifier(), $newHashedPassword)
         );
-    }
-
-    private function getUser(string $username): User
-    {
-        $user = $this->config->getUser($username);
-
-        if (null === $user) {
-            $ex = new UserNotFoundException(sprintf('Username "%s" does not exist.', $username));
-            $ex->setUserIdentifier($username);
-
-            throw $ex;
-        }
-
-        return $user;
     }
 }

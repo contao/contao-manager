@@ -12,20 +12,23 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Security;
 
-use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
-use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class JwtAuthenticator extends AbstractGuardAuthenticator
+class JwtAuthenticator extends AbstractAuthenticator
 {
-    public function __construct(private readonly JwtManager $jwtManager)
-    {
+    public function __construct(
+        private readonly UserProviderInterface $userProvider,
+        private readonly JwtManager $jwtManager
+    ) {
     }
 
     public function supports(Request $request): bool
@@ -33,40 +36,28 @@ class JwtAuthenticator extends AbstractGuardAuthenticator
         return $this->jwtManager->hasRequestToken($request) && null !== $this->jwtManager->getPayload($request);
     }
 
-    public function start(Request $request, AuthenticationException $authException = null): Response
+    public function authenticate(Request $request): Passport
     {
-        return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_UNAUTHORIZED));
+        $credentials = $this->jwtManager->getPayload($request);
+
+        if (!$credentials) {
+            throw new AuthenticationCredentialsNotFoundException();
+        }
+
+        $userBadge = new UserBadge($credentials->username, $this->userProvider->loadUserByIdentifier(...));
+
+        return new SelfValidatingPassport($userBadge);
     }
 
-    public function getCredentials(Request $request)
-    {
-        return $this->jwtManager->getPayload($request);
-    }
-
-    public function getUser($credentials, UserProviderInterface $userProvider): UserInterface
-    {
-        return $userProvider->loadUserByUsername($credentials->username);
-    }
-
-    public function checkCredentials($credentials, UserInterface $user): bool
-    {
-        return true;
-    }
-
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
-    {
-        return null;
-    }
-
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         $token->setAttribute('authenticator', static::class);
 
         return null;
     }
 
-    public function supportsRememberMe(): bool
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return false;
+        return null;
     }
 }

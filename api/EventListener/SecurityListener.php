@@ -43,9 +43,9 @@ class SecurityListener implements EventSubscriberInterface
             null !== $token
             && $token->hasAttribute('authenticator')
             && JwtAuthenticator::class === $token->getAttribute('authenticator')
-            && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')
+            && $this->authorizationChecker->isGranted('ROLE_USER')
         ) {
-            $this->jwtManager->addToken($event->getRequest(), $event->getResponse(), $token->getUsername());
+            $this->jwtManager->addToken($event->getRequest(), $event->getResponse(), $token->getUserIdentifier());
         } else {
             $this->jwtManager->removeToken($event->getRequest(), $event->getResponse());
         }

@@ -13,26 +13,26 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Security;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Config\UserConfig;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
-class LoginAuthenticator extends AbstractBrowserAuthenticator implements PasswordAuthenticatedInterface
+class LoginAuthenticator extends AbstractBrowserAuthenticator
 {
-    /**
-     * @var EncoderFactoryInterface
-     */
-    private $encoderFactory;
-
-    public function __construct(EncoderFactoryInterface $encoderFactory, JwtManager $jwtManager, Filesystem $filesystem, ApiKernel $kernel)
-    {
+    public function __construct(
+        private readonly UserProviderInterface $userProvider,
+        private readonly UserConfig $userConfig,
+        JwtManager $jwtManager,
+        Filesystem $filesystem,
+        ApiKernel $kernel
+    ) {
         parent::__construct($jwtManager, $filesystem, $kernel);
-
-        $this->encoderFactory = $encoderFactory;
     }
 
     public function supports(Request $request): bool
@@ -42,35 +42,20 @@ class LoginAuthenticator extends AbstractBrowserAuthenticator implements Passwor
             && $request->request->has('password');
     }
 
-    public function getCredentials(Request $request)
+    public function authenticate(Request $request): Passport
     {
-        return $request->request->all();
-    }
-
-    public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
-    {
-        $user = $userProvider->loadUserByUsername($credentials['username']);
-
-        if ($userProvider instanceof PasswordUpgraderInterface && null === $user->getPassword()) {
-            $encoder = $this->encoderFactory->getEncoder($user);
-            $userProvider->upgradePassword($user, $encoder->encodePassword($credentials['password'], null));
-            $user = $userProvider->loadUserByUsername($user->getUsername());
+        if (!$this->userConfig->hasUsers()) {
+            $user = $this->userConfig->createUser($request->request->get('username'), $request->request->get('password'));
+            $this->userConfig->addUser($user);
         }
 
-        return $user;
-    }
+        $userBadge = new UserBadge($request->request->get('username'), $this->userProvider->loadUserByIdentifier(...));
+        $passport = new Passport($userBadge, new PasswordCredentials($request->request->get('password')));
 
-    public function checkCredentials($credentials, UserInterface $user): bool
-    {
-        return $this->encoderFactory->getEncoder($user)->isPasswordValid(
-            $user->getPassword(),
-            $credentials['password'],
-            null
-        );
-    }
+        if ($this->userProvider instanceof PasswordUpgraderInterface) {
+            $passport->addBadge(new PasswordUpgradeBadge($request->request->get('password'), $this->userProvider));
+        }
 
-    public function getPassword($credentials): ?string
-    {
-        return $credentials['password'];
+        return $passport;
     }
 }

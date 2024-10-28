@@ -60,7 +60,7 @@ class SessionController
      */
     private function getStatus(): Response
     {
-        if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->security->isGranted('ROLE_USER')) {
             $token = $this->security->getToken();
 
             if (
@@ -78,7 +78,7 @@ class SessionController
             return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_FORBIDDEN));
         }
 
-        if (0 === $this->config->countUsers()) {
+        if (!$this->config->hasUsers()) {
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
@@ -90,7 +90,7 @@ class SessionController
      */
     private function handleLogout(Request $request): Response
     {
-        if (!$this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if (!$this->security->isGranted('ROLE_USER')) {
             return new ApiProblemResponse(
                 (new ApiProblem('User is not logged in'))->setStatus(Response::HTTP_UNAUTHORIZED)
             );

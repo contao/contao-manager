@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Config\UserConfig;
+use Contao\ManagerApi\Security\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Controller to handle users.
@@ -50,8 +50,8 @@ class UserController
     {
         $user = $this->createUserFromRequest($request);
 
-        if ($this->config->hasUser($user->getUsername())) {
-            throw new BadRequestHttpException(sprintf('User "%s" already exists.', $user->getUsername()));
+        if ($this->config->hasUser($user->getUserIdentifier())) {
+            throw new BadRequestHttpException(sprintf('User "%s" already exists.', $user->getUserIdentifier()));
         }
 
         $this->config->addUser($user);
@@ -82,8 +82,8 @@ class UserController
     {
         $user = $this->createUserFromRequest($request);
 
-        if (!$this->config->hasUser($user->getUsername())) {
-            throw new NotFoundHttpException(sprintf('User "%s" does not exist.', $user->getUsername()));
+        if (!$this->config->hasUser($user->getUserIdentifier())) {
+            throw new NotFoundHttpException(sprintf('User "%s" does not exist.', $user->getUserIdentifier()));
         }
 
         $this->config->updateUser($user);
@@ -189,7 +189,7 @@ class UserController
     /**
      * Creates a response for given user information.
      *
-     * @param UserInterface|array<UserInterface> $user
+     * @param User|array<User> $user
      */
     private function getUserResponse($user, int $status = Response::HTTP_OK, bool $addLocation = false): Response
     {
@@ -198,8 +198,8 @@ class UserController
             $status
         );
 
-        if ($addLocation && $user instanceof UserInterface) {
-            $response->headers->set('Location', $this->urlGenerator->generate('user_get', ['username' => $user->getUsername()]));
+        if ($addLocation && $user instanceof User) {
+            $response->headers->set('Location', $this->urlGenerator->generate('user_get', ['username' => $user->getUserIdentifier()]));
         }
 
         return $response;
@@ -208,20 +208,14 @@ class UserController
     /**
      * Converts a user to JSON representation.
      *
-     * @param array<UserInterface>|UserInterface $user
-     *
-     * @throws \InvalidArgumentException
+     * @param array<User>|User $user
      */
-    private function convertToJson($user): array
+    private function convertToJson(User|array $user): array
     {
-        if ($user instanceof UserInterface) {
+        if ($user instanceof User) {
             return [
                 'username' => $user->getUserIdentifier(),
             ];
-        }
-
-        if (!\is_array($user)) {
-            throw new \InvalidArgumentException('Can only convert UserInterface or array of UserInterface');
         }
 
         foreach ($user as $k => $item) {
@@ -236,7 +230,7 @@ class UserController
      *
      * @throws BadRequestHttpException
      */
-    private function createUserFromRequest(Request $request): UserInterface
+    private function createUserFromRequest(Request $request): User
     {
         if (!$request->request->has('username') || !$request->request->has('password')) {
             throw new BadRequestHttpException('Username and password must be given.');

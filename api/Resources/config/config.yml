@@ -7,25 +7,23 @@ framework:
     default_locale: en
 
 security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
     providers:
         contao_manager_user_provider:
             id: Contao\ManagerApi\Security\UserProvider
 
-    encoders:
-        Contao\ManagerApi\Security\User: auto
-
     firewalls:
         api:
             stateless: true
-            guard:
-                authenticators:
-                    - Contao\ManagerApi\Security\LoginAuthenticator
-                    - Contao\ManagerApi\Security\PasswordlessAuthenticator
-                    - Contao\ManagerApi\Security\JwtAuthenticator
-                    - Contao\ManagerApi\Security\TokenAuthenticator
-                entry_point: Contao\ManagerApi\Security\JwtAuthenticator
-            anonymous: ~
+            provider: contao_manager_user_provider
+            custom_authenticators:
+                - Contao\ManagerApi\Security\LoginAuthenticator
+                - Contao\ManagerApi\Security\PasswordlessAuthenticator
+                - Contao\ManagerApi\Security\JwtAuthenticator
+                - Contao\ManagerApi\Security\TokenAuthenticator
 
     access_control:
-        - { path: ^/api/session$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/session$, roles: PUBLIC_ACCESS }
+        - { path: ^/api, roles: ROLE_ADMIN }

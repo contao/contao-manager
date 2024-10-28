@@ -12,11 +12,12 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Security;
 
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class User implements UserInterface, \Stringable
+class User implements UserInterface, PasswordAuthenticatedUserInterface, \Stringable
 {
-    public function __construct(private readonly string $username, private ?string $password, private readonly array $roles = ['ROLE_ADMIN'])
+    public function __construct(private readonly string $username, private ?string $password, private readonly array $roles = ['ROLE_ADMIN', 'ROLE_USER'])
     {
     }
 
@@ -40,7 +41,7 @@ class User implements UserInterface, \Stringable
         return null;
     }
 
-    public function getUsername(): string
+    public function getUserIdentifier(): string
     {
         return $this->username;
     }

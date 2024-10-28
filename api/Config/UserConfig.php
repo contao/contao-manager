@@ -14,16 +14,16 @@ namespace Contao\ManagerApi\Config;
 
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Security\User;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
-class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
+class UserConfig extends AbstractConfig
 {
-    public function __construct(private readonly ContainerInterface $container, ApiKernel $kernel, Filesystem $filesystem = null)
-    {
+    public function __construct(
+        private readonly PasswordHasherFactoryInterface $passwordHasherFactory,
+        ApiKernel $kernel,
+        Filesystem $filesystem = null
+    ) {
         parent::__construct('users.json', $kernel, $filesystem);
     }
 
@@ -59,18 +59,11 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
         $this->save();
     }
 
-    /**
-     * Counts the users.
-     */
-    public function countUsers(): int
+    public function hasUsers(): bool
     {
         $this->initialize();
 
-        if (!isset($this->data['users'])) {
-            return 0;
-        }
-
-        return \count($this->data['users']);
+        return isset($this->data['users']) && is_array($this->data['users']) && [] !== $this->data['users'];
     }
 
     /**
@@ -82,7 +75,7 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     {
         $this->initialize();
 
-        if (0 === $this->countUsers()) {
+        if (!$this->hasUsers()) {
             return [];
         }
 
@@ -132,10 +125,11 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     {
         $this->initialize();
 
-        $encodedPassword = $this->container->get(UserPasswordEncoderInterface::class)->encodePassword(
-            new User($username, null),
-            $password
-        );
+        $encodedPassword = $this
+            ->passwordHasherFactory
+            ->getPasswordHasher(new User($username, null))
+            ->hash($password)
+        ;
 
         return new User($username, $encodedPassword);
     }
@@ -143,11 +137,11 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     /**
      * Adds a user to the configuration file.
      */
-    public function addUser(UserInterface $user): void
+    public function addUser(User $user): void
     {
         $this->initialize();
 
-        $username = $user->getUsername();
+        $username = $user->getUserIdentifier();
 
         if (isset($this->data['users'][$username])) {
             throw new \RuntimeException(sprintf('Username "%s" already exists.', $username));
@@ -164,11 +158,11 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
     /**
      * Replaces a user in the configuration file.
      */
-    public function updateUser(UserInterface $user): void
+    public function updateUser(User $user): void
     {
         $this->initialize();
 
-        unset($this->data['users'][$user->getUsername()]);
+        unset($this->data['users'][$user->getUserIdentifier()]);
 
         $this->addUser($user);
     }
@@ -297,68 +291,24 @@ class UserConfig extends AbstractConfig implements ServiceSubscriberInterface
         $this->save();
     }
 
-    public static function getSubscribedServices(): array
-    {
-        return [
-            UserPasswordEncoderInterface::class,
-            ManagerConfig::class,
-        ];
-    }
-
     protected function initialize(): void
     {
         parent::initialize();
 
-        if (!isset($this->data['version']) || $this->data['version'] < 2) {
-            $this->migrateSecret();
-            $this->hashTokens();
+        if ($this->data !== [] && (!isset($this->data['version']) || $this->data['version'] < 2)) {
+            throw new \RuntimeException('Unsupported user.json version');
+        }
 
-            if ($this->data !== []) {
-                $this->data['version'] = 2;
-                $this->save();
-            }
+        if (!isset($this->data['version'])) {
+            $this->data['version'] = 2;
         }
 
         foreach (($this->data['tokens'] ?? []) as $id => $token) {
             if (isset($token['expires']) && $token['expires'] < time()) {
                 unset($this->data['tokens'][$id]);
-                $this->save();
             }
         }
-    }
 
-    /**
-     * Migrates the secret from manager config to user config.
-     */
-    private function migrateSecret(): void
-    {
-        if (!isset($this->data['secret'])) {
-            $config = $this->container->get(ManagerConfig::class);
-
-            if ($this->data !== [] && !isset($this->data['users'])) {
-                $this->data = ['users' => $this->data];
-            }
-
-            if ($config->has('secret')) {
-                $this->data['secret'] = $config->get('secret');
-                $config->remove('secret');
-            }
-        }
-    }
-
-    private function hashTokens(): void
-    {
-        if (!isset($this->data['tokens']) || !\is_array($this->data['tokens'])) {
-            return;
-        }
-
-        foreach ($this->data['tokens'] as $k => $payload) {
-            if (!isset($payload['id']) && isset($payload['token'])) {
-                $id = hash('sha256', (string) $payload['token']);
-                unset($this->data['tokens'][$k], $payload['token']);
-
-                $this->data['tokens'][$id] = $payload;
-            }
-        }
+        $this->save();
     }
 }

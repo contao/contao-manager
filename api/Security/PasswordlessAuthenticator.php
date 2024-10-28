@@ -18,53 +18,50 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 class PasswordlessAuthenticator extends AbstractBrowserAuthenticator
 {
-    /**
-     * @var string
-     */
-    private $tokenId;
+    private string $tokenId;
 
-    public function __construct(private readonly UserConfig $config, JwtManager $jwtManager, Filesystem $filesystem, ApiKernel $kernel)
-    {
+    public function __construct(
+        private readonly UserProviderInterface $userProvider,
+        private readonly UserConfig $config,
+        JwtManager $jwtManager,
+        Filesystem $filesystem,
+        ApiKernel $kernel
+    ) {
         parent::__construct($jwtManager, $filesystem, $kernel);
     }
 
     public function supports(Request $request): bool
     {
-        return parent::supports($request) && $request->request->has('token');
+        return parent::supports($request)
+            && $request->request->has('token');
     }
 
-    public function getCredentials(Request $request)
+    public function authenticate(Request $request): SelfValidatingPassport
     {
-        return $request->request->get('token');
-    }
-
-    public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
-    {
-        $token = $this->config->findToken($credentials);
+        $token = $this->config->findToken($request->request->get('token'));
 
         if (null === $token || 'one-time' !== ($token['grant_type'] ?? null)) {
-            return null;
+            throw new AuthenticationCredentialsNotFoundException();
         }
 
         $this->tokenId = $token['id'];
 
-        return $userProvider->loadUserByUsername($token['username']);
+        $userBadge = new UserBadge($token['username'], $this->userProvider->loadUserByIdentifier(...));
+
+        return new SelfValidatingPassport($userBadge);
     }
 
-    public function checkCredentials($credentials, UserInterface $user): bool
-    {
-        return true;
-    }
-
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response
     {
         $this->config->deleteToken($this->tokenId);
 
-        return parent::onAuthenticationSuccess($request, $token, $providerKey);
+        return parent::onAuthenticationSuccess($request, $token, $firewallName);
     }
 }
