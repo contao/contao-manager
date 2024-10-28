@@ -170,5 +170,10 @@ return [
 
             return str_replace("'Symfony\\\\Bundle\\\\FrameworkBundle\\\\Controller\\\\RedirectController::", "'$prefix\\\\Symfony\\\\Bundle\\\\FrameworkBundle\\\\Controller\\\\RedirectController::", $contents);
         },
+
+        // Fix PHP8 attributes in Symfony namespace
+        static function (string $filePath, string $prefix, string $contents): string {
+            return str_replace('#[\\Symfony\\', "#[\\$prefix\\Symfony\\", $contents);
+        }
     ],
 ];

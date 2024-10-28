@@ -6,6 +6,12 @@ services:
         bind:
             $debug: '%kernel.debug%'
 
+    kernel:
+        synthetic: true
+        public: true
+        tags:
+            - routing.route_loader
+
     Contao\ManagerApi\:
         resource: '../../*'
         exclude: '../../{Command,Controller,Resources,Tests}'

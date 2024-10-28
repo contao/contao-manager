@@ -1,10 +1,13 @@
 imports:
-    - { resource: services.yml }
+    - { resource: services.yaml }
 
 # The secret is only required to sign fragment URLs which is not used
 framework:
     secret: ''
     default_locale: en
+    router:
+        resource: kernel::loadRoutes
+        type: service
 
 security:
     password_hashers:

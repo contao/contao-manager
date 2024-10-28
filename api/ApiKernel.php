@@ -15,29 +15,24 @@ namespace Contao\ManagerApi;
 use Composer\Util\ErrorHandler;
 use Contao\ManagerApi\Exception\ApiProblemException;
 use Contao\ManagerApi\I18n\Translator;
-use Contao\ManagerApi\Task\TaskInterface;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
-use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * @property ContainerInterface $container
  */
 class ApiKernel extends Kernel
 {
-    use MicroKernelTrait;
-
     private string $version = '@manager_version@';
 
     private string|null $projectDir = null;
@@ -46,7 +41,7 @@ class ApiKernel extends Kernel
 
     private string|null $publicDir = null;
 
-    private Filesystem $filesystem;
+    private readonly Filesystem $filesystem;
 
     public function __construct(string $environment)
     {
@@ -63,15 +58,6 @@ class ApiKernel extends Kernel
         parent::__construct($environment, $debug);
 
         $this->configureComposerEnvironment();
-    }
-
-    public function registerBundles(): array
-    {
-        return [
-            new FrameworkBundle(),
-            new SecurityBundle(),
-            new MonologBundle(),
-        ];
     }
 
     public function isWebDir(): bool
@@ -186,19 +172,32 @@ class ApiKernel extends Kernel
         return new Translator($requestStack);
     }
 
-    private function configureRoutes(RoutingConfigurator $routes): void
+    public function registerBundles(): array
     {
-        $routes->import(__DIR__.'/Controller', 'attribute')->prefix('/api');
+        return [
+            new FrameworkBundle(),
+            new SecurityBundle(),
+            new MonologBundle(),
+        ];
     }
 
-    private function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__.'/Resources/config/config_'.$this->environment.'.yml');
+        $loader->load(__DIR__.'/Resources/config/config_'.$this->environment.'.yaml');
+    }
 
-        $container->registerForAutoconfiguration(TaskInterface::class)
-            ->addTag('app.task')
-            ->addTag('monolog.logger', ['channel' => 'tasks'])
-        ;
+    /**
+     * Loads the routes using framework.router config. We must use a loader method not
+     * e.g. a routes.yaml because of dynamic path to the Phar.
+     */
+    public function loadRoutes(LoaderInterface $loader): RouteCollection
+    {
+        $resolver = $loader->getResolver()->resolve(__DIR__.'/Controller', 'attribute');
+
+        $routes = $resolver->load(__DIR__.'/Controller', 'attribute');
+        $routes->addPrefix('api');
+
+        return $routes;
     }
 
     /**
@@ -270,7 +269,7 @@ class ApiKernel extends Kernel
             '/system/config/constants.php',
         ];
 
-        if ($this->isDebug()) {
+        if ($this->debug) {
             $contaoFiles[] = '/vendor/contao/contao/manager-bundle/bin/contao-console';
         }
 
@@ -292,7 +291,7 @@ class ApiKernel extends Kernel
                 \dirname($current).'/system/config/constants.php',
             ];
 
-            if ($this->isDebug()) {
+            if ($this->debug) {
                 $files[] = \dirname($current).'/vendor/contao/contao/manager-bundle/bin/contao-console';
             }
 

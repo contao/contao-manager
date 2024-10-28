@@ -12,6 +12,10 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Task;
 
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+
+#[AutoconfigureTag('app.task')]
+#[AutoconfigureTag('monolog.logger', ['channel' => 'tasks'])]
 interface TaskInterface
 {
     /**
