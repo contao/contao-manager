@@ -38,9 +38,7 @@ class LogController
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    /**
-     * @Route("/logs", methods={"GET"})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/logs', methods: ['GET'])]
     public function listFiles(): Response
     {
         if (!$this->filesystem->exists($this->kernel->getProjectDir().'/var/logs')) {
@@ -72,9 +70,7 @@ class LogController
         return new JsonResponse(array_reverse($files));
     }
 
-    /**
-     * @Route("/logs/{filename}", methods={"GET"})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/logs/{filename}', methods: ['GET'])]
     public function retrieveFile(string $filename, Request $request): Response
     {
         $file = $this->getFile($filename);
@@ -89,9 +85,7 @@ class LogController
         return $response;
     }
 
-    /**
-     * @Route("/logs/{filename}", methods={"DELETE"})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/logs/{filename}', methods: ['DELETE'])]
     public function deleteFile(string $filename): Response
     {
         $file = $this->getFile($filename);

@@ -12,12 +12,14 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
-class JsonRequestListener implements EventSubscriberInterface
+// Priority must be lower than the router (defaults to 32)
+#[AsEventListener(priority: 20)]
+class JsonRequestListener
 {
     /**
      * Disallow everything except JSON and convert data to request content.
@@ -25,7 +27,7 @@ class JsonRequestListener implements EventSubscriberInterface
      * @throws UnsupportedMediaTypeHttpException
      * @throws BadRequestHttpException
      */
-    public function onKernelRequest(KernelEvent $event): void
+    public function __invoke(RequestEvent $event): void
     {
         $request = $event->getRequest();
         $content = $request->getContent();
@@ -49,11 +51,5 @@ class JsonRequestListener implements EventSubscriberInterface
         }
 
         $request->request->replace($data);
-    }
-
-    public static function getSubscribedEvents(): array
-    {
-        // Priority must be lower than the router (defaults to 32)
-        return ['kernel.request' => ['onKernelRequest', 20]];
     }
 }

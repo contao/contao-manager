@@ -26,10 +26,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/packages/local", methods={"GET"})
- * @Route("/packages/local/{name}", methods={"GET"}, requirements={"name"=".+"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/packages/local', methods: ['GET'])]
+#[\Symfony\Component\Routing\Attribute\Route(path: '/packages/local/{name}', methods: ['GET'], requirements: ['name' => '.+'])]
 class LocalPackagesController
 {
     private readonly \Composer\Repository\InstalledRepositoryInterface $localRepository;

@@ -45,9 +45,7 @@ class UploadPackagesController
         $this->filesystem = $filesystem ?: new Filesystem();
     }
 
-    /**
-     * @Route("/packages/uploads", methods={"GET"})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/packages/uploads', methods: ['GET'])]
     public function __invoke(): JsonResponse
     {
         $this->validateUploadSupport();
@@ -73,9 +71,7 @@ class UploadPackagesController
         return new JsonResponse(array_reverse($uploads));
     }
 
-    /**
-     * @Route("/packages/uploads", methods={"POST"}, defaults={"form-data"=true})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/packages/uploads', methods: ['POST'], defaults: ['form-data' => true])]
     public function upload(Request $request): JsonResponse
     {
         $this->validateUploadSupport();
@@ -128,9 +124,7 @@ class UploadPackagesController
         throw new \RuntimeException(sprintf('Invalid chunk phase "%s"', $request->request->get('phase')));
     }
 
-    /**
-     * @Route("/packages/uploads/{id}", methods={"DELETE"})
-     */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/packages/uploads/{id}', methods: ['DELETE'])]
     public function delete(string $id): JsonResponse
     {
         $this->validateUploadSupport();

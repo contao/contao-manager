@@ -22,9 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/task", methods={"GET", "PUT", "PATCH", "DELETE"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/task', methods: ['GET', 'PUT', 'PATCH', 'DELETE'])]
 class TaskController
 {
     public function __construct(private readonly TaskManager $taskManager)

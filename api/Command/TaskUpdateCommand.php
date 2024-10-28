@@ -24,6 +24,7 @@ use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'task:update', description: 'Updates the current task and returns the status information.')]
 class TaskUpdateCommand extends Command
 {
     /**
@@ -37,8 +38,6 @@ class TaskUpdateCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('task:update')
-            ->setDescription('Updates the current task and returns the status information.')
             ->addOption('poll', null, InputOption::VALUE_NONE, 'Poll for updates until the task is completed.')
             ->addOption('interval', null, InputOption::VALUE_REQUIRED, 'Poll interval in seconds.', 1)
         ;

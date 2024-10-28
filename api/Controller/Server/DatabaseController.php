@@ -22,9 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/server/database", methods={"GET", "POST"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/server/database', methods: ['GET', 'POST'])]
 class DatabaseController
 {
     // double escaping is necessary for JavaScript validation

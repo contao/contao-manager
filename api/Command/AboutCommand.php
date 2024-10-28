@@ -22,6 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'about', description: 'Displays information about Contao Manager and the current server')]
 class AboutCommand extends Command
 {
     public function __construct(private readonly ApiKernel $kernel, private readonly ServerInfo $serverInfo)
@@ -31,10 +32,6 @@ class AboutCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setName('about')
-            ->setDescription('Displays information about Contao Manager and the current server')
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

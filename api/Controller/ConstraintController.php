@@ -18,9 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/constraint", methods={"POST"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/constraint', methods: ['POST'])]
 class ConstraintController
 {
     public function __invoke(Request $request): Response

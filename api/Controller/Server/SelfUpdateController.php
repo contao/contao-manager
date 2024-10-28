@@ -19,9 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/server/self-update", methods={"GET"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/server/self-update', methods: ['GET'])]
 class SelfUpdateController
 {
     /**

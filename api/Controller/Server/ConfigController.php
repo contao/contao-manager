@@ -25,9 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/server/config", methods={"GET", "PUT"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/server/config', methods: ['GET', 'PUT'])]
 class ConfigController
 {
     public function __construct(private readonly ManagerConfig $config, private readonly ServerInfo $serverInfo, private readonly Environment $environment, private readonly Translator $translator)

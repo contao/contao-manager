@@ -22,9 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/packages/cloud", methods={"GET", "PUT"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/packages/cloud', methods: ['GET', 'PUT'])]
 class CloudController
 {
     public function __construct(private readonly Environment $environment, private readonly TaskManager $taskManager)

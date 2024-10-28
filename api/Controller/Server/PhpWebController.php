@@ -19,9 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/server/php-web", methods={"GET"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/server/php-web', methods: ['GET'])]
 class PhpWebController
 {
     public function __construct(private readonly IntegrityCheckFactory $integrity)

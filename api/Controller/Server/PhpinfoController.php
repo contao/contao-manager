@@ -15,9 +15,7 @@ namespace Contao\ManagerApi\Controller\Server;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/server/phpinfo", methods={"GET"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/server/phpinfo', methods: ['GET'])]
 class PhpinfoController
 {
     /**

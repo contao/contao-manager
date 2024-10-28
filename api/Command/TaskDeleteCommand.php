@@ -17,6 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'task:delete', description: 'Deletes the current task if it is not active.')]
 class TaskDeleteCommand extends Command
 {
     public function __construct(private readonly TaskManager $taskManager)
@@ -26,10 +27,6 @@ class TaskDeleteCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setName('task:delete')
-            ->setDescription('Deletes the current task if it is not active.')
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

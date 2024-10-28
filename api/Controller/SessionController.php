@@ -25,12 +25,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
-/**
- * @Route("/session", methods={"GET", "POST", "DELETE"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/session', methods: ['GET', 'POST', 'DELETE'])]
 class SessionController
 {
-    public function __construct(private readonly UserConfig $config, private readonly Security $security, private readonly JwtManager $jwtManager, private readonly ApiKernel $kernel)
+    public function __construct(private readonly UserConfig $config, private readonly \Symfony\Bundle\SecurityBundle\Security $security, private readonly JwtManager $jwtManager, private readonly ApiKernel $kernel)
     {
     }
 

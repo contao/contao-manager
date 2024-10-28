@@ -22,9 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/contao/jwt-cookie", methods={"GET", "PUT", "DELETE"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/contao/jwt-cookie', methods: ['GET', 'PUT', 'DELETE'])]
 class JwtCookieController
 {
     public const COOKIE_NAME = 'contao_settings';

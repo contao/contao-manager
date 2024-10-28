@@ -24,9 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/contao/install-tool/lock", methods={"GET", "PUT", "DELETE"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/contao/install-tool/lock', methods: ['GET', 'PUT', 'DELETE'])]
 class InstallToolLockController
 {
     private readonly string $lockFile;

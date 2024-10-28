@@ -17,6 +17,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'self-update', description: 'Updates Contao Manager to the latest version')]
 class UpdateCommand extends Command
 {
     public function __construct(private readonly SelfUpdate $updater)
@@ -44,10 +45,6 @@ class UpdateCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setName('self-update')
-            ->setDescription('Updates Contao Manager to the latest version')
-        ;
     }
 
     private function update(OutputInterface $output): int

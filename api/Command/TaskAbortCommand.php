@@ -16,16 +16,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'task:abort', description: 'Aborts the current task and returns the status information.')]
 class TaskAbortCommand extends TaskUpdateCommand
 {
     protected function configure(): void
     {
         parent::configure();
-
-        $this
-            ->setName('task:abort')
-            ->setDescription('Aborts the current task and returns the status information.')
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

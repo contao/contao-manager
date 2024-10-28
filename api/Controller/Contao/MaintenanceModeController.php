@@ -23,9 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/contao/maintenance-mode", methods={"GET", "PUT", "DELETE"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/contao/maintenance-mode', methods: ['GET', 'PUT', 'DELETE'])]
 class MaintenanceModeController
 {
     public function __construct(private readonly ContaoConsole $console, private readonly ConsoleProcessFactory $processFactory, private readonly ApiKernel $kernel, private readonly Filesystem $filesystem)

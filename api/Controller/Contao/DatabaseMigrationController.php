@@ -25,9 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/contao/database-migration", methods={"GET", "PUT", "DELETE"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/contao/database-migration', methods: ['GET', 'PUT', 'DELETE'])]
 class DatabaseMigrationController
 {
     public function __construct(private readonly ContaoConsole $console, private readonly ConsoleProcessFactory $processFactory, private readonly ApiKernel $kernel)

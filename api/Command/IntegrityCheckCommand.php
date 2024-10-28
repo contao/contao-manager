@@ -19,6 +19,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'integrity-check', description: 'Performs integrity check for the Contao Manager')]
 class IntegrityCheckCommand extends Command
 {
     public function __construct(private readonly IntegrityCheckFactory $integrity)
@@ -29,8 +30,6 @@ class IntegrityCheckCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('integrity-check')
-            ->setDescription('Performs integrity check for the Contao Manager')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Use "text" or "json" to output the check results accordingly.', 'text')
         ;
     }

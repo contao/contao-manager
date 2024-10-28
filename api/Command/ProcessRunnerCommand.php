@@ -18,13 +18,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'background-task:run', description: 'Execute a background task')]
 class ProcessRunnerCommand extends Command
 {
     protected function configure(): void
     {
         $this
-            ->setName('background-task:run')
-            ->setDescription('Execute a background task')
             ->addArgument('path', InputArgument::REQUIRED, 'Absolute path to the task config file.')
         ;
     }

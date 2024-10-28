@@ -26,9 +26,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/server/composer", methods={"GET"})
- */
+#[\Symfony\Component\Routing\Attribute\Route(path: '/server/composer', methods: ['GET'])]
 class ComposerController
 {
     public function __construct(private readonly Environment $environment, private readonly Translator $translator, private readonly Filesystem $filesystem)

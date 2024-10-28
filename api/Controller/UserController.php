@@ -33,9 +33,8 @@ class UserController
 
     /**
      * Returns a list of users in the configuration file.
-     *
-     * @Route("/users", methods={"GET"})
      */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/users', methods: ['GET'])]
     public function listUsers(): Response
     {
         return $this->getUserResponse($this->config->getUsers());
@@ -43,9 +42,8 @@ class UserController
 
     /**
      * Adds a new user to the configuration file.
-     *
-     * @Route("/users", methods={"POST"})
      */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/users', methods: ['POST'])]
     public function createUser(Request $request): Response
     {
         $user = $this->createUserFromRequest($request);
@@ -61,9 +59,8 @@ class UserController
 
     /**
      * Returns user data from the configuration file.
-     *
-     * @Route("/users/{username}", name="user_get", methods={"GET"})
      */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/users/{username}', name: 'user_get', methods: ['GET'])]
     public function retrieveUser(string $username): Response
     {
         if ($this->config->hasUser($username)) {
@@ -75,9 +72,8 @@ class UserController
 
     /**
      * Replaces user data in the configuration file.
-     *
-     * @Route("/users/{username}", methods={"PUT"})
      */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/users/{username}', methods: ['PUT'])]
     public function replaceUser(Request $request): Response
     {
         $user = $this->createUserFromRequest($request);
@@ -93,9 +89,8 @@ class UserController
 
     /**
      * Deletes a user from the configuration file.
-     *
-     * @Route("/users/{username}", methods={"DELETE"})
      */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/users/{username}', methods: ['DELETE'])]
     public function deleteUser(string $username): Response
     {
         $user = $this->config->getUser($username);
@@ -111,9 +106,8 @@ class UserController
 
     /**
      * Returns a list of tokens of a user in the configuration file.
-     *
-     * @Route("/users/{username}/tokens", methods={"GET"})
      */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/users/{username}/tokens', methods: ['GET'])]
     public function listTokens(string $username): Response
     {
         $tokens = array_filter(
@@ -126,9 +120,8 @@ class UserController
 
     /**
      * Adds a new token for a user to the configuration file.
-     *
-     * @Route("/users/{username}/tokens", methods={"POST"})
      */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/users/{username}/tokens', methods: ['POST'])]
     public function createToken(string $username, Request $request): Response
     {
         if (!$this->config->hasUser($username)) {
@@ -154,9 +147,8 @@ class UserController
 
     /**
      * Returns token data of a user from the configuration file.
-     *
-     * @Route("/users/{username}/tokens/{id}", methods={"GET"})
      */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/users/{username}/tokens/{id}', methods: ['GET'])]
     public function retrieveToken(string $username, string $id): Response
     {
         $payload = $this->config->getToken($id);
@@ -170,9 +162,8 @@ class UserController
 
     /**
      * Deletes a token from the configuration file.
-     *
-     * @Route("/users/{username}/tokens/{id}", methods={"DELETE"})
      */
+    #[\Symfony\Component\Routing\Attribute\Route(path: '/users/{username}/tokens/{id}', methods: ['DELETE'])]
     public function deleteToken(string $username, string $id): Response
     {
         $payload = $this->config->getToken($id);
