@@ -25,12 +25,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class ExceptionListener implements EventSubscriberInterface
 {
-    /**
-     * Constructor.
-     *
-     * @param bool $debug
-     */
-    public function __construct(private readonly LoggerInterface $logger, private $debug = false)
+    public function __construct(private readonly LoggerInterface $logger, private readonly bool $debug = false)
     {
     }
 

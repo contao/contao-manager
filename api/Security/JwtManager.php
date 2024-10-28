@@ -14,6 +14,7 @@ namespace Contao\ManagerApi\Security;
 
 use Contao\ManagerApi\Config\UserConfig;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,19 +23,14 @@ class JwtManager
 {
     public const COOKIE_AUTH = 'contao_manager_auth';
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly UserConfig $users)
     {
     }
 
     /**
      * Gets payload data from JWT token cookie in the request.
-     *
-     * @return object|null
      */
-    public function getPayload(Request $request)
+    public function getPayload(Request $request): \stdClass|null
     {
         if (!$request->cookies->has(self::COOKIE_AUTH)) {
             return null;
@@ -43,8 +39,7 @@ class JwtManager
         try {
             return JWT::decode(
                 $request->cookies->get(self::COOKIE_AUTH),
-                $this->users->getSecret(),
-                ['HS256']
+                new Key($this->users->getSecret(), 'HS256'),
             );
         } catch (\Exception) {
             return null;
@@ -80,7 +75,7 @@ class JwtManager
 
         $response->headers->setCookie(
             $this->createCookie(
-                JWT::encode($payload, $this->users->getSecret()),
+                JWT::encode($payload, $this->users->getSecret(), 'HS256'),
                 $request
             )
         );
@@ -124,7 +119,7 @@ class JwtManager
      */
     private function createCookie(string $value, Request $request): Cookie
     {
-        return new Cookie(
+        return Cookie::create(
             self::COOKIE_AUTH,
             $value,
             0,

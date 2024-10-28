@@ -29,7 +29,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Routing\RouteCollectionBuilder;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 /**
  * @property ContainerInterface $container
@@ -46,7 +46,7 @@ class ApiKernel extends Kernel
 
     private ?string $publicDir = null;
 
-    private \Symfony\Component\Filesystem\Filesystem $filesystem;
+    private Filesystem $filesystem;
 
     public function __construct(string $environment)
     {
@@ -186,14 +186,14 @@ CODE
         return new Translator($requestStack);
     }
 
-    protected function configureRoutes(RouteCollectionBuilder $routes): void
+    private function configureRoutes(RoutingConfigurator $routes): void
     {
-        $routes->import(__DIR__.'/Controller', '/api', 'annotation');
+        $routes->import(__DIR__.'/Controller', 'attribute')->prefix('/api');
     }
 
-    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
+    private function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
-        $loader->load(__DIR__.'/Resources/config/config_'.$container->getParameter('kernel.environment').'.yml');
+        $loader->load(__DIR__.'/Resources/config/config_'.$this->environment.'.yml');
 
         $container->registerForAutoconfiguration(TaskInterface::class)
             ->addTag('app.task')

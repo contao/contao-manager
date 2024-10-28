@@ -37,7 +37,7 @@ class JsonRequestListener implements EventSubscriberInterface
         $data = [];
 
         if ('' !== $content) {
-            if ('json' !== $request->getContentType()) {
+            if ('json' !== $request->getContentTypeFormat()) {
                 throw new UnsupportedMediaTypeHttpException('Only JSON requests are supported.');
             }
 
