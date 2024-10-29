@@ -17,7 +17,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class UploadsConfig extends AbstractConfig
 {
-    public function __construct(ApiKernel $kernel, Filesystem|null $filesystem = null)
+    public function __construct(ApiKernel $kernel, Filesystem $filesystem)
     {
         parent::__construct('uploads.json', $kernel, $filesystem);
     }

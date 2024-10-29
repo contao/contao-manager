@@ -20,18 +20,12 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ContaoApi
 {
-    private readonly Filesystem $filesystem;
-
-    /**
-     * @var array
-     */
-    private $apiInfo;
+    private array|null $apiInfo = null;
 
     public function __construct(
         private readonly ConsoleProcessFactory $processFactory,
-        Filesystem|null $filesystem = null,
+        private readonly Filesystem $filesystem,
     ) {
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**

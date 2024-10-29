@@ -17,7 +17,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class AuthConfig extends AbstractConfig
 {
-    public function __construct(ApiKernel $kernel, Filesystem|null $filesystem = null)
+    public function __construct(ApiKernel $kernel, Filesystem $filesystem)
     {
         parent::__construct('auth.json', $kernel, $filesystem);
     }

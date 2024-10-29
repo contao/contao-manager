@@ -20,21 +20,15 @@ use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractConfig implements \IteratorAggregate, \Countable
 {
-    /**
-     * @var array
-     */
-    protected $data = [];
-
-    private readonly Filesystem $filesystem;
+    protected array $data = [];
 
     private bool $initialized = false;
 
     public function __construct(
         private readonly string $fileName,
         private readonly ApiKernel $kernel,
-        Filesystem|null $filesystem = null,
+        private readonly Filesystem $filesystem,
     ) {
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**
@@ -179,11 +173,13 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
         $file = $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.$this->fileName;
 
         if (is_file($file)) {
-            $this->data = json_decode(file_get_contents($file), true);
+            $data = json_decode(file_get_contents($file), true);
 
-            if (!\is_array($this->data)) {
+            if (!\is_array($data)) {
                 throw new \InvalidArgumentException('The config file does not contain valid JSON data.');
             }
+
+            $this->data = $data;
         }
     }
 }

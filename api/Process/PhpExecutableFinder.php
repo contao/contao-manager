@@ -20,7 +20,7 @@ class PhpExecutableFinder
 {
     private array $names = ['php-cli', 'php'];
 
-    public function __construct(private readonly LoggerInterface|null $logger = null)
+    public function __construct(private readonly LoggerInterface $logger)
     {
     }
 
@@ -98,9 +98,7 @@ class PhpExecutableFinder
                 return null;
             }
 
-            if (null !== $this->logger) {
-                $this->logger->error($exception->getMessage(), ['exception' => $exception]);
-            }
+            $this->logger->error($exception->getMessage(), ['exception' => $exception]);
 
             throw $exception;
         }

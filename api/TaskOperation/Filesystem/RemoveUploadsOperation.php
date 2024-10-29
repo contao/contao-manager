@@ -22,18 +22,15 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class RemoveUploadsOperation extends AbstractInlineOperation
 {
-    private readonly Filesystem $filesystem;
-
     public function __construct(
         private readonly array $uploads,
         private readonly UploadsConfig $uploadsConfig,
         TaskConfig $taskConfig,
         private readonly Environment $environment,
         private readonly Translator $translator,
-        Filesystem|null $filesystem = null,
+        private readonly Filesystem $filesystem,
     ) {
         parent::__construct($taskConfig);
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     public function getSummary(): string

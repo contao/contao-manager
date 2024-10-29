@@ -23,12 +23,7 @@ class SelfUpdate
 
     private const VERSION_URL = 'https://download.contao.org/contao-manager/%s/contao-manager.version';
 
-    private readonly Filesystem $filesystem;
-
-    /**
-     * @var array
-     */
-    private $remote;
+    private array|null $remote = null;
 
     private bool $checkedForUpdates = false;
 
@@ -36,9 +31,8 @@ class SelfUpdate
         private readonly ApiKernel $kernel,
         private readonly ManagerConfig $managerConfig,
         private readonly Request $request,
-        Filesystem|null $filesystem = null,
+        private readonly Filesystem $filesystem,
     ) {
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**

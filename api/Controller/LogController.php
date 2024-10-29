@@ -31,13 +31,10 @@ class LogController
 {
     public const MONOLOG_PATTERN = '/^\[(?<datetime>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+.*)\] (?<channel>[\w-]+(?:\.[\w-]+)?)\.(?<level>\w+): (?<message>.+)(?: (?<context>(?:\[.*?\]|\{.*?\})))(?: (?<extra>(?:\[.*\]|\{.*\})))\s{0,2}$/';
 
-    private readonly Filesystem $filesystem;
-
     public function __construct(
         private readonly ApiKernel $kernel,
-        Filesystem|null $filesystem = null,
+        private readonly Filesystem $filesystem,
     ) {
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     #[Route(path: '/logs', methods: ['GET'])]

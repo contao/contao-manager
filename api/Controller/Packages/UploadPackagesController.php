@@ -38,15 +38,12 @@ class UploadPackagesController
 {
     public const CHUNK_SIZE = 1048576;
 
-    private readonly Filesystem $filesystem;
-
     public function __construct(
         private readonly UploadsConfig $config,
         private readonly Environment $environment,
         private readonly Translator $translator,
-        Filesystem|null $filesystem = null,
+        private readonly Filesystem $filesystem,
     ) {
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     #[Route(path: '/packages/uploads', methods: ['GET'])]

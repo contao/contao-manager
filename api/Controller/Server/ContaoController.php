@@ -31,17 +31,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/server/contao', methods: ['GET', 'POST'])]
 class ContaoController
 {
-    private readonly Filesystem $filesystem;
-
     public function __construct(
         private readonly ApiKernel $kernel,
         private readonly ContaoApi $contaoApi,
         private readonly ContaoConsole $contaoConsole,
         private readonly ConsoleProcessFactory $processFactory,
-        private readonly LoggerInterface|null $logger = null,
-        Filesystem|null $filesystem = null,
+        private readonly LoggerInterface $logger,
+        private readonly Filesystem $filesystem,
     ) {
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     public function __invoke(Request $request, ServerInfo $serverInfo): Response
@@ -231,9 +228,7 @@ class ContaoController
             $files[] = \dirname($phar).'/system/config/constants.php';
         }
 
-        if ($this->logger instanceof LoggerInterface) {
-            $this->logger->info('Searching for Contao 2/3', ['files' => $files]);
-        }
+        $this->logger->info('Searching for Contao 2/3', ['files' => $files]);
 
         foreach ($files as $file) {
             if ($this->filesystem->exists($file)) {

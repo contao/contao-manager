@@ -23,8 +23,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(path: '/files/{file}', methods: ['GET', 'PUT'])]
 class FileController
 {
-    private readonly Filesystem $filesystem;
-
     private array $allowedFiles = [
         'composer.json',
         'composer.lock',
@@ -32,9 +30,8 @@ class FileController
 
     public function __construct(
         private readonly KernelInterface $kernel,
-        Filesystem|null $filesystem = null,
+        private readonly Filesystem $filesystem,
     ) {
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     public function __invoke(Request $request): Response

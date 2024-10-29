@@ -17,20 +17,16 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class TaskConfig
 {
-    private readonly Filesystem $filesystem;
-
     private array $data;
 
     private bool $isDeleted = false;
 
     public function __construct(
         private readonly string $file,
+        private readonly Filesystem $filesystem,
         string|null $name = null,
         array|null $options = null,
-        Filesystem|null $filesystem = null,
     ) {
-        $this->filesystem = $filesystem ?: new Filesystem();
-
         if (null === $name && null === $options) {
             $data = json_decode(file_get_contents($this->file), true);
 
@@ -110,10 +106,9 @@ class TaskConfig
             return false;
         }
 
-        file_put_contents(
+        $this->filesystem->dumpFile(
             $this->file,
-            json_encode($this->data),
-            LOCK_EX,
+            json_encode($this->data, JSON_PRETTY_PRINT)
         );
 
         return true;

@@ -22,7 +22,7 @@ class UserConfig extends AbstractConfig
     public function __construct(
         private readonly PasswordHasherFactoryInterface $passwordHasherFactory,
         ApiKernel $kernel,
-        Filesystem|null $filesystem = null,
+        Filesystem $filesystem,
     ) {
         parent::__construct('users.json', $kernel, $filesystem);
     }

@@ -32,14 +32,11 @@ class ConsoleProcessFactory implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private Filesystem $filesystem;
-
     public function __construct(
-        private ApiKernel $kernel,
-        private ServerInfo $serverInfo,
-        Filesystem|null $filesystem = null,
+        private readonly ApiKernel $kernel,
+        private readonly ServerInfo $serverInfo,
+        private readonly Filesystem $filesystem,
     ) {
-        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**
