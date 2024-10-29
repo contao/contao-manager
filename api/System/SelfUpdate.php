@@ -67,7 +67,7 @@ class SelfUpdate
      */
     public function isDev(): bool
     {
-        return '@manager_version'.'@' === $this->kernel->getVersion()
+        return ApiKernel::VERSION_KEY === ApiKernel::MANAGER_VERSION
             || 'prod' !== $this->kernel->getEnvironment()
             || $this->kernel->isDebug();
     }
@@ -93,7 +93,7 @@ class SelfUpdate
      */
     public function getOldVersion(): string
     {
-        return $this->kernel->getVersion();
+        return ApiKernel::MANAGER_VERSION;
     }
 
     /**

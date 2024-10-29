@@ -31,7 +31,7 @@ class ApiApplication extends Application
 
     public function __construct(private readonly ApiKernel $kernel)
     {
-        parent::__construct('Contao Manager', $this->kernel->getVersion());
+        parent::__construct('Contao Manager', ApiKernel::MANAGER_VERSION);
 
         $this->getDefinition()->addOption(new InputOption('disable-events', null, InputOption::VALUE_NONE, 'Disables the event dispatcher.'));
     }

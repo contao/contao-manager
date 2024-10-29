@@ -85,7 +85,7 @@ class AboutCommand extends Command
 
     private function collectData(): array
     {
-        $version = $this->getManagerVersion($this->kernel);
+        $version = $this->getManagerVersion();
 
         $data = [
             'app' => [
@@ -121,11 +121,11 @@ class AboutCommand extends Command
         return $data;
     }
 
-    private function getManagerVersion(ApiKernel $kernel): string
+    private function getManagerVersion(): string
     {
-        $version = $kernel->getVersion();
+        $version = ApiKernel::MANAGER_VERSION;
 
-        if ('@manager_version'.'@' === $version) {
+        if (ApiKernel::VERSION_KEY === $version) {
             $git = new Process(['git', 'describe', '--tags', '--always']);
 
             try {

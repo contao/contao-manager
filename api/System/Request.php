@@ -24,7 +24,6 @@ class Request
     private const DEFAULT_TIMEOUT = 5;
 
     public function __construct(
-        private readonly ApiKernel $kernel,
         private readonly LoggerInterface|null $logger = null,
     ) {
     }
@@ -121,7 +120,7 @@ class Request
 
         $options['http']['header'][] = \sprintf(
             'User-Agent: Contao Manager/%s (%s; %s; %s%s)',
-            '@manager_version'.'@' === $this->kernel->getVersion() ? 'source' : $this->kernel->getVersion(),
+            ApiKernel::VERSION_KEY === ApiKernel::MANAGER_VERSION ? 'source' : ApiKernel::MANAGER_VERSION,
             \function_exists('php_uname') ? php_uname('s') : 'Unknown',
             \function_exists('php_uname') ? php_uname('r') : 'Unknown',
             'PHP '.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.'.'.PHP_RELEASE_VERSION,

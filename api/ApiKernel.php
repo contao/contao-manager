@@ -33,7 +33,8 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class ApiKernel extends Kernel
 {
-    private string $version = '@manager_version@';
+    public const MANAGER_VERSION = '@manager_version@';
+    public const VERSION_KEY = '@manager_version'.'@';
 
     private string|null $projectDir = null;
 
@@ -149,14 +150,6 @@ class ApiKernel extends Kernel
         }
 
         return $this->configDir;
-    }
-
-    /**
-     * Gets the current Contao Manager version.
-     */
-    public function getVersion(): string
-    {
-        return $this->version;
     }
 
     public function getTranslator(): Translator
