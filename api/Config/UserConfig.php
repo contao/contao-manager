@@ -24,7 +24,11 @@ class UserConfig extends AbstractConfig
         ApiKernel $kernel,
         Filesystem $filesystem,
     ) {
-        parent::__construct('users.json', $kernel, $filesystem);
+        parent::__construct(
+            $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'users.json',
+            $filesystem,
+            $kernel->getTranslator(),
+        );
     }
 
     /**
@@ -63,7 +67,7 @@ class UserConfig extends AbstractConfig
     {
         $this->initialize();
 
-        return isset($this->data['users']) && is_array($this->data['users']) && [] !== $this->data['users'];
+        return isset($this->data['users']) && \is_array($this->data['users']) && [] !== $this->data['users'];
     }
 
     /**

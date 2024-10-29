@@ -19,7 +19,11 @@ class AuthConfig extends AbstractConfig
 {
     public function __construct(ApiKernel $kernel, Filesystem $filesystem)
     {
-        parent::__construct('auth.json', $kernel, $filesystem);
+        parent::__construct(
+            $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'auth.json',
+            $filesystem,
+            $kernel->getTranslator(),
+        );
     }
 
     /**

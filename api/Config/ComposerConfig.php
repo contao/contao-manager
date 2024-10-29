@@ -19,14 +19,11 @@ class ComposerConfig extends AbstractConfig
 {
     public function __construct(ApiKernel $kernel, Filesystem $filesystem)
     {
-        parent::__construct('config.json', $kernel, $filesystem);
-
-        // Make sure the config is in the correct subkey
-        if (!$this->has('config') || [] === $this->get('config')) {
-            $config = $this->all();
-            unset($config['config']);
-            $this->replace(['config' => $config]);
-        }
+        parent::__construct(
+            $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'config.json',
+            $filesystem,
+            $kernel->getTranslator(),
+        );
     }
 
     public function config(): PartialConfig
@@ -45,6 +42,22 @@ class ComposerConfig extends AbstractConfig
 
         if (true !== $config->get('allow-plugins')) {
             $config->set('allow-plugins', true);
+        }
+    }
+
+    protected function initialize(): void
+    {
+        if (null !== $this->data) {
+            return;
+        }
+
+        parent::initialize();
+
+        // Make sure the config is in the correct subkey
+        if (!$this->has('config') || [] === $this->get('config')) {
+            $config = $this->all();
+            unset($config['config']);
+            $this->replace(['config' => $config]);
         }
     }
 }

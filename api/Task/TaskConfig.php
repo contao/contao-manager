@@ -12,30 +12,20 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Task;
 
+use Contao\ManagerApi\Config\AbstractConfig;
+use Contao\ManagerApi\I18n\Translator;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Filesystem\Filesystem;
 
-class TaskConfig
+class TaskConfig extends AbstractConfig
 {
-    private array $data;
+    public function __construct(string $file, Filesystem $filesystem, Translator $translator, string|null $name = null, array|null $options = null)
+    {
+        parent::__construct($file, $filesystem, $translator);
 
-    private bool $isDeleted = false;
+        $this->initialize();
 
-    public function __construct(
-        private readonly string $file,
-        private readonly Filesystem $filesystem,
-        string|null $name = null,
-        array|null $options = null,
-    ) {
         if (null === $name && null === $options) {
-            $data = json_decode(file_get_contents($this->file), true);
-
-            if (!\is_array($data)) {
-                throw new \RuntimeException(\sprintf('Invalid task data in file "%s"', $this->file));
-            }
-
-            $this->data = $data;
-
             return;
         }
 
@@ -48,33 +38,45 @@ class TaskConfig
         ];
     }
 
-    public function getId(): string|null
+    public function getId(): string
     {
+        $this->initialize();
+
         return $this->data['id'] ?? '--unknown--';
     }
 
-    public function getName(): string|null
+    public function getName(): string
     {
-        return $this->data['name'];
+        $this->initialize();
+
+        return $this->data['name'] ?? '--unknown--';
     }
 
-    public function getOptions(): array|null
+    public function getOptions(): array
     {
-        return $this->data['options'];
+        $this->initialize();
+
+        return $this->data['options'] ?? [];
     }
 
     public function getOption(string $name, $default = null)
     {
+        $this->initialize();
+
         return \array_key_exists($name, $this->data['options']) ? $this->data['options'][$name] : $default;
     }
 
     public function getState(string $name, $default = null)
     {
+        $this->initialize();
+
         return \array_key_exists($name, $this->data['state']) ? $this->data['state'][$name] : $default;
     }
 
     public function setState(string $name, $value): void
     {
+        $this->initialize();
+
         $this->data['state'][$name] = $value;
 
         $this->save();
@@ -82,11 +84,15 @@ class TaskConfig
 
     public function clearState(string $name): void
     {
+        $this->initialize();
+
         unset($this->data['state'][$name]);
     }
 
     public function isCancelled(): bool
     {
+        $this->initialize();
+
         return (bool) $this->data['cancelled'];
     }
 
@@ -95,28 +101,10 @@ class TaskConfig
      */
     public function setCancelled(): void
     {
+        $this->initialize();
+
         $this->data['cancelled'] = true;
 
         $this->save();
-    }
-
-    public function save(): bool
-    {
-        if ($this->isDeleted) {
-            return false;
-        }
-
-        $this->filesystem->dumpFile(
-            $this->file,
-            json_encode($this->data, JSON_PRETTY_PRINT)
-        );
-
-        return true;
-    }
-
-    public function delete(): void
-    {
-        $this->isDeleted = true;
-        $this->filesystem->remove($this->file);
     }
 }

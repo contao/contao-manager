@@ -39,12 +39,12 @@ class TaskManager implements LoggerAwareInterface
      */
     public function __construct(
         iterable $tasks,
-        ApiKernel $kernel,
+        private readonly ApiKernel $kernel,
         private readonly ConsoleProcessFactory $processFactory,
         private readonly Filesystem $filesystem,
     ) {
-        $this->configFile = $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'task.json';
-        $this->logFile = $kernel->getLogDir().'/task-output.log';
+        $this->configFile = $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.'task.json';
+        $this->logFile = $this->kernel->getLogDir().'/task-output.log';
 
         foreach ($tasks as $task) {
             $this->tasks[$task->getName()] = $task;
@@ -67,7 +67,14 @@ class TaskManager implements LoggerAwareInterface
             throw new \RuntimeException('A task already exists.');
         }
 
-        $config = new TaskConfig($this->configFile, $this->filesystem, $name, $options);
+        $config = new TaskConfig(
+            $this->configFile,
+            $this->filesystem,
+            $this->kernel->getTranslator(),
+            $name,
+            $options,
+        );
+
         $config->save();
 
         $task = $this->loadTask($config);
@@ -167,7 +174,11 @@ class TaskManager implements LoggerAwareInterface
     {
         if ($this->filesystem->exists($this->configFile)) {
             try {
-                return new TaskConfig($this->configFile, $this->filesystem, null, null);
+                return new TaskConfig(
+                    $this->configFile,
+                    $this->filesystem,
+                    $this->kernel->getTranslator(),
+                );
             } catch (\Exception) {
                 $this->filesystem->remove($this->configFile);
             }

@@ -12,22 +12,22 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Config;
 
-use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Exception\ApiProblemException;
+use Contao\ManagerApi\I18n\Translator;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractConfig implements \IteratorAggregate, \Countable
 {
-    protected array $data = [];
+    protected array|null $data = null;
 
-    private bool $initialized = false;
+    private bool $deleted = false;
 
     public function __construct(
-        private readonly string $fileName,
-        private readonly ApiKernel $kernel,
+        private readonly string $file,
         private readonly Filesystem $filesystem,
+        private readonly Translator $translator,
     ) {
     }
 
@@ -138,48 +138,61 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
     /**
      * Saves current data to the JSON config file.
      */
-    protected function save(): void
+    public function save(): void
     {
-        if (!$this->initialized) {
+        if ($this->deleted || null === $this->data) {
             return;
         }
 
-        $file = $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.$this->fileName;
-
         try {
             $this->filesystem->dumpFile(
-                $file,
+                $this->file,
                 json_encode($this->data, JSON_PRETTY_PRINT),
             );
         } catch (IOException $exception) {
-            $translator = $this->kernel->getTranslator();
-            $problem = (new ApiProblem(
-                $translator->trans('error.writable.config-file', ['file' => $file]),
-                'https://php.net/is_writable',
-            ))->setDetail($translator->trans('error.writable.detail'));
+            $this->throwNotWritable($exception);
+        }
+    }
 
-            throw new ApiProblemException($problem, $exception);
+    public function delete(): void
+    {
+        $this->deleted = true;
+
+        try {
+            $this->filesystem->remove($this->file);
+        } catch (IOException $exception) {
+            $this->throwNotWritable($exception);
         }
     }
 
     protected function initialize(): void
     {
-        if ($this->initialized) {
+        if (null !== $this->data) {
             return;
         }
 
-        $this->initialized = true;
+        if (!$this->filesystem->exists($this->file)) {
+            $this->data = [];
 
-        $file = $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.$this->fileName;
-
-        if (is_file($file)) {
-            $data = json_decode(file_get_contents($file), true);
-
-            if (!\is_array($data)) {
-                throw new \InvalidArgumentException('The config file does not contain valid JSON data.');
-            }
-
-            $this->data = $data;
+            return;
         }
+
+        $data = json_decode(file_get_contents($this->file), true);
+
+        if (!\is_array($data)) {
+            throw new \InvalidArgumentException('The config file does not contain valid JSON data.');
+        }
+
+        $this->data = $data;
+    }
+
+    private function throwNotWritable(\Throwable $throwable): void
+    {
+        $problem = (new ApiProblem(
+            $this->translator->trans('error.writable.config-file', ['file' => $this->file]),
+            'https://php.net/is_writable',
+        ))->setDetail($this->translator->trans('error.writable.detail'));
+
+        throw new ApiProblemException($problem, $throwable);
     }
 }

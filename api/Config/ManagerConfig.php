@@ -19,6 +19,10 @@ class ManagerConfig extends AbstractConfig
 {
     public function __construct(ApiKernel $kernel, Filesystem $filesystem)
     {
-        parent::__construct('manager.json', $kernel, $filesystem);
+        parent::__construct(
+            $kernel->getConfigDir().\DIRECTORY_SEPARATOR.'manager.json',
+            $filesystem,
+            $kernel->getTranslator(),
+        );
     }
 }
