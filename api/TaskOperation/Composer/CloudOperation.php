@@ -33,7 +33,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
 
     private \Throwable|null $exception = null;
 
-    private string $output = '';
+    private string|null $output = null;
 
     public function __construct(
         private readonly CloudResolver $cloud,
@@ -221,7 +221,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
             if (null === $this->taskConfig->getState('cloud-job')) {
                 // Retry to create Cloud job, the first request always fails on XAMPP for
                 // unknown reason
-                $attempts = $this->taskConfig->getState('cloud-job-attempts', 0);
+                $attempts = (int) $this->taskConfig->getState('cloud-job-attempts', 0);
 
                 if ($attempts >= 5) {
                     $this->taskConfig->setState('cloud-job-successful', false);
@@ -306,8 +306,8 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
                     return $this->job;
                 }
 
-                $lastUpdated = time() - $this->taskConfig->getState('cloud-job-updated', time());
-                $isProcessing = $this->taskConfig->getState('cloud-job-processing', 0) > 0;
+                $lastUpdated = time() - (int) $this->taskConfig->getState('cloud-job-updated', time());
+                $isProcessing = (int) $this->taskConfig->getState('cloud-job-processing', 0) > 0;
 
                 if (($isProcessing && $lastUpdated <= 5) || $lastUpdated <= 10) {
                     $this->output = $this->taskConfig->getState('cloud-job-output', '');

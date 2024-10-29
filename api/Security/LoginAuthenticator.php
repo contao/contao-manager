@@ -25,6 +25,9 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
 class LoginAuthenticator extends AbstractBrowserAuthenticator
 {
+    /**
+     * @param UserProviderInterface<User> $userProvider
+     */
     public function __construct(
         private readonly UserProviderInterface $userProvider,
         private readonly UserConfig $userConfig,

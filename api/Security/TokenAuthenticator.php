@@ -27,6 +27,9 @@ class TokenAuthenticator extends AbstractAuthenticator
 {
     private string $tokenId;
 
+    /**
+     * @param UserProviderInterface<User> $userProvider
+     */
     public function __construct(
         private readonly UserProviderInterface $userProvider,
         private readonly UserConfig $config,

@@ -220,7 +220,7 @@ class ConsoleProcessFactory implements LoggerAwareInterface
 
         $defaultArgs = [$phpCli, '-q'];
 
-        if (file_exists($this->kernel->getConfigDir().'/php.ini')) {
+        if ($this->filesystem->exists($this->kernel->getConfigDir().'/php.ini')) {
             $defaultArgs[] = '-c';
             $defaultArgs[] = $this->kernel->getConfigDir().'/php.ini';
         }

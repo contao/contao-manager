@@ -111,7 +111,7 @@ class ComposerController
             }
         } catch (ParsingException $e) {
             $result['json']['valid'] = false;
-            $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage().' '.$e->getDetails()]);
+            $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage().' '.$e->getDetails()['text']]);
         } catch (\Exception $e) {
             $result['json']['valid'] = false;
             $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $e->getMessage()]);

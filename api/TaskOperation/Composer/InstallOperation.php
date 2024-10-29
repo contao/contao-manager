@@ -30,7 +30,7 @@ class InstallOperation extends AbstractProcessOperation
     ) {
         try {
             $process = $processFactory->restoreBackgroundProcess('composer-install');
-            $retries = $this->taskConfig->getState('install-retry', 0);
+            $retries = (int) $this->taskConfig->getState('install-retry', 0);
 
             if ($retry && $retries < 4 && $process->isTerminated() && !$process->isSuccessful()) {
                 $process->delete();
@@ -91,7 +91,7 @@ class InstallOperation extends AbstractProcessOperation
             return null;
         }
 
-        if ($this->isRunning() && ($attempt = $this->taskConfig->getState('install-retry', 0)) > 0) {
+        if ($this->isRunning() && ($attempt = (int) $this->taskConfig->getState('install-retry', 0)) > 0) {
             return $this->translator->trans(
                 'taskoperation.composer-install.retry',
                 ['current' => $attempt + 1, 'max' => 5],

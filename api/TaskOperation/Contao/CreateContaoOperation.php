@@ -20,17 +20,11 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class CreateContaoOperation extends AbstractInlineOperation
 {
-    private static array $supportedVersions = ['4.9', '4.13', '5.3', '5.4'];
+    private const SUPPORTED_VERSIONS = ['4.9', '4.13', '5.3', '5.4'];
 
-    /**
-     * @var string
-     */
-    private $version;
+    private string|null $version;
 
-    /**
-     * @var string
-     */
-    private $publicDir;
+    private string|null $publicDir;
 
     public function __construct(
         TaskConfig $taskConfig,
@@ -39,13 +33,13 @@ class CreateContaoOperation extends AbstractInlineOperation
         private readonly Filesystem $filesystem,
     ) {
         parent::__construct($taskConfig);
-        $this->version = $taskConfig->getOption('version');
 
-        if (!\in_array($this->version, static::$supportedVersions, true)) {
+        $this->version = $taskConfig->getOption('version');
+        $this->publicDir = $taskConfig->getState('public-dir');
+
+        if (!\in_array($this->version, self::SUPPORTED_VERSIONS, true)) {
             throw new \InvalidArgumentException('Unsupported Contao version');
         }
-
-        $this->publicDir = $taskConfig->getState('public-dir');
 
         if (null !== $this->publicDir) {
             return;

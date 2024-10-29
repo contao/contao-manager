@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Config;
 
+/**
+ * @implements \IteratorAggregate<string, array|string|int|float|bool>
+ */
 class PartialConfig implements \IteratorAggregate, \Countable
 {
     public function __construct(
@@ -56,10 +59,8 @@ class PartialConfig implements \IteratorAggregate, \Countable
 
     /**
      * Returns a config option by name.
-     *
-     * @param mixed|null $default
      */
-    public function get(string $key, $default = null)
+    public function get(string $key, array|string|int|float|bool|null $default = null): array|string|int|float|bool|null
     {
         $data = $this->all();
 
@@ -69,7 +70,7 @@ class PartialConfig implements \IteratorAggregate, \Countable
     /**
      * Sets a config option by name.
      */
-    public function set(string $key, $value): void
+    public function set(string $key, array|string|int|float|bool $value): void
     {
         $this->replace([$key => $value]);
     }
@@ -96,6 +97,9 @@ class PartialConfig implements \IteratorAggregate, \Countable
         $this->replace($data);
     }
 
+    /**
+     * @return \ArrayIterator<string, array|string|int|float|bool>
+     */
     public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->all());

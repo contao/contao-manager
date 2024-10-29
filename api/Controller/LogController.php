@@ -117,6 +117,7 @@ class LogController
         $file->setFlags(\SplFileObject::DROP_NEW_LINE);
 
         $content = [];
+        $skipLastLine = false;
         $total = $this->countLines($file, $skipLastLine);
         $limit = $request->query->getInt('limit', $total);
         $offset = $request->query->getInt('offset');
@@ -165,13 +166,13 @@ class LogController
             return null;
         }
 
-        $matches['context'] = json_decode(trim($matches['context'] ?? ''), true);
-        $matches['extra'] = json_decode(trim($matches['extra'] ?? ''), true);
+        $matches['context'] = json_decode(trim($matches['context']), true);
+        $matches['extra'] = json_decode(trim($matches['extra']), true);
 
         return array_intersect_key($matches, array_flip(['datetime', 'channel', 'level', 'message', 'context', 'extra']));
     }
 
-    private function countLines(\SplFileObject $file, &$skipLastLine = false): int
+    private function countLines(\SplFileObject $file, bool &$skipLastLine = false): int
     {
         $skipLastLine = false;
         $file->seek(PHP_INT_MAX);

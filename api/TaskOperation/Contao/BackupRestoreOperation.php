@@ -20,7 +20,7 @@ class BackupRestoreOperation extends AbstractProcessOperation
     public function __construct(
         ConsoleProcessFactory $processFactory,
         private readonly string $file,
-        $processId = 'backup-restore',
+        string $processId = 'backup-restore',
     ) {
         try {
             parent::__construct($processFactory->restoreBackgroundProcess($processId));

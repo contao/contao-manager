@@ -115,7 +115,9 @@ class TaskUpdateCommand extends Command
 
             $this->updateOperation($operation, $section, $progress);
 
-            $progresses[$i] = $progress;
+            if ($progress) {
+                $progresses[$i] = $progress;
+            }
 
             if (!$operation->isStarted() || $operation->isRunning()) {
                 return false;

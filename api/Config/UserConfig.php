@@ -299,7 +299,7 @@ class UserConfig extends AbstractConfig
     {
         parent::initialize();
 
-        if ([] !== $this->data && (!isset($this->data['version']) || $this->data['version'] < 2)) {
+        if ([] !== $this->data && (!isset($this->data['version']) || (int) $this->data['version'] < 2)) {
             throw new \RuntimeException('Unsupported user.json version');
         }
 

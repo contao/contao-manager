@@ -16,6 +16,7 @@ use Composer\Json\JsonFile;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Task\TaskManager;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +29,7 @@ class CloudController
     public function __construct(
         private readonly Environment $environment,
         private readonly TaskManager $taskManager,
+        private readonly Filesystem $filesystem,
     ) {
     }
 
@@ -56,19 +58,19 @@ class CloudController
             throw new BadRequestHttpException('A task is already active');
         }
 
-        $lock = $request->request->get('composerLock');
+        $lock = $request->request->all('composerLock');
 
         if (null === $lock) {
             return new Response('composerLock is missing', Response::HTTP_BAD_REQUEST);
         }
 
         try {
-            $lockFile = new JsonFile(tempnam(sys_get_temp_dir(), md5(\Phar::running())));
+            $lockFile = new JsonFile($this->filesystem->tempnam(sys_get_temp_dir(), md5(\Phar::running())));
             $lockFile->write($lock);
             $lockContent = $lockFile->read(); // Validates the JSON
 
-            if (null !== ($json = $request->request->get('composerJson'))) {
-                $jsonFile = new JsonFile(tempnam(sys_get_temp_dir(), md5(\Phar::running())));
+            if (null !== ($json = $request->request->all('composerJson'))) {
+                $jsonFile = new JsonFile($this->filesystem->tempnam(sys_get_temp_dir(), md5(\Phar::running())));
                 $jsonFile->write($json);
                 $jsonFile->validateSchema(JsonFile::LAX_SCHEMA);
                 $this->environment->getComposerJsonFile()->write($jsonFile->read());

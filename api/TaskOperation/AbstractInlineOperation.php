@@ -59,7 +59,7 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
     {
         // Inline task should never need more than 60secs to complete. Assume something
         // went wrong.
-        $started = $this->taskConfig->getState($this->getName().'.started', 0);
+        $started = (int) $this->taskConfig->getState($this->getName().'.started', 0);
 
         if ($started > 0 && ($started + 60) < time()) {
             $this->taskConfig->setState($this->getName(), TaskStatus::STATUS_ERROR);

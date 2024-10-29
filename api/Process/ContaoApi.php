@@ -60,18 +60,24 @@ class ContaoApi
         return $this->getApiInfo()['features'];
     }
 
-    /**
-     * @param string|array $arguments
-     *
-     * @throws ParsingException
-     * @throws ProcessFailedException
-     */
-    public function runCommand($arguments, bool $parseJson = false)
+    public function runCommand(string|array $arguments): string
     {
         $process = $this->processFactory->createContaoApiProcess((array) $arguments);
         $process->mustRun();
 
-        return $parseJson ? $this->parseJson($process->getOutput()) : $process->getOutput();
+        return $process->getOutput();
+    }
+
+    /**
+     * @throws ParsingException
+     * @throws ProcessFailedException
+     */
+    public function runJsonCommand(string|array $arguments): array
+    {
+        $process = $this->processFactory->createContaoApiProcess((array) $arguments);
+        $process->mustRun();
+
+        return $this->parseJson($process->getOutput());
     }
 
     /**
@@ -128,7 +134,7 @@ class ContaoApi
     /**
      * @throws ParsingException
      */
-    private function parseJson(string $output)
+    private function parseJson(string $output): array
     {
         $data = json_decode($output, true);
 

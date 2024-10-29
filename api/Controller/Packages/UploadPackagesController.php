@@ -54,7 +54,7 @@ class UploadPackagesController
         $uploads = $this->config->all();
 
         foreach ($uploads as $id => &$upload) {
-            if (!file_exists($this->uploadPath($id))) {
+            if (!$this->filesystem->exists($this->uploadPath($id))) {
                 unset($uploads[$id]);
                 $this->config->remove($id);
                 continue;
@@ -289,7 +289,7 @@ class UploadPackagesController
 
     private function validateUploadSupport(): void
     {
-        if (!file_exists($this->environment->getJsonFile())) {
+        if (!$this->filesystem->exists($this->environment->getJsonFile())) {
             return;
         }
 

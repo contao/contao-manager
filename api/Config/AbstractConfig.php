@@ -18,8 +18,14 @@ use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * @implements \IteratorAggregate<string, array|string|int|float|bool>
+ */
 abstract class AbstractConfig implements \IteratorAggregate, \Countable
 {
+    /**
+     * @var array<string, array|string|int|float|bool>|null
+     */
     protected array|null $data = null;
 
     private bool $deleted = false;
@@ -77,10 +83,8 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
 
     /**
      * Returns a config option by name.
-     *
-     * @param mixed|null $default
      */
-    public function get(string $key, $default = null)
+    public function get(string $key, array|string|int|float|bool|null $default = null): array|string|int|float|bool|null
     {
         $this->initialize();
 
@@ -90,7 +94,7 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
     /**
      * Sets a config option by name.
      */
-    public function set(string $key, $value): void
+    public function set(string $key, array|string|int|float|bool $value): void
     {
         $this->initialize();
 
@@ -121,6 +125,9 @@ abstract class AbstractConfig implements \IteratorAggregate, \Countable
         $this->save();
     }
 
+    /**
+     * @return \ArrayIterator<string, array|string|int|float|bool>
+     */
     public function getIterator(): \ArrayIterator
     {
         $this->initialize();

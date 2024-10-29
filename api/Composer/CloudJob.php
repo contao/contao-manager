@@ -28,23 +28,23 @@ class CloudJob implements \JsonSerializable
 
     public const LINK_OUTPUT = 'composerOutput';
 
-    public function __construct(private array $result)
+    public function __construct(private readonly array $result)
     {
     }
 
-    public function getId()
+    public function getId(): string
     {
         return $this->result['jobId'];
     }
 
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->result['status'];
     }
 
-    public function getLink($name)
+    public function getLink(string $name): string|null
     {
-        return $this->result['links'][$name];
+        return $this->result['links'][$name] ?? null;
     }
 
     public function getSponsor(): array
@@ -102,7 +102,7 @@ class CloudJob implements \JsonSerializable
         return self::STATUS_ERROR === $this->getStatus();
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->result;
     }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Process;
 
 use Contao\ManagerApi\Process\Forker\ForkerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 class ProcessController extends AbstractProcess
@@ -154,7 +155,7 @@ class ProcessController extends AbstractProcess
         return Process::STATUS_TERMINATED === $this->getStatus() && $this->config['timedout'] > 0;
     }
 
-    public function getStatus()
+    public function getStatus(): string
     {
         $this->updateStatus();
 
@@ -240,7 +241,7 @@ class ProcessController extends AbstractProcess
 
     public static function create(string $workDir, array $commandline, string|null $cwd = null, string|null $id = null): self
     {
-        return new static(
+        return new ProcessController(
             [
                 'id' => $id ?: md5(uniqid('', true)),
                 'commandline' => $commandline,
@@ -258,7 +259,7 @@ class ProcessController extends AbstractProcess
             $config = array_merge($config, static::readConfig($getFile));
         }
 
-        return new static($config, $workDir);
+        return new ProcessController($config, $workDir);
     }
 
     private function saveConfig(bool $always = false): void
@@ -281,9 +282,11 @@ class ProcessController extends AbstractProcess
 
     private function close(): void
     {
-        @unlink($this->setFile);
-        @unlink($this->getFile);
-        @unlink($this->inputFile);
-        @unlink($this->outputFile);
+        $fs = new Filesystem();
+
+        $fs->remove($this->setFile);
+        $fs->remove($this->getFile);
+        $fs->remove($this->inputFile);
+        $fs->remove($this->outputFile);
     }
 }

@@ -22,7 +22,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
 {
     use LoggerAwareTrait;
 
-    private static array $signals = [
+    private const SIGNALS = [
         1 => 'SIGHUP',
         2 => 'SIGINT',
         3 => 'SIGQUIT',
@@ -30,10 +30,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
         15 => 'SIGTERM',
     ];
 
-    /**
-     * @param Process|ProcessController $process
-     */
-    public function __construct(protected $process)
+    public function __construct(protected readonly Process|ProcessController $process)
     {
     }
 
@@ -136,8 +133,8 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
      */
     private function getSignalText($signal): string
     {
-        if (isset(static::$signals[$signal])) {
-            return \sprintf(' [%s]', static::$signals[$signal]);
+        if (isset(self::SIGNALS[$signal])) {
+            return \sprintf(' [%s]', self::SIGNALS[$signal]);
         }
 
         return \sprintf(' [signal %s]', $signal);

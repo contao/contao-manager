@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Isolated\Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\Finder;
 
 $polyfillsBootstraps = array_map(
     static fn (SplFileInfo $fileInfo): string => $fileInfo->getPathname(),

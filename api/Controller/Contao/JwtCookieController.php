@@ -62,7 +62,7 @@ class JwtCookieController
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
-        $payload = $this->api->runCommand(['jwt-cookie:parse', $request->cookies->get(self::COOKIE_NAME)], true);
+        $payload = $this->api->runJsonCommand(['jwt-cookie:parse', $request->cookies->get(self::COOKIE_NAME)]);
 
         return new JsonResponse($payload);
     }

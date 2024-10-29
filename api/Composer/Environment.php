@@ -140,7 +140,7 @@ class Environment
     /**
      * Gets the Composer instance.
      */
-    public function getComposer($reload = false): Composer
+    public function getComposer(bool $reload = false): Composer
     {
         $this->composerConfig->allowPlugins();
 
@@ -296,12 +296,13 @@ class Environment
                 if (isset($metadata['logo']) && preg_match('{https?://}i', (string) $metadata['logo'])) {
                     unset($metadata['logo']);
                 }
+
+                return array_merge($package, $metadata, ['private' => true]);
             }
         } catch (\Exception) {
-            return $package;
         }
 
-        return array_merge($package, $metadata, ['private' => true]);
+        return $package;
     }
 
     private function normalizeRepositoryPath(string $path): string

@@ -206,7 +206,7 @@ class DatabaseMigrationController
         return new JsonResponse([
             'type' => $responseType,
             'status' => $this->getProcessStatus($process),
-            'operations' => array_values($operations),
+            'operations' => $operations,
         ]);
     }
 

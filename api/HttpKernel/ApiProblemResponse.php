@@ -77,6 +77,6 @@ class ApiProblemResponse extends Response
             $headers = $exception->getHeaders();
         }
 
-        return new static($problem, $headers);
+        return new self($problem, $headers);
     }
 }

@@ -17,7 +17,7 @@ use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 
 class CacheClearOperation extends AbstractProcessOperation
 {
-    public function __construct(ConsoleProcessFactory $processFactory, string $environment, $processId = 'cache-clear')
+    public function __construct(ConsoleProcessFactory $processFactory, string $environment, string $processId = 'cache-clear')
     {
         try {
             parent::__construct($processFactory->restoreBackgroundProcess($processId));

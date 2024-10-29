@@ -19,17 +19,11 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ContaoConsole
 {
-    /**
-     * @var string|null
-     */
-    private $version;
+    private string|null $version = null;
 
     private array|null $commands = null;
 
-    /**
-     * @var @array|null
-     */
-    private $config;
+    private array|null $config = null;
 
     public function __construct(private readonly ConsoleProcessFactory $processFactory)
     {
@@ -48,6 +42,7 @@ class ContaoConsole
 
         $this->getCommandList(true);
 
+        // @phpstan-ignore notIdentical.alwaysFalse
         if (null !== $this->version) {
             return $this->version;
         }

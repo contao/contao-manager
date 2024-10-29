@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 require __DIR__.'/../vendor/autoload.php';
 
 try {
+    // @phpstan-ignore identical.alwaysFalse
     $kernel = new ApiKernel('@symfony_env@' === 'prod' ? 'prod' : 'dev');
 
     $request = Request::createFromGlobals();

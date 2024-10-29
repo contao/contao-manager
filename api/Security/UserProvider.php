@@ -20,6 +20,9 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+/**
+ * @implements UserProviderInterface<User>
+ */
 class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
 {
     public function __construct(private readonly UserConfig $config)
@@ -49,13 +52,17 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
-    public function supportsClass($class): bool
+    public function supportsClass(string $class): bool
     {
         return User::class === $class;
     }
 
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
+        }
+
         $this->config->updateUser(
             new User($user->getUserIdentifier(), $newHashedPassword),
         );

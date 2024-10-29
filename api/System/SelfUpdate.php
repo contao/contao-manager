@@ -67,6 +67,7 @@ class SelfUpdate
      */
     public function isDev(): bool
     {
+        // @phpstan-ignore-next-line
         return ApiKernel::VERSION_KEY === ApiKernel::MANAGER_VERSION
             || 'prod' !== $this->kernel->getEnvironment()
             || $this->kernel->isDebug();
