@@ -65,11 +65,13 @@ class UserController
     #[Route(path: '/users/{username}', name: 'user_get', methods: ['GET'])]
     public function retrieveUser(string $username): Response
     {
-        if ($this->config->hasUser($username)) {
-            return $this->getUserResponse($this->config->getUser($username));
+        $user = $this->config->getUser($username);
+
+        if (null === $user) {
+            throw new NotFoundHttpException(\sprintf('User "%s" was not found.', $username));
         }
 
-        throw new NotFoundHttpException(\sprintf('User "%s" was not found.', $username));
+        return $this->getUserResponse($user);
     }
 
     /**
@@ -184,7 +186,7 @@ class UserController
      *
      * @param User|array<User> $user
      */
-    private function getUserResponse($user, int $status = Response::HTTP_OK, bool $addLocation = false): Response
+    private function getUserResponse(User|array $user, int $status = Response::HTTP_OK, bool $addLocation = false): Response
     {
         $response = new JsonResponse(
             $this->convertToJson($user),

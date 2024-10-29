@@ -94,7 +94,7 @@ class DatabaseMigrationController
         $skipWarnings = (bool) ($process->getMeta()['skip_warnings'] ?? false);
         $output = trim($process->getOutput());
 
-        if (!empty($output)) {
+        if ('' !== $output) {
             $lines = explode("\n", $output);
 
             while ($line = array_shift($lines)) {

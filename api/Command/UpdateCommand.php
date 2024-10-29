@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Command;
 
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\System\SelfUpdate;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -28,7 +29,7 @@ class UpdateCommand extends Command
 
     public function isEnabled(): bool
     {
-        return '' !== \Phar::running(false) && parent::isEnabled();
+        return ApiKernel::isPhar() && parent::isEnabled();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

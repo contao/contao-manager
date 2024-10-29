@@ -89,7 +89,7 @@ class CloudResolver implements LoggerAwareInterface
      */
     public function getJob(string $jobId): CloudJob|null
     {
-        if (!$jobId) {
+        if ('' === $jobId) {
             return null;
         }
 
@@ -110,7 +110,7 @@ class CloudResolver implements LoggerAwareInterface
      */
     public function deleteJob(string $jobId): bool
     {
-        if (!$jobId) {
+        if ('' === $jobId) {
             return false;
         }
 

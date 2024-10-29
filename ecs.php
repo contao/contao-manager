@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Contao\EasyCodingStandard\Set\SetList;
 use PhpCsFixer\Fixer\Comment\HeaderCommentFixer;
+use PhpCsFixer\Fixer\FunctionNotation\UseArrowFunctionsFixer;
+use PhpCsFixer\Fixer\Operator\NoUselessConcatOperatorFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 
@@ -21,6 +23,8 @@ return ECSConfig::configure()
             __DIR__.'/rector.php',
             __DIR__.'/scoper.inc.php',
         ],
+        UseArrowFunctionsFixer::class => [__DIR__.'/scoper.inc.php'],
+        NoUselessConcatOperatorFixer::class => [__DIR__.'/api/ApiKernel.php'],
     ])
     ->withRootFiles()
     ->withParallel()

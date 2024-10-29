@@ -31,7 +31,7 @@ class RequestException extends \RuntimeException
 
         parent::__construct(
             $message,
-            $previous ? $previous->getCode() : 0,
+            $previous?->getCode() ?? 0,
             $previous,
         );
     }

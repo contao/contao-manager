@@ -40,7 +40,7 @@ class SelfUpdate
      */
     public function canUpdate(): bool
     {
-        return '' !== \Phar::running(false);
+        return ApiKernel::isPhar();
     }
 
     /**

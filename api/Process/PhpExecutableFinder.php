@@ -48,7 +48,7 @@ class PhpExecutableFinder
             $this->includePath($paths, \dirname($bin));
         }
 
-        if (PHP_BINDIR) {
+        if (\defined('PHP_BINDIR') && '' !== PHP_BINDIR) {
             $this->includePath($paths, PHP_BINDIR);
         }
 
@@ -72,14 +72,10 @@ class PhpExecutableFinder
 
     public function getServerInfo(string $cli): array|null
     {
+        $phar = \Phar::running(false);
+
         $arguments = [$cli, '-q'];
-
-        if ('' !== ($phar = \Phar::running(false))) {
-            $arguments[] = $phar;
-        } else {
-            $arguments[] = \dirname(__DIR__).'/console';
-        }
-
+        $arguments[] = $phar ?: \dirname(__DIR__).'/console';
         $arguments[] = 'test';
 
         try {
@@ -196,11 +192,16 @@ class PhpExecutableFinder
             $vWeb = PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;
             $vCli = vsprintf('%s.%s', explode('.', (string) $info['version']));
 
+            // Ignore binary if minor version does not match
+            if (!version_compare($vWeb, $vCli, 'eq')) {
+                continue;
+            }
+
             // Allow fallback to another patch version of the same PHP major/minor and prefer
             // a CLI SAPI over e.g. a CGI SAPI.
             if (
-                (null === $fallbackPath || ('cli' !== $fallbackSapi && 'cli' === $info['sapi']))
-                && version_compare($vWeb, $vCli, 'eq')
+                null === $fallbackPath
+                || ('cli' !== $fallbackSapi && 'cli' === $info['sapi'])
             ) {
                 $fallbackPath = $path;
                 $fallbackSapi = $info['sapi'];

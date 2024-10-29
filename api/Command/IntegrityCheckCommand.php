@@ -48,11 +48,11 @@ class IntegrityCheckCommand extends Command
             throw new \InvalidArgumentException(\sprintf('Unknown output format "%s"', $format));
         }
 
-        if ($problem) {
+        if (null !== $problem) {
             $output->writeln('Running PHP '.PHP_VERSION);
             $output->writeln($problem->getTitle());
 
-            if ($detail = $problem->getDetail()) {
+            if ('' !== ($detail = $problem->getDetail())) {
                 $output->writeln('');
                 $output->writeln($detail);
             }
@@ -72,12 +72,12 @@ class IntegrityCheckCommand extends Command
                 [
                     'version' => PHP_VERSION,
                     'version_id' => \PHP_VERSION_ID,
-                    'problem' => $problem ? $problem->asArray() : null,
+                    'problem' => $problem?->asArray(),
                 ],
                 JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT,
             ),
         );
 
-        return $problem ? Command::FAILURE : Command::SUCCESS;
+        return null === $problem ? Command::SUCCESS : Command::FAILURE;
     }
 }

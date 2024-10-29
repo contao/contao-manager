@@ -34,6 +34,7 @@ use Symfony\Component\Routing\RouteCollection;
 class ApiKernel extends Kernel
 {
     public const MANAGER_VERSION = '@manager_version@';
+
     public const VERSION_KEY = '@manager_version'.'@';
 
     private string|null $projectDir = null;
@@ -118,7 +119,7 @@ class ApiKernel extends Kernel
 
         $this->configDir = $this->getProjectDir().\DIRECTORY_SEPARATOR.'contao-manager';
 
-        if ('' === \Phar::running(false)) {
+        if (!self::isPhar()) {
             return $this->configDir;
         }
 
@@ -193,6 +194,11 @@ class ApiKernel extends Kernel
         return $routes;
     }
 
+    public static function isPhar(): bool
+    {
+        return '' !== \Phar::running(false);
+    }
+
     /**
      * Configures the Composer environment variables to match the current setup.
      */
@@ -222,10 +228,8 @@ class ApiKernel extends Kernel
             return;
         }
 
-        $phar = \Phar::running(false);
-
         // Not a phar file, use test directory in local development
-        if ('' === $phar) {
+        if (!self::isPhar()) {
             $this->projectDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'test-dir';
             $this->publicDir = $this->projectDir.'/web';
             $this->ensureDirectoryExists($this->publicDir);
@@ -245,7 +249,7 @@ class ApiKernel extends Kernel
         $current = getcwd();
 
         if (!$current) {
-            $current = \dirname($phar);
+            $current = \dirname(\Phar::running(false));
         }
 
         // Always use current folder if it is not named "web" or "public"

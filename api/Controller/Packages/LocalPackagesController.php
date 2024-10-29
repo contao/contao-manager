@@ -85,7 +85,7 @@ class LocalPackagesController
         $dependents = $this->parseDependents([$package->getName()]);
 
         if ([] === $dependents && [] !== ($replaces = array_keys($package->getReplaces()))) {
-            $dependents = $this->parseDependents($replaces, true);
+            return $this->parseDependents($replaces, true);
         }
 
         return $dependents;

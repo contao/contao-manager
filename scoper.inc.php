@@ -111,7 +111,7 @@ return [
                 return $contents;
             }
 
-            return str_replace("'$prefix\\\\", "'", $contents);
+            return str_replace("'{$prefix}\\\\", "'", $contents);
         },
 
         // Fix error templates (e.g. /vendor/symfony/error-handler/Resources/views)
@@ -122,12 +122,12 @@ return [
 
             return str_replace(
                 [
-                    "namespace $prefix;",
+                    "namespace {$prefix};",
                     'echo Symfony\Component\HttpKernel\Kernel::VERSION',
                 ],
                 [
                     '',
-                    "echo \\$prefix\\Symfony\\Component\\HttpKernel\\Kernel::VERSION",
+                    "echo \\{$prefix}\\Symfony\\Component\\HttpKernel\\Kernel::VERSION",
                 ],
                 $contents,
             );
@@ -159,7 +159,7 @@ return [
                 return $contents;
             }
 
-            return str_replace("'Contao\\\\ManagerApi\\\\", "'$prefix\\\\Contao\\\\ManagerApi\\\\", $contents);
+            return str_replace("'Contao\\\\ManagerApi\\\\", "'{$prefix}\\\\Contao\\\\ManagerApi\\\\", $contents);
         },
 
         // Fix route redirects if API is called with a slash
@@ -168,12 +168,12 @@ return [
                 return $contents;
             }
 
-            return str_replace("'Symfony\\\\Bundle\\\\FrameworkBundle\\\\Controller\\\\RedirectController::", "'$prefix\\\\Symfony\\\\Bundle\\\\FrameworkBundle\\\\Controller\\\\RedirectController::", $contents);
+            return str_replace("'Symfony\\\\Bundle\\\\FrameworkBundle\\\\Controller\\\\RedirectController::", "'{$prefix}\\\\Symfony\\\\Bundle\\\\FrameworkBundle\\\\Controller\\\\RedirectController::", $contents);
         },
 
         // Fix PHP8 attributes in Symfony namespace
         static function (string $filePath, string $prefix, string $contents): string {
-            return str_replace('#[\\Symfony\\', "#[\\$prefix\\Symfony\\", $contents);
-        }
+            return str_replace('#[\\Symfony\\', "#[\\{$prefix}\\Symfony\\", $contents);
+        },
     ],
 ];

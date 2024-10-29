@@ -205,12 +205,12 @@ class ProcessRunner extends AbstractProcess
     private function timeoutCode(): int
     {
         if ($this->timeout instanceof ProcessTimedOutException) {
-            switch (true) {
-                case $this->timeout->isGeneralTimeout():
-                    return ProcessTimedOutException::TYPE_GENERAL;
+            if ($this->timeout->isGeneralTimeout()) {
+                return ProcessTimedOutException::TYPE_GENERAL;
+            }
 
-                case $this->timeout->isIdleTimeout():
-                    return ProcessTimedOutException::TYPE_IDLE;
+            if ($this->timeout->isIdleTimeout()) {
+                return ProcessTimedOutException::TYPE_IDLE;
             }
         }
 

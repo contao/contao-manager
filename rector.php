@@ -2,12 +2,24 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
+use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
+use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
+use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
+use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
+use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
+use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
+use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
+use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
+use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
+use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
+use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Set\SymfonySetList;
 
 return RectorConfig::configure()
     ->withSets([
@@ -15,32 +27,12 @@ return RectorConfig::configure()
 
         // https://getrector.com/blog/5-common-mistakes-in-rector-config-and-how-to-avoid-them
         SetList::DEAD_CODE,
-        //SetList::CODE_QUALITY,
-        //SetList::CODING_STYLE,
-        //SetList::NAMING,
-        //SetList::TYPE_DECLARATION,
-        //SetList::PRIVATIZATION,
-        //SetList::EARLY_RETURN,
-        //SetList::INSTANCEOF,
-
-        //SymfonySetList::SYMFONY_40,
-        //SymfonySetList::SYMFONY_41,
-        //SymfonySetList::SYMFONY_42,
-        //SymfonySetList::SYMFONY_43,
-        //SymfonySetList::SYMFONY_44,
-        //SymfonySetList::SYMFONY_50,
-        //SymfonySetList::SYMFONY_50_TYPES,
-        //SymfonySetList::SYMFONY_51,
-        //SymfonySetList::SYMFONY_52,
-        //SymfonySetList::SYMFONY_53,
-        //SymfonySetList::SYMFONY_54,
-        //SymfonySetList::SYMFONY_60,
-        //SymfonySetList::SYMFONY_61,
-        //SymfonySetList::SYMFONY_62,
-        //SymfonySetList::SYMFONY_63,
-        //SymfonySetList::SYMFONY_64,
-        //SymfonySetList::SYMFONY_CODE_QUALITY,
-        //SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
+        SetList::CODE_QUALITY,
+        SetList::CODING_STYLE,
+        SetList::TYPE_DECLARATION,
+        SetList::PRIVATIZATION,
+        SetList::EARLY_RETURN,
+        SetList::INSTANCEOF,
     ])
     ->withPaths([
         __DIR__.'/api',
@@ -49,8 +41,21 @@ return RectorConfig::configure()
     ->withSkip([
         __DIR__.'/downgrade.php',
         __DIR__.'/stub.php',
-        RemoveAlwaysTrueIfConditionRector::class => [__DIR__.'/api/TaskOperation/AbstractInlineOperation.php'],
+        CatchExceptionNameMatchingTypeRector::class,
+        ReturnBinaryOrToEarlyReturnRector::class,
+        FlipTypeControlToUseExclusiveTypeRector::class,
+        RemoveAlwaysTrueIfConditionRector::class => [
+            __DIR__.'/api/Command/AboutCommand.php',
+            __DIR__.'/api/Process/PhpExecutableFinder.php',
+            __DIR__.'/api/TaskOperation/AbstractInlineOperation.php',
+        ],
+        SimplifyIfReturnBoolRector::class => [__DIR__.'/api/IntegrityCheck/GraphicsLibCheck.php'],
         RemoveUnusedPrivateMethodParameterRector::class => [__DIR__.'/api/TaskOperation/Contao/CreateContaoOperation.php'],
+        JoinStringConcatRector::class => [__DIR__.'/api/ApiKernel.php'],
+        ClosureToArrowFunctionRector::class => [__DIR__.'/scoper.inc.php'],
+        EncapsedStringsToSprintfRector::class => [__DIR__.'/scoper.inc.php'],
+        SymplifyQuoteEscapeRector::class => [__DIR__.'/scoper.inc.php'],
+        UseClassKeywordForClassNameResolutionRector::class => [__DIR__.'/scoper.inc.php'],
     ])
     ->withRootFiles()
     ->withParallel()

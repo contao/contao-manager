@@ -125,7 +125,7 @@ class TaskUpdateCommand extends Command
         return true;
     }
 
-    private function updateOperation(TaskOperationInterface $operation, ConsoleSectionOutput $section, ?ProgressIndicator &$progress): void
+    private function updateOperation(TaskOperationInterface $operation, ConsoleSectionOutput $section, ProgressIndicator|null &$progress): void
     {
         if (!$operation->isStarted()) {
             return;
@@ -134,7 +134,7 @@ class TaskUpdateCommand extends Command
         $section->clear();
 
         if ($operation->isRunning()) {
-            if (!$progress) {
+            if (null === $progress) {
                 $progress = new ProgressIndicator($section);
                 $progress->start($operation->getSummary());
             }
@@ -146,7 +146,7 @@ class TaskUpdateCommand extends Command
             return;
         }
 
-        if ($progress) {
+        if (null !== $progress) {
             $progress->finish($operation->getSummary());
             $section->clear();
             $progress = null;

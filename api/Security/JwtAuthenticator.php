@@ -40,7 +40,7 @@ class JwtAuthenticator extends AbstractAuthenticator
     {
         $credentials = $this->jwtManager->getPayload($request);
 
-        if (!$credentials) {
+        if (null === $credentials) {
             throw new AuthenticationCredentialsNotFoundException();
         }
 

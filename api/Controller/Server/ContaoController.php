@@ -114,7 +114,7 @@ class ContaoController
 
     private function createDirectories(string|null $directory, bool $usePublicDir): Response
     {
-        if ('' === \Phar::running()) {
+        if (!ApiKernel::isPhar()) {
             return new Response('', Response::HTTP_SERVICE_UNAVAILABLE);
         }
 

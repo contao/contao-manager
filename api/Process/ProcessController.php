@@ -228,7 +228,7 @@ class ProcessController extends AbstractProcess
         $class = $this->config['forker'] ?? null;
 
         foreach ($this->forkers as $forker) {
-            if (null === $class ? $forker->isSupported() : is_a($forker, $class)) {
+            if (null === $class ? $forker->isSupported() : $forker instanceof $class) {
                 $this->config['forker'] = $forker::class;
 
                 return $forker;

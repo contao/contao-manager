@@ -281,7 +281,6 @@ class Environment
 
             if (\is_array($metadata)) {
                 // Make sure only allowed keys are preserved in metadata
-                // TODO: should validate against a custom schema
                 $metadata = array_intersect_key($metadata, array_flip([
                     'title',
                     'description',
@@ -314,7 +313,7 @@ class Environment
         $normalizedPath = $this->composerFs->normalizePath($path);
 
         if (str_starts_with($path, './')) {
-            $normalizedPath = './'.$normalizedPath;
+            return './'.$normalizedPath;
         }
 
         return $normalizedPath;

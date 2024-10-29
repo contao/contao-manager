@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Security;
 
+use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\UserConfig;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -92,7 +93,7 @@ class JwtManager
 
         $response->headers->clearCookie(
             self::COOKIE_AUTH,
-            \Phar::running(false) ? $request->getBaseUrl().'/' : '/',
+            ApiKernel::isPhar() ? $request->getBaseUrl().'/' : '/',
             null,
             $request->isSecure(),
         );
@@ -123,7 +124,7 @@ class JwtManager
             self::COOKIE_AUTH,
             $value,
             0,
-            \Phar::running(false) ? $request->getBaseUrl().'/' : '/',
+            ApiKernel::isPhar() ? $request->getBaseUrl().'/' : '/',
             null,
             $request->isSecure(),
             true,

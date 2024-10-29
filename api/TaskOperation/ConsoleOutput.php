@@ -30,11 +30,11 @@ class ConsoleOutput implements \Stringable
             $output = \sprintf("%s\n\n%s", $title, $output);
         }
 
-        if (!$output) {
+        if ('' === $output) {
             return $this;
         }
 
-        if ($this->output) {
+        if ('' !== $this->output) {
             $output = $this->output."\n\n".$output;
         }
 

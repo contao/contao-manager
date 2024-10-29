@@ -60,18 +60,4 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
             new User($user->getUserIdentifier(), $newHashedPassword),
         );
     }
-
-    private function getUser(string $username): User
-    {
-        $user = $this->config->getUser($username);
-
-        if (null === $user) {
-            $ex = new UserNotFoundException(sprintf('Username "%s" does not exist.', $username));
-            $ex->setUserIdentifier($username);
-
-            throw $ex;
-        }
-
-        return $user;
-    }
 }

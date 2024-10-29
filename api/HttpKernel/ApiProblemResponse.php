@@ -24,11 +24,11 @@ class ApiProblemResponse extends Response
 {
     public function __construct(ApiProblem $problem, array $headers = [])
     {
-        if (!$problem->getStatus()) {
+        if (0 === $problem->getStatus()) {
             $problem->setStatus(500);
         }
 
-        if (!$problem->getTitle()) {
+        if ('' === $problem->getTitle()) {
             $code = $problem->getStatus();
             $problem->setTitle(Response::$statusTexts[$code] ?? 'unknown status');
         }

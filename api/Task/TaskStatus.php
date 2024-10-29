@@ -186,11 +186,11 @@ final class TaskStatus implements \JsonSerializable
 
         return [
             'id' => $this->id,
-            'title' => $this->getTitle(),
+            'title' => $this->title,
             'console' => $this->getConsole(),
-            'cancellable' => $this->isCancellable(),
-            'autoclose' => $this->canAutoClose(),
-            'audit' => $this->hasAudit(),
+            'cancellable' => $this->cancellable,
+            'autoclose' => $this->autoClose,
+            'audit' => $this->audit,
             'status' => $this->getStatus(),
             'operations' => $operations,
             'sponsor' => $sponsor,
