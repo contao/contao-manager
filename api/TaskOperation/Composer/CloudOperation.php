@@ -270,7 +270,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
     public function delete(): void
     {
         try {
-            $this->output = $this->taskConfig->getState('cloud-job-output');
+            $this->output = $this->taskConfig->getState('cloud-job-output', '');
             $this->cloud->deleteJob((string) $this->taskConfig->getState('cloud-job'));
         } catch (\Exception $exception) {
             $this->exception = $exception;
@@ -301,7 +301,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
                 $this->job = new CloudJob($content);
 
                 if (null !== $this->taskConfig->getState('cloud-job-successful')) {
-                    $this->output = $this->taskConfig->getState('cloud-job-output');
+                    $this->output = $this->taskConfig->getState('cloud-job-output', '');
 
                     return $this->job;
                 }
@@ -310,7 +310,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
                 $isProcessing = $this->taskConfig->getState('cloud-job-processing', 0) > 0;
 
                 if (($isProcessing && $lastUpdated <= 5) || $lastUpdated <= 10) {
-                    $this->output = $this->taskConfig->getState('cloud-job-output');
+                    $this->output = $this->taskConfig->getState('cloud-job-output', '');
 
                     return $this->job;
                 }

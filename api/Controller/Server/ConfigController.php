@@ -50,7 +50,7 @@ class ConfigController
 
             $this->config->set('php_cli', $phpCli);
 
-            if ($request->request->get('cloud', true)) {
+            if ($request->request->getBoolean('cloud', true)) {
                 $this->config->remove('disable_cloud');
             } else {
                 $this->config->set('disable_cloud', true);

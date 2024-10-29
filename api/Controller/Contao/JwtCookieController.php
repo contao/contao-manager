@@ -74,7 +74,7 @@ class JwtCookieController
     {
         $arguments = ['jwt-cookie:generate'];
 
-        if ($request->request->get('debug', false)) {
+        if ($request->request->getBoolean('debug')) {
             $arguments[] = '--debug';
         }
 
@@ -82,7 +82,7 @@ class JwtCookieController
 
         $response = new JsonResponse(
             [
-                'debug' => $request->request->get('debug', false),
+                'debug' => $request->request->getBoolean('debug'),
             ],
         );
 

@@ -52,7 +52,7 @@ class TaskController
         }
 
         $name = $request->request->get('name');
-        $config = $request->request->get('config', []);
+        $config = $request->request->all('config');
 
         if (empty($name) || !\is_array($config)) {
             throw new BadRequestHttpException('Invalid task data');
