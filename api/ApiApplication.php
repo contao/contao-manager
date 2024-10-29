@@ -87,7 +87,7 @@ class ApiApplication extends Application
         $this->add($container->get(TaskUpdateCommand::class));
         $this->add($container->get(UpdateCommand::class));
 
-        if (!\Phar::running(false) && $container->has('console.command_loader')) {
+        if ($this->kernel->isDebug() && $container->has('console.command_loader')) {
             $this->setCommandLoader($container->get('console.command_loader'));
         }
     }
