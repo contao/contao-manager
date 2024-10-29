@@ -11,6 +11,7 @@
 /contao-manager.version
 /dist
 /test-dir
+/.phpunit.result.cache
 
 # Local
 /box.json
