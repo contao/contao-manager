@@ -156,181 +156,181 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "../../../node_modules/contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .console-operation {
+.console-operation {
+    position: relative;
+    padding: 0 16px;
+    text-align: left;
+    font-size: 12px;
+    color: #959da5;
+
+    &__summary {
+        margin-left: 13px;
+        padding: 8px;
+        box-sizing: border-box;
+        outline: none;
+
+        &--console {
+            margin-left: 0;
+        }
+    }
+
+    summary {
+        cursor: pointer;
+    }
+
+    &__status {
+        display: inline-block;
         position: relative;
-        padding: 0 16px;
-        text-align: left;
-        font-size: 12px;
-        color: #959da5;
+        box-sizing: border-box;
+        padding-right: 8px;
+        width: 24px;
+        height: 18px;
+        text-align: center;
+        vertical-align: middle;
+    }
 
-        &__summary {
-            margin-left: 13px;
-            padding: 8px;
-            box-sizing: border-box;
-            outline: none;
+    &__icon {
+        position: absolute;
+        left: 0;
+        top: 0;
 
-            &--console {
-                margin-left: 0;
-            }
+        &--skipped {
+            fill: #666b71;
         }
 
-        summary {
-            cursor: pointer;
+        &--pending {
+            fill: #dbab0a;
         }
 
-        &__status {
-            display: inline-block;
-            position: relative;
-            box-sizing: border-box;
-            padding-right: 8px;
-            width: 24px;
-            height: 18px;
-            text-align: center;
-            vertical-align: middle;
-        }
+        &--active {
+            fill: #dbab0a;
+            animation: console-active 1s linear infinite;
 
-        &__icon {
-            position: absolute;
-            left: 0;
-            top: 0;
-
-            &--skipped {
-                fill: #666b71;
-            }
-
-            &--pending {
-                fill: #dbab0a;
-            }
-
-            &--active {
-                fill: #dbab0a;
-                animation: console-active 1s linear infinite;
-
-                @keyframes console-active {
-                    0% {
-                        transform: rotate(0deg);
-                    }
-                    50% {
-                        transform: rotate(180deg);
-                    }
-                    100% {
-                        transform: rotate(359deg);
-                    }
+            @keyframes console-active {
+                0% {
+                    transform: rotate(0deg);
+                }
+                50% {
+                    transform: rotate(180deg);
+                }
+                100% {
+                    transform: rotate(359deg);
                 }
             }
-
-            &--success {
-                fill: var(--btn-primary);
-            }
-
-            &--error {
-                fill: var(--btn-alert);
-            }
         }
 
-        &__label {
-            display: inline-block;
-            overflow: hidden;
-            max-width: 750px;
-            vertical-align: top;
+        &--success {
+            fill: var(--btn-primary);
         }
 
-        &__title {
-            display: inline;
-            margin: 0;
-            color: #fff;
+        &--error {
+            fill: var(--btn-alert);
+        }
+    }
 
-            &--disabled {
-                text-decoration: line-through;
-            }
+    &__label {
+        display: inline-block;
+        overflow: hidden;
+        max-width: 750px;
+        vertical-align: top;
+    }
+
+    &__title {
+        display: inline;
+        margin: 0;
+        color: #fff;
+
+        &--disabled {
+            text-decoration: line-through;
+        }
+    }
+
+    &__description {
+        display: inline;
+        margin: 0 0 0 10px;
+    }
+
+    &__console {
+        position: relative;
+    }
+
+    &__lines {
+        overflow-y: auto;
+        max-height: 280px;
+        padding: 8px 0 16px;
+        font-family: defaults.$font-monospace;
+        color: #f6f8fa;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    &__line {
+        display: flex;
+
+        &:hover {
+            background-color: #2f363d;
+        }
+    }
+
+    &__line-number {
+        display: inline-block;
+        overflow: hidden;
+        width: 48px;
+        min-width: 48px;
+        color: #959da5;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+        user-select: none;
+    }
+
+    &__line-content {
+        display: inline-block;
+        margin-left: 16px;
+        vertical-align: middle;
+    }
+
+    &__scroll {
+        position: absolute;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        width: 100%;
+        height: 30px;
+        padding: 0;
+        border: none;
+        cursor: pointer;
+
+        svg {
+            fill: #fff;
+            width: 16px;
+            height: 16px;
         }
 
-        &__description {
-            display: inline;
-            margin: 0 0 0 10px;
-        }
-
-        &__console {
-            position: relative;
-        }
-
-        &__lines {
-            overflow-y: auto;
-            max-height: 280px;
-            padding: 8px 0 16px;
-            font-family: $font-monospace;
-            color: #f6f8fa;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            word-break: break-word;
-            overflow-wrap: break-word;
-        }
-
-        &__line {
-            display: flex;
-
-            &:hover {
-                background-color: #2f363d;
-            }
-        }
-
-        &__line-number {
-            display: inline-block;
-            overflow: hidden;
-            width: 48px;
-            min-width: 48px;
-            color: #959da5;
-            text-align: right;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            vertical-align: middle;
-            user-select: none;
-        }
-
-        &__line-content {
-            display: inline-block;
-            margin-left: 16px;
-            vertical-align: middle;
-        }
-
-        &__scroll {
-            position: absolute;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            width: 100%;
-            height: 30px;
-            padding: 0;
-            border: none;
-            cursor: pointer;
+        &--top {
+            top: 0;
+            background: linear-gradient(#24292e, #24292e80 50%);
 
             svg {
-                fill: #fff;
-                width: 16px;
-                height: 16px;
+                transform: rotateZ(180deg);
             }
+        }
 
-            &--top {
-                top: 0;
-                background: linear-gradient(#24292e, #24292e80 50%);
+        &--bottom {
+            bottom: 0;
+            background: linear-gradient(#24292e80, #24292e 50%);
 
-                svg {
-                    transform: rotateZ(180deg);
-                }
-            }
-
-            &--bottom {
-                bottom: 0;
-                background: linear-gradient(#24292e80, #24292e 50%);
-
-                svg {
-                    transform: rotateZ(0deg);
-                }
+            svg {
+                transform: rotateZ(0deg);
             }
         }
     }
+}
 </style>

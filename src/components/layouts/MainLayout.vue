@@ -55,147 +55,148 @@
 
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .layout-main {
+.layout-main {
+    overflow: hidden;
+    min-height:100vh;
+
+    &__header {
+        height: 56px;
+        padding: 8px;
+        background: var(--header-main-bg);
+
+        &--margin {
+            margin-bottom: 30px;
+        }
+    }
+
+    &__badge-title {
+        background: var(--border);
+        color: var(--text);
+        padding: 2px 5px;
+        position: relative;
+        top: -5px;
+        border-radius: 8px;
+        font-size: .75rem;
+        font-weight: 600;
+        line-height: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        word-break: break-word;
         overflow: hidden;
-        min-height:100vh;
+        text-overflow: ellipsis;
+    }
 
-        &__header {
-            height: 56px;
-            padding: 8px;
-            background: var(--header-main-bg);
+    &__subheader {
+        margin: 0 0 45px;
+        padding: 20px 0;
+        background: var(--header-bg);
+        border-bottom: 1px solid var(--header-bdr);
 
-            &--margin {
-                margin-bottom: 30px;
+        &-inside {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    }
+
+    &__news {
+        width: 320px;
+        height: 50px;
+        margin-bottom: 20px;
+    }
+
+    .search-bar {
+        width: 100%;
+        margin: 0;
+    }
+
+    &__logo {
+        display: inline;
+        color: var(--text);
+        text-decoration: none;
+        font-weight: defaults.$font-weight-light;
+        font-size: 27px;
+        line-height: 40px;
+
+        img {
+            float: left;
+            margin: 0 10px 0 12px;
+
+            @include defaults.screen(1024) {
+                margin-left: 0;
             }
         }
+    }
 
-        &__badge-title {
-            background: var(--border);
-            color: var(--text);
-            padding: 2px 5px;
-            position: relative;
-            top: -5px;
-            border-radius: 8px;
-            font-size: .75rem;
-            font-weight: 600;
+    &__subheader-inside,
+    &__content,
+    footer {
+        position: relative;
+        margin: 0 20px;
+    }
+
+    &__has-badge-title {
+        display: flex;
+        justify-content: space-between;
+
+        .layout-main__logo {
+            display: flex;
+        }
+
+        .layout-main__title {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
             line-height: 1;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            word-break: break-word;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            column-gap: 10px;
+            // Counter top positioning for row-wrap
+            row-gap: 5px;
         }
+    }
 
-        &__subheader {
-            margin: 0 0 45px;
-            padding: 20px 0;
-            background: var(--header-bg);
-            border-bottom: 1px solid var(--header-bdr);
+    @media (max-width: 600px) {
+        &__badge-title {
+            max-width: 220px;
+        }
+    }
 
-            &-inside {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-            }
+    @include defaults.screen(700) {
+        &__subheader-inside {
+            flex-direction: row;
         }
 
         &__news {
-            width: 320px;
-            height: 50px;
-            margin-bottom: 20px;
+            margin: 0 20px 0 0;
         }
+    }
 
-        .search-bar {
-            width: 100%;
-            margin: 0;
-        }
-
-        &__logo {
-            display: inline;
-            color: var(--text);
-            text-decoration: none;
-            font-weight: $font-weight-light;
-            font-size: 27px;
-            line-height: 40px;
-
-            img {
-                float: left;
-                margin: 0 10px 0 12px;
-
-                @include screen(1024) {
-                    margin-left: 0;
-                }
+    @include defaults.screen(1024) {
+        &__has-badge-title {
+            // Do not allow wrapping navigation items
+            .navigation__group--main {
+                display: flex;
             }
         }
 
         &__subheader-inside,
         &__content,
         footer {
-            position: relative;
-            margin: 0 20px;
-        }
-
-        &__has-badge-title {
-            display: flex;
-            justify-content: space-between;
-
-            .layout-main__logo {
-                display: flex;
-            }
-
-            .layout-main__title {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                line-height: 1;
-                column-gap: 10px;
-                // Counter top positioning for row-wrap
-                row-gap: 5px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            &__badge-title {
-                max-width: 220px;
-            }
-        }
-
-        @include screen(700) {
-            &__subheader-inside {
-                flex-direction: row;
-            }
-
-            &__news {
-                margin: 0 20px 0 0;
-            }
-        }
-
-        @include screen(1024) {
-            &__has-badge-title {
-                // Do not allow wrapping navigation items
-                .navigation__group--main {
-                    display: flex;
-                }
-            }
-
-            &__subheader-inside,
-            &__content,
-            footer {
-                max-width: 960px;
-                margin: 0 auto;
-            }
-        }
-
-        @include screen(1200) {
-            &__subheader-inside,
-            &__content,
-            footer {
-                max-width: 1180px;
-            }
+            max-width: 960px;
+            margin: 0 auto;
         }
     }
+
+    @include defaults.screen(1200) {
+        &__subheader-inside,
+        &__content,
+        footer {
+            max-width: 1180px;
+        }
+    }
+}
 </style>

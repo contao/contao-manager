@@ -50,46 +50,46 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .file-tree {
-        margin: 0;
-        padding: 0;
-        list-style: none;
+.file-tree {
+    margin: 0;
+    padding: 0;
+    list-style: none;
 
-        &__folder {
-            position: relative;
-            padding-left: 20px;
+    &__folder {
+        position: relative;
+        padding-left: 20px;
 
+        &:before {
+            content: "";
+            position: absolute;
+            left: 10px;
+            top: 6px;
+            width: 0;
+            height: 0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 5px solid var(--text);
+            transition: transform .1s ease-in-out;
+        }
+
+        &--open {
             &:before {
-                content: "";
-                position: absolute;
-                left: 10px;
-                top: 6px;
-                width: 0;
-                height: 0;
-                border-top: 5px solid transparent;
-                border-bottom: 5px solid transparent;
-                border-left: 5px solid var(--text);
-                transition: transform .1s ease-in-out;
+                transform: rotateZ(90deg);
             }
-
-            &--open {
-                &:before {
-                    transform: rotateZ(90deg);
-                }
-            }
-        }
-
-        &__file {
-            padding-left: 20px;
-        }
-
-        button {
-            background: none;
-            border: none;
-            font-weight: $font-weight-medium;
-            cursor: pointer;
         }
     }
+
+    &__file {
+        padding-left: 20px;
+    }
+
+    button {
+        background: none;
+        border: none;
+        font-weight: defaults.$font-weight-medium;
+        cursor: pointer;
+    }
+}
 </style>

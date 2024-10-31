@@ -128,118 +128,118 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .config-check {
-        &__header {
-            max-width: 280px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 40px 0;
-            text-align: center;
-        }
+.config-check {
+    &__header {
+        max-width: 280px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 40px 0;
+        text-align: center;
+    }
 
-        &__icon {
-            background: var(--contao);
-            border-radius: 10px;
-            padding:10px;
-        }
+    &__icon {
+        background: var(--contao);
+        border-radius: 10px;
+        padding:10px;
+    }
 
-        &__headline {
+    &__headline {
+        margin-top: 20px;
+        margin-bottom: 25px;
+        font-size: 36px;
+        font-weight: defaults.$font-weight-light;
+        line-height: 1;
+    }
+
+    &__description {
+        text-align: justify;
+    }
+
+    &__form {
+        position: relative;
+        max-width: 280px;
+        margin: 0 auto 50px;
+
+        .widget-select,
+        .widget-text {
             margin-top: 20px;
-            margin-bottom: 25px;
-            font-size: 36px;
-            font-weight: $font-weight-light;
-            line-height: 1;
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: defaults.$font-weight-medium;
+            }
+        }
+    }
+
+    &__fields {
+        margin-bottom: 2em;
+    }
+
+    &__fieldtitle {
+        margin-bottom: .5em;
+        font-size: 18px;
+        font-weight: defaults.$font-weight-bold;
+        line-height: 30px;
+    }
+
+    &__fielddesc {
+        margin-bottom: 1em;
+    }
+
+    &__issues {
+        margin-bottom: 1em;
+        color: var(--btn-alert);
+
+        p {
+            font-weight: defaults.$font-weight-bold;
         }
 
-        &__description {
-            text-align: justify;
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            margin: .5em 0 0 25px;
+            padding: 0;
+        }
+    }
+
+    .widget-button {
+        margin-bottom: .5em;
+    }
+
+    @include defaults.screen(960) {
+        padding-top: 100px;
+
+        &__header {
+            float: left;
+            width: 470px;
+            max-width: none;
+            padding: 0 60px 100px;
         }
 
         &__form {
-            position: relative;
-            max-width: 280px;
-            margin: 0 auto 50px;
+            float: left;
+            width: 370px;
+            max-width: none;
+            margin: 20px 50px 0;
+            padding-bottom: 100px;
 
             .widget-select,
             .widget-text {
-                margin-top: 20px;
-
                 label {
                     display: block;
-                    margin-bottom: 5px;
-                    font-weight: $font-weight-medium;
-                }
-            }
-        }
-
-        &__fields {
-            margin-bottom: 2em;
-        }
-
-        &__fieldtitle {
-            margin-bottom: .5em;
-            font-size: 18px;
-            font-weight: $font-weight-bold;
-            line-height: 30px;
-        }
-
-        &__fielddesc {
-            margin-bottom: 1em;
-        }
-
-        &__issues {
-            margin-bottom: 1em;
-            color: var(--btn-alert);
-
-            p {
-                font-weight: $font-weight-bold;
-            }
-
-            ul {
-                margin: 0;
-                padding: 0;
-            }
-
-            li {
-                margin: .5em 0 0 25px;
-                padding: 0;
-            }
-        }
-
-        .widget-button {
-            margin-bottom: .5em;
-        }
-
-        @include screen(960) {
-            padding-top: 100px;
-
-            &__header {
-                float: left;
-                width: 470px;
-                max-width: none;
-                padding: 0 60px 100px;
-            }
-
-            &__form {
-                float: left;
-                width: 370px;
-                max-width: none;
-                margin: 20px 50px 0;
-                padding-bottom: 100px;
-
-                .widget-select,
-                .widget-text {
-                    label {
-                        display: block;
-                        float: left;
-                        width: 120px;
-                        padding-top: 10px;
-                        font-weight: $font-weight-medium;
-                    }
+                    float: left;
+                    width: 120px;
+                    padding-top: 10px;
+                    font-weight: defaults.$font-weight-medium;
                 }
             }
         }
     }
+}
 </style>

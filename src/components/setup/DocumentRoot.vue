@@ -233,7 +233,7 @@
 
 
 <style rel="stylesheet/scss" lang="scss">
-@import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
 .setup {
     &__directories {
@@ -241,7 +241,7 @@
 
         > dt {
             margin-top: 1em;
-            font-weight: $font-weight-bold;
+            font-weight: defaults.$font-weight-bold;
         }
 
         > dd {
@@ -251,7 +251,7 @@
             span {
                 background-color: var(--highlight-bg);
                 color: var(--highlight-color);
-                font-weight: $font-weight-medium;
+                font-weight: defaults.$font-weight-medium;
             }
         }
     }

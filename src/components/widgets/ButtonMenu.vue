@@ -69,89 +69,87 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+.button-menu {
+    position: relative;
 
-    .button-menu {
-        position: relative;
+    &__primary.widget-button {
+        float: left;
+        width: calc(100% - 39px);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
 
-        &__primary.widget-button {
-            float: left;
-            width: calc(100% - 39px);
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-        }
+    &__more.widget-button {
+        float: right;
+        width: 38px;
+        padding: 7px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
 
-        &__more.widget-button {
-            float: right;
-            width: 38px;
-            padding: 7px;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-
-            svg {
-                width: 24px;
-                height: 24px;
-            }
-        }
-
-        &__menu {
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            top: 38px;
-            right: 0;
-            width: auto;
-            z-index: 100;
-            background: var(--form-bg);
-            border-radius: var(--border-radius);
-
-            &:before {
-                content: "";
-                position: absolute;
-                top: -5px;
-                right: 15px;
-                width: 0;
-                height: 0;
-                border-right: none;
-                border-bottom: none;
-                border-left: 5px solid transparent;
-                border-right: 5px solid transparent;
-                border-bottom: 5px solid var(--form-bg);
-            }
-
-            &:focus {
-                outline: none;
-            }
-
-            button {
-                padding: 8px 16px;
-                background: none;
-                border: none;
-                text-align: left;
-                white-space: nowrap;
-                border-bottom: 1px solid var(--border);
-                cursor: pointer;
-
-                &:hover {
-                    color: var(--text);
-                    background: var(--focus);
-                }
-
-                &:first-child {
-                    border-top-left-radius: 2px;
-                    border-top-right-radius: 2px;
-                }
-
-                &:last-child {
-                    border-bottom: none;
-                    border-bottom-left-radius: 2px;
-                    border-bottom-right-radius: 2px;
-                }
-            }
-
-            .link-menu {
-                margin-top: 3px;
-            }
+        svg {
+            width: 24px;
+            height: 24px;
         }
     }
+
+    &__menu {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 38px;
+        right: 0;
+        width: auto;
+        z-index: 100;
+        background: var(--form-bg);
+        border-radius: var(--border-radius);
+
+        &:before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            right: 15px;
+            width: 0;
+            height: 0;
+            border-right: none;
+            border-bottom: none;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid var(--form-bg);
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        button {
+            padding: 8px 16px;
+            background: none;
+            border: none;
+            text-align: left;
+            white-space: nowrap;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+
+            &:hover {
+                color: var(--text);
+                background: var(--focus);
+            }
+
+            &:first-child {
+                border-top-left-radius: 2px;
+                border-top-right-radius: 2px;
+            }
+
+            &:last-child {
+                border-bottom: none;
+                border-bottom-left-radius: 2px;
+                border-bottom-right-radius: 2px;
+            }
+        }
+
+        .link-menu {
+            margin-top: 3px;
+        }
+    }
+}
 </style>

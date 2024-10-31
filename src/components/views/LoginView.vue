@@ -91,130 +91,130 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .view-login {
-        &__header {
-            max-width: 280px;
-            margin: 0 auto 60px;
-            padding-top: 40px;
-            text-align: center;
-        }
+.view-login {
+    &__header {
+        max-width: 280px;
+        margin: 0 auto 60px;
+        padding-top: 40px;
+        text-align: center;
+    }
 
-        &__product {
-            margin-top: 15px;
-            font-size: 38px;
-            font-weight: $font-weight-light;
-            line-height: 1;
-        }
+    &__product {
+        margin-top: 15px;
+        font-size: 38px;
+        font-weight: defaults.$font-weight-light;
+        line-height: 1;
+    }
 
-        &__form {
-            position: relative;
-            max-width: 280px;
-            margin: 0 auto 80px;
+    &__form {
+        position: relative;
+        max-width: 280px;
+        margin: 0 auto 80px;
 
-            input {
-                padding-right: 30px;
-                margin: 5px 0 10px;
-            }
-        }
-
-        &__locked {
-            max-width: 290px;
-            margin: -20px auto 60px;
-            padding: 20px;
-            background: var(--btn-alert);
-            color: #fff;
-            text-align: center;
-
-            // prevent line breaks in lock file path/name
-            strong {
-                white-space: pre;
-            }
-        }
-
-        &__headline {
-            margin-bottom: 0;
-        }
-
-        &__description {
-            margin-top: .5em;
-            margin-bottom: 30px;
-        }
-
-        label {
-            position: absolute;
-            text-indent: -999em;
-            pointer-events: none;
-
-            &[for=ctrl_username] {
-                top: 0;
-                bottom: 0;
-                margin: auto;
-                right: 13px;
-                width: 16px;
-                height: 16px;
-                background: url("../../assets/images/person.svg") left top no-repeat;
-                background-size: 16px 16px;
-                z-index: 10;
-            }
-
-            &[for=ctrl_password] {
-                top: 0;
-                bottom: 0;
-                margin: auto;
-                right: 12px;
-                width: 16px;
-                height: 16px;
-                background: url("../../assets/images/lock.svg") left top no-repeat;
-                background-size: 14px 14px;
-                z-index: 10;
-            }
-        }
-
-        &__user,
-        &__password {
-            input {
-                margin: 0;
-            }
-        }
-
-        &__user {
-            input {
-                border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
-            }
-        }
-
-        &__password {
-            margin-top: -1px;
-
-            input {
-                border-radius: 0 0 var(--border-radius) var(--border-radius) !important;
-            }
-        }
-
-        .widget-text--password button {
-            opacity: 0;
-        }
-
-        &__link {
-            display: block;
-            margin-top: 1em;
-            font-size: 12px;
-            text-align: right;
-        }
-
-        &__button {
-            margin: 12px 0 6px;
-
-            .sk-circle {
-                color: #fff;
-                text-align: center;
-            }
-        }
-
-        .fragment-footer {
-            display: block;
+        input {
+            padding-right: 30px;
+            margin: 5px 0 10px;
         }
     }
+
+    &__locked {
+        max-width: 290px;
+        margin: -20px auto 60px;
+        padding: 20px;
+        background: var(--btn-alert);
+        color: #fff;
+        text-align: center;
+
+        // prevent line breaks in lock file path/name
+        strong {
+            white-space: pre;
+        }
+    }
+
+    &__headline {
+        margin-bottom: 0;
+    }
+
+    &__description {
+        margin-top: .5em;
+        margin-bottom: 30px;
+    }
+
+    label {
+        position: absolute;
+        text-indent: -999em;
+        pointer-events: none;
+
+        &[for=ctrl_username] {
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            right: 13px;
+            width: 16px;
+            height: 16px;
+            background: url("../../assets/images/person.svg") left top no-repeat;
+            background-size: 16px 16px;
+            z-index: 10;
+        }
+
+        &[for=ctrl_password] {
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            right: 12px;
+            width: 16px;
+            height: 16px;
+            background: url("../../assets/images/lock.svg") left top no-repeat;
+            background-size: 14px 14px;
+            z-index: 10;
+        }
+    }
+
+    &__user,
+    &__password {
+        input {
+            margin: 0;
+        }
+    }
+
+    &__user {
+        input {
+            border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+        }
+    }
+
+    &__password {
+        margin-top: -1px;
+
+        input {
+            border-radius: 0 0 var(--border-radius) var(--border-radius) !important;
+        }
+    }
+
+    .widget-text--password button {
+        opacity: 0;
+    }
+
+    &__link {
+        display: block;
+        margin-top: 1em;
+        font-size: 12px;
+        text-align: right;
+    }
+
+    &__button {
+        margin: 12px 0 6px;
+
+        .sk-circle {
+            color: #fff;
+            text-align: center;
+        }
+    }
+
+    .fragment-footer {
+        display: block;
+    }
+}
 </style>

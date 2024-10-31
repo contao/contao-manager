@@ -185,84 +185,84 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .package-constraint {
-        input[type=text] {
-            margin-right: 2px;
-            background: #fff;
-            border: 2px solid var(--btn-warning);
-            color: var(--black);
-            font-weight: $font-weight-bold;
-            text-align: center;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
+.package-constraint {
+    input[type=text] {
+        margin-right: 2px;
+        background: #fff;
+        border: 2px solid var(--btn-warning);
+        color: var(--black);
+        font-weight: defaults.$font-weight-bold;
+        text-align: center;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
 
-            &::placeholder {
-                color: #fff;
-                opacity: 1;
-            }
-
-            &:disabled {
-                color: var(--clr-btn);
-                opacity: 1;
-                background: var(--btn-warning);
-                -webkit-text-fill-color: var(--clr-btn);
-            }
-
-            &.disabled {
-                background: var(--border);
-                border-color: var(--border);
-            }
-
-            &.error {
-                animation: input-error .15s linear 3;
-            }
+        &::placeholder {
+            color: #fff;
+            opacity: 1;
         }
 
-        & > input[type=text],
-        & > input[type=text]:disabled {
-            float: left;
-            width: calc(100% - 32px);
-        }
-
-        button {
-            position: relative;
-            width: 30px;
+        &:disabled {
+            color: var(--clr-btn);
+            opacity: 1;
             background: var(--btn-warning);
-            line-height: 20px;
-            text-indent: -999em;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-
-            &:hover {
-                background: var(--btn-warning-active);
-                border-color: var(--btn-warning-active);
-            }
-
-            &:before {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                margin: -10px 0 0 -10px;
-            }
-
-            &.rotate:before {
-                animation: release-validating 2s linear infinite;
-            }
+            -webkit-text-fill-color: var(--clr-btn);
         }
 
-        @keyframes release-validating {
-            100% {
-                transform: rotate(360deg);
-            }
+        &.disabled {
+            background: var(--border);
+            border-color: var(--border);
         }
 
-        @include screen(1024) {
-            input[type=text],
-            button {
-                height: 30px;
-            }
+        &.error {
+            animation: input-error .15s linear 3;
         }
     }
+
+    & > input[type=text],
+    & > input[type=text]:disabled {
+        float: left;
+        width: calc(100% - 32px);
+    }
+
+    button {
+        position: relative;
+        width: 30px;
+        background: var(--btn-warning);
+        line-height: 20px;
+        text-indent: -999em;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+
+        &:hover {
+            background: var(--btn-warning-active);
+            border-color: var(--btn-warning-active);
+        }
+
+        &:before {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin: -10px 0 0 -10px;
+        }
+
+        &.rotate:before {
+            animation: release-validating 2s linear infinite;
+        }
+    }
+
+    @keyframes release-validating {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @include defaults.screen(1024) {
+        input[type=text],
+        button {
+            height: 30px;
+        }
+    }
+}
 </style>

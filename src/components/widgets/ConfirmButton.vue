@@ -58,44 +58,42 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+.confirm-button {
+    position: relative;
 
-    .confirm-button {
-        position: relative;
+    &__icon {
+        display: none;
+        position: absolute;
+        opacity: 0;
+        z-index: 100;
 
-        &__icon {
-            display: none;
-            position: absolute;
-            opacity: 0;
-            z-index: 100;
-
-            &--confirm {
-                display: block;
-                animation: .5s ease-out 0s confirm_button;
-            }
-
-            svg {
-                fill: var(--btn-primary);
-                width: 100%;
-                height: 100%;
-            }
+        &--confirm {
+            display: block;
+            animation: .5s ease-out 0s confirm_button;
         }
 
-        @keyframes confirm_button {
-            0% {
-                opacity: 1;
-                height: 10px;
-                width: 10px;
-                left: calc(50% - 10px / 2);
-                top: calc(50% - 10px / 2);
-            }
-            100% {
-                opacity: 0;
-                height: 150px;
-                width: 150px;
-                left: calc(50% - 150px / 2);
-                top: calc(50% - 150px / 2);
-            }
+        svg {
+            fill: var(--btn-primary);
+            width: 100%;
+            height: 100%;
         }
     }
+
+    @keyframes confirm_button {
+        0% {
+            opacity: 1;
+            height: 10px;
+            width: 10px;
+            left: calc(50% - 10px / 2);
+            top: calc(50% - 10px / 2);
+        }
+        100% {
+            opacity: 0;
+            height: 150px;
+            width: 150px;
+            left: calc(50% - 150px / 2);
+            top: calc(50% - 150px / 2);
+        }
+    }
+}
 </style>

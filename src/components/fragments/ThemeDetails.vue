@@ -44,8 +44,6 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@import "~contao-package-list/src/assets/styles/defaults";
-
 .theme-details {
     &__constraint {
         flex-grow: 1;

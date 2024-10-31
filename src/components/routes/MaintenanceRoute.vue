@@ -43,121 +43,121 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .maintenance {
-        margin-bottom: 14px;
-        background: var(--tiles-bg);
-        border-radius: var(--border-radius);
+.maintenance {
+    margin-bottom: 14px;
+    background: var(--tiles-bg);
+    border-radius: var(--border-radius);
 
-        &__inside {
-            &:after {
-                display: table;
-                clear: both;
-                content: "";
-            }
-
-            padding: 10px 20px 20px;
-
-            @include screen(1024) {
-                padding: 25px 20px;
-            }
+    &__inside {
+        &:after {
+            display: table;
+            clear: both;
+            content: "";
         }
 
-        &__image {
-            display: none;
+        padding: 10px 20px 20px;
 
-            img {
-                width: 100%;
-                height: 100%;
-                border-radius: var(--border-radius);
-                overflow: hidden;
-            }
-
-            @include screen(1024) {
-                display: block;
-                float: left;
-                width: 90px;
-                height: 90px;
-                margin-right: 20px;
-            }
+        @include defaults.screen(1024) {
+            padding: 25px 20px;
         }
+    }
 
-        &__about {
-            margin-bottom: 20px;
+    &__image {
+        display: none;
 
-            @include screen(1024) {
-                float: left;
-                width: 510px;
-                margin-bottom: 0;
-            }
-
-            h1 {
-                position: relative;
-                margin-bottom: 5px;
-            }
-
-            p {
-                margin: 0 0 1em;
-                display: inline;
-            }
-        }
-
-        &__warning,
-        &__error {
-            position: relative;
-            top: -2px;
-            margin-left: .5em;
-            padding: 2px 8px;
-            font-size: 14px;
-            line-height: 1em;
-            font-weight: $font-weight-normal;
-            background: var(--btn-warning);
-            color: var(--clr-btn);
+        img {
+            width: 100%;
+            height: 100%;
             border-radius: var(--border-radius);
+            overflow: hidden;
         }
 
-        &__error {
-            background: var(--btn-alert);
+        @include defaults.screen(1024) {
+            display: block;
+            float: left;
+            width: 90px;
+            height: 90px;
+            margin-right: 20px;
+        }
+    }
+
+    &__about {
+        margin-bottom: 20px;
+
+        @include defaults.screen(1024) {
+            float: left;
+            width: 510px;
+            margin-bottom: 0;
         }
 
-        &__actions {
-            @include screen(600) {
-                margin: 0 -10px;
-            }
+        h1 {
+            position: relative;
+            margin-bottom: 5px;
+        }
 
-            @include screen(1024) {
+        p {
+            margin: 0 0 1em;
+            display: inline;
+        }
+    }
+
+    &__warning,
+    &__error {
+        position: relative;
+        top: -2px;
+        margin-left: .5em;
+        padding: 2px 8px;
+        font-size: 14px;
+        line-height: 1em;
+        font-weight: defaults.$font-weight-normal;
+        background: var(--btn-warning);
+        color: var(--clr-btn);
+        border-radius: var(--border-radius);
+    }
+
+    &__error {
+        background: var(--btn-alert);
+    }
+
+    &__actions {
+        @include defaults.screen(600) {
+            margin: 0 -10px;
+        }
+
+        @include defaults.screen(1024) {
+            float: right;
+            width: 280px;
+            margin: 0 0 0 40px;
+        }
+
+        > button,
+        > .button-group {
+            width: 100%;
+            margin-bottom: 10px;
+
+            @include defaults.screen(600) {
                 float: right;
-                width: 280px;
-                margin: 0 0 0 40px;
+                width: calc(50% - 20px);
+                margin: 0 10px;
             }
 
-            > button,
-            > .button-group {
+            @include defaults.screen(1024) {
                 width: 100%;
-                margin-bottom: 10px;
-
-                @include screen(600) {
-                    float: right;
-                    width: calc(50% - 20px);
-                    margin: 0 10px;
-                }
-
-                @include screen(1024) {
-                    width: 100%;
-                    margin: 0 0 10px;
-                }
-            }
-        }
-
-        &__loader {
-            width: 50px;
-            margin: 0 auto;
-
-            .sk-circle {
-                width: 50px;
-                height: 50px;
+                margin: 0 0 10px;
             }
         }
     }
+
+    &__loader {
+        width: 50px;
+        margin: 0 auto;
+
+        .sk-circle {
+            width: 50px;
+            height: 50px;
+        }
+    }
+}
 </style>

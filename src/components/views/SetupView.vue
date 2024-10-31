@@ -140,338 +140,337 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
-    @import "../../assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .view-setup {
-        padding-top: 40px;
+.view-setup {
+    padding-top: 40px;
+
+    footer {
+        margin-top: 40px;
+    }
+
+    &__steps {
+        padding: 0 0 50px 0;
+
+        ul {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            position: relative;
+            height: 6px;
+            margin: 0;
+            padding: 0;
+
+            &:before {
+                content: "";
+                position: absolute;
+                left: -50%;
+                right: 50%;
+                background: var(--border);
+                height: 5px;
+            }
+
+            &:after {
+                content: "";
+                position: absolute;
+                top: -18px;
+                left: 50%;
+                margin-left: -21px;
+                width: 42px;
+                height: 42px;
+                color: #FFF;
+                text-indent: 0;
+                text-align: center;
+                line-height: 35px;
+                background:  var(--border);
+                border-radius: 50%;
+                z-index: 1;
+            }
+        }
+
+        li:first-child:before {
+            content: none;
+        }
+
+        li.active:before,
+        li.active:after {
+            background: var(--contao);
+        }
+
+        button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            border: none;
+            z-index: 10;
+            cursor: pointer;
+
+            &:disabled {
+                cursor: default;
+            }
+        }
+
+        svg {
+            fill: #FFF;
+        }
+    }
+
+    &__main {
+        text-align: center;
+    }
+
+    &__party {
+        font-size: 64px;
+    }
+
+    &__headline {
+        margin: 10px 0 20px;
+        padding: 15px 0;
+        font-size: 42px;
+        font-weight: defaults.$font-weight-light;
+    }
+
+    &__description {
+        max-width: 500px;
+        margin: 1em 25px;
+    }
+
+    &__start.widget-button {
+        height: 50px;
+        margin: 30px 10px 0;
+        padding: 0 50px;
+        font-size: 1.2em;
+        line-height: 50px;
+    }
+
+    &__continue.widget-button {
+        width: 80% !important;
+        margin: 10px 0 0;
+    }
+
+    &__funding {
+        width: 80%;
+        margin: 50px auto 0;
+        padding: 20px 25px;
+        border: 2px solid var(--funding);
+        border-radius: var(--border-radius);
+        background: rgba(var(--funding-rgb), .025);
+        font-weight: 400;
+
+        figure {
+            margin-bottom: 1em;
+        }
+
+        p {
+            margin: 0 0 .5em 0;
+        }
+
+        &-link {
+            margin: 1em 0 0;
+        }
+    }
+
+    @include defaults.screen(960) {
+        padding-top: 80px;
 
         footer {
-            margin-top: 40px;
+            margin-top: 80px;
         }
 
         &__steps {
-            padding: 0 0 50px 0;
-
-            ul {
-                display: flex;
-                margin: 0;
-                padding: 0;
-                list-style-type: none;
-            }
-
-            li {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-grow: 1;
-                position: relative;
-                height: 6px;
-                margin: 0;
-                padding: 0;
-
-                &:before {
-                    content: "";
-                    position: absolute;
-                    left: -50%;
-                    right: 50%;
-                    background: var(--border);
-                    height: 5px;
-                }
-
-                &:after {
-                    content: "";
-                    position: absolute;
-                    top: -18px;
-                    left: 50%;
-                    margin-left: -21px;
-                    width: 42px;
-                    height: 42px;
-                    color: #FFF;
-                    text-indent: 0;
-                    text-align: center;
-                    line-height: 35px;
-                    background:  var(--border);
-                    border-radius: 50%;
-                    z-index: 1;
-                }
-            }
-
-            li:first-child:before {
-                content: none;
-            }
-
-            li.active:before,
-            li.active:after {
-                background: var(--contao);
-            }
-
-            button {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background: transparent;
-                border: none;
-                z-index: 10;
-                cursor: pointer;
-
-                &:disabled {
-                    cursor: default;
-                }
-            }
-
-            svg {
-                fill: #FFF;
-            }
+            padding-bottom: 80px;
         }
 
-        &__main {
-            text-align: center;
-        }
-
-        &__party {
+        &__headline {
+            margin: 20px 0 40px;
             font-size: 64px;
         }
 
-        &__headline {
-            margin: 10px 0 20px;
-            padding: 15px 0;
-            font-size: 42px;
-            font-weight: $font-weight-light;
+        &__continue.widget-button {
+            width: auto !important;
+            margin: 25px 10px 0;
+            padding: 0 20px;
         }
 
         &__description {
-            max-width: 500px;
-            margin: 1em 25px;
-        }
-
-        &__start.widget-button {
-            height: 50px;
-            margin: 30px 10px 0;
-            padding: 0 50px;
+            max-width: 550px;
+            margin: 1em auto;
             font-size: 1.2em;
-            line-height: 50px;
-        }
-
-        &__continue.widget-button {
-            width: 80% !important;
-            margin: 10px 0 0;
         }
 
         &__funding {
-            width: 80%;
-            margin: 50px auto 0;
-            padding: 20px 25px;
-            border: 2px solid var(--funding);
-            border-radius: var(--border-radius);
-            background: rgba(var(--funding-rgb), .025);
-            font-weight: 400;
+            display: flex;
+            margin: 60px auto -20px;
+            text-align: left;
 
             figure {
-                margin-bottom: 1em;
+                margin-right: 25px;
             }
+        }
+    }
+}
 
-            p {
-                margin: 0 0 .5em 0;
-            }
+.setup {
+    &__header {
+        max-width: 280px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 40px 0;
+        text-align: center;
 
-            &-link {
-                margin: 1em 0 0;
+        .widget-button {
+            margin-top: 1em;
+        }
+    }
+
+    &__icon {
+        background: var(--contao);
+        border-radius: 10px;
+        padding:10px;
+    }
+
+    &__headline {
+        margin-top: 20px;
+        margin-bottom: 25px;
+        font-size: 36px;
+        font-weight: defaults.$font-weight-light;
+        line-height: 1;
+    }
+
+    &__warning,
+    &__description {
+        margin: 1em 0;
+        text-align: justify;
+    }
+
+    &__warning {
+        color: var(--btn-alert);
+        font-weight: defaults.$font-weight-bold;
+    }
+
+    &__form {
+        position: relative;
+        max-width: 280px;
+        margin: 0 auto 50px;
+        opacity: 1;
+
+        svg.setup__check {
+            display: block;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2em;
+            fill: var(--btn-primary);
+        }
+
+        .widget-select,
+        .widget-text {
+            margin-top: 10px;
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: defaults.$font-weight-medium;
             }
         }
 
-        @include screen(960) {
-            padding-top: 80px;
+        .widget-checkbox {
+            margin-top: 20px;
+            font-weight: defaults.$font-weight-medium;
+        }
 
-            footer {
-                margin-top: 80px;
-            }
+        .widget-radio-button {
+            margin-top: 20px;
+        }
+    }
 
-            &__steps {
-                padding-bottom: 80px;
-            }
+    &__fields {
+        margin-bottom: 2em;
 
-            &__headline {
-                margin: 20px 0 40px;
-                font-size: 64px;
-            }
+        &--center {
+            text-align: center;
+        }
 
-            &__continue.widget-button {
-                width: auto !important;
-                margin: 25px 10px 0;
-                padding: 0 20px;
-            }
+        .button-group .widget-button {
+            margin-bottom: 1px;
+        }
+    }
 
-            &__description {
-                max-width: 550px;
-                margin: 1em auto;
-                font-size: 1.2em;
-            }
+    &__fieldtitle {
+        margin-bottom: .5em;
+        font-size: 18px;
+        font-weight: defaults.$font-weight-bold;
+        line-height: 30px;
+    }
 
-            &__funding {
-                display: flex;
-                margin: 60px auto -20px;
-                text-align: left;
+    &__fielddesc {
+        margin-bottom: 1em;
+        text-align: left;
 
-                figure {
-                    margin-right: 25px;
-                }
+        code {
+            word-break: break-word;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        &--center {
+            justify-content: center;
+        }
+
+        .widget-button,
+        .button-group {
+            flex-grow: 1;
+
+            &--inline {
+                flex-grow: 0;
             }
         }
     }
 
-    .setup {
+    @include defaults.screen(960) {
+        padding-top: 100px;
+
         &__header {
-            max-width: 280px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 40px 0;
-            text-align: center;
-
-            .widget-button {
-                margin-top: 1em;
-            }
-        }
-
-        &__icon {
-            background: var(--contao);
-            border-radius: 10px;
-            padding:10px;
-        }
-
-        &__headline {
-            margin-top: 20px;
-            margin-bottom: 25px;
-            font-size: 36px;
-            font-weight: $font-weight-light;
-            line-height: 1;
-        }
-
-        &__warning,
-        &__description {
-            margin: 1em 0;
-            text-align: justify;
-        }
-
-        &__warning {
-            color: var(--btn-alert);
-            font-weight: $font-weight-bold;
+            float: left;
+            width: 470px;
+            max-width: none;
+            padding: 0 60px 50px;
         }
 
         &__form {
-            position: relative;
-            max-width: 280px;
-            margin: 0 auto 50px;
-            opacity: 1;
-
-            svg.setup__check {
-                display: block;
-                width: 80px;
-                height: 80px;
-                margin: 0 auto 2em;
-                fill: var(--btn-primary);
-            }
+            float: left;
+            width: 370px;
+            max-width: none;
+            margin: 0 50px 50px;
 
             .widget-select,
             .widget-text {
-                margin-top: 10px;
-
                 label {
                     display: block;
-                    margin-bottom: 5px;
-                    font-weight: $font-weight-medium;
+                    float: left;
+                    width: 120px;
+                    padding-top: 10px;
+                    font-weight: defaults.$font-weight-medium;
                 }
-            }
 
-            .widget-checkbox {
-                margin-top: 20px;
-                font-weight: $font-weight-medium;
-            }
-
-            .widget-radio-button {
-                margin-top: 20px;
-            }
-        }
-
-        &__fields {
-            margin-bottom: 2em;
-
-            &--center {
-                text-align: center;
-            }
-
-            .button-group .widget-button {
-                margin-bottom: 1px;
-            }
-        }
-
-        &__fieldtitle {
-            margin-bottom: .5em;
-            font-size: 18px;
-            font-weight: $font-weight-bold;
-            line-height: 30px;
-        }
-
-        &__fielddesc {
-            margin-bottom: 1em;
-            text-align: left;
-
-            code {
-                word-break: break-word;
-            }
-        }
-
-        &__actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-
-            &--center {
-                justify-content: center;
-            }
-
-            .widget-button,
-            .button-group {
-                flex-grow: 1;
-
-                &--inline {
-                    flex-grow: 0;
-                }
-            }
-        }
-
-        @include screen(960) {
-            padding-top: 100px;
-
-            &__header {
-                float: left;
-                width: 470px;
-                max-width: none;
-                padding: 0 60px 50px;
-            }
-
-            &__form {
-                float: left;
-                width: 370px;
-                max-width: none;
-                margin: 0 50px 50px;
-
-                .widget-select,
-                .widget-text {
-                    label {
-                        display: block;
-                        float: left;
-                        width: 120px;
-                        padding-top: 10px;
-                        font-weight: $font-weight-medium;
-                    }
-
-                    select,
-                    input {
-                        width: 250px !important;
-                    }
+                select,
+                input {
+                    width: 250px !important;
                 }
             }
         }
     }
+}
 </style>

@@ -566,7 +566,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
 .setup {
     &__versions {
@@ -620,7 +620,7 @@ export default {
             display: grid;
             gap: 14px;
 
-            @include screen(1024) {
+            @include defaults.screen(1024) {
                 grid-template-columns: repeat(2, 1fr);
 
                 &-item {

@@ -106,73 +106,73 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .view-recovery {
-        &__header {
-            max-width: 280px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 40px 0 10px;
-            text-align: center;
-        }
+.view-recovery {
+    &__header {
+        max-width: 280px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 40px 0 10px;
+        text-align: center;
+    }
 
-        &__icon {
-            background: var(--contao);
-            border-radius: 10px;
-            padding:10px;
-        }
+    &__icon {
+        background: var(--contao);
+        border-radius: 10px;
+        padding:10px;
+    }
 
-        &__headline {
-            margin-top: 15px;
-            font-size: 36px;
-            font-weight: $font-weight-light;
-            line-height: 1;
-        }
+    &__headline {
+        margin-top: 15px;
+        font-size: 36px;
+        font-weight: defaults.$font-weight-light;
+        line-height: 1;
+    }
 
-        &__content {
-            margin: 0 30px 50px;
+    &__content {
+        margin: 0 30px 50px;
 
-            @include screen(960) {
-                margin-left: 50px;
-                margin-right: 50px;
-            }
-        }
-
-        &__description {
-            font-weight: $font-weight-bold;
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        &__console {
-            margin: 30px 0 60px;
-        }
-
-        &__option {
-            margin: 50px 0 0;
-            padding: 20px 20px 30px;
-            background: var(--table-odd-bg);
-            text-align: center;
-
-            h3 {
-                position: relative;
-                top: -40px;
-                margin-bottom: -25px;
-                font-size: 2em;
-                font-weight: $font-weight-normal;
-            }
-
-            button {
-                margin-top: 1.5em;
-            }
-        }
-
-        &__failed {
-            margin: 10px 0;
-            color: var(--btn-alert);
-            font-weight: $font-weight-bold;
+        @include defaults.screen(960) {
+            margin-left: 50px;
+            margin-right: 50px;
         }
     }
+
+    &__description {
+        font-weight: defaults.$font-weight-bold;
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    &__console {
+        margin: 30px 0 60px;
+    }
+
+    &__option {
+        margin: 50px 0 0;
+        padding: 20px 20px 30px;
+        background: var(--table-odd-bg);
+        text-align: center;
+
+        h3 {
+            position: relative;
+            top: -40px;
+            margin-bottom: -25px;
+            font-size: 2em;
+            font-weight: defaults.$font-weight-normal;
+        }
+
+        button {
+            margin-top: 1.5em;
+        }
+    }
+
+    &__failed {
+        margin: 10px 0;
+        color: var(--btn-alert);
+        font-weight: defaults.$font-weight-bold;
+    }
+}
 </style>

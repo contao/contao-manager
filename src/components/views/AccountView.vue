@@ -143,114 +143,114 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .view-account {
-        &__header {
-            max-width: 280px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 40px 0;
-            text-align: center;
+.view-account {
+    &__header {
+        max-width: 280px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 40px 0;
+        text-align: center;
+    }
+
+    &__product {
+        margin-top: 15px;
+        margin-bottom: 40px;
+        font-weight: defaults.$font-weight-bold;
+
+        strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 54px;
+            font-weight: defaults.$font-weight-light;
+            line-height: 1;
         }
+    }
 
-        &__product {
-            margin-top: 15px;
-            margin-bottom: 40px;
-            font-weight: $font-weight-bold;
+    &__headline {
+        margin-bottom: .5em;
+        font-size: 18px;
+        font-weight: defaults.$font-weight-bold;
+        line-height: 30px;
+    }
 
-            strong {
+    &__description {
+        margin-bottom: 1em;
+        text-align: justify;
+    }
+
+    &__form {
+        position: relative;
+        max-width: 280px;
+        margin: 0 auto;
+
+        .widget-text {
+            margin-top: 10px;
+
+            label {
                 display: block;
-                margin-bottom: 10px;
-                font-size: 54px;
-                font-weight: $font-weight-light;
-                line-height: 1;
+                padding-bottom: 5px;
             }
         }
 
-        &__headline {
-            margin-bottom: .5em;
-            font-size: 18px;
-            font-weight: $font-weight-bold;
-            line-height: 30px;
+        .widget-button {
+            margin-top: 1.5em;
         }
+    }
 
-        &__description {
-            margin-bottom: 1em;
-            text-align: justify;
+    &__contribute {
+        max-width: 280px;
+        margin: 60px auto 0;
+        font-size: 12px;
+        text-align: center;
+
+        br {
+            display: none;
+        }
+    }
+
+    @include defaults.screen(960) {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        padding-top: 50px;
+
+        &__header,
+        &__form {
+            padding: 50px;
+            width: 50%;
+            max-width: none;
         }
 
         &__form {
-            position: relative;
-            max-width: 280px;
-            margin: 0 auto;
 
-            .widget-text {
-                margin-top: 10px;
+            .widget-text label {
+                float: left;
+                width: 120px;
+                padding-top: 10px;
+                font-weight: defaults.$font-weight-medium;
+            }
 
-                label {
-                    display: block;
-                    padding-bottom: 5px;
-                }
+            input[type=text],
+            input[type=password],
+            select {
+                width: 250px !important;
             }
 
             .widget-button {
-                margin-top: 1.5em;
+                width: 250px;
+                margin-left: 120px;
             }
         }
 
         &__contribute {
-            max-width: 280px;
-            margin: 60px auto 0;
-            font-size: 12px;
-            text-align: center;
+            max-width: 840px;
 
             br {
-                display: none;
-            }
-        }
-
-        @include screen(960) {
-            display: flex;
-            flex-flow: row wrap;
-            align-items: center;
-            padding-top: 50px;
-
-            &__header,
-            &__form {
-                padding: 50px;
-                width: 50%;
-                max-width: none;
-            }
-
-            &__form {
-
-                .widget-text label {
-                    float: left;
-                    width: 120px;
-                    padding-top: 10px;
-                    font-weight: $font-weight-medium;
-                }
-
-                input[type=text],
-                input[type=password],
-                select {
-                    width: 250px !important;
-                }
-
-                .widget-button {
-                    width: 250px;
-                    margin-left: 120px;
-                }
-            }
-
-            &__contribute {
-                max-width: 840px;
-
-                br {
-                    display: block;
-                }
+                display: block;
             }
         }
     }
+}
 </style>

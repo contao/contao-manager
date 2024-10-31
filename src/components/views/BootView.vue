@@ -207,89 +207,89 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .view-boot {
-        &__header {
-            margin-left: auto;
-            margin-right: auto;
-            padding: 40px 0;
-            text-align: center;
-        }
+.view-boot {
+    &__header {
+        margin-left: auto;
+        margin-right: auto;
+        padding: 40px 0;
+        text-align: center;
+    }
 
-        &__icon {
-            background: var(--contao);
-            border-radius: 10px;
-            padding:10px;
-        }
+    &__icon {
+        background: var(--contao);
+        border-radius: 10px;
+        padding:10px;
+    }
 
-        &__headline {
-            margin-top: 15px;
-            font-size: 36px;
-            font-weight: $font-weight-light;
-            line-height: 1;
-        }
+    &__headline {
+        margin-top: 15px;
+        font-size: 36px;
+        font-weight: defaults.$font-weight-light;
+        line-height: 1;
+    }
 
-        &__description {
-            margin: 0;
-            font-weight: $font-weight-bold;
-        }
+    &__description {
+        margin: 0;
+        font-weight: defaults.$font-weight-bold;
+    }
 
-        &__loading {
+    &__loading {
+        width: 30px;
+        margin: 0 auto 40px;
+
+        .sk-circle {
             width: 30px;
-            margin: 0 auto 40px;
-
-            .sk-circle {
-                width: 30px;
-                height: 30px;
-            }
-        }
-
-        &__checks {
-            margin: 0 16px 50px;
-
-            .boot-check:nth-child(odd) {
-                border-radius: var(--border-radius);
-                background: var(--table-odd-bg);
-            }
-        }
-
-        &__summary {
-            margin: 50px 0 0;
-
-            &--error svg {
-                width: 100%;
-                height: 40px;
-                fill: var(--btn-alert);
-            }
-        }
-
-        &__issue {
-            max-width: 60%;
-            margin: 10px auto;
-            text-align: center;
-            color: var(--btn-alert);
-            line-height: 1.2em;
-        }
-
-        &__safeMode {
-            clear: both;
-            display: block !important;
-            width: 220px !important;
-            margin: 2em auto 0;
-        }
-
-        &__continue {
-            clear: both;
-            display: block !important;
-            width: 220px !important;
-            margin: 0 auto;
-        }
-
-        @include screen(960) {
-            &__checks {
-                margin: 0 80px 50px;
-            }
+            height: 30px;
         }
     }
+
+    &__checks {
+        margin: 0 16px 50px;
+
+        .boot-check:nth-child(odd) {
+            border-radius: var(--border-radius);
+            background: var(--table-odd-bg);
+        }
+    }
+
+    &__summary {
+        margin: 50px 0 0;
+
+        &--error svg {
+            width: 100%;
+            height: 40px;
+            fill: var(--btn-alert);
+        }
+    }
+
+    &__issue {
+        max-width: 60%;
+        margin: 10px auto;
+        text-align: center;
+        color: var(--btn-alert);
+        line-height: 1.2em;
+    }
+
+    &__safeMode {
+        clear: both;
+        display: block !important;
+        width: 220px !important;
+        margin: 2em auto 0;
+    }
+
+    &__continue {
+        clear: both;
+        display: block !important;
+        width: 220px !important;
+        margin: 0 auto;
+    }
+
+    @include defaults.screen(960) {
+        &__checks {
+            margin: 0 80px 50px;
+        }
+    }
+}
 </style>

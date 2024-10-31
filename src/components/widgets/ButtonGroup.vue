@@ -93,60 +93,58 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+.button-group {
+    display: flex;
+    gap: 1px;
+    position: relative;
 
-    .button-group {
-        display: flex;
-        gap: 1px;
-        position: relative;
+    &__primary.widget-button {
+        flex-grow: 1;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
 
-        &__primary.widget-button {
-            flex-grow: 1;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
+    &__more.widget-button {
+        flex-shrink: 0;
+        width: 38px;
+        padding: 7px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &__group {
+        position: absolute;
+        top: 39px;
+        width: 100%;
+        z-index: 100;
+
+        &:focus {
+            outline: none;
         }
 
-        &__more.widget-button {
-            flex-shrink: 0;
-            width: 38px;
-            padding: 7px;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-
-            svg {
-                width: 24px;
-                height: 24px;
-            }
+        .widget-button {
+            margin-top: 1px;
         }
 
-        &__group {
-            position: absolute;
-            top: 39px;
-            width: 100%;
-            z-index: 100;
+        .link-menu {
+            margin-top: 3px;
+        }
 
-            &:focus {
-                outline: none;
-            }
 
-            .widget-button {
-                margin-top: 1px;
-            }
+        &--top {
+            top: auto;
+            bottom: 39px;
 
             .link-menu {
-                margin-top: 3px;
-            }
-
-
-            &--top {
-                top: auto;
-                bottom: 39px;
-
-                .link-menu {
-                    margin-top: 0;
-                    margin-bottom: 3px;
-                }
+                margin-top: 0;
+                margin-bottom: 3px;
             }
         }
     }
+}
 </style>

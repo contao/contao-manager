@@ -158,28 +158,28 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .package-list {
-        position: relative;
+.package-list {
+    position: relative;
 
-        &__status {
-            margin: 100px 0;
-            text-align: center;
-            font-size: 20px;
-            line-height: 1.5em;
+    &__status {
+        margin: 100px 0;
+        text-align: center;
+        font-size: 20px;
+        line-height: 1.5em;
 
-            .sk-circle {
-                width: 100px;
-                height: 100px;
-                margin: 0 auto 40px;
-            }
-        }
-
-        &__headline {
-            font-size: 18px;
-            font-weight: $font-weight-normal;
-            margin: 30px 0 10px;
+        .sk-circle {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 40px;
         }
     }
+
+    &__headline {
+        font-size: 18px;
+        font-weight: defaults.$font-weight-normal;
+        margin: 30px 0 10px;
+    }
+}
 </style>

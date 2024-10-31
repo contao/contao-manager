@@ -85,47 +85,47 @@
 </script>
 
 <style lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .package-popup {
-        &__installed {
+.package-popup {
+    &__installed {
+        strong {
+            margin-right: 5px;
+        }
+
+        @include defaults.screen(600) {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            text-align: center;
+
             strong {
-                margin-right: 5px;
+                display: block;
+                margin: 0;
             }
-
-            @include screen(600) {
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-end;
-                text-align: center;
-
-                strong {
-                    display: block;
-                    margin: 0;
-                }
-            }
-        }
-
-        &__update {
-            margin: 0 0 20px;
-            padding: 10px 20px 10px 50px;
-            color: var(--clr-btn);
-            background: var(--btn-primary) url('../../assets/images/button-update.svg') 15px 50% no-repeat;
-            background-size: 23px 23px;
-            border-radius: var(--border-radius);
-        }
-
-        &__incompatible {
-            margin: 0 0 20px;
-            padding: 10px 20px 10px 50px;
-            color: var(--clr-btn);
-            background: var(--contao) url('../../assets/images/button-incompatible.svg') 15px 50% no-repeat;
-            background-size: 23px 23px;
-            border-radius: var(--border-radius);
-        }
-
-        &__funding + .package-popup__update {
-            margin-top: -10px;
         }
     }
+
+    &__update {
+        margin: 0 0 20px;
+        padding: 10px 20px 10px 50px;
+        color: var(--clr-btn);
+        background: var(--btn-primary) url('../../assets/images/button-update.svg') 15px 50% no-repeat;
+        background-size: 23px 23px;
+        border-radius: var(--border-radius);
+    }
+
+    &__incompatible {
+        margin: 0 0 20px;
+        padding: 10px 20px 10px 50px;
+        color: var(--clr-btn);
+        background: var(--contao) url('../../assets/images/button-incompatible.svg') 15px 50% no-repeat;
+        background-size: 23px 23px;
+        border-radius: var(--border-radius);
+    }
+
+    &__funding + .package-popup__update {
+        margin-top: -10px;
+    }
+}
 </style>

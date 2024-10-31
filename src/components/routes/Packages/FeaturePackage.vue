@@ -63,98 +63,100 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .feature-package {
+.feature-package {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 6px 16px;
+    border-top: 1px solid var(--border--light);
+
+    &__name {
+        font-weight: defaults.$font-weight-bold;
+        white-space: nowrap;
+
+        &:after {
+            content: ": ";
+        }
+    }
+
+    &__text {
+        flex-grow: 1;
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        margin-right: .5em;
+        padding: 4px 0;
+        line-height: 20px;
+
+        &--hint {
+            display: inline;
+            -webkit-line-clamp: none;
+            line-clamp: none;
+        }
+    }
+
+    &__badge {
+        margin-left: 5px;
+        padding: 2px 8px;
+        background: var(--btn-alert);
+        border-radius: var(--border-radius);
+        font-size: 12px;
+        font-weight: defaults.$font-weight-bold;
+        line-height: 19px;
+        color: #fff;
+        cursor: help;
+    }
+
+    &__hint {
+        line-height: 1.2;
+        padding: 2px 5px;
+        background: var(--hint-bg);
+        font-size: 12px;
+    }
+
+    &__actions {
+        flex-grow: 1;
         display: flex;
-        flex-wrap: wrap;
-        padding: 6px 16px;
-        border-top: 1px solid var(--border--light);
+        justify-content: flex-end;
+        margin: 0 -4px 0 0;
 
-        &__name {
-            font-weight: $font-weight-bold;
-            white-space: nowrap;
-
-            &:after {
-                content: ": ";
-            }
+        > * {
+            margin: 0 4px;
         }
+    }
 
-        &__text {
-            flex-grow: 1;
-            display: -webkit-box;
-            overflow: hidden;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            margin-right: .5em;
-            padding: 4px 0;
-            line-height: 20px;
+    &__restore {
+        padding-left: 18px;
+        font-size: 12px;
+        color: var(--hint-link);
+        background: url('../../../assets/images/close.svg') left center no-repeat;
+        background-size: 14px 14px;
+        border: none;
+        outline: none;
+        cursor: pointer;
 
-            &--hint {
-                display: inline;
-                -webkit-line-clamp: none;
-            }
+        &:hover {
+            text-decoration: underline;
         }
+    }
 
-        &__badge {
-            margin-left: 5px;
-            padding: 2px 8px;
-            background: var(--btn-alert);
-            border-radius: var(--border-radius);
-            font-size: 12px;
-            font-weight: $font-weight-bold;
-            line-height: 19px;
-            color: #fff;
-            cursor: help;
-        }
+    @include defaults.screen(800) {
+        flex-wrap: nowrap;
+    }
 
+    @include defaults.screen(1024) {
         &__hint {
-            line-height: 1.2;
-            padding: 2px 5px;
-            background: var(--hint-bg);
-            font-size: 12px;
+            padding: 8px 10px 8px 36px;
+            background: var(--hint-bg) url('~contao-package-list/src/assets/images/hint.svg') 10px 5px no-repeat;
+            background-size: 20px 20px;
         }
 
         &__actions {
-            flex-grow: 1;
-            display: flex;
-            justify-content: flex-end;
             margin: 0 -4px 0 0;
-
-            > * {
-                margin: 0 4px;
-            }
-        }
-
-        &__restore {
-            padding-left: 18px;
-            font-size: 12px;
-            color: var(--hint-link);
-            background: url('../../../assets/images/close.svg') left center no-repeat;
-            background-size: 14px 14px;
-            border: none;
-            outline: none;
-            cursor: pointer;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-
-        @include screen(800) {
-            flex-wrap: nowrap;
-        }
-
-        @include screen(1024) {
-            &__hint {
-                padding: 8px 10px 8px 36px;
-                background: var(--hint-bg) url('~contao-package-list/src/assets/images/hint.svg') 10px 5px no-repeat;
-                background-size: 20px 20px;
-            }
-
-            &__actions {
-                margin: 0 -4px 0 0;
-            }
         }
     }
+}
 </style>

@@ -41,34 +41,33 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .progress-bar {
-        position: relative;
-        width: 100%;
-        height: 30px;
-        background: var(--clr-btn);
-        border: 2px solid var(--btn-warning);
-        color: #000;
-        font-weight: $font-weight-bold;
-        text-align: center;
-        line-height: 26px;
+.progress-bar {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background: var(--clr-btn);
+    border: 2px solid var(--btn-warning);
+    color: #000;
+    font-weight: defaults.$font-weight-bold;
+    text-align: center;
+    line-height: 26px;
 
-        &__bar {
-            position: absolute;
-            overflow: hidden;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            background: var(--btn-warning);
+    &__bar {
+        position: absolute;
+        overflow: hidden;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: var(--btn-warning);
 
-            span {
-                display: block;
-                color: var(--clr-btn);
-                text-align: center;
-            }
+        span {
+            display: block;
+            color: var(--clr-btn);
+            text-align: center;
         }
-
     }
+}
 </style>

@@ -75,88 +75,88 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .view-error {
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
+.view-error {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    color: #e8e8e8;
+    font-family: defaults.$font-monospace;
+    font-size: 13px;
+    line-height: 1.2;
+    background-color: rgba(0, 0, 0, 0.85098);
+    background-position: initial;
+    background-repeat: initial;
+    z-index: 9998;
+
+    &__content {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        padding: 10px;
-        color: #e8e8e8;
-        font-family: $font-monospace;
-        font-size: 13px;
-        line-height: 1.2;
-        background-color: rgba(0, 0, 0, 0.85098);
-        background-position: initial;
-        background-repeat: initial;
-        z-index: 9998;
-
-        &__content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 800px;
-            max-height: 100vh;
-            line-height: 1.5;
-            text-align: center;
-        }
-
-        &__icon {
-            display: block;
-            height: 100px;
-            margin: 2em 0;
-            fill: #fff;
-        }
-
-        &__status {
-            margin-bottom: 1em;
-            padding: 2px 4px;
-            background-color: #E36049;
-            border-radius: var(--border-radius);
-        }
-
-        &__headline {
-            margin: 0;
-            font-size: 1em;
-            line-height: 1.5;
-        }
-
-        &__status a {
-            color: #e8e8e8;
-            text-decoration: underline;
-        }
-
-        &__details {
-            display: block;
-            margin-top: 2em;
-            white-space: pre-line;
-        }
-
-        &__debug {
-            align-self: flex-start;
-            max-height: 60vh;
-            overflow-y: auto;
-            margin-top: 2em;
-            text-align: left;
-            white-space: pre-line;
-        }
-
-        &__actions {
-            margin: 4em 0;
-            text-align: center;
-        }
-
-        &__link {
-            margin: 10px;
-            padding: 10px 20px;
-            border: 1px solid #fff;
-            border-radius: 4px;
-            color: #fff;
-        }
+        max-width: 800px;
+        max-height: 100vh;
+        line-height: 1.5;
+        text-align: center;
     }
+
+    &__icon {
+        display: block;
+        height: 100px;
+        margin: 2em 0;
+        fill: #fff;
+    }
+
+    &__status {
+        margin-bottom: 1em;
+        padding: 2px 4px;
+        background-color: #E36049;
+        border-radius: var(--border-radius);
+    }
+
+    &__headline {
+        margin: 0;
+        font-size: 1em;
+        line-height: 1.5;
+    }
+
+    &__status a {
+        color: #e8e8e8;
+        text-decoration: underline;
+    }
+
+    &__details {
+        display: block;
+        margin-top: 2em;
+        white-space: pre-line;
+    }
+
+    &__debug {
+        align-self: flex-start;
+        max-height: 60vh;
+        overflow-y: auto;
+        margin-top: 2em;
+        text-align: left;
+        white-space: pre-line;
+    }
+
+    &__actions {
+        margin: 4em 0;
+        text-align: center;
+    }
+
+    &__link {
+        margin: 10px;
+        padding: 10px 20px;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        color: #fff;
+    }
+}
 </style>

@@ -37,10 +37,9 @@
 </template>
 
 <script>
+    import { defineAsyncComponent } from "vue";
     import { mapState, mapGetters } from 'vuex';
     import views from '../router/views';
-
-    import PackageDetails from './fragments/PackageDetails';
 
     import ErrorView from './views/ErrorView';
     import AccountView from './views/AccountView';
@@ -105,7 +104,10 @@
                     }
 
                     this.loaded = true;
-                    this.$store.dispatch('packages/details/init', { vue: this, component: PackageDetails });
+                    this.$store.dispatch('packages/details/init', {
+                        vue: this,
+                        component: defineAsyncComponent(() => import('./fragments/PackageDetails'))
+                    });
                 }
             },
 
@@ -173,108 +175,113 @@
     };
 </script>
 
+
+
 <style rel="stylesheet/scss" lang="scss">
-    $icons: (
-        'add',
-        'check',
-        'cloud',
-        'cloud-off',
-        'console',
-        'database',
-        'download',
-        'edit',
-        'gear',
-        'hide',
-        'details',
-        'link',
-        'lock',
-        'maintenance',
-        'more',
-        'power',
-        'run',
-        'save',
-        'search',
-        'show',
-        'trash',
-        'unlock',
-        'update',
-        'upload',
-    );
+@use "sass:meta";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    @import "~contao-package-list/src/assets/styles/defaults";
-    @import "~contao-package-list/src/assets/styles/layout";
-    @import "~contao-package-list/src/assets/styles/animations";
+$icons: (
+    'add',
+    'check',
+    'cloud',
+    'cloud-off',
+    'console',
+    'database',
+    'download',
+    'edit',
+    'gear',
+    'hide',
+    'details',
+    'link',
+    'lock',
+    'maintenance',
+    'more',
+    'power',
+    'run',
+    'save',
+    'search',
+    'show',
+    'trash',
+    'unlock',
+    'update',
+    'upload',
+);
 
-    .https-warning {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 27px;
-        padding: 4px 8px;
-        background: var(--btn-warning);
+@include meta.load-css("~contao-package-list/src//assets/styles/layout");
+@include meta.load-css("~contao-package-list/src//assets/styles/animations");
+@include meta.load-css("../assets/styles/defaults");
+
+.https-warning {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 27px;
+    padding: 4px 8px;
+    background: var(--btn-warning);
+    color: #fff;
+    text-align: center;
+    z-index: 100;
+
+    &__description {
+        display: none;
+
+        @include defaults.screen(600) {
+            display: inline;
+        }
+    }
+
+    &__link {
         color: #fff;
-        text-align: center;
-        z-index: 100;
+        text-decoration: underline;
+    }
 
-        &__description {
-            display: none;
+    + div {
+        padding-top: 25px;
+    }
+}
 
-            @include screen(600) {
-                display: inline;
-            }
-        }
+.safe-mode {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 27px;
+    padding: 4px 8px;
+    background: var(--btn-alert);
+    color: #fff;
+    text-align: center;
+    z-index: 100;
 
-        &__link {
-            color: #fff;
-            text-decoration: underline;
-        }
+    &__description {
+        display: none;
 
-        + div {
-            padding-top: 25px;
+        @include defaults.screen(600) {
+            display: inline;
         }
     }
 
-    .safe-mode {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 27px;
-        padding: 4px 8px;
-        background: var(--btn-alert);
+    &__link {
         color: #fff;
+        text-decoration: underline;
+    }
+
+    + div {
+        padding-top: 25px;
+    }
+}
+
+.view-init {
+    display: table;
+    width: 100%;
+    height: 100%;
+
+    &__cell {
+        display: table-cell;
+        font-size: 1.5em;
         text-align: center;
-        z-index: 100;
-
-        &__description {
-            display: none;
-
-            @include screen(600) {
-                display: inline;
-            }
-        }
-
-        &__link {
-            color: #fff;
-            text-decoration: underline;
-        }
-
-        + div {
-            padding-top: 25px;
-        }
+        vertical-align: middle;
     }
-
-    .view-init {
-        display: table;
-        width: 100%;
-        height: 100%;
-
-        &__cell {
-            display: table-cell;
-            font-size: 1.5em;
-            text-align: center;
-            vertical-align: middle;
-        }
-    }
+}
 </style>

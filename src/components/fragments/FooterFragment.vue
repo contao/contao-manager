@@ -76,147 +76,146 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
-    @import "../../assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .fragment-footer {
-        width: 280px;
-        margin: 10px auto 0;
-        padding: 15px 0 25px;
-        font-size: 12px;
-        text-align: center;
-        border-top: 1px solid var(--footer-bdr);
+.fragment-footer {
+    width: 280px;
+    margin: 10px auto 0;
+    padding: 15px 0 25px;
+    font-size: 12px;
+    text-align: center;
+    border-top: 1px solid var(--footer-bdr);
 
-        &--main {
-            width: auto;
-            margin-top: 52px !important;
-            padding: 20px 0;
-        }
+    &--main {
+        width: auto;
+        margin-top: 52px !important;
+        padding: 20px 0;
+    }
 
-        &--boxed {
-            border-color: var(--footer-fragment-bdr);
-        }
+    &--boxed {
+        border-color: var(--footer-fragment-bdr);
+    }
 
-        &__product {
-            font-weight: $font-weight-normal;
-        }
+    &__product {
+        font-weight: defaults.$font-weight-normal;
+    }
 
-        &__links {
-            margin: 5px 0 0;
-            padding: 0;
-            list-style-type: none;
+    &__links {
+        margin: 5px 0 0;
+        padding: 0;
+        list-style-type: none;
 
-            li {
-                display: inline-block;
-
-                &:not(:first-child):before {
-                    content: "|";
-                    padding: 0 10px 0 8px;
-                }
-            }
-
-            a {
-                display: inline !important;
-                color: var(--link-footer);
-            }
-        }
-
-        &__settings {
-            margin-top: 10px;
-            display: flex;
-            flex-flow: column;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        &__language {
-            position: relative;
+        li {
             display: inline-block;
 
-            button {
-                width: auto;
-                height: auto;
-                padding: 0 0 0 25px;
-                background: transparent;
-                color: var(--text);
-                font-size: 12px;
-                font-weight: $font-weight-normal;
-                line-height: 20px;
-                background: var(--svg--language) left center no-repeat;
-                background-size: 20px 20px;
-                border: none;
-                cursor: pointer;
-
-                &:hover {
-                    color: var(--black);
-                }
-            }
-
-            ul {
-                display: grid;
-                overflow: hidden;
-                grid-template-columns: 1fr 1fr;
-                grid-auto-flow: row;
-                gap: 2px;
-                padding: 2px;
-                //width: 350px;
-                bottom: 25px;
-                white-space: nowrap;
-                transform: translateX(-50%);
-            }
-
-            li {
-                a {
-                    display: block;
-                    padding: 6px;
-                    border-radius: 5px;
-                    color: var(--text);
-                    cursor: pointer;
-
-                    &.active {
-                        font-weight: $font-weight-bold;
-                    }
-
-                    &.active,
-                    &:hover {
-                        color: var(--text);
-                        background: var(--focus);
-                        text-decoration: none;
-                    }
-                }
+            &:not(:first-child):before {
+                content: "|";
+                padding: 0 10px 0 8px;
             }
         }
 
-        @include screen(960) {
-            display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: minmax(0, 1fr);
-            gap: 16px;
-            align-content: center;
+        a {
+            display: inline !important;
+            color: var(--link-footer);
+        }
+    }
 
-            &--boxed,
-            &--main {
-                .fragment-footer {
-                    &__product {
-                        margin-right: auto;
-                    }
+    &__settings {
+        margin-top: 10px;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        gap: 10px;
+    }
 
-                    &__links {
-                        order: 15;
-                        margin: 0 0 0 auto;
-                    }
+    &__language {
+        position: relative;
+        display: inline-block;
 
-                    &__settings {
-                        flex-flow: row;
-                        margin-top: 0;
-                    }
-                }
+        button {
+            width: auto;
+            height: auto;
+            padding: 0 0 0 25px;
+            background: transparent;
+            color: var(--text);
+            font-size: 12px;
+            font-weight: defaults.$font-weight-normal;
+            line-height: 20px;
+            background: var(--svg--language) left center no-repeat;
+            background-size: 20px 20px;
+            border: none;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--black);
             }
+        }
 
-            &--boxed {
-                width: 840px;
+        ul {
+            display: grid;
+            overflow: hidden;
+            grid-template-columns: 1fr 1fr;
+            grid-auto-flow: row;
+            gap: 2px;
+            padding: 2px;
+            //width: 350px;
+            bottom: 25px;
+            white-space: nowrap;
+            transform: translateX(-50%);
+        }
+
+        li {
+            a {
+                display: block;
+                padding: 6px;
+                border-radius: 5px;
+                color: var(--text);
+                cursor: pointer;
+
+                &.active {
+                    font-weight: defaults.$font-weight-bold;
+                }
+
+                &.active,
+                &:hover {
+                    color: var(--text);
+                    background: var(--focus);
+                    text-decoration: none;
+                }
             }
         }
     }
+
+    @include defaults.screen(960) {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(0, 1fr);
+        gap: 16px;
+        align-content: center;
+
+        &--boxed,
+        &--main {
+            .fragment-footer {
+                &__product {
+                    margin-right: auto;
+                }
+
+                &__links {
+                    order: 15;
+                    margin: 0 0 0 auto;
+                }
+
+                &__settings {
+                    flex-flow: row;
+                    margin-top: 0;
+                }
+            }
+        }
+
+        &--boxed {
+            width: 840px;
+        }
+    }
+}
 
 </style>

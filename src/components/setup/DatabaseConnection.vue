@@ -306,33 +306,31 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+.setup {
+    &__or {
+        position: relative;
+        overflow: hidden;
+        margin: 1em 0;
+        text-align: center;
 
-    .setup {
-        &__or {
+        &:before {
+            content: "";
+            position: absolute;
+            top: .8em;
+            left: 0;
+            right: 0;
+            display: block;
+            height: 1px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        span {
             position: relative;
-            overflow: hidden;
-            margin: 1em 0;
-            text-align: center;
-
-            &:before {
-                content: "";
-                position: absolute;
-                top: .8em;
-                left: 0;
-                right: 0;
-                display: block;
-                height: 1px;
-                background: var(--border);
-                z-index: 1;
-            }
-
-            span {
-                position: relative;
-                padding: 0 10px;
-                background: var(--popup-bg);
-                z-index: 2;
-            }
+            padding: 0 10px;
+            background: var(--popup-bg);
+            z-index: 2;
         }
     }
+}
 </style>

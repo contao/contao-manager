@@ -207,37 +207,35 @@
 </script>
 
 <style lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+.composer-package {
+    &__stats {
+        display: inline-block;
+        margin-right: 15px;
+        padding-left: 18px;
+        font-size: 13px;
+        background-position: 0 50%;
+        background-repeat: no-repeat;
+        background-size: 13px 13px;
 
-    .composer-package {
-        &__stats {
-            display: inline-block;
-            margin-right: 15px;
-            padding-left: 18px;
-            font-size: 13px;
-            background-position: 0 50%;
+        &--license {
+            padding-left: 0;
+        }
+
+        &--downloads {
+            background-image: var(--svg--downloads);
+        }
+
+        &--favers {
+            background-image: var(--svg--favers);
+        }
+
+        &--funding {
+            width: 16px;
+            background-image: url("~contao-package-list/src/assets/images/funding.svg");
+            background-size: 16px 16px;
             background-repeat: no-repeat;
-            background-size: 13px 13px;
-
-            &--license {
-                padding-left: 0;
-            }
-
-            &--downloads {
-                background-image: var(--svg--downloads);
-            }
-
-            &--favers {
-                background-image: var(--svg--favers);
-            }
-
-            &--funding {
-                width: 16px;
-                background-image: url("~contao-package-list/src/assets/images/funding.svg");
-                background-size: 16px 16px;
-                background-repeat: no-repeat;
-                text-decoration: none !important;
-            }
+            text-decoration: none !important;
         }
     }
+}
 </style>

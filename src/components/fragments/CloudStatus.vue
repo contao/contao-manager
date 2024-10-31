@@ -120,98 +120,96 @@
 </script>
 
 <style lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+.cloud-status {
+    margin-left: 8px;
+    position: relative;
 
-    .cloud-status {
-        margin-left: 8px;
-        position: relative;
+    &__button {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 8px;
+        cursor: help !important;
+    }
 
-        &__button {
-            margin-left: 0;
-            margin-right: 0;
-            padding-left: 8px;
-            cursor: help !important;
+    &__popup {
+        position: absolute;
+        text-align: center;
+        left: 0;
+        bottom: 55px;
+        margin: 0;
+        padding: 0 0 15px;
+        outline: none;
+        background: var(--form-bg);
+        color: var(--text);
+        border-bottom: 3px solid var(--contao);
+        border-radius: 5px;
+        box-shadow: 0 0 2px var(--shadow);
+        z-index: 100;
+
+        &:after {
+            position: absolute;
+            left: 38px;
+            bottom: -6px;
+            width: 0;
+            height: 0;
+            margin-left: -4px;
+            border-style: solid;
+            border-width: 4px 3.5px 0 3.5px;
+            border-color: var(--contao) transparent transparent transparent;
+            content: "";
         }
 
-        &__popup {
-            position: absolute;
-            text-align: center;
-            left: 0;
-            bottom: 55px;
-            margin: 0;
-            padding: 0 0 15px;
-            outline: none;
-            background: var(--form-bg);
-            color: var(--text);
-            border-bottom: 3px solid var(--contao);
-            border-radius: 5px;
-            box-shadow: 0 0 2px var(--shadow);
-            z-index: 100;
+        &--error {
+            color: var(--clr-btn);
+            background-color: var(--btn-alert);
+            border-color: var(--btn-alert);
 
             &:after {
-                position: absolute;
-                left: 38px;
-                bottom: -6px;
-                width: 0;
-                height: 0;
-                margin-left: -4px;
-                border-style: solid;
-                border-width: 4px 3.5px 0 3.5px;
-                border-color: var(--contao) transparent transparent transparent;
-                content: "";
+                left: 27px;
+                border-color: var(--btn-alert) transparent transparent transparent;
             }
-
-            &--error {
-                color: var(--clr-btn);
-                background-color: var(--btn-alert);
-                border-color: var(--btn-alert);
-
-                &:after {
-                    left: 27px;
-                    border-color: var(--btn-alert) transparent transparent transparent;
-                }
-            }
-        }
-
-        &__headline {
-            padding: 15px 20px 0;
-            font-size: 16px;
-            white-space: pre;
-        }
-
-        &__version {
-            margin: 0 0 8px;
-            font-size: 12px;
-        }
-
-        &__link {
-            display: inline-block;
-            margin: 15px 10px 0;
-        }
-
-        &__error {
-            padding: 8px 20px 8px;
-            hyphens: auto;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 12px;
-            text-align: left;
-            border-spacing: 0;
-            border-collapse: collapse;
-        }
-
-        th {
-            padding: 3px 5px 3px 20px;
-        }
-
-        td {
-            padding: 3px 20px 3px 0;
-        }
-
-        tr:nth-child(odd) {
-            background: var(--table-odd-bg);
         }
     }
+
+    &__headline {
+        padding: 15px 20px 0;
+        font-size: 16px;
+        white-space: pre;
+    }
+
+    &__version {
+        margin: 0 0 8px;
+        font-size: 12px;
+    }
+
+    &__link {
+        display: inline-block;
+        margin: 15px 10px 0;
+    }
+
+    &__error {
+        padding: 8px 20px 8px;
+        hyphens: auto;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 12px;
+        text-align: left;
+        border-spacing: 0;
+        border-collapse: collapse;
+    }
+
+    th {
+        padding: 3px 5px 3px 20px;
+    }
+
+    td {
+        padding: 3px 20px 3px 0;
+    }
+
+    tr:nth-child(odd) {
+        background: var(--table-odd-bg);
+    }
+}
 </style>

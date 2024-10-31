@@ -90,8 +90,6 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@import "~contao-package-list/src/assets/styles/defaults";
-
 .widget {
     &-text--password input {
         padding-right: 40px !important;

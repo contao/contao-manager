@@ -36,99 +36,99 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .boot-check {
-        padding: 10px;
+.boot-check {
+    padding: 10px;
 
-        &:after {
-            display: table;
-            clear: both;
-            content: "";
+    &:after {
+        display: table;
+        clear: both;
+        content: "";
+    }
+
+    &__icon {
+        float: left;
+
+        .sk-circle {
+            width: 34px;
+            height: 34px;
+            margin: 3px;
         }
 
-        &__icon {
-            float: left;
-
-            .sk-circle {
-                width: 34px;
-                height: 34px;
-                margin: 3px;
-            }
-
-            svg {
-                display: block;
-                width: 40px;
-                height: 40px;
-            }
-
-            &--success svg {
-                fill: var(--btn-primary);
-            }
-
-            &--info svg,
-            &--warning svg {
-                fill: var(--btn-warning);
-            }
-
-            &--error svg {
-                fill: var(--btn-alert);
-            }
+        svg {
+            display: block;
+            width: 40px;
+            height: 40px;
         }
 
+        &--success svg {
+            fill: var(--btn-primary);
+        }
+
+        &--info svg,
+        &--warning svg {
+            fill: var(--btn-warning);
+        }
+
+        &--error svg {
+            fill: var(--btn-alert);
+        }
+    }
+
+    &__label {
+        margin-left: 50px;
+    }
+
+    &__title,
+    &__description,
+    &__detail {
+        margin: 0;
+        line-height: inherit;
+        overflow: hidden;
+        text-overflow: ellipsis ;
+    }
+
+    &__detail {
+        margin-top: 5px;
+        font-size: 12px;
+    }
+
+    &__action {
+        margin-left: 50px;
+
+        button {
+            margin: 15px 0 10px;
+            height: 33px;
+            line-height: 33px;
+        }
+    }
+
+    @include defaults.screen(960) {
         &__label {
-            margin-left: 50px;
-        }
-
-        &__title,
-        &__description,
-        &__detail {
-            margin: 0;
-            line-height: inherit;
-            overflow: hidden;
-            text-overflow: ellipsis ;
-        }
-
-        &__detail {
-            margin-top: 5px;
-            font-size: 12px;
+            float: left;
+            width: 540px;
+            margin-left: 10px;
         }
 
         &__action {
-            margin-left: 50px;
+            float: right;
+            margin: 0 0 0 10px;
+            width: 140px;
+            text-align: center;
 
             button {
-                margin: 15px 0 10px;
-                height: 33px;
-                line-height: 33px;
-            }
-        }
-
-        @include screen(960) {
-            &__label {
-                float: left;
-                width: 540px;
-                margin-left: 10px;
+                margin: 3px 0;
             }
 
-            &__action {
-                float: right;
-                margin: 0 0 0 10px;
-                width: 140px;
-                text-align: center;
-
-                button {
-                    margin: 3px 0;
-                }
-
-                a[target="_blank"] {
-                    display: inline-block;
-                    margin: 10px 0;
-                    padding-left: 20px;
-                    background: var(--svg--link-blank);
-                    background-size: 16px 16px;
-                }
+            a[target="_blank"] {
+                display: inline-block;
+                margin: 10px 0;
+                padding-left: 20px;
+                background: var(--svg--link-blank);
+                background-size: 16px 16px;
             }
         }
     }
+}
 </style>

@@ -448,73 +448,73 @@ export default {
 </script>
 
 <style lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .database-migration {
-        &__header {
-            margin-left: auto;
-            margin-right: auto;
-            padding: 40px 0;
-            text-align: center;
-        }
+.database-migration {
+    &__header {
+        margin-left: auto;
+        margin-right: auto;
+        padding: 40px 0;
+        text-align: center;
+    }
 
-        &__icon {
-            background: var(--contao);
-            border-radius: 10px;
-            padding:10px;
-        }
+    &__icon {
+        background: var(--contao);
+        border-radius: 10px;
+        padding:10px;
+    }
 
-        &__headline {
-            margin-top: .5em;
-            margin-bottom: .5em;
-            font-size: 36px;
-            font-weight: $font-weight-light;
-            line-height: 1;
-        }
+    &__headline {
+        margin-top: .5em;
+        margin-bottom: .5em;
+        font-size: 36px;
+        font-weight: defaults.$font-weight-light;
+        line-height: 1;
+    }
 
-        &__description {
-            margin: 0 50px;
-            font-weight: $font-weight-bold;
-        }
+    &__description {
+        margin: 0 50px;
+        font-weight: defaults.$font-weight-bold;
+    }
 
-        &__actions {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-top: 2em;
-            padding: 0 50px;
+    &__actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2em;
+        padding: 0 50px;
 
-            @include screen(960) {
-                flex-direction: row;
-            }
-        }
-
-        .widget-button {
-            width: 280px;
-            height: 35px;
-            margin: 5px;
-            padding: 0 30px;
-            line-height: 35px;
-
-            @include screen(960) {
-                width: auto;
-            }
-        }
-
-        &__main {
-            margin: 0 50px 50px;
-            background: #24292e;
-        }
-
-        &__loading {
-            width: 30px;
-            margin: 40px auto;
-
-            .sk-circle {
-                width: 30px;
-                height: 30px;
-            }
+        @include defaults.screen(960) {
+            flex-direction: row;
         }
     }
+
+    .widget-button {
+        width: 280px;
+        height: 35px;
+        margin: 5px;
+        padding: 0 30px;
+        line-height: 35px;
+
+        @include defaults.screen(960) {
+            width: auto;
+        }
+    }
+
+    &__main {
+        margin: 0 50px 50px;
+        background: #24292e;
+    }
+
+    &__loading {
+        width: 30px;
+        margin: 40px auto;
+
+        .sk-circle {
+            width: 30px;
+            height: 30px;
+        }
+    }
+}
 </style>

@@ -101,32 +101,29 @@
 
 
 <style rel="stylesheet/scss" lang="scss">
+.package-uploads {
+    &__overlay {
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        position: fixed;
+        z-index: 9999;
+        opacity: .6;
+        text-align: center;
+        background: #000;
 
-    .package-uploads {
-        &__overlay {
-            top: 0;
-            bottom: 0;
-            right: 0;
+        div {
+            margin: -.5em 0 0;
+            position: absolute;
+            top: 50%;
             left: 0;
-            position: fixed;
-            z-index: 9999;
-            opacity: .6;
-            text-align: center;
-            background: #000;
-
-            div {
-                margin: -.5em 0 0;
-                position: absolute;
-                top: 50%;
-                left: 0;
-                right: 0;
-                -webkit-transform: translateY(-50%);
-                -ms-transform: translateY(-50%);
-                transform: translateY(-50%);
-                font-size: 40px;
-                color: #fff;
-                padding: 0;
-            }
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 40px;
+            color: #fff;
+            padding: 0;
         }
     }
+}
 </style>

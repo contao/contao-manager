@@ -274,10 +274,9 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
 .log-viewer {
-
     &__status {
         margin: 100px 0;
         text-align: center;
@@ -353,7 +352,7 @@
         background: var(--form-bg);
         border-radius: var(--border-radius);
 
-        @include screen(600) {
+        @include defaults.screen(600) {
             overflow-y: scroll;
             max-height: calc(100vh - 300px);
         }
@@ -364,7 +363,7 @@
         padding: 10px 0;
         border-bottom: 1px solid var(--border--light);
 
-        @include screen(600) {
+        @include defaults.screen(600) {
             display: flex;
         }
 
@@ -379,12 +378,12 @@
         &--header {
             display: none;
 
-            @include screen(600) {
+            @include defaults.screen(600) {
                 display: flex;
                 position: sticky;
                 top: 0;
                 z-index: 1;
-                font-weight: $font-weight-bold;
+                font-weight: defaults.$font-weight-bold;
                 background: var(--log-header-bg) !important;
                 color: #FFF;
                 border-top-left-radius: 2px;
@@ -419,7 +418,7 @@
             padding: 5px 10px;
             background: #24292e;
             border-bottom: none;
-            font-family: $font-monospace;
+            font-family: defaults.$font-monospace;
             color: #f6f8fa;
             font-size: .8em;
             line-height: 1.5;
@@ -454,7 +453,7 @@
             font-style: normal;
         }
 
-        @include screen(600) {
+        @include defaults.screen(600) {
             width: 220px;
             padding-bottom: 10px;
         }
@@ -467,7 +466,7 @@
     &__datetime {
         display: block;
 
-        @include screen(600) {
+        @include defaults.screen(600) {
             margin-bottom: 1em;
         }
     }
@@ -479,14 +478,14 @@
         background: var(--border);
         border-radius: var(--border-radius);
         font-size: .9em;
-        font-weight: $font-weight-medium;
+        font-weight: defaults.$font-weight-medium;
         text-transform: lowercase;
 
         &--desktop {
             display: none;
         }
 
-        @include screen(600) {
+        @include defaults.screen(600) {
             &--desktop {
                 display: inline-block;
             }
@@ -519,7 +518,7 @@
 
     &__message {
         span:nth-child(even) {
-            font-weight: $font-weight-bold;
+            font-weight: defaults.$font-weight-bold;
             color: var(--black);
         }
     }

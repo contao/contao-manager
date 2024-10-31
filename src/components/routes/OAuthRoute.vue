@@ -127,62 +127,62 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .view-oauth {
-        &__header {
-            max-width: 280px;
-            margin: 0 auto 60px;
-            padding-top: 40px;
-            text-align: center;
-        }
+.view-oauth {
+    &__header {
+        max-width: 280px;
+        margin: 0 auto 60px;
+        padding-top: 40px;
+        text-align: center;
+    }
 
-        &__product {
-            margin-top: 15px;
-            font-size: 36px;
-            font-weight: $font-weight-light;
-            line-height: 1;
-        }
+    &__product {
+        margin-top: 15px;
+        font-size: 36px;
+        font-weight: defaults.$font-weight-light;
+        line-height: 1;
+    }
 
-        &__form {
-            position: relative;
-            max-width: 280px;
-            margin: 0 auto 80px;
-            text-align: center;
+    &__form {
+        position: relative;
+        max-width: 280px;
+        margin: 0 auto 80px;
+        text-align: center;
 
-            input,
-            select {
-                margin: 5px 0 10px;
-            }
-        }
-
-        &__headline {
-            margin-bottom: 0;
-        }
-
-        &__description {
-            margin-top: .5em;
-            margin-bottom: .5em;
-        }
-
-        &__client {
-            margin: 1em 0;
-            font-size: 32px;
-        }
-
-        &__warning {
-          color: var(--btn-alert);
-          margin-top: .5em;
-          margin-bottom: 2em;
-        }
-
-        &__button {
-            margin-top: 20px;
-
-            .sk-circle {
-                color: #fff;
-                text-align: center;
-            }
+        input,
+        select {
+            margin: 5px 0 10px;
         }
     }
+
+    &__headline {
+        margin-bottom: 0;
+    }
+
+    &__description {
+        margin-top: .5em;
+        margin-bottom: .5em;
+    }
+
+    &__client {
+        margin: 1em 0;
+        font-size: 32px;
+    }
+
+    &__warning {
+      color: var(--btn-alert);
+      margin-top: .5em;
+      margin-bottom: 2em;
+    }
+
+    &__button {
+        margin-top: 20px;
+
+        .sk-circle {
+            color: #fff;
+            text-align: center;
+        }
+    }
+}
 </style>

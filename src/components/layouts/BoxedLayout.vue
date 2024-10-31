@@ -22,43 +22,42 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .layout-boxed,
-    .animate-blur-out,
-    .animate-blur-in {
-        display: table;
-        width: 100%;
-        height: 100%;
+.layout-boxed,
+.animate-blur-out,
+.animate-blur-in {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.layout-boxed {
+
+    &__cell {
+        display: table-cell;
+        overflow: hidden;
+        vertical-align: middle;
+        padding: 10px;
     }
 
-    .layout-boxed {
+    &__container {
+        position: relative;
+        max-width: 380px;
+        margin: 0 auto;
+        background: var(--popup-bg);
+        border-radius: 8px;
+    }
 
-        &__cell {
-            display: table-cell;
-            overflow: hidden;
-            vertical-align: middle;
-            padding: 10px;
-        }
-
+    @include defaults.screen(960) {
         &__container {
-            position: relative;
-            max-width: 380px;
-            margin: 0 auto;
-            background: var(--popup-bg);
-            border-radius: 8px;
-        }
+            margin-top: 20px;
+            margin-bottom: 20px;
 
-        @include screen(960) {
-            &__container {
-                margin-top: 20px;
-                margin-bottom: 20px;
-
-                &--wide {
-                    max-width: 940px;
-                }
+            &--wide {
+                max-width: 940px;
             }
         }
     }
-
+}
 </style>

@@ -83,55 +83,55 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    @import "~contao-package-list/src/assets/styles/defaults";
+@use "~contao-package-list/src/assets/styles/defaults";
 
-    .logout-warning {
-        position: fixed;
-        display: block;
-        top: 50%;
-        left: 50%;
-        width: 500px;
-        max-width: 90%;
-        text-align: center;
-        background: var(--popup-bg);
-        z-index: 10;
-        opacity: 1;
-        transform: translate(-50%, -50%);
-        border-radius: var(--border-radius);
-        overflow: hidden;
+.logout-warning {
+    position: fixed;
+    display: block;
+    top: 50%;
+    left: 50%;
+    width: 500px;
+    max-width: 90%;
+    text-align: center;
+    background: var(--popup-bg);
+    z-index: 10;
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    border-radius: var(--border-radius);
+    overflow: hidden;
 
-        &__headline {
-            position: relative;
-            background: var(--contao);
-            color: #fff;
-            font-weight: $font-weight-normal;
-            line-height: 40px;
+    &__headline {
+        position: relative;
+        background: var(--contao);
+        color: #fff;
+        font-weight: defaults.$font-weight-normal;
+        line-height: 40px;
 
-            &--complete {
-                background-color: var(--btn-primary);
-            }
-
-            &--error {
-                background-color: var(--btn-alert);
-            }
+        &--complete {
+            background-color: var(--btn-primary);
         }
 
-        &__text {
-            margin: 2em 40px;
-        }
-
-        &__countdown {
-            margin: -20px 0 20px;
-            font: $font-weight-bold 4em/1.6 $font-monospace;
-            color: var(--btn-warning);
-        }
-
-        .widget-button {
-            width: auto;
-            height: 35px;
-            margin: 0 5px 2em 5px;
-            padding: 0 30px;
-            line-height: 35px;
+        &--error {
+            background-color: var(--btn-alert);
         }
     }
+
+    &__text {
+        margin: 2em 40px;
+    }
+
+    &__countdown {
+        margin: -20px 0 20px;
+        font: defaults.$font-weight-bold 4em/1.6 defaults.$font-monospace;
+        color: var(--btn-warning);
+    }
+
+    .widget-button {
+        width: auto;
+        height: 35px;
+        margin: 0 5px 2em 5px;
+        padding: 0 30px;
+        line-height: 35px;
+    }
+}
 </style>
