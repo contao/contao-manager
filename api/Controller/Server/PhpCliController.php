@@ -19,8 +19,10 @@ use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/server/php-cli', methods: ['GET'])]
+#[IsGranted('ROLE_READ')]
 class PhpCliController
 {
     public function __invoke(ServerInfo $serverInfo, ConsoleProcessFactory $processFactory): Response

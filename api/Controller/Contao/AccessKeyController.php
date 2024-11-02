@@ -20,8 +20,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/contao/access-key', methods: ['GET', 'PUT', 'DELETE'])]
+#[IsGranted('ROLE_UPDATE')]
 class AccessKeyController
 {
     public function __construct(private readonly ContaoApi $api)

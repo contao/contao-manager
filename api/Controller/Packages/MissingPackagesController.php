@@ -21,8 +21,10 @@ use Contao\ManagerApi\Composer\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/packages/missing', methods: ['GET'])]
+#[IsGranted('ROLE_READ')]
 class MissingPackagesController
 {
     private readonly InstalledRepositoryInterface $localRepository;

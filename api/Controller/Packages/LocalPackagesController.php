@@ -25,9 +25,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/packages/local', methods: ['GET'])]
 #[Route(path: '/packages/local/{name}', methods: ['GET'], requirements: ['name' => '.+'])]
+#[IsGranted('ROLE_READ')]
 class LocalPackagesController
 {
     private readonly InstalledRepositoryInterface $localRepository;

@@ -21,8 +21,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/server/admin-user', methods: ['GET', 'POST'])]
+#[IsGranted('ROLE_INSTALL')]
 class AdminUserController
 {
     public function __construct(private readonly ContaoConsole $contaoConsole)

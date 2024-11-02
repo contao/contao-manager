@@ -21,8 +21,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/task', methods: ['GET', 'PUT', 'PATCH', 'DELETE'])]
+#[IsGranted('ROLE_UPDATE')]
 class TaskController
 {
     public function __construct(private readonly TaskManager $taskManager)

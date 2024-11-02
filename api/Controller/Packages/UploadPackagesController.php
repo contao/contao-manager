@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class UploadPackagesController
 {
@@ -47,6 +48,7 @@ class UploadPackagesController
     }
 
     #[Route(path: '/packages/uploads', methods: ['GET'])]
+    #[IsGranted('ROLE_READ')]
     public function __invoke(): JsonResponse
     {
         $this->validateUploadSupport();
@@ -73,6 +75,7 @@ class UploadPackagesController
     }
 
     #[Route(path: '/packages/uploads', methods: ['POST'], defaults: ['form-data' => true])]
+    #[IsGranted('ROLE_INSTALL')]
     public function upload(Request $request): JsonResponse
     {
         $this->validateUploadSupport();
@@ -129,6 +132,7 @@ class UploadPackagesController
     }
 
     #[Route(path: '/packages/uploads/{id}', methods: ['DELETE'])]
+    #[IsGranted('ROLE_INSTALL')]
     public function delete(string $id): JsonResponse
     {
         $this->validateUploadSupport();

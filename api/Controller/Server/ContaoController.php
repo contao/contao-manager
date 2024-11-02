@@ -27,8 +27,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/server/contao', methods: ['GET', 'POST'])]
 class ContaoController
 {
     public function __construct(
@@ -41,6 +41,15 @@ class ContaoController
     ) {
     }
 
+    #[Route(path: '/server/contao', methods: ['POST'])]
+    #[IsGranted('ROLE_INSTALL')]
+    public function update(Request $request, ServerInfo $serverInfo): Response
+    {
+        return $this->__invoke($request, $serverInfo);
+    }
+
+    #[Route(path: '/server/contao', methods: ['GET'])]
+    #[IsGranted('ROLE_READ')]
     public function __invoke(Request $request, ServerInfo $serverInfo): Response
     {
         if (!$serverInfo->getPhpExecutable()) {

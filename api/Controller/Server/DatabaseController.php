@@ -21,8 +21,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/server/database', methods: ['GET', 'POST'])]
 class DatabaseController
 {
     // double escaping is necessary for JavaScript validation
@@ -34,6 +34,15 @@ class DatabaseController
     ) {
     }
 
+    #[Route(path: '/server/database', methods: ['POST'])]
+    #[IsGranted('ROLE_INSTALL')]
+    public function write(Request $request, ServerInfo $serverInfo): Response
+    {
+        return $this->__invoke($request, $serverInfo);
+    }
+
+    #[Route(path: '/server/database', methods: ['GET'])]
+    #[IsGranted('ROLE_READ')]
     public function __invoke(Request $request, ServerInfo $serverInfo): Response
     {
         if (!$serverInfo->getPhpExecutable()) {

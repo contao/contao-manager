@@ -16,25 +16,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/server/opcache', methods: ['GET', 'DELETE'])]
 class OpcacheController
 {
-    public function __invoke(Request $request): Response
+    #[Route(path: '/server/opcache', methods: ['GET'])]
+    #[IsGranted('ROLE_READ')]
+    public function getOpcache(): Response
     {
         if (!\function_exists('opcache_reset')) {
             return new JsonResponse(null, Response::HTTP_NOT_IMPLEMENTED);
         }
 
-        return match ($request->getMethod()) {
-            'GET' => $this->getOpcache(),
-            'DELETE' => $this->deleteOpcache(),
-            default => new Response(null, Response::HTTP_METHOD_NOT_ALLOWED),
-        };
-    }
-
-    private function getOpcache(): Response
-    {
         global $opcacheEnabled;
 
         $status = [
@@ -45,8 +38,14 @@ class OpcacheController
         return new JsonResponse($status);
     }
 
-    private function deleteOpcache(): Response
+    #[Route(path: '/server/opcache', methods: ['DELETE'])]
+    #[IsGranted('ROLE_UPDATE')]
+    public function deleteOpcache(): Response
     {
+        if (!\function_exists('opcache_reset')) {
+            return new JsonResponse(null, Response::HTTP_NOT_IMPLEMENTED);
+        }
+
         opcache_reset();
 
         return $this->getOpcache();

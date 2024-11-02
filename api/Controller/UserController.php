@@ -14,6 +14,7 @@ namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\Security\User;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,11 +22,12 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to handle users.
  */
-class UserController
+class UserController extends AbstractController
 {
     public function __construct(
         private readonly UserConfig $config,
@@ -37,6 +39,7 @@ class UserController
      * Returns a list of users in the configuration file.
      */
     #[Route(path: '/users', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function listUsers(): Response
     {
         return $this->getUserResponse($this->config->getUsers());
@@ -46,6 +49,7 @@ class UserController
      * Adds a new user to the configuration file.
      */
     #[Route(path: '/users', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function createUser(Request $request): Response
     {
         $user = $this->createUserFromRequest($request);
@@ -63,6 +67,7 @@ class UserController
      * Returns user data from the configuration file.
      */
     #[Route(path: '/users/{username}', name: 'user_get', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function retrieveUser(string $username): Response
     {
         $user = $this->config->getUser($username);
@@ -78,6 +83,7 @@ class UserController
      * Replaces user data in the configuration file.
      */
     #[Route(path: '/users/{username}', methods: ['PUT'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function replaceUser(Request $request): Response
     {
         $user = $this->createUserFromRequest($request);
@@ -95,6 +101,7 @@ class UserController
      * Deletes a user from the configuration file.
      */
     #[Route(path: '/users/{username}', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function deleteUser(string $username): Response
     {
         $user = $this->config->getUser($username);
@@ -112,6 +119,7 @@ class UserController
      * Returns a list of tokens of a user in the configuration file.
      */
     #[Route(path: '/users/{username}/tokens', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function listTokens(string $username): Response
     {
         $tokens = array_filter(
@@ -126,6 +134,7 @@ class UserController
      * Adds a new token for a user to the configuration file.
      */
     #[Route(path: '/users/{username}/tokens', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function createToken(string $username, Request $request): Response
     {
         if (!$this->config->hasUser($username)) {
@@ -153,6 +162,7 @@ class UserController
      * Returns token data of a user from the configuration file.
      */
     #[Route(path: '/users/{username}/tokens/{id}', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function retrieveToken(string $username, string $id): Response
     {
         $payload = $this->config->getToken($id);
@@ -168,6 +178,7 @@ class UserController
      * Deletes a token from the configuration file.
      */
     #[Route(path: '/users/{username}/tokens/{id}', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function deleteToken(string $username, string $id): Response
     {
         $payload = $this->config->getToken($id);

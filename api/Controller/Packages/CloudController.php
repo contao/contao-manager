@@ -22,8 +22,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/packages/cloud', methods: ['GET', 'PUT'])]
 class CloudController
 {
     public function __construct(
@@ -33,16 +33,9 @@ class CloudController
     ) {
     }
 
-    public function __invoke(Request $request): Response
-    {
-        return match ($request->getMethod()) {
-            'GET' => $this->getCloudData(),
-            'PUT' => $this->writeAndInstall($request),
-            default => new Response(null, Response::HTTP_METHOD_NOT_ALLOWED),
-        };
-    }
-
-    private function getCloudData(): Response
+    #[Route(path: '/packages/cloud', methods: ['GET', 'PUT'])]
+    #[IsGranted('ROLE_READ')]
+    public function getCloudData(): Response
     {
         return new JsonResponse([
             'composerJson' => $this->environment->getComposerJson(),
@@ -52,7 +45,9 @@ class CloudController
         ]);
     }
 
-    private function writeAndInstall(Request $request): Response
+    #[Route(path: '/packages/cloud', methods: ['PUT'])]
+    #[IsGranted('ROLE_INSTALL')]
+    public function writeAndInstall(Request $request): Response
     {
         if ($this->taskManager->hasTask()) {
             throw new BadRequestHttpException('A task is already active');

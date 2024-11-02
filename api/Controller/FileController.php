@@ -14,16 +14,19 @@ namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/files/{file}', methods: ['GET', 'PUT'])]
-class FileController
+#[IsGranted('ROLE_ADMIN')]
+class FileController extends AbstractController
 {
-    private array $allowedFiles = [
+    private const ALLOWED_FILES = [
         'composer.json',
         'composer.lock',
     ];
@@ -36,7 +39,7 @@ class FileController
 
     public function __invoke(Request $request): Response
     {
-        if (!\in_array($request->attributes->get('file'), $this->allowedFiles, true)) {
+        if (!\in_array($request->attributes->get('file'), self::ALLOWED_FILES, true)) {
             return new ApiProblemResponse((new ApiProblem())->setStatus(Response::HTTP_FORBIDDEN));
         }
 

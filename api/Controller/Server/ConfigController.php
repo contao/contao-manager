@@ -24,8 +24,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/server/config', methods: ['GET', 'PUT'])]
 class ConfigController
 {
     public function __construct(
@@ -36,31 +36,9 @@ class ConfigController
     ) {
     }
 
-    public function __invoke(Request $request): Response
-    {
-        if ($request->isMethod('PUT')) {
-            $phpCli = $request->request->get('php_cli');
-
-            if (null !== ($error = $this->validatePhpCli($phpCli))) {
-                $problem = (new ApiProblem('Bad Request'))->setStatus(400);
-                $problem->setDetail($error);
-
-                return new ApiProblemResponse($problem);
-            }
-
-            $this->config->set('php_cli', $phpCli);
-
-            if ($request->request->getBoolean('cloud', true)) {
-                $this->config->remove('disable_cloud');
-            } else {
-                $this->config->set('disable_cloud', true);
-            }
-        }
-
-        return $this->getTestResult();
-    }
-
-    private function getTestResult(): Response
+    #[Route(path: '/server/config', methods: ['GET'])]
+    #[IsGranted('ROLE_READ')]
+    public function getConfig(): Response
     {
         return new JsonResponse(
             [
@@ -68,6 +46,30 @@ class ConfigController
                 'cloud' => $this->getCloudConfig(),
             ],
         );
+    }
+
+    #[Route(path: '/server/config', methods: ['PUT'])]
+    #[IsGranted('ROLE_INSTALL')]
+    public function setConfig(Request $request): Response
+    {
+        $phpCli = $request->request->get('php_cli');
+
+        if (null !== ($error = $this->validatePhpCli($phpCli))) {
+            $problem = (new ApiProblem('Bad Request'))->setStatus(400);
+            $problem->setDetail($error);
+
+            return new ApiProblemResponse($problem);
+        }
+
+        $this->config->set('php_cli', $phpCli);
+
+        if ($request->request->getBoolean('cloud', true)) {
+            $this->config->remove('disable_cloud');
+        } else {
+            $this->config->set('disable_cloud', true);
+        }
+
+        return $this->getConfig();
     }
 
     private function validatePhpCli(string $phpCli): string|null

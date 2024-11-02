@@ -14,8 +14,10 @@ namespace Contao\ManagerApi\Controller\Server;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/server/phpinfo', methods: ['GET'])]
+#[IsGranted('ROLE_READ')]
 class PhpinfoController
 {
     /**

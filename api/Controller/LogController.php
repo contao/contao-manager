@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to handle log files.
@@ -38,6 +39,7 @@ class LogController
     }
 
     #[Route(path: '/logs', methods: ['GET'])]
+    #[IsGranted('ROLE_READ')]
     public function listFiles(): Response
     {
         if (!$this->filesystem->exists($this->kernel->getProjectDir().'/var/logs')) {
@@ -70,6 +72,7 @@ class LogController
     }
 
     #[Route(path: '/logs/{filename}', methods: ['GET'])]
+    #[IsGranted('ROLE_READ')]
     public function retrieveFile(string $filename, Request $request): Response
     {
         $file = $this->getFile($filename);
@@ -85,6 +88,7 @@ class LogController
     }
 
     #[Route(path: '/logs/{filename}', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function deleteFile(string $filename): Response
     {
         $file = $this->getFile($filename);
