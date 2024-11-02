@@ -1,14 +1,14 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 const handle = (request, { commit }) => new Promise((resolve, reject) => {
     request.then(
         (response) => {
-            commit('setCache', response.body['access-key']);
-            commit('setIsEnabled', response.body['access-key'] !== '');
+            commit('setCache', response.data['access-key']);
+            commit('setIsEnabled', response.data['access-key'] !== '');
 
-            resolve(response.body['access-key']);
+            resolve(response.data['access-key']);
         },
         () => {
             commit('setIsEnabled', false);
@@ -49,15 +49,15 @@ export default {
                 return Promise.reject();
             }
 
-            return handle(Vue.http.get('api/contao/access-key'), store);
+            return handle(axios.get('api/contao/access-key'), store);
         },
 
         set(store, payload) {
-            return handle(Vue.http.put('api/contao/access-key', payload), store);
+            return handle(axios.put('api/contao/access-key', payload), store);
         },
 
         delete(store) {
-            return handle(Vue.http.delete('api/contao/access-key'), store);
+            return handle(axios.delete('api/contao/access-key'), store);
         },
     },
 };

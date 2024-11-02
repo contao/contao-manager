@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 let handleTask;
 let failTask;
@@ -10,7 +10,7 @@ let ignoreErrors = false;
 
 const pollTask = (store, resolve, reject, delay = 5000, attempt = 1) => {
     setTimeout(() => {
-        Vue.http.get('api/task', {
+        axios.get('api/task', {
             timeout: 5000 * attempt,
         }).then(
             response => handleTask(response, store, resolve, reject),
@@ -27,7 +27,7 @@ handleTask = (response, store, resolve, reject) => {
         return;
     }
 
-    if (!(response.body instanceof Object)) {
+    if (!(response.data instanceof Object)) {
         if (!ignoreErrors) {
             store.commit('apiError', response, {root: true});
         }
@@ -35,7 +35,7 @@ handleTask = (response, store, resolve, reject) => {
         return;
     }
 
-    const task = response.body;
+    const task = response.data;
 
     store.commit('setCurrent', task);
 
@@ -143,23 +143,23 @@ export default {
                 delete task.ignoreErrors;
 
                 if (ignoreErrors) {
-                    Vue.http.interceptors.unshift((request, next) => {
-                        next((response) => {
-                            if (request.url.substring(0, 4) === 'api/'
-                                && response.headers.get('Content-Type') !== 'application/json'
-                                && response.status >= 400
-                                && response.status <= 599
-                            ) {
-                                throw response.data;
-                            }
-                        })
-                    });
+                    // Vue.http.interceptors.unshift((request, next) => {
+                    //     next((response) => {
+                    //         if (request.url.substring(0, 4) === 'api/'
+                    //             && response.headers.get('Content-Type') !== 'application/json'
+                    //             && response.status >= 400
+                    //             && response.status <= 599
+                    //         ) {
+                    //             throw response.data;
+                    //         }
+                    //     })
+                    // });
                 }
 
                 store.commit('setCurrent', task);
                 store.commit('setStatus', 'created');
 
-                Vue.http.put('api/task', task).then(
+                axios.put('api/task', task).then(
                     response => handleTask(response, store, resolve, reject),
                     response => failTask(response, store, resolve, reject),
                 );
@@ -176,7 +176,7 @@ export default {
             store.commit('setStatus', 'aborting');
 
             return new Promise((resolve, reject) => {
-                Vue.http.patch('api/task', {status: 'aborting'}).then(
+                axios.patch('api/task', {status: 'aborting'}).then(
                     response => handleTask(response, store, resolve, reject),
                     response => failTask(response, store, resolve, reject),
                 );
@@ -187,7 +187,7 @@ export default {
             commit('setDeleting', true);
 
             try {
-                await Vue.http.delete('api/task');
+                await axios.delete('api/task');
                 commit('setCurrent', null);
                 await dispatch('server/contao/get', false, { root: true });
             } catch (response) {

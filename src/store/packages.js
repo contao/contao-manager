@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import axios from 'axios';
 import { coerce, satisfies, intersects, eq, valid, parse } from 'semver';
 
 import details from 'contao-package-list/src/store/packages/details';
@@ -148,12 +148,12 @@ export default {
         },
 
         add(state, pkg) {
-            Vue.set(state.add, pkg.name, pkg);
+            state.add[pkg.name] = pkg;
         },
 
         change(state, { name, version }) {
             this.commit('packages/restore', name);
-            Vue.set(state.change, name, version);
+            state.change[name] = version;
         },
 
         update(state, name) {
@@ -167,8 +167,8 @@ export default {
         },
 
         restore(state, name) {
-            Vue.delete(state.add, name);
-            Vue.delete(state.change, name);
+            delete state.add[name];
+            delete state.change[name];
 
             if (state.remove.includes(name)) {
                 state.remove.splice(state.remove.indexOf(name), 1);
@@ -274,15 +274,15 @@ export default {
 
             const packages = {};
             const load = [
-                Vue.http.get('api/packages/root'),
-                Vue.http.get('api/packages/local'),
-                Vue.http.get('api/packages/missing'),
+                axios.get('api/packages/root'),
+                axios.get('api/packages/local'),
+                axios.get('api/packages/missing'),
             ];
 
             commit('setInstalled', {
-                root: (await load[0]).body,
-                local: (await load[1]).body,
-                missing: (await load[2]).body
+                root: (await load[0]).data,
+                local: (await load[1]).data,
+                missing: (await load[2]).data
             });
 
             return packages;

@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import routes from './routes';
 
@@ -9,9 +8,8 @@ import OAuthRoute from '../components/routes/OAuthRoute';
 import MaintenanceRoute from '../components/routes/MaintenanceRoute';
 import LogViewerRoute from '../components/routes/LogViewerRoute';
 
-Vue.use(Router);
-
-const router = new Router({
+const router = createRouter({
+    history: createWebHashHistory(),
     routes: [
         {
             name: routes.discover.name,
@@ -39,7 +37,7 @@ const router = new Router({
             path: '/logs',
             component: LogViewerRoute,
         },
-        { path: '*', redirect: '/discover' },
+        { path: '/:pathMatch(.*)*', redirect: '/discover' },
     ],
 });
 

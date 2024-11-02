@@ -1,7 +1,4 @@
-/* eslint-disable no-param-reassign */
-
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex'
 
 import views from '../router/views';
 
@@ -15,9 +12,7 @@ import contao from './contao';
 import server from './server';
 import tasks from './tasks';
 
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
+const store = createStore({
     modules: { auth, algolia, cloud, config, modals, packages, contao, server, tasks },
 
     state: {

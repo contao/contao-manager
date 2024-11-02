@@ -64,8 +64,9 @@
                         <div class="setup__tab" v-if="view === 'require'">
                             <table class="setup__requires">
                                 <tbody>
-                                <template v-for="(version, name) in theme.composerJson.require">
-                                    <tr :key="name">
+                                <!-- eslint-disable vue/no-v-for-template-key -->
+                                <template v-for="(version, name) in theme.composerJson.require" :key="name">
+                                    <tr>
                                         <td>{{ name }}:</td>
                                         <td>{{ version }}</td>
                                     </tr>
@@ -92,11 +93,11 @@
             <header class="setup__header">
                 <img src="../../assets/images/create-project.svg" width="80" height="80" alt="" class="setup__icon"/>
                 <h1 class="setup__headline">{{ $t('ui.setup.create-project.headline') }}</h1>
-                <i18n tag="p" path="ui.setup.create-project.description" class="setup__description">
+                <i18n-t tag="p" keypath="ui.setup.create-project.description" class="setup__description">
                     <template #semver>
                         <a href="https://semver.org" target="_blank" rel="noreferrer noopener">{{ $t('ui.setup.create-project.semver') }}</a>
                     </template>
-                </i18n>
+                </i18n-t>
 
                 <ul class="setup__versions">
                     <template v-for="version in versions">
@@ -113,11 +114,11 @@
                     </template>
                 </ul>
 
-                <i18n tag="p" path="ui.setup.create-project.releaseplan" class="setup__releaseplan">
+                <i18n-t tag="p" keypath="ui.setup.create-project.releaseplan" class="setup__releaseplan">
                     <template #contaoReleasePlan>
                         <a :href="`https://to.contao.org/release-plan?lang=${$i18n.locale}`" target="_blank" rel="noreferrer noopener">{{ $t('ui.setup.create-project.releaseplanLink') }}</a>
                     </template>
-                </i18n>
+                </i18n-t>
             </header>
 
             <main class="setup__form" v-if="!!contaoVersion">
@@ -142,9 +143,9 @@
 
                     <div class="setup__theme" v-if="version === 'theme'">
                         <p>{{ $t('ui.setup.create-project.themeInstall') }}</p>
-                        <i18n path="ui.setup.create-project.themeBuy" tag="p">
+                        <i18n-t keypath="ui.setup.create-project.themeBuy" tag="p">
                             <template #store><a href="https://themes.contao.org" target="_blank">{{ $t('ui.setup.create-project.themeStore') }}</a></template>
-                        </i18n>
+                        </i18n-t>
                         <div v-show="$refs.uploader && $refs.uploader.dropActive" class="package-uploads__overlay">
                             <div>
                                 <img src="../../assets/images/button-upload.svg" alt="" width="128" height="128">
@@ -156,9 +157,9 @@
                     <template v-else>
                         <check-box name="demo" :label="$t('ui.setup.create-project.demo')" :disabled="processing" v-model="demo">
                             <template #description>
-                                <i18n tag="p" path="ui.setup.create-project.demoDescription">
+                                <i18n-t tag="p" keypath="ui.setup.create-project.demoDescription">
                                     <template #store><a href="https://themes.contao.org" target="_blank">{{ $t('ui.setup.create-project.themeStore') }}</a></template>
-                                </i18n>
+                                </i18n-t>
                             </template>
                         </check-box>
                     </template>
@@ -191,9 +192,9 @@
                 </div>
 
                 <div v-else-if="isSearching && results && !Object.keys(results).length" class="setup__theme-search setup__theme-search--empty">
-                    <i18n tag="p" path="ui.setup.create-project.theme.empty">
+                    <i18n-t tag="p" keypath="ui.setup.create-project.theme.empty">
                         <template #query><i>{{ query }}</i></template>
-                    </i18n>
+                    </i18n-t>
                 </div>
 
                 <template v-else-if="isSearching && results">
@@ -417,7 +418,7 @@ export default {
                 this.$store.commit('setSafeMode', true);
                 this.$store.commit('setView', views.READY);
             } else {
-                this.isWeb = (await this.$store.dispatch('server/contao/get', false)).body.public_dir === 'web';
+                this.isWeb = (await this.$store.dispatch('server/contao/get', false)).data.public_dir === 'web';
 
                 await Promise.all([
                     this.$store.dispatch('contao/install-tool/fetch', false),
@@ -553,6 +554,8 @@ export default {
     },
 
     async mounted () {
+        await this.$router.isReady();
+
         // remove existing package query parameters
         if (Object.keys(this.$route.query).length) {
             this.$router.replace({ query: null });
@@ -560,7 +563,7 @@ export default {
 
         await this.$store.dispatch('packages/details/init', { vue: this, component: ThemeDetails });
         this.$store.commit('packages/setInstalled', {});
-        this.isWeb = (await this.$store.dispatch('server/contao/get')).body.public_dir === 'web';
+        this.isWeb = (await this.$store.dispatch('server/contao/get')).data.public_dir === 'web';
     }
 };
 </script>

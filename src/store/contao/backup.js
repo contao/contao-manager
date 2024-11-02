@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -60,7 +60,7 @@ export default {
 
             commit('setLoading', true);
 
-            return Vue.http.get('api/contao/backup').then(handle, handle);
+            return axios.get('api/contao/backup').then(handle, handle);
         }
     },
 };

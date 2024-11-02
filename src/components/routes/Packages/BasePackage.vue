@@ -1,7 +1,7 @@
 <template>
-    <article class="package" :class="(hint || !!$slots.hint) ? 'is--hint' : ''">
+    <article class="package" :class="(hint || !slotEmpty($slots.hint)) ? 'is--hint' : ''">
 
-        <div class="package__hint" v-if="hint || !!$slots.hint">
+        <div class="package__hint" v-if="hint || !slotEmpty($slots.hint)">
             <slot name="hint">
                 <a href="#" class="package__hint-close" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
                 <p>{{ hint }}</p>
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+    import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
     import PackageLogo from 'contao-package-list/src/components/fragments/PackageLogo';
 
     export default {
@@ -59,6 +60,10 @@
             hint: String,
             hintClose: String,
         },
+
+        methods: {
+            slotEmpty,
+        }
     };
 </script>
 

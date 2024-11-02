@@ -39,7 +39,7 @@
                         this.bootDescription = this.$t('ui.server.error');
                     }
                 }).then(() => {
-                    this.$emit('result', 'PhpCli', this.bootState);
+                    this.$emit('result', this.bootState);
                 });
             },
         },

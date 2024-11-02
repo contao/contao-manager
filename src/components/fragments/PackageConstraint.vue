@@ -22,8 +22,7 @@
 </template>
 
 <script>
-    import Vue from 'vue';
-
+    import axios from 'axios';
     import packageStatus from '../../mixins/packageStatus';
 
     export default {
@@ -118,10 +117,10 @@
                 this.$refs.constraint.blur();
                 this.constraintValidating = true;
 
-                Vue.http.post('api/constraint', { constraint: this.constraint }).then(
+                axios.post('api/constraint', { constraint: this.constraint }).then(
                     (response) => {
                         this.constraintValidating = false;
-                        if (response.body.valid) {
+                        if (response.data.valid) {
                             if (this.emit) {
                                 this.$emit('input', this.constraint);
                             } else if (this.isRootInstalled || this.isRequired) {

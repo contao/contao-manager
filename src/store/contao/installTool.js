@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -19,7 +19,7 @@ export default {
 
             if (response && response.status === 200) {
                 state.isSupported = true;
-                state.isLocked = response.body.locked === true;
+                state.isLocked = response.data.locked === true;
             }
         },
     },
@@ -41,7 +41,7 @@ export default {
                 return Promise.resolve(response);
             }
 
-            return Vue.http.get('api/contao/install-tool/lock').then(handle, handle);
+            return axios.get('api/contao/install-tool/lock').then(handle, handle);
         },
 
         lock(store) {
@@ -51,7 +51,7 @@ export default {
                 return Promise.resolve(response);
             }
 
-            return Vue.http.put('api/contao/install-tool/lock').then(handle, handle);
+            return axios.put('api/contao/install-tool/lock').then(handle, handle);
         },
 
         unlock(store) {
@@ -61,7 +61,7 @@ export default {
                 return Promise.resolve(response);
             }
 
-            return Vue.http.delete('api/contao/install-tool/lock').then(handle, handle);
+            return axios.delete('api/contao/install-tool/lock').then(handle, handle);
         },
     },
 };

@@ -33,7 +33,7 @@
                 this.bootDescription = this.$t('ui.server.running');
 
                 const response = await this.$store.dispatch('server/contao/get', false);
-                const result = response.body;
+                const result = response.data;
                 let bootState = this.bootState;
                 let bootDescription = this.bootDescription;
 
@@ -95,7 +95,7 @@
 
                 this.bootState = bootState;
                 this.bootDescription = bootDescription;
-                this.$emit('result', 'Contao', this.bootState);
+                this.$emit('result', this.bootState);
             },
 
             async setup() {

@@ -49,9 +49,9 @@
             <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="view-setup__icon">
             <h1 class="view-setup__headline">{{ $t('ui.setup.welcome') }}</h1>
             <p class="view-setup__description">{{ $t('ui.setup.welcome1') }}</p>
-            <i18n tag="p" class="view-setup__description" path="ui.setup.welcome2">
+            <i18n-t tag="p" class="view-setup__description" keypath="ui.setup.welcome2">
                 <template #support><a href="https://to.contao.org/support" target="_blank">{{ $t('ui.setup.support') }}</a></template>
-            </i18n>
+            </i18n-t>
             <button class="widget-button widget-button--inline widget-button--primary view-setup__start" @click="currentStep=1">{{ $t('ui.setup.start') }}</button>
         </main>
 

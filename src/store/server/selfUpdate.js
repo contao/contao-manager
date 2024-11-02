@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -24,8 +24,8 @@ export default {
                 });
             }
 
-            return Vue.http.get('api/server/self-update').then(
-                response => response.body,
+            return axios.get('api/server/self-update').then(
+                response => response.data,
                 (response) => {
                     if (response.status === 501) {
                         return {
@@ -47,9 +47,9 @@ export default {
         },
 
         async latest() {
-            const response = await Vue.http.get('https://download.contao.org/contao-manager/stable/contao-manager.version');
+            const response = await axios.get('https://download.contao.org/contao-manager/stable/contao-manager.version');
 
-            return response.body.version;
+            return response.data.version;
         },
     },
 };

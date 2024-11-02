@@ -1,14 +1,14 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 const handle = (request, { commit }) => new Promise((resolve, reject) => {
     request.then(
         (response) => {
-            commit('setCache', response.body['enabled']);
-            commit('setIsEnabled', response.body['enabled'] === true);
+            commit('setCache', response.data.enabled);
+            commit('setIsEnabled', response.data.enabled === true);
 
-            resolve(response.body['enabled']);
+            resolve(response.data.enabled);
         },
         () => {
             commit('setIsEnabled', false);
@@ -46,15 +46,15 @@ export default {
                 return Promise.reject();
             }
 
-            return handle(Vue.http.get('api/contao/maintenance-mode'), store);
+            return handle(axios.get('api/contao/maintenance-mode'), store);
         },
 
         enable(store) {
-            return handle(Vue.http.put('api/contao/maintenance-mode'), store);
+            return handle(axios.put('api/contao/maintenance-mode'), store);
         },
 
         disable(store) {
-            return handle(Vue.http.delete('api/contao/maintenance-mode'), store);
+            return handle(axios.delete('api/contao/maintenance-mode'), store);
         },
     },
 };

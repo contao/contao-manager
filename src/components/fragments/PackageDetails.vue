@@ -6,7 +6,7 @@
                     <package-constraint :data="data" v-if="!isFeature && isVisible"/>
                     <p class="package-popup__installed">
                         <strong>{{ $t('ui.package.installed') }}</strong>
-                        <time :dateTime="installedTime" v-if="installedTime" :title="installedTime | datimFormat">{{ $t('ui.package.version', { version: installedVersion }) }}</time>
+                        <time :dateTime="installedTime" v-if="installedTime" :title="datimFormat(installedTime)">{{ $t('ui.package.version', { version: installedVersion }) }}</time>
                         <template v-else>{{ $t('ui.package.version', { version: installedVersion }) }}</template>
                     </p>
                 </template>
@@ -19,7 +19,7 @@
             </slot>
         </template>
         <template #package-update v-if="metadata.update && metadata.update.valid && !metadata.update.latest">
-            <p class="package-popup__update"><strong>{{ $t('ui.package.update') }}:</strong> {{ $t('ui.package.version', { version: metadata.update.version}) }} ({{ $t('ui.package-details.released') }} {{ metadata.update.time | datimFormat('short', 'long') }})</p>
+            <p class="package-popup__update"><strong>{{ $t('ui.package.update') }}:</strong> {{ $t('ui.package.version', { version: metadata.update.version}) }} ({{ $t('ui.package-details.released') }} {{ datimFormat(metadata.update.time, 'short', 'long') }})</p>
         </template>
         <template #package-update v-else-if="!isCompatible">
             <p class="package-popup__incompatible">{{ $t('ui.package.incompatible', { package: data.name, constraint: packageConstraint('contao/manager-bundle') }) }}</p>
@@ -35,6 +35,7 @@
 
 <script>
     import { mapGetters, mapState } from 'vuex';
+    import datimFormat from 'contao-package-list/src/filters/datimFormat';
     import packageStatus from '../../mixins/packageStatus';
 
     import PackageDetails from 'contao-package-list/src/components/fragments/PackageDetails';
@@ -47,9 +48,9 @@
 
         computed: {
             ...mapState('packages', { allInstalled: 'installed' }),
-            ...mapState('packages/details', ['current']),
             ...mapGetters('packages', ['packageConstraint']),
 
+            current: vm => vm.$route.query.p,
             data: vm => vm.add[vm.current] || vm.allInstalled[vm.current] || ({ name: vm.current }),
 
             dependents() {
@@ -81,6 +82,10 @@
                 return deps;
             },
         },
+
+        methods: {
+            datimFormat,
+        }
     };
 </script>
 

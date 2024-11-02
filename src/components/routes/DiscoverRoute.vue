@@ -7,7 +7,6 @@
             <a class="widget-button widget-button--small widget-button--primary widget-button--link" target="_blank" :href="data.homepage" v-if="data && data.private && !packageSuggested(data.name)">{{ $t('ui.package.homepage') }}</a>
             <install-button small inline :data="data" v-else/>
         </template>
-
     </discover-list>
 </template>
 

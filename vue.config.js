@@ -13,13 +13,6 @@ module.exports = {
         },
     },
 
-    pluginOptions: {
-        webpackBundleAnalyzer: {
-            analyzerMode: 'disabled',
-            openAnalyzer: false,
-        },
-    },
-
     configureWebpack: () => {
         return {
             output: {
@@ -56,6 +49,24 @@ module.exports = {
             .rule('svg')
             .use('image-webpack-loader')
             .loader('image-webpack-loader')
+        ;
+
+
+        config.resolve.alias.set('vue', '@vue/compat');
+
+        config.module
+            .rule('vue')
+            .use('vue-loader')
+            .tap((options) => {
+                return {
+                    ...options,
+                    compilerOptions: {
+                        compatConfig: {
+                            MODE: 2
+                        }
+                    }
+                }
+            })
         ;
     }
 };

@@ -98,7 +98,7 @@
         async mounted () {
             const response = await this.$store.dispatch('server/contao/get');
 
-            if (response.status === 502 && response.body.error) {
+            if (response.status === 502 && response.data.error) {
                 this.console = response.data.error;
             }
         }

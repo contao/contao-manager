@@ -10,7 +10,7 @@
 
         <slot/>
 
-        <div :class="{ 'package-actions': true, 'package-actions--active': !!$slots.actions }">
+        <div :class="{ 'package-actions': true, 'package-actions--active': !slotEmpty($slots.actions) }">
             <slot name="actions"/>
         </div>
 
@@ -19,7 +19,7 @@
 
 <script>
     import { mapState, mapGetters, mapActions } from 'vuex';
-
+    import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
     import MainLayout from '../../layouts/MainLayout';
 
     export default {
@@ -33,6 +33,8 @@
         },
 
         methods: {
+            slotEmpty,
+
             ...mapActions('packages', ['updateAll']),
         },
     };

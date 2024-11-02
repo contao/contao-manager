@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -22,7 +22,7 @@ export default {
                 return state.cache;
             }
 
-            const content = (await Vue.http.get('api/server/phpinfo')).bodyText;
+            const content = (await axios.get('api/server/phpinfo', { responseType: 'text' })).data;
             commit('setCache', content);
 
             return content;

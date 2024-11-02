@@ -20,6 +20,7 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import BoxedLayout from '../layouts/BoxedLayout';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
@@ -42,7 +43,7 @@
                 this.authenticating = true;
 
                 try {
-                    const response = await this.$http.post(
+                    const response = await axios.post(
                         `api/users/${this.$store.state.auth.username}/tokens`,
                         {
                             client_id: this.$route.query.client_id,
@@ -52,7 +53,7 @@
 
                     // OAuth Implicit Grant (RFC 6749 section 4.2)
                     this.redirect({
-                        access_token: response.body.token,
+                        access_token: response.data.token,
                         token_type: 'bearer',
                         scope: this.$route.query.scope,
                         endpoint: `${location.origin}${location.pathname}`

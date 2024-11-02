@@ -14,7 +14,7 @@
         <template #release>
             <progress-bar :amount="progress"/>
             <div class="package__version package__version--release">
-                <p><strong>{{ upload.size|filesize }}</strong></p>
+                <p><strong>{{ filesize(upload.size) }}</strong></p>
             </div>
         </template>
 
@@ -44,6 +44,7 @@
 <script>
     import { mapGetters } from 'vuex';
 
+    import filesize from '../../../filters/filesize';
     import metadata from 'contao-package-list/src/mixins/metadata';
     import BasePackage from './BasePackage';
     import ComposerPackage from './ComposerPackage';
@@ -125,6 +126,8 @@
         },
 
         methods: {
+            filesize,
+
             addPackage() {
                 this.$store.dispatch('packages/uploads/confirm', this.upload.id);
             },

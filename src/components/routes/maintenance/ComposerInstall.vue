@@ -5,10 +5,10 @@
 
             <div class="maintenance__about">
                 <h1>{{ $t('ui.maintenance.composerInstall.title') }}</h1>
-                <i18n tag="p" path="ui.maintenance.composerInstall.description">
+                <i18n-t tag="p" keypath="ui.maintenance.composerInstall.description">
                     <template #vendor><code>/vendor</code></template>
                     <template #composerLock><code>composer.lock</code></template>
-                </i18n>
+                </i18n-t>
             </div>
 
             <fieldset class="maintenance__actions">

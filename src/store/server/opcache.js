@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -24,8 +24,8 @@ export default {
                 });
             }
 
-            return Vue.http.get('api/server/opcache').then(
-                response => response.body,
+            return axios.get('api/server/opcache').then(
+                response => response.data,
             ).then((result) => {
                 commit('setCache', result);
 
@@ -34,8 +34,8 @@ export default {
         },
 
         delete({ commit }, token) {
-            return Vue.http.delete(`api/server/opcache?opcache_reset=${token}`).then(
-                response => response.body,
+            return axios.delete(`api/server/opcache?opcache_reset=${token}`).then(
+                response => response.data,
             ).then((result) => {
                 commit('setCache', result);
 

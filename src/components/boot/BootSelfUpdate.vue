@@ -1,10 +1,10 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.selfUpdate.title')" :description="bootDescription">
         <template #description v-if="latestDownload">
-            <i18n :tag="false" path="ui.server.selfUpdate.manualUpdate">
+            <i18n-t keypath="ui.server.selfUpdate.manualUpdate">
                 <template #latest>{{ latestDownload }}</template>
                 <template #download><a href="https://to.contao.org/download?lang=${this.$i18n.locale}" target="_blank" rel="noreferrer noopener">https://to.contao.org/download</a></template>
-            </i18n>
+            </i18n-t>
         </template>
         <button class="widget-button widget-button--warning" v-if="!isSupported && bootState === 'action'" @click="next">{{ $t('ui.server.selfUpdate.continue') }}</button>
         <button class="widget-button widget-button--alert" v-else-if="hasUpdate" @click="update">{{ $t('ui.server.selfUpdate.button') }}</button>
@@ -104,13 +104,13 @@
 
             next() {
                 this.bootState = 'info';
-                this.$emit('result', 'SelfUpdate', this.bootState);
+                this.$emit('result', this.bootState);
             },
 
             emitState(state, description) {
                 this.bootState = state;
                 this.bootDescription = description;
-                this.$emit('result', 'SelfUpdate', state);
+                this.$emit('result', state);
             },
         },
     };

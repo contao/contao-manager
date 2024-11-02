@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -24,8 +24,8 @@ export default {
                 });
             }
 
-            return Vue.http.get('api/server/php-cli').then(
-                response => response.body,
+            return axios.get('api/server/php-cli').then(
+                response => response.data,
             ).then((result) => {
                 commit('setCache', result);
 

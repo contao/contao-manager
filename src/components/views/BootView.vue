@@ -1,15 +1,20 @@
 <template>
-    <div ref="current" v-if="currentStep"></div>
-
-    <boxed-layout :wide="true" slotClass="view-boot" v-else>
+    <boxed-layout :wide="true" slotClass="view-boot">
         <header class="view-boot__header">
-            <img src="../../assets/images/boot.svg" width="80" height="80" alt="Contao Logo" class="view-boot__icon">
+            <img src="../../assets/images/boot.svg" width="80" height="80" alt="" class="view-boot__icon">
             <h1 class="view-boot__headline">{{ $t('ui.boot.headline') }}</h1>
             <p class="view-boot__description">{{ $t('ui.boot.description') }}</p>
         </header>
         <main v-if="tasksInitialized" class="view-boot__checks">
 
-            <div ref="steps"></div>
+            <div>
+                <boot-php-web :ready="canShow('PhpWeb')" @result="(...args) => result('PhpWeb', ...args)"/>
+                <boot-config :ready="canShow('Config')" @result="(...args) => result('Config', ...args)"/>
+                <boot-php-cli :ready="canShow('PhpCli')" @result="(...args) => result('PhpCli', ...args)"/>
+                <boot-self-update :ready="canShow('SelfUpdate')" @result="(...args) => result('SelfUpdate', ...args)"/>
+                <boot-composer :ready="canShow('Composer')" @result="(...args) => result('Composer', ...args)" v-if="!isOAuth"/>
+                <boot-contao :ready="canShow('Contao')" @result="(...args) => result('Contao', ...args)" v-if="!isOAuth"/>
+            </div>
 
             <div class="clearfix"></div>
             <div class="view-boot__summary view-boot__summary--error" v-if="hasError">
@@ -32,7 +37,6 @@
 </template>
 
 <script>
-    import Vue from 'vue';
     import { mapState } from 'vuex';
 
     import views from '../../router/views';
@@ -40,32 +44,38 @@
 
     import BoxedLayout from '../layouts/BoxedLayout';
     import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
-    import SelfUpdate from '../boot/BootSelfUpdate';
-    import Config from '../boot/BootConfig';
-    import PhpWeb from '../boot/BootPhpWeb';
-    import PhpCli from '../boot/BootPhpCli';
-    import Composer from '../boot/BootComposer';
-    import Contao from '../boot/BootContao';
+    import BootPhpWeb from '../boot/BootPhpWeb.vue';
+    import BootConfig from '../boot/BootConfig.vue';
+    import BootPhpCli from '../boot/BootPhpCli.vue';
+    import BootSelfUpdate from '../boot/BootSelfUpdate.vue';
+    import BootComposer from '../boot/BootComposer.vue';
+    import BootContao from '../boot/BootContao.vue';
 
     export default {
-        components: { BoxedLayout, LoadingSpinner },
+        components: { BoxedLayout, LoadingSpinner, BootPhpWeb, BootConfig, BootPhpCli, BootSelfUpdate, BootComposer, BootContao },
 
         data: () => ({
-            steps: [],
-            currentStep: null,
-            status: {},
+            status: {
+                PhpWeb: null,
+                Config: null,
+                PhpCli: null,
+                SelfUpdate: null,
+                Composer: null,
+                Contao: null,
+            },
         }),
 
         computed: {
             ...mapState(['safeMode']),
             ...mapState('tasks', { tasksInitialized: 'initialized' }),
 
+            isOAuth: vm => vm.$route.name === routes.oauth.name,
             hasError: vm => Object.values(vm.status).indexOf('error') !== -1,
             autoContinue: vm => (window.localStorage.getItem('contao_manager_booted') === '1'
                     && Object.values(vm.status).indexOf('error') === -1
                     && Object.values(vm.status).indexOf('action') === -1
                     && Object.values(vm.status).indexOf('warning') === -1
-                ) || vm.$route.name === routes.oauth.name,
+                ) || vm.isOAuth,
 
             canContinue: vm => Object.values(vm.status).indexOf(null) === -1
                     && Object.values(vm.status).indexOf('error') === -1
@@ -78,36 +88,6 @@
         },
 
         methods: {
-            async setView(view) {
-                if (!view) {
-                    this.currentStep = null;
-                    this.$nextTick(() => {
-                        if (!this.$refs.steps) {
-                            return;
-                        }
-
-                        this.$refs.steps.innerHTML = '';
-
-                        Object.keys(this.steps).forEach((key) => {
-                            this.steps[key].current = false;
-                            this.$refs.steps.append(this.steps[key].$el);
-                        })
-                    });
-                    return;
-                }
-
-                Object.keys(this.steps).forEach((key) => {
-                    this.steps[key].current = false;
-                })
-
-                this.currentStep = view;
-                this.$nextTick(() => {
-                    this.$refs.current.innerHTML = '';
-                    this.$refs.current.append(this.steps[view].$el);
-                    this.steps[view].current = true;
-                })
-            },
-
             runSafeMode() {
                 this.$store.commit('setSafeMode', true);
                 this.$store.commit('setView', views.READY);
@@ -120,20 +100,7 @@
             },
 
             result(name, state) {
-                if (this.currentStep) {
-                    return;
-                }
-
-                this.$set(this.status, name, state);
-
-                const keys = Object.keys(this.status);
-                for (let k = 0; k < keys.length; k += 1) {
-                    if (this.status[keys[k]] === null) {
-                        this.steps[keys[k]].ready = this.canShow(keys[k]);
-                        this.currentStep = null;
-                        return;
-                    }
-                }
+                this.status[name] = state;
             },
 
             canShow(name) {
@@ -150,47 +117,9 @@
 
                 return false;
             },
-
-            initViews() {
-                if (!this.$refs.steps) {
-                    return;
-                }
-
-                this.$refs.steps.innerHTML = '';
-                this.steps = {};
-                let steps = { PhpWeb, Config, PhpCli, SelfUpdate, Composer, Contao };
-
-                if (this.$route.name === routes.oauth.name) {
-                    steps = { PhpWeb, Config, PhpCli, SelfUpdate };
-                }
-
-                this.status = Object
-                    .keys(steps)
-                    .reduce((status, key) => Object.assign(status, { [key]: null }), {})
-                ;
-
-                Object.keys(steps).forEach((key) => {
-                    const instance = new (Vue.extend(steps[key]))({
-                        parent: this
-                    });
-
-                    instance.$mount();
-                    instance.$on('result', this.result);
-                    instance.$on('view', this.setView);
-                    instance.ready = this.canShow(key);
-
-                    this.steps[key] = instance;
-
-                    this.$refs.steps.append(instance.$el);
-                })
-            },
         },
 
         watch: {
-            $route() {
-                this.initViews();
-            },
-
             shouldContinue(value) {
                 if (value && this.autoContinue) {
                     this.finish();
@@ -201,7 +130,6 @@
         async mounted() {
             await this.$store.dispatch('reset');
             await this.$store.dispatch('tasks/init');
-            this.initViews();
         },
     };
 </script>

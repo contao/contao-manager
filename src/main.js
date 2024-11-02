@@ -1,65 +1,67 @@
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-import VueClipboard from 'v-clipboard';
+import axios from 'axios'
+import Clipboard from 'v-clipboard';
 
 import bootstrap from 'contao-package-list/src/bootstrap';
 import router from './router';
 import views from './router/views';
 import store from './store';
 import i18n from './i18n';
-import './filters';
 
 import App from './components/App';
 
-Vue.use(VueResource);
-Vue.use(VueClipboard);
+axios.defaults.headers.common['Accept'] = 'application/json';
 
-Vue.http.options.emulateHTTP = true;
-Vue.http.headers.common['Accept'] = 'application/json';
+axios.interceptors.request.use(function (config) {
+    if (config.url.slice(0, 4) === 'api/') {
+        config.headers['Accept-Language'] = i18n.plugin.global.locale;
 
-Vue.http.interceptors.push((request, next) => {
-    const url = request.url;
-
-    if (request.url.slice(0, 4) === 'api/') {
-        request.headers.set('Accept-Language', i18n.plugin.locale);
+        if (['PUT', 'PATCH', 'DELETE'].includes(config.method)) {
+            config.headers['X-HTTP-Method-Override'] = config.method;
+            config.method = 'POST';
+        }
     }
 
-    next((response) => {
-        if (response.status === 401 && url !== 'api/session') {
-            store.commit('auth/reset');
-            store.commit('setView', views.LOGIN);
-            return;
-        }
-
-        if (response.headers.get('Content-Type') === 'application/problem+json') {
-            if (response.status === 500) {
-                store.commit('setError', response.data);
-            }
-
-            throw response;
-        }
-
-        if (url === 'api/session' && response.status !== 200) {
-            return;
-        }
-
-        if (request.url.substring(0, 4) === 'api/'
-            && response.headers.get('Content-Type') !== 'application/json'
-            && response.status >= 400
-            && response.status <= 599
-        ) {
-            store.commit('setError', {
-                type: 'about:blank',
-                status: response.status,
-                request,
-                response,
-            });
-
-            throw response;
-        }
-
-        store.commit('auth/renewCountdown');
-    });
+    return config;
 });
 
-bootstrap(Vue, App, router, store, i18n);
+axios.interceptors.response.use(function (response) {
+    const url = response.config.url;
+
+    if (response.status === 401 && url !== 'api/session') {
+        store.commit('auth/reset');
+        store.commit('setView', views.LOGIN);
+        return response;
+    }
+
+    if (response.headers['content-type'] === 'application/problem+json') {
+        if (response.status === 500) {
+            store.commit('setError', response.data);
+        }
+
+        throw response;
+    }
+
+    if (url === 'api/session' && response.status !== 200) {
+        return response;
+    }
+
+    if (url.substring(0, 4) === 'api/'
+        && response.headers['content-type'] !== 'application/json'
+        && response.status >= 400
+        && response.status <= 599
+    ) {
+        store.commit('setError', {
+            type: 'about:blank',
+            status: response.status,
+            response,
+        });
+
+        throw response;
+    }
+
+    store.commit('auth/renewCountdown');
+
+    return response;
+});
+
+bootstrap(App, i18n, router, store, Clipboard);

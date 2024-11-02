@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -21,17 +21,25 @@ export default {
                 return state.cache;
             }
 
-            const result = (await Vue.http.get('api/server/config')).body;
+            const result = (await axios.get('api/server/config')).data;
             commit('setCache', result);
 
             return result;
         },
 
         async set({ commit }, config) {
-            const result = (await Vue.http.put('api/server/config', config)).body;
-            commit('setCache', result);
+            try {
+                const result = (await axios.put('api/server/config', config)).data;
+                commit('setCache', result);
 
-            return result;
+                return result;
+            } catch (error) {
+                if (!error.response) {
+                    throw error;
+                }
+
+                return error.response.data;
+            }
         },
     },
 };

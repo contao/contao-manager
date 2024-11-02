@@ -6,9 +6,9 @@
                 <div class="maintenance__about">
                     <h1>{{ $t('ui.maintenance.debugMode.title') }}</h1>
                     <p v-if="supportsJwtCookie">{{ $t('ui.maintenance.debugMode.descriptionJwt') }}</p>
-                    <i18n tag="p" path="ui.maintenance.debugMode.description" v-else-if="supportsAccessKey">
+                    <i18n-t tag="p" keypath="ui.maintenance.debugMode.description" v-else-if="supportsAccessKey">
                         <template #appDevPhp><code>app_dev.php</code></template>
-                    </i18n>
+                    </i18n-t>
                 </div>
                 <fieldset class="maintenance__actions" v-if="loading && !supportsJwtCookie && !supportsAccessKey">
                     <loading-spinner class="maintenance__loader"/>

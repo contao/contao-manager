@@ -13,10 +13,11 @@
             </div>
             <div class="console-operation__label">
                 <template v-if="Array.isArray(summary)">
-                    <template v-for="(title, k) in summary">
-                        <h2 class="console-operation__title" :class="{ 'console-operation__title--disabled': title.match(/^~.+~$/) }" :key="`${k}_title`">{{ title.replace(/^~(.+)~$/, '$1') }}</h2>
+                    <!-- eslint-disable vue/no-v-for-template-key -->
+                    <template v-for="(title, k) in summary" :key="`${k}_title`">
+                        <h2 class="console-operation__title" :class="{ 'console-operation__title--disabled': title.match(/^~.+~$/) }">{{ title.replace(/^~(.+)~$/, '$1') }}</h2>
                         <p class="console-operation__description" :key="`${k}_details`" v-if="details[k]">{{ details[k] }}</p>
-                        <br :key="`${k}_br`"/>
+                        <br/>
                     </template>
                 </template>
                 <template v-else>
@@ -31,8 +32,9 @@
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
             </button>
             <div ref="console" @scroll="scrolled" class="console-operation__lines">
-                <template v-for="(line, i) in consoleLines">
-                    <div class="console-operation__line" :data-index="i" :key="i">
+                <!-- eslint-disable vue/no-v-for-template-key -->
+                <template v-for="(line, i) in consoleLines" :key="i">
+                    <div class="console-operation__line" :data-index="i">
                         <span class="console-operation__line-number">{{ i + 1 }}</span>
                         <span class="console-operation__line-content">{{ line }}</span>
                     </div>

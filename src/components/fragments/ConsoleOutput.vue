@@ -10,7 +10,7 @@
                     class="widget-button widget-button--transparent widget-button--console console__action"
                     :class="{ 'console__action--active': showConsole }"
                     :title="$t('ui.console.toggle')"
-                    @click="$emit('update:showConsole', !showConsole)"
+                    @click="toggleConsole"
                     v-if="!forceConsole"
                 />
                 <button-menu transparent button-class="console__action">
@@ -20,12 +20,12 @@
             </div>
         </section>
         <div class="console__operations">
-            <template v-for="(operation, i) in operations">
+            <!-- eslint-disable vue/no-v-for-template-key -->
+            <template v-for="(operation, i) in operations" :key="i">
                 <console-operation
                     v-bind="operation"
                     :show-console="showConsole"
                     :force-console="forceConsole"
-                    :key="i"
                 />
             </template>
         </div>
@@ -49,10 +49,6 @@
                 type: Array,
                 required: true
             },
-            showConsole: {
-                type: Boolean,
-                default: false,
-            },
             forceConsole: {
                 type: Boolean,
                 default: false,
@@ -60,7 +56,15 @@
             consoleOutput: String,
         },
 
+        data: () => ({
+            showConsole: false,
+        }),
+
         methods: {
+            toggleConsole() {
+                this.showConsole = !this.showConsole;
+                window.localStorage.setItem('contao_manager_console', this.showConsole ? '1' : '0');
+            },
             showLog() {
                 const popup = window.open();
 
@@ -71,6 +75,10 @@
                 }
             },
         },
+
+        mounted () {
+            this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
+        }
     }
 </script>
 

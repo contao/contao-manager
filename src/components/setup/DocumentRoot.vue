@@ -93,12 +93,12 @@
                     <div class="setup__fields setup__fields--center">
                         <svg class="setup__check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" /></svg>
                         <p class="setup__fielddesc">{{ $t('ui.setup.document-root.success') }}</p>
-                        <i18n tag="p" class="setup__fielddesc" :path="`ui.setup.document-root.${contaoVersion ? 'installed' : 'installing'}ProjectDir`">
+                        <i18n-t tag="p" class="setup__fielddesc" :keypath="`ui.setup.document-root.${contaoVersion ? 'installed' : 'installing'}ProjectDir`">
                             <template #dir><code>{{ projectDir }}</code></template>
-                        </i18n>
-                        <i18n tag="p" class="setup__fielddesc" :path="`ui.setup.document-root.${contaoVersion ? 'installed' : 'installing'}PublicDir`">
+                        </i18n-t>
+                        <i18n-t tag="p" class="setup__fielddesc" :keypath="`ui.setup.document-root.${contaoVersion ? 'installed' : 'installing'}PublicDir`">
                             <template #dir><code>{{ publicDir }}</code></template>
-                        </i18n>
+                        </i18n-t>
                     </div>
                     <div class="setup__actions setup__actions--center">
                         <button class="widget-button widget-button--inline widget-button--gear" @click="wantsFix = true" v-if="!contaoVersion">{{ $t('ui.setup.document-root.change') }}</button>
@@ -205,15 +205,15 @@
                 this.processing = true;
                 const response = await this.$store.dispatch('server/contao/get', cache);
 
-                this.projectDir = response.body.project_dir;
-                this.conflicts = response.body.conflicts;
-                this.isEmpty = response.body.conflicts.length === 0;
-                this.isWeb = response.body.public_dir === 'web';
-                this.isPublic = response.body.public_dir === 'public';
-                this.usePublicDir = response.body.public_dir === 'public';
+                this.projectDir = response.data.project_dir;
+                this.conflicts = response.data.conflicts;
+                this.isEmpty = response.data.conflicts.length === 0;
+                this.isWeb = response.data.public_dir === 'web';
+                this.isPublic = response.data.public_dir === 'public';
+                this.usePublicDir = response.data.public_dir === 'public';
                 this.wantsFix = false;
                 this.directory = this.isEmpty ? '' : location.hostname;
-                this.directorySeparator = response.body.directory_separator;
+                this.directorySeparator = response.data.directory_separator;
 
                 this.processing = false;
             },

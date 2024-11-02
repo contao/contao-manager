@@ -5,9 +5,9 @@
             <p class="view-login__product">Contao Manager</p>
         </header>
         <main class="view-login__locked" v-if="locked">
-            <i18n tag="p" path="ui.login.locked">
+            <i18n-t tag="p" keypath="ui.login.locked">
                 <template #lockFile><strong>contao-manager/login.lock</strong><br></template>
-            </i18n>
+            </i18n-t>
         </main>
         <main class="view-login__form" v-else>
             <form @submit.prevent="login">

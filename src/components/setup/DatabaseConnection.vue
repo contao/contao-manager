@@ -3,9 +3,9 @@
         <header class="setup__header">
             <img src="../../assets/images/database.svg" width="80" height="80" class="setup__icon" alt="">
             <h1 class="setup__headline">{{ $t('ui.setup.database-connection.headline') }}</h1>
-            <i18n tag="p" path="ui.setup.database-connection.description" class="setup__description">
+            <i18n-t tag="p" keypath="ui.setup.database-connection.description" class="setup__description">
                 <template #env><code>.env.local</code></template>
-            </i18n>
+            </i18n-t>
         </header>
 
         <transition name="animate-flip" type="transition" mode="out-in" v-if="currentState">
@@ -44,10 +44,10 @@
             <main class="setup__form" v-else v-bind:key="'confirmation'">
                 <div class="setup__fields">
                     <h2 class="setup__fieldtitle">{{ $t('ui.setup.database-connection.formTitle') }}</h2>
-                    <i18n tag="p" path="ui.setup.database-connection.connected" class="setup__fielddesc" v-if="url">
+                    <i18n-t tag="p" keypath="ui.setup.database-connection.connected" class="setup__fielddesc" v-if="url">
                         <template #database><i>{{ database }}</i></template>
                         <template #server><i>{{ server }}</i></template>
-                    </i18n>
+                    </i18n-t>
                     <button type="button" class="widget-button widget-button--edit widget-button--small" @click="currentState = 'edit'">{{ $t('ui.setup.database-connection.change') }}</button>
                 </div>
 
@@ -232,7 +232,7 @@ export default {
         },
 
         async load() {
-            this.url = (await this.$store.dispatch('server/database/get')).body.url;
+            this.url = (await this.$store.dispatch('server/database/get')).data.url;
             this.currentState = this.status?.type;
             this.parseUrl();
 
@@ -247,7 +247,7 @@ export default {
 
             const response = await this.$store.dispatch('server/database/set', this.url);
 
-            if (response.body.status.type === 'error') {
+            if (response.data.status.type === 'error') {
                 this.processing = false;
                 this.validUrl = false;
                 this.valid = false;

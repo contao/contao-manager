@@ -13,8 +13,8 @@
                     <console-output
                         class="view-recovery__console"
                         :title="$t('ui.recovery.console')"
-                        :operations="[{ status: 'error', summary: 'vendor/bin/contao-console contao:user:list', console: response.body.detail }]"
-                        :console-output="response.body.detail"
+                        :operations="[{ status: 'error', summary: 'vendor/bin/contao-console contao:user:list', console: response.data.detail }]"
+                        :console-output="response.data.detail"
                         show-console force-console
                         v-if="response.status === 502"
                     />

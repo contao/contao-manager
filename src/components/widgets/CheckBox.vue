@@ -8,7 +8,7 @@
                 :name="name"
                 :disabled="disabled"
                 :required="required"
-                :checked="value"
+                :checked="modelValue || null"
                 @change="toggle($event.target.checked)"
             >
             <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
@@ -21,6 +21,8 @@
 
 <script>
     export default {
+        compatConfig: { COMPONENT_V_MODEL: false },
+
         props: {
             name: {
                 type: String,
@@ -31,13 +33,14 @@
                 required: true,
             },
             description: String,
-            value: Boolean,
+            modelValue: Boolean,
             disabled: Boolean,
             required: Boolean,
         },
         methods: {
             toggle(value) {
-                this.$emit('input', !!value);
+                this.$emit('input');
+                this.$emit('update:modelValue', !!value);
             },
         },
     };

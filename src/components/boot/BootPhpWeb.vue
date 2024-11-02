@@ -24,23 +24,23 @@
                 const response = await this.$store.dispatch('server/php-web/get');
 
                 if (response.status === 200) {
-                    if (response.body.problem) {
-                        this.problem = response.body.problem;
+                    if (response.data.problem) {
+                        this.problem = response.data.problem;
                         this.bootState = 'error';
-                        this.bootDescription = response.body.problem.title;
-                    } else if (response.body.version_id < 70000) {
+                        this.bootDescription = response.data.problem.title;
+                    } else if (response.data.version_id < 70000) {
                         this.bootState = 'info';
-                        this.bootDescription = this.$t('ui.server.php_web.below7', response.body);
+                        this.bootDescription = this.$t('ui.server.php_web.below7', response.data);
                     } else {
                         this.bootState = 'success';
-                        this.bootDescription = this.$t('ui.server.php_web.success', response.body);
+                        this.bootDescription = this.$t('ui.server.php_web.success', response.data);
                     }
                 } else {
                     this.bootState = 'error';
                     this.bootDescription = this.$t('ui.server.error');
                 }
 
-                this.$emit('result', 'PhpWeb', this.bootState);
+                this.$emit('result', this.bootState);
             },
         },
     };

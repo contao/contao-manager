@@ -1,11 +1,12 @@
 <template>
     <ul class="file-tree">
-        <template v-for="(file, i) in files">
-            <li :key="i" :class="`file-tree__folder${isOpen(file) ? ' file-tree__folder--open' : ''}`" v-if="file.children.length">
+        <!-- eslint-disable vue/no-v-for-template-key -->
+        <template v-for="(file, i) in files" :key="i">
+            <li :class="`file-tree__folder${isOpen(file) ? ' file-tree__folder--open' : ''}`" v-if="file.children.length">
                 <button @click="toggle(file)">{{ name(file) }}</button>
                 <file-tree :files="file.children" v-if="isOpen(file)"/>
             </li>
-            <li :key="i" class="file-tree__file" v-else><span>{{ name(file) }}</span></li>
+            <li class="file-tree__file" v-else><span>{{ name(file) }}</span></li>
         </template>
     </ul>
 </template>

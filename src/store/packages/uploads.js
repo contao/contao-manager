@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import axios from 'axios';
 
 const hasDuplicates = (uploads) => {
     const count = Object.values(uploads).reduce(
@@ -59,7 +59,7 @@ export default {
         },
 
         setUnconfirmed(state, id) {
-            Vue.delete(state.confirmed, state.confirmed.indexOf(id));
+            axios.delete(state.confirmed, state.confirmed.indexOf(id));
         },
 
         setRemoving(state, id) {
@@ -74,7 +74,7 @@ export default {
     actions: {
         async load({ commit }) {
             try {
-                commit('setUploads', (await Vue.http.get('api/packages/uploads')).body);
+                commit('setUploads', (await axios.get('api/packages/uploads')).data);
             } catch (err) {
                 if (err.status !== 501) {
                     throw err;
@@ -148,7 +148,7 @@ export default {
 
         async remove({ commit, dispatch }, id) {
             commit('setRemoving', id);
-            await Vue.http.delete(`api/packages/uploads/${id}`);
+            await axios.delete(`api/packages/uploads/${id}`);
             await dispatch('load');
             commit('setRemoved', id);
             await dispatch('unconfirm', id);
@@ -159,7 +159,7 @@ export default {
                 async (id) => {
                     if (!state.confirmed.includes(id)) {
                         commit('setRemoving', id);
-                        await Vue.http.delete(`api/packages/uploads/${id}`);
+                        await axios.delete(`api/packages/uploads/${id}`);
                         commit('setRemoved', id);
                     }
                 },

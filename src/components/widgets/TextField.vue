@@ -11,7 +11,7 @@
             :pattern="pattern"
             :disabled="disabled"
             :autocapitalize="autocapitalize || 'none'"
-            :value="value"
+            :value="modelValue"
             @input="input($event.target.value)"
             @keyup="$emit('keyup')"
             @focus="$emit('focus')"
@@ -26,6 +26,8 @@
 
 <script>
     export default {
+        compatConfig: { COMPONENT_V_MODEL: false },
+
         props: {
             type: {
                 type: String,
@@ -36,7 +38,7 @@
                 required: true,
             },
             label: String,
-            value: String,
+            modelValue: String,
             pattern: String,
             placeholder: String,
             disabled: Boolean,
@@ -61,8 +63,9 @@
         },
 
         methods: {
-            input(value) {
-                this.$emit('input', value);
+            input(modelValue) {
+                this.$emit('input');
+                this.$emit('update:modelValue', modelValue);
             },
 
             enter() {
@@ -84,7 +87,7 @@
         },
 
         mounted() {
-            this.$emit('input', this.$refs.input.value);
+            this.$emit('update:modelValue', this.$refs.input.value);
         },
     };
 </script>

@@ -2,21 +2,17 @@
     <nav role="navigation" class="navigation">
         <a class="navigation__toggle" @click.prevent="toggleNavigation"><span></span></a>
         <ul class="navigation__group navigation__group--main">
-            <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.discover"><a>{{ $t('ui.navigation.discover') }}</a></router-link>
-            <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.packages">
-                <a>{{ $t('ui.navigation.packages') }}<span class="navigation__item-badge" v-if="packageChanges > 0">{{ packageChanges }}</span></a>
-            </router-link>
-            <router-link tag="li" class="navigation__item navigation__item--main" :to="routes.maintenance">
-                <a>{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="hasDatabaseChanges || hasDatabaseWarning || hasDatabaseError">1</span></a>
-            </router-link>
+            <navigation-item :to="routes.discover">{{ $t('ui.navigation.discover') }}</navigation-item>
+            <navigation-item :to="routes.packages">{{ $t('ui.navigation.packages') }}<span class="navigation__item-badge" v-if="packageChanges > 0">{{ packageChanges }}</span></navigation-item>
+            <navigation-item :to="routes.maintenance">{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="hasDatabaseChanges || hasDatabaseWarning || hasDatabaseError">1</span></navigation-item>
             <li class="navigation__item navigation__item--main">
-                <a tabindex="0" aria-haspopup="true" onclick="">{{ $t('ui.navigation.tools') }}</a>
+                <a tabindex="0" aria-haspopup="true">{{ $t('ui.navigation.tools') }}</a>
                 <ul class="navigation__group navigation__group--sub">
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a :href="backendUrl">{{ $t('ui.navigation.backend') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showAppDev"><a href="/app_dev.php/" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showPreview"><a :href="previewUrl" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showInstallTool"><a :href="installToolUrl" target="_blank">{{ $t('ui.navigation.installTool') }}</a></li>
-                    <router-link tag="li" :to="routes.logViewer" class="navigation__item navigation__item--sub"><a>{{ $t('ui.navigation.logViewer') }}</a></router-link>
+                    <navigation-item :to="routes.logViewer" sub>{{ $t('ui.navigation.logViewer') }}</navigation-item>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="phpinfo">{{ $t('ui.navigation.phpinfo') }}</a></li>
                 </ul>
             </li>
@@ -36,11 +32,13 @@
 
 <script>
     import { mapState, mapGetters, mapActions } from 'vuex';
-
     import views from '../../router/views';
     import routes from '../../router/routes';
+    import NavigationItem from './NavigationItem.vue';
 
     export default {
+        components: { NavigationItem },
+
         data: () => ({
             routes,
             databaseChanges: 0,

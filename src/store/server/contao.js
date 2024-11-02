@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -24,9 +24,9 @@ export default {
             state.contaoConfig = null;
 
             if (response) {
-                state.contaoVersion = response.body.version;
-                state.contaoApi = response.body.api;
-                state.contaoConfig = response.body.config;
+                state.contaoVersion = response.data.version;
+                state.contaoApi = response.data.api;
+                state.contaoConfig = response.data.config;
             }
         },
     },
@@ -45,7 +45,7 @@ export default {
                 return response;
             };
 
-            return Vue.http.get('api/server/contao').then(handle, handle);
+            return axios.get('api/server/contao').then(handle, handle);
         },
 
         documentRoot(store, { directory, usePublicDir = false }) {
@@ -57,7 +57,7 @@ export default {
                 params.directory = directory;
             }
 
-            return Vue.http.post('api/server/contao', params).catch(response => response);
+            return axios.post('api/server/contao', params).catch(response => response);
         }
     },
 };

@@ -52,7 +52,7 @@
                     }
                 }
 
-                this.$emit('result', 'Composer', this.bootState);
+                this.$emit('result', this.bootState);
             },
 
             async install() {

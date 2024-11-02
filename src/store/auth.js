@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 import views from '../router/views';
 import LogoutWarning from "../components/fragments/LogoutWarning";
 
@@ -82,10 +82,10 @@ export default {
         status(store) {
             $store = store;
 
-            return Vue.http.get('api/session').then(
+            return axios.get('api/session').then(
                 (response) => {
-                    if (response.body && response.body.username) {
-                        store.commit('setUsername', response.body.username);
+                    if (response.data.username) {
+                        store.commit('setUsername', response.data.username);
                         startCountdown();
                     } else {
                         store.commit('setUsername', null);
@@ -110,9 +110,9 @@ export default {
         login(store, { username, password }) {
             $store = store;
 
-            return Vue.http.post('api/session', { username, password }).then(
+            return axios.post('api/session', { username, password }).then(
                 (response) => {
-                    store.commit('setUsername', response.body.username);
+                    store.commit('setUsername', response.data.username);
                     startCountdown();
 
                     return true;
@@ -128,7 +128,7 @@ export default {
         },
 
         logout({ commit }) {
-            return Vue.http.delete('api/session').then(
+            return axios.delete('api/session').then(
                 () => true,
                 response => (response.status === 401),
             ).then((result) => {

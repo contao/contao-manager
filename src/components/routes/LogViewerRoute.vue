@@ -32,13 +32,14 @@
                 </div>
 
                 <template v-if="lines">
-                    <template v-for="(line, k) in lines">
+                    <!-- eslint-disable vue/no-v-for-template-key -->
+                    <template v-for="(line, k) in lines" :key="k">
                         <div class="log-viewer__line log-viewer__line--raw" :key="k" v-if="typeof line === 'string'">
                             {{ line }}
                         </div>
-                        <div :class="`log-viewer__line log-viewer__line--${line.level.toLowerCase()}`" :key="k" v-else>
+                        <div :class="`log-viewer__line log-viewer__line--${line.level.toLowerCase()}`" v-else>
                             <div class="log-viewer__meta">
-                                <time class="log-viewer__datetime" :datetime="line.datetime">{{ line.datetime|datimFormat('medium') }}</time>
+                                <time class="log-viewer__datetime" :datetime="line.datetime">{{ datimFormat(line.datetime, 'medium') }}</time>
                                 <span :class="`log-viewer__badge log-viewer__badge--desktop log-viewer__badge--level-${line.level.toLowerCase()}`" :title="$t('ui.log-viewer.levelTitle')">{{ line.level }}</span>
                                 <span class="log-viewer__badge log-viewer__badge--desktop log-viewer__badge--channel" :title="$t('ui.log-viewer.channelTitle')">{{ line.channel }}</span>
                             </div>
@@ -75,6 +76,7 @@
 </template>
 
 <script>
+import axios from 'axios';
     import filesize from '../../filters/filesize';
     import VueJsonPretty from 'vue-json-pretty';
     import 'vue-json-pretty/lib/styles.css';
@@ -153,6 +155,8 @@
         },
 
         methods: {
+            datimFormat,
+
             canShow: (data) => data && (!Array.isArray(data) || data.length),
             pieces: (text) => {
                 let result = [];
@@ -230,7 +234,7 @@
                 this.files = null;
                 this.file = null;
 
-                this.files = (await this.$http.get('api/logs')).body;
+                this.files = (await axios.get('api/logs')).data;
                 this.file = this.files.find(f => f.name === current)?.name || (this.files.length ? this.files[0].name : null);
             },
 
@@ -241,7 +245,7 @@
 
                 this.loading = true;
 
-                const response = (await this.$http.get(`api/logs/${this.current.name}?offset=${this.offset}&limit=${this.limit}`)).body;
+                const response = (await axios.get(`api/logs/${this.current.name}?offset=${this.offset}&limit=${this.limit}`)).data;
 
                 this.content = this.content.concat(Array.from(response.content.reverse()));
                 this.loading = false;

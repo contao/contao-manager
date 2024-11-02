@@ -8,18 +8,20 @@
             <h2 class="cloud-status__headline">{{ $t('ui.cloudStatus.headline') }}</h2>
             <p class="cloud-status__version">{{ $t('ui.cloudStatus.version', { version: status.appVersion }) }}</p>
             <table>
-                <tr>
-                    <th>{{ $t('ui.cloudStatus.waitingTime') }}:</th>
-                    <td>{{ waitingLabel }}</td>
-                </tr>
-                <tr>
-                    <th>{{ $t('ui.cloudStatus.jobs') }}:</th>
-                    <td>{{ status.numberOfJobsInQueue > 0 ? (status.numberOfJobsInQueue + status.numberOfWorkers) : `≤ ${status.numberOfWorkers}` }}</td>
-                </tr>
-                <tr>
-                    <th>{{ $t('ui.cloudStatus.workers') }}:</th>
-                    <td>{{ status.numberOfWorkers }}</td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <th>{{ $t('ui.cloudStatus.waitingTime') }}:</th>
+                        <td>{{ waitingLabel }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ $t('ui.cloudStatus.jobs') }}:</th>
+                        <td>{{ status.numberOfJobsInQueue > 0 ? (status.numberOfJobsInQueue + status.numberOfWorkers) : `≤ ${status.numberOfWorkers}` }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ $t('ui.cloudStatus.workers') }}:</th>
+                        <td>{{ status.numberOfWorkers }}</td>
+                    </tr>
+                </tbody>
             </table>
             <a
                 class="widget-button widget-button--info widget-button--link widget-button--small cloud-status__link"
@@ -113,7 +115,7 @@
             this.fetchCloud();
         },
 
-        beforeDestroy() {
+        beforeUnmount() {
             clearTimeout(this.timeout);
         }
     };

@@ -21,7 +21,6 @@
         computed: {
             ...mapState(['error']),
 
-            request: vm => vm.error.request,
             response: vm => vm.error.response,
 
             title() {
@@ -29,10 +28,10 @@
                     return this.error.title;
                 }
 
-                if (this.request) {
+                if (this.response) {
                     return this.$t('ui.error.title', {
-                        method: this.request.headers.get('X-HTTP-Method-Override') || this.request.method,
-                        url: this.request.url,
+                        method: (this.response.config.headers['X-HTTP-Method-Override'] || this.response.config.method).toUpperCase(),
+                        url: this.response.config.url,
                     })
                 }
 
@@ -64,8 +63,8 @@
                     return this.error.debug;
                 }
 
-                if (this.response && this.response.body) {
-                    return this.response.body;
+                if (this.response && this.response.data) {
+                    return this.response.data;
                 }
 
                 return '';

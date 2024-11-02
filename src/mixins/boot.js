@@ -1,8 +1,10 @@
 export default {
-    data: () => ({
+    props: {
         ready: false,
         current: false,
+    },
 
+    data: () => ({
         booted: false,
         bootState: 'loading',
         bootDescription: '',

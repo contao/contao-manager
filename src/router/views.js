@@ -4,6 +4,7 @@ export default {
     ACCOUNT: 'account',
     LOGIN: 'login',
     BOOT: 'boot',
+    CONFIG: 'config',
     SETUP: 'setup',
     RECOVERY: 'recovery',
     MIGRATION: 'migration',

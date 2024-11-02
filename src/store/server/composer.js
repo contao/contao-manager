@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -16,7 +16,6 @@ export default {
     },
 
     actions: {
-
         get({ state, commit }, cache = true) {
             if (cache && state.cache) {
                 return new Promise((resolve) => {
@@ -24,8 +23,8 @@ export default {
                 });
             }
 
-            return Vue.http.get('api/server/composer').then(
-                response => response.body,
+            return axios.get('api/server/composer').then(
+                response => response.data,
             ).then((result) => {
                 commit('setCache', result);
 

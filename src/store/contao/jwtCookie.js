@@ -1,14 +1,14 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 const handle = (request, { commit }) => new Promise((resolve, reject) => {
     request.then(
         (response) => {
-            commit('setCache', response.body);
+            commit('setCache', response.data);
             commit('setIsDebugEnabled', response.status !== 204 && response.data.debug);
 
-            resolve(response.body);
+            resolve(response.data);
         },
         () => {
             commit('setIsDebugEnabled', false);
@@ -49,19 +49,19 @@ export default {
                 return Promise.reject();
             }
 
-            return handle(Vue.http.get('api/contao/jwt-cookie'), store);
+            return handle(axios.get('api/contao/jwt-cookie'), store);
         },
 
         enableDebug(store) {
-            return handle(Vue.http.put('api/contao/jwt-cookie', { debug: true }), store);
+            return handle(axios.put('api/contao/jwt-cookie', { debug: true }), store);
         },
 
         disableDebug(store) {
-            return handle(Vue.http.put('api/contao/jwt-cookie', { debug: false }), store);
+            return handle(axios.put('api/contao/jwt-cookie', { debug: false }), store);
         },
 
         delete(store) {
-            return handle(Vue.http.delete('api/contao/jwt-cookie'), store);
+            return handle(axios.delete('api/contao/jwt-cookie'), store);
         },
     },
 };

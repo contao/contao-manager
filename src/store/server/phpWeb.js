@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -18,8 +18,8 @@ export default {
             state.phpVersionId = null;
 
             if (response && response.status === 200) {
-                state.phpVersion = response.body.version;
-                state.phpVersionId = response.body.version_id;
+                state.phpVersion = response.data.version;
+                state.phpVersionId = response.data.version_id;
             }
         },
     },
@@ -38,7 +38,7 @@ export default {
                 return Promise.resolve(response);
             }
 
-            return Vue.http.get('api/server/php-web').then(handle, handle);
+            return axios.get('api/server/php-web').then(handle, handle);
         },
     },
 };

@@ -1,73 +1,75 @@
 {
-  "name": "contao-manager",
-  "description": "The Contao Manager UI",
-  "license": "GPL-3.0+",
-  "private": true,
-  "homepage": "https://github.com/contao/contao-manager",
-  "scripts": {
-    "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "algoliasearch": "^4.24.0",
-    "contao-package-list": "git+https://github.com/contao/package-list.git",
-    "core-js": "^3.37.1",
-    "details-element-polyfill": "^2.4.0",
-    "jszip": "^3.10.1",
-    "semver": "^7.6.3",
-    "treeify-paths": "^1.0",
-    "v-clipboard": "^2.2.3",
-    "vue": "^2.6.12",
-    "vue-i18n": "^8.24.3",
-    "vue-json-pretty": "^1.9.4",
-    "vue-resource": "^1.5.3",
-    "vue-router": "^3.6",
-    "vue-upload-component": "^2.8.22",
-    "vueperslides": "^2.13.0",
-    "vuex": "^2.5.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.24.7",
-    "@babel/eslint-parser": "^7.24.7",
-    "@babel/preset-env": "^7.24.7",
-    "@vue/cli-plugin-babel": "~5.0.8",
-    "@vue/cli-plugin-eslint": "~5.0.8",
-    "@vue/cli-service": "~5.0.8",
-    "cypress": "^13.6.4",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "favicons": "^7.2.0",
-    "favicons-webpack-plugin": "^6.0.1",
-    "image-webpack-loader": "^6.0.0",
-    "sass": "^1.80.5",
-    "sass-loader": "^7.3.1",
-    "sharp": "^0.33.2",
-    "vue-template-compiler": "^2.6.12"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "name": "contao-manager",
+    "description": "The Contao Manager UI",
+    "license": "GPL-3.0+",
+    "private": true,
+    "homepage": "https://github.com/contao/contao-manager",
+    "scripts": {
+        "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+        "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
+        "lint": "vue-cli-service lint"
     },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
+    "dependencies": {
+        "@vue/compat": "^3.1.0",
+        "algoliasearch": "^4.24.0",
+        "axios": "^1.7.7",
+        "contao-package-list": "git+https://github.com/contao/package-list.git",
+        "core-js": "^3.38.1",
+        "details-element-polyfill": "^2.4.0",
+        "jszip": "^3.10.1",
+        "semver": "^7.6.3",
+        "treeify-paths": "^1.0",
+        "v-clipboard": "^3.0.0-next",
+        "vue": "^3.1.0",
+        "vue-axios": "^3.5.2",
+        "vue-i18n": "^9.14",
+        "vue-json-pretty": "^1.9.4",
+        "vue-router": "^4.4",
+        "vue-upload-component": "^3.1",
+        "vueperslides": "^3.5.1",
+        "vuex": "^4.1.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.26.0",
+        "@babel/eslint-parser": "^7.25.9",
+        "@babel/preset-env": "^7.26.0",
+        "@vue/cli-plugin-babel": "~5.0.8",
+        "@vue/cli-plugin-eslint": "~5.0.8",
+        "@vue/cli-service": "~5.0.8",
+        "@vue/compiler-sfc": "^3.1.0",
+        "cypress": "^13.6.4",
+        "eslint": "^7.32.0",
+        "eslint-plugin-vue": "^8.0.3",
+        "favicons": "^7.2.0",
+        "favicons-webpack-plugin": "^6.0.1",
+        "image-webpack-loader": "^8.1.0",
+        "sass": "^1.80.5",
+        "sass-loader": "^16.0.2",
+        "sharp": "^0.33.2"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended"
+        ],
+        "rules": {},
+        "parserOptions": {
+            "parser": "@babel/eslint-parser"
+        }
+    },
+    "postcss": {
+        "plugins": {
+            "autoprefixer": {}
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not ie <= 8"
     ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
-  "packageManager": "yarn@3.4.1+sha512.a333bf9c2557d71f5ba87dd1446cde24bb9c35301ec29dd2baba577b3f9d1ab61348b66a1324de9088c40a996c5b9203794da8bf14cab9fae6a6eccc00cb8078"
+    "packageManager": "yarn@3.4.1+sha512.a333bf9c2557d71f5ba87dd1446cde24bb9c35301ec29dd2baba577b3f9d1ab61348b66a1324de9088c40a996c5b9203794da8bf14cab9fae6a6eccc00cb8078"
 }

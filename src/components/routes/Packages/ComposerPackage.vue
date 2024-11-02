@@ -9,7 +9,7 @@
         :hint-close="packageHintClose"
         @close-hint="restore"
     >
-        <template #hint><slot name="hint"/></template>
+        <template #hint v-if="!slotEmpty($slots.hint)"><slot name="hint"/></template>
         <template #additional>
             <div class="package__version package__version--additional" v-if="packageData.version">
                 <strong :title="packageData.time ? datimFormat(packageData.time) : ''">{{ $t('ui.package.version', { version: packageData.version }) }}</strong>
@@ -23,8 +23,8 @@
                 </template>
             </div>
             <span class="composer-package__stats composer-package__stats--license" v-if="license">{{ license }}</span>
-            <span class="composer-package__stats composer-package__stats--downloads" v-if="packageData.downloads">{{ packageData.downloads | numberFormat }}</span>
-            <span class="composer-package__stats composer-package__stats--favers" v-if="packageData.favers">{{ packageData.favers | numberFormat }}</span>
+            <span class="composer-package__stats composer-package__stats--downloads" v-if="packageData.downloads">{{ numberFormat(packageData.downloads) }}</span>
+            <span class="composer-package__stats composer-package__stats--favers" v-if="packageData.favers">{{ numberFormat(packageData.favers) }}</span>
             <router-link class="composer-package__stats composer-package__stats--funding" :to="{ query: { p: data.name } }" v-if="packageData.funding">&nbsp;</router-link>
         </template>
 
@@ -63,8 +63,9 @@
 
         <template #features v-if="packageFeatures(data.name)?.length">
             <section class="package__features">
-                <template v-for="name in packageFeatures(data.name)">
-                    <feature-package :key="name" :name="name" />
+                <!-- eslint-disable vue/no-v-for-template-key -->
+                <template v-for="name in packageFeatures(data.name)" :key="name">
+                    <feature-package :name="name" />
                 </template>
             </section>
         </template>
@@ -74,8 +75,9 @@
 
 <script>
     import { mapGetters } from 'vuex';
-
     import datimFormat from 'contao-package-list/src/filters/datimFormat'
+    import numberFormat from 'contao-package-list/src/filters/numberFormat'
+    import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
     import packageStatus from '../../../mixins/packageStatus';
 
     import BasePackage from './BasePackage';
@@ -196,12 +198,14 @@
         },
 
         methods: {
+            datimFormat,
+            numberFormat,
+            slotEmpty,
+
             restore() {
                 this.$store.commit('packages/restore', this.data.name);
                 this.$store.dispatch('packages/uploads/unconfirm', this.data.name);
             },
-
-            datimFormat: (value) => datimFormat(value),
         },
     };
 </script>

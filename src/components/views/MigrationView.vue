@@ -64,7 +64,6 @@
             :title="consoleTitle"
             :operations="operations"
             :console-output="console"
-            :show-console.sync="showConsole"
             :force-console="hasProblem"
             v-if="!checking && operations && operations.length"
         />
@@ -73,6 +72,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import axios from 'axios';
 import views from '../../router/views';
 
 import BoxedLayout from '../layouts/BoxedLayout';
@@ -93,7 +93,6 @@ export default {
             hash: null,
             withDeletes: false,
 
-            showConsole: false,
             previousResult: true,
             checking: true,
             executing: false,
@@ -178,13 +177,13 @@ export default {
                 if (response.status === 201) {
                     return new Promise((resolve) => {
                         setTimeout(async () => {
-                            await this.poll(await this.$http.get('api/contao/database-migration'));
+                            await this.poll(await axios.get('api/contao/database-migration'));
                             resolve();
                         }, 1000);
                     });
                 }
 
-                const data = await response.json()
+                const data = response.data
 
                 if (!this.changes || data.status) {
                     this.type = data.type;
@@ -196,7 +195,7 @@ export default {
                 if (!data.status || data.status === 'active') {
                     return new Promise((resolve) => {
                         setTimeout(async () => {
-                            await this.poll(await this.$http.get('api/contao/database-migration'));
+                            await this.poll(await axios.get('api/contao/database-migration'));
                             resolve();
                         }, 1000);
                     })
@@ -206,14 +205,14 @@ export default {
             async execute () {
                 this.executing = true;
 
-                await this.$http.put('api/contao/database-migration', {
+                await axios.put('api/contao/database-migration', {
                     type: this.type,
                     hash: this.hash,
                     withDeletes: this.withDeletes && this.hasDeletes,
                 });
 
                 setTimeout(async () => {
-                    await this.poll(await this.$http.get('api/contao/database-migration'));
+                    await this.poll(await axios.get('api/contao/database-migration'));
                     await this.$store.dispatch('server/database/get', false);
                     this.executing = false;
                 }, 1000);
@@ -229,18 +228,18 @@ export default {
                     this.changes = null;
                     this.hash = null;
 
-                    await this.$http.delete('api/contao/database-migration')
+                    await axios.delete('api/contao/database-migration')
                 }
 
-                let response = await this.$http.get('api/contao/database-migration');
+                let response = await axios.get('api/contao/database-migration');
 
                 if (response.status === 204) {
                     this.previousResult = false;
-                    response = await this.$http.put('api/contao/database-migration', { type, skipWarnings });
+                    response = await axios.put('api/contao/database-migration', { type, skipWarnings });
                 }
 
                 await this.poll(response)
-                await this.$http.delete('api/contao/database-migration')
+                await axios.delete('api/contao/database-migration')
 
                 this.checking = false;
             },
@@ -256,7 +255,7 @@ export default {
 
             async close () {
                 this.closing = true;
-                await this.$http.delete('api/contao/database-migration');
+                await axios.delete('api/contao/database-migration');
                 await this.$store.dispatch('server/database/get', false);
 
                 if (this.setupStep > 0) {

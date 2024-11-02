@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -45,17 +45,17 @@ export default {
             }
 
             try {
-                const response = (await Vue.http.get(
+                const response = (await axios.get(
                     'https://www.composer-resolver.cloud/',
                     { timeout: 2500, responseType: 'json', headers: {'Composer-Resolver-Client': 'contao'} },
                 ));
 
-                if (!response.body?.appVersion) {
+                if (!response.data?.appVersion) {
                     commit('setStatus', {});
                     return;
                 }
 
-                commit('setStatus', response.body);
+                commit('setStatus', response.data);
             } catch (err) {
                 commit('setStatus', {});
             }

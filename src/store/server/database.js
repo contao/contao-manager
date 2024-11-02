@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -36,9 +36,9 @@ export default {
 
             if (response && response.status === 200) {
                 state.supported = true;
-                state.status = response.body.status;
-                state.pattern = response.body.pattern;
-                state.url = response.body.url;
+                state.status = response.data.status;
+                state.pattern = response.data.pattern;
+                state.url = response.data.url;
             }
         },
     },
@@ -59,7 +59,7 @@ export default {
 
             commit('setLoading', true);
 
-            return Vue.http.get('api/server/database').then(handle, handle);
+            return axios.get('api/server/database').then(handle, handle);
         },
 
         set({ commit }, url) {
@@ -71,7 +71,7 @@ export default {
 
             commit('setLoading', true);
 
-            return Vue.http.post('api/server/database', { url }).then(handle, handle);
+            return axios.post('api/server/database', { url }).then(handle, handle);
         },
     },
 };

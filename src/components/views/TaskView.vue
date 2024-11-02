@@ -37,14 +37,13 @@
             :title="hasTask ? currentTask.title : $t('ui.task.loading')"
             :operations="currentTask.operations"
             :console-output="currentTask.console"
-            :show-console.sync="showConsole"
             v-if="hasTask"
         />
 
-        <div class="view-task__sponsor" v-if="currentTask.sponsor">
-            <i18n path="ui.task.sponsor" :tag="false">
+        <div class="view-task__sponsor" v-if="currentTask && currentTask.sponsor">
+            <i18n-t keypath="ui.task.sponsor">
                 <template #sponsor><br><a :href="currentTask.sponsor.link" target="_blank" rel="noreferrer noopener">{{ currentTask.sponsor.name }}</a></template>
-            </i18n>
+            </i18n-t>
             <a href="https://to.contao.org/donate" target="_blank" rel="noreferrer noopener" class="view-task__donate"><img src="~contao-package-list/src/assets/images/funding.svg" alt="" width="20" height="20"></a>
         </div>
     </boxed-layout>
@@ -66,7 +65,6 @@ export default {
         components: { BoxedLayout, LoadingSpinner, LoadingButton, ConsoleOutput, CheckBox },
 
         data: () => ({
-            showConsole: false,
             autoClose: false,
             favicons: null,
             faviconInterval: null,
@@ -149,10 +147,6 @@ export default {
                 this.updateFavicon();
             },
 
-            showConsole(value) {
-                window.localStorage.setItem('contao_manager_console', value ? '1' : '0');
-            },
-
             autoClose(value) {
                 window.localStorage.setItem('contao_manager_autoclose', value ? '1' : '0');
             },
@@ -168,13 +162,12 @@ export default {
             this.favicons = document.querySelectorAll('link[class="favicon"]');
             this.updateFavicon();
 
-            this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
             this.autoClose = window.localStorage.getItem('contao_manager_autoclose') === '1';
 
             this.$store.dispatch('server/database/get');
         },
 
-        beforeDestroy() {
+        beforeUnmount() {
             this.updateFavicon();
         },
     }

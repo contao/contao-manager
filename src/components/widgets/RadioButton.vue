@@ -9,8 +9,8 @@
                 :name="name"
                 :disabled="option.disabled"
                 :required="required"
-                :checked="value === option.value"
-                @click="$emit('input', option.value)"
+                :checked="modelValue === option.value"
+                @click="input(option.value)"
             >
             <label :for="`ctrl_${name}_${option.value}`" v-if="allowHtml" v-html="option.label"></label>
             <label :for="`ctrl_${name}_${option.value}`" v-else>{{ option.label }}</label>
@@ -20,6 +20,8 @@
 
 <script>
     export default {
+        compatConfig: { COMPONENT_V_MODEL: false },
+
         props: {
             name: {
                 type: String,
@@ -30,7 +32,7 @@
                 required: true,
             },
             label: String,
-            value: {
+            modelValue: {
                 required: true,
             },
             disabled: Boolean,
@@ -38,6 +40,13 @@
             allowHtml: {
                 type: Boolean,
                 default: false,
+            },
+        },
+
+        methods: {
+            input(value) {
+                this.$emit('input');
+                this.$emit('update:modelValue', value);
             },
         },
     };

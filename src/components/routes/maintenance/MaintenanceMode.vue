@@ -56,7 +56,7 @@
             const response = await this.$store.dispatch('server/contao/get');
 
             if (response.status === 200) {
-                const commands = Object.keys(response.body?.cli?.commands);
+                const commands = Object.keys(response.data?.cli?.commands);
 
                 this.supported = commands.includes('contao:maintenance-mode') ||
                     (commands.includes('lexik:maintenance:lock') && commands.includes('lexik:maintenance:unlock'))

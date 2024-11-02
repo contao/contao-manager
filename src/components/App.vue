@@ -37,31 +37,26 @@
 </template>
 
 <script>
-    import { defineAsyncComponent } from "vue";
+    import { defineAsyncComponent, markRaw } from "vue";
     import { mapState, mapGetters } from 'vuex';
+    import axios from 'axios';
     import views from '../router/views';
 
     import ErrorView from './views/ErrorView';
-    import AccountView from './views/AccountView';
-    import LoginView from './views/LoginView';
     import TaskView from './views/TaskView';
-    import BootView from './views/BootView';
-    import SetupView from './views/SetupView';
-    import RecoveryView from './views/RecoveryView';
-    import MigrationView from './views/MigrationView';
-    import Vue from 'vue';
 
     export default {
         components: { ErrorView, TaskView },
 
         data: () => ({
             views: {
-                [views.ACCOUNT]: AccountView,
-                [views.LOGIN]: LoginView,
-                [views.BOOT]: BootView,
-                [views.SETUP]: SetupView,
-                [views.RECOVERY]: RecoveryView,
-                [views.MIGRATION]: MigrationView,
+                [views.ACCOUNT]: markRaw(defineAsyncComponent(() => import('././views/AccountView'))),
+                [views.LOGIN]: markRaw(defineAsyncComponent(() => import('././views/LoginView'))),
+                [views.BOOT]: markRaw(defineAsyncComponent(() => import('././views/BootView'))),
+                [views.CONFIG]: markRaw(defineAsyncComponent(() => import('././views/ConfigView'))),
+                [views.SETUP]: markRaw(defineAsyncComponent(() => import('././views/SetupView'))),
+                [views.RECOVERY]: markRaw(defineAsyncComponent(() => import('././views/RecoveryView'))),
+                [views.MIGRATION]: markRaw(defineAsyncComponent(() => import('././views/MigrationView'))),
             },
             loaded: false,
         }),
@@ -122,9 +117,11 @@
         async mounted() {
             this.initColorMode();
 
+            await this.$router.isReady();
+
             if (this.$route.query.token) {
                 try {
-                    await Vue.http.post('api/session', { token: this.$route.query.token });
+                    await axios.post('api/session', { token: this.$route.query.token });
                 } catch (err) {
                     // ignore authentication errors
                 }
@@ -139,7 +136,7 @@
 
             while (chunks.pop() !== undefined && chunks.length) {
                 try {
-                    const config = (await this.$http.get(`${chunks.join('/')}/contao-manager/users.json`, { responseType: 'json' })).body;
+                    const config = (await axios.get(`${chunks.join('/')}/contao-manager/users.json`)).data;
 
                     if (!config.users && !config.version) {
                         continue;
@@ -178,9 +175,6 @@
 
 
 <style rel="stylesheet/scss" lang="scss">
-@use "sass:meta";
-@use "~contao-package-list/src/assets/styles/defaults";
-
 $icons: (
     'add',
     'check',
@@ -208,9 +202,11 @@ $icons: (
     'upload',
 );
 
-@include meta.load-css("~contao-package-list/src//assets/styles/layout");
-@include meta.load-css("~contao-package-list/src//assets/styles/animations");
-@include meta.load-css("../assets/styles/defaults");
+@use "~contao-package-list/src/assets/styles/layout";
+@use "~contao-package-list/src/assets/styles/forms" with ($icons: $icons);
+@use "~contao-package-list/src/assets/styles/animations";
+@use "~contao-package-list/src/assets/styles/defaults";
+@use "../assets/styles/defaults" as AppDefaults;
 
 .https-warning {
     position: absolute;

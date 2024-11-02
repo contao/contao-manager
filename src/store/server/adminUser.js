@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
 	namespaced: true,
@@ -17,7 +17,7 @@ export default {
 
 			if (response && (response.status === 200 || response.status === 201)) {
 				state.supported = true;
-				state.hasUser = !!response.body.hasUser;
+				state.hasUser = !!response.data.hasUser;
 			}
 		},
 	},
@@ -36,7 +36,7 @@ export default {
 				return response;
 			};
 
-			return Vue.http.get('api/server/admin-user').then(handle, handle);
+			return axios.get('api/server/admin-user').then(handle, handle);
 		},
 
 		set({ commit }, data) {
@@ -46,7 +46,7 @@ export default {
 				return response;
 			};
 
-			return Vue.http.post('api/server/admin-user', data).then(handle, handle);
+			return axios.post('api/server/admin-user', data).then(handle, handle);
 		}
 	},
 };
