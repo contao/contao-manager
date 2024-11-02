@@ -4,7 +4,7 @@
         <ul class="navigation__group navigation__group--main">
             <navigation-item :to="routes.discover">{{ $t('ui.navigation.discover') }}</navigation-item>
             <navigation-item :to="routes.packages">{{ $t('ui.navigation.packages') }}<span class="navigation__item-badge" v-if="packageChanges > 0">{{ packageChanges }}</span></navigation-item>
-            <navigation-item :to="routes.maintenance">{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="hasDatabaseChanges || hasDatabaseWarning || hasDatabaseError">1</span></navigation-item>
+            <navigation-item :to="routes.maintenance" v-if="isGranted('ROLE_UPDATE')">{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="hasDatabaseChanges || hasDatabaseWarning || hasDatabaseError">1</span></navigation-item>
             <li class="navigation__item navigation__item--main">
                 <a tabindex="0" aria-haspopup="true">{{ $t('ui.navigation.tools') }}</a>
                 <ul class="navigation__group navigation__group--sub">
@@ -50,6 +50,7 @@
             ...mapState('contao/access-key', { showAppDev: 'isEnabled' }),
             ...mapState('contao/jwt-cookie', { showPreview: 'isDebugEnabled' }),
             ...mapState('server/contao', ['contaoConfig']),
+            ...mapGetters('auth', ['isGranted']),
             ...mapGetters('packages', ['totalChanges']),
             ...mapGetters('packages/uploads', ['totalUploads']),
             ...mapGetters('server/database', { hasDatabaseChanges: 'hasChanges', hasDatabaseWarning: 'hasWarning', hasDatabaseError: 'hasError' }),
@@ -92,10 +93,12 @@
         },
 
         mounted() {
-            this.$store.dispatch('contao/install-tool/fetch');
-            this.$store.dispatch('contao/jwt-cookie/get').catch(() => {});
-            this.$store.dispatch('contao/access-key/get').catch(() => {});
-            this.$store.dispatch('server/database/get');
+            if (this.isGranted('ROLE_UPDATE')) {
+                this.$store.dispatch('contao/install-tool/fetch');
+                this.$store.dispatch('contao/jwt-cookie/get').catch(() => {});
+                this.$store.dispatch('contao/access-key/get').catch(() => {});
+                this.$store.dispatch('server/database/get');
+            }
         },
     };
 </script>

@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign,no-fallthrough */
 
 import axios from 'axios';
 import views from '../router/views';
@@ -53,12 +53,35 @@ export default {
 
     state: {
         username: null,
+        roles: null,
         countdown: null,
     },
 
+    getters: {
+        isGranted: state => role => {
+            const roles = [];
+            state.roles?.forEach(role => {
+                // noinspection FallThroughInSwitchStatementJS
+                switch (role) {
+                    case 'ROLE_ADMIN':
+                        roles.push('ROLE_ADMIN');
+                    case 'ROLE_INSTALL':
+                        roles.push('ROLE_INSTALL');
+                    case 'ROLE_UPDATE':
+                        roles.push('ROLE_UPDATE');
+                    case 'ROLE_READ':
+                        roles.push('ROLE_READ');
+                }
+            })
+
+            return roles.includes(role);
+        }
+    },
+
     mutations: {
-        setUsername(state, username) {
-            state.username = username;
+        setUser(state, data) {
+            state.username = data?.username || null;
+            state.roles = data?.roles || null;
         },
 
         setCountdown(state, value) {
@@ -85,17 +108,17 @@ export default {
             return axios.get('api/session').then(
                 (response) => {
                     if (response.data.username) {
-                        store.commit('setUsername', response.data.username);
+                        store.commit('setUser', response.data);
                         startCountdown();
                     } else {
-                        store.commit('setUsername', null);
+                        store.commit('setUser', null);
                         stopCountdown();
                     }
 
                     return response.status;
                 },
                 (response) => {
-                    store.commit('setUsername', null);
+                    store.commit('setUser', null);
                     stopCountdown();
 
                     if (response.status === 403) {
@@ -112,7 +135,7 @@ export default {
 
             return axios.post('api/session', { username, password }).then(
                 (response) => {
-                    store.commit('setUsername', response.data.username);
+                    store.commit('setUser', response.data);
                     startCountdown();
 
                     return true;
@@ -133,7 +156,7 @@ export default {
                 response => (response.status === 401),
             ).then((result) => {
                 if (result) {
-                    commit('setUsername', null);
+                    commit('setUser', null);
                     commit('setView', views.LOGIN, { root: true });
                     stopCountdown();
                 }

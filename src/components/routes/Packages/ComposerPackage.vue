@@ -48,15 +48,17 @@
         <template #actions>
             <slot name="actions">
                 <details-button :name="data.name" v-if="data.name"/>
-                <template v-if="isContao">
-                    <button class="widget-button widget-button--update" :disabled="isModified" v-if="!isRequired" @click="update">{{ $t('ui.package.updateButton') }}</button>
-                </template>
-                <template v-else>
-                    <button class="widget-button widget-button--primary widget-button--add" v-if="isMissing" @click="install" :disabled="willBeInstalled">{{ $t('ui.package.installButton') }}</button>
-                    <button class="widget-button widget-button--alert widget-button--trash" v-else-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
-                    <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isRootInstalled" :disabled="isModified" @click="update">
-                        <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
-                    </button-group>
+                <template v-if="isGranted('ROLE_UPDATE')">
+                    <template v-if="isContao">
+                        <button class="widget-button widget-button--update" :disabled="isModified" v-if="!isRequired" @click="update">{{ $t('ui.package.updateButton') }}</button>
+                    </template>
+                    <template v-else>
+                        <button class="widget-button widget-button--primary widget-button--add" v-if="isMissing" @click="install" :disabled="willBeInstalled">{{ $t('ui.package.installButton') }}</button>
+                        <button class="widget-button widget-button--alert widget-button--trash" v-else-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
+                        <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isRootInstalled" :disabled="isModified" @click="update">
+                            <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
+                        </button-group>
+                    </template>
                 </template>
             </slot>
         </template>
@@ -100,6 +102,7 @@
         },
 
         computed: {
+            ...mapGetters('auth', ['isGranted']),
             ...mapGetters('packages', ['packageFeatures']),
 
             packageData: vm => Object.assign(

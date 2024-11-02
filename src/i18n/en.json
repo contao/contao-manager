@@ -314,6 +314,7 @@
     "ui.error.response": "The server returned a response with status code {status}.",
     "ui.error.moreLink": "More Information",
     "ui.error.support": "Contao Support",
+    "ui.error.permission": "You do not have permission to use this feature.",
     "ui.footer.help": "Help",
     "ui.footer.reportProblem": "Report a Problem",
     "ui.navigation.discover": "Discover",

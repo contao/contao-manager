@@ -6,8 +6,8 @@
             :placeholder="inputPlaceholder"
             :title="inputTitle"
             v-model="inputValue"
-            :class="{ disabled: !emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload), error: constraintError }"
-            :disabled="!constraintEditable || willBeRemoved || (!emit && !isInstalled && !willBeInstalled && !isRequired) || isUpload"
+            :class="{ disabled: !emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted('ROLE_UPDATE')), error: constraintError }"
+            :disabled="!constraintEditable || willBeRemoved || (!emit && !isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted('ROLE_UPDATE')"
             @keypress.enter.prevent="saveConstraint"
             @keypress.esc.prevent="resetConstraint"
             @blur="saveConstraint"
@@ -16,12 +16,13 @@
             :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
             :title="buttonTitle"
             @click="editConstraint"
-            :disabled="!emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload)"
+            :disabled="!emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted('ROLE_UPDATE'))"
         >{{ buttonValue }}</button>
     </fieldset>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import axios from 'axios';
     import packageStatus from '../../mixins/packageStatus';
 
@@ -51,6 +52,8 @@
         }),
 
         computed: {
+            ...mapGetters('auth', ['isGranted']),
+
             buttonTitle: vm => vm.isUpload ? vm.$t('ui.package.uploadConstraint') : '',
             buttonValue: vm => vm.isUpload ? vm.$t('ui.package.editConstraint') : vm.$t('ui.package.private'),
             inputTitle: vm => vm.isUpload ? vm.$t('ui.package.privateTitle') : vm.constraint,

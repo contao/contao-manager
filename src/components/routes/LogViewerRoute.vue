@@ -76,7 +76,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+    import axios from 'axios';
+    import datimFormat from 'contao-package-list/src/filters/datimFormat';
     import filesize from '../../filters/filesize';
     import VueJsonPretty from 'vue-json-pretty';
     import 'vue-json-pretty/lib/styles.css';
@@ -84,7 +85,6 @@ import axios from 'axios';
     import MainLayout from '../layouts/MainLayout';
     import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
     import SelectMenu from '../widgets/SelectMenu.vue';
-    import datimFormat from 'contao-package-list/src/filters/datimFormat';
 
     export default {
         components: { MainLayout, LoadingSpinner, SelectMenu, VueJsonPretty },

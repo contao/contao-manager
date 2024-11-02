@@ -6,10 +6,12 @@
         :inline="inline"
         :disabled="disabled || isRootInstalled || isAdded || isRequired || !canBeInstalled"
         @click="install"
+        v-if="isGranted('ROLE_INSTALL')"
     >{{ $t(small ? 'ui.package.installButtonShort' : 'ui.package.installButton') }}</confirm-button>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import packageStatus from '../../mixins/packageStatus';
     import ConfirmButton from '../widgets/ConfirmButton';
 
@@ -25,6 +27,10 @@
             small: Boolean,
             inline: Boolean,
             disabled: Boolean,
+        },
+
+        computed: {
+            ...mapGetters('auth', ['isGranted']),
         },
 
         methods: {

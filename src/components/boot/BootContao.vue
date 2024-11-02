@@ -1,8 +1,8 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription">
-        <button v-if="bootState === 'action'" @click="setup" class="widget-button widget-button--primary widget-button--run">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
-        <button v-if="bootState === 'warning'" @click="setup" class="widget-button widget-button--alert">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
-        <button v-if="bootState === 'success' && databaseSupported" @click="setup" class="widget-button">{{ $t('ui.server.contao.setup') }}</button>
+        <button class="widget-button widget-button--primary widget-button--run" :disabled="!isGranted('ROLE_INSTALL')" @click="setup" v-if="bootState === 'action'">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
+        <button class="widget-button widget-button--alert" :disabled="!isGranted('ROLE_INSTALL')" @click="setup" v-if="bootState === 'warning'">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
+        <button class="widget-button" :disabled="!isGranted('ROLE_INSTALL')" @click="setup" v-if="bootState === 'success' && databaseSupported">{{ $t('ui.server.contao.setup') }}</button>
     </boot-check>
 </template>
 
@@ -24,6 +24,7 @@
         computed: {
             ...mapState('server/database', { databaseSupported: 'supported', databaseStatus: 'status' }),
             ...mapState('server/adminUser', { userSupported: 'supported', hasUser: 'hasUser' }),
+            ...mapGetters('auth', ['isGranted']),
             ...mapGetters('server/database', { databaseProblem: 'hasError', databaseAccessProblem: 'accessProblem' }),
         },
 
@@ -59,7 +60,7 @@
                     bootDescription = this.$t('ui.server.error');
                 }
 
-                if (bootState === 'success') {
+                if (bootState === 'success' && this.isGranted('ROLE_UPDATE')) {
                     await Promise.all([
                         this.$store.dispatch('contao/install-tool/fetch', false),
                         this.$store.dispatch('server/database/get', false)
@@ -72,7 +73,7 @@
                         } else if (this.databaseProblem) {
                             bootState = 'warning';
                             bootDescription += ` ${this.$t('ui.server.contao.connectionProblem')}`;
-                        } else {
+                        } else if (this.isGranted('ROLE_INSTALL')) {
                             await this.$store.dispatch('server/adminUser/get', false)
 
                             if (this.userSupported && !this.hasUser) {

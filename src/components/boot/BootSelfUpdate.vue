@@ -13,7 +13,6 @@
 
 <script>
     import boot from '../../mixins/boot';
-
     import BootCheck from '../fragments/BootCheck';
 
     export default {

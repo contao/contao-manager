@@ -11,7 +11,7 @@
                 <boot-php-web :ready="canShow('PhpWeb')" @result="(...args) => result('PhpWeb', ...args)"/>
                 <boot-config :ready="canShow('Config')" @result="(...args) => result('Config', ...args)"/>
                 <boot-php-cli :ready="canShow('PhpCli')" @result="(...args) => result('PhpCli', ...args)"/>
-                <boot-self-update :ready="canShow('SelfUpdate')" @result="(...args) => result('SelfUpdate', ...args)"/>
+                <boot-self-update :ready="canShow('SelfUpdate')" @result="(...args) => result('SelfUpdate', ...args)" v-if="isGranted('ROLE_UPDATE')"/>
                 <boot-composer :ready="canShow('Composer')" @result="(...args) => result('Composer', ...args)" v-if="!isOAuth"/>
                 <boot-contao :ready="canShow('Contao')" @result="(...args) => result('Contao', ...args)" v-if="!isOAuth"/>
             </div>
@@ -37,8 +37,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
-
+    import { mapGetters, mapState } from 'vuex';
     import views from '../../router/views';
     import routes from '../../router/routes';
 
@@ -55,19 +54,13 @@
         components: { BoxedLayout, LoadingSpinner, BootPhpWeb, BootConfig, BootPhpCli, BootSelfUpdate, BootComposer, BootContao },
 
         data: () => ({
-            status: {
-                PhpWeb: null,
-                Config: null,
-                PhpCli: null,
-                SelfUpdate: null,
-                Composer: null,
-                Contao: null,
-            },
+            status: {},
         }),
 
         computed: {
             ...mapState(['safeMode']),
             ...mapState('tasks', { tasksInitialized: 'initialized' }),
+            ...mapGetters('auth', ['isGranted']),
 
             isOAuth: vm => vm.$route.name === routes.oauth.name,
             hasError: vm => Object.values(vm.status).indexOf('error') !== -1,
@@ -129,7 +122,28 @@
 
         async mounted() {
             await this.$store.dispatch('reset');
-            await this.$store.dispatch('tasks/init');
+
+            if (this.isGranted('ROLE_UPDATE')) {
+                await this.$store.dispatch('tasks/init');
+            } else {
+                this.$store.commit('tasks/setInitialized', true);
+            }
+
+            const status = {};
+            status.PhpWeb = null;
+            status.Config = null;
+            status.PhpCli = null;
+
+            if (this.isGranted('ROLE_UPDATE')) {
+                status.SelfUpdate = null;
+            }
+
+            if (this.$route.name !== routes.oauth.name) {
+                status.Composer = null;
+                status.Contao = null;
+            }
+
+            this.status = status;
         },
     };
 </script>

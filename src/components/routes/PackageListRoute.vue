@@ -59,6 +59,7 @@
         }),
 
         computed: {
+            ...mapGetters('auth', ['isGranted']),
             ...mapGetters('cloud', { cloudLoading: 'isLoading', cloudError: 'hasError' }),
             ...mapState('packages', {
                 'requiredPackages': 'required',
@@ -110,7 +111,7 @@
 
         methods: {
             openFileSelector() {
-                if (!this.$refs.uploader) {
+                if (!this.$refs.uploader || !this.isGranted('ROLE_INSTALL')) {
                     return;
                 }
 

@@ -15,6 +15,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import MainLayout from '../layouts/MainLayout';
     import DatabaseStatus from './maintenance/DatabaseStatus';
     import RebuildCache from './maintenance/RebuildCache';
@@ -38,6 +39,16 @@
             ComposerInstall,
             ComposerCache,
             OpcodeCache,
+        },
+
+        computed: {
+            ...mapGetters('auth', ['isGranted']),
+        },
+
+        mounted () {
+            if (!this.isGranted('ROLE_UPDATE')) {
+                this.$router.push('/');
+            }
         },
     };
 </script>

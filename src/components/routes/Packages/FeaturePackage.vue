@@ -9,16 +9,16 @@
         </p>
 
         <div class="feature-package__actions">
-            <button class="feature-package__restore" @click="restore" v-if="packageHint">{{ $t('ui.package.hintRevert') }}</button>
+            <button class="feature-package__restore" @click="restore" v-if="packageHint && isGranted('ROLE_INSTALL')">{{ $t('ui.package.hintRevert') }}</button>
             <details-button small :name="name"/>
-            <button :title="$t('ui.package.removeButton')" class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isRootInstalled) && !willBeRemoved"></button>
+            <button :title="$t('ui.package.removeButton')" class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isRootInstalled) && !willBeRemoved && isGranted('ROLE_INSTALL')"></button>
         </div>
     </article>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import packageStatus from '../../../mixins/packageStatus';
-
     import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
 
     export default {
@@ -31,6 +31,8 @@
         },
 
         computed: {
+            ...mapGetters('auth', ['isGranted']),
+
             data: vm => ({ name: vm.name, }),
 
             packageTitle() {
