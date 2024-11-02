@@ -17,7 +17,9 @@ use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_INSTALL')]
 class CreateContaoOperation extends AbstractInlineOperation
 {
     private const SUPPORTED_VERSIONS = ['4.9', '4.13', '5.3', '5.4'];

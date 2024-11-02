@@ -24,7 +24,9 @@ use Contao\ManagerApi\TaskOperation\ConsoleOutput;
 use Contao\ManagerApi\TaskOperation\SponsoredOperationInterface;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_UPDATE')]
 class CloudOperation implements TaskOperationInterface, SponsoredOperationInterface
 {
     private const CLOUD_ERROR = 'Error handling the Composer Resolver Cloud. Please try again later.';

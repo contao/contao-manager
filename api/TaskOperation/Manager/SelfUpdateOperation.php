@@ -16,7 +16,9 @@ use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\System\SelfUpdate;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_UPDATE')]
 class SelfUpdateOperation extends AbstractInlineOperation
 {
     public function __construct(

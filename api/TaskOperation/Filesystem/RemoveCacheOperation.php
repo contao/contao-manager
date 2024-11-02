@@ -16,7 +16,9 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_UPDATE')]
 class RemoveCacheOperation extends AbstractInlineOperation
 {
     public function __construct(

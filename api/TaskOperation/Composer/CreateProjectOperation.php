@@ -19,7 +19,9 @@ use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_INSTALL')]
 class CreateProjectOperation extends AbstractProcessOperation
 {
     /**

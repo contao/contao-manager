@@ -14,7 +14,9 @@ namespace Contao\ManagerApi\TaskOperation\Composer;
 
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_INSTALL')]
 class RequireOperation extends AbstractProcessOperation
 {
     public function __construct(

@@ -19,6 +19,10 @@ use Psr\Log\LoggerAwareTrait;
 use studio24\Rotate\Rotate;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[AutoconfigureTag('monolog.logger', ['channel' => 'tasks'])]
 class TaskManager implements LoggerAwareInterface
@@ -41,6 +45,7 @@ class TaskManager implements LoggerAwareInterface
         iterable $tasks,
         private readonly ApiKernel $kernel,
         private readonly ConsoleProcessFactory $processFactory,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly Filesystem $filesystem,
     ) {
         $this->configFile = $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.'task.json';
@@ -79,13 +84,32 @@ class TaskManager implements LoggerAwareInterface
 
         $task = $this->loadTask($config);
 
+        $status = $task->create($config);
+
+        foreach ($status->getOperations() as $operation) {
+            foreach ((new \ReflectionClass($operation))->getAttributes(IsGranted::class) ?? [] as $attribute) {
+                /** @var IsGranted $isGranted */
+                $isGranted = $attribute->newInstance();
+
+                if (!$this->authorizationChecker->isGranted($isGranted->attribute, $isGranted->subject)) {
+                    $task->delete($config);
+
+                    if ($isGranted->statusCode) {
+                        throw new HttpException($isGranted->statusCode, $isGranted->message ?? '', null, [], $isGranted->exceptionCode ?? 0);
+                    }
+
+                    throw new AccessDeniedHttpException($isGranted->message ?? '', null, $isGranted->exceptionCode ?? 0);
+                }
+            }
+        }
+
         if (null !== $this->logger) {
             $this->logger->info('Created new task', ['name' => $name, 'options' => $options, 'class' => $task::class]);
         }
 
         $this->processFactory->createManagerConsoleBackgroundProcess(['task:update', '--poll']);
 
-        return $task->create($config);
+        return $status;
     }
 
     public function updateTask(): TaskStatus|null

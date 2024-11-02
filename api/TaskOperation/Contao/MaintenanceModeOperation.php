@@ -15,7 +15,9 @@ namespace Contao\ManagerApi\TaskOperation\Contao;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\AbstractInlineOperation;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_UPDATE')]
 class MaintenanceModeOperation extends AbstractInlineOperation
 {
     public function __construct(

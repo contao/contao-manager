@@ -15,7 +15,9 @@ namespace Contao\ManagerApi\TaskOperation\Composer;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_UPDATE')]
 class DumpAutoloadOperation extends AbstractProcessOperation
 {
     public function __construct(

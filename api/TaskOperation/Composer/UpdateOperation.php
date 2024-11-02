@@ -15,7 +15,9 @@ namespace Contao\ManagerApi\TaskOperation\Composer;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_UPDATE')]
 class UpdateOperation extends AbstractProcessOperation
 {
     public function __construct(

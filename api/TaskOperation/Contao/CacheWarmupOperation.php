@@ -14,7 +14,9 @@ namespace Contao\ManagerApi\TaskOperation\Contao;
 
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_UPDATE')]
 class CacheWarmupOperation extends AbstractProcessOperation
 {
     public function __construct(ConsoleProcessFactory $processFactory, string $environment, string $processId = 'cache-warmup')
