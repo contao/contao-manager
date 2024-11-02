@@ -56,7 +56,11 @@ class PasswordlessAuthenticator extends AbstractBrowserAuthenticator
 
         $this->tokenId = $token['id'];
 
-        $userBadge = new UserBadge($token['username'], $this->userProvider->loadUserByIdentifier(...));
+        $userBadge = new UserBadge(
+            $token['username'],
+            $this->userProvider->loadUserByIdentifier(...),
+            ['roles' => 'ROLE_'.strtoupper($token['scope'])],
+        );
 
         return new SelfValidatingPassport($userBadge);
     }

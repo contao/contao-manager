@@ -73,7 +73,10 @@ class SessionController
                 return new JsonResponse($payload);
             }
 
-            return new JsonResponse(['username' => $this->security->getUser()?->getUserIdentifier()]);
+            return new JsonResponse([
+                'username' => $token?->getUserIdentifier(),
+                'roles' => $token?->getRoleNames(),
+            ]);
         }
 
         if (LoginAuthenticator::isLocked($this->kernel->getConfigDir())) {

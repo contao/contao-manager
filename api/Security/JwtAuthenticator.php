@@ -47,7 +47,11 @@ class JwtAuthenticator extends AbstractAuthenticator
             throw new AuthenticationCredentialsNotFoundException();
         }
 
-        $userBadge = new UserBadge($credentials->username, $this->userProvider->loadUserByIdentifier(...));
+        $userBadge = new UserBadge(
+            $credentials->username,
+            $this->userProvider->loadUserByIdentifier(...),
+            ['roles' => $credentials->roles],
+        );
 
         return new SelfValidatingPassport($userBadge);
     }

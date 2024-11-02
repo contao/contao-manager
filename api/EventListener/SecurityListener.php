@@ -46,7 +46,7 @@ class SecurityListener
             && JwtAuthenticator::class === $token->getAttribute('authenticator')
             && $this->authorizationChecker->isGranted('ROLE_USER')
         ) {
-            $this->jwtManager->addToken($event->getRequest(), $event->getResponse(), $token->getUserIdentifier());
+            $this->jwtManager->addToken($event->getRequest(), $event->getResponse(), $token);
         } else {
             $this->jwtManager->removeToken($event->getRequest(), $event->getResponse());
         }

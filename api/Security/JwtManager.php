@@ -19,6 +19,7 @@ use Firebase\JWT\Key;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class JwtManager
 {
@@ -66,12 +67,13 @@ class JwtManager
     /**
      * Adds JWT auth cookies to the given response.
      */
-    public function addToken(Request $request, Response $response, string $username): void
+    public function addToken(Request $request, Response $response, TokenInterface $token): void
     {
         $payload = [
             'iat' => time(),
             'exp' => strtotime('+30 minutes'),
-            'username' => $username,
+            'username' => $token->getUserIdentifier(),
+            'roles' => $token->getRoleNames(),
         ];
 
         $response->headers->setCookie(

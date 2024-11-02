@@ -27,6 +27,12 @@ security:
                 - Contao\ManagerApi\Security\JwtAuthenticator
                 - Contao\ManagerApi\Security\TokenAuthenticator
 
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_INSTALL
+        ROLE_INSTALL: ROLE_UPDATE
+        ROLE_UPDATE: ROLE_READ
+        ROLE_READ: ROLE_USER
+
     access_control:
         - { path: ^/api/session$, roles: PUBLIC_ACCESS }
-        - { path: ^/api, roles: ROLE_ADMIN }
+        - { path: ^/api, roles: ROLE_USER }

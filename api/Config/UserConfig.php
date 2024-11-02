@@ -108,7 +108,7 @@ class UserConfig extends AbstractConfig
     /**
      * Gets the user by username or null if it does not exist.
      */
-    public function getUser(string $username): User|null
+    public function getUser(string $username, array|null $roles = null): User|null
     {
         $this->initialize();
 
@@ -119,6 +119,7 @@ class UserConfig extends AbstractConfig
         return new User(
             $this->data['users'][$username]['username'],
             $this->data['users'][$username]['password'],
+            $roles ?? $this->data['users'][$username]['roles'] ?? null,
         );
     }
 

@@ -210,6 +210,7 @@ class UserController
         if ($user instanceof User) {
             return [
                 'username' => $user->getUserIdentifier(),
+                'roles' => $user->getRoles(),
             ];
         }
 

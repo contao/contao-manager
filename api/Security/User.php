@@ -20,8 +20,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct(
         private readonly string $username,
         private string|null $password,
-        private readonly array $roles = ['ROLE_ADMIN', 'ROLE_USER'],
+        private array|null $roles = null
     ) {
+        $this->roles ??= ['ROLE_ADMIN'];
     }
 
     public function getRoles(): array
