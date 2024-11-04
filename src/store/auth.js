@@ -54,6 +54,7 @@ export default {
     state: {
         username: null,
         roles: null,
+        scoped: false,
         countdown: null,
     },
 
@@ -82,6 +83,7 @@ export default {
         setUser(state, data) {
             state.username = data?.username || null;
             state.roles = data?.roles || null;
+            state.scoped = data?.scoped || false;
         },
 
         setCountdown(state, value) {

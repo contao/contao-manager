@@ -35,7 +35,7 @@ class LoginAuthenticator extends AbstractBrowserAuthenticator
         Filesystem $filesystem,
         ApiKernel $kernel,
     ) {
-        parent::__construct($jwtManager, $filesystem, $kernel);
+        parent::__construct($jwtManager, $this->userConfig, $filesystem, $kernel);
     }
 
     public function supports(Request $request): bool

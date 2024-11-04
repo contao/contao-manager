@@ -32,12 +32,12 @@ class PasswordlessAuthenticator extends AbstractBrowserAuthenticator
      */
     public function __construct(
         private readonly UserProviderInterface $userProvider,
-        private readonly UserConfig $config,
+        private readonly UserConfig $userConfig,
         JwtManager $jwtManager,
         Filesystem $filesystem,
         ApiKernel $kernel,
     ) {
-        parent::__construct($jwtManager, $filesystem, $kernel);
+        parent::__construct($jwtManager, $this->userConfig, $filesystem, $kernel);
     }
 
     public function supports(Request $request): bool
@@ -48,7 +48,7 @@ class PasswordlessAuthenticator extends AbstractBrowserAuthenticator
 
     public function authenticate(Request $request): SelfValidatingPassport
     {
-        $token = $this->config->findToken($request->request->get('token'));
+        $token = $this->userConfig->findToken($request->request->get('token'));
 
         if (null === $token || 'one-time' !== ($token['grant_type'] ?? null)) {
             throw new AuthenticationCredentialsNotFoundException();
@@ -59,7 +59,7 @@ class PasswordlessAuthenticator extends AbstractBrowserAuthenticator
         $userBadge = new UserBadge(
             $token['username'],
             $this->userProvider->loadUserByIdentifier(...),
-            ['roles' => 'ROLE_'.strtoupper($token['scope'])],
+            ['roles' => ['ROLE_'.strtoupper($token['scope'])]],
         );
 
         return new SelfValidatingPassport($userBadge);
@@ -67,7 +67,7 @@ class PasswordlessAuthenticator extends AbstractBrowserAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response
     {
-        $this->config->deleteToken($this->tokenId);
+        $this->userConfig->deleteToken($this->tokenId);
 
         return parent::onAuthenticationSuccess($request, $token, $firewallName);
     }

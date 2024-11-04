@@ -14,7 +14,7 @@ namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\Security\User;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,16 +22,18 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to handle users.
  */
-class UserController extends AbstractController
+class UserController
 {
     public function __construct(
         private readonly UserConfig $config,
         private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly Security $security,
     ) {
     }
 
@@ -39,10 +41,19 @@ class UserController extends AbstractController
      * Returns a list of users in the configuration file.
      */
     #[Route(path: '/users', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function listUsers(): Response
     {
-        return $this->getUserResponse($this->config->getUsers());
+        $users = $this->config->getUsers();
+
+        if (!$this->security->isGranted('ROLE_ADMIN')) {
+            $username = $this->security->getUser()?->getUserIdentifier();
+            $users = array_filter(
+                $users,
+                static fn (User $user): bool => $user->getUserIdentifier() === $username,
+            );
+        }
+
+        return $this->getUserResponse($users);
     }
 
     /**
@@ -67,9 +78,10 @@ class UserController extends AbstractController
      * Returns user data from the configuration file.
      */
     #[Route(path: '/users/{username}', name: 'user_get', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function retrieveUser(string $username): Response
     {
+        $this->denyAccessUnlessUserOrAdmin($username);
+
         $user = $this->config->getUser($username);
 
         if (null === $user) {
@@ -83,9 +95,10 @@ class UserController extends AbstractController
      * Replaces user data in the configuration file.
      */
     #[Route(path: '/users/{username}', methods: ['PUT'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function replaceUser(Request $request): Response
+    public function replaceUser(string $username, Request $request): Response
     {
+        $this->denyAccessUnlessUserOrAdmin($username);
+
         $user = $this->createUserFromRequest($request);
 
         if (!$this->config->hasUser($user->getUserIdentifier())) {
@@ -119,12 +132,13 @@ class UserController extends AbstractController
      * Returns a list of tokens of a user in the configuration file.
      */
     #[Route(path: '/users/{username}/tokens', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function listTokens(string $username): Response
     {
+        $this->denyAccessUnlessUserOrAdmin($username);
+
         $tokens = array_filter(
             $this->config->getTokens(),
-            static fn ($token): bool => $token['user'] === $username,
+            static fn ($token): bool => $token['username'] === $username,
         );
 
         return new JsonResponse($tokens);
@@ -134,9 +148,10 @@ class UserController extends AbstractController
      * Adds a new token for a user to the configuration file.
      */
     #[Route(path: '/users/{username}/tokens', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function createToken(string $username, Request $request): Response
     {
+        $this->denyAccessUnlessUserOrAdmin($username);
+
         if (!$this->config->hasUser($username)) {
             throw new BadRequestHttpException(\sprintf('User "%s" does not exists.', $username));
         }
@@ -145,9 +160,11 @@ class UserController extends AbstractController
         $scope = $request->request->get('scope');
         $oneTimeToken = 'one-time' === $request->request->get('grant_type');
 
-        if (!$clientId || 'admin' !== $scope) {
+        if (!$clientId || !$scope) {
             throw new BadRequestHttpException('Invalid payload for OAuth token.');
         }
+
+        $this->denyAccessUnlessGranted('ROLE_'.strtoupper($scope));
 
         $token = $this->config->createToken($username, $clientId, $scope, $oneTimeToken);
 
@@ -162,9 +179,10 @@ class UserController extends AbstractController
      * Returns token data of a user from the configuration file.
      */
     #[Route(path: '/users/{username}/tokens/{id}', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function retrieveToken(string $username, string $id): Response
     {
+        $this->denyAccessUnlessUserOrAdmin($username);
+
         $payload = $this->config->getToken($id);
 
         if (null === $payload || $payload['username'] !== $username) {
@@ -178,9 +196,10 @@ class UserController extends AbstractController
      * Deletes a token from the configuration file.
      */
     #[Route(path: '/users/{username}/tokens/{id}', methods: ['DELETE'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function deleteToken(string $username, string $id): Response
     {
+        $this->denyAccessUnlessUserOrAdmin($username);
+
         $payload = $this->config->getToken($id);
 
         if (null === $payload || $payload['username'] !== $username) {
@@ -219,10 +238,7 @@ class UserController extends AbstractController
     private function convertToJson(User|array $user): array
     {
         if ($user instanceof User) {
-            return [
-                'username' => $user->getUserIdentifier(),
-                'roles' => $user->getRoles(),
-            ];
+            return $user->getProfile();
         }
 
         foreach ($user as $k => $item) {
@@ -246,6 +262,26 @@ class UserController extends AbstractController
         return $this->config->createUser(
             $request->request->get('username'),
             $request->request->get('password'),
+            $request->request->has('roles') ? $request->request->all('roles') : null,
+            array_filter($request->request->all()),
         );
+    }
+
+    private function denyAccessUnlessUserOrAdmin(string $username, string $message = 'Access Denied.'): void
+    {
+        if ($username !== $this->security->getUser()?->getUserIdentifier()) {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN', null, $message);
+        }
+    }
+
+    private function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null, string $message = 'Access Denied.'): void
+    {
+        if (!$this->security->isGranted($attribute, $subject)) {
+            $exception = new AccessDeniedException($message);
+            $exception->setAttributes([$attribute]);
+            $exception->setSubject($subject);
+
+            throw $exception;
+        }
     }
 }

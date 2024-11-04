@@ -54,15 +54,26 @@
     }
 
     label {
+        position: relative;
         display: block;
         padding-left: 25px;
-        background: url("../../assets/images/widget-checkbox--off.svg") 0 0 no-repeat;
-        background-size: 20px 20px;
         text-align: left;
+
+        &:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background: url("../../assets/images/widget-checkbox--off.svg") 0 0 no-repeat;
+            background-size: 20px 20px;
+        }
     }
 
     input:checked + label {
-        background-image: url("../../assets/images/widget-checkbox--on.svg");
+        &:before {
+            background-image: url("../../assets/images/widget-checkbox--on.svg");
+        }
     }
 
     input:disabled + label {

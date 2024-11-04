@@ -23,6 +23,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/session', methods: ['GET', 'POST', 'DELETE'])]
@@ -73,9 +74,12 @@ class SessionController
                 return new JsonResponse($payload);
             }
 
+            $user = $this->config->getUser($token->getUserIdentifier());
+
             return new JsonResponse([
                 'username' => $token?->getUserIdentifier(),
                 'roles' => $token?->getRoleNames(),
+                'scoped' => $user?->getRoles() !== $token->getRoleNames(),
             ]);
         }
 

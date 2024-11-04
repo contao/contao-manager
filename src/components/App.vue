@@ -2,16 +2,22 @@
     <div id="app">
         <Notivue v-slot="item"><Notification :item="item" /></Notivue>
 
-        <div class="safe-mode" v-if="safeMode && view === 'ready'">
-            <strong class="safe-mode__headline">{{ $t('ui.app.safeModeHeadline') }}</strong>&nbsp;
-            <span class="safe-mode__description">{{ $t('ui.app.safeModeDescription') }}</span>&nbsp;
-            <a class="safe-mode__link" href="javascript:window.location.reload()">{{ $t('ui.app.safeModeExit') }}</a>
+        <div class="app-hint app-hint--alert" v-if="safeMode && view === 'ready'">
+            <strong class="app-hint__headline">{{ $t('ui.app.safeModeHeadline') }}</strong>&nbsp;
+            <span class="app-hint__description">{{ $t('ui.app.safeModeDescription') }}</span>&nbsp;
+            <button class="app-hint__link" @click="() => window.location.reload()">{{ $t('ui.app.safeModeExit') }}</button>
         </div>
 
-        <div class="https-warning" v-else-if="isInsecure">
-            <strong class="https-warning__headline">{{ $t('ui.app.httpsHeadline') }}</strong>&nbsp;
-            <span class="https-warning__description">{{ $t('ui.app.httpsDescription') }}</span>&nbsp;
-            <a :href="$t('ui.app.httpsHref')" target="_blank" class="https-warning__link">{{ $t('ui.app.httpsLink') }}</a>
+        <div class="app-hint" v-if="scoped">
+            <strong class="app-hint__headline">{{ $t('ui.app.scopedHeadline') }}</strong>&nbsp;
+            <span class="app-hint__description">{{ $t('ui.app.scopedDescription') }}</span>&nbsp;
+            <button class="app-hint__link" @click="logout">{{ $t('ui.app.scopedLogout') }}</button>
+        </div>
+
+        <div class="app-hint app-hint--warning" v-else-if="isInsecure">
+            <strong class="app-hint__headline">{{ $t('ui.app.httpsHeadline') }}</strong>&nbsp;
+            <span class="app-hint__description">{{ $t('ui.app.httpsDescription') }}</span>&nbsp;
+            <a :href="$t('ui.app.httpsHref')" target="_blank" class="app-hint__link">{{ $t('ui.app.httpsLink') }}</a>
         </div>
 
         <error-view v-if="error"/>
@@ -40,7 +46,7 @@
 
 <script>
     import { defineAsyncComponent, markRaw } from "vue";
-    import { mapState, mapGetters } from 'vuex';
+    import { mapState, mapGetters, mapActions } from 'vuex';
     import axios from 'axios';
     import { Notivue, Notification } from 'notivue';
     import views from '../router/views';
@@ -67,7 +73,7 @@
         computed: {
             ...mapState(['safeMode']),
             ...mapState(['view', 'error']),
-            ...mapState('auth', ['username']),
+            ...mapState('auth', ['username', 'scoped']),
             ...mapState('tasks', { taskStatus: 'status' }),
             ...mapGetters('modals', ['hasModal', 'currentModal']),
 
@@ -79,6 +85,8 @@
         },
 
         methods: {
+            ...mapActions('auth', ['logout']),
+
             initColorMode() {
                 let prefersDark = localStorage.getItem('contao--prefers-dark');
 
@@ -214,17 +222,25 @@ $icons: (
 @import '~notivue/notifications.css';
 @import '~notivue/animations.css';
 
-.https-warning {
+.app-hint {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 27px;
     padding: 4px 8px;
-    background: var(--btn-warning);
+    background: var(--btn-info);
     color: #fff;
     text-align: center;
     z-index: 100;
+
+    &--warning {
+        background: var(--btn-warning);
+    }
+
+    &--alert {
+        background: var(--btn-alert);
+    }
 
     &__description {
         display: none;
@@ -235,38 +251,13 @@ $icons: (
     }
 
     &__link {
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: none;
         color: #fff;
         text-decoration: underline;
-    }
-
-    + div {
-        padding-top: 25px;
-    }
-}
-
-.safe-mode {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 27px;
-    padding: 4px 8px;
-    background: var(--btn-alert);
-    color: #fff;
-    text-align: center;
-    z-index: 100;
-
-    &__description {
-        display: none;
-
-        @include defaults.screen(600) {
-            display: inline;
-        }
-    }
-
-    &__link {
-        color: #fff;
-        text-decoration: underline;
+        cursor: pointer;
     }
 
     + div {

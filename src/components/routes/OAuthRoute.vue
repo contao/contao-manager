@@ -1,53 +1,124 @@
 <template>
     <boxed-layout slotClass="view-oauth">
         <header class="view-oauth__header">
-            <img src="../../assets/images/logo.svg" width="80" height="80" alt="Contao Logo" />
-            <p class="view-oauth__product">Contao Manager</p>
+            <img src="../../assets/images/oauth.svg" width="80" height="80" alt="" class="view-oauth__icon"/>
+            <p class="view-oauth__product">{{ $t('ui.oauth.headline') }}</p>
         </header>
         <main class="view-oauth__form">
-            <h1 class="view-oauth__headline">{{ $t('ui.oauth.headline') }}</h1>
             <p class="view-oauth__description">{{ $t('ui.oauth.description') }}</p>
             <p class="view-oauth__client">{{ hostname }}</p>
-            <p class="view-oauth__warning">{{ $t('ui.oauth.domain') }}</p>
-            <loading-button class="view-oauth__button" color="primary" :disabled="!valid" :loading="authenticating" @click="allowAccess">
-                {{ $t('ui.oauth.allow') }}
-            </loading-button>
-            <button class="view-oauth__button widget-button" @click.prevent="denyAccess" :disabled="!valid || authenticating">
-                {{ $t('ui.oauth.deny') }}
-            </button>
+            <template v-if="scopes.length">
+                <div class="view-oauth__scopes">
+                    <!-- eslint-disable vue/no-v-for-template-key -->
+                    <template v-for="scope in all" :key="scope">
+                        <check-box
+                            class="view-oauth__scope" :class="{ 'view-oauth__scope--required': scopeRequired(scope) }"
+                            :name="scope"
+                            :label="$t(`ui.oauth.scope.${scope}`)"
+                            :disabled="!scopeRequested(scope) || scopeRequired(scope)"
+                            :model-value="model[scope]"
+                            @update:model-value="value => setEnabled(scope, value)"
+                        />
+                    </template>
+                </div>
+                <p class="view-oauth__warning">{{ $t('ui.oauth.domain') }}</p>
+                <loading-button class="view-oauth__button" color="primary" :disabled="!valid" :loading="authenticating" @click="allowAccess">
+                    {{ $t('ui.oauth.allow') }}
+                </loading-button>
+                <button class="view-oauth__button widget-button" @click.prevent="denyAccess" :disabled="!valid || authenticating">
+                    {{ $t('ui.oauth.deny') }}
+                </button>
+            </template>
+            <template v-else>
+                <p class="view-oauth__warning">{{ $t('ui.oauth.outOfScope') }}</p>
+                <button class="view-oauth__button widget-button" @click.prevent="denyAccess" :disabled="!valid">
+                    {{ $t('ui.oauth.deny') }}
+                </button>
+                <button class="view-oauth__button widget-button widget-button--anchor" @click.prevent="logout">
+                    {{ $t('ui.oauth.switchUser') }}
+                </button>
+            </template>
         </main>
     </boxed-layout>
 </template>
 
 <script>
+    import { mapGetters, mapActions } from 'vuex';
     import axios from 'axios';
     import BoxedLayout from '../layouts/BoxedLayout';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+    import CheckBox from '../widgets/CheckBox.vue';
 
     export default {
-        components: { BoxedLayout, LoadingButton },
+        components: { CheckBox, BoxedLayout, LoadingButton },
 
         data: () => ({
             valid: false,
             authenticating: false,
+
+            all: ['read', 'update', 'install', 'admin'],
+
+            model: {
+                admin: false,
+                install: false,
+                update: false,
+                read: false,
+            }
         }),
 
         computed: {
-            hostname () {
-                return this.$route.query.redirect_uri ? new URL(this.$route.query.redirect_uri).hostname : '???';
-            }
+            ...mapGetters('auth', ['isGranted']),
+
+            hostname: vm => vm.$route.query.redirect_uri ? new URL(vm.$route.query.redirect_uri).hostname : '???',
+
+            scopes () {
+                const requested = this.$route.query.scope.split(' ').filter(scope => this.isGranted(`ROLE_${scope.toUpperCase()}`));
+
+                return this.all.filter(s => requested.includes(s));
+            },
+
+            // scopeRequested: vm => scope => isGranted(`ROLE_${scope.toUpperCase()}`, vm.scopes.map(scope => `ROLE_${scope.toUpperCase()}`)),
+            scopeRequested: vm => scope => vm.scopes.includes(scope),
+
+            scopeRequired: vm => scope => {
+                return vm.all.indexOf(scope) <= vm.all.indexOf(vm.all.find(s => vm.scopes.includes(s)));
+            },
         },
 
         methods: {
+            ...mapActions('auth', ['logout']),
+
+            initScopes () {
+                this.all.forEach((scope) => {
+                    this.model[scope] = false;
+                });
+
+                this.setEnabled(this.scopes[this.scopes.length - 1], true);
+            },
+
+            setEnabled (scope, value) {
+                this.all.forEach((s) => {
+                    if (this.scopeRequired(s)) {
+                        this.model[s] = true;
+                    } else if (value) {
+                        this.model[s] = this.all.indexOf(s) <= this.all.indexOf(scope);
+                    } else {
+                        this.model[s] = this.scopeRequested(s) && this.all.indexOf(s) < this.all.indexOf(scope);
+                    }
+                });
+            },
+
             async allowAccess() {
                 this.authenticating = true;
 
                 try {
+                    const scope = Array.from(this.all).reverse().find(k => this.model[k]);
+
                     const response = await axios.post(
                         `api/users/${this.$store.state.auth.username}/tokens`,
                         {
                             client_id: this.$route.query.client_id,
-                            scope: this.$route.query.scope,
+                            scope,
                         },
                     )
 
@@ -55,7 +126,7 @@
                     this.redirect({
                         access_token: response.data.token,
                         token_type: 'bearer',
-                        scope: this.$route.query.scope,
+                        scope,
                         endpoint: `${location.origin}${location.pathname}`
                     });
                 } catch (err) {
@@ -85,10 +156,18 @@
                 } else {
                     document.location.href = `${redirectUrl}#${params}`;
                 }
+            },
+        },
+
+        watch: {
+            scopes () {
+                this.initScopes();
             }
         },
 
-        mounted() {
+        async mounted() {
+            await this.$router.isReady();
+
             let error = false;
             try {
                 const redirectUri = new URL(this.$route.query.redirect_uri);
@@ -114,13 +193,15 @@
                 return this.redirect({ error: 'unsupported_response_type' })
             }
 
-            if (this.$route.query.scope !== 'admin') {
+            if (!this.scopes.length) {
                 return this.redirect({ error: 'invalid_scope' })
             }
 
             if (!this.$route.query.client_id) {
                 return this.redirect({ error: 'invalid_request' })
             }
+
+            this.initScopes();
 
             this.valid = true
         },
@@ -133,9 +214,15 @@
 .view-oauth {
     &__header {
         max-width: 280px;
-        margin: 0 auto 60px;
+        margin: 0 auto 40px;
         padding-top: 40px;
         text-align: center;
+    }
+
+    &__icon {
+        background: var(--contao);
+        border-radius: 10px;
+        padding:10px;
     }
 
     &__product {
@@ -148,17 +235,13 @@
     &__form {
         position: relative;
         max-width: 280px;
-        margin: 0 auto 80px;
+        margin: 0 auto 60px;
         text-align: center;
 
         input,
         select {
             margin: 5px 0 10px;
         }
-    }
-
-    &__headline {
-        margin-bottom: 0;
     }
 
     &__description {
@@ -171,14 +254,30 @@
         font-size: 32px;
     }
 
+    &__scopes {
+        text-align: left;
+    }
+
+    &__scope {
+        padding: 5px 0;
+
+        &--required label {
+            opacity: 1 !important;
+
+            &:before {
+                opacity: 0.5;
+            }
+        }
+    }
+
     &__warning {
       color: var(--btn-alert);
-      margin-top: .5em;
+      margin-top: 2em;
       margin-bottom: 2em;
     }
 
     &__button {
-        margin-top: 20px;
+        margin-top: 1em;
 
         .sk-circle {
             color: #fff;

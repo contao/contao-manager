@@ -89,6 +89,8 @@ class UserConfig extends AbstractConfig
             $users[] = new User(
                 $user['username'],
                 $user['password'],
+                $user['roles'] ?? null,
+                $user,
             );
         }
 
@@ -120,13 +122,14 @@ class UserConfig extends AbstractConfig
             $this->data['users'][$username]['username'],
             $this->data['users'][$username]['password'],
             $roles ?? $this->data['users'][$username]['roles'] ?? null,
+            $this->data['users'][$username],
         );
     }
 
     /**
      * Creates user from given username and plaintext password but does not add it.
      */
-    public function createUser(string $username, string $password): User
+    public function createUser(string $username, string $password, array|null $roles = null, array $data = []): User
     {
         $this->initialize();
 
@@ -136,7 +139,7 @@ class UserConfig extends AbstractConfig
             ->hash($password)
         ;
 
-        return new User($username, $encodedPassword);
+        return new User($username, $encodedPassword, $roles, $data);
     }
 
     /**
@@ -152,10 +155,7 @@ class UserConfig extends AbstractConfig
             throw new \RuntimeException(\sprintf('Username "%s" already exists.', $username));
         }
 
-        $this->data['users'][$username] = [
-            'username' => $username,
-            'password' => $user->getPassword(),
-        ];
+        $this->data['users'][$username] = $user->jsonSerialize();
 
         $this->save();
     }

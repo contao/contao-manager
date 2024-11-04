@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Security;
 
 use Contao\ManagerApi\ApiKernel;
+use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Component\Filesystem\Filesystem;
@@ -29,6 +30,7 @@ abstract class AbstractBrowserAuthenticator extends AbstractAuthenticator
 
     public function __construct(
         private readonly JwtManager $jwtManager,
+        private readonly UserConfig $userConfig,
         private readonly Filesystem $filesystem,
         private readonly ApiKernel $kernel,
     ) {
@@ -50,10 +52,12 @@ abstract class AbstractBrowserAuthenticator extends AbstractAuthenticator
         $this->filesystem->dumpFile($this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.self::LOCK_FILE, '0');
 
         $token->setAttribute('authenticator', static::class);
+        $user = $this->userConfig->getUser($token->getUserIdentifier());
 
         $response = new JsonResponse([
             'username' => $token->getUserIdentifier(),
             'roles' => $token->getRoleNames(),
+            'scoped' => $user?->getRoles() !== $token->getRoleNames(),
         ]);
 
         $this->jwtManager->addToken($request, $response, $token);

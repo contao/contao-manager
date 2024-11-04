@@ -15,38 +15,54 @@ namespace Contao\ManagerApi\Security;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSerializable
 {
+    private array $data;
+
     public function __construct(
-        private readonly string $username,
-        private string|null $password,
-        private array|null $roles = null
+        string $username,
+        string|null $password,
+        array|null $roles = null,
+        array $data = [],
     ) {
-        $this->roles ??= ['ROLE_ADMIN'];
+        $this->data = array_merge($data, [
+            'username' => $username,
+            'password' => $password,
+            'roles' => $roles ?? ['ROLE_ADMIN'],
+        ]);
     }
 
     public function getRoles(): array
     {
-        return $this->roles;
+        return $this->data['roles'];
     }
 
     public function getPassword(): string|null
     {
-        return $this->password;
-    }
-
-    public function getSalt(): string|null
-    {
-        return null;
+        return $this->data['password'] ?? null;
     }
 
     public function getUserIdentifier(): string
     {
-        return $this->username;
+        return $this->data['username'];
     }
 
     public function eraseCredentials(): void
     {
-        $this->password = null;
+        unset($this->data['password']);
+    }
+
+    public function getProfile(): array
+    {
+        $profile = $this->data;
+
+        unset($profile['password']);
+
+        return $profile;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->data;
     }
 }
