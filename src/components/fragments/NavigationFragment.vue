@@ -22,6 +22,7 @@
                     <span>{{ $t('ui.navigation.advanced') }}</span>
                 </a>
                 <ul class="navigation__group navigation__group--sub navigation__group--right">
+                    <navigation-item :to="routes.userManager" sub v-if="isGranted('ROLE_ADMIN')">{{ $t('ui.navigation.users') }}</navigation-item>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="systemCheck">{{ $t('ui.navigation.systemCheck') }}</a></li>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="logout">{{ $t('ui.navigation.logout') }}</a></li>
                 </ul>

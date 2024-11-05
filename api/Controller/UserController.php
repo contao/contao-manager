@@ -255,14 +255,22 @@ class UserController
      */
     private function createUserFromRequest(Request $request): User
     {
-        if (!$request->request->has('username') || !$request->request->has('password')) {
+        $username = $request->request->get('username', '');
+        $password = $request->request->get('password', '');
+        $roles = array_values($request->request->all('roles'));
+
+        if ('' === $username || strlen($password) < 8) {
             throw new BadRequestHttpException('Username and password must be given.');
         }
 
+        if (\count($roles) > 1 || !\in_array($roles[0], ['ROLE_ADMIN', 'ROLE_INSTALL', 'ROLE_UPDATE', 'ROLE_READ'])) {
+            throw new BadRequestHttpException('Only one of the following roles is allowed: ROLE_ADMIN, ROLE_INSTALL, ROLE_UPDATE, ROLE_READ.');
+        }
+
         return $this->config->createUser(
-            $request->request->get('username'),
-            $request->request->get('password'),
-            $request->request->has('roles') ? $request->request->all('roles') : null,
+            $username,
+            $password,
+            $roles ?: null,
             array_filter($request->request->all()),
         );
     }

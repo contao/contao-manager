@@ -7,6 +7,7 @@ import PackagesListRoute from '../components/routes/PackageListRoute';
 import OAuthRoute from '../components/routes/OAuthRoute';
 import MaintenanceRoute from '../components/routes/MaintenanceRoute';
 import LogViewerRoute from '../components/routes/LogViewerRoute';
+import UserManagerRoute from '../components/routes/UserManagerRoute';
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -36,6 +37,11 @@ const router = createRouter({
             name: routes.logViewer.name,
             path: '/logs',
             component: LogViewerRoute,
+        },
+        {
+            name: routes.userManager.name,
+            path: '/users',
+            component: UserManagerRoute,
         },
         { path: '/:pathMatch(.*)*', redirect: '/discover' },
     ],

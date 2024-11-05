@@ -8,19 +8,7 @@
             <p class="view-oauth__description">{{ $t('ui.oauth.description') }}</p>
             <p class="view-oauth__client">{{ hostname }}</p>
             <template v-if="scopes.length">
-                <div class="view-oauth__scopes">
-                    <!-- eslint-disable vue/no-v-for-template-key -->
-                    <template v-for="scope in all" :key="scope">
-                        <check-box
-                            class="view-oauth__scope" :class="{ 'view-oauth__scope--required': scopeRequired(scope) }"
-                            :name="scope"
-                            :label="$t(`ui.oauth.scope.${scope}`)"
-                            :disabled="!scopeRequested(scope) || scopeRequired(scope)"
-                            :model-value="model[scope]"
-                            @update:model-value="value => setEnabled(scope, value)"
-                        />
-                    </template>
-                </div>
+                <user-roles class="view-oauth__scopes" :allowed="scopes" v-model="scope"/>
                 <p class="view-oauth__warning">{{ $t('ui.oauth.domain') }}</p>
                 <loading-button class="view-oauth__button" color="primary" :disabled="!valid" :loading="authenticating" @click="allowAccess">
                     {{ $t('ui.oauth.allow') }}
@@ -47,78 +35,36 @@
     import axios from 'axios';
     import BoxedLayout from '../layouts/BoxedLayout';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import CheckBox from '../widgets/CheckBox.vue';
+    import UserRoles from './Users/UserRoles.vue';
 
     export default {
-        components: { CheckBox, BoxedLayout, LoadingButton },
+        components: { UserRoles, BoxedLayout, LoadingButton },
 
         data: () => ({
             valid: false,
             authenticating: false,
-
-            all: ['read', 'update', 'install', 'admin'],
-
-            model: {
-                admin: false,
-                install: false,
-                update: false,
-                read: false,
-            }
+            scope: null,
         }),
 
         computed: {
             ...mapGetters('auth', ['isGranted']),
 
             hostname: vm => vm.$route.query.redirect_uri ? new URL(vm.$route.query.redirect_uri).hostname : '???',
-
-            scopes () {
-                const requested = this.$route.query.scope.split(' ').filter(scope => this.isGranted(`ROLE_${scope.toUpperCase()}`));
-
-                return this.all.filter(s => requested.includes(s));
-            },
-
-            // scopeRequested: vm => scope => isGranted(`ROLE_${scope.toUpperCase()}`, vm.scopes.map(scope => `ROLE_${scope.toUpperCase()}`)),
-            scopeRequested: vm => scope => vm.scopes.includes(scope),
-
-            scopeRequired: vm => scope => {
-                return vm.all.indexOf(scope) <= vm.all.indexOf(vm.all.find(s => vm.scopes.includes(s)));
-            },
+            scopes: vm => vm.$route.query.scope.split(' ').filter(scope => vm.isGranted(`ROLE_${scope.toUpperCase()}`)),
         },
 
         methods: {
             ...mapActions('auth', ['logout']),
 
-            initScopes () {
-                this.all.forEach((scope) => {
-                    this.model[scope] = false;
-                });
-
-                this.setEnabled(this.scopes[this.scopes.length - 1], true);
-            },
-
-            setEnabled (scope, value) {
-                this.all.forEach((s) => {
-                    if (this.scopeRequired(s)) {
-                        this.model[s] = true;
-                    } else if (value) {
-                        this.model[s] = this.all.indexOf(s) <= this.all.indexOf(scope);
-                    } else {
-                        this.model[s] = this.scopeRequested(s) && this.all.indexOf(s) < this.all.indexOf(scope);
-                    }
-                });
-            },
-
             async allowAccess() {
                 this.authenticating = true;
 
                 try {
-                    const scope = Array.from(this.all).reverse().find(k => this.model[k]);
-
                     const response = await axios.post(
                         `api/users/${this.$store.state.auth.username}/tokens`,
                         {
                             client_id: this.$route.query.client_id,
-                            scope,
+                            scope: this.scope,
                         },
                     )
 
@@ -126,7 +72,7 @@
                     this.redirect({
                         access_token: response.data.token,
                         token_type: 'bearer',
-                        scope,
+                        scope: this.scope,
                         endpoint: `${location.origin}${location.pathname}`
                     });
                 } catch (err) {
@@ -157,12 +103,6 @@
                     document.location.href = `${redirectUrl}#${params}`;
                 }
             },
-        },
-
-        watch: {
-            scopes () {
-                this.initScopes();
-            }
         },
 
         async mounted() {
@@ -200,8 +140,6 @@
             if (!this.$route.query.client_id) {
                 return this.redirect({ error: 'invalid_request' })
             }
-
-            this.initScopes();
 
             this.valid = true
         },
@@ -256,18 +194,6 @@
 
     &__scopes {
         text-align: left;
-    }
-
-    &__scope {
-        padding: 5px 0;
-
-        &--required label {
-            opacity: 1 !important;
-
-            &:before {
-                opacity: 0.5;
-            }
-        }
     }
 
     &__warning {
