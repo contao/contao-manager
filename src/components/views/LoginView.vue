@@ -15,7 +15,7 @@
                 <p class="view-login__description">{{ $t('ui.login.description') }}</p>
 
                 <text-field ref="username" name="username" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
-                <text-field type="password" name="password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
+                <text-field type="password" name="password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" minlength="8" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
 
                 <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in">
                     {{ $t('ui.login.button') }}

@@ -55,7 +55,7 @@
                             ref="password" name="password" type="password"
                             :label="$t('ui.setup.backend-user.password')" :placeholder="$t('ui.setup.backend-user.passwordPlaceholder')"
                             :disabled="processing"
-                            required pattern=".{8,}" validate
+                            required minlength="8" validate
                             :error="errors.password" @focus="errors.password = ''" @blur="validatePassword"
                             v-model="password"
                         />

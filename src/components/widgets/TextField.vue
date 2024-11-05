@@ -7,8 +7,7 @@
             :id="label ? 'ctrl_'+name : ''"
             :name="name"
             :placeholder="validate ? (placeholder || ' ') : placeholder"
-            :required="required"
-            :pattern="pattern"
+            :required="required" :pattern="pattern" :minlength="minlength" :maxlength="maxlength"
             :disabled="disabled"
             :autocapitalize="autocapitalize || 'none'"
             :value="modelValue"
@@ -46,6 +45,8 @@
             validate: Boolean,
             error: String,
             autocapitalize: String,
+            minlength: String,
+            maxlength: String,
         },
 
         data: () => ({
@@ -94,8 +95,19 @@
 
 <style rel="stylesheet/scss" lang="scss">
 .widget {
-    &-text--password input {
-        padding-right: 40px !important;
+    &-text {
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            display: none;
+        }
+
+        input[type=number] {
+            appearance: textfield !important;
+        }
+
+        &--password input {
+            padding-right: 40px !important;
+        }
     }
 
     &__password-toggle {
