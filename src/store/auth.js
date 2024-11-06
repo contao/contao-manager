@@ -132,24 +132,29 @@ export default {
             );
         },
 
-        login(store, { username, password }) {
+        async login(store, { username, password, invitation }) {
             $store = store;
+            const data = { username, password };
 
-            return axios.post('api/session', { username, password }).then(
-                (response) => {
-                    store.commit('setUser', response.data);
-                    startCountdown();
+            if (invitation) {
+                data.invitation = invitation;
+            }
 
-                    return true;
-                },
-                (response) => {
-                    if (response.status === 403) {
-                        store.commit('setLocked', null, { root: true });
-                    }
+            try {
+                const response = await axios.post('api/session', data);
 
-                    return false;
-                },
-            );
+                store.commit('setUser', response.data);
+                startCountdown();
+
+                return response;
+            } catch (err) {
+                if (err.response.status === 403) {
+                    store.commit('setLocked', null, { root: true });
+                    store.commit('setView', views.LOGIN);
+                }
+
+                return err.response;
+            }
         },
 
         logout({ commit }) {

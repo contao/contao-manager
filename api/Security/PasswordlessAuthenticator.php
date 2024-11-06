@@ -42,8 +42,13 @@ class PasswordlessAuthenticator extends AbstractBrowserAuthenticator
 
     public function supports(Request $request): bool
     {
-        return parent::supports($request)
-            && $request->request->has('token');
+        if (!parent::supports($request) || !$request->request->has('token')) {
+            return false;
+        }
+
+        $token = $this->userConfig->findToken($request->request->get('token'));
+
+        return $token && 'one-time' === ($token['grant_type'] ?? null);
     }
 
     public function authenticate(Request $request): SelfValidatingPassport

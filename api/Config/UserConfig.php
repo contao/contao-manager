@@ -296,6 +296,36 @@ class UserConfig extends AbstractConfig
         $this->save();
     }
 
+    public function createInvitation(string $scope = 'admin'): array
+    {
+        $this->initialize();
+
+        $token = bin2hex(random_bytes(16));
+        $id = hash('sha256', $token);
+
+        if (isset($this->data['tokens'][$id])) {
+            throw new \RuntimeException(\sprintf('Token with ID "%s" already exist.', $id));
+        }
+
+        $data = [
+            'scope' => $scope,
+            'grant_type' => 'invitation',
+            'expires' => strtotime('+1 week'),
+        ];
+
+        $this->data['tokens'][$id] = $data;
+
+        $this->save();
+
+        return array_merge(
+            [
+                'id' => $id,
+                'token' => $token,
+            ],
+            $this->data['tokens'][$id],
+        );
+    }
+
     protected function initialize(): void
     {
         parent::initialize();

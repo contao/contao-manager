@@ -96,6 +96,35 @@
 
                 document.documentElement.dataset.colorScheme = prefersDark === 'true' ? 'dark' : 'light';
             },
+
+            async checkPublicConfig () {
+                const chunks = location.pathname.split('/').filter(v => v !== '');
+                chunks.unshift('');
+
+                while (chunks.pop() !== undefined && chunks.length) {
+                    let config;
+
+                    try {
+                        config = (await axios.get(`${chunks.join('/')}/contao-manager/users.json`)).data;
+                    } catch (err) {
+                        // user.json could not be loaded, seems like a valid config
+                        continue;
+                    }
+
+                    if (!config.users && !config.version) {
+                        continue;
+                    }
+
+                    this.$store.commit('setError', {
+                        title: this.$t('ui.app.configSecurity1'),
+                        type: 'about:blank',
+                        status: '500',
+                        detail: this.$t('ui.app.configSecurity2'),
+                    });
+
+                    throw new Error(this.$t('ui.app.configSecurity1'));
+                }
+            }
         },
 
         watch: {
@@ -127,8 +156,14 @@
 
         async mounted() {
             this.initColorMode();
+            await this.checkPublicConfig()
 
             await this.$router.isReady();
+
+            if (this.$route.query.invitation) {
+                this.$store.commit('setView', views.ACCOUNT);
+                return;
+            }
 
             if (this.$route.query.token) {
                 try {
@@ -141,30 +176,6 @@
             }
 
             const accountStatus = await this.$store.dispatch('auth/status');
-
-            const chunks = location.pathname.split('/').filter(v => v !== '');
-            chunks.unshift('');
-
-            while (chunks.pop() !== undefined && chunks.length) {
-                try {
-                    const config = (await axios.get(`${chunks.join('/')}/contao-manager/users.json`)).data;
-
-                    if (!config.users && !config.version) {
-                        continue;
-                    }
-
-                    this.$store.commit('setError', {
-                        title: this.$t('ui.app.configSecurity1'),
-                        type: 'about:blank',
-                        status: '500',
-                        detail: this.$t('ui.app.configSecurity2'),
-                    });
-
-                    return;
-                } catch (err) {
-                    // user.json could not be loaded, seems like a valid config
-                }
-            }
 
             if (accountStatus === 200) {
                 this.$store.commit('setView', views.BOOT);
@@ -183,12 +194,11 @@
     };
 </script>
 
-
-
 <style rel="stylesheet/scss" lang="scss">
 $icons: (
     'add',
     'check',
+    'clipboard',
     'cloud',
     'cloud-off',
     'console',

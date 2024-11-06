@@ -30,20 +30,22 @@
                     <text-field
                         ref="username" name="username"
                         :label="$t('ui.account.username')"
-                        :disabled="installing"
+                        :disabled="logging_in"
                         required
+                        :error="errors.username" @blur="errors.username = ''"
                         v-model="username"
                     />
                     <text-field
                         ref="password" name="password" type="password"
                         :label="$t('ui.account.password')" :placeholder="$t('ui.account.passwordPlaceholder')"
-                        :disabled="installing"
+                        :disabled="logging_in"
                         required pattern=".{8,}"
                         :error="errors.password" @blur="validatePassword"
                         v-model="password"
                     />
 
-                    <loading-button submit color="primary" :disabled="!valid" :loading="installing">{{ $t('ui.account.submit') }}</loading-button>
+                    <loading-button submit color="primary" :disabled="!valid" :loading="logging_in">{{ $t('ui.account.submit') }}</loading-button>
+                    <button class="widget-button widget-button--anchor" @click="gotoLogin" v-if="isInvitation">{{ $t('ui.account.login') }}</button>
                 </fieldset>
             </form>
         </main>
@@ -74,12 +76,17 @@ export default {
             password: '',
 
             errors: {
+                username: '',
                 password: '',
             },
 
-            installing: false,
             valid: false,
+            logging_in: false,
         }),
+
+        computed: {
+            isInvitation: vm => !!vm.$route.query.invitation,
+        },
 
         methods: {
             validate() {
@@ -99,29 +106,39 @@ export default {
                 }
             },
 
-            createAccount() {
+            async createAccount() {
                 if (!this.valid) {
                     return;
                 }
 
-                this.installing = true;
+                this.logging_in = true;
 
-                this.$store.dispatch(
+                const response = await this.$store.dispatch(
                     'auth/login',
                     {
                         username: this.username,
                         password: this.password,
-                    },
-                ).then(
-                    (success) => {
-                        if (success) {
-                            this.$store.commit('setView', views.BOOT);
-                        } else {
-                            this.$store.commit('apiError');
-                        }
+                        invitation: this.$route.query.invitation
                     },
                 );
+
+                if (response.status === 201) {
+                    this.$router.replace({ name: this.$route.name, query: null });
+                    this.$store.commit('setView', views.BOOT);
+                } else {
+                    this.logging_in = false;
+
+                    this.errors.username = this.$t('ui.account.loginInvalid');
+                    this.$nextTick(() => {
+                        this.$refs.username.focus();
+                    })
+                }
             },
+
+            gotoLogin () {
+                this.$router.replace({ name: this.$route.name, query: null });
+                this.$store.commit('setView', views.LOGIN);
+            }
         },
 
         watch: {

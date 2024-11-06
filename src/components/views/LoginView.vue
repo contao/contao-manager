@@ -55,24 +55,24 @@
         },
 
         methods: {
-            login() {
+            async login() {
                 if (!this.inputValid) {
                     return;
                 }
 
                 this.logging_in = true;
 
-                this.$store.dispatch('auth/login', {
+                const response = await this.$store.dispatch('auth/login', {
                     username: this.username,
                     password: this.password,
-                }).then((success) => {
-                    if (success) {
-                        this.$store.commit('setView', views.BOOT);
-                    } else {
-                        this.logging_in = false;
-                        this.login_failed = true;
-                    }
                 });
+
+                if (response.status === 201) {
+                    this.$store.commit('setView', views.BOOT);
+                } else {
+                    this.logging_in = false;
+                    this.login_failed = true;
+                }
             },
             reset() {
                 this.login_failed = false;

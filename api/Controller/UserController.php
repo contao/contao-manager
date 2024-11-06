@@ -212,6 +212,20 @@ class UserController
     }
 
     /**
+     * Adds an invitation to the configuration file.
+     */
+    #[Route(path: '/invitations', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function inviteUser(Request $request): Response
+    {
+        $token = $this->config->createInvitation($request->request->get('scope'));
+        $token['url'] = $request->getUriForPath('/#?invitation='.$token['token']);
+
+        return new JsonResponse($token, Response::HTTP_CREATED);
+    }
+
+
+    /**
      * Creates a response for given user information.
      *
      * @param User|array<User> $user

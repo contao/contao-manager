@@ -513,6 +513,31 @@ paths:
     #   Users   #
     #############
 
+    /api/invite:
+        post:
+            summary: Create invitation token for a new user.
+            tags: [Users]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                scope:
+                                    type: string
+                                    enum:
+                                        - admin
+                                        - install
+                                        - update
+                                        - read
+            responses:
+                201:
+                    description: Data of the newly created invitation token.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TokenResponse'
+
     /api/users:
         get:
             summary: User List

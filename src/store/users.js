@@ -32,14 +32,9 @@ export default {
             return response.data;
         },
 
-        async create(store, { username, password, email, roles }) {
+        async invite(store, scope) {
             try {
-                return await axios.post('api/users', {
-                    username,
-                    password,
-                    roles,
-                    email,
-                });
+                return await axios.post('api/invitations', { scope });
             } catch (error) {
                 return error.response;
             }

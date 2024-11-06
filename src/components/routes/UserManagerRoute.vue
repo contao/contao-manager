@@ -21,7 +21,7 @@
             </div>
 
             <div class="user-manager__new">
-                <button class="widget-button widget-button--inline widget-button--add" @click="addUser" v-if="isGranted('ROLE_ADMIN')">Add User</button>
+                <button class="widget-button widget-button--inline widget-button--add" @click="addUser" v-if="isGranted('ROLE_ADMIN')">Invite User</button>
             </div>
         </div>
 
@@ -32,7 +32,7 @@
 import { mapState, mapGetters } from 'vuex';
 import MainLayout from '../layouts/MainLayout';
 import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
-import CreateUser from './Users/CreateUser.vue';
+import InviteUser from './Users/InviteUser';
 
 export default {
     components: { MainLayout, LoadingSpinner },
@@ -45,7 +45,7 @@ export default {
 
     methods: {
         addUser() {
-            this.$store.commit('modals/open', { id: 'create-user', component: CreateUser, });
+            this.$store.commit('modals/open', { id: 'invite-user', component: InviteUser, });
         },
 
         async deleteUser(username) {
