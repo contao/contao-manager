@@ -6,8 +6,8 @@
             :placeholder="inputPlaceholder"
             :title="inputTitle"
             v-model="inputValue"
-            :class="{ disabled: !emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted('ROLE_UPDATE')), error: constraintError }"
-            :disabled="!constraintEditable || willBeRemoved || (!emit && !isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted('ROLE_UPDATE')"
+            :class="{ disabled: !emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.UPDATE)), error: constraintError }"
+            :disabled="!constraintEditable || willBeRemoved || (!emit && !isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.UPDATE)"
             @keypress.enter.prevent="saveConstraint"
             @keypress.esc.prevent="resetConstraint"
             @blur="saveConstraint"
@@ -16,7 +16,7 @@
             :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
             :title="buttonTitle"
             @click="editConstraint"
-            :disabled="!emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted('ROLE_UPDATE'))"
+            :disabled="!emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.UPDATE))"
         >{{ buttonValue }}</button>
     </fieldset>
 </template>
@@ -24,6 +24,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import axios from 'axios';
+    import scopes from '../../scopes';
     import packageStatus from '../../mixins/packageStatus';
 
     export default {
@@ -53,6 +54,7 @@
 
         computed: {
             ...mapGetters('auth', ['isGranted']),
+            scopes: () => scopes,
 
             buttonTitle: vm => vm.isUpload ? vm.$t('ui.package.uploadConstraint') : '',
             buttonValue: vm => vm.isUpload ? vm.$t('ui.package.editConstraint') : vm.$t('ui.package.private'),

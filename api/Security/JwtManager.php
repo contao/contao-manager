@@ -73,7 +73,7 @@ class JwtManager
             'iat' => time(),
             'exp' => strtotime('+30 minutes'),
             'username' => $token->getUserIdentifier(),
-            'roles' => $token->getRoleNames(),
+            'scope' => User::scopeFromRoles($token->getRoleNames()),
         ];
 
         $response->headers->setCookie(

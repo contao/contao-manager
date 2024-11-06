@@ -13,7 +13,7 @@
                     <div class="user-manager__item">
                         <div>Username: {{ user.username }}</div>
                         <div>E-Mail: {{ user.email }}</div>
-                        <div>Role: {{ user.roles.join(', ') }}</div>
+                        <div>Scope: {{ user.scope }}</div>
                         <div class="user-manager__spacer"></div>
                         <button class="widget-button widget-button--alert widget-button--trash" @click="deleteUser(user.username)" v-if="currentUser !== user.username">Delete</button>
                     </div>
@@ -21,7 +21,7 @@
             </div>
 
             <div class="user-manager__new">
-                <button class="widget-button widget-button--inline widget-button--add" @click="addUser" v-if="isGranted('ROLE_ADMIN')">Invite User</button>
+                <button class="widget-button widget-button--inline widget-button--add" @click="addUser" v-if="isGranted(scopes.ADMIN)">Invite User</button>
             </div>
         </div>
 
@@ -30,6 +30,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import scopes from '../../scopes';
 import MainLayout from '../layouts/MainLayout';
 import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
 import InviteUser from './Users/InviteUser';
@@ -41,6 +42,7 @@ export default {
         ...mapState('auth', { currentUser: 'username' }),
         ...mapGetters('auth', ['isGranted']),
         ...mapGetters('users', ['users']),
+        scopes: () => scopes,
     },
 
     methods: {

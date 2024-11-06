@@ -60,7 +60,7 @@ class TokenAuthenticator extends AbstractAuthenticator
         $userBadge = new UserBadge(
             $token['username'],
             $this->userProvider->loadUserByIdentifier(...),
-            ['roles' => ['ROLE_'.strtoupper($token['scope'])]],
+            ['scope' => $token['scope']],
         );
 
         return new SelfValidatingPassport($userBadge);

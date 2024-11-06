@@ -48,7 +48,7 @@
         <template #actions>
             <slot name="actions">
                 <details-button :name="data.name" v-if="data.name"/>
-                <template v-if="isGranted('ROLE_UPDATE')">
+                <template v-if="isGranted(scopes.UPDATE)">
                     <template v-if="isContao">
                         <button class="widget-button widget-button--update" :disabled="isModified" v-if="!isRequired" @click="update">{{ $t('ui.package.updateButton') }}</button>
                     </template>
@@ -77,6 +77,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import scopes from '../../../scopes';
     import datimFormat from 'contao-package-list/src/filters/datimFormat'
     import numberFormat from 'contao-package-list/src/filters/numberFormat'
     import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
@@ -104,6 +105,7 @@
         computed: {
             ...mapGetters('auth', ['isGranted']),
             ...mapGetters('packages', ['packageFeatures']),
+            scopes: () => scopes,
 
             packageData: vm => Object.assign(
                 {},

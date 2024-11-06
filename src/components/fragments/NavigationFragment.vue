@@ -4,7 +4,7 @@
         <ul class="navigation__group navigation__group--main">
             <navigation-item :to="routes.discover">{{ $t('ui.navigation.discover') }}</navigation-item>
             <navigation-item :to="routes.packages">{{ $t('ui.navigation.packages') }}<span class="navigation__item-badge" v-if="packageChanges > 0">{{ packageChanges }}</span></navigation-item>
-            <navigation-item :to="routes.maintenance" v-if="isGranted('ROLE_UPDATE')">{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="hasDatabaseChanges || hasDatabaseWarning || hasDatabaseError">1</span></navigation-item>
+            <navigation-item :to="routes.maintenance" v-if="isGranted(scopes.UPDATE)">{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="hasDatabaseChanges || hasDatabaseWarning || hasDatabaseError">1</span></navigation-item>
             <li class="navigation__item navigation__item--main">
                 <a tabindex="0" aria-haspopup="true">{{ $t('ui.navigation.tools') }}</a>
                 <ul class="navigation__group navigation__group--sub">
@@ -22,7 +22,7 @@
                     <span>{{ $t('ui.navigation.advanced') }}</span>
                 </a>
                 <ul class="navigation__group navigation__group--sub navigation__group--right">
-                    <navigation-item :to="routes.userManager" sub v-if="isGranted('ROLE_ADMIN')">{{ $t('ui.navigation.users') }}</navigation-item>
+                    <navigation-item :to="routes.userManager" sub>{{ $t('ui.navigation.users') }}</navigation-item>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="systemCheck">{{ $t('ui.navigation.systemCheck') }}</a></li>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="logout">{{ $t('ui.navigation.logout') }}</a></li>
                 </ul>
@@ -36,6 +36,7 @@
     import views from '../../router/views';
     import routes from '../../router/routes';
     import NavigationItem from './NavigationItem.vue';
+    import scopes from '../../scopes';
 
     export default {
         components: { NavigationItem },
@@ -56,6 +57,7 @@
             ...mapGetters('packages/uploads', ['totalUploads']),
             ...mapGetters('server/database', { hasDatabaseChanges: 'hasChanges', hasDatabaseWarning: 'hasWarning', hasDatabaseError: 'hasError' }),
 
+            scopes: () => scopes,
             packageChanges: vm => vm.totalChanges + vm.totalUploads,
 
             backendUrl: vm => vm.contaoConfig?.backend?.route_prefix || '/contao',
@@ -94,7 +96,7 @@
         },
 
         mounted() {
-            if (this.isGranted('ROLE_UPDATE')) {
+            if (this.isGranted(scopes.UPDATE)) {
                 this.$store.dispatch('contao/install-tool/fetch');
                 this.$store.dispatch('contao/jwt-cookie/get').catch(() => {});
                 this.$store.dispatch('contao/access-key/get').catch(() => {});

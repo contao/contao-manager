@@ -30,6 +30,7 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
+    import scopes from '../../scopes';
 
     import PackageBase from './Packages/PackageBase';
     import PackageUploads from './Packages/PackageUploads';
@@ -111,7 +112,7 @@
 
         methods: {
             openFileSelector() {
-                if (!this.$refs.uploader || !this.isGranted('ROLE_INSTALL')) {
+                if (!this.$refs.uploader || !this.isGranted(scopes.INSTALL)) {
                     return;
                 }
 

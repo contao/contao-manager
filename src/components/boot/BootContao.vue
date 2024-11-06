@@ -1,17 +1,17 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.contao.title')" :description="bootDescription">
-        <button class="widget-button widget-button--primary widget-button--run" :disabled="!isGranted('ROLE_INSTALL')" @click="setup" v-if="bootState === 'action'">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
-        <button class="widget-button widget-button--alert" :disabled="!isGranted('ROLE_INSTALL')" @click="setup" v-if="bootState === 'warning'">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
-        <button class="widget-button" :disabled="!isGranted('ROLE_INSTALL')" @click="setup" v-if="bootState === 'success' && databaseSupported">{{ $t('ui.server.contao.setup') }}</button>
+        <button class="widget-button widget-button--primary widget-button--run" :disabled="!isGranted(scopes.INSTALL)" @click="setup" v-if="bootState === 'action'">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
+        <button class="widget-button widget-button--alert" :disabled="!isGranted(scopes.INSTALL)" @click="setup" v-if="bootState === 'warning'">{{ $t(`ui.server.contao.${(databaseProblem && !databaseAccessProblem) ? 'check' : 'setup'}`) }}</button>
+        <button class="widget-button" :disabled="!isGranted(scopes.INSTALL)" @click="setup" v-if="bootState === 'success' && databaseSupported">{{ $t('ui.server.contao.setup') }}</button>
     </boot-check>
 </template>
 
 <script>
+    import { mapGetters, mapState } from 'vuex';
+    import scopes from '../../scopes';
     import views from '../../router/views';
     import boot from '../../mixins/boot';
-
     import BootCheck from '../fragments/BootCheck';
-    import { mapGetters, mapState } from 'vuex';
 
     export default {
         mixins: [boot],
@@ -26,6 +26,7 @@
             ...mapState('server/adminUser', { userSupported: 'supported', hasUser: 'hasUser' }),
             ...mapGetters('auth', ['isGranted']),
             ...mapGetters('server/database', { databaseProblem: 'hasError', databaseAccessProblem: 'accessProblem' }),
+            scopes: () => scopes,
         },
 
         methods: {
@@ -60,7 +61,7 @@
                     bootDescription = this.$t('ui.server.error');
                 }
 
-                if (bootState === 'success' && this.isGranted('ROLE_UPDATE')) {
+                if (bootState === 'success' && this.isGranted(scopes.UPDATE)) {
                     await Promise.all([
                         this.$store.dispatch('contao/install-tool/fetch', false),
                         this.$store.dispatch('server/database/get', false)
@@ -73,7 +74,7 @@
                         } else if (this.databaseProblem) {
                             bootState = 'warning';
                             bootDescription += ` ${this.$t('ui.server.contao.connectionProblem')}`;
-                        } else if (this.isGranted('ROLE_INSTALL')) {
+                        } else if (this.isGranted(scopes.INSTALL)) {
                             await this.$store.dispatch('server/adminUser/get', false)
 
                             if (this.userSupported && !this.hasUser) {

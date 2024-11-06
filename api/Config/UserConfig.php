@@ -19,6 +19,8 @@ use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 class UserConfig extends AbstractConfig
 {
+    public const SCOPES = ['admin', 'install', 'update', 'read'];
+
     public function __construct(
         private readonly PasswordHasherFactoryInterface $passwordHasherFactory,
         ApiKernel $kernel,
@@ -89,7 +91,7 @@ class UserConfig extends AbstractConfig
             $users[] = new User(
                 $user['username'],
                 $user['password'],
-                $user['roles'] ?? null,
+                $user['scope'] ?? null,
                 $user,
             );
         }
@@ -110,7 +112,7 @@ class UserConfig extends AbstractConfig
     /**
      * Gets the user by username or null if it does not exist.
      */
-    public function getUser(string $username, array|null $roles = null): User|null
+    public function getUser(string $username, string|null $scope = null): User|null
     {
         $this->initialize();
 
@@ -121,7 +123,7 @@ class UserConfig extends AbstractConfig
         return new User(
             $this->data['users'][$username]['username'],
             $this->data['users'][$username]['password'],
-            $roles ?? $this->data['users'][$username]['roles'] ?? null,
+            $scope ?? $this->data['users'][$username]['scope'] ?? null,
             $this->data['users'][$username],
         );
     }
@@ -129,7 +131,7 @@ class UserConfig extends AbstractConfig
     /**
      * Creates user from given username and plaintext password but does not add it.
      */
-    public function createUser(string $username, string $password, array|null $roles = null, array $data = []): User
+    public function createUser(string $username, string $password, string|null $scope = null, array $data = []): User
     {
         $this->initialize();
 
@@ -139,7 +141,7 @@ class UserConfig extends AbstractConfig
             ->hash($password)
         ;
 
-        return new User($username, $encodedPassword, $roles, $data);
+        return new User($username, $encodedPassword, $scope, $data);
     }
 
     /**

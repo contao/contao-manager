@@ -1,15 +1,16 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.config.title')" :description="bootDescription">
-        <button class="widget-button widget-button--alert" v-if="bootState === 'error' || bootState === 'action'" :disabled="!isGranted('ROLE_INSTALL')" @click="showConfiguration">{{ $t('ui.server.config.setup') }}</button>
-        <button class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" :disabled="!isGranted('ROLE_INSTALL')" @click="showConfiguration">{{ $t('ui.server.config.change') }}</button>
+        <button class="widget-button widget-button--alert" v-if="bootState === 'error' || bootState === 'action'" :disabled="!isGranted(scopes.INSTALL)" @click="showConfiguration">{{ $t('ui.server.config.setup') }}</button>
+        <button class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" :disabled="!isGranted(scopes.INSTALL)" @click="showConfiguration">{{ $t('ui.server.config.change') }}</button>
     </boot-check>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import scopes from '../../scopes';
 import boot from '../../mixins/boot';
 import views from '../../router/views';
 import BootCheck from '../fragments/BootCheck';
-import { mapGetters } from 'vuex';
 
 export default {
     mixins: [boot],
@@ -17,6 +18,7 @@ export default {
 
     computed: {
         ...mapGetters('auth', ['isGranted']),
+        scopes: () => scopes,
     },
 
     methods: {

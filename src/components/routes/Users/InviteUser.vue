@@ -32,8 +32,8 @@
                 If you need multiple logins for the Contao Manager, you can create an invitation link here.
                 Share this link with your client or use it on another device to create a new account with the given permissions.
             </p>
-            <user-roles v-model="scope"/>
-            <a class="invite-user__help" :href="`https://to.contao.org/docs/manager-roles?lang=${$i18n.locale}`" target="_blank">Learn about permissions</a>
+            <user-scope v-model="scope"/>
+            <a class="invite-user__help" :href="`https://to.contao.org/docs/manager-scopes?lang=${$i18n.locale}`" target="_blank">Learn about permissions</a>
         </template>
         <template #actions>
             <loading-button submit color="primary" :loading="loading" v-if="!token">Create Invitation Link</loading-button>
@@ -46,10 +46,10 @@
     import datimFormat from 'contao-package-list/src/filters/datimFormat';
     import PopupOverlay from 'contao-package-list/src/components/fragments/PopupOverlay';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import UserRoles from './UserRoles';
+    import UserScope from './UserScope';
 
     export default {
-        components: { PopupOverlay, LoadingButton, UserRoles },
+        components: { PopupOverlay, LoadingButton, UserScope },
 
         data: () => ({
             loading: false,

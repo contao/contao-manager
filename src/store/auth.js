@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign,no-fallthrough */
 
 import axios from 'axios';
+import scopes from '../scopes';
 import views from '../router/views';
 import LogoutWarning from "../components/fragments/LogoutWarning";
 
@@ -53,37 +54,24 @@ export default {
 
     state: {
         username: null,
-        roles: null,
-        scoped: false,
+        scope: null,
+        limited: false,
         countdown: null,
     },
 
     getters: {
-        isGranted: state => role => {
-            const roles = [];
-            state.roles?.forEach(role => {
-                // noinspection FallThroughInSwitchStatementJS
-                switch (role) {
-                    case 'ROLE_ADMIN':
-                        roles.push('ROLE_ADMIN');
-                    case 'ROLE_INSTALL':
-                        roles.push('ROLE_INSTALL');
-                    case 'ROLE_UPDATE':
-                        roles.push('ROLE_UPDATE');
-                    case 'ROLE_READ':
-                        roles.push('ROLE_READ');
-                }
-            })
+        isGranted: state => scope => {
+            const all = Object.values(scopes);
 
-            return roles.includes(role);
+            return state.scope && all.indexOf(state.scope) <= all.indexOf(scope);
         }
     },
 
     mutations: {
         setUser(state, data) {
             state.username = data?.username || null;
-            state.roles = data?.roles || null;
-            state.scoped = data?.scoped || false;
+            state.scope = data?.scope || null;
+            state.limited = data?.limited || false;
         },
 
         setCountdown(state, value) {

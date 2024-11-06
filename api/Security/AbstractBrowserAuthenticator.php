@@ -53,11 +53,12 @@ abstract class AbstractBrowserAuthenticator extends AbstractAuthenticator
 
         $token->setAttribute('authenticator', static::class);
         $user = $this->userConfig->getUser($token->getUserIdentifier());
+        $scope = User::scopeFromRoles($token->getRoleNames());
 
         $response = new JsonResponse([
             'username' => $token->getUserIdentifier(),
-            'roles' => $token->getRoleNames(),
-            'scoped' => $user?->getRoles() !== $token->getRoleNames(),
+            'scope' => $scope,
+            'limited' => $scope !== User::scopeFromRoles($user?->getRoles()),
         ], Response::HTTP_CREATED);
 
         $this->jwtManager->addToken($request, $response, $token);

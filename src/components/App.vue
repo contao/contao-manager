@@ -8,10 +8,10 @@
             <button class="app-hint__link" @click="() => window.location.reload()">{{ $t('ui.app.safeModeExit') }}</button>
         </div>
 
-        <div class="app-hint" v-if="scoped">
-            <strong class="app-hint__headline">{{ $t('ui.app.scopedHeadline') }}</strong>&nbsp;
-            <span class="app-hint__description">{{ $t('ui.app.scopedDescription') }}</span>&nbsp;
-            <button class="app-hint__link" @click="logout">{{ $t('ui.app.scopedLogout') }}</button>
+        <div class="app-hint" v-if="limited">
+            <strong class="app-hint__headline">{{ $t('ui.app.limitedHeadline') }}</strong>&nbsp;
+            <span class="app-hint__description">{{ $t('ui.app.limitedDescription') }}</span>&nbsp;
+            <button class="app-hint__link" @click="logout">{{ $t('ui.app.limitedLogout') }}</button>
         </div>
 
         <div class="app-hint app-hint--warning" v-else-if="isInsecure">
@@ -73,7 +73,7 @@
         computed: {
             ...mapState(['safeMode']),
             ...mapState(['view', 'error']),
-            ...mapState('auth', ['username', 'scoped']),
+            ...mapState('auth', ['username', 'limited']),
             ...mapState('tasks', { taskStatus: 'status' }),
             ...mapGetters('modals', ['hasModal', 'currentModal']),
 

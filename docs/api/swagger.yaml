@@ -476,6 +476,7 @@ paths:
                                     type: string
                                 password:
                                     type: string
+                                    minLength: 8
             responses:
                 201:
                     description: User was created successfully.
@@ -1394,15 +1395,13 @@ components:
                 username:
                     type: string
                     description: Username of the user.
-                roles:
-                    type: array
-                    items:
-                        type: string
-                        enum:
-                            - ROLE_ADMIN
-                            - ROLE_INSTALL
-                            - ROLE_UPDATE
-                            - ROLE_READ
+                scope:
+                    type: string
+                    enum:
+                        - admin
+                        - install
+                        - update
+                        - read
 
         UserPassword:
             allOf:
@@ -1438,7 +1437,7 @@ components:
 
         TokenResponse:
             type: object
-            required: [id, token, username, client_id, scope]
+            required: [id, token, scope]
             properties:
                 id:
                     type: string
@@ -1447,10 +1446,10 @@ components:
                     description: Only available if the token was freshly created.
                 username:
                     type: string
-                    description: Username of the token.
+                    description: Username of the token, if grant_type is not "invitation".
                 client_id:
                     type: string
-                    description: Client ID of the token.
+                    description: Client ID of the token, if grant_type is not "invitation".
                 scope:
                     type: string
                     description: Permission scope of the token.
@@ -1464,6 +1463,7 @@ components:
                     description: Grant type of the token
                     enum:
                         - one-time
+                        - invitation
                 expires:
                     type: integer
                     description: Timestamp when the one-time token expires.

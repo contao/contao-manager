@@ -75,7 +75,7 @@ class InvitationAuthenticator extends AbstractBrowserAuthenticator
         $user = $this->userConfig->createUser(
             $request->request->get('username'),
             $request->request->get('password'),
-            ['ROLE_'.strtoupper($token['scope'])],
+            $token['scope'],
         );
 
         if ($this->userConfig->hasUser($user->getUserIdentifier())) {

@@ -18,6 +18,7 @@ use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Security\JwtManager;
 use Contao\ManagerApi\Security\LoginAuthenticator;
 use Contao\ManagerApi\Security\TokenAuthenticator;
+use Contao\ManagerApi\Security\User;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -75,11 +76,12 @@ class SessionController
             }
 
             $user = $this->config->getUser($token->getUserIdentifier());
+            $scope = User::scopeFromRoles($token?->getRoleNames());
 
             return new JsonResponse([
                 'username' => $token?->getUserIdentifier(),
-                'roles' => $token?->getRoleNames(),
-                'scoped' => $user?->getRoles() !== $token->getRoleNames(),
+                'scope' => $scope,
+                'limited' => $scope !== User::scopeFromRoles($user?->getRoles()),
             ]);
         }
 

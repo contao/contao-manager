@@ -271,20 +271,20 @@ class UserController
     {
         $username = $request->request->get('username', '');
         $password = $request->request->get('password', '');
-        $roles = array_values($request->request->all('roles'));
+        $scope = $request->request->get('scope');
 
         if ('' === $username || strlen($password) < 8) {
             throw new BadRequestHttpException('Username and password must be given.');
         }
 
-        if (\count($roles) > 1 || !\in_array($roles[0], ['ROLE_ADMIN', 'ROLE_INSTALL', 'ROLE_UPDATE', 'ROLE_READ'])) {
-            throw new BadRequestHttpException('Only one of the following roles is allowed: ROLE_ADMIN, ROLE_INSTALL, ROLE_UPDATE, ROLE_READ.');
+        if (!\in_array($scope, User::SCOPES, true)) {
+            throw new BadRequestHttpException('Only the following "scope" is required: '.implode(', ', User::SCOPES));
         }
 
         return $this->config->createUser(
             $username,
             $password,
-            $roles ?: null,
+            $scope,
             array_filter($request->request->all()),
         );
     }

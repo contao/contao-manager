@@ -11,7 +11,7 @@
                 <boot-php-web :ready="canShow('PhpWeb')" @result="(...args) => result('PhpWeb', ...args)"/>
                 <boot-config :ready="canShow('Config')" @result="(...args) => result('Config', ...args)"/>
                 <boot-php-cli :ready="canShow('PhpCli')" @result="(...args) => result('PhpCli', ...args)"/>
-                <boot-self-update :ready="canShow('SelfUpdate')" @result="(...args) => result('SelfUpdate', ...args)" v-if="isGranted('ROLE_UPDATE')"/>
+                <boot-self-update :ready="canShow('SelfUpdate')" @result="(...args) => result('SelfUpdate', ...args)" v-if="isGranted(scopes.UPDATE)"/>
                 <boot-composer :ready="canShow('Composer')" @result="(...args) => result('Composer', ...args)" v-if="!isOAuth"/>
                 <boot-contao :ready="canShow('Contao')" @result="(...args) => result('Contao', ...args)" v-if="!isOAuth"/>
             </div>
@@ -38,6 +38,7 @@
 
 <script>
     import { mapGetters, mapState } from 'vuex';
+    import scopes from '../../scopes';
     import views from '../../router/views';
     import routes from '../../router/routes';
 
@@ -61,6 +62,7 @@
             ...mapState(['safeMode']),
             ...mapState('tasks', { tasksInitialized: 'initialized' }),
             ...mapGetters('auth', ['isGranted']),
+            scopes: () => scopes,
 
             isOAuth: vm => vm.$route.name === routes.oauth.name,
             hasError: vm => Object.values(vm.status).indexOf('error') !== -1,
@@ -123,7 +125,7 @@
         async mounted() {
             await this.$store.dispatch('reset');
 
-            if (this.isGranted('ROLE_UPDATE')) {
+            if (this.isGranted(scopes.UPDATE)) {
                 await this.$store.dispatch('tasks/init');
             } else {
                 this.$store.commit('tasks/setInitialized', true);
@@ -134,7 +136,7 @@
             status.Config = null;
             status.PhpCli = null;
 
-            if (this.isGranted('ROLE_UPDATE')) {
+            if (this.isGranted(scopes.UPDATE)) {
                 status.SelfUpdate = null;
             }
 

@@ -9,15 +9,16 @@
         </p>
 
         <div class="feature-package__actions">
-            <button class="feature-package__restore" @click="restore" v-if="packageHint && isGranted('ROLE_INSTALL')">{{ $t('ui.package.hintRevert') }}</button>
+            <button class="feature-package__restore" @click="restore" v-if="packageHint && isGranted(scopes.INSTALL)">{{ $t('ui.package.hintRevert') }}</button>
             <details-button small :name="name"/>
-            <button :title="$t('ui.package.removeButton')" class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isRootInstalled) && !willBeRemoved && isGranted('ROLE_INSTALL')"></button>
+            <button :title="$t('ui.package.removeButton')" class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isRootInstalled) && !willBeRemoved && isGranted(scopes.INSTALL)"></button>
         </div>
     </article>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
+    import scopes from '../../../scopes';
     import packageStatus from '../../../mixins/packageStatus';
     import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
 
@@ -32,6 +33,7 @@
 
         computed: {
             ...mapGetters('auth', ['isGranted']),
+            scopes: () => scopes,
 
             data: vm => ({ name: vm.name, }),
 

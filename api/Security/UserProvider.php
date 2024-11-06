@@ -31,7 +31,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
 
     public function loadUserByIdentifier(string $identifier, array $attributes = []): UserInterface
     {
-        $user = $this->config->getUser($identifier, $attributes['roles'] ?? null);
+        $user = $this->config->getUser($identifier, $attributes['scope'] ?? null);
 
         if (null === $user) {
             $ex = new UserNotFoundException(\sprintf('Username "%s" does not exist.', $identifier));

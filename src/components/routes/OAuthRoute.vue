@@ -8,7 +8,7 @@
             <p class="view-oauth__description">{{ $t('ui.oauth.description') }}</p>
             <p class="view-oauth__client">{{ hostname }}</p>
             <template v-if="scopes.length">
-                <user-roles class="view-oauth__scopes" :allowed="scopes" v-model="scope"/>
+                <user-scope class="view-oauth__scopes" :allowed="scopes" v-model="scope"/>
                 <p class="view-oauth__warning">{{ $t('ui.oauth.domain') }}</p>
                 <loading-button class="view-oauth__button" color="primary" :disabled="!valid" :loading="authenticating" @click="allowAccess">
                     {{ $t('ui.oauth.allow') }}
@@ -35,10 +35,10 @@
     import axios from 'axios';
     import BoxedLayout from '../layouts/BoxedLayout';
     import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import UserRoles from './Users/UserRoles.vue';
+    import UserScope from './Users/UserScope';
 
     export default {
-        components: { UserRoles, BoxedLayout, LoadingButton },
+        components: { BoxedLayout, LoadingButton, UserScope },
 
         data: () => ({
             valid: false,
@@ -50,7 +50,7 @@
             ...mapGetters('auth', ['isGranted']),
 
             hostname: vm => vm.$route.query.redirect_uri ? new URL(vm.$route.query.redirect_uri).hostname : '???',
-            scopes: vm => vm.$route.query.scope.split(' ').filter(scope => vm.isGranted(`ROLE_${scope.toUpperCase()}`)),
+            scopes: vm => vm.$route.query.scope.split(' ').filter(scope => vm.isGranted(scope)),
         },
 
         methods: {

@@ -16,6 +16,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import scopes from '../../scopes';
     import MainLayout from '../layouts/MainLayout';
     import DatabaseStatus from './maintenance/DatabaseStatus';
     import RebuildCache from './maintenance/RebuildCache';
@@ -46,7 +47,7 @@
         },
 
         mounted () {
-            if (!this.isGranted('ROLE_UPDATE')) {
+            if (!this.isGranted(scopes.UPDATE)) {
                 this.$router.push('/');
             }
         },

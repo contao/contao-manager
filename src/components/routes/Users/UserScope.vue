@@ -1,15 +1,15 @@
 <template>
-    <fieldset class="user-roles">
+    <fieldset class="user-scope">
         <legend v-if="label">{{ label }}</legend>
         <!-- eslint-disable vue/no-v-for-template-key -->
-        <template v-for="role in all" :key="role">
+        <template v-for="scope in all" :key="scope">
             <check-box
-                class="user-roles__item" :class="{ 'user-roles__item--required': isRequired(role) }"
-                :name="role"
-                :label="$t(`ui.role.${role}`)"
-                :disabled="!isRequested(role) || isRequired(role)"
-                :model-value="model[role]"
-                @update:model-value="value => setEnabled(role, value)"
+                class="user-scope__item" :class="{ 'user-scope__item--required': isRequired(scope) }"
+                :name="scope"
+                :label="$t(`ui.scope.${scope}`)"
+                :disabled="!isRequested(scope) || isRequired(scope)"
+                :model-value="model[scope]"
+                @update:model-value="value => setEnabled(scope, value)"
             />
         </template>
     </fieldset>
@@ -41,29 +41,29 @@ export default {
     }),
 
     computed: {
-        roles: vm => vm.all.filter(r => !vm.allowed || vm.allowed.includes(r)),
+        scopes: vm => vm.all.filter(r => !vm.allowed || vm.allowed.includes(r)),
 
-        isRequested: vm => role => vm.roles.includes(role),
-        isRequired: vm => role => vm.all.indexOf(role) <= vm.all.indexOf(vm.all.find(s => vm.roles.includes(s))),
+        isRequested: vm => scope => vm.scopes.includes(scope),
+        isRequired: vm => scope => vm.all.indexOf(scope) <= vm.all.indexOf(vm.all.find(s => vm.scopes.includes(s))),
     },
 
     methods: {
         init () {
-            this.all.forEach((role) => {
-                this.model[role] = false;
+            this.all.forEach((scope) => {
+                this.model[scope] = false;
             });
 
-            this.setEnabled(this.modelValue || this.roles[this.roles.length - 1], true);
+            this.setEnabled(this.modelValue || this.scopes[this.scopes.length - 1], true);
         },
 
-        setEnabled (role, value) {
+        setEnabled (scope, value) {
             this.all.forEach((r) => {
                 if (this.isRequired(r)) {
                     this.model[r] = true;
                 } else if (value) {
-                    this.model[r] = this.all.indexOf(r) <= this.all.indexOf(role);
+                    this.model[r] = this.all.indexOf(r) <= this.all.indexOf(scope);
                 } else {
-                    this.model[r] = this.isRequested(r) && this.all.indexOf(r) < this.all.indexOf(role);
+                    this.model[r] = this.isRequested(r) && this.all.indexOf(r) < this.all.indexOf(scope);
                 }
             });
 
@@ -72,7 +72,7 @@ export default {
     },
 
     watch: {
-        roles: {
+        scopes: {
             handler () {
                 this.init();
             },
@@ -93,7 +93,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.user-roles {
+.user-scope {
     &__item {
         padding: 5px 0 0;
 

@@ -1,10 +1,10 @@
 <template>
     <main-layout>
 
-        <section class="package-tools" v-if="isGranted('ROLE_UPDATE')">
+        <section class="package-tools" v-if="isGranted(scopes.UPDATE)">
             <slot name="search">
                 <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updateAll">{{ $t('ui.packages.updateButton') }}</button>
-                <button class="package-tools__button widget-button widget-button--upload" :disabled="!uploads || uploading || !isGranted('ROLE_INSTALL')" :title="uploadError" @click.prevent="$emit('start-upload')">{{ $t('ui.packages.uploadButton') }}</button>
+                <button class="package-tools__button widget-button widget-button--upload" :disabled="!uploads || uploading || !isGranted(scopes.INSTALL)" :title="uploadError" @click.prevent="$emit('start-upload')">{{ $t('ui.packages.uploadButton') }}</button>
             </slot>
         </section>
 
@@ -19,6 +19,7 @@
 
 <script>
     import { mapState, mapGetters, mapActions } from 'vuex';
+    import scopes from '../../../scopes';
     import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
     import MainLayout from '../../layouts/MainLayout';
 
@@ -29,13 +30,14 @@
             ...mapGetters('auth', ['isGranted']),
             ...mapGetters('packages', ['totalChanges']),
             ...mapState('packages/uploads', ['uploads', 'uploading']),
+            scopes: () => scopes,
 
             uploadError: vm => {
                 if (vm.uploads === false) {
                     return vm.$t('ui.packages.uploadUnsupported');
                 }
 
-                if (!vm.isGranted('ROLE_INSTALL')) {
+                if (!vm.isGranted(scopes.INSTALL)) {
                     return vm.$t('ui.error.permission');
                 }
 
