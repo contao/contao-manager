@@ -105,7 +105,25 @@ class UserController
             throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $user->getUserIdentifier()));
         }
 
-        $this->config->updateUser($user);
+        $this->config->replaceUser($user);
+
+        return $this->getUserResponse($user, Response::HTTP_OK, true);
+    }
+
+    /**
+     * Update user data in the configuration file.
+     */
+    #[Route(path: '/users/{username}', methods: ['PATCH'])]
+    public function updateUser(string $username, Request $request): Response
+    {
+        $this->denyAccessUnlessUserOrAdmin($username);
+
+        if (!$this->config->hasUser($username)) {
+            throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $username));
+        }
+
+        $this->config->updateUser($username, $request->request->all());
+        $user = $this->config->getUser($username);
 
         return $this->getUserResponse($user, Response::HTTP_OK, true);
     }
@@ -252,7 +270,10 @@ class UserController
     private function convertToJson(User|array $user): array
     {
         if ($user instanceof User) {
-            return $user->getProfile();
+            return [
+                'username' => $user->getUserIdentifier(),
+                'scope' => $user->getScope(),
+            ];
         }
 
         foreach ($user as $k => $item) {
@@ -274,7 +295,7 @@ class UserController
         $scope = $request->request->get('scope');
 
         if ('' === $username || strlen($password) < 8) {
-            throw new BadRequestHttpException('Username and password must be given.');
+            throw new BadRequestHttpException('Username or password invalid.');
         }
 
         if (!\in_array($scope, User::SCOPES, true)) {
@@ -285,7 +306,6 @@ class UserController
             $username,
             $password,
             $scope,
-            array_filter($request->request->all()),
         );
     }
 

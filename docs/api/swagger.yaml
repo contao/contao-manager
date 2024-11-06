@@ -589,7 +589,7 @@ paths:
                     description: User was not found.
 
         put:
-            summary: Update User
+            summary: Replace User
             tags: [Users]
             parameters:
                 - name: username
@@ -597,9 +597,36 @@ paths:
                   required: true
                   schema:
                       type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserPassword'
             responses:
                 200:
-                    description: User updated
+                    description: User replaced
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+
+        patch:
+            summary: Update User
+            tags: [Users]
+            parameters:
+                -   name: username
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserPassword'
+            responses:
+                200:
+                    description: User update
                     content:
                         application/json:
                             schema:

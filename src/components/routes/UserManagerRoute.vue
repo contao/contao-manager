@@ -12,7 +12,6 @@
                 <template v-for="(user, k) in users" :key="k">
                     <div class="user-manager__item">
                         <div>Username: {{ user.username }}</div>
-                        <div>E-Mail: {{ user.email }}</div>
                         <div>Scope: {{ user.scope }}</div>
                         <div class="user-manager__spacer"></div>
                         <button class="widget-button widget-button--alert widget-button--trash" @click="deleteUser(user.username)" v-if="currentUser !== user.username">Delete</button>

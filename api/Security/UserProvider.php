@@ -63,8 +63,8 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
             throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
-        $this->config->updateUser(
-            new User($user->getUserIdentifier(), $newHashedPassword),
+        $this->config->replaceUser(
+            new User($user->getUserIdentifier(), $newHashedPassword, $user->getScope()),
         );
     }
 }

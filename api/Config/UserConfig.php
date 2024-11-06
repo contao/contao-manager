@@ -92,7 +92,6 @@ class UserConfig extends AbstractConfig
                 $user['username'],
                 $user['password'],
                 $user['scope'] ?? null,
-                $user,
             );
         }
 
@@ -124,14 +123,13 @@ class UserConfig extends AbstractConfig
             $this->data['users'][$username]['username'],
             $this->data['users'][$username]['password'],
             $scope ?? $this->data['users'][$username]['scope'] ?? null,
-            $this->data['users'][$username],
         );
     }
 
     /**
      * Creates user from given username and plaintext password but does not add it.
      */
-    public function createUser(string $username, string $password, string|null $scope = null, array $data = []): User
+    public function createUser(string $username, string $password, string|null $scope = null): User
     {
         $this->initialize();
 
@@ -141,7 +139,7 @@ class UserConfig extends AbstractConfig
             ->hash($password)
         ;
 
-        return new User($username, $encodedPassword, $scope, $data);
+        return new User($username, $encodedPassword, $scope);
     }
 
     /**
@@ -165,13 +163,38 @@ class UserConfig extends AbstractConfig
     /**
      * Replaces a user in the configuration file.
      */
-    public function updateUser(User $user): void
+    public function replaceUser(User $user): void
     {
         $this->initialize();
 
         unset($this->data['users'][$user->getUserIdentifier()]);
 
         $this->addUser($user);
+    }
+
+    /**
+     * Update properties of a user in the configuration file.
+     */
+    public function updateUser(string $username, array $data): void
+    {
+        $this->initialize();
+
+        if (!isset($this->data['users'][$username])) {
+            throw new \RuntimeException(\sprintf('Username "%s" does not exist.', $username));
+        }
+
+        if (isset($data['password'])) {
+            $data['password'] = $this
+                ->passwordHasherFactory
+                ->getPasswordHasher(new User($username, null))
+                ->hash($data['password'])
+            ;
+        }
+
+        $this->data['users'][$username] = array_merge(
+            $this->data['users'][$username],
+            $data,
+        );
     }
 
     /**

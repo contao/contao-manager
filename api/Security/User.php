@@ -20,59 +20,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
     public const SCOPES = ['admin', 'install', 'update', 'read'];
     public const ROLES = ['ROLE_ADMIN', 'ROLE_INSTALL', 'ROLE_UPDATE', 'ROLE_READ'];
 
-    private array $data;
-
     public function __construct(
-        string $username,
-        string|null $password,
-        string|null $scope = null,
-        array $data = [],
+        private readonly string $username,
+        private string|null $password,
+        private string|null $scope = null,
     ) {
-        $scope ??= 'admin';
+        $this->scope ??= 'admin';
 
-        if (!\in_array($scope, self::SCOPES, true)) {
+        if (!\in_array($this->scope, self::SCOPES, true)) {
             throw new \InvalidArgumentException('Invalid scope');
         }
+    }
 
-        $this->data = array_merge($data, [
-            'username' => $username,
-            'password' => $password,
-            'scope' => $scope,
-        ]);
+    public function getScope(): string
+    {
+        return $this->scope;
     }
 
     public function getRoles(): array
     {
-        return self::rolesFromScope($this->data['scope']) ?? [];
+        return self::rolesFromScope($this->scope) ?? [];
     }
 
     public function getPassword(): string|null
     {
-        return $this->data['password'] ?? null;
+        return $this->password;
     }
 
     public function getUserIdentifier(): string
     {
-        return $this->data['username'];
+        return $this->username;
     }
 
     public function eraseCredentials(): void
     {
-        unset($this->data['password']);
-    }
-
-    public function getProfile(): array
-    {
-        $profile = $this->data;
-
-        unset($profile['password']);
-
-        return $profile;
+        $this->password = null;
     }
 
     public function jsonSerialize(): array
     {
-        return $this->data;
+        return [
+            'username' => $this->username,
+            'password' => $this->password,
+            'scope' => $this->scope,
+        ];
     }
 
     public static function rolesFromScope(string|null $scope): array|null
