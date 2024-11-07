@@ -14,12 +14,16 @@ namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\Security\User;
+use OTPHP\Factory;
+use OTPHP\TOTP;
+use Psr\Clock\ClockInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -144,6 +148,81 @@ class UserController
         $this->config->deleteUser($username);
 
         return $this->getUserResponse($user);
+    }
+
+    #[Route(path: '/users/{username}/totp', methods: ['GET'])]
+    public function getTOTP(string $username, Request $request): Response
+    {
+        $this->denyAccessUnlessUser($username);
+
+        $user = $this->config->getUser($username);
+
+        if (null === $user) {
+            throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $username));
+        }
+
+        if (null !== $user->getTotpSecret()) {
+            throw new AccessDeniedException('TOTP already configured.');
+        }
+
+        $totp = TOTP::generate();
+        $totp->setLabel($username);
+
+        return new JsonResponse(['provisioning_uri' => $totp->getProvisioningUri()]);
+    }
+
+    #[Route(path: '/users/{username}/totp', methods: ['PUT'])]
+    public function setupTotp(string $username, Request $request): Response
+    {
+        $this->denyAccessUnlessUser($username);
+
+        $user = $this->config->getUser($username);
+
+        if (null === $user) {
+            throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $username));
+        }
+
+        if (null !== $user->getTotpSecret()) {
+            throw new AccessDeniedException('TOTP already configured.');
+        }
+
+        try {
+            $totp = Factory::loadFromProvisioningUri($request->request->get('provisioning_uri'));
+        } catch (\Exception) {
+            throw new BadRequestHttpException('Invalid provisioning_uri');
+        }
+
+        if (!$totp instanceof TOTP) {
+            throw new BadRequestHttpException('Invalid provisioning_uri');
+        }
+
+        if (!$totp->verify($request->request->get('totp'))) {
+            throw new UnprocessableEntityHttpException('Invalid TOTP');
+        }
+
+        $this->config->updateUser($username, ['totp_secret' => $totp->getSecret()]);
+
+        return new JsonResponse(null, Response::HTTP_CREATED);
+    }
+
+    #[Route(path: '/users/{username}/totp', methods: ['DELETE'])]
+    public function deleteTotp(string $username): Response
+    {
+        $this->denyAccessUnlessUser($username);
+
+        $user = $this->config->getUser($username);
+
+        if (null === $user) {
+            throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $username));
+        }
+
+        if (null === $user->getTotpSecret()) {
+            throw new NotFoundHttpException('TOTP not configured.');
+        }
+
+        $this->config->updateUser($username, ['totp_secret' => null]);
+
+        return new JsonResponse();
     }
 
     /**
@@ -307,6 +386,13 @@ class UserController
             $password,
             $scope,
         );
+    }
+
+    private function denyAccessUnlessUser(string $username, string $message = 'Access Denied.'): void
+    {
+        if ($username !== $this->security->getUser()?->getUserIdentifier()) {
+            throw new AccessDeniedException($message);
+        }
     }
 
     private function denyAccessUnlessUserOrAdmin(string $username, string $message = 'Access Denied.'): void

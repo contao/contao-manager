@@ -56,6 +56,7 @@ export default {
         username: null,
         scope: null,
         limited: false,
+        totpEnabled: false,
         countdown: null,
     },
 
@@ -72,6 +73,7 @@ export default {
             state.username = data?.username || null;
             state.scope = data?.scope || null;
             state.limited = data?.limited || false;
+            state.totpEnabled = data?.totp_enabled || false;
         },
 
         setCountdown(state, value) {
@@ -120,9 +122,13 @@ export default {
             );
         },
 
-        async login(store, { username, password, invitation }) {
+        async login(store, { username, password, totp, invitation }) {
             $store = store;
             const data = { username, password };
+
+            if (totp) {
+                data.totp = totp;
+            }
 
             if (invitation) {
                 data.invitation = invitation;

@@ -9,21 +9,45 @@
                 <template #lockFile><strong>contao-manager/login.lock</strong><br></template>
             </i18n-t>
         </main>
-        <main class="view-login__form" v-else>
-            <form @submit.prevent="login">
-                <h1 class="view-login__headline">{{ $t('ui.login.headline') }}</h1>
-                <p class="view-login__description">{{ $t('ui.login.description') }}</p>
+        <transition name="animate-flip" type="transition" mode="out-in" v-else>
+            <main class="view-login__form" v-if="!requires_totp">
+                <form @submit.prevent="login">
+                    <h1 class="view-login__headline">{{ $t('ui.login.headline') }}</h1>
+                    <p class="view-login__description">{{ $t('ui.login.description') }}</p>
 
-                <text-field ref="username" name="username" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
-                <text-field type="password" name="password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" minlength="8" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
+                    <text-field ref="username" name="username" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
+                    <text-field type="password" name="password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" minlength="8" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
 
-                <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in">
-                    {{ $t('ui.login.button') }}
-                </loading-button>
+                    <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in">
+                        {{ $t('ui.login.button') }}
+                    </loading-button>
 
-                <a :href="`https://to.contao.org/docs/manager-password?lang=${$i18n.locale}`" target="_blank" class="view-login__link">{{ $t('ui.login.forgotPassword') }}</a>
-            </form>
-        </main>
+                    <a :href="`https://to.contao.org/docs/manager-password?lang=${$i18n.locale}`" target="_blank" class="view-login__link">{{ $t('ui.login.forgotPassword') }}</a>
+                </form>
+            </main>
+            <main class="view-login__form" v-else>
+                <form @submit.prevent="login">
+                    <h1 class="view-login__headline">{{ $t('ui.login.totpHeadline') }}</h1>
+                    <p class="view-login__description">{{ $t('ui.login.totpDescription') }}</p>
+
+                    <text-field
+                        name="totp"
+                        required minlength="6" maxlength="6"
+                        autocomplete="one-time-code"
+                        :label="$t('ui.login.totp')" :placeholder="$t('ui.login.totp')"
+                        class="view-login__totp" :class="login_failed ? 'widget--error' : ''"
+                        :disabled="logging_in"
+                        v-model="totp"
+                        @input="reset"
+                    />
+
+                    <loading-button submit class="view-login__button" color="primary" :disabled="!totpValid || login_failed" :loading="logging_in">
+                        {{ $t('ui.login.button') }}
+                    </loading-button>
+                    <button class="widget-button" @click="cancelTotp">{{ $t('ui.login.cancel') }}</button>
+                </form>
+            </main>
+        </transition>
     </boxed-layout>
 </template>
 
@@ -41,8 +65,10 @@
         data: () => ({
             username: '',
             password: '',
+            totp: '',
 
             logging_in: false,
+            requires_totp: false,
             login_failed: false,
         }),
 
@@ -52,6 +78,10 @@
             inputValid() {
                 return this.username !== '' && this.password !== '' && this.password.length >= 8;
             },
+
+            totpValid() {
+                return this.totp !== '' && /^\d{6}$/.test(this.totp);
+            }
         },
 
         methods: {
@@ -65,16 +95,31 @@
                 const response = await this.$store.dispatch('auth/login', {
                     username: this.username,
                     password: this.password,
+                    totp: this.totp,
                 });
 
                 if (response.status === 201) {
-                    this.$store.commit('setView', views.BOOT);
+                    this.$store.commit('setView', views.BOOT)
+                } else if (response.status === 401 && response.data.totp_enabled) {
+                    this.logging_in = false;
+                    this.requires_totp = true;
+                    this.login_failed = !!this.totp;
                 } else {
                     this.logging_in = false;
                     this.login_failed = true;
                 }
             },
+
             reset() {
+                this.login_failed = false;
+            },
+
+            cancelTotp() {
+                this.username = '';
+                this.password = '';
+                this.totp = '';
+                this.logging_in = false;
+                this.requires_totp = false;
                 this.login_failed = false;
             },
         },

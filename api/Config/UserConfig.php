@@ -119,11 +119,19 @@ class UserConfig extends AbstractConfig
             return null;
         }
 
-        return new User(
-            $this->data['users'][$username]['username'],
-            $this->data['users'][$username]['password'],
-            $scope ?? $this->data['users'][$username]['scope'] ?? null,
+        $data = $this->data['users'][$username];
+
+        $user = new User(
+            $data['username'],
+            $data['password'],
+            $scope ?? $data['scope'] ?? null,
         );
+
+        if ($data['totp_secret'] ?? null) {
+            $user->setTotpSecret($data['totp_secret']);
+        }
+
+        return $user;
     }
 
     /**

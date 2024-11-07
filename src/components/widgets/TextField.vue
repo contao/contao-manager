@@ -9,6 +9,7 @@
             :placeholder="validate ? (placeholder || ' ') : placeholder"
             :required="required" :pattern="pattern" :minlength="minlength" :maxlength="maxlength"
             :disabled="disabled"
+            :autocomplete="autocomplete"
             :autocapitalize="autocapitalize || 'none'"
             :value="modelValue"
             @input="input($event.target.value)"
@@ -48,6 +49,7 @@
             required: Boolean,
             validate: Boolean,
             error: String,
+            autocomplete: String,
             autocapitalize: String,
             minlength: String,
             maxlength: String,

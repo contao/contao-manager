@@ -59,6 +59,7 @@ abstract class AbstractBrowserAuthenticator extends AbstractAuthenticator
             'username' => $token->getUserIdentifier(),
             'scope' => $scope,
             'limited' => $scope !== User::scopeFromRoles($user?->getRoles()),
+            'totp_enabled' => (bool) $user?->getTotpSecret(),
         ], Response::HTTP_CREATED);
 
         $this->jwtManager->addToken($request, $response, $token);

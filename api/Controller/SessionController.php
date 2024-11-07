@@ -82,6 +82,7 @@ class SessionController
                 'username' => $token?->getUserIdentifier(),
                 'scope' => $scope,
                 'limited' => $scope !== User::scopeFromRoles($user?->getRoles()),
+                'totp_enabled' => (bool) $user?->getTotpSecret(),
             ]);
         }
 

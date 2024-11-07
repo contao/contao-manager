@@ -20,6 +20,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
     public const SCOPES = ['admin', 'install', 'update', 'read'];
     public const ROLES = ['ROLE_ADMIN', 'ROLE_INSTALL', 'ROLE_UPDATE', 'ROLE_READ'];
 
+    private $totp_secret = null;
+
     public function __construct(
         private readonly string $username,
         private string|null $password,
@@ -32,6 +34,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
         }
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
+    }
+
+    public function getPassword(): string|null
+    {
+        return $this->password;
+    }
+
+    public function eraseCredentials(): void
+    {
+        $this->password = null;
+    }
+
     public function getScope(): string
     {
         return $this->scope;
@@ -42,19 +59,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
         return self::rolesFromScope($this->scope) ?? [];
     }
 
-    public function getPassword(): string|null
+    public function getTotpSecret(): string|null
     {
-        return $this->password;
+        return $this->totp_secret;
     }
 
-    public function getUserIdentifier(): string
+    public function setTotpSecret(string|null $secret): void
     {
-        return $this->username;
-    }
-
-    public function eraseCredentials(): void
-    {
-        $this->password = null;
+        $this->totp_secret = $secret;
     }
 
     public function jsonSerialize(): array
@@ -63,6 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
             'username' => $this->username,
             'password' => $this->password,
             'scope' => $this->scope,
+            'totp_secret' => $this->totp_secret,
         ];
     }
 

@@ -1429,6 +1429,9 @@ components:
                         - install
                         - update
                         - read
+                totp_enabled:
+                    type: boolean
+                    description: Whether two-factor authentication is enabled/required using TOTP.
 
         UserPassword:
             allOf:
