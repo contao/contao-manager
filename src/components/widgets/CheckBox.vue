@@ -13,7 +13,7 @@
             >
             <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
         </div>
-        <div class="widget-checkbox__description" :class="{ 'widget-checkbox__description--disabled': disabled }" v-if="description || $slots.description">
+        <div class="widget__description" :class="{ 'widget__description--disabled': disabled }" v-if="description || $slots.description">
             <slot name="description"><p>{{ description }}</p></slot>
         </div>
     </div>
@@ -69,7 +69,7 @@
         opacity: .5;
     }
 
-    &__description {
+    .widget__description {
         padding-left: 25px;
 
         &--disabled {
