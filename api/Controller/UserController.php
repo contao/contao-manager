@@ -47,17 +47,14 @@ class UserController
     #[Route(path: '/users', methods: ['GET'])]
     public function listUsers(): Response
     {
-        $users = $this->config->getUsers();
-
         if (!$this->security->isGranted('ROLE_ADMIN')) {
             $username = $this->security->getUser()?->getUserIdentifier();
-            $users = array_filter(
-                $users,
-                static fn (User $user): bool => $user->getUserIdentifier() === $username,
-            );
+            $user = $this->config->getUser($username);
+
+            return $this->getUserResponse([$user]);
         }
 
-        return $this->getUserResponse($users);
+        return $this->getUserResponse($this->config->getUsers());
     }
 
     /**
@@ -206,7 +203,7 @@ class UserController
     }
 
     #[Route(path: '/users/{username}/totp', methods: ['DELETE'])]
-    public function deleteTotp(string $username): Response
+    public function deleteTotp(string $username, Request $request): Response
     {
         $this->denyAccessUnlessUser($username);
 
@@ -218,6 +215,16 @@ class UserController
 
         if (null === $user->getTotpSecret()) {
             throw new NotFoundHttpException('TOTP not configured.');
+        }
+
+        try {
+            $totp = TOTP::createFromSecret($user->getTotpSecret());
+        } catch (\Exception) {
+            throw new \RuntimeException('TOTP error.');
+        }
+
+        if (!$totp->verify($request->request->getString('totp'))) {
+            throw new UnprocessableEntityHttpException('Invalid TOTP');
         }
 
         $this->config->updateUser($username, ['totp_secret' => null]);

@@ -1,13 +1,13 @@
 <template>
     <fieldset class="user-scope">
-        <legend v-if="label">{{ label }}</legend>
+        <legend class="user-scope__label" v-if="label">{{ label }}</legend>
         <!-- eslint-disable vue/no-v-for-template-key -->
         <template v-for="scope in all" :key="scope">
             <check-box
-                class="user-scope__item" :class="{ 'user-scope__item--required': isRequired(scope) }"
-                :name="scope"
+                class="user-scope__item" :class="{ 'user-scope__item--required': readonly || isRequired(scope) }"
+                :name="`${scope}_${randomKey}`"
                 :label="$t(`ui.scope.${scope}`)"
-                :disabled="!isRequested(scope) || isRequired(scope)"
+                :disabled="readonly || !isRequested(scope) || isRequired(scope)"
                 :model-value="model[scope]"
                 @update:model-value="value => setEnabled(scope, value)"
             />
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import scopes from '../../../scopes';
 import CheckBox from '../../widgets/CheckBox.vue';
 
 export default {
@@ -27,11 +28,11 @@ export default {
         allowed: Array,
         label: String,
         modelValue: String,
+        readonly: Boolean,
     },
 
     data: () => ({
-        all: ['read', 'update', 'install', 'admin'],
-
+        randomKey: (Math.random() + 1).toString(36).substring(7),
         model: {
             admin: false,
             install: false,
@@ -41,6 +42,7 @@ export default {
     }),
 
     computed: {
+        all: () => Object.values(scopes).reverse(),
         scopes: vm => vm.all.filter(r => !vm.allowed || vm.allowed.includes(r)),
 
         isRequested: vm => scope => vm.scopes.includes(scope),
@@ -57,6 +59,7 @@ export default {
         },
 
         setEnabled (scope, value) {
+            console.log(scope, value);
             this.all.forEach((r) => {
                 if (this.isRequired(r)) {
                     this.model[r] = true;
@@ -78,12 +81,12 @@ export default {
             },
             deep: true,
         },
-        modelValue: {
-            handler (value) {
-                this.setEnabled(value, true);
-            },
-            deep: true,
-        }
+        // modelValue: {
+        //     handler (value) {
+        //         this.setEnabled(value, true);
+        //     },
+        //     deep: true,
+        // }
     },
 
     mounted() {
@@ -94,6 +97,11 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .user-scope {
+    &__label {
+        margin: 0;
+        padding: 0;
+    }
+
     &__item {
         padding: 5px 0 0;
 

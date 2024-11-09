@@ -11,10 +11,9 @@ import packages from './packages';
 import contao from './contao';
 import server from './server';
 import tasks from './tasks';
-import users from './users';
 
 const store = createStore({
-    modules: { auth, algolia, cloud, config, modals, packages, contao, server, tasks, users },
+    modules: { auth, algolia, cloud, config, modals, packages, contao, server, tasks },
 
     state: {
         view: views.INIT,

@@ -21,34 +21,44 @@
             </p>
         </header>
 
-        <main class="view-account__form">
-            <form @submit.prevent="createAccount">
-                <h1 class="view-account__headline">{{ $t('ui.account.headline') }}</h1>
-                <p class="view-account__description">{{ $t('ui.account.description') }}</p>
+        <transition name="animate-flip" type="transition" mode="out-in">
+            <main class="view-account__totp" v-if="currentUser && !hasTotp">
+                <h1 class="view-account__headline">{{ $t('ui.account.totpHeadline') }}</h1>
+                <p class="view-account__description">{{ $t('ui.account.totpDescription') }}</p>
 
-                <fieldset class="view-account__fields">
-                    <text-field
-                        ref="username" name="username"
-                        :label="$t('ui.account.username')"
-                        :disabled="logging_in"
-                        required
-                        :error="errors.username" @blur="errors.username = ''"
-                        v-model="username"
-                    />
-                    <text-field
-                        ref="password" name="password" type="password"
-                        :label="$t('ui.account.password')" :placeholder="$t('ui.account.passwordPlaceholder')"
-                        :disabled="logging_in"
-                        required pattern=".{8,}"
-                        :error="errors.password" @blur="validatePassword"
-                        v-model="password"
-                    />
+                <button class="widget-button widget-button--primary" @click="setupTotp">Setup Two-Factor Authentication</button>
+                <button class="widget-button widget-button--alert" @click="skipTotp">Skip Two-Factor Authentication</button>
+            </main>
 
-                    <loading-button submit color="primary" :disabled="!valid" :loading="logging_in">{{ $t('ui.account.submit') }}</loading-button>
-                    <button class="widget-button widget-button--anchor" @click="gotoLogin" v-if="isInvitation">{{ $t('ui.account.login') }}</button>
-                </fieldset>
-            </form>
-        </main>
+            <main class="view-account__form" v-else>
+                <form @submit.prevent="createAccount">
+                    <h1 class="view-account__headline">{{ $t('ui.account.headline') }}</h1>
+                    <p class="view-account__description">{{ $t('ui.account.description') }}</p>
+
+                    <fieldset class="view-account__fields">
+                        <text-field
+                            ref="username" name="username"
+                            :label="$t('ui.account.username')"
+                            :disabled="logging_in"
+                            required
+                            :error="errors.username" @blur="errors.username = ''"
+                            v-model="username"
+                        />
+                        <text-field
+                            ref="password" name="password" type="password"
+                            :label="$t('ui.account.password')" :placeholder="$t('ui.account.passwordPlaceholder')"
+                            :disabled="logging_in"
+                            required pattern=".{8,}"
+                            :error="errors.password" @blur="validatePassword"
+                            v-model="password"
+                        />
+
+                        <loading-button submit color="primary" :disabled="!valid" :loading="logging_in">{{ $t('ui.account.submit') }}</loading-button>
+                        <button class="widget-button widget-button--anchor" @click="gotoLogin" v-if="isInvitation">{{ $t('ui.account.login') }}</button>
+                    </fieldset>
+                </form>
+            </main>
+        </transition>
 
         <aside class="view-account__contribute">
             <p>
@@ -62,11 +72,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import views from '../../router/views';
-
 import BoxedLayout from '../layouts/BoxedLayout';
 import TextField from '../widgets/TextField';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import SetupTotp from '../routes/Users/SetupTotp.vue';
 
 export default {
         components: { BoxedLayout, TextField, LoadingButton },
@@ -85,6 +96,7 @@ export default {
         }),
 
         computed: {
+            ...mapState('auth', { currentUser: 'username', hasTotp: 'totpEnabled' }),
             isInvitation: vm => !!vm.$route.query.invitation,
         },
 
@@ -124,15 +136,20 @@ export default {
 
                 if (response.status === 201) {
                     this.$router.replace({ name: this.$route.name, query: null });
-                    this.$store.commit('setView', views.BOOT);
                 } else {
                     this.logging_in = false;
 
                     this.errors.username = this.$t('ui.account.loginInvalid');
-                    this.$nextTick(() => {
-                        this.$refs.username.focus();
-                    })
+                    this.$refs.username.focus();
                 }
+            },
+
+            setupTotp () {
+                this.$store.commit('modals/open', { id: 'setup-totp', component: SetupTotp, });
+            },
+
+            skipTotp () {
+                this.$store.commit('setView', views.BOOT);
             },
 
             gotoLogin () {
@@ -148,6 +165,10 @@ export default {
 
             password () {
                 this.validate();
+            },
+
+            hasTotp () {
+                this.$store.commit('setView', views.BOOT);
             }
         },
 
@@ -197,11 +218,18 @@ export default {
         text-align: justify;
     }
 
-    &__form {
+    &__form,
+    &__totp {
         position: relative;
         max-width: 280px;
         margin: 0 auto;
 
+        .widget-button {
+            margin-top: 1.5em;
+        }
+    }
+
+    &__form {
         .widget-text {
             margin-top: 10px;
 
@@ -209,10 +237,6 @@ export default {
                 display: block;
                 padding-bottom: 5px;
             }
-        }
-
-        .widget-button {
-            margin-top: 1.5em;
         }
     }
 
@@ -234,14 +258,14 @@ export default {
         padding-top: 50px;
 
         &__header,
-        &__form {
+        &__form,
+        &__totp {
             padding: 50px;
             width: 50%;
             max-width: none;
         }
 
         &__form {
-
             .widget-text label {
                 float: left;
                 width: 120px;

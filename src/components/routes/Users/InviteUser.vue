@@ -71,12 +71,13 @@
 
             async submit() {
                 this.loading = true;
-                const response = await this.$store.dispatch('users/invite', this.scope);
 
-                if (response.status === 201) {
-                    this.token = response.data;
-                    this.loading = false;
-                }
+                this.$request.post('api/invitations', { scope: this.scope }, null, {
+                    201: (response) => {
+                        this.token = response.data;
+                        this.loading = false;
+                    }
+                });
             },
 
             close() {

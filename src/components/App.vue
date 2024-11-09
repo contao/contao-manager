@@ -20,6 +20,12 @@
             <a :href="$t('ui.app.httpsHref')" target="_blank" class="app-hint__link">{{ $t('ui.app.httpsLink') }}</a>
         </div>
 
+        <div class="app-hint app-hint--warning" v-else-if="loaded && username && !totpEnabled">
+            <strong class="app-hint__headline">{{ $t('ui.app.totpHeadline') }}</strong>&nbsp;
+            <span class="app-hint__description">{{ $t('ui.app.totpDescription') }}</span>&nbsp;
+            <button class="app-hint__link" @click="setupTotp">{{ $t('ui.app.totpSetup') }}</button>
+        </div>
+
         <error-view v-if="error"/>
 
         <transition name="animate-fade" mode="out-in" style="height:100%">
@@ -53,6 +59,7 @@
 
     import ErrorView from './views/ErrorView';
     import TaskView from './views/TaskView';
+    import SetupTotp from './routes/Users/SetupTotp.vue';
 
     export default {
         components: { ErrorView, TaskView, Notivue, Notification },
@@ -73,7 +80,7 @@
         computed: {
             ...mapState(['safeMode']),
             ...mapState(['view', 'error']),
-            ...mapState('auth', ['username', 'limited']),
+            ...mapState('auth', ['username', 'limited', 'totpEnabled']),
             ...mapState('tasks', { taskStatus: 'status' }),
             ...mapGetters('modals', ['hasModal', 'currentModal']),
 
@@ -124,6 +131,10 @@
 
                     throw new Error(this.$t('ui.app.configSecurity1'));
                 }
+            },
+
+            setupTotp () {
+                this.$store.commit('modals/open', { id: 'setup-totp', component: SetupTotp, });
             }
         },
 
