@@ -165,7 +165,7 @@
             } else if (accountStatus === 401 || accountStatus === 403) {
                 this.$store.commit('setView', views.LOGIN);
             } else {
-                this.$store.commit('apiError', { status: accountStatus });
+                this.$store.commit('setError', { type: 'about:blank', status: accountStatus });
             }
         },
 

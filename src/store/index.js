@@ -60,17 +60,22 @@ const store = createStore({
             state.migrationsType = type;
         },
 
-        apiError: (state, response, request = null) => {
+        apiError: (state, response) => {
             if (state.error) {
                 return;
             }
 
-            state.error = {
-                type: 'about:blank',
-                status: response.status || '',
-                response,
-                request,
-            };
+            if (response.headers['content-type'] === 'application/problem+json') {
+                const error = response.data;
+                error.response = response;
+                state.error = error;
+            } else {
+                state.error = {
+                    type: 'about:blank',
+                    status: response.status || '',
+                    response,
+                };
+            }
         },
     },
 
