@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Clipboard from 'v-clipboard';
+import { createNotivue, push } from 'notivue';
 
 import bootstrap from 'contao-package-list/src/bootstrap';
 import router from './router';
@@ -58,10 +59,16 @@ axios.interceptors.response.use(function (response) {
 
         throw response;
     }
+);
 
-    store.commit('auth/renewCountdown');
+const notivue = createNotivue({
+    position: 'bottom-right',
+    limit: 4,
+    enqueue: true,
+});
 
-    return response;
+bootstrap(App, i18n, [store, router, Clipboard, notivue], (app) => {
+    app.config.globalProperties.$notify = push;
 });
 
 bootstrap(App, i18n, router, store, Clipboard);

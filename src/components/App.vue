@@ -1,5 +1,7 @@
 <template>
     <div id="app">
+        <Notivue v-slot="item"><Notification :item="item" /></Notivue>
+
         <div class="safe-mode" v-if="safeMode && view === 'ready'">
             <strong class="safe-mode__headline">{{ $t('ui.app.safeModeHeadline') }}</strong>&nbsp;
             <span class="safe-mode__description">{{ $t('ui.app.safeModeDescription') }}</span>&nbsp;
@@ -40,13 +42,14 @@
     import { defineAsyncComponent, markRaw } from "vue";
     import { mapState, mapGetters } from 'vuex';
     import axios from 'axios';
+    import { Notivue, Notification } from 'notivue';
     import views from '../router/views';
 
     import ErrorView from './views/ErrorView';
     import TaskView from './views/TaskView';
 
     export default {
-        components: { ErrorView, TaskView },
+        components: { ErrorView, TaskView, Notivue, Notification },
 
         data: () => ({
             views: {
@@ -207,6 +210,9 @@ $icons: (
 @use "~contao-package-list/src/assets/styles/animations";
 @use "~contao-package-list/src/assets/styles/defaults";
 @use "../assets/styles/defaults" as AppDefaults;
+
+@import '~notivue/notifications.css';
+@import '~notivue/animations.css';
 
 .https-warning {
     position: absolute;

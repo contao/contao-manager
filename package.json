@@ -17,6 +17,7 @@
         "core-js": "^3.38.1",
         "details-element-polyfill": "^2.4.0",
         "jszip": "^3.10.1",
+        "notivue": "^2.4.5",
         "semver": "^7.6.3",
         "treeify-paths": "^1.0",
         "v-clipboard": "^3.0.0-next",
