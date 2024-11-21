@@ -34,7 +34,7 @@ export default {
         },
 
         delete({ commit }, token) {
-            return Vue.http.delete(`api/server/opcache?opcache_reset=${token}`).then(
+            return Vue.http.delete(`api/server/opcache?opcache_reset=${encodeURIComponent(token)}`).then(
                 response => response.body,
             ).then((result) => {
                 commit('setCache', result);
