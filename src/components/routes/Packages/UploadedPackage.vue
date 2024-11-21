@@ -73,7 +73,7 @@
             progress: vm => 100 / vm.upload.size * vm.upload.filesize,
 
             isTheme: vm => vm.data.type === 'contao-theme' || (vm.metadata && vm.metadata.type === 'contao-theme'),
-            isCompatible: vm => !vm.data.require || vm.contaoSupported(vm.data.require['contao/core-bundle'] || vm.data.require['contao/manager-bundle'] || '0'),
+            isCompatible: vm => !vm.data.require || vm.contaoSupported(vm.data.require['contao/core-bundle'] || vm.data.require['contao/manager-bundle'] || null),
 
             canBeInstalled: vm => !vm.isDuplicate(vm.upload.id, vm.pkg.name)
                 && !vm.versionInstalled(vm.pkg.name, vm.pkg.version)
