@@ -16,7 +16,7 @@ pl:
             detail: 'Contao 4 wymaga rozszerzenia PHP DOM do czytania dokumentów XML.'
         xmlreader:
             title: 'Rozszerzenie PHP XMLReader jest niedostępne.'
-            detail: 'Contao 4 wymaga rozszerzenia PHP DOM do czytania dokumentów XML.'
+            detail: 'Contao 4 wymaga rozszerzenia PHP XMLReader do czytania dokumentów XML.'
         graphics_lib:
             title: 'Nie ma dostępnej biblioteki PHP do przetwarzania obrazków.'
             detail: 'Contao 4 wymaga rozszerzenia GD, Imagick lub Gmgick do przetwarzania obrazków.'
@@ -25,7 +25,7 @@ pl:
         session:
             title: 'Sesja PHP nie mogła zostać uruchomiona.'
         memory_limit:
-            title: 'Niewystarczający limit pamięci'
+            title: 'Niewystarczający limit pamięci.'
             detail: 'Twoja konfiguracja PHP pozwala tylko na {limit} pamięci (w linii komend). To nie wystarczy na uruchomienie Composera i automatycznie podniesienie limitu nie było możliwe. Skontaktuj się z hostingodawcą.'
         systempdir:
             title: 'Nie udało się zapisać do tymczasowego katalogu systemowego.'

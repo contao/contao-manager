@@ -16,7 +16,7 @@ cs:
             detail: 'Contao 4 vyžaduje rozšíření PHP DOM pro zpracování dokumentů XML.'
         xmlreader:
             title: 'Rozšíření PHP XMLReader není na tomto serveru spuštěno.'
-            detail: 'Contao 4 vyžaduje rozšíření PHP DOM pro zpracování dokumentů XML.'
+            detail: 'Contao 4 vyžaduje rozšíření PHP XMLReader pro zpracování dokumentů XML.'
         graphics_lib:
             title: 'Není dostupná žádná knihovna PHP na zpracování obrázků.'
             detail: 'Contao 4 vyžaduje pro zpracování obrázku jedno z následujících rozšíření: GD, Imagick nebo Gmagick.'
@@ -25,7 +25,7 @@ cs:
         session:
             title: 'Sezení PHP nelze zahájit.'
         memory_limit:
-            title: 'Nedostatečné množství paměti pro PHP'
+            title: 'Nedostatečné množství paměti pro PHP.'
             detail: 'Vaše nastavení PHP dovoluje (na příkazovém řádku) jen omezené akce kvůli omezení paměti {limit}. Ta není dostatečná pro chod Composeru a nešlo automaticky zvýšit paměť. Kontaktujte prosím Vaše poskytovatele služeb.'
         systempdir:
             title: 'Nelze zapisovat do dočasné složky systému.'

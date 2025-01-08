@@ -16,7 +16,7 @@ de:
             detail: 'Contao 4 benötigt die PHP DOM-Erweiterung, um XML-Dokumente zu parsen.'
         xmlreader:
             title: 'Die PHP XMLReader-Erweiterung ist nicht verfügbar.'
-            detail: 'Contao 4 benötigt die PHP DOM-Erweiterung, um XML-Dokumente zu parsen.'
+            detail: 'Contao 4 benötigt die PHP XMLReader-Erweiterung, um XML-Dokumente zu parsen.'
         graphics_lib:
             title: 'Keine PHP Bild-Bibliothek verfügbar.'
             detail: 'Contao 4 benötigt entweder die GD-, Imagick- oder Gmagick-Erweiterung, um Bilder zu verarbeiten.'
@@ -25,11 +25,13 @@ de:
         session:
             title: 'Die PHP-Session konnte nicht gestartet werden.'
         memory_limit:
-            title: 'Ungenügendes PHP Memory-Limit'
+            title: 'Ungenügendes PHP Memory-Limit.'
             detail: 'Deine PHP-Konfiguration erlaubt nur {limit} RAM (auf der Kommandozeile). Das ist nicht genug, um Composer auszuführen, und das Limit konnte auch nicht automatisch erhöht werden. Bitte kontaktiere deinen Hosting-Anbieter.'
         systempdir:
             title: 'Konnte nicht in den temporären Systemordner schreiben.'
             detail: 'Dies ist höchstwahrscheinlich ein Problem mit deiner Serverkonfiguration. Stelle sicher, dass entweder open_basedir den Zugriff auf den temporären Ordner erlaubt oder dass sys_temp_dir korrekt gesetzt ist.'
+        zip:
+            title: 'Die PHP ZIP-Erweiterung und die unzip/7z-Commands sind beide nicht verfügbar.'
 
     boot:
         composer:

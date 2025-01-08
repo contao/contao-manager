@@ -434,7 +434,7 @@
     "ui.package.updateAvailable": "{version} beschikbaar",
     "ui.package.updateUnknown": "Onbekende versie",
     "ui.package.updateConstraint": "Er is een nieuwere versie beschikbaar buiten uw versiebeperking.",
-    "ui.package.incompatible": "{package} does not work with Contao {constraint}.",
+    "ui.package.incompatible": "{package} werkt niet met Contao {constraint}.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Versie {version}",

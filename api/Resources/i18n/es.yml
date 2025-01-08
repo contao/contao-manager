@@ -16,7 +16,7 @@ es:
             detail: 'Contao 4 requiere la extensión DOM de PHP para analizar documentos XML.'
         xmlreader:
             title: 'La extensión PHP XMLReader no está disponible.'
-            detail: 'Contao 4 requiere la extensión DOM de PHP para analizar documentos XML.'
+            detail: 'Contao 4 requiere la extensión XMLReader de PHP para analizar documentos XML.'
         graphics_lib:
             title: 'No hay biblioteca de procesamiento de imágenes PHP disponible.'
             detail: 'Contao 4 requiere la extensión GD, Imagick o Gmagick para procesar imágenes.'
@@ -25,7 +25,7 @@ es:
         session:
             title: 'La sesión de PHP no se pudo iniciar.'
         memory_limit:
-            title: 'Límite insuficiente de memoria de PHP'
+            title: 'Límite insuficiente de memoria de PHP.'
             detail: 'Su configuración PHP solo permite {limit} memoria (en la línea de comando). Esto no es suficiente para ejecutar Composer y no fue posible aumentar este límite automáticamente. Por favor, póngase en contacto con su proveedor de hosting para obtener asistencia.'
         systempdir:
             title: 'No se puede escribir en el directorio temporal del sistema.'

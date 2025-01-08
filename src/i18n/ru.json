@@ -1,5 +1,5 @@
 {
-    "ui.app.httpsHeadline": "!! Незащищенное соединение !!",
+    "ui.app.httpsHeadline": "!! Небезопасное соединение !!",
     "ui.app.httpsDescription": "Без использования HTTPS ваши конфиденциальные данные будут переданы не зашифрованными.",
     "ui.app.httpsLink": "Больше информации",
     "ui.app.httpsHref": "https://https.cio.gov/everything/",
