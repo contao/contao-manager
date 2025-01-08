@@ -81,9 +81,9 @@
 
         methods: {
             toggleConsole() {
-                const showConsole = this.$refs.details.open;
+                this.openConsole = this.$refs.details.open;
 
-                if (showConsole && this.$refs.console) {
+                if (this.openConsole && this.$refs.console) {
                     this.autoScroll = true;
                     this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
 
