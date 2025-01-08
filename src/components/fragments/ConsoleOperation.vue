@@ -26,11 +26,11 @@
             </div>
         </component>
 
-        <div class="console-operation__console" v-if="console">
+        <div class="console-operation__console" v-if="console" ref="console" @scroll="scrolled" >
             <button class="console-operation__scroll console-operation__scroll--top" @click="scrollToTop" v-show="!isScrolledTop">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
             </button>
-            <div ref="console" @scroll="scrolled" class="console-operation__lines">
+            <div class="console-operation__lines">
                 <template v-for="(line, i) in consoleLines">
                     <div class="console-operation__line" :data-index="i" :key="i">
                         <span class="console-operation__line-number">{{ i + 1 }}</span>
@@ -254,11 +254,11 @@
 
         &__console {
             position: relative;
+            overflow-y: auto;
+            max-height: 280px;
         }
 
         &__lines {
-            overflow-y: auto;
-            max-height: 280px;
             padding: 8px 0 16px;
             font-family: $font-monospace;
             color: #f6f8fa;
@@ -296,7 +296,7 @@
         }
 
         &__scroll {
-            position: absolute;
+            position: sticky;
             left: 0;
             right: 0;
             display: flex;

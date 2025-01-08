@@ -114,7 +114,7 @@ export default {
                     });
             }
 
-                if (this.userSupported) {
+            if (this.userSupported) {
                 steps.push({
                     name: 'backend-user',
                     icon: UserIcon,
