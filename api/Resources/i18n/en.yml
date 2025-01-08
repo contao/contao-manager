@@ -16,7 +16,7 @@ en:
             detail: 'Contao 4 requires the PHP DOM extension to parse XML documents.'
         xmlreader:
             title: 'The PHP XMLReader extension is not available.'
-            detail: 'Contao 4 requires the PHP DOM extension to parse XML documents.'
+            detail: 'Contao 4 requires the PHP XMLReader extension to parse XML documents.'
         graphics_lib:
             title: 'No PHP image processing library is available.'
             detail: 'Contao 4 requires either the GD, Imagick or Gmagick extension to process images.'
@@ -30,6 +30,8 @@ en:
         systempdir:
             title: 'Unable to write to the temporary system directory.'
             detail: 'This is most likely a problem with your hosting configuration. Make sure that either open_basedir does allow access to the temporary directory or that the sys_temp_dir is correctly configured.'
+        zip:
+            title: 'The zip extension and unzip/7z commands are both missing'
 
     boot:
         composer:
