@@ -5830,7 +5830,7 @@ __metadata:
     "@vue/cli-plugin-eslint": ~5.0.8
     "@vue/cli-service": ~5.0.8
     algoliasearch: ^4.24.0
-    contao-package-list: "git+https://github.com/contao/package-list.git"
+    contao-package-list: "git@github.com:contao/package-list.git"
     core-js: ^3.37.1
     cypress: ^13.6.4
     details-element-polyfill: ^2.4.0
@@ -5858,9 +5858,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"contao-package-list@git+https://github.com/contao/package-list.git":
+"contao-package-list@git@github.com:contao/package-list.git":
   version: 1.0.0
-  resolution: "contao-package-list@https://github.com/contao/package-list.git#commit=cb97b37deb2fbfc9198fbb01ae504960476a74b0"
+  resolution: "contao-package-list@git@github.com:contao/package-list.git#commit=24d7d80b2afb4dbedad835f3ca109f652bb291b1"
   dependencies:
     algoliasearch: ^4.23.3
     core-js: ^3.37.1
@@ -5871,7 +5871,7 @@ __metadata:
     vue-router: ^3.6
     vueperslides: ^2.13.0
     vuex: ^2.5.0
-  checksum: d11f3da0c23b8dc6139194412e37f8ab8cd535a56ffd48185ed18ddc98634848f2ca1ca54fcbb406cd9843a33c11a9afeedb9a3212f0e2806e70cfa644e4b91f
+  checksum: e3c5c6b9b6e109dce166c9c998612800d1b2d62d681b9ea1d605f58ea9470d053108895849178067758a5925c3f3dbc0eec5dccd7ebe9a8d552950ec189b287d
   languageName: node
   linkType: hard
 
