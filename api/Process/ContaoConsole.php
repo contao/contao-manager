@@ -114,7 +114,7 @@ class ContaoConsole
             return $this->config = [];
         }
 
-        $process = $this->processFactory->createContaoConsoleProcess(['debug:config', 'contao', '--format=json']);
+        $process = $this->processFactory->createContaoConsoleProcess(['debug:config', 'contao', '--format=json', '--resolve-env']);
         $process->run();
 
         // If the console does not work, we don't have any command support.

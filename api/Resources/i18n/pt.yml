@@ -16,7 +16,7 @@ pt:
             detail: 'O contao 4 necessita da extensão PHP DOM para reconhecer documentos XML.'
         xmlreader:
             title: 'A extensão PHP XMLReader não está disponível.'
-            detail: 'O contao 4 necessita da extensão PHP DOM para reconhecer documentos XML.'
+            detail: 'O contao 4 necessita da extensão PHP XMLReader para reconhecer documentos XML.'
         graphics_lib:
             title: 'Nenhuma biblioteca de processamento de imagens PHP está disponível. '
             detail: 'O Contacto 4 requer ou a extensão GD, Imagick ou Gmagick para processar imagens.'
@@ -25,7 +25,7 @@ pt:
         session:
             title: 'A sessão PHP falhou ao iniciar.'
         memory_limit:
-            title: 'Memória limite PHP insuficiente'
+            title: 'Memória limite PHP insuficiente.'
             detail: 'A configuração PHP atual apenas permite {limit} de memória (na linha de comandos). Estes recursos não são suficientes para executar o Composer e não é possível aumentar este limite automaticamente. Por favor contacte o seu fornecedor de conteúdo  para assistência.'
         systempdir:
             title: 'Impossível escrever no directório de memória de sistema temporário.'

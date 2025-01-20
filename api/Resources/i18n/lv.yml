@@ -16,7 +16,7 @@ lv:
             detail: 'Contao 4 ir nepieciešams PHP DOM paplašinājums, lai analizētu XML dokumentus.'
         xmlreader:
             title: 'PHP XMLReader paplašinājums nav pieejams.'
-            detail: 'Contao 4 ir nepieciešams PHP DOM paplašinājums, lai analizētu XML dokumentus.'
+            detail: 'Contao 4 ir nepieciešams PHP XMLReader paplašinājums, lai analizētu XML dokumentus.'
         graphics_lib:
             title: 'Nav pieejama neviena PHP attēlu apstrādes bibliotēka.'
             detail: 'Lai apstrādātu attēlus, Contao 4 nepieciešams paplašinājums GD, Imagick vai Gmagick.'
@@ -25,7 +25,7 @@ lv:
         session:
             title: 'Nevarēja uzsākt PHP sesiju.'
         memory_limit:
-            title: 'Nepietiekams PHP atmiņas ierobežojums'
+            title: 'Nepietiekams PHP atmiņas ierobežojums.'
             detail: 'Jūsu PHP konfigurācija atļauj tikai {limit} atmiņu (komandrindā). Ar to nepietiek, lai palaistu Composer, un nebija iespējams automātiski palielināt šo limitu. Lūdzu, sazinieties ar savu hostinga pakalpojumu sniedzēju, lai saņemtu atbalstu.'
         systempdir:
             title: 'Nevar rakstīt sistēmas pagaidu direktorijā.'

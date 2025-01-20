@@ -16,7 +16,7 @@ tr:
             detail: 'Contao 4, XML dosyalarını okuyabilmek için PHP XML Reader eklentisine gerek duyar.'
         xmlreader:
             title: 'PHP XML Reader eklentisi kullanılamıyor.'
-            detail: 'Contao 4, XML dosyalarını okuyabilmek için PHP XML Reader eklentisine gerek duyar.'
+            detail: 'Contao 4, XML dosyalarını okuyabilmek için PHP XMLReader eklentisine gerek duyar.'
         graphics_lib:
             title: 'Kullanılabilecek bir PHP görsel işleme kitaplığı bulunamadı.'
             detail: 'Contao 4, görselleri işlemek için GD, Imagick ya da Gmagick eklentisine gerek duyar.'
@@ -25,7 +25,7 @@ tr:
         session:
             title: 'PHP oturumu başlatılamadı.'
         memory_limit:
-            title: 'PHP bellek sınırı yetersiz'
+            title: 'PHP bellek sınırı yetersiz.'
             detail: 'PHP yapılandırmanız yalnızca {limit} bellek kullanımına (komut satırında) izin veriyor. Bu değer, Composer çalıştırmak için yetersiz ve bu sınır otomatik olarak artırılamadı. Destek almak için barındırma hizmeti sağlayıcınızla görüşün.'
         systempdir:
             title: 'Geçici sistem klasörüne yazılamadı.'

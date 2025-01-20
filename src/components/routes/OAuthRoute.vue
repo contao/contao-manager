@@ -61,7 +61,7 @@
 
                 try {
                     const response = await axios.post(
-                        `api/users/${this.$store.state.auth.username}/tokens`,
+                        `api/users/${encodeURIComponent(this.$store.state.auth.username)}/tokens`,
                         {
                             client_id: this.$route.query.client_id,
                             scope: this.scope,

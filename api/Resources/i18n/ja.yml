@@ -16,7 +16,7 @@ ja:
             detail: 'Contao 4はXMLドキュメントの解析のためにPHPのDOM拡張を必要とします。'
         xmlreader:
             title: 'PHPのXMLReader拡張を利用できません。'
-            detail: 'Contao 4はXMLドキュメントの解析のためにPHPのDOM拡張を必要とします。'
+            detail: 'Contao 4はXMLドキュメントの解析のためにPHPのXMLReader拡張を必要とします。'
         graphics_lib:
             title: 'PHPの画像処理のライブラリが何も利用できません。'
             detail: 'Contao 4は画像を処理するためにGD、IMagick、Gmagickの拡張のいずれかを必要とします。'
@@ -30,6 +30,8 @@ ja:
         systempdir:
             title: 'システムの一時ディレクトリに書き込みできませんでした。'
             detail: 'ホスティングの設定に問題の可能性がもっとも高いです。open_basedirが一時ディクトリへのアクセスを許可しているか、sys_temp_dirが正しく設定されているか確認してください。'
+        zip:
+            title: 'zip拡張とunzip/7zコマンドの両方がありません。'
 
     boot:
         composer:

@@ -16,7 +16,7 @@ zh:
             detail: 'Contao 4 需要 PHP DOM 扩展来解析XML文档。'
         xmlreader:
             title: 'The PHP XMLReader 扩展不可用。'
-            detail: 'Contao 4 需要 PHP DOM 扩展来解析XML文档。'
+            detail: ''
         graphics_lib:
             title: '没有有效的PHP图片处理库，'
             detail: 'Contao 4 需要 GD, Imagick 或 Gmagick 扩展来处理图片。'

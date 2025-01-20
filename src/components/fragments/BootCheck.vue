@@ -125,7 +125,7 @@
                 display: inline-block;
                 margin: 10px 0;
                 padding-left: 20px;
-                background: var(--svg--link-blank);
+                background: var(--svg--link-blank) left center no-repeat;
                 background-size: 16px 16px;
             }
         }

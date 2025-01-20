@@ -434,7 +434,7 @@
     "ui.package.updateAvailable": "{version} yayınlanmış",
     "ui.package.updateUnknown": "sürüm bilinmiyor",
     "ui.package.updateConstraint": "Sürüm kısıtlamanızın dışında yeni bir sürüm yayınlanmış.",
-    "ui.package.incompatible": "{package} does not work with Contao {constraint}.",
+    "ui.package.incompatible": "{package} Contao {constraint} ile çalışmayacak.",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "{version} sürümü",

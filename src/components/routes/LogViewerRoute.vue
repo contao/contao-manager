@@ -17,7 +17,7 @@
                         <select-menu :options="fileOptions" name="file" :label="$t('ui.log-viewer.file')" v-model="file"/>
                         <button class="widget-button widget-button--inline widget-button--update" :title="$t('ui.log-viewer.reload')" @click="load"></button>
                     </div>
-                    <a :href="`api/logs/${file}`" :download="`${file}.log`" target="_blank" class="widget-button widget-button--inline widget-button--download" :class="{ 'disabled': !file }" :title="$t('ui.log-viewer.downloadTitle', { file: `${file}.log` })">{{ $t('ui.log-viewer.download') }}</a>
+                    <a :href="`api/logs/${encodeURIComponent(file)}`" :download="`${file}.log`" target="_blank" class="widget-button widget-button--inline widget-button--download" :class="{ 'disabled': !file }" :title="$t('ui.log-viewer.downloadTitle', { file: `${file}.log` })">{{ $t('ui.log-viewer.download') }}</a>
                 </div>
                 <div>
                     <select-menu :options="channelOptions" name="channel" :label="$t('ui.log-viewer.channel')" v-model="channel"/>
@@ -245,7 +245,7 @@
 
                 this.loading = true;
 
-                const response = (await axios.get(`api/logs/${this.current.name}?offset=${this.offset}&limit=${this.limit}`)).data;
+                const response = (await axios.get(`api/logs/${encodeURIComponent(this.current.name)}?offset=${this.offset}&limit=${this.limit}`)).data;
 
                 this.content = this.content.concat(Array.from(response.content.reverse()));
                 this.loading = false;

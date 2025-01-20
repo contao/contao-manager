@@ -16,7 +16,7 @@ sv:
             detail: 'Contao 4 kräver PHP DOM-tillägget för att tolka XML-dokument.'
         xmlreader:
             title: 'PHP XMLReader-tillägget är inte tillgängligt.'
-            detail: 'Contao 4 kräver PHP DOM-tillägget för att tolka XML-dokument.'
+            detail: 'Contao 4 kräver PHP XMLReader-tillägget för att tolka XML-dokument.'
         graphics_lib:
             title: 'Inget PHP-bildbehandlingsbibliotek är tillgängligt.'
             detail: 'Contao 4 kräver antingen tillägget GD, Imagick eller Gmagick för att bearbeta bilder.'
@@ -25,7 +25,7 @@ sv:
         session:
             title: 'PHP-sessionen kunde inte startas.'
         memory_limit:
-            title: 'Otillräcklig gräns för PHP-minne'
+            title: 'Otillräcklig gräns för PHP-minne.'
             detail: 'Din PHP-konfiguration tillåter endast {limit}-minne (på kommandoraden). Detta räcker inte för att köra Composer och det var inte möjligt att automatiskt öka denna gräns. Kontakta din värdleverantör för support.'
         systempdir:
             title: 'Det går inte att skriva till den tillfälliga systemkatalogen.'

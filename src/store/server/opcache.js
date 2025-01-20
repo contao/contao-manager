@@ -34,7 +34,7 @@ export default {
         },
 
         delete({ commit }, token) {
-            return axios.delete(`api/server/opcache?opcache_reset=${token}`).then(
+            return axios.delete(`api/server/opcache?opcache_reset=${encodeURIComponent(token)}`).then(
                 response => response.data,
             ).then((result) => {
                 commit('setCache', result);
