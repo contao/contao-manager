@@ -13,7 +13,7 @@
         "@vue/compat": "^3.1.0",
         "algoliasearch": "^4.24.0",
         "axios": "^1.7.7",
-        "contao-package-list": "git+https://github.com/contao/package-list.git",
+        "contao-package-list": "git+https://github.com/contao/package-list.git#develop",
         "core-js": "^3.38.1",
         "details-element-polyfill": "^2.4.0",
         "jszip": "^3.10.1",
@@ -69,9 +69,7 @@
         }
     },
     "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "not ie <= 8"
+        "defaults"
     ],
-    "packageManager": "yarn@3.4.1+sha512.a333bf9c2557d71f5ba87dd1446cde24bb9c35301ec29dd2baba577b3f9d1ab61348b66a1324de9088c40a996c5b9203794da8bf14cab9fae6a6eccc00cb8078"
+    "packageManager": "npm@10.8.2"
 }
