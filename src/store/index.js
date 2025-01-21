@@ -39,7 +39,7 @@ const store = createStore({
         },
 
         setError(state, error) {
-            if (state.error) {
+            if (error && state.error) {
                 return;
             }
 
