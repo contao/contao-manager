@@ -24,7 +24,6 @@ security:
             custom_authenticators:
                 - Contao\ManagerApi\Security\LoginAuthenticator
                 - Contao\ManagerApi\Security\PasswordlessAuthenticator
-                - Contao\ManagerApi\Security\InvitationAuthenticator
                 - Contao\ManagerApi\Security\JwtAuthenticator
                 - Contao\ManagerApi\Security\TokenAuthenticator
 
@@ -35,5 +34,5 @@ security:
         ROLE_READ: ROLE_USER
 
     access_control:
-        - { path: ^/api/session$, roles: PUBLIC_ACCESS }
+        - { path: ^/api/session(/options)?$, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: ROLE_USER }
