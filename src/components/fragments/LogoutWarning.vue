@@ -1,17 +1,23 @@
 <template>
-    <popup-overlay :popup-class="popupClass">
-        <h1 :class="headlineClass">{{$t('ui.logout.headline')}}</h1>
-
+    <popup-overlay
+        class="logout-warning"
+        :headline="$t('ui.logout.headline')"
+        :headlineType="this.countdown === 0 ? 'alert' : null"
+    >
         <template v-if="countdown > 0">
             <p class="logout-warning__text">{{$t('ui.logout.warning')}}</p>
             <p class="logout-warning__countdown">{{minutes}}:{{seconds}}</p>
-
-            <loading-button color="primary" :loading="renew" :disabled="logout" @click="keepAlive">{{$t('ui.logout.renew')}}</loading-button>
-            <loading-button @click="doLogout" :loading="logout" :disabled="renew">{{$t('ui.logout.logout')}}</loading-button>
         </template>
         <template v-else>
             <p class="logout-warning__text">{{$t('ui.logout.expired')}}</p>
-            <loading-button @click="close">{{$t('ui.logout.login')}}</loading-button>
+        </template>
+
+        <template #actions>
+            <template v-if="countdown > 0">
+                <loading-button color="primary" :loading="renew" :disabled="logout" @click="keepAlive">{{$t('ui.logout.renew')}}</loading-button>
+                <loading-button @click="doLogout" :loading="logout" :disabled="renew">{{$t('ui.logout.logout')}}</loading-button>
+            </template>
+            <loading-button @click="close" v-else>{{$t('ui.logout.login')}}</loading-button>
         </template>
     </popup-overlay>
 </template>
@@ -46,20 +52,6 @@
 
                 return seconds;
             },
-
-            popupClass() {
-                return {
-                    'logout-warning': true,
-                    'logout-warning--fixed': !this.$refs.popup || this.$refs.popup.clientHeight < window.innerHeight,
-                };
-            },
-
-            headlineClass() {
-                return {
-                    'logout-warning__headline': true,
-                    'logout-warning__headline--error': this.countdown === 0,
-                };
-            },
         },
 
         methods: {
@@ -86,52 +78,12 @@
 @use "~contao-package-list/src/assets/styles/defaults";
 
 .logout-warning {
-    position: fixed;
-    display: block;
-    top: 50%;
-    left: 50%;
-    width: 500px;
-    max-width: 90%;
     text-align: center;
-    background: var(--popup-bg);
-    z-index: 10;
-    opacity: 1;
-    transform: translate(-50%, -50%);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-
-    &__headline {
-        position: relative;
-        background: var(--contao);
-        color: #fff;
-        font-weight: defaults.$font-weight-normal;
-        line-height: 40px;
-
-        &--complete {
-            background-color: var(--btn-primary);
-        }
-
-        &--error {
-            background-color: var(--btn-alert);
-        }
-    }
-
-    &__text {
-        margin: 2em 40px;
-    }
 
     &__countdown {
-        margin: -20px 0 20px;
+        margin: 20px 0;
         font: defaults.$font-weight-bold 4em/1.6 defaults.$font-monospace;
         color: var(--btn-warning);
-    }
-
-    .widget-button {
-        width: auto;
-        height: 35px;
-        margin: 0 5px 2em 5px;
-        padding: 0 30px;
-        line-height: 35px;
     }
 }
 </style>
