@@ -1,5 +1,5 @@
 <template>
-    <popup-overlay class="invite-user" headline="Invite User" @submit="submit">
+    <popup-overlay class="invite-user" :headline="$t('ui.user-manager.inviteHeadline')" @submit="submit" @clear="close">
         <template v-if="token">
             <div class="invite-user__check">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -7,37 +7,28 @@
                 </svg>
             </div>
 
-            <p class="invite-user__text">
-                A new invitation link was created. The URL below can be used to create a new user account for this Contao Manager.
-                The invitation expires on {{ datimFormat(token.expires * 1000, 'short', 'long') }} (one week from now).
-            </p>
+            <i18n-t tag="p" keypath="ui.user-manager.inviteSuccess1" class="invite-user__text">
+                <template #expires>{{ datimFormat(token.expires * 1000, 'short', 'long') }}</template>
+            </i18n-t>
 
-            <p class="invite-user__text">
-                Please copy the link to your clipboard. It will only work once and you will not be able to see it again after closing this dialog.
-            </p>
-
+            <p class="invite-user__text">{{ $t('ui.user-manager.inviteSuccess2') }}</p>
             <code class="invite-user__url">{{ token.url }}</code>
-
             <button
                 type="button"
                 class="widget-button widget-button--small invite-user__clipboard"
                 :class="{ 'widget-button--clipboard': !copied, 'widget-button--check': copied }"
                 v-clipboard="token.url"
                 @click="markCopy"
-            >Copy to clipboard</button>
-
+            >{{ $t('ui.user-manager.clipboard') }}</button>
         </template>
         <template v-else>
-            <p class="invite-user__text">
-                If you need multiple logins for the Contao Manager, you can create an invitation link here.
-                Share this link with your client or use it on another device to create a new account with the given permissions.
-            </p>
+            <p class="invite-user__text">{{ $t('ui.user-manager.inviteText') }}</p>
             <user-scope v-model="scope"/>
-            <a class="invite-user__help" :href="`https://to.contao.org/docs/manager-scopes?lang=${$i18n.locale}`" target="_blank">Learn about permissions</a>
+            <a class="invite-user__help" :href="`https://to.contao.org/docs/manager-scopes?lang=${$i18n.locale}`" target="_blank">{{ $t('ui.user-manager.permissions') }}</a>
         </template>
         <template #actions>
-            <loading-button submit color="primary" :loading="loading" v-if="!token">Create Invitation Link</loading-button>
-            <button type="button" class="widget-button" :disabled="loading" @click="close">{{ token ? 'Close' : 'Cancel' }}</button>
+            <button type="button" class="widget-button" :disabled="loading" @click="close">{{ token ? $t('ui.user-manager.close') : $t('ui.user-manager.cancel') }}</button>
+            <loading-button submit color="primary" :loading="loading" v-if="!token">{{ $t('ui.user-manager.createInvitation') }}</loading-button>
         </template>
     </popup-overlay>
 </template>
@@ -93,7 +84,6 @@
 .invite-user {
     &__check {
         text-align: center;
-        margin: 2em 0 -0.5em;
 
         svg {
             width: 60px;
@@ -102,8 +92,9 @@
         }
     }
 
+    &__check,
     &__text {
-        margin: 1em 0;
+        margin-bottom: 1em;
     }
 
     &__url {
@@ -118,7 +109,7 @@
     }
 
     &__clipboard {
-        margin: 1em 0 2em;
+        margin: 1em 0;
     }
 }
 </style>

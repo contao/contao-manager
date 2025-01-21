@@ -1,5 +1,5 @@
 <template>
-    <popup-overlay class="disable-totp" :headline="$t('ui.totp.headline')" @submit="submit">
+    <popup-overlay class="disable-totp" :headline="$t('ui.totp.headline')" @submit="submit" @clear="close">
         <p class="disable-totp__text">{{ $t('ui.totp.disableText') }}</p>
 
         <text-field
@@ -11,8 +11,8 @@
         />
 
         <template #actions>
-            <loading-button submit color="primary" :loading="loading">{{ $t('ui.totp.disable') }}</loading-button>
             <button type="button" class="widget-button" :disabled="loading" @click="close">{{ $t('ui.totp.cancel') }}</button>
+            <loading-button submit color="primary" :loading="loading">{{ $t('ui.totp.disable') }}</loading-button>
         </template>
     </popup-overlay>
 </template>

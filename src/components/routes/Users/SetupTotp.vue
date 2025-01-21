@@ -1,5 +1,5 @@
 <template>
-    <popup-overlay class="setup-totp" :headline="$t('ui.totp.headline')" @submit="submit">
+    <popup-overlay class="setup-totp" :headline="$t('ui.totp.headline')" @submit="submit" @clear="close">
         <template v-if="provisioning_uri">
             <p>{{ $t('ui.totp.setupQr') }}</p>
 
@@ -22,9 +22,9 @@
         </template>
         <loading-spinner v-else/>
 
-        <template #actions>
-            <loading-button submit color="primary" :loading="loading">{{ $t('ui.totp.enable') }}</loading-button>
+        <template #actions v-if="provisioning_uri">
             <button type="button" class="widget-button" :disabled="loading" @click="close">{{ $t('ui.totp.cancel') }}</button>
+            <loading-button submit color="primary" :loading="loading">{{ $t('ui.totp.enable') }}</loading-button>
         </template>
     </popup-overlay>
 </template>

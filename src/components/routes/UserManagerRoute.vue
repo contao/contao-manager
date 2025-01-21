@@ -10,20 +10,21 @@
                 <!-- eslint-disable vue/no-v-for-template-key -->
                 <template v-for="(user, k) in users" :key="k">
                     <div class="user-manager__item">
+                        <div class="user-manager__you" v-if="currentUser === user.username">{{ $t('ui.user-manager.you') }}</div>
                         <div class="user-manager__username">{{ user.username }}</div>
                         <user-scope readonly label="Permissions" :model-value="user.scope" class="user-manager__scope"/>
                         <div class="user-manager__spacer"></div>
 
-                        <button class="widget-button" @click="changePassword" v-if="currentUser === user.username">Change Password</button>
-                        <button class="widget-button" @click="setupTotp" v-if="currentUser === user.username && !hasTotp">Setup Two-Factor Authentication</button>
-                        <button class="widget-button" @click="disableTotp" v-if="currentUser === user.username && hasTotp">Disable Two-Factor Authentication</button>
-                        <button class="widget-button widget-button--alert widget-button--trash" @click="deleteUser(user.username)" v-if="currentUser !== user.username">Delete</button>
+                        <button class="widget-button" @click="changePassword" v-if="currentUser === user.username">{{ $t('ui.user-manager.changePassword') }}</button>
+                        <button class="widget-button" @click="setupTotp" v-if="currentUser === user.username && !hasTotp">{{ $t('ui.user-manager.setupTotp') }}</button>
+                        <button class="widget-button" @click="disableTotp" v-if="currentUser === user.username && hasTotp">{{ $t('ui.user-manager.disableTotp') }}</button>
+                        <button class="widget-button widget-button--alert widget-button--trash" @click="deleteUser(user.username)" v-if="currentUser !== user.username">{{ $t('ui.user-manager.delete') }}</button>
                     </div>
                 </template>
             </div>
 
             <div class="user-manager__new">
-                <button class="widget-button widget-button--inline widget-button--add" @click="addUser" v-if="isGranted(scopes.ADMIN)">Invite User</button>
+                <button class="widget-button widget-button--inline widget-button--add" @click="addUser" v-if="isGranted(scopes.ADMIN)">{{ $t('ui.user-manager.invite') }}</button>
             </div>
         </div>
 
@@ -39,6 +40,7 @@ import UserScope from './Users/UserScope.vue';
 import InviteUser from './Users/InviteUser';
 import SetupTotp from './Users/SetupTotp.vue';
 import DisableTotp from './Users/DisableTotp.vue';
+import ChangePassword from './Users/ChangePassword.vue';
 
 export default {
     components: { MainLayout, LoadingSpinner, UserScope },
@@ -63,24 +65,27 @@ export default {
         },
 
         changePassword() {
-
+            this.$store.commit('modals/open', { id: 'change-password', component: ChangePassword });
         },
 
         setupTotp() {
-            this.$store.commit('modals/open', { id: 'setup-totp', component: SetupTotp, });
+            this.$store.commit('modals/open', { id: 'setup-totp', component: SetupTotp });
         },
 
         disableTotp() {
-            this.$store.commit('modals/open', { id: 'disable-totp', component: DisableTotp, });
+            this.$store.commit('modals/open', { id: 'disable-totp', component: DisableTotp });
         },
 
         addUser() {
-            this.$store.commit('modals/open', { id: 'invite-user', component: InviteUser, });
+            this.$store.commit('modals/open', { id: 'invite-user', component: InviteUser });
         },
 
         async deleteUser(username) {
-            await this.$request.delete(`api/users/${username}`);
-            this.load();
+            if (confirm(this.$t('ui.user-manager.deleteConfirm', { username }))) {
+                await this.$request.delete(`api/users/${ username }`);
+                this.$notify.success(this.$t('ui.user-manager.deleted'));
+                this.load();
+            }
         }
     },
 
@@ -94,7 +99,7 @@ export default {
 @use "~contao-package-list/src/assets/styles/defaults";
 
 .user-manager {
-    &__status {
+    &__loading {
         margin: 100px 0;
         text-align: center;
         font-size: 20px;
@@ -114,12 +119,28 @@ export default {
     }
 
     &__item {
+        position: relative;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
         padding: 16px;
         background: var(--tiles-bg);
         border: 1px solid 1px solid var(--tiles-bdr);
         border-radius: 14px;
+    }
+
+    &__you {
+        position: absolute;
+        top: 15px;
+        right: -25px;
+        width: 100px;
+        color: #fff;
+        font-weight: defaults.$font-weight-bold;
+        line-height: 1.5;
+        text-align: center;
+        background: var(--btn-primary);
+        transform-origin: center center;
+        transform: rotateZ(45deg);
     }
 
     &__new {

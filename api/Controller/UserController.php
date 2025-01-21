@@ -18,12 +18,14 @@ use OTPHP\Factory;
 use OTPHP\TOTP;
 use Psr\Clock\ClockInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -38,6 +40,7 @@ class UserController
         private readonly UserConfig $config,
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly Security $security,
+        private readonly PasswordHasherFactoryInterface $passwordHasherFactory
     ) {
     }
 
@@ -112,24 +115,6 @@ class UserController
     }
 
     /**
-     * Update user data in the configuration file.
-     */
-    #[Route(path: '/users/{username}', methods: ['PATCH'])]
-    public function updateUser(string $username, Request $request): Response
-    {
-        $this->denyAccessUnlessUserOrAdmin($username);
-
-        if (!$this->config->hasUser($username)) {
-            throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $username));
-        }
-
-        $this->config->updateUser($username, $request->request->all());
-        $user = $this->config->getUser($username);
-
-        return $this->getUserResponse($user, Response::HTTP_OK, true);
-    }
-
-    /**
      * Deletes a user from the configuration file.
      */
     #[Route(path: '/users/{username}', methods: ['DELETE'])]
@@ -147,8 +132,42 @@ class UserController
         return $this->getUserResponse($user);
     }
 
+    #[Route(path: '/users/{username}/password', methods: ['PUT'])]
+    public function setPassword(string $username, Request $request): Response
+    {
+        $this->denyAccessUnlessUser($username);
+
+        $user = $this->config->getUser($username);
+
+        if (null === $user) {
+            throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $username));
+        }
+
+        $currentPassword = $request->request->get('current_password');
+        $newPassword = $request->request->get('new_password');
+
+        if (!$currentPassword || !$newPassword) {
+            throw new BadRequestHttpException('Invalid payload.');
+        }
+
+        $isPasswordValid = $this
+            ->passwordHasherFactory
+            ->getPasswordHasher($user)
+            ->verify($user->getPassword(), $currentPassword)
+        ;
+
+        if (!$isPasswordValid) {
+            throw new UnprocessableEntityHttpException('Current password is not valid.');
+        }
+
+        $this->config->updateUser($username, ['password' => $newPassword]);
+
+        return new JsonResponse();
+    }
+
+
     #[Route(path: '/users/{username}/totp', methods: ['GET'])]
-    public function getTOTP(string $username, Request $request): Response
+    public function getTOTP(string $username): Response
     {
         $this->denyAccessUnlessUser($username);
 
@@ -159,7 +178,7 @@ class UserController
         }
 
         if (null !== $user->getTotpSecret()) {
-            throw new AccessDeniedException('TOTP already configured.');
+            throw new BadRequestException('TOTP already configured.');
         }
 
         $totp = TOTP::generate();

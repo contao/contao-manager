@@ -59,7 +59,6 @@ export default {
         },
 
         setEnabled (scope, value) {
-            console.log(scope, value);
             this.all.forEach((r) => {
                 if (this.isRequired(r)) {
                     this.model[r] = true;

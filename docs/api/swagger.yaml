@@ -2,7 +2,7 @@
 openapi: 3.0.0
 info:
     title: Contao Manager API
-    version: "1.7.0"
+    version: "1.9.0"
 
 paths:
 
@@ -587,7 +587,6 @@ paths:
                                 $ref: '#/components/schemas/User'
                 404:
                     description: User was not found.
-
         put:
             summary: Replace User
             tags: [Users]
@@ -609,29 +608,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/User'
-
-        patch:
-            summary: Update User
-            tags: [Users]
-            parameters:
-                -   name: username
-                    in: path
-                    required: true
-                    schema:
-                        type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UserPassword'
-            responses:
-                200:
-                    description: User update
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/User'
-
         delete:
             summary: Delete User
             tags: [Users]
@@ -648,6 +624,118 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/User'
+
+    /api/users/{username}/password:
+        put:
+            summary: Change the current user password
+            tags: [Users]
+            parameters:
+                - name: username
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                current_password:
+                                    type: string
+                                new_password:
+                                    type: string
+            responses:
+                200:
+                    description: The password was changed successfully.
+                400:
+                    description: Current or new password is missing.
+                403:
+                    description: If {username} is not the currently logged in user.
+                422:
+                    description: If the current password is not valid.
+
+    /api/users/{username}/totp:
+        get:
+            summary: Get TOTP configuration
+            tags: [Users]
+            parameters:
+                - name: username
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                200:
+                    description: Returns the TOTP provisioning URI, if TOTP has not been configured.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    provisioning_uri:
+                                        type: string
+                400:
+                    description: Bad request if TOTP is already configured for this user.
+                403:
+                    description: For any {username} in URL but the currently logged in user (or no user is logged in).
+        put:
+            summary: Configure TOTP authentication
+            tags: [Users]
+            parameters:
+                - name: username
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                provisioning_uri:
+                                    type: string
+                                    description: The provisioning_uri previously obtained from a GET request for this user.
+                                totp:
+                                    type: number
+                                    description: Valid TOTP code for the given provisioning_uri
+            responses:
+                201:
+                    description: When TOTP has been configured successfully.
+                400:
+                    description: If the provisioning_uri is invalid.
+                403:
+                    description: If TOTP is already configured for this user, or {username} is not the currently logged in user.
+                422:
+                    description: If the TOTP code is invalid/does not match the provisioning_uri.
+        delete:
+            summary: Remove TOTP configuration for a user.
+            tags: [Users]
+            parameters:
+                - name: username
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                totp:
+                                    type: number
+                                    description: Valid TOTP code for the given user account.
+            responses:
+                200:
+                    description: If TOTP was removed successfully.
+                403:
+                    description: For any {username} in URL but the currently logged in user (or no user is logged in).
+                404:
+                    description: If the user is not found or TOTP is not configured.
+                422:
+                    description: If the TOTP code is invalid.
 
     /api/users/{username}/tokens:
         get:
@@ -714,7 +802,6 @@ paths:
                                 $ref: '#/components/schemas/TokenResponse'
                 404:
                     description: Token was not found.
-
         delete:
             summary: Delete Token
             tags: [Users]
