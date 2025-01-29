@@ -123,12 +123,16 @@ class UserConfig extends AbstractConfig
 
         $user = new User(
             $data['username'],
-            $data['password'],
+            $data['password'] ?? null,
             $scope ?? $data['scope'] ?? null,
         );
 
         if ($data['totp_secret'] ?? null) {
             $user->setTotpSecret($data['totp_secret']);
+        }
+
+        if ($data['passkey'] ?? null) {
+            $user->setPasskey($data['passkey']);
         }
 
         return $user;
@@ -213,6 +217,31 @@ class UserConfig extends AbstractConfig
         $this->initialize();
 
         unset($this->data['users'][$username]);
+
+        $this->save();
+    }
+
+    public function getWebauthnOptions(string $key): string|null
+    {
+        $this->initialize();
+
+        return $this->data['webauthn'][$key] ?? null;
+    }
+
+    public function setWebauthnOptions(string $key, string $value): void
+    {
+        $this->initialize();
+
+        $this->data['webauthn'][$key] = $value;
+
+        $this->save();
+    }
+
+    public function deleteWebauthnOptions(string $key): void
+    {
+        $this->initialize();
+
+        unset($this->data['webauthn'][$key]);
 
         $this->save();
     }

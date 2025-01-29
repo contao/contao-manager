@@ -19,15 +19,14 @@ use Contao\ManagerApi\Security\JwtManager;
 use Contao\ManagerApi\Security\LoginAuthenticator;
 use Contao\ManagerApi\Security\TokenAuthenticator;
 use Contao\ManagerApi\Security\User;
+use Contao\ManagerApi\Security\WebauthnAuthenticator;
 use Crell\ApiProblem\ApiProblem;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/session', methods: ['GET', 'POST', 'DELETE'])]
 class SessionController
 {
     public function __construct(
@@ -35,9 +34,11 @@ class SessionController
         private readonly Security $security,
         private readonly JwtManager $jwtManager,
         private readonly ApiKernel $kernel,
+        private readonly WebauthnAuthenticator $webauthn,
     ) {
     }
 
+    #[Route(path: '/session', methods: ['GET', 'POST', 'DELETE'])]
     public function __invoke(Request $request): Response
     {
         switch ($request->getMethod()) {
@@ -59,6 +60,17 @@ class SessionController
         return new Response(null, Response::HTTP_METHOD_NOT_ALLOWED);
     }
 
+    #[Route(path: '/session/options', methods: ['GET', 'POST'])]
+    public function getWebauthnOptions(Request $request): Response
+    {
+        $username = $request->isMethod('POST') ? $request->request->get('username') : null;
+
+        return new JsonResponse(
+            $this->webauthn->getCredentialOptions($request->getHost(), $username),
+            json: true,
+        );
+    }
+
     /**
      * Returns the login status of the user.
      */
@@ -78,12 +90,19 @@ class SessionController
             $user = $this->config->getUser($token->getUserIdentifier());
             $scope = User::scopeFromRoles($token?->getRoleNames());
 
-            return new JsonResponse([
+            $json = [
                 'username' => $token?->getUserIdentifier(),
                 'scope' => $scope,
                 'limited' => $scope !== User::scopeFromRoles($user?->getRoles()),
-                'totp_enabled' => (bool) $user?->getTotpSecret(),
-            ]);
+            ];
+
+            if ($user?->getPasskey()) {
+                $json['passkey'] = true;
+            } else {
+                $json['totp_enabled'] = (bool) $user?->getTotpSecret();
+            }
+
+            return new JsonResponse($json);
         }
 
         if (LoginAuthenticator::isLocked($this->kernel->getConfigDir())) {

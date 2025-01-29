@@ -15,11 +15,15 @@
                     <h1 class="view-login__headline">{{ $t('ui.login.headline') }}</h1>
                     <p class="view-login__description">{{ $t('ui.login.description') }}</p>
 
-                    <text-field ref="username" name="username" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
-                    <text-field type="password" name="password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" minlength="8" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
+                    <text-field ref="username" name="username" autocomplete="username webauthn" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
+                    <text-field type="password" name="password" autocomplete="current-password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" minlength="8" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
 
                     <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in">
                         {{ $t('ui.login.button') }}
+                    </loading-button>
+
+                    <loading-button class="view-login__button" color="primary" :loading="logging_in" @click.prevent="passkeyLogin" v-if="showPasskey">
+                        {{ $t('ui.login.passkey') }}
                     </loading-button>
 
                     <a :href="`https://to.contao.org/docs/manager-password?lang=${$i18n.locale}`" target="_blank" class="view-login__link">{{ $t('ui.login.forgotPassword') }}</a>
@@ -53,6 +57,7 @@
 
 <script>
     import { mapState } from 'vuex';
+    import { startAuthentication, browserSupportsWebAuthn, browserSupportsWebAuthnAutofill } from '@simplewebauthn/browser';
     import views from '../../router/views';
 
     import BoxedLayout from '../layouts/BoxedLayout';
@@ -70,6 +75,7 @@
             logging_in: false,
             requires_totp: false,
             login_failed: false,
+            showPasskey: false
         }),
 
         computed: {
@@ -90,13 +96,27 @@
                     return;
                 }
 
-                this.logging_in = true;
-
-                const response = await this.$store.dispatch('auth/login', {
+                this.doLogin({
                     username: this.username,
                     password: this.password,
                     totp: this.totp,
                 });
+            },
+
+            async passkeyLogin ({ useBrowserAutofill }) {
+                const optionsJSON = (await this.$request.get('api/session/options')).data
+
+                const resp = await startAuthentication({ optionsJSON, useBrowserAutofill: !!useBrowserAutofill });
+
+                this.doLogin({
+                    passkey: JSON.stringify(resp),
+                });
+            },
+
+            async doLogin (data) {
+                this.logging_in = true;
+
+                const response = await this.$store.dispatch('auth/login', data);
 
                 if (response.status === 201) {
                     this.$store.commit('setView', views.BOOT)
@@ -124,12 +144,24 @@
             },
         },
 
-        mounted() {
+        async mounted() {
             // Hide error screen when redirecting to login (timeout or 401 error).
             this.$store.commit('setError', null);
 
+            if (this.locked) {
+                return;
+            }
+
             if (this.$refs.username) {
                 this.$refs.username.focus();
+            }
+
+            const supportsWebAuthn = browserSupportsWebAuthn();
+            const supportsAutofill = await browserSupportsWebAuthnAutofill();
+            this.showPasskey = supportsWebAuthn;
+
+            if (supportsWebAuthn && supportsAutofill) {
+                this.passkeyLogin({ useBrowserAutofill: true });
             }
         },
     };
@@ -250,7 +282,11 @@
     }
 
     &__button {
-        margin: 12px 0 6px;
+        margin: 6px 0;
+
+        .widget-text + & {
+            margin: 12px 0 0;
+        }
 
         .sk-circle {
             color: #fff;

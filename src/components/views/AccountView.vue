@@ -51,10 +51,14 @@
                             required pattern=".{8,}"
                             :error="errors.password" @blur="validatePassword"
                             v-model="password"
+                            v-if="usePassword"
                         />
 
-                        <loading-button submit color="primary" :disabled="!valid" :loading="logging_in">{{ $t('ui.account.submit') }}</loading-button>
-                        <button class="widget-button widget-button--anchor" @click="gotoLogin" v-if="isInvitation">{{ $t('ui.account.login') }}</button>
+                        <button-group submit color="primary" :disabled="!valid" :loading="logging_in" :label="$t('ui.account.submit')" v-if="supportsWebAuthn">
+                            <button type="button" class="widget-button" :disabled="logging_in" @click="usePassword = !usePassword">{{ $t(`ui.account.${usePassword ? 'usePasskey' : 'usePassword'}`) }}</button>
+                        </button-group>
+                        <loading-button submit color="primary" :disabled="!valid" :loading="logging_in" v-else>{{ $t('ui.account.submit') }}</loading-button>
+                        <button type="button" class="widget-button widget-button--anchor" @click="gotoLogin" v-if="isInvitation">{{ $t('ui.account.login') }}</button>
                     </fieldset>
                 </form>
             </main>
@@ -73,14 +77,16 @@
 
 <script>
 import { mapState } from 'vuex';
+import { startRegistration, browserSupportsWebAuthn } from '@simplewebauthn/browser';
 import views from '../../router/views';
 import BoxedLayout from '../layouts/BoxedLayout';
 import TextField from '../widgets/TextField';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import ButtonGroup from '@/components/widgets/ButtonGroup.vue';
 import SetupTotp from '../routes/Users/SetupTotp.vue';
 
 export default {
-        components: { BoxedLayout, TextField, LoadingButton },
+        components: { BoxedLayout, TextField, LoadingButton, ButtonGroup },
 
         data: () => ({
             username: '',
@@ -93,6 +99,8 @@ export default {
 
             valid: false,
             logging_in: false,
+            usePassword: false,
+            supportsWebAuthn: true,
         }),
 
         computed: {
@@ -103,7 +111,7 @@ export default {
         methods: {
             validate() {
                 this.valid = this.$refs.username.checkValidity()
-                    && this.$refs.password.checkValidity();
+                    && (!this.usePassword || this.$refs.password.checkValidity());
             },
 
             validatePassword() {
@@ -125,22 +133,41 @@ export default {
 
                 this.logging_in = true;
 
-                const response = await this.$store.dispatch(
-                    'auth/login',
-                    {
-                        username: this.username,
-                        password: this.password,
-                        invitation: this.$route.query.invitation
-                    },
-                );
+                const data = {
+                    username: this.username,
+                };
 
-                if (response.status === 201) {
-                    this.$router.replace({ name: this.$route.name, query: null });
+                if (this.isInvitation) {
+                    data.invitation = this.$route.query.invitation;
+                }
+
+                if (this.usePassword) {
+                    data.password = this.password;
                 } else {
-                    this.logging_in = false;
+                    const optionsJSON = (await this.$request.post('api/session/options', data)).data
+                    let passkey;
 
+                    try {
+                        passkey = await startRegistration({ optionsJSON });
+                    } catch (error) {
+                        this.logging_in = false;
+                        return;
+                    }
+
+                    if (!passkey) {
+                        this.logging_in = false;
+                        return;
+                    }
+
+                    data.passkey = JSON.stringify(passkey);
+                }
+
+                if ((await this.$store.dispatch('auth/login', data)).status !== 201) {
+                    this.logging_in = false;
                     this.errors.username = this.$t('ui.account.loginInvalid');
-                    this.$refs.username.focus();
+                    this.$nextTick(() => {
+                        this.$refs.username.focus();
+                    });
                 }
             },
 
@@ -173,6 +200,9 @@ export default {
         },
 
         mounted() {
+            this.supportsWebAuthn = browserSupportsWebAuthn();
+            this.usePassword = !this.supportsWebAuthn;
+
             if (this.$refs.username) {
                 this.$refs.username.focus();
             }
@@ -279,7 +309,8 @@ export default {
                 width: 250px !important;
             }
 
-            .widget-button {
+            .button-group,
+            .widget-button--anchor {
                 width: 250px;
                 margin-left: 120px;
             }

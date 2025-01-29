@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign,no-fallthrough */
 
 import axios from 'axios';
+import request from '../tools/request';
 import scopes from '../scopes';
 import views from '../router/views';
 import LogoutWarning from "../components/fragments/LogoutWarning";
@@ -57,6 +58,7 @@ export default {
         scope: null,
         limited: false,
         totpEnabled: false,
+        passkey: false,
         countdown: null,
     },
 
@@ -73,7 +75,8 @@ export default {
             state.username = data?.username || null;
             state.scope = data?.scope || null;
             state.limited = data?.limited || false;
-            state.totpEnabled = data?.totp_enabled || false;
+            state.totpEnabled = data?.totp_enabled || data?.passkey || false;
+            state.passkey = data?.passkey || false;
         },
 
         setCountdown(state, value) {
@@ -122,33 +125,28 @@ export default {
             );
         },
 
-        async login(store, { username, password, totp, invitation }) {
+        async login(store, data) {
             $store = store;
-            const data = { username, password };
 
-            if (totp) {
-                data.totp = totp;
-            }
+            return await request.post('api/session', data, null, {
+                201: (response) => {
+                    store.commit('setUser', response.data);
+                    startCountdown();
 
-            if (invitation) {
-                data.invitation = invitation;
-            }
+                    return response;
+                },
+                401: (response) => {
+                    return response;
+                },
+                403: (response) => {
+                    this.$store.commit('setLocked');
 
-            try {
-                const response = await axios.post('api/session', data);
-
-                store.commit('setUser', response.data);
-                startCountdown();
-
-                return response;
-            } catch (err) {
-                if (err.response.status === 403) {
-                    store.commit('setLocked', null, { root: true });
-                    store.commit('setView', views.LOGIN);
-                }
-
-                return err.response;
-            }
+                    return response;
+                },
+                422: (response) => {
+                    return response;
+                },
+            });
         },
 
         logout({ commit }) {

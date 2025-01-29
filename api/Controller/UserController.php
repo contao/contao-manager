@@ -16,7 +16,6 @@ use Contao\ManagerApi\Config\UserConfig;
 use Contao\ManagerApi\Security\User;
 use OTPHP\Factory;
 use OTPHP\TOTP;
-use Psr\Clock\ClockInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,6 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -143,6 +143,10 @@ class UserController
             throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $username));
         }
 
+        if ($user->getPasskey()) {
+            throw new ServiceUnavailableHttpException('Cannot change password of a user with a Passkey.');
+        }
+
         $currentPassword = $request->request->get('current_password');
         $newPassword = $request->request->get('new_password');
 
@@ -177,6 +181,10 @@ class UserController
             throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $username));
         }
 
+        if ($user->getPasskey()) {
+            throw new ServiceUnavailableHttpException('Cannot configure TOTP of a user with a Passkey.');
+        }
+
         if (null !== $user->getTotpSecret()) {
             throw new BadRequestException('TOTP already configured.');
         }
@@ -196,6 +204,10 @@ class UserController
 
         if (null === $user) {
             throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $username));
+        }
+
+        if ($user->getPasskey()) {
+            throw new ServiceUnavailableHttpException('Cannot configure TOTP of a user with a Passkey.');
         }
 
         if (null !== $user->getTotpSecret()) {
@@ -230,6 +242,10 @@ class UserController
 
         if (null === $user) {
             throw new NotFoundHttpException(\sprintf('User "%s" does not exist.', $username));
+        }
+
+        if ($user->getPasskey()) {
+            throw new ServiceUnavailableHttpException('Cannot configure TOTP of a user with a Passkey.');
         }
 
         if (null === $user->getTotpSecret()) {

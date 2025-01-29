@@ -9,3 +9,9 @@ monolog:
             level: INFO
             channels: ['!event', '!security', '!request']
             max_files: 10
+
+services:
+    contao_manager.webauthn.ceremony_step_manager_factory:
+        class: Webauthn\CeremonyStep\CeremonyStepManagerFactory
+        calls:
+            - setSecuredRelyingPartyId: [ [ 'localhost' ] ]

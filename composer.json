@@ -41,7 +41,10 @@
         "composer/composer": "^2.6.2",
         "studio24/rotate": "^1.0",
         "ramsey/uuid": "^4.0",
-        "spomky-labs/otphp": "^11.3"
+        "spomky-labs/otphp": "^11.3",
+        "web-auth/webauthn-lib": "^4.9",
+        "symfony/serializer": "^6.4",
+        "phpdocumentor/reflection-docblock": "^5.6"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.4",

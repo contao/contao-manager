@@ -15,9 +15,9 @@
                         <user-scope readonly label="Permissions" :model-value="user.scope" class="user-manager__scope"/>
                         <div class="user-manager__spacer"></div>
 
-                        <button class="widget-button" @click="changePassword" v-if="currentUser === user.username">{{ $t('ui.user-manager.changePassword') }}</button>
-                        <button class="widget-button" @click="setupTotp" v-if="currentUser === user.username && !hasTotp">{{ $t('ui.user-manager.setupTotp') }}</button>
-                        <button class="widget-button" @click="disableTotp" v-if="currentUser === user.username && hasTotp">{{ $t('ui.user-manager.disableTotp') }}</button>
+                        <button class="widget-button" @click="changePassword" v-if="currentUser === user.username && !hasPasskey">{{ $t('ui.user-manager.changePassword') }}</button>
+                        <button class="widget-button" @click="setupTotp" v-if="currentUser === user.username && !hasPasskey && !hasTotp">{{ $t('ui.user-manager.setupTotp') }}</button>
+                        <button class="widget-button" @click="disableTotp" v-if="currentUser === user.username && !hasPasskey && hasTotp">{{ $t('ui.user-manager.disableTotp') }}</button>
                         <button class="widget-button widget-button--alert widget-button--trash" @click="deleteUser(user.username)" v-if="currentUser !== user.username">{{ $t('ui.user-manager.delete') }}</button>
                     </div>
                 </template>
@@ -50,7 +50,7 @@ export default {
     }),
 
     computed: {
-        ...mapState('auth', { currentUser: 'username', hasTotp: 'totpEnabled' }),
+        ...mapState('auth', { currentUser: 'username', hasTotp: 'totpEnabled', hasPasskey: 'passkey' }),
         ...mapGetters('auth', ['isGranted']),
         scopes: () => scopes,
     },

@@ -20,7 +20,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
     public const SCOPES = ['admin', 'install', 'update', 'read'];
     public const ROLES = ['ROLE_ADMIN', 'ROLE_INSTALL', 'ROLE_UPDATE', 'ROLE_READ'];
 
-    private $totp_secret = null;
+    private string|null $totp_secret = null;
+    private string|null $passkey = null;
 
     public function __construct(
         private readonly string $username,
@@ -49,6 +50,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
         $this->password = null;
     }
 
+    public function getPasskey(): string|null
+    {
+        return $this->passkey;
+    }
+
+    public function setPasskey(string|null $passkey): void
+    {
+        $this->passkey = $passkey;
+    }
+
     public function getScope(): string
     {
         return $this->scope;
@@ -74,6 +85,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
         return [
             'username' => $this->username,
             'password' => $this->password,
+            'passkey' => $this->passkey,
             'scope' => $this->scope,
             'totp_secret' => $this->totp_secret,
         ];

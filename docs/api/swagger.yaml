@@ -81,6 +81,43 @@ paths:
                 403:
                     description: If the Contao Manager is locked after three unsuccessful login attempts.
 
+    /api/session/options:
+        post:
+            summary: Get WebAuthn public key credential creation options
+            description: Retrieves options necessary for WebAuthn attestation ceremony (sign up with a Passkey).
+            externalDocs:
+                url: https://webauthn-doc.spomky-labs.com/webauthn-in-a-nutshell/ceremonies#attestation-ceremony
+            tags: [Session]
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                username:
+                                    type: string
+                                    description: Username for the new user
+            responses:
+                200:
+                    description: The WebAuthn creation options
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+
+        get:
+            summary: Get WebAuthn public key credential request options
+            description: Retrieves options necessary for WebAuthn assertion ceremony (login with a Passkey).
+            externalDocs:
+                url: https://webauthn-doc.spomky-labs.com/webauthn-in-a-nutshell/ceremonies#assertion-ceremony
+            tags: [Session]
+            responses:
+                200:
+                    description: The WebAuthn request options
+                    content:
+                        application/json:
+                            schema:
+                                type: object
 
     #############
     #   Files   #
@@ -654,6 +691,8 @@ paths:
                     description: If {username} is not the currently logged in user.
                 422:
                     description: If the current password is not valid.
+                503:
+                    description: If the user is using Passkey authentication, the password cannot be changed.
 
     /api/users/{username}/totp:
         get:
@@ -679,6 +718,8 @@ paths:
                     description: Bad request if TOTP is already configured for this user.
                 403:
                     description: For any {username} in URL but the currently logged in user (or no user is logged in).
+                503:
+                    description: If the user is using Passkey authentication, TOTP cannot be configured.
         put:
             summary: Configure TOTP authentication
             tags: [Users]
@@ -709,6 +750,8 @@ paths:
                     description: If TOTP is already configured for this user, or {username} is not the currently logged in user.
                 422:
                     description: If the TOTP code is invalid/does not match the provisioning_uri.
+                503:
+                    description: If the user is using Passkey authentication, TOTP cannot be configured.
         delete:
             summary: Remove TOTP configuration for a user.
             tags: [Users]
@@ -736,6 +779,8 @@ paths:
                     description: If the user is not found or TOTP is not configured.
                 422:
                     description: If the TOTP code is invalid.
+                503:
+                    description: If the user is using Passkey authentication, TOTP cannot be configured.
 
     /api/users/{username}/tokens:
         get:
@@ -1518,7 +1563,10 @@ components:
                         - read
                 totp_enabled:
                     type: boolean
-                    description: Whether two-factor authentication is enabled/required using TOTP.
+                    description: Whether two-factor authentication is enabled/required using TOTP. Not available if Passkey is used.
+                passkey:
+                    type: boolean
+                    description: Whether this user authenticates using a Passkey.
 
         UserPassword:
             allOf:

@@ -41,3 +41,37 @@ services:
     Contao\ManagerApi\Task\TaskManager:
         arguments:
             - !tagged app.task
+
+    contao_manager.webauthn.serializer_factory:
+        class: Webauthn\Denormalizer\WebauthnSerializerFactory
+        arguments:
+            - !service { class: Webauthn\AttestationStatement\AttestationStatementSupportManager }
+
+    contao_manager.webauthn.serializer:
+        class:  Symfony\Component\Serializer\SerializerInterface
+        factory: ['@contao_manager.webauthn.serializer_factory', 'create']
+
+    contao_manager.webauthn.ceremony_step_manager_factory:
+        class: Webauthn\CeremonyStep\CeremonyStepManagerFactory
+
+    contao_manager.webauthn.creation_ceremony:
+        class: Webauthn\CeremonyStep\CeremonyStepManager
+        factory: ['@contao_manager.webauthn.ceremony_step_manager_factory', 'creationCeremony']
+
+    contao_manager.webauthn.request_ceremony:
+        class: Webauthn\CeremonyStep\CeremonyStepManager
+        factory: ['@contao_manager.webauthn.ceremony_step_manager_factory', 'requestCeremony']
+
+    contao_manager.webauthn.authenticator_attestation_response_validator:
+        class: Webauthn\AuthenticatorAttestationResponseValidator
+        arguments:
+            $ceremonyStepManager: '@contao_manager.webauthn.creation_ceremony'
+        calls:
+            - setLogger: ['@logger']
+
+    contao_manager.webauthn.authenticator_assertion_response_validator:
+        class: Webauthn\AuthenticatorAssertionResponseValidator
+        arguments:
+            $ceremonyStepManager: '@contao_manager.webauthn.request_ceremony'
+        calls:
+            - setLogger: ['@logger']
