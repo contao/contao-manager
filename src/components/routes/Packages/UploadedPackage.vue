@@ -44,7 +44,7 @@
 <script>
     import { mapGetters } from 'vuex';
 
-    import filesize from '../../../filters/filesize';
+    import filesize from '../../../tools/filesize';
     import metadata from 'contao-package-list/src/mixins/metadata';
     import BasePackage from './BasePackage';
     import ComposerPackage from './ComposerPackage';

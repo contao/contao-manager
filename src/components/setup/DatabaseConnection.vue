@@ -111,7 +111,7 @@ import LoadingButton from 'contao-package-list/src/components/fragments/LoadingB
 import RadioButton from '../widgets/RadioButton';
 // import CheckBox from '../widgets/CheckBox';
 import datimFormat from 'contao-package-list/src/filters/datimFormat';
-import filesize from '../../filters/filesize';
+import filesize from '../../tools/filesize';
 
 export default {
     components: { /*CheckBox,*/ RadioButton, TextField, LoadingButton },

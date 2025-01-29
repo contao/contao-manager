@@ -78,7 +78,7 @@
 <script>
     import axios from 'axios';
     import datimFormat from 'contao-package-list/src/filters/datimFormat';
-    import filesize from '../../filters/filesize';
+    import filesize from '../../tools/filesize';
     import VueJsonPretty from 'vue-json-pretty';
     import 'vue-json-pretty/lib/styles.css';
 
