@@ -171,6 +171,15 @@ return [
             return str_replace("'Symfony\\\\Bundle\\\\FrameworkBundle\\\\Controller\\\\RedirectController::", "'{$prefix}\\\\Symfony\\\\Bundle\\\\FrameworkBundle\\\\Controller\\\\RedirectController::", $contents);
         },
 
+        // Fix lazy ghost proxy helper
+        static function (string $filePath, string $prefix, string $contents): string {
+            if ('vendor/symfony/var-exporter/ProxyHelper.php' !== $filePath) {
+                return $contents;
+            }
+
+            return str_replace('Symfony\\\\Component\\\\VarExporter\\\\', "{$prefix}\\\\Symfony\\\\Component\\\\VarExporter\\\\", $contents);
+        },
+
         // Fix PHP8 attributes in Symfony namespace
         static function (string $filePath, string $prefix, string $contents): string {
             return str_replace('#[\\Symfony\\', "#[\\{$prefix}\\Symfony\\", $contents);
