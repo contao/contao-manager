@@ -22,7 +22,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_INSTALL')]
 class CreateContaoOperation extends AbstractInlineOperation
 {
-    private const SUPPORTED_VERSIONS = ['4.9', '4.13', '5.3', '5.4'];
+    private const SUPPORTED_VERSIONS = ['4.9', '4.13', '5.3', '5.5'];
 
     private string|null $version;
 
@@ -151,6 +151,6 @@ class CreateContaoOperation extends AbstractInlineOperation
 
     private function isDevVersion(string $version): bool
     {
-        return false;
+        return '5.5' === $version;
     }
 }

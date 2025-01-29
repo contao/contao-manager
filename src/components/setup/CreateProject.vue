@@ -235,7 +235,7 @@ export default {
         processing: false,
         isWeb: true,
 
-        version: '5.4',
+        version: '5.5',
         demo: false,
 
         view: 'require',
@@ -260,11 +260,11 @@ export default {
             const versions = [];
 
             versions.push({
-                value: '5.4',
-                label: `Contao 5.4 (${ this.$t('ui.setup.create-project.latestTitle') })`,
-                disabled: this.phpVersionId < 80100,
-                description: this.$t('ui.setup.create-project.latestQ1', { year: '2025' }),
-                problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.1.0', current: this.phpVersion }),
+                value: '5.5',
+                label: `Contao 5.5 (${ this.$t('ui.setup.create-project.latestTitle') })`,
+                disabled: this.phpVersionId < 80200,
+                description: this.$t('ui.setup.create-project.latestQ3', { year: '2025' }),
+                problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.2.0', current: this.phpVersion }),
             });
 
             versions.push({
@@ -564,6 +564,7 @@ export default {
         await this.$store.dispatch('packages/details/init', { vue: this, component: ThemeDetails });
         this.$store.commit('packages/setInstalled', {});
         this.isWeb = (await this.$store.dispatch('server/contao/get')).data.public_dir === 'web';
+        this.version = this.versions.find((v) => !v.disabled).value;
     }
 };
 </script>
