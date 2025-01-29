@@ -18,9 +18,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSerializable
 {
     public const SCOPES = ['admin', 'install', 'update', 'read'];
+
     public const ROLES = ['ROLE_ADMIN', 'ROLE_INSTALL', 'ROLE_UPDATE', 'ROLE_READ'];
 
     private string|null $totp_secret = null;
+
     private string|null $passkey = null;
 
     public function __construct(

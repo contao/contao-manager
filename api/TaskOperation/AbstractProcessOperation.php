@@ -128,10 +128,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
         return $output;
     }
 
-    /**
-     * @param int $signal
-     */
-    private function getSignalText($signal): string
+    private function getSignalText(int|null $signal): string
     {
         if (isset(self::SIGNALS[$signal])) {
             return \sprintf(' [%s]', self::SIGNALS[$signal]);

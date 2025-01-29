@@ -41,13 +41,6 @@ class ContaoController
     ) {
     }
 
-    #[Route(path: '/server/contao', methods: ['POST'])]
-    #[IsGranted('ROLE_INSTALL')]
-    public function update(Request $request, ServerInfo $serverInfo): Response
-    {
-        return $this->__invoke($request, $serverInfo);
-    }
-
     #[Route(path: '/server/contao', methods: ['GET'])]
     #[IsGranted('ROLE_READ')]
     public function __invoke(Request $request, ServerInfo $serverInfo): Response
@@ -119,6 +112,13 @@ class ContaoController
                 'supported' => version_compare($contaoVersion, '4.0.0', '>=') || str_starts_with($contaoVersion, 'dev-'),
             ],
         );
+    }
+
+    #[Route(path: '/server/contao', methods: ['POST'])]
+    #[IsGranted('ROLE_INSTALL')]
+    public function update(Request $request, ServerInfo $serverInfo): Response
+    {
+        return $this($request, $serverInfo);
     }
 
     private function createDirectories(string|null $directory, bool $usePublicDir): Response

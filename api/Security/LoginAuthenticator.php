@@ -48,8 +48,7 @@ class LoginAuthenticator extends AbstractBrowserAuthenticator
     {
         return parent::supports($request)
             && $request->request->has('username')
-            && $request->request->has('password')
-        ;
+            && $request->request->has('password');
     }
 
     public function authenticate(Request $request): Passport
@@ -93,10 +92,13 @@ class LoginAuthenticator extends AbstractBrowserAuthenticator
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         if ($exception instanceof InvalidTotpException) {
-            return new JsonResponse([
-                'username' => $exception->getUser()?->getUserIdentifier(),
-                'totp_enabled' => true,
-            ], Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse(
+                [
+                    'username' => $exception->getUser()?->getUserIdentifier(),
+                    'totp_enabled' => true,
+                ],
+                Response::HTTP_UNAUTHORIZED,
+            );
         }
 
         return parent::onAuthenticationFailure($request, $exception);

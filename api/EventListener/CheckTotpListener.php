@@ -12,20 +12,9 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\EventListener;
 
-use Contao\ManagerApi\Exception\ApiProblemException;
-use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Security\TotpBadge;
 use Contao\ManagerApi\Security\User;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
-use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 
 #[AsEventListener]

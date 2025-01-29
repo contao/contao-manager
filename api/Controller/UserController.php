@@ -40,7 +40,7 @@ class UserController
         private readonly UserConfig $config,
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly Security $security,
-        private readonly PasswordHasherFactoryInterface $passwordHasherFactory
+        private readonly PasswordHasherFactoryInterface $passwordHasherFactory,
     ) {
     }
 
@@ -168,7 +168,6 @@ class UserController
 
         return new JsonResponse();
     }
-
 
     #[Route(path: '/users/{username}/totp', methods: ['GET'])]
     public function getTOTP(string $username): Response
@@ -363,7 +362,6 @@ class UserController
         return new JsonResponse($token, Response::HTTP_CREATED);
     }
 
-
     /**
      * Creates a response for given user information.
      *
@@ -415,7 +413,7 @@ class UserController
         $password = $request->request->get('password', '');
         $scope = $request->request->get('scope');
 
-        if ('' === $username || strlen($password) < 8) {
+        if ('' === $username || \strlen($password) < 8) {
             throw new BadRequestHttpException('Username or password invalid.');
         }
 

@@ -59,21 +59,21 @@ class TaskConfig extends AbstractConfig
         return $this->data['options'] ?? [];
     }
 
-    public function getOption(string $name, array|string|int|float|bool|null $default = null): array|string|int|float|bool|null
+    public function getOption(string $name, array|bool|float|int|string|null $default = null): array|bool|float|int|string|null
     {
         $this->initialize();
 
         return \array_key_exists($name, $this->data['options']) ? $this->data['options'][$name] : $default;
     }
 
-    public function getState(string $name, array|string|int|float|bool|null $default = null): array|string|int|float|bool|null
+    public function getState(string $name, array|bool|float|int|string|null $default = null): array|bool|float|int|string|null
     {
         $this->initialize();
 
         return \array_key_exists($name, $this->data['state']) ? $this->data['state'][$name] : $default;
     }
 
-    public function setState(string $name, array|string|int|float|bool|null $value): void
+    public function setState(string $name, array|bool|float|int|string|null $value): void
     {
         $this->initialize();
 

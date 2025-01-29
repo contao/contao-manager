@@ -60,7 +60,7 @@ class PartialConfig implements \IteratorAggregate, \Countable
     /**
      * Returns a config option by name.
      */
-    public function get(string $key, array|string|int|float|bool|null $default = null): array|string|int|float|bool|null
+    public function get(string $key, array|bool|float|int|string|null $default = null): array|bool|float|int|string|null
     {
         $data = $this->all();
 
@@ -70,7 +70,7 @@ class PartialConfig implements \IteratorAggregate, \Countable
     /**
      * Sets a config option by name.
      */
-    public function set(string $key, array|string|int|float|bool $value): void
+    public function set(string $key, array|bool|float|int|string $value): void
     {
         $this->replace([$key => $value]);
     }

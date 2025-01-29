@@ -27,12 +27,9 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
-use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
@@ -43,7 +40,6 @@ use Webauthn\AuthenticatorAssertionResponseValidator;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\AuthenticatorAttestationResponseValidator;
 use Webauthn\AuthenticatorSelectionCriteria;
-use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialParameters;
@@ -110,41 +106,44 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
         $username = $authenticatorAssertionResponse->userHandle;
         $userBadge = new UserBadge($username, $this->userProvider->loadUserByIdentifier(...));
 
-        $credentials = new CustomCredentials(function (AuthenticatorAssertionResponse $response, User $user) use ($rpEntity) {
-            $passkey = $user->getPasskey();
-            $challenge = bin2hex($response->clientDataJSON->challenge);
-            $requestOptions = $this->userConfig->getWebauthnOptions($challenge);
+        $credentials = new CustomCredentials(
+            function (AuthenticatorAssertionResponse $response, User $user) use ($rpEntity): bool {
+                $passkey = $user->getPasskey();
+                $challenge = bin2hex($response->clientDataJSON->challenge);
+                $requestOptions = $this->userConfig->getWebauthnOptions($challenge);
 
-            if (!$passkey || !$requestOptions) {
-                throw new AuthenticationCredentialsNotFoundException();
-            }
+                if (!$passkey || !$requestOptions) {
+                    throw new AuthenticationCredentialsNotFoundException();
+                }
 
-            $this->userConfig->deleteWebauthnOptions($challenge);
+                $this->userConfig->deleteWebauthnOptions($challenge);
 
-            try {
-                $publicKeyCredentialSource = $this
-                    ->serializer
-                    ->deserialize($passkey, PublicKeyCredentialSource::class, 'json')
-                ;
+                try {
+                    $publicKeyCredentialSource = $this
+                        ->serializer
+                        ->deserialize($passkey, PublicKeyCredentialSource::class, 'json')
+                    ;
 
-                $publicKeyCredentialRequestOptions = $this
-                    ->serializer
-                    ->deserialize($requestOptions, PublicKeyCredentialRequestOptions::class, 'json')
-                ;
+                    $publicKeyCredentialRequestOptions = $this
+                        ->serializer
+                        ->deserialize($requestOptions, PublicKeyCredentialRequestOptions::class, 'json')
+                    ;
 
-                $this->authenticatorAssertionResponseValidator->check(
-                    $publicKeyCredentialSource,
-                    $response,
-                    $publicKeyCredentialRequestOptions,
-                    $rpEntity->id,
-                    $user->getUserIdentifier(),
-                );
+                    $this->authenticatorAssertionResponseValidator->check(
+                        $publicKeyCredentialSource,
+                        $response,
+                        $publicKeyCredentialRequestOptions,
+                        $rpEntity->id,
+                        $user->getUserIdentifier(),
+                    );
 
-                return true;
-            } catch (\Exception $e) {
-                throw new AuthenticationException($e->getMessage(), $e->getCode(), $e);
-            }
-        }, $authenticatorAssertionResponse);
+                    return true;
+                } catch (\Exception $e) {
+                    throw new AuthenticationException($e->getMessage(), $e->getCode(), $e);
+                }
+            },
+            $authenticatorAssertionResponse
+        );
 
         return new Passport($userBadge, $credentials);
     }
@@ -152,10 +151,13 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         if ($exception instanceof InvalidTotpException) {
-            return new JsonResponse([
-                'username' => $exception->getUser()?->getUserIdentifier(),
-                'totp_enabled' => true,
-            ], Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse(
+                [
+                    'username' => $exception->getUser()?->getUserIdentifier(),
+                    'totp_enabled' => true,
+                ],
+                Response::HTTP_UNAUTHORIZED,
+            );
         }
 
         return parent::onAuthenticationFailure($request, $exception);
@@ -179,10 +181,10 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
                 $challenge,
                 [
                     PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_ES256K), // More interesting algorithm
-                    PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_ES256),  //      ||
-                    PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_RS256),  //      ||
-                    PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_PS256),  //      \/
-                    PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_ED256),  // Less interesting algorithm
+                    PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_ES256), //      ||
+                    PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_RS256), //      ||
+                    PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_PS256), //      \/
+                    PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_ED256), // Less interesting algorithm
                 ],
                 new AuthenticatorSelectionCriteria(userVerification: AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_REQUIRED),
             );
@@ -194,7 +196,7 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
             [
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
                 JsonEncode::OPTIONS => JSON_THROW_ON_ERROR,
-            ]
+            ],
         );
 
         $this->userConfig->setWebauthnOptions(bin2hex($challenge), $serialized);
@@ -236,7 +238,7 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
         $publicKeyCredentialCreationOptions = $this->serializer->deserialize(
             $creationOptions,
             PublicKeyCredentialCreationOptions::class,
-            'json'
+            'json',
         );
 
         $publicKeyCredentialSource = $this->authenticatorAttestationResponseValidator->check(
@@ -266,7 +268,7 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
         return new PublicKeyCredentialRpEntity(
             'Contao Manager '.ApiKernel::MANAGER_VERSION,
             $host,
-            'data:image/svg+xml;base64,PHN2ZyBpZD0iRWJlbmVfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTc4LjYgMTU1LjkiPjxzdHlsZT4uc3Qwe2ZpbGw6I2ZmZn0uc3Qxe2ZpbGw6I2Y0N2MwMH08L3N0eWxlPjx0aXRsZT5jb250YW9fb3JpZ2luYWxfcmdiPC90aXRsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTEuOC0uMUM1LjMtLjEgMCA1LjIgMCAxMS43djEzMi40YzAgNi41IDUuMyAxMS44IDExLjggMTEuOGgxNTVjNi41IDAgMTEuOC01LjIgMTEuOC0xMS43VjExLjdjMC02LjUtNS4zLTExLjgtMTEuOC0xMS44aC0xNTV6Ii8+PHBhdGggY2xhc3M9InN0MSIgZD0iTTE1LjkgOTQuNmM1IDIzLjMgOS4yIDQ1LjQgMjMuNyA2MS40SDExLjhDNS4zIDE1NiAwIDE1MC44IDAgMTQ0LjNWMTEuN0MwIDUuMiA1LjMtLjEgMTEuOC0uMWgyMC4xQzI3IDQuNCAyMi43IDkuNSAxOS4xIDE1LjEgMy4yIDM5LjQgOS44IDY1LjkgMTUuOSA5NC42ek0xNjYuOC0uMWgtMzEuNWM3LjUgNy41IDEzLjggMTcuMSAxOC41IDI5LjFsLTQ3LjkgMTAuMUMxMDAuNiAyOS4xIDkyLjYgMjAuOCA3NyAyNGMtOC42IDEuOC0xNC4zIDYuNi0xNi45IDExLjktMy4xIDYuNS00LjYgMTMuOCAyLjggNDguNnMxMS44IDQwLjggMTcuMyA0NS41YzQuNSAzLjggMTEuNyA1LjkgMjAuMyA0LjEgMTUuNi0zLjMgMTkuNS0xNC4yIDIwLjEtMjUuNWw0Ny45LTEwLjFjMS4xIDI0LjgtNi41IDQ0LTIwLjEgNTcuM2gxOC4yYzYuNSAwIDExLjgtNS4yIDExLjgtMTEuN1YxMS43Yy4yLTYuNS01LjEtMTEuOC0xMS42LTExLjh6Ii8+PC9zdmc+'
+            'data:image/svg+xml;base64,PHN2ZyBpZD0iRWJlbmVfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTc4LjYgMTU1LjkiPjxzdHlsZT4uc3Qwe2ZpbGw6I2ZmZn0uc3Qxe2ZpbGw6I2Y0N2MwMH08L3N0eWxlPjx0aXRsZT5jb250YW9fb3JpZ2luYWxfcmdiPC90aXRsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTEuOC0uMUM1LjMtLjEgMCA1LjIgMCAxMS43djEzMi40YzAgNi41IDUuMyAxMS44IDExLjggMTEuOGgxNTVjNi41IDAgMTEuOC01LjIgMTEuOC0xMS43VjExLjdjMC02LjUtNS4zLTExLjgtMTEuOC0xMS44aC0xNTV6Ii8+PHBhdGggY2xhc3M9InN0MSIgZD0iTTE1LjkgOTQuNmM1IDIzLjMgOS4yIDQ1LjQgMjMuNyA2MS40SDExLjhDNS4zIDE1NiAwIDE1MC44IDAgMTQ0LjNWMTEuN0MwIDUuMiA1LjMtLjEgMTEuOC0uMWgyMC4xQzI3IDQuNCAyMi43IDkuNSAxOS4xIDE1LjEgMy4yIDM5LjQgOS44IDY1LjkgMTUuOSA5NC42ek0xNjYuOC0uMWgtMzEuNWM3LjUgNy41IDEzLjggMTcuMSAxOC41IDI5LjFsLTQ3LjkgMTAuMUMxMDAuNiAyOS4xIDkyLjYgMjAuOCA3NyAyNGMtOC42IDEuOC0xNC4zIDYuNi0xNi45IDExLjktMy4xIDYuNS00LjYgMTMuOCAyLjggNDguNnMxMS44IDQwLjggMTcuMyA0NS41YzQuNSAzLjggMTEuNyA1LjkgMjAuMyA0LjEgMTUuNi0zLjMgMTkuNS0xNC4yIDIwLjEtMjUuNWw0Ny45LTEwLjFjMS4xIDI0LjgtNi41IDQ0LTIwLjEgNTcuM2gxOC4yYzYuNSAwIDExLjgtNS4yIDExLjgtMTEuN1YxMS43Yy4yLTYuNS01LjEtMTEuOC0xMS42LTExLjh6Ii8+PC9zdmc+',
         );
     }
 }

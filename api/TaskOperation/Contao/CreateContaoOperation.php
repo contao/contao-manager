@@ -24,7 +24,7 @@ class CreateContaoOperation extends AbstractInlineOperation
 {
     private const SUPPORTED_VERSIONS = ['4.9', '4.13', '5.3', '5.5'];
 
-    private string|null $version;
+    private readonly string|null $version;
 
     private string|null $publicDir;
 

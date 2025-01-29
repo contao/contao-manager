@@ -18,13 +18,13 @@ use Symfony\Component\Process\ExecutableFinder;
 
 class ZipCheck extends AbstractIntegrityCheck
 {
-    public function run(): ?ApiProblem
+    public function run(): ApiProblem|null
     {
-        if (\class_exists(\ZipArchive::class)) {
+        if (class_exists(\ZipArchive::class)) {
             return null;
         }
 
-        $finder = new ExecutableFinder;
+        $finder = new ExecutableFinder();
 
         if (
             $finder->find('unzip')
@@ -34,9 +34,9 @@ class ZipCheck extends AbstractIntegrityCheck
             return null;
         }
 
-        return (new ApiProblem(
+        return new ApiProblem(
             $this->trans('zip.title'),
-            'https://getcomposer.org/doc/articles/troubleshooting.md#zip-archives-are-not-unpacked-correctly-'
-        ));
+            'https://getcomposer.org/doc/articles/troubleshooting.md#zip-archives-are-not-unpacked-correctly-',
+        );
     }
 }

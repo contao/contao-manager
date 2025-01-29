@@ -24,10 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_INSTALL')]
 class CreateProjectOperation extends AbstractProcessOperation
 {
-    /**
-     * @var string
-     */
-    private $publicDir;
+    private string|null $publicDir;
 
     public function __construct(
         TaskConfig $taskConfig,

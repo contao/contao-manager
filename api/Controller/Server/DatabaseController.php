@@ -34,13 +34,6 @@ class DatabaseController
     ) {
     }
 
-    #[Route(path: '/server/database', methods: ['POST'])]
-    #[IsGranted('ROLE_INSTALL')]
-    public function write(Request $request, ServerInfo $serverInfo): Response
-    {
-        return $this->__invoke($request, $serverInfo);
-    }
-
     #[Route(path: '/server/database', methods: ['GET'])]
     #[IsGranted('ROLE_READ')]
     public function __invoke(Request $request, ServerInfo $serverInfo): Response
@@ -88,5 +81,12 @@ class DatabaseController
             'pattern' => self::URL_PATTERN,
             'status' => $this->contaoConsole->checkDatabaseMigrations(),
         ]);
+    }
+
+    #[Route(path: '/server/database', methods: ['POST'])]
+    #[IsGranted('ROLE_INSTALL')]
+    public function write(Request $request, ServerInfo $serverInfo): Response
+    {
+        return $this($request, $serverInfo);
     }
 }

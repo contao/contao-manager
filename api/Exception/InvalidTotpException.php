@@ -17,9 +17,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class InvalidTotpException extends BadCredentialsException
 {
-    private ?UserInterface $user = null;
+    private UserInterface|null $user = null;
 
-    public function getUser(): ?UserInterface
+    public function getUser(): UserInterface|null
     {
         return $this->user;
     }

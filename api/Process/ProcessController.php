@@ -241,7 +241,7 @@ class ProcessController extends AbstractProcess
 
     public static function create(string $workDir, array $commandline, string|null $cwd = null, string|null $id = null): self
     {
-        return new ProcessController(
+        return new self(
             [
                 'id' => $id ?: md5(uniqid('', true)),
                 'commandline' => $commandline,
@@ -259,7 +259,7 @@ class ProcessController extends AbstractProcess
             $config = array_merge($config, static::readConfig($getFile));
         }
 
-        return new ProcessController($config, $workDir);
+        return new self($config, $workDir);
     }
 
     private function saveConfig(bool $always = false): void
