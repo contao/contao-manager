@@ -5830,7 +5830,7 @@ __metadata:
     "@vue/cli-plugin-eslint": ~5.0.8
     "@vue/cli-service": ~5.0.8
     algoliasearch: ^4.24.0
-    contao-package-list: "git@github.com:contao/package-list.git"
+    contao-package-list: "git@github.com:contao/package-list.git#main"
     core-js: ^3.37.1
     cypress: ^13.6.4
     details-element-polyfill: ^2.4.0
@@ -5858,7 +5858,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"contao-package-list@git@github.com:contao/package-list.git":
+"contao-package-list@git@github.com:contao/package-list.git#main":
   version: 1.0.0
   resolution: "contao-package-list@git@github.com:contao/package-list.git#commit=24d7d80b2afb4dbedad835f3ca109f652bb291b1"
   dependencies:

@@ -30,6 +30,8 @@ tr:
         systempdir:
             title: 'Geçici sistem klasörüne yazılamadı.'
             detail: 'Bu sorun büyük olasılıkla barındırma hizmeti yapılandırmanızla ilgilidir. open_basedir tarafından geçici klasöre erişme izin verildiğinden ya da sys_temp_dir parametresinin doğru yapılandırıldığından emin olun.'
+        zip:
+            title: 'zip eklentisi ile unzip/7z komutlarının ikisi de eksik.'
 
     boot:
         composer:
