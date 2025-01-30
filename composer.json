@@ -75,7 +75,7 @@
         "ecs": "@php vendor-bin/ecs/vendor/bin/ecs check --fix",
         "phpstan": "@php vendor-bin/phpstan/vendor/bin/phpstan analyze",
         "rector": "@php vendor-bin/rector/vendor/bin/rector",
-        "depcheck": "@php vendor-bin/composer-dependency-analyser/vendor/bin/composer-dependency-analyser --config=tools/composer-dependency-analyser/config.php",
+        "depcheck": "@php vendor-bin/composer-dependency-analyser/vendor/bin/composer-dependency-analyser --config=vendor-bin/composer-dependency-analyser/config.php",
         "unit-tests": "@php vendor/bin/phpunit"
     }
 }
