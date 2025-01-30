@@ -1953,52 +1953,49 @@ components:
                     description: Updated the Contao Manager to the latest version.
 
         TaskPackagesSetup:
-            oneOf:
-                -   type: object
-                    required: [name, theme]
-                    properties:
-                        name:
-                            type: string
-                            default: 'contao/install'
+            type: object
+            properties:
+                name:
+                    type: string
+                    default: 'contao/install'
+                config:
+                    oneOf:
+                        -   type: object
                             description: Creates a Contao project from an uploaded theme file.
-                        upload:
-                            type: string
-                            description: ID of a theme file that was uploaded.
-                        no-update:
-                            type: boolean
-                            default: false
-                            description: Only create the project files but do not run a `composer update`.
-                -   type: object
-                    required: [name, package]
-                    properties:
-                        name:
-                            type: string
-                            default: 'contao/install'
+                            required: [upload]
+                            properties:
+                                upload:
+                                    type: string
+                                    description: ID of a theme file that was uploaded.
+                                no-update:
+                                    type: boolean
+                                    default: false
+                                    description: Only create the project files but do not run a `composer update`.
+                        -   type: object
                             description: Installs a Contao project through Composer.
-                        package:
-                            type: string
-                            description: A composer package to use with `create-project` (e.g. `contao/contao-demo`).
-                        version:
-                            type: string
-                            description: Version of the package to install.
-                        no-update:
-                            type: boolean
-                            default: false
-                            description: Only create the project files but do not run a `composer update`.
-                -   type: object
-                    required: [name, version]
-                    properties:
-                        name:
-                            type: string
-                            default: 'contao/install'
+                            required: [package]
+                            properties:
+                                package:
+                                    type: string
+                                    description: A composer package to use with `create-project` (e.g. `contao/contao-demo`).
+                                version:
+                                    type: string
+                                    description: Version of the package to install.
+                                no-update:
+                                    type: boolean
+                                    default: false
+                                    description: Only create the project files but do not run a `composer update`.
+                        -   type: object
                             description: Creates a `composer.json` for the Contao Managed Edition.
-                        version:
-                            type: string
-                            enum: [4.9, 4.13, 5.2]
-                        no-update:
-                            type: boolean
-                            default: false
-                            description: Only create the `composer.json` but do not run a `composer update`.
+                            required: [version]
+                            properties:
+                                version:
+                                    type: string
+                                    enum: [4.9, 4.13, 5.2]
+                                no-update:
+                                    type: boolean
+                                    default: false
+                                    description: Only create the `composer.json` but do not run a `composer update`.
 
         TaskPackagesInstall:
             type: object
@@ -2009,13 +2006,19 @@ components:
                     description: Installs Composer packages from lock file (`composer install`).
                       This automatically runs an update if there is no `composer.lock` file and uses
                       the Composer Resolver Cloud if enabled.
-                dry_run:
-                    type: boolean
-                    default: false
-                remove-vendor:
-                    type: boolean
-                    default: false
-                    description: Removes the `vendor` folder before installation (clean install).
+                config:
+                    type: object
+                    properties:
+                        dry_run:
+                            type: boolean
+                            default: false
+                        remove-vendor:
+                            type: boolean
+                            default: false
+                            description: Removes the `vendor` folder before installation (clean install).
+                        cloud-job:
+                            type: string
+                            description: ID of a composer cloud job if a lock file should be downloaded before installation.
 
         TaskPackagesUpdate:
             type: object
@@ -2024,26 +2027,29 @@ components:
                     type: string
                     default: 'composer/update'
                     description: Updates the installed Composer packages (`composer update`).
-                dry_run:
-                    type: boolean
-                    default: false
-                uploads:
-                    type: boolean
-                    default: false
-                    description: Install uploaded packages that are in the list of packages to update
-                require:
+                config:
                     type: object
-                    description: List of packages to require. Key is package name and value is version, which can be empty.
-                remove:
-                    type: array
-                    description: List of packages to remove.
-                    items:
-                        type: string
-                update:
-                    type: array
-                    description: List of package names to include in the update. If not set, all packages will be updated.
-                    items:
-                        type: string
+                    properties:
+                        dry_run:
+                            type: boolean
+                            default: false
+                        uploads:
+                            type: boolean
+                            default: false
+                            description: Install uploaded packages that are in the list of packages to update
+                        require:
+                            type: object
+                            description: List of packages to require. Key is package name and value is version, which can be empty.
+                        remove:
+                            type: array
+                            description: List of packages to remove.
+                            items:
+                                type: string
+                        update:
+                            type: array
+                            description: List of package names to include in the update. If not set, all packages will be updated.
+                            items:
+                                type: string
 
         TaskStatus:
             type: object

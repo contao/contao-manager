@@ -33,7 +33,7 @@ class CloudController
     ) {
     }
 
-    #[Route(path: '/packages/cloud', methods: ['GET', 'PUT'])]
+    #[Route(path: '/packages/cloud', methods: ['GET'])]
     #[IsGranted('ROLE_READ')]
     public function getCloudData(): Response
     {
