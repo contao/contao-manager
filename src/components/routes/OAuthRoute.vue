@@ -46,7 +46,7 @@
                         `api/users/${encodeURIComponent(this.$store.state.auth.username)}/tokens`,
                         {
                             client_id: this.$route.query.client_id,
-                            scope: this.$route.query.scope,
+                            scope: 'admin',
                         },
                     )
 
@@ -54,7 +54,7 @@
                     this.redirect({
                         access_token: response.body.token,
                         token_type: 'bearer',
-                        scope: this.$route.query.scope,
+                        scope: 'admin',
                         endpoint: `${location.origin}${location.pathname}`
                     });
                 } catch (err) {
@@ -113,7 +113,7 @@
                 return this.redirect({ error: 'unsupported_response_type' })
             }
 
-            if (this.$route.query.scope !== 'admin') {
+            if (!['admin', 'install', 'update', 'read'].includes(this.$route.query.scope)) {
                 return this.redirect({ error: 'invalid_scope' })
             }
 
