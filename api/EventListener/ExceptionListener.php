@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\EventListener;
 
-use Contao\ManagerApi\Exception\ApiProblemException;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -47,11 +46,7 @@ class ExceptionListener
 
         $this->logException($exception);
 
-        if ($exception instanceof HttpExceptionInterface && !$exception instanceof ApiProblemException) {
-            $response = new Response($exception->getMessage(), $exception->getStatusCode(), $exception->getHeaders());
-        } else {
-            $response = ApiProblemResponse::createFromException($exception, $this->debug);
-        }
+        $response = ApiProblemResponse::createFromException($exception, $this->debug);
 
         $event->setResponse($response);
     }
