@@ -98,7 +98,8 @@ export default {
         packageConstraintInstalled: (s, g) => name => (g.packageInstalled(name) && g.packageRoot(name)) ? g.installed[name].constraint : null,
         packageConstraintRequired: (s, g) => name => g.packageRequired(name) ? (g.packageChanged(name) ? g.constraintChanged(name) : s.required[name].constraint) : null,
 
-        contaoSupported: (s, g) => constraint => constraint ? intersects(constraint, g.packageConstraint('contao/manager-bundle'), true) : true,
+        contaoConstraint: (s, g) => coerce(g.packageConstraint('contao/manager-bundle'), { includePrerelease: true }).toString(),
+        contaoSupported: (s, g) => constraint => constraint ? intersects(constraint, g.contaoConstraint, true) : true,
     },
 
     mutations: {
