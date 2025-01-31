@@ -423,6 +423,7 @@
             color: #f6f8fa;
             font-size: .8em;
             line-height: 1.5;
+            white-space: pre-wrap;
 
             &:hover {
                 background: #2f363d;
