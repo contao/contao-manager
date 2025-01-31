@@ -23,8 +23,9 @@
                 </template>
             </div>
             <span class="composer-package__stats composer-package__stats--license" v-if="license">{{ license }}</span>
-            <span class="composer-package__stats composer-package__stats--downloads" v-if="packageData.downloads">{{ numberFormat(packageData.downloads) }}</span>
-            <span class="composer-package__stats composer-package__stats--favers" v-if="packageData.favers">{{ numberFormat(packageData.favers) }}</span>
+            <ul class="composer-package__stats composer-package__stats--versions" :title="`${$t('ui.package.contaoVersion')} ${packageData.contaoVersions.join(', ')}`" v-if="packageData.contaoVersions && !isContao">
+                <li class="composer-package__stats--version" v-for="(version, i) in packageData.contaoVersions" :key="i">{{ version }}</li>
+            </ul>
             <router-link class="composer-package__stats composer-package__stats--funding" :to="{ query: { p: data.name } }" v-if="packageData.funding">&nbsp;</router-link>
         </template>
 
@@ -230,12 +231,20 @@
             padding-left: 0;
         }
 
-        &--downloads {
-            background-image: var(--svg--downloads);
+        &--versions {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            list-style: none;
+            margin: 0 15px 0 0;
+            padding: 0;
         }
 
-        &--favers {
-            background-image: var(--svg--favers);
+        &--version {
+            padding: 3px 5px;
+            line-height: 1;
+            border: 1px solid var(--border);
+            border-radius: 4px;
         }
 
         &--funding {
