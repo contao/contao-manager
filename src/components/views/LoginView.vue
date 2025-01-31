@@ -156,6 +156,11 @@
                 this.$refs.username.focus();
             }
 
+            if (location.protocol !== 'https:' && process.env.NODE_ENV !== 'development') {
+                this.showPasskey = false;
+                return;
+            }
+
             const supportsWebAuthn = browserSupportsWebAuthn();
             const supportsAutofill = await browserSupportsWebAuthnAutofill();
             this.showPasskey = supportsWebAuthn;

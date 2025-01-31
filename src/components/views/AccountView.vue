@@ -200,7 +200,7 @@ export default {
         },
 
         mounted() {
-            this.supportsWebAuthn = browserSupportsWebAuthn();
+            this.supportsWebAuthn = (location.protocol === 'https:' || process.env.NODE_ENV === 'development') && browserSupportsWebAuthn();
             this.usePassword = !this.supportsWebAuthn;
 
             if (this.$refs.username) {
