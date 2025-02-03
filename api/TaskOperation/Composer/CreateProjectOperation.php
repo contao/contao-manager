@@ -120,7 +120,7 @@ class CreateProjectOperation extends AbstractProcessOperation
                 try {
                     $file = $this->environment->getComposerJsonFile();
                     $json = $file->read();
-                    $json['extra']['public-dir'] = basename($this->publicDir);
+                    $json['extra']['public-dir'] = basename((string) $this->publicDir);
                     $file->write($json);
                 } catch (\RuntimeException) {
                     // ignore

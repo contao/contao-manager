@@ -120,7 +120,7 @@ class CreateContaoOperation extends AbstractInlineOperation
         // https://github.com/contao/contao-manager/issues/627 Still needed since we
         // allow Contao 4.9 for PHP < 7.4
         if (version_compare($version, '4.12', '>=')) {
-            $publicDir = basename($this->publicDir);
+            $publicDir = basename((string) $this->publicDir);
             $script = '@php vendor/bin/contao-setup';
         } else {
             $publicDir = 'web';

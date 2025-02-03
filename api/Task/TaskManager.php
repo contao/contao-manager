@@ -87,7 +87,7 @@ class TaskManager implements LoggerAwareInterface
         $status = $task->create($config);
 
         foreach ($status->getOperations() as $operation) {
-            foreach ((new \ReflectionClass($operation))->getAttributes(IsGranted::class) ?? [] as $attribute) {
+            foreach ((new \ReflectionClass($operation))->getAttributes(IsGranted::class) as $attribute) {
                 /** @var IsGranted $isGranted */
                 $isGranted = $attribute->newInstance();
 

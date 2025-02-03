@@ -142,7 +142,7 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
                     throw new AuthenticationException($e->getMessage(), $e->getCode(), $e);
                 }
             },
-            $authenticatorAssertionResponse
+            $authenticatorAssertionResponse,
         );
 
         return new Passport($userBadge, $credentials);

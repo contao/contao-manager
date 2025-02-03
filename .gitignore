@@ -1,5 +1,4 @@
 # Dependencies
-/.yarn
 /node_modules
 /vendor-bin/*/vendor
 /vendor

@@ -250,6 +250,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
             if ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-successful', false)) {
                 if (!$this->validateComposerJson($job)) {
                     $this->taskConfig->setState('cloud-job-successful', false);
+
                     return;
                 }
 
@@ -406,9 +407,10 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
     }
 
     /**
-     * The composer.json of a cloud job must be identical to the local file. If that is not the case,
-     * either an incorrect job is trying to be installed, or the local composer.json was modified after
-     * the cloud job was started. Both cases are not valid and unsupported.
+     * The composer.json of a cloud job must be identical to the local file. If that
+     * is not the case, either an incorrect job is trying to be installed, or the
+     * local composer.json was modified after the cloud job was started. Both cases
+     * are not valid and unsupported.
      */
     private function validateComposerJson(CloudJob $job): bool
     {

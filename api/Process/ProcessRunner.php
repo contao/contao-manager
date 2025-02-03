@@ -23,8 +23,14 @@ class ProcessRunner extends AbstractProcess
 
     private ProcessTimedOutException|null $timeout = null;
 
+    /**
+     * @var resource
+     */
     private $stdin;
 
+    /**
+     * @var resource
+     */
     private $stdout;
 
     public function __construct(string $configFile)
