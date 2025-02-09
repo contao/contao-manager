@@ -30,6 +30,8 @@ zh:
         systempdir:
             title: '系统临时目录无法写入'
             detail: '很有可能是主机的配置问题。请确保open_basedir允许访问临时目录，或者sys_temp_dir已正确配置。'
+        zip:
+            title: ''
 
     boot:
         composer:

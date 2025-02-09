@@ -30,6 +30,8 @@ nl:
         systempdir:
             title: 'Tijdelijke systeem directory niet beschrijfbaar.'
             detail: 'Er is waarschijnlijk een probleem met uw hostingconfiguratie. Zorg ervoor dat open_basedir toegang geeft tot de tijdelijke directory, of dat sys_temp_dir correct is geconfigureerd.'
+        zip:
+            title: ''
 
     boot:
         composer:

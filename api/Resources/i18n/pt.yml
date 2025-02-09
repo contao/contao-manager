@@ -30,6 +30,8 @@ pt:
         systempdir:
             title: 'Impossível escrever no directório de memória de sistema temporário.'
             detail: 'Isto é muito provavelmente um problema com a configuração do seu alojamento. Certifique-se de que o open_basedir permite o acesso ao directório temporário ou de que o sys_temp_dir está correctamente configurado.'
+        zip:
+            title: ''
 
     boot:
         composer:
@@ -41,7 +43,7 @@ pt:
             incompatible: 'Este binário é uma versão PHP {cli} mas o seu servidor web é versão {web}.'
             error: ''
         cloud:
-            platform: 'A plataforma não pode estar configurada em composer.json .'
+            platform: ''
             cache: 'Propriedades de cache não podem estar configuradas em composer.json .'
 
     task:

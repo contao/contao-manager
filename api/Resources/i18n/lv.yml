@@ -30,6 +30,8 @@ lv:
         systempdir:
             title: 'Nevar rakstīt sistēmas pagaidu direktorijā.'
             detail: 'Visticamāk, tā ir problēma ar jūsu hostinga konfigurāciju. Pārliecinieties, vai open_basedir ļauj piekļūt pagaidu direktorijai, vai arī sys_temp_dir ir pareizi konfigurēta.'
+        zip:
+            title: ''
 
     boot:
         composer:

@@ -30,6 +30,8 @@ cs:
         systempdir:
             title: 'Nelze zapisovat do dočasné složky systému.'
             detail: 'Nejspíš jde o problém s Vaším nastavením služeb. Ujistěte se, že open_basedir dovoluje přístup k dočasné složce nebo zda je sys_temp_dir správně nastavená.'
+        zip:
+            title: 'Rozšíření zip a příkazy unzip/7z chybějí.'
 
     boot:
         composer:

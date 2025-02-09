@@ -30,6 +30,8 @@ es:
         systempdir:
             title: 'No se puede escribir en el directorio temporal del sistema.'
             detail: 'Probablemente esto sea un problema con su configuración de alojamiento. Asegúrese de que open_basedir permita el acceso al directorio temporal o que el sys_temp_dir esté configurado correctamente.'
+        zip:
+            title: ''
 
     boot:
         composer:

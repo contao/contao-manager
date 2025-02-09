@@ -30,6 +30,8 @@ sv:
         systempdir:
             title: 'Det går inte att skriva till den tillfälliga systemkatalogen.'
             detail: 'Detta är troligen ett problem med din värdkonfiguration. Se till att antingen open_basedir tillåter åtkomst till den temporära katalogen eller att sys_temp_dir är korrekt konfigurerad.'
+        zip:
+            title: 'Både zip-tillägget och kommandona unzip/7z saknas.'
 
     boot:
         composer:

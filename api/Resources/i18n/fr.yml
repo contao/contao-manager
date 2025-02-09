@@ -30,6 +30,8 @@ fr:
         systempdir:
             title: 'Impossible d''écrire sur le répertoire temporaire du système.'
             detail: 'C''est probablement un problème avec votre configuration d''hébergement. Assurez-vous que open_basedir permet d''accéder au répertoire temporaire ou que sys_temp_dir est correctement configuré.'
+        zip:
+            title: ''
 
     boot:
         composer:

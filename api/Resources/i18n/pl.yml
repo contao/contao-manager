@@ -30,6 +30,8 @@ pl:
         systempdir:
             title: 'Nie udało się zapisać do tymczasowego katalogu systemowego.'
             detail: 'To jest prawdopodobnie problem z konfiguracją hostingu. Upewnij się, że open_basedir pozwala na dostęp do tymczasowego katalogu lub, że sys_temp_dir jest poprawnie skonfigurowane.'
+        zip:
+            title: ''
 
     boot:
         composer:

@@ -30,6 +30,8 @@ it:
         systempdir:
             title: 'Impossibile scrivere sulla cartella temporanea di sistema.'
             detail: 'Questo è molto probabilmente un problema con la vostra configurazione di hosting. Assicurarsi che open_basedir permetta l''accesso alla directory temporanea o che sys_temp_dir sia configurato correttamente.'
+        zip:
+            title: ''
 
     boot:
         composer:
