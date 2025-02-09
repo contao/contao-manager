@@ -225,14 +225,21 @@ class UserConfig extends AbstractConfig
     {
         $this->initialize();
 
-        return $this->data['webauthn'][$key] ?? null;
+        if (($this->data['webauthn'][$key]['expires'] ?? 0) < time()) {
+            return null;
+        }
+
+        return $this->data['webauthn'][$key]['options'] ?? null;
     }
 
     public function setWebauthnOptions(string $key, string $value): void
     {
         $this->initialize();
 
-        $this->data['webauthn'][$key] = $value;
+        $this->data['webauthn'][$key] = [
+            'options' => $value,
+            'expires' => strtotime('+5 minutes'),
+        ];
 
         $this->save();
     }
@@ -403,6 +410,12 @@ class UserConfig extends AbstractConfig
         foreach (($this->data['tokens'] ?? []) as $id => $token) {
             if (isset($token['expires']) && $token['expires'] < time()) {
                 unset($this->data['tokens'][$id]);
+            }
+        }
+
+        foreach (($this->data['webauthn'] ?? []) as $key => $data) {
+            if (($data['expires'] ?? 0) < time()) {
+                unset($this->data['webauthn'][$key]);
             }
         }
 

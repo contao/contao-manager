@@ -169,15 +169,16 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
         $rpEntity = $this->createRpEntity($host);
 
         if (null === $username) {
-            $options = PublicKeyCredentialRequestOptions::create(
+            $options = new PublicKeyCredentialRequestOptions(
                 $challenge,
                 $rpEntity->id,
                 userVerification: PublicKeyCredentialRequestOptions::USER_VERIFICATION_REQUIREMENT_REQUIRED,
+                timeout: 5 * 60 * 1000,
             );
         } else {
-            $options = PublicKeyCredentialCreationOptions::create(
+            $options = new PublicKeyCredentialCreationOptions(
                 $rpEntity,
-                new PublicKeyCredentialUserEntity($username, $username, $username),
+                new PublicKeyCredentialUserEntity($username, 'contao-manager.'.$username, $username),
                 $challenge,
                 [
                     PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_ES256K), // More interesting algorithm
@@ -187,6 +188,7 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
                     PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_ED256), // Less interesting algorithm
                 ],
                 new AuthenticatorSelectionCriteria(userVerification: AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_REQUIRED),
+                timeout: 5 * 60 * 1000,
             );
         }
 
@@ -268,7 +270,6 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
         return new PublicKeyCredentialRpEntity(
             'Contao Manager '.ApiKernel::MANAGER_VERSION,
             $host,
-            'data:image/svg+xml;base64,PHN2ZyBpZD0iRWJlbmVfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTc4LjYgMTU1LjkiPjxzdHlsZT4uc3Qwe2ZpbGw6I2ZmZn0uc3Qxe2ZpbGw6I2Y0N2MwMH08L3N0eWxlPjx0aXRsZT5jb250YW9fb3JpZ2luYWxfcmdiPC90aXRsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTEuOC0uMUM1LjMtLjEgMCA1LjIgMCAxMS43djEzMi40YzAgNi41IDUuMyAxMS44IDExLjggMTEuOGgxNTVjNi41IDAgMTEuOC01LjIgMTEuOC0xMS43VjExLjdjMC02LjUtNS4zLTExLjgtMTEuOC0xMS44aC0xNTV6Ii8+PHBhdGggY2xhc3M9InN0MSIgZD0iTTE1LjkgOTQuNmM1IDIzLjMgOS4yIDQ1LjQgMjMuNyA2MS40SDExLjhDNS4zIDE1NiAwIDE1MC44IDAgMTQ0LjNWMTEuN0MwIDUuMiA1LjMtLjEgMTEuOC0uMWgyMC4xQzI3IDQuNCAyMi43IDkuNSAxOS4xIDE1LjEgMy4yIDM5LjQgOS44IDY1LjkgMTUuOSA5NC42ek0xNjYuOC0uMWgtMzEuNWM3LjUgNy41IDEzLjggMTcuMSAxOC41IDI5LjFsLTQ3LjkgMTAuMUMxMDAuNiAyOS4xIDkyLjYgMjAuOCA3NyAyNGMtOC42IDEuOC0xNC4zIDYuNi0xNi45IDExLjktMy4xIDYuNS00LjYgMTMuOCAyLjggNDguNnMxMS44IDQwLjggMTcuMyA0NS41YzQuNSAzLjggMTEuNyA1LjkgMjAuMyA0LjEgMTUuNi0zLjMgMTkuNS0xNC4yIDIwLjEtMjUuNWw0Ny45LTEwLjFjMS4xIDI0LjgtNi41IDQ0LTIwLjEgNTcuM2gxOC4yYzYuNSAwIDExLjgtNS4yIDExLjgtMTEuN1YxMS43Yy4yLTYuNS01LjEtMTEuOC0xMS42LTExLjh6Ii8+PC9zdmc+',
         );
     }
 }
