@@ -59,7 +59,7 @@ export default {
 
             commit('setLoading', true);
 
-            return axios.get('api/server/database').then(handle, handle);
+            return axios.get('api/server/database').then(handle).catch(error => handle(error.response));
         },
 
         set({ commit }, url) {
@@ -71,7 +71,7 @@ export default {
 
             commit('setLoading', true);
 
-            return axios.post('api/server/database', { url }).then(handle, handle);
+            return axios.post('api/server/database', { url }).then(handle).catch(error => handle(error.response));
         },
     },
 };

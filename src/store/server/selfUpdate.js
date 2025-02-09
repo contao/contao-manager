@@ -24,10 +24,10 @@ export default {
                 });
             }
 
-            return axios.get('api/server/self-update').then(
-                response => response.data,
-                (response) => {
-                    if (response.status === 501) {
+            return axios.get('api/server/self-update')
+                .then(response => response.data)
+                .catch((error) => {
+                    if (error.response?.status === 501) {
                         return {
                             current_version: null,
                             latest_version: null,
@@ -37,13 +37,13 @@ export default {
                         };
                     }
 
-                    throw response;
-                },
-            ).then((result) => {
-                commit('setCache', result);
+                    throw error;
+                })
+                .then((result) => {
+                    commit('setCache', result);
 
-                return result;
-            });
+                    return result;
+                });
         },
 
         async latest() {

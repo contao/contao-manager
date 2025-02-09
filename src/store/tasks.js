@@ -14,7 +14,8 @@ const pollTask = (store, resolve, reject, delay = 5000, attempt = 1) => {
             timeout: 5000 * attempt,
         }).then(
             response => handleTask(response, store, resolve, reject),
-            response => failTask(response, store, resolve, reject),
+        ).catch(
+            error => failTask(error, store, resolve, reject),
         );
     }, delay);
 };
@@ -64,9 +65,9 @@ handleTask = (response, store, resolve, reject) => {
     }
 };
 
-failTask = (response, store, resolve, reject) => {
+failTask = (error, store, resolve, reject) => {
     // Request has timed out
-    if (response.status === 0) {
+    if (error.request && !error.response) {
         pending += 1;
 
         if (pending <= 5) {
@@ -159,10 +160,9 @@ export default {
                 store.commit('setCurrent', task);
                 store.commit('setStatus', 'created');
 
-                axios.put('api/task', task).then(
-                    response => handleTask(response, store, resolve, reject),
-                    response => failTask(response, store, resolve, reject),
-                );
+                axios.put('api/task', task)
+                    .then(response => handleTask(response, store, resolve, reject))
+                    .catch(error => failTask(error, store, resolve, reject));
             });
         },
 
@@ -176,10 +176,9 @@ export default {
             store.commit('setStatus', 'aborting');
 
             return new Promise((resolve, reject) => {
-                axios.patch('api/task', {status: 'aborting'}).then(
-                    response => handleTask(response, store, resolve, reject),
-                    response => failTask(response, store, resolve, reject),
-                );
+                axios.patch('api/task', {status: 'aborting'})
+                    .then(response => handleTask(response, store, resolve, reject))
+                    .catch(error => failTask(error, store, resolve, reject));
             });
         },
 

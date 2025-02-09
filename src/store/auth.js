@@ -100,8 +100,8 @@ export default {
         status(store) {
             $store = store;
 
-            return axios.get('api/session').then(
-                (response) => {
+            return axios.get('api/session')
+                .then((response) => {
                     if (response.data.username) {
                         store.commit('setUser', response.data);
                         startCountdown();
@@ -111,18 +111,17 @@ export default {
                     }
 
                     return response.status;
-                },
-                (response) => {
+                })
+                .catch((error) => {
                     store.commit('setUser', null);
                     stopCountdown();
 
-                    if (response.status === 403) {
+                    if (error.response?.status === 403) {
                         store.commit('setLocked', null, { root: true });
                     }
 
-                    return response.status;
-                },
-            );
+                    return error.response?.status;
+                });
         },
 
         async login(store, data) {

@@ -36,7 +36,7 @@ export default {
 				return response;
 			};
 
-			return axios.get('api/server/admin-user').then(handle, handle);
+			return axios.get('api/server/admin-user').then(handle).catch(error => handle(error.response));
 		},
 
 		set({ commit }, data) {
@@ -46,7 +46,7 @@ export default {
 				return response;
 			};
 
-			return axios.post('api/server/admin-user', data).then(handle, handle);
+			return axios.post('api/server/admin-user', data).then(handle).catch(error => handle(error.response));
 		}
 	},
 };

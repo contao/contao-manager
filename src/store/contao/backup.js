@@ -60,7 +60,7 @@ export default {
 
             commit('setLoading', true);
 
-            return axios.get('api/contao/backup').then(handle, handle);
+            return axios.get('api/contao/backup').then(handle).catch(error => handle(error.response));
         }
     },
 };

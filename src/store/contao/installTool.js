@@ -41,7 +41,7 @@ export default {
                 return Promise.resolve(response);
             }
 
-            return axios.get('api/contao/install-tool/lock').then(handle, handle);
+            return axios.get('api/contao/install-tool/lock').then(handle).catch(error => handle(error.response));
         },
 
         lock(store) {
@@ -51,7 +51,7 @@ export default {
                 return Promise.resolve(response);
             }
 
-            return axios.put('api/contao/install-tool/lock').then(handle, handle);
+            return axios.put('api/contao/install-tool/lock').then(handle).catch(error => handle(error.response));
         },
 
         unlock(store) {
@@ -61,7 +61,7 @@ export default {
                 return Promise.resolve(response);
             }
 
-            return axios.delete('api/contao/install-tool/lock').then(handle, handle);
+            return axios.delete('api/contao/install-tool/lock').then(handle).catch(error => handle(error.response));
         },
     },
 };

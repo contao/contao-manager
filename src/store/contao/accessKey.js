@@ -3,19 +3,18 @@
 import axios from 'axios';
 
 const handle = (request, { commit }) => new Promise((resolve, reject) => {
-    request.then(
-        (response) => {
+    request
+        .then((response) => {
             commit('setCache', response.data['access-key']);
             commit('setIsEnabled', response.data['access-key'] !== '');
 
             resolve(response.data['access-key']);
-        },
-        () => {
+        })
+        .catch(() => {
             commit('setIsEnabled', false);
 
             reject();
-        },
-    );
+        });
 });
 
 export default {

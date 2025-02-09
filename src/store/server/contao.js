@@ -45,7 +45,7 @@ export default {
                 return response;
             };
 
-            return axios.get('api/server/contao').then(handle, handle);
+            return axios.get('api/server/contao').then(handle).catch(error => handle(error.response));
         },
 
         documentRoot(store, { directory, usePublicDir = false }) {
