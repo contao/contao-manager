@@ -1,7 +1,7 @@
 <template>
     <package-base @start-upload="openFileSelector()">
         <div class="package-list">
-            <package-uploads ref="uploader" v-if="uploads !== false"/>
+            <package-uploads ref="uploader" v-if="uploads !== false && isGranted(scopes.INSTALL)"/>
 
             <h2 class="package-list__headline" v-if="hasAdded">{{ $t('ui.packagelist.added') }}</h2>
             <composer-package v-for="item in addedPackages" :data="item" :key="item.name"/>
@@ -75,6 +75,7 @@
                 'visibleAdded',
             ]),
             ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
+            scopes: () => scopes,
 
             addedPackages: vm => vm.visibleRequired.concat(vm.visibleAdded).filter(pkg => !vm.packageMissing(pkg.name)).sort(sortPackages),
             installedPackages: vm => vm.visibleRequired.filter(pkg => vm.packageMissing(pkg.name)).concat(vm.visibleInstalled).sort(sortPackages),
