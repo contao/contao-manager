@@ -24,7 +24,7 @@
         <template v-else>
             <p class="invite-user__text">{{ $t('ui.user-manager.inviteText') }}</p>
             <user-scope v-model="scope"/>
-            <a class="invite-user__help" :href="`https://to.contao.org/docs/manager-scopes?lang=${$i18n.locale}`" target="_blank">{{ $t('ui.user-manager.permissions') }}</a>
+            <a class="invite-user__help" :href="`https://to.contao.org/docs/manager-users?lang=${$i18n.locale}`" target="_blank">{{ $t('ui.user-manager.permissions') }}</a>
         </template>
         <template #actions>
             <button type="button" class="widget-button" :disabled="loading" @click="close">{{ token ? $t('ui.user-manager.close') : $t('ui.user-manager.cancel') }}</button>
