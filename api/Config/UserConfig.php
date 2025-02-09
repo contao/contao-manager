@@ -19,8 +19,6 @@ use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 class UserConfig extends AbstractConfig
 {
-    public const SCOPES = ['admin', 'install', 'update', 'read'];
-
     public function __construct(
         private readonly PasswordHasherFactoryInterface $passwordHasherFactory,
         ApiKernel $kernel,

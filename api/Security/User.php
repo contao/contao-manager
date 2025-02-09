@@ -19,8 +19,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
 {
     public const SCOPES = ['admin', 'install', 'update', 'read'];
 
-    public const ROLES = ['ROLE_ADMIN', 'ROLE_INSTALL', 'ROLE_UPDATE', 'ROLE_READ'];
-
     private string|null $totp_secret = null;
 
     private string|null $passkey = null;
@@ -104,12 +102,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
 
     public static function scopeFromRoles(array $roles): string|null
     {
-        $roles = array_values(array_intersect(self::ROLES, $roles));
+        $scopes = array_map(static fn (string $role) => strtolower(substr($role, 5)), $roles);
+        $scopes = array_values(array_intersect(self::SCOPES, $scopes));
 
-        if ([] === $roles) {
+        if ([] === $scopes) {
             return null;
         }
 
-        return strtolower(substr($roles[0], 5));
+        return $scopes[0];
     }
 }
