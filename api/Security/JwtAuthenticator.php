@@ -50,7 +50,7 @@ class JwtAuthenticator extends AbstractAuthenticator
         $userBadge = new UserBadge(
             $credentials->username,
             $this->userProvider->loadUserByIdentifier(...),
-            ['scope' => $credentials->scope],
+            ['scope' => $credentials->scope ?? null],
         );
 
         return new SelfValidatingPassport($userBadge);
