@@ -93,7 +93,7 @@ class TaskController
     private function deleteTask(): Response
     {
         if (!$this->taskManager->hasTask()) {
-            throw new BadRequestHttpException('No active task found.');
+            return $this->getResponse();
         }
 
         try {
