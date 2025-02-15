@@ -20,8 +20,6 @@ import scopes from '../../../scopes';
 import CheckBox from '../../widgets/CheckBox.vue';
 
 export default {
-    compatConfig: { COMPONENT_V_MODEL: false },
-
     components: { CheckBox },
 
     props: {
@@ -80,12 +78,6 @@ export default {
             },
             deep: true,
         },
-        // modelValue: {
-        //     handler (value) {
-        //         this.setEnabled(value, true);
-        //     },
-        //     deep: true,
-        // }
     },
 
     mounted() {

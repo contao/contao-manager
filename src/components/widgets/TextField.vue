@@ -29,8 +29,6 @@
 
 <script>
     export default {
-        compatConfig: { COMPONENT_V_MODEL: false },
-
         props: {
             type: {
                 type: String,
