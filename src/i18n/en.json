@@ -508,6 +508,7 @@
     "ui.user-manager.passwordText": "To change your password, please enter the current and a new password in the respective fields.",
     "ui.user-manager.currentPassword": "Current password",
     "ui.user-manager.newPassword": "New password",
+    "ui.user-manager.passwordPlaceholder": "min. 8 characters",
     "ui.user-manager.submitPassword": "Submit",
     "ui.user-manager.passwordChanged": "Your password has been changed successfully.",
     "ui.user-manager.passwordError": "This password is incorrect.",
