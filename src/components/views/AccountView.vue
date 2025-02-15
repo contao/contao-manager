@@ -26,8 +26,8 @@
                 <h1 class="view-account__headline">{{ $t('ui.account.totpHeadline') }}</h1>
                 <p class="view-account__description">{{ $t('ui.account.totpDescription') }}</p>
 
-                <button class="widget-button widget-button--primary" @click="setupTotp">Setup Two-Factor Authentication</button>
-                <button class="widget-button widget-button--alert" @click="skipTotp">Skip Two-Factor Authentication</button>
+                <button class="widget-button widget-button--primary" @click="setupTotp">{{ $t('ui.totp.setup') }}</button>
+                <button class="widget-button widget-button--alert" @click="skipTotp">{{ $t('ui.totp.skip') }}</button>
             </main>
 
             <main class="view-account__form" v-else>

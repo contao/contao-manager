@@ -533,5 +533,7 @@
     "ui.totp.disable": "Disable",
     "ui.totp.cancel": "Cancel",
     "ui.totp.enabled": "Two-factor authentication was enabled successfully.",
-    "ui.totp.disabled": "Two-factor authentication was disabled successfully."
+    "ui.totp.disabled": "Two-factor authentication was disabled successfully.",
+    "ui.totp.setup": "Setup Two-Factor Authentication",
+    "ui.totp.skip": "Skip Two-Factor Authentication"
 }
