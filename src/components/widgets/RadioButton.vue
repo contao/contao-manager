@@ -20,6 +20,8 @@
 
 <script>
     export default {
+        emits: ['input', 'update:modelValue'],
+
         props: {
             name: {
                 type: String,

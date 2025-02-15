@@ -14,6 +14,8 @@
     export default {
         components: { LoadingButton },
 
+        emits: ['click'],
+
         props: {
             label: {
                 type: String,

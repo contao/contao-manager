@@ -14,6 +14,8 @@
 
 <script>
     export default {
+        emits: ['click'],
+
         props: {
             color: String,
             icon: String,
