@@ -508,6 +508,7 @@
     "ui.user-manager.passwordText": "Om du vill ändra ditt lösenord anger du det nuvarande och ett nytt lösenord i respektive fält.",
     "ui.user-manager.currentPassword": "Aktuellt lösenord",
     "ui.user-manager.newPassword": "Nytt lösenord",
+    "ui.user-manager.passwordPlaceholder": "min. 8 tecken",
     "ui.user-manager.submitPassword": "Skicka",
     "ui.user-manager.passwordChanged": "Ditt lösenord har ändrats framgångsrikt.",
     "ui.user-manager.passwordError": "Det här lösenordet är felaktigt.",
@@ -533,5 +534,7 @@
     "ui.totp.disable": "Inaktivera",
     "ui.totp.cancel": "Avbryt",
     "ui.totp.enabled": "Tvåfaktorsautentisering aktiverades framgångsrikt.",
-    "ui.totp.disabled": "Tvåfaktorsautentisering avaktiverades framgångsrikt."
+    "ui.totp.disabled": "Tvåfaktorsautentisering avaktiverades framgångsrikt.",
+    "ui.totp.setup": "Konfigurera tvåfaktorsautentisering",
+    "ui.totp.skip": "Skip Two-Factor Authentication"
 }

@@ -30,8 +30,8 @@
     "ui.account.passwordLength": "Bitte gib mindestens 8 Zeichen ein.",
     "ui.account.loginInvalid": "Beim erstellen des Konto ist ein Fehler aufgetreten. Bitte versuche einen anderen Benutzernamen.",
     "ui.account.submit": "Benutzerkonto erstellen",
-    "ui.account.usePassword": "Passwort zum Anmelden verwenden",
-    "ui.account.usePasskey": "Passkey zum Anmelden verwenden",
+    "ui.account.usePassword": "Mit Passwort anmelden",
+    "ui.account.usePasskey": "Mit Passkey anmelden",
     "ui.account.totpHeadline": "Zwei-Faktor Anmeldung",
     "ui.account.totpDescription": "Bitte aktivieren die Zwei-Faktor-Anmeldung, welche dein Konto sicherer macht. Zusätzlich zu deinem Benutzernamen und Passwort musst du einen Sicherheitscode eingeben, welcher von einer Zwei-Faktor-App wie 1Password, Authy, Google Authenticator, Microsoft Authenticator, LassPass Authenticator oder einer beliebigen anderen TOTP-App erzeugt wird.",
     "ui.account.totpSetup": "Jetzt einrichten",
@@ -498,8 +498,8 @@
 
     "ui.user-manager.loading": "Lade Benutzer:innen …",
     "ui.user-manager.changePassword": "Passwort ändern",
-    "ui.user-manager.setupTotp": "Zwei-Faktor-Anmeldung konfigurieren",
-    "ui.user-manager.disableTotp": "Zwei-Faktor-Anmeldung deaktivieren",
+    "ui.user-manager.setupTotp": "Zwei-Faktor konfigurieren",
+    "ui.user-manager.disableTotp": "Zwei-Faktor deaktivieren",
     "ui.user-manager.invite": "Benutzer:in einladen",
     "ui.user-manager.delete": "Löschen",
     "ui.user-manager.deleteConfirm": "Möchtest du das Konto von \"{username}\" wirklich löschen?",
@@ -508,6 +508,7 @@
     "ui.user-manager.passwordText": "Um dein Passwort zu ändern, gibt dein bestehendes und ein neues Passwort in den entsprechenden Feldern ein.",
     "ui.user-manager.currentPassword": "Aktuelles Passwort",
     "ui.user-manager.newPassword": "Neues Passwort",
+    "ui.user-manager.passwordPlaceholder": "min. 8 Zeichen",
     "ui.user-manager.submitPassword": "Absenden",
     "ui.user-manager.passwordChanged": "Dein Passwort wurde erfolgreich geändert.",
     "ui.user-manager.passwordError": "Dieses Passwort stimmt nicht.",
@@ -533,5 +534,7 @@
     "ui.totp.disable": "Deaktivieren",
     "ui.totp.cancel": "Abbrechen",
     "ui.totp.enabled": "Die Zwei-Faktor-Anmeldung wurde erfolgreich aktiviert.",
-    "ui.totp.disabled": "Die Zwei-Faktor-Anmeldung wurde erfolgreich deaktiviert."
+    "ui.totp.disabled": "Die Zwei-Faktor-Anmeldung wurde erfolgreich deaktiviert.",
+    "ui.totp.setup": "Zwei-Faktor-Anmeldung konfigurieren",
+    "ui.totp.skip": "Two-Factor-Anmeldung überspringen"
 }

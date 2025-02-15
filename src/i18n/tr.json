@@ -508,6 +508,7 @@
     "ui.user-manager.passwordText": "Parolanızı değiştirmek için, ilgili alanlara geçerli ve yeni parolayı yazın.",
     "ui.user-manager.currentPassword": "Geçerli parola",
     "ui.user-manager.newPassword": "Yeni parola",
+    "ui.user-manager.passwordPlaceholder": "en az 8 karakter",
     "ui.user-manager.submitPassword": "Gönder",
     "ui.user-manager.passwordChanged": "Parolanız değiştirildi.",
     "ui.user-manager.passwordError": "Parola yanlış.",
@@ -533,5 +534,7 @@
     "ui.totp.disable": "Etkisizleştir",
     "ui.totp.cancel": "İptal",
     "ui.totp.enabled": "İki adımlı doğrulama açıldı.",
-    "ui.totp.disabled": "İki adımlı doğrulama kapatıldı."
+    "ui.totp.disabled": "İki adımlı doğrulama kapatıldı.",
+    "ui.totp.setup": "İki adımlı doğrulamayı kur",
+    "ui.totp.skip": "Skip Two-Factor Authentication"
 }

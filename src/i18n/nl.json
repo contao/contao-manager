@@ -508,6 +508,7 @@
     "ui.user-manager.passwordText": "To change your password, please enter the current and a new password in the respective fields.",
     "ui.user-manager.currentPassword": "Current password",
     "ui.user-manager.newPassword": "New password",
+    "ui.user-manager.passwordPlaceholder": "min. 8 tekens",
     "ui.user-manager.submitPassword": "Submit",
     "ui.user-manager.passwordChanged": "Your password has been changed successfully.",
     "ui.user-manager.passwordError": "This password is incorrect.",
@@ -533,5 +534,7 @@
     "ui.totp.disable": "Uitschakelen",
     "ui.totp.cancel": "Annuleer",
     "ui.totp.enabled": "Two-factor authentication was enabled successfully.",
-    "ui.totp.disabled": "Two-factor authentication was disabled successfully."
+    "ui.totp.disabled": "Two-factor authentication was disabled successfully.",
+    "ui.totp.setup": "Setup Two-Factor Authentication",
+    "ui.totp.skip": "Skip Two-Factor Authentication"
 }

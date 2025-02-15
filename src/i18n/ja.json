@@ -508,6 +508,7 @@
     "ui.user-manager.passwordText": "パスワードを変更するには、現在のパスワードと新しいパスワードをそれぞれの欄に入力してください。",
     "ui.user-manager.currentPassword": "現在のパスワード",
     "ui.user-manager.newPassword": "新しいパスワード",
+    "ui.user-manager.passwordPlaceholder": "最小で8文字",
     "ui.user-manager.submitPassword": "送信",
     "ui.user-manager.passwordChanged": "パスワードを変更しました。",
     "ui.user-manager.passwordError": "このパスワードは間違っています。",
@@ -533,5 +534,7 @@
     "ui.totp.disable": "無効",
     "ui.totp.cancel": "取り止め",
     "ui.totp.enabled": "2ファクター認証を有効にしました。",
-    "ui.totp.disabled": "2ファクター認証を無効にしました。"
+    "ui.totp.disabled": "2ファクター認証を無効にしました。",
+    "ui.totp.setup": "2ファクター認証を設定",
+    "ui.totp.skip": "Skip Two-Factor Authentication"
 }

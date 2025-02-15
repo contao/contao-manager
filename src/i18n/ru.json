@@ -508,6 +508,7 @@
     "ui.user-manager.passwordText": "Чтобы изменить пароль, введите текущий и новый пароль в соответствующие поля.",
     "ui.user-manager.currentPassword": "Текущий пароль",
     "ui.user-manager.newPassword": "Новый пароль",
+    "ui.user-manager.passwordPlaceholder": "мин. 8 символов",
     "ui.user-manager.submitPassword": "Отправить",
     "ui.user-manager.passwordChanged": "Ваш пароль был успешно изменён.",
     "ui.user-manager.passwordError": "Этот пароль неверный.",
@@ -533,5 +534,7 @@
     "ui.totp.disable": "Выключить",
     "ui.totp.cancel": "Отмена",
     "ui.totp.enabled": "Двухфакторная авторизация успешно включена.",
-    "ui.totp.disabled": "Двухфакторная авторизация успешно отключена."
+    "ui.totp.disabled": "Двухфакторная авторизация успешно отключена.",
+    "ui.totp.setup": "Настройка двухфакторной авторизации",
+    "ui.totp.skip": "Skip Two-Factor Authentication"
 }

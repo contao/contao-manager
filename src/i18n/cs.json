@@ -508,6 +508,7 @@
     "ui.user-manager.passwordText": "Abyste mohli změnit heslo, zadajte nejdřív vaše stávající a pak vaše nové v odpovídajících polích. ",
     "ui.user-manager.currentPassword": "Současné heslo",
     "ui.user-manager.newPassword": "Nové heslo",
+    "ui.user-manager.passwordPlaceholder": "min. 8 znaků",
     "ui.user-manager.submitPassword": "Odeslat",
     "ui.user-manager.passwordChanged": "Vaše heslo bylo úspěšně změněno.",
     "ui.user-manager.passwordError": "Heslo není správné.",
@@ -533,5 +534,7 @@
     "ui.totp.disable": "Deaktivovat",
     "ui.totp.cancel": "Zrušit",
     "ui.totp.enabled": "Dvoufaktorové ověření bylo úspěšně aktivováno.",
-    "ui.totp.disabled": "Dvoufaktorové ověření bylo úspěšně deaktivováno."
+    "ui.totp.disabled": "Dvoufaktorové ověření bylo úspěšně deaktivováno.",
+    "ui.totp.setup": "Nastavení dvoufaktorového ověření",
+    "ui.totp.skip": "Skip Two-Factor Authentication"
 }
