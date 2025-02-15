@@ -114,8 +114,20 @@ export default {
 
     &__list {
         display: grid;
-        grid-template: 1fr / repeat(4, 1fr);
+        grid-template: 1fr / 1fr;
         gap: 20px;
+
+        @include defaults.screen(600) {
+            grid-template: 1fr / repeat(2, 1fr);
+        }
+
+        @include defaults.screen(800) {
+            grid-template: 1fr / repeat(3, 1fr);
+        }
+
+        @include defaults.screen(1200) {
+            grid-template: 1fr / repeat(4, 1fr);
+        }
     }
 
     &__item {
