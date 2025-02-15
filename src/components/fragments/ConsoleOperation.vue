@@ -137,10 +137,10 @@
                 this.updateConsole(this.openConsole);
 
                 if (this.autoScroll) {
-                    this.$nextTick(() => {
+                    setTimeout(() => {
                         this.swallowScroll = true;
                         this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
-                    });
+                    }, 0);
                 }
             },
 

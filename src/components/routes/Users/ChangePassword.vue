@@ -67,9 +67,9 @@
                     422: () => {
                         this.error = this.$t('ui.user-manager.passwordError');
 
-                        this.$nextTick(() => {
+                        setTimeout(() => {
                             this.$refs.password.focus();
-                        });
+                        }, 0);
                     }
                 });
 

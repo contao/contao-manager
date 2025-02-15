@@ -83,9 +83,9 @@
 
             this.provisioning_uri = response.data.provisioning_uri;
 
-            this.$nextTick(() => {
+            setTimeout(() => {
                 this.$refs.totp.focus();
-            });
+            }, 0);
         }
     };
 </script>

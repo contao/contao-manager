@@ -165,9 +165,9 @@ export default {
                 if ((await this.$store.dispatch('auth/login', data)).status !== 201) {
                     this.logging_in = false;
                     this.errors.username = this.$t('ui.account.loginInvalid');
-                    this.$nextTick(() => {
+                    setTimeout(() => {
                         this.$refs.username.focus();
-                    });
+                    }, 0);
                 }
             },
 

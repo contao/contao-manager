@@ -35,7 +35,7 @@
         },
 
         mounted() {
-            this.$nextTick(this.updateWidth);
+            setTimeout(this.updateWidth, 0);
         },
     };
 </script>

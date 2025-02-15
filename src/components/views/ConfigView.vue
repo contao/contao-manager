@@ -74,9 +74,9 @@ export default {
                 if (data.status === 400 && data.detail) {
                     this.error = data.detail;
                     this.processing = false;
-                    this.$nextTick(() => {
+                    setTimeout(() => {
                         this.$refs.cli.focus();
-                    })
+                    }, 0)
                 } else {
                     // window.location.reload(true);
                 }

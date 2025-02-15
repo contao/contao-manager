@@ -62,9 +62,9 @@
         },
 
         mounted() {
-            this.$nextTick(() => {
+            setTimeout(() => {
                 this.$refs.totp.focus();
-            });
+            }, 0);
         }
     };
 </script>

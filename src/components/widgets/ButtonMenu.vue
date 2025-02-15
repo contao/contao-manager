@@ -47,7 +47,7 @@
         methods: {
             open() {
                 this.showMenu = true;
-                this.$nextTick(() => this.$refs.menu.focus());
+                setTimeout(() => this.$refs.menu.focus(), 0);
             },
 
             close() {

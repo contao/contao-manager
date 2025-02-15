@@ -72,7 +72,7 @@
         methods: {
             open() {
                 this.showGroup = true;
-                this.$nextTick(() => this.$refs.group?.focus());
+                setTimeout(() => this.$refs.group?.focus(), 0);
             },
 
             close() {

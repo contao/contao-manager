@@ -79,9 +79,9 @@
 
                 this.constraintEditable = true;
 
-                this.$nextTick(() => {
+                setTimeout(() => {
                     this.$refs.constraint.focus();
-                });
+                }, 0);
             },
 
             saveConstraint() {
@@ -138,7 +138,7 @@
                             }
                         } else {
                             this.constraintError = true;
-                            this.$nextTick(() => this.editConstraint());
+                            setTimeout(() => this.editConstraint(), 0);
                         }
                     },
                 );
