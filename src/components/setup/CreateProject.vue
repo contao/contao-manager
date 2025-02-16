@@ -283,16 +283,6 @@ export default {
                 problem: this.$t('ui.setup.create-project.requiresPHP', { version: '7.4.0', current: this.phpVersion }),
             });
 
-            if (this.phpVersionId < 70400) {
-                versions.push({
-                    value: '4.9',
-                    label: `Contao 4.9`,
-                    disabled: !this.isWeb,
-                    description: this.$t('ui.setup.create-project.pltsText', { year: '2023' }),
-                    problem: this.$t('ui.setup.create-project.requiresDocroot', { folder: 'web', }),
-                });
-            }
-
             versions.push({
                 value: 'theme',
                 label: this.$t('ui.setup.create-project.theme'),
