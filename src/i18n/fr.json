@@ -194,7 +194,6 @@
     "ui.setup.create-project.ltsText": "Our current LTS version, if you focus on stability. Offers long term support until February {year}.",
     "ui.setup.create-project.pltsText": "The previous LTS version, still has long term support until February {year}.",
     "ui.setup.create-project.requiresPHP": "Requires at least PHP {version}, you have PHP {current}.",
-    "ui.setup.create-project.requiresDocroot": "The document root must be \"{folder}\".",
     "ui.setup.create-project.releaseplan": "Consultez le {contaoReleasePlan} pour obtenir des informations détaillées",
     "ui.setup.create-project.releaseplanLink": "Plan de publication",
     "ui.setup.create-project.installed": "Contao {version} is successfully installed on the server. Continue to set up your database or launch the Contao Manager to install a different version.",

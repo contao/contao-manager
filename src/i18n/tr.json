@@ -194,7 +194,6 @@
     "ui.setup.create-project.ltsText": "Güncel uzun dönem desteklenen sürümümümüz, kararlılık isteyenler içindir. {year} Şubat ayına kadar uzun dönem desteği sunar.",
     "ui.setup.create-project.pltsText": "Önceki uzun dönem desteklenen sürümümüz. Hala {year} Şubat ayına kadar uzun dönem desteği sunuyor.",
     "ui.setup.create-project.requiresPHP": "En az PHP {version} sürümü gereklidir. Sizin sürümünüz PHP {current}.",
-    "ui.setup.create-project.requiresDocroot": "Belge kök klasörü \"{folder}\" olmalıdır.",
     "ui.setup.create-project.releaseplan": "Ayrıntılı bilgi almak için {contaoReleasePlan} bölümüne bakabilirsiniz.",
     "ui.setup.create-project.releaseplanLink": "Contao yayınlanma planı",
     "ui.setup.create-project.installed": "Contao {version} sunucuya kuruldu. Veri tabanınızı kurmaya geçin ya da farklı bir sürüm kurmak için Contao Manager uygulamasını başlatın.",

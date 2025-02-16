@@ -194,7 +194,6 @@
     "ui.setup.create-project.ltsText": "Vår nuvarande LTS-version, om du fokuserar på stabilitet. Erbjuder långsiktig support till februari {year}.",
     "ui.setup.create-project.pltsText": "Den tidigare LTS-versionen har fortfarande långtidssupport fram till februari {year}.",
     "ui.setup.create-project.requiresPHP": "Kräver minst PHP {version}, du har PHP {current}.",
-    "ui.setup.create-project.requiresDocroot": "Dokumentroten måste vara \"{folder}\".",
     "ui.setup.create-project.releaseplan": "Se {contaoReleasePlan} för detaljerad information.",
     "ui.setup.create-project.releaseplanLink": "Contao Release Plan",
     "ui.setup.create-project.installed": "Contao {version} har installerats på servern. Fortsätt att ställa in din databas eller starta Contao Manager för att installera en annan version.",

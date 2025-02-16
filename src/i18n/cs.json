@@ -194,7 +194,6 @@
     "ui.setup.create-project.ltsText": "Naše současná verze LTS, chcete-li se zaměřit na stabilitu. Nabízí dlouhodobou podporu do února {year}.",
     "ui.setup.create-project.pltsText": "Naše předešlá verze LTS má podporu do února {year}.",
     "ui.setup.create-project.requiresPHP": "Vyžaduje přinejmenším PHP {version}, používáte PHP {current}.",
-    "ui.setup.create-project.requiresDocroot": "Kořenový dokument musí být \"{folder}\".",
     "ui.setup.create-project.releaseplan": "Více informací: {contaoReleasePlan} ",
     "ui.setup.create-project.releaseplanLink": "Plán vydávání nových verzí Contaa",
     "ui.setup.create-project.installed": "Contao {version} je úspěšně nainstalována na vašem serveru. Pokračujte, abyste nastavili vaši databázi nebo spustili Správce Contaa pro nainstalování jiné verze.",

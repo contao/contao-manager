@@ -194,7 +194,6 @@
     "ui.setup.create-project.ltsText": "現在のLTSバージョン、安定性を重視する場合に選んでください。さらに{year}年2月までの長期サポートを提供します。",
     "ui.setup.create-project.pltsText": "以前のLTSバージョン、さらに{year}年2月までの長期サポートを提供します。",
     "ui.setup.create-project.requiresPHP": "少なくともPHP {version}が必要です、現在はPHP {current}です。",
-    "ui.setup.create-project.requiresDocroot": "ドキュメントルートは\"{folder}\"でなければなりません。",
     "ui.setup.create-project.releaseplan": "詳細な情報は{contaoReleasePlan}を参照してください。",
     "ui.setup.create-project.releaseplanLink": "Contaoのリリース計画",
     "ui.setup.create-project.installed": "サーバーにContao {version}のインストールに成功しました。データベースの設定を続けるか、異なるバージョンをインストールするにはContao Managerを起動してください。",
@@ -536,5 +535,5 @@
     "ui.totp.enabled": "2ファクター認証を有効にしました。",
     "ui.totp.disabled": "2ファクター認証を無効にしました。",
     "ui.totp.setup": "2ファクター認証を設定",
-    "ui.totp.skip": "Skip Two-Factor Authentication"
+    "ui.totp.skip": "2ファクター認証を飛ばす"
 }

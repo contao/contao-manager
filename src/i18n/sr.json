@@ -194,7 +194,6 @@
     "ui.setup.create-project.ltsText": "Наша тренутна LTS верзија, ако сте фокусирани на стабилност. Нуди дугорочну подршку до фебруара {year}.",
     "ui.setup.create-project.pltsText": "Претходна LTS верзија, још увек нуди дугорочну подршку до фебруара {year}.",
     "ui.setup.create-project.requiresPHP": "Захтева минималну верзију PHP {version}, а ви имате PHP {current}.",
-    "ui.setup.create-project.requiresDocroot": "Основни фолдер за документе мора бити \"{folder}\".",
     "ui.setup.create-project.releaseplan": "За више информација, проверите {contaoReleasePlan}.",
     "ui.setup.create-project.releaseplanLink": "План издања за Contao",
     "ui.setup.create-project.installed": "Contao {version} је успешно инсталиран на сервер. Наставите са постављањем ваше базе података или покрените Contao Manager да инсталирате другу верзију.",
