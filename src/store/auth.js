@@ -138,7 +138,7 @@ export default {
                     return response;
                 },
                 403: (response) => {
-                    this.$store.commit('setLocked');
+                    store.commit('setLocked', null, { root: true });
 
                     return response;
                 },
