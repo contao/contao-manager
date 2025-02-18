@@ -106,11 +106,15 @@
             async passkeyLogin ({ useBrowserAutofill }) {
                 const optionsJSON = (await this.$request.get('api/session/options')).data
 
-                const resp = await startAuthentication({ optionsJSON, useBrowserAutofill: !!useBrowserAutofill });
+                try {
+                    const resp = await startAuthentication({ optionsJSON, useBrowserAutofill: !!useBrowserAutofill });
 
-                this.doLogin({
-                    passkey: JSON.stringify(resp),
-                });
+                    await this.doLogin({
+                        passkey: JSON.stringify(resp),
+                    });
+                } catch (err) {
+                    // Ignore Webauthn error
+                }
             },
 
             async doLogin (data) {
