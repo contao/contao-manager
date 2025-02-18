@@ -103,7 +103,7 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
             throw new BadRequestException();
         }
 
-        $username = $authenticatorAssertionResponse->userHandle;
+        $username = substr($authenticatorAssertionResponse->userHandle, strlen('contao-manager.'));
         $userBadge = new UserBadge($username, $this->userProvider->loadUserByIdentifier(...));
 
         $credentials = new CustomCredentials(
