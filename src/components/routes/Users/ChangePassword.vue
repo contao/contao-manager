@@ -54,10 +54,6 @@
 
         methods: {
             async submit() {
-                if (this.loading) {
-                    return;
-                }
-
                 this.loading = true;
 
                 await this.$request.put(`api/users/${ this.username }/password`, {

@@ -29,7 +29,7 @@
 
 <script>
     export default {
-        emits: ['input', 'focus', 'blur', 'update:modelValue'],
+        emits: ['input', 'keyup', 'focus', 'blur', 'update:modelValue'],
 
         props: {
             type: {
