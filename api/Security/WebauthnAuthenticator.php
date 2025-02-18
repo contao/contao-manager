@@ -103,7 +103,7 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
             throw new BadRequestException();
         }
 
-        $username = substr($authenticatorAssertionResponse->userHandle, strlen('contao-manager.'));
+        $username = $authenticatorAssertionResponse->userHandle;
         $userBadge = new UserBadge($username, $this->userProvider->loadUserByIdentifier(...));
 
         $credentials = new CustomCredentials(
@@ -173,12 +173,11 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
                 $challenge,
                 $rpEntity->id,
                 userVerification: PublicKeyCredentialRequestOptions::USER_VERIFICATION_REQUIREMENT_REQUIRED,
-                timeout: 5 * 60 * 1000,
             );
         } else {
             $options = new PublicKeyCredentialCreationOptions(
                 $rpEntity,
-                new PublicKeyCredentialUserEntity($username, 'contao-manager.'.$username, $username),
+                new PublicKeyCredentialUserEntity($username, $username, $username),
                 $challenge,
                 [
                     PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_ES256K), // More interesting algorithm
@@ -188,7 +187,6 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
                     PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_ED256), // Less interesting algorithm
                 ],
                 new AuthenticatorSelectionCriteria(userVerification: AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_REQUIRED),
-                timeout: 5 * 60 * 1000,
             );
         }
 
