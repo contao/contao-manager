@@ -48,7 +48,8 @@
                     <loading-button submit class="view-login__button" color="primary" :disabled="!totpValid || login_failed" :loading="logging_in">
                         {{ $t('ui.login.button') }}
                     </loading-button>
-                    <button class="widget-button" @click="cancelTotp">{{ $t('ui.login.cancel') }}</button>
+
+                    <button class="widget-button view-login__button" @click="cancelTotp">{{ $t('ui.login.cancel') }}</button>
                 </form>
             </main>
         </transition>
