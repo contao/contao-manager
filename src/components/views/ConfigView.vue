@@ -78,7 +78,7 @@ export default {
                         this.$refs.cli.focus();
                     }, 0)
                 } else {
-                    // window.location.reload(true);
+                    window.location.reload(true);
                 }
             },
 
