@@ -11,8 +11,8 @@
             <console-output
                 class="view-recovery__console"
                 :title="$t('ui.recovery.console')"
-                :operations="[{ status: 'error', summary: 'vendor/bin/contao-console list', console }]"
-                :console-output="console"
+                :operations="[{ status: 'error', summary: 'vendor/bin/contao-console list', console: this.error }]"
+                :console-output="error"
                 show-console force-console
                 v-if="console"
             />
@@ -52,7 +52,7 @@
         data: () => ({
             repairStarted: false,
             repairFailed: false,
-            console: '',
+            error: '',
         }),
 
         computed: {
@@ -99,7 +99,7 @@
             const response = await this.$store.dispatch('server/contao/get');
 
             if (response.status === 502 && response.data.error) {
-                this.console = response.data.error;
+                this.error = response.data.error;
             }
         }
     };
