@@ -10,13 +10,10 @@ let ignoreErrors = false;
 
 const pollTask = (store, resolve, reject, delay = 5000, attempt = 1) => {
     setTimeout(() => {
-        axios.get('api/task', {
-            timeout: 5000 * attempt,
-        }).then(
-            response => handleTask(response, store, resolve, reject),
-        ).catch(
-            error => failTask(error, store, resolve, reject),
-        );
+        axios
+            .get('api/task', { timeout: 5000 * attempt })
+            .then(response => handleTask(response, store, resolve, reject))
+            .catch(error => failTask(error, store, resolve, reject));
     }, delay);
 };
 

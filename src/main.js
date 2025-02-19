@@ -33,6 +33,10 @@ axios.interceptors.response.use(
         return response;
     },
     function (error) {
+        if (!error.response) {
+            return Promise.reject(error);
+        }
+
         const response = error.response;
         const url = response.config.url;
 
