@@ -397,26 +397,33 @@ class UserConfig extends AbstractConfig
     {
         parent::initialize();
 
+        $hasChanges = false;
+
         if ([] !== $this->data && (!isset($this->data['version']) || (int) $this->data['version'] < 2)) {
             throw new \RuntimeException('Unsupported user.json version');
         }
 
         if (!isset($this->data['version'])) {
             $this->data['version'] = 2;
+            $hasChanges = true;
         }
 
         foreach (($this->data['tokens'] ?? []) as $id => $token) {
             if (isset($token['expires']) && $token['expires'] < time()) {
                 unset($this->data['tokens'][$id]);
+                $hasChanges = true;
             }
         }
 
         foreach (($this->data['webauthn'] ?? []) as $key => $data) {
             if (($data['expires'] ?? 0) < time()) {
                 unset($this->data['webauthn'][$key]);
+                $hasChanges = true;
             }
         }
 
-        $this->save();
+        if ($hasChanges) {
+            $this->save();
+        }
     }
 }
