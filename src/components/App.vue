@@ -8,7 +8,7 @@
             <button class="app-hint__link" @click="exitSafeMode">{{ $t('ui.app.safeModeExit') }}</button>
         </div>
 
-        <div class="app-hint" v-if="limited">
+        <div class="app-hint" v-else-if="limited">
             <strong class="app-hint__headline">{{ $t('ui.app.limitedHeadline') }}</strong>&nbsp;
             <span class="app-hint__description">{{ $t('ui.app.limitedDescription') }}</span>&nbsp;
             <button class="app-hint__link" @click="logout">{{ $t('ui.app.limitedLogout') }}</button>
