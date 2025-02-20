@@ -5,7 +5,7 @@
         <div class="app-hint app-hint--alert" v-if="safeMode && view === 'ready'">
             <strong class="app-hint__headline">{{ $t('ui.app.safeModeHeadline') }}</strong>&nbsp;
             <span class="app-hint__description">{{ $t('ui.app.safeModeDescription') }}</span>&nbsp;
-            <button class="app-hint__link" @click="() => window.location.reload()">{{ $t('ui.app.safeModeExit') }}</button>
+            <button class="app-hint__link" @click="exitSafeMode">{{ $t('ui.app.safeModeExit') }}</button>
         </div>
 
         <div class="app-hint" v-if="limited">
@@ -93,6 +93,10 @@
 
         methods: {
             ...mapActions('auth', ['logout']),
+
+            exitSafeMode() {
+                window.location.reload();
+            },
 
             initColorMode() {
                 let prefersDark = localStorage.getItem('contao--prefers-dark');
