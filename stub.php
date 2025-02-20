@@ -23,7 +23,7 @@ if (!extension_loaded('Phar')) {
     exit(1);
 }
 
-if (PHP_VERSION_ID < 70205) {
+if (PHP_VERSION_ID < 80100) {
     Phar::mapPhar('contao-manager.phar');
     @include 'phar://contao-manager.phar/downgrade.php';
     die('<script>setTimeout(function() { window.location.reload(true) }, 1000)</script>');
