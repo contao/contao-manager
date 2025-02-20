@@ -21,7 +21,7 @@
             <h1 class="view-setup__headline">{{ $t('ui.setup.complete') }}</h1>
             <p class="view-setup__description">{{ $t('ui.setup.complete1', { version: contaoVersion }) }}</p>
 
-            <template v-if="!databaseSupported || !userSupported">
+            <template v-if="showInstallTool">
                 <p class="view-setup__description">{{ $t('ui.setup.complete2') }}</p>
                 <button class="widget-button widget-button--inline" @click="launch">{{ $t('ui.setup.manager') }}</button>
                 <a href="/contao/install" class="widget-button widget-button--primary view-setup__continue">{{ $t('ui.setup.installTool') }}</a>
@@ -31,8 +31,6 @@
                 <button class="widget-button view-setup__continue" @click="launch">{{ $t('ui.setup.manager') }}</button>
                 <a href="/contao" class="widget-button widget-button--primary view-setup__continue">{{ $t('ui.setup.login') }}</a>
             </template>
-
-
             <div class="view-setup__funding">
                 <figure><img src="~contao-package-list/src/assets/images/funding.svg" width="80" height="80" alt=""></figure>
                 <div>
@@ -40,7 +38,6 @@
                     <p><a class="view-setup__funding-link widget-button widget-button--small widget-button--funding widget-button--link" href="https://to.contao.org/donate" target="_blank">{{ $t('ui.setup.fundingLink') }}</a></p>
                 </div>
             </div>
-
         </main>
 
         <component :is="steps[currentStep - 1].component" @continue="currentStep += 1" v-else-if="currentStep > 0"/>
@@ -74,63 +71,64 @@ import DatabaseIcon from '../../assets/images/database.svg';
 import UserIcon from '../../assets/images/user.svg';
 
 export default {
-        components: { BoxedLayout, DocumentRoot, CreateProject, DatabaseConnection, BackendUser },
+    components: { BoxedLayout, DocumentRoot, CreateProject, DatabaseConnection, BackendUser },
 
-        computed: {
-            ...mapState(['setupStep']),
-            ...mapState('server/contao', ['contaoVersion']),
-            ...mapState('server/database', { databaseSupported: 'supported' }),
-            ...mapState('server/adminUser', { userSupported: 'supported' }),
+    computed: {
+        ...mapState(['setupStep']),
+        ...mapState('server/contao', ['contaoVersion']),
+        ...mapState('server/database', { databaseSupported: 'supported' }),
+        ...mapState('server/adminUser', { userSupported: 'supported' }),
+        ...mapState('contao/install-tool', { showInstallTool: 'isSupported' }),
 
-            currentStep: {
-                get() {
-                    return this.setupStep;
-                },
-                set(value) {
-                    this.$store.commit('setup', value);
-                },
+        currentStep: {
+            get() {
+                return this.setupStep;
             },
-
-            steps() {
-                const steps = [];
-
-                steps.push({
-                    name: 'document-root',
-                    icon: DocumentRootIcon,
-                    component: DocumentRoot
-                });
-
-                steps.push({
-                    name: 'create-project',
-                    icon: CreateProjectIcon,
-                    component: CreateProject
-                });
-
-                if (this.databaseSupported) {
-                    steps.push({
-                        name: 'database-connection',
-                        icon: DatabaseIcon,
-                        component: DatabaseConnection
-                    });
-            }
-
-            if (this.userSupported) {
-                steps.push({
-                    name: 'backend-user',
-                    icon: UserIcon,
-                    component: BackendUser
-                })
-            }
-
-                return steps;
-            }
+            set(value) {
+                this.$store.commit('setup', value);
+            },
         },
 
-        methods: {
-            launch() {
-                this.$store.commit('setView', views.READY);
-            }
-        },
+        steps() {
+            const steps = [];
+
+            steps.push({
+                name: 'document-root',
+                icon: DocumentRootIcon,
+                component: DocumentRoot
+            });
+
+            steps.push({
+                name: 'create-project',
+                icon: CreateProjectIcon,
+                component: CreateProject
+            });
+
+            if (this.databaseSupported) {
+                steps.push({
+                    name: 'database-connection',
+                    icon: DatabaseIcon,
+                    component: DatabaseConnection
+                });
+        }
+
+        if (this.userSupported) {
+            steps.push({
+                name: 'backend-user',
+                icon: UserIcon,
+                component: BackendUser
+            })
+        }
+
+            return steps;
+        }
+    },
+
+    methods: {
+        launch() {
+            this.$store.commit('setView', views.READY);
+        }
+    },
 
     mounted () {
         this.$store.dispatch('server/adminUser/get');
