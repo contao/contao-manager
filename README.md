@@ -10,7 +10,7 @@ with this repository if you want to help with development of the app.
 
 ## System requirements
 
-- PHP >= 7.2.5
+- PHP >= 8.1
 - PHP Intl extension
 - PHP OpenSSL extension
 - *allow_url_fopen* must be enabled in PHP
@@ -26,10 +26,10 @@ $ composer.phar install
 ```
 
 
-Install Javascript dependencies using Yarn.
+Install Javascript dependencies using NPM.
 
 ```
-$ yarn install
+$ npm install
 ```
 
 
