@@ -171,7 +171,6 @@
         margin-left: 13px;
         padding: 8px;
         box-sizing: border-box;
-        outline: none;
 
         &--console {
             margin-left: 0;
