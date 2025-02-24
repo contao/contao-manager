@@ -62,6 +62,8 @@
     min-height:100vh;
 
     &__header {
+        display: flex;
+        justify-content: space-between;
         height: 56px;
         padding: 8px;
         background: var(--header-main-bg);
@@ -108,6 +110,10 @@
         width: 320px;
         height: 50px;
         margin-bottom: 20px;
+
+        a, img {
+            display: block;
+        }
     }
 
     .search-bar {

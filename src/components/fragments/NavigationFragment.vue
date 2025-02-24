@@ -1,30 +1,30 @@
 <template>
-    <nav role="navigation" class="navigation">
-        <a class="navigation__toggle" @click.prevent="toggleNavigation"><span></span></a>
-        <ul class="navigation__group navigation__group--main">
-            <navigation-item :to="routes.discover">{{ $t('ui.navigation.discover') }}</navigation-item>
-            <navigation-item :to="routes.packages">{{ $t('ui.navigation.packages') }}<span class="navigation__item-badge" v-if="packageChanges > 0">{{ packageChanges }}</span></navigation-item>
-            <navigation-item :to="routes.maintenance" v-if="isGranted(scopes.UPDATE)">{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="hasDatabaseChanges || hasDatabaseWarning || hasDatabaseError">1</span></navigation-item>
+    <nav id="main-navigation" role="navigation" class="navigation">
+        <button class="navigation__toggle" @click.prevent="toggleNavigation"><span></span></button>
+        <ul ref="menu" class="navigation__group navigation__group--main">
+            <navigation-item :to="routes.discover" @navigate="closeNavigation">{{ $t('ui.navigation.discover') }}</navigation-item>
+            <navigation-item :to="routes.packages" @navigate="closeNavigation">{{ $t('ui.navigation.packages') }}<span class="navigation__item-badge" v-if="packageChanges > 0">{{ packageChanges }}</span></navigation-item>
+            <navigation-item :to="routes.maintenance" v-if="isGranted(scopes.UPDATE)" @navigate="closeNavigation">{{ $t('ui.navigation.maintenance') }}<span class="navigation__item-badge" v-if="hasDatabaseChanges || hasDatabaseWarning || hasDatabaseError">1</span></navigation-item>
             <li class="navigation__item navigation__item--main">
-                <a tabindex="0" aria-haspopup="true">{{ $t('ui.navigation.tools') }}</a>
+                <button>{{ $t('ui.navigation.tools') }}</button>
                 <ul class="navigation__group navigation__group--sub">
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a :href="backendUrl">{{ $t('ui.navigation.backend') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showAppDev"><a href="/app_dev.php/" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showPreview"><a :href="previewUrl" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
                     <li class="navigation__item navigation__item--sub" v-if="!safeMode && showInstallTool"><a :href="installToolUrl" target="_blank">{{ $t('ui.navigation.installTool') }}</a></li>
-                    <navigation-item :to="routes.logViewer" sub>{{ $t('ui.navigation.logViewer') }}</navigation-item>
+                    <navigation-item :to="routes.logViewer" sub @navigate="closeNavigation">{{ $t('ui.navigation.logViewer') }}</navigation-item>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="phpinfo">{{ $t('ui.navigation.phpinfo') }}</a></li>
                 </ul>
             </li>
             <li class="navigation__item navigation__item--main navigation__item--icon">
-                <a tabindex="0" aria-haspopup="true" onclick="">
+                <button>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 204.993 204.993"><path d="M113.711 202.935H92.163c-3.242 0-4.373.007-15.421-27.364l-8.532-3.468c-23.248 10.547-26 10.547-26.92 10.547h-1.779l-1.517-1.303-15.275-14.945c-2.323-2.319-3.128-3.124 8.825-30.137l-3.479-8.231C0 117.977 0 116.81 0 113.496V92.37c0-3.31 0-4.355 27.972-15.171l3.479-8.249c-12.644-26.602-11.774-27.428-9.28-29.776l16.427-16.105 2.04-.064c2.48 0 11.681 3.357 27.371 9.981l8.507-3.454C86.758 2.054 88.015 2.058 91.246 2.058h21.548c3.228 0 4.363.004 15.411 27.382l8.546 3.443c23.212-10.533 26-10.533 26.927-10.533h1.768l1.517 1.281 15.275 14.92c2.323 2.344 3.117 3.146-8.836 30.17l3.489 8.278c28.101 10.014 28.101 11.177 28.101 14.498v21.101c0 3.232 0 4.37-28.008 15.192l-3.457 8.256c12.58 26.487 11.749 27.317 9.394 29.69l-16.552 16.205-2.051.057c-2.469 0-11.649-3.361-27.317-9.992l-8.557 3.457c-10.27 27.472-11.437 27.472-14.733 27.472zm-19.308-8.722h16.996c1.95-3.976 6.166-14.516 9.541-23.595l.68-1.807 15.475-6.249 1.664.705c9.223 3.933 20.124 8.292 24.372 9.631l11.943-11.681c-1.517-4.205-6.116-14.494-10.264-23.173l-.837-1.764 6.403-15.285 1.743-.673c9.316-3.586 20.11-8.013 24.143-10.032V93.88c-4.08-1.918-14.831-6.009-24.096-9.294l-1.814-.648-6.445-15.3.769-1.725c3.965-8.947 8.375-19.501 9.788-23.753l-11.975-11.706c-3.865 1.349-14.688 5.987-23.817 10.153l-1.7.78-15.475-6.238-.691-1.721c-3.658-9.13-8.203-19.716-10.253-23.635H93.569c-1.961 3.965-6.163 14.509-9.53 23.585l-.669 1.797-15.432 6.27-1.664-.712c-9.244-3.926-20.167-8.278-24.429-9.616L29.923 43.805c1.496 4.198 6.109 14.48 10.243 23.159l.848 1.768-6.435 15.278-1.732.669c-9.301 3.582-20.077 8.006-24.111 10.017v16.431c4.08 1.925 14.82 6.027 24.079 9.326l1.8.655 6.446 15.249-.769 1.721c-3.965 8.94-8.371 19.48-9.788 23.724l12 11.742c3.854-1.36 14.663-5.998 23.803-10.168l1.711-.784 15.443 6.277.691 1.721c3.669 9.133 8.2 19.701 10.251 23.623zm8.092-56.56c-19.759 0-35.849-15.772-35.849-35.159 0-19.372 16.087-35.134 35.849-35.134 19.748 0 35.799 15.765 35.799 35.134 0 19.387-16.051 35.159-35.799 35.159zm0-61.563c-14.956 0-27.113 11.846-27.113 26.405 0 14.569 12.154 26.426 27.113 26.426 14.931 0 27.078-11.857 27.078-26.426-.004-14.559-12.147-26.405-27.078-26.405z"/></svg>
                     <span>{{ $t('ui.navigation.advanced') }}</span>
-                </a>
+                </button>
                 <ul class="navigation__group navigation__group--sub navigation__group--right">
-                    <navigation-item :to="routes.userManager" sub>{{ $t('ui.navigation.users') }}</navigation-item>
+                    <navigation-item :to="routes.userManager" sub @navigate="closeNavigation">{{ $t('ui.navigation.users') }}</navigation-item>
                     <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="systemCheck">{{ $t('ui.navigation.systemCheck') }}</a></li>
-                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="logout">{{ $t('ui.navigation.logout') }}</a></li>
+                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="doLogout">{{ $t('ui.navigation.logout') }}</a></li>
                 </ul>
             </li>
         </ul>
@@ -33,6 +33,7 @@
 
 <script>
     import { mapState, mapGetters, mapActions } from 'vuex';
+    import DisclosureMenu from 'accessible-menu/disclosure-menu';
     import views from '../../router/views';
     import routes from '../../router/routes';
     import NavigationItem from './NavigationItem.vue';
@@ -72,6 +73,10 @@
                 document.body.classList.toggle('nav-active');
             },
 
+            closeNavigation() {
+                document.body.classList.remove('nav-active')
+            },
+
             phpinfo() {
                 const popup = window.open();
 
@@ -90,12 +95,24 @@
             },
 
             systemCheck() {
+                this.closeNavigation();
                 window.localStorage.removeItem('contao_manager_booted');
                 this.$store.commit('setView', views.BOOT);
             },
+
+            doLogout() {
+                this.closeNavigation();
+                this.logout();
+            }
         },
 
         mounted() {
+            console.log(this.$refs.menu);
+            new DisclosureMenu({
+                menuElement: this.$refs.menu,
+                hoverType: "on",
+            });
+
             if (this.isGranted(scopes.UPDATE)) {
                 this.$store.dispatch('contao/install-tool/fetch');
                 this.$store.dispatch('contao/jwt-cookie/get').catch(() => {});
@@ -105,7 +122,6 @@
         },
     };
 </script>
-
 
 <style rel="stylesheet/scss" lang="scss">
 @use "~contao-package-list/src/assets/styles/defaults";
@@ -123,6 +139,10 @@ body.nav-active {
         overflow-y: visible;
         transform: translateX(-$nav-offset);
 
+        .navigation__group--main {
+            visibility: visible;
+        }
+
         @include defaults.screen(1024) {
             transform: none;
         }
@@ -130,8 +150,6 @@ body.nav-active {
 }
 
 .navigation {
-    float: right;
-
     &__toggle {
         display: block;
         float: right;
@@ -140,6 +158,8 @@ body.nav-active {
         padding: 0;
         width: 30px;
         height: 30px;
+        background: none;
+        border: none;
         cursor: pointer;
         z-index: 20;
 
@@ -173,7 +193,6 @@ body.nav-active {
         }
 
         .nav-active & {
-
             span {
                 transform: rotate(45deg);
                 transition-delay: 0.12s;
@@ -207,6 +226,7 @@ body.nav-active {
         bottom: 0;
         right: -$nav-offset;
         width: $nav-offset;
+        visibility: hidden;
         padding: 20px;
         overflow-y: auto;
         overflow-scrolling: touch;
@@ -216,12 +236,16 @@ body.nav-active {
     }
 
     &__item {
-        a {
+        a,
+        button {
             display: block;
+            margin: 0;
             padding: 12px 10px;
             font-size: 16px;
             color: var(--text);
             white-space: pre;
+            background: none;
+            border: none;
 
             &:hover {
                 text-decoration: none;
@@ -233,7 +257,8 @@ body.nav-active {
         }
 
         &--main {
-            > a {
+            > a,
+            > button {
                 text-transform: uppercase;
             }
         }
@@ -270,10 +295,10 @@ body.nav-active {
 
         &__group {
             &--main {
+                display: flex;
+                visibility: visible;
                 position: inherit;
-                top: auto;
-                bottom: auto;
-                right: auto;
+                inset: auto;
                 width: auto;
                 padding: 0;
                 overflow: visible;
@@ -285,7 +310,6 @@ body.nav-active {
             }
 
             &--sub {
-                display: none;
                 position: absolute;
                 left: 50%;
                 min-width: 180px;
@@ -297,6 +321,7 @@ body.nav-active {
                 transform: translateX(-50%);
                 z-index: 100;
                 box-shadow: 0 0 2px var(--shadow);
+                transition: opacity var(--am-close-transition-duration) ease;
 
                 &:before {
                     position: absolute;
@@ -309,6 +334,21 @@ body.nav-active {
                     border-width: 0 3.5px 4px 3.5px;
                     border-color: transparent transparent var(--link) transparent;
                     content: "";
+                }
+
+                &.hide {
+                    display: none !important;
+                }
+
+                &.transitioning {
+                    display: block !important;
+                    opacity: 0;
+                }
+
+                &.show {
+                    display: block !important;
+                    opacity: 1;
+                    transition: opacity var(--am-open-transition-duration) ease;
                 }
             }
 
@@ -326,7 +366,6 @@ body.nav-active {
 
         &__item {
             position: relative;
-            display: inline-block;
             padding: 0 8px;
 
             &.router-link-active > a,
@@ -341,7 +380,8 @@ body.nav-active {
 
             &--sub {
                 display: block;
-                margin: calc(var(--border-radius) / 2);
+                margin: calc(var(--border-radius) / 2) 0;
+                padding: 0 2px;
                 border-radius: var(--border-radius);
 
                 a {
@@ -359,7 +399,7 @@ body.nav-active {
                 }
             }
 
-            &--icon > a {
+            &--icon > button {
                 padding-top: 7px;
 
                 svg {

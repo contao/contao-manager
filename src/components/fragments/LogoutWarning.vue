@@ -2,7 +2,7 @@
     <popup-overlay
         class="logout-warning"
         :headline="$t('ui.logout.headline')"
-        :headlineType="this.countdown === 0 ? 'alert' : null"
+        :headlineType="countdown === 0 ? 'alert' : null"
     >
         <template v-if="countdown > 0">
             <p class="logout-warning__text">{{$t('ui.logout.warning')}}</p>

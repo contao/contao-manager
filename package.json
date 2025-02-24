@@ -11,6 +11,7 @@
     },
     "dependencies": {
         "@simplewebauthn/browser": "^13.1.0",
+        "accessible-menu": "^4.2.0",
         "axios": "^1.7.9",
         "contao-package-list": "git+https://github.com/contao/package-list.git#main",
         "core-js": "^3.40.0",
