@@ -29,9 +29,9 @@
 
         computed: {
             ...mapState('packages', { allInstalled: 'installed' }),
-            ...mapState('packages/details', ['current']),
 
-            data: vm =>  vm.allInstalled[vm.current] || { name: vm.current },
+            current: vm => vm.$route.query.p,
+            data: vm =>  vm.allInstalled && vm.allInstalled[vm.current] || ({ name: vm.current }),
             isPrivate: vm => vm.metadata && !!vm.metadata.private,
         },
 

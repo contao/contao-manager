@@ -51,7 +51,7 @@
             ...mapGetters('packages', ['packageConstraint']),
 
             current: vm => vm.$route.query.p,
-            data: vm => vm.add[vm.current] || vm.allInstalled[vm.current] || ({ name: vm.current }),
+            data: vm => vm.add[vm.current] || (vm.allInstalled && vm.allInstalled[vm.current]) || ({ name: vm.current }),
 
             dependents() {
                 if (!this.allInstalled[this.data.name]?.dependents) {
