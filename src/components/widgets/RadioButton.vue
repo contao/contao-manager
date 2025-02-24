@@ -64,8 +64,14 @@
     }
 
     input {
-        position: absolute;
-        visibility: hidden;
+        border:0;
+        clip:rect(0 0 0 0);
+        height:1px;
+        margin:-1px;
+        overflow:hidden;
+        padding:0;
+        position:absolute;
+        width:1px;
     }
 
     label {
@@ -77,6 +83,11 @@
 
     input:checked + label {
         background-image: url("../../assets/images/widget-radio--on.svg");
+    }
+
+    input:focus-visible + label {
+        outline: 5px auto Highlight;
+        outline: 5px auto -webkit-focus-ring-color;
     }
 
     input:disabled + label {

@@ -1,10 +1,10 @@
 <template>
-    <div class="cloud-status" v-if="enabled">
-        <loading-button :class="`cloud-status__button ${buttonClass}`" color="info" :icon="hasError ? 'cloud-off' : 'cloud'" :loading="isLoading" :disabled="hasError" @mouseover="open" @mouseout="close" @click="open">
+    <div class="cloud-status" @mouseenter="open" @mouseleave="close" v-if="enabled">
+        <loading-button :class="`cloud-status__button ${buttonClass}`" color="info" :icon="hasError ? 'cloud-off' : 'cloud'" :loading="isLoading" :disabled="hasError" @click="open">
             <template v-if="isReady">{{ $t('ui.cloudStatus.approx', { minutes: approxMinutes }) }}</template>
         </loading-button>
 
-        <div class="cloud-status__popup" tabindex="-1" @blur="close" @mouseover="open" @mouseout="close" @click="open" v-show="visible" v-if="isReady">
+        <div ref="menu" class="cloud-status__popup" tabindex="-1" @focusout="close" @click="open" v-show="visible" v-if="isReady">
             <h2 class="cloud-status__headline">{{ $t('ui.cloudStatus.headline') }}</h2>
             <p class="cloud-status__version">{{ $t('ui.cloudStatus.version', { version: status.appVersion }) }}</p>
             <table>
@@ -87,14 +87,19 @@
 
         methods: {
             open() {
-                clearTimeout(this.mouseout);
                 this.visible = true;
+                setTimeout(() => this.$refs.menu?.focus(), 0);
             },
 
-            close() {
-                this.mouseout = setTimeout(() => {
+            close(event) {
+                if (event && this.$refs.menu?.contains(event.relatedTarget)) {
+                    return;
+                }
+
+                this.$refs.menu.blur();
+                setTimeout(() => {
                     this.visible = false;
-                }, 300);
+                }, 100);
             },
 
             refreshCloud() {
@@ -111,7 +116,7 @@
             },
         },
 
-        async mounted() {
+        mounted() {
             this.fetchCloud();
         },
 
@@ -137,7 +142,7 @@
         position: absolute;
         text-align: center;
         left: 0;
-        bottom: 55px;
+        bottom: 54px;
         margin: 0;
         padding: 0 0 15px;
         outline: none;

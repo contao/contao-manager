@@ -4,7 +4,7 @@
             :class="classes"
             @click="toggle"
         ></button>
-        <div ref="menu" class="button-menu__menu" v-show="showMenu" tabindex="-1" @blur="close" @click="close">
+        <div ref="menu" class="button-menu__menu" v-show="showMenu" tabindex="-1" @focusout="close" @click="close">
             <slot/>
         </div>
     </div>
@@ -47,14 +47,18 @@
         methods: {
             open() {
                 this.showMenu = true;
-                setTimeout(() => this.$refs.menu.focus(), 0);
+                setTimeout(() => this.$refs.menu?.focus(), 0);
             },
 
-            close() {
+            close(event) {
+                if (event && this.$refs.menu?.contains(event.relatedTarget)) {
+                    return;
+                }
+
                 this.$refs.menu.blur();
                 setTimeout(() => {
                     this.showMenu = false;
-                }, 300);
+                }, 100);
             },
 
             toggle() {

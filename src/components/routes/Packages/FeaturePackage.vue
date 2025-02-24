@@ -139,7 +139,6 @@
         background: url('../../../assets/images/close.svg') left center no-repeat;
         background-size: 14px 14px;
         border: none;
-        outline: none;
         cursor: pointer;
 
         &:hover {
