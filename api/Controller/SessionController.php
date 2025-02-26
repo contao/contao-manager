@@ -39,7 +39,7 @@ class SessionController
     }
 
     #[Route(path: '/session', methods: ['GET', 'POST', 'DELETE'])]
-    public function __invoke(Request $request): Response
+    public function getSession(Request $request): Response
     {
         switch ($request->getMethod()) {
             case 'GET':

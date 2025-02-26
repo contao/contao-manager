@@ -36,7 +36,7 @@ class DatabaseController
 
     #[Route(path: '/server/database', methods: ['GET'])]
     #[IsGranted('ROLE_READ')]
-    public function __invoke(Request $request, ServerInfo $serverInfo): Response
+    public function handle(Request $request, ServerInfo $serverInfo): Response
     {
         if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
@@ -87,6 +87,6 @@ class DatabaseController
     #[IsGranted('ROLE_INSTALL')]
     public function write(Request $request, ServerInfo $serverInfo): Response
     {
-        return $this($request, $serverInfo);
+        return $this->handle($request, $serverInfo);
     }
 }

@@ -43,7 +43,7 @@ class ContaoController
 
     #[Route(path: '/server/contao', methods: ['GET'])]
     #[IsGranted('ROLE_READ')]
-    public function __invoke(Request $request, ServerInfo $serverInfo): Response
+    public function handle(Request $request, ServerInfo $serverInfo): Response
     {
         if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
@@ -118,7 +118,7 @@ class ContaoController
     #[IsGranted('ROLE_INSTALL')]
     public function update(Request $request, ServerInfo $serverInfo): Response
     {
-        return $this($request, $serverInfo);
+        return $this->handle($request, $serverInfo);
     }
 
     private function createDirectories(string|null $directory, bool $usePublicDir): Response

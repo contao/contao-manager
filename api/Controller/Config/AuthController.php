@@ -18,7 +18,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route(path: '/config/auth', methods: ['GET', 'PUT', 'PATCH'])]
+#[IsGranted('ROLE_INSTALL')]
 class AuthController extends AbstractConfigController
 {
     public function __construct(AuthConfig $config)
@@ -26,13 +29,8 @@ class AuthController extends AbstractConfigController
         parent::__construct($config);
     }
 
-    #[Route(path: '/config/auth', methods: ['GET', 'PUT', 'PATCH'])]
-    public function __invoke(Request $request): Response
-    {
-        return parent::__invoke($request);
-    }
-
     #[Route(path: '/config/auth/github-oauth', methods: ['PUT'])]
+    #[IsGranted('ROLE_INSTALL')]
     public function putGithubToken(Request $request): Response
     {
         if (!$this->config instanceof AuthConfig || !$request->request->has('token')) {

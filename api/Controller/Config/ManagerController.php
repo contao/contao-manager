@@ -14,8 +14,10 @@ namespace Contao\ManagerApi\Controller\Config;
 
 use Contao\ManagerApi\Config\ManagerConfig;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/config/manager', methods: ['GET', 'PUT', 'PATCH'])]
+#[IsGranted('ROLE_INSTALL')]
 class ManagerController extends AbstractConfigController
 {
     public function __construct(ManagerConfig $config)

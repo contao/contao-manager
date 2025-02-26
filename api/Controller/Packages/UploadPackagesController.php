@@ -49,7 +49,7 @@ class UploadPackagesController
 
     #[Route(path: '/packages/uploads', methods: ['GET'])]
     #[IsGranted('ROLE_READ')]
-    public function __invoke(): JsonResponse
+    public function read(): JsonResponse
     {
         $this->validateUploadSupport();
 
