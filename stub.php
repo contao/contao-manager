@@ -23,6 +23,10 @@ if (!extension_loaded('Phar')) {
     exit(1);
 }
 
+if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) && isset($_SERVER['argv'][1]) && 'test' === $_SERVER['argv'][1]) {
+    die(json_encode(['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI]));
+}
+
 if (PHP_VERSION_ID < 80100) {
     Phar::mapPhar('contao-manager.phar');
     @include 'phar://contao-manager.phar/downgrade.php';
@@ -34,10 +38,6 @@ if (function_exists('date_default_timezone_set') && function_exists('date_defaul
 }
 
 if ('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI'])) {
-    if (isset($_SERVER['argv'][1]) && 'test' === $_SERVER['argv'][1]) {
-        die(json_encode(['version' => PHP_VERSION, 'version_id' => PHP_VERSION_ID, 'sapi' => PHP_SAPI]));
-    }
-
     Phar::mapPhar('contao-manager.phar');
     require 'phar://contao-manager.phar/api/console';
 } else {
