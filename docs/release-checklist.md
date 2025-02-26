@@ -5,9 +5,9 @@
 
 - [ ] Contao Webhoster
     - Contao Version getestet
-        - [ ] 4.4 (LTS)
-        - [ ] 4.9 (LTS)
-        - [ ] 4.10
+        - [ ] 4.13 (LTS)
+        - [ ] 5.3 (LTS)
+        - [ ] 5.5
     - Webhoster getestet
         - [ ] 1und1 IONOS
         - [ ] All-Inkl
@@ -29,21 +29,21 @@
         - [ ] MAMP
         - [ ] XAMPP
     - Contao Version getestet
-        - [ ] 4.4 (LTS)
-        - [ ] 4.9 (LTS)
-        - [ ]	4.10
+        - [ ] 4.13 (LTS)
+        - [ ] 5.3 (LTS)
+        - [ ] 5.5
 - [ ] Contao nur Core-Module
     - Contao Version getestet
-        - [ ] 4.4 (LTS)
-        - [ ] 4.9 (LTS)
-        - [ ]	4.10
+        - [ ] 4.13 (LTS)
+        - [ ] 5.3 (LTS)
+        - [ ] 5.5
 - [ ] Contao Manager bei bestehender Installation hinzufügen
 - [ ] Unterschiedliche PHP-Versionen, auch inkompatible testen
-    - [ ] PHP 7.1
-    - [ ] PHP 7.2
-    - [ ] PHP 7.3
     - [ ] PHP 7.4
-    - [ ] PHP 8.0
+    - [ ] PHP 8.1
+    - [ ] PHP 8.2
+    - [ ] PHP 8.3
+    - [ ] PHP 8.4
 - [ ] Contao aus Backup wiederherstellen mit vorhandener `composer.lock` und `composer.json`
 
 
@@ -60,7 +60,7 @@
 ## 3. Pakete verwalten
 - [ ] Suche nach Paketen funktioniert
 - [ ] Alle Pakete aktualisieren
-- [ ] Neue Erweiterung installieren (z. B. [contao-easy_themes](https://packagist.org/packages/terminal42/contao-easy_themes), [notification_center](https://packagist.org/packages/terminal42/notification_center))
+- [ ] Neue Erweiterung installieren (z. B. [notification_center](https://packagist.org/packages/terminal42/notification_center))
 - [ ] Mehrere Pakete gleichzeitig installieren
 - [ ] Core Paket entfernen (z. B. [faq-bundle](https://packagist.org/packages/contao/faq-bundle))
 - [ ] Ein Paket entfernen
