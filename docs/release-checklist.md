@@ -113,4 +113,4 @@
 - [ ] 2FA hinzufügen und Login erfolgreich
 - [ ] Passwortänderung möglich
 - [ ] Neues Benutzerkonto mit reduzierten Reechten (UPDATE) erstellen
-- [ ] Pakete aktualisieren mit eingeschränktem User möglich
+- [ ] Pakete aktualisieren mit eingeschränkten Benutzerrechten möglich
