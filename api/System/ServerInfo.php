@@ -14,6 +14,7 @@ namespace Contao\ManagerApi\System;
 
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\Process\Forker\DisownForker;
+use Contao\ManagerApi\Process\Forker\ForkerInterface;
 use Contao\ManagerApi\Process\Forker\InlineForker;
 use Contao\ManagerApi\Process\Forker\NohupForker;
 use Contao\ManagerApi\Process\Forker\WindowsStartForker;
@@ -112,6 +113,8 @@ class ServerInfo
 
     /**
      * Returns the background process forker classes for the current server.
+     *
+     * @return array<class-string<ForkerInterface>>
      */
     public function getProcessForkers(): array
     {

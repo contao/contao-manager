@@ -196,7 +196,6 @@ class ConsoleProcessFactory implements LoggerAwareInterface
         );
 
         foreach ($this->serverInfo->getProcessForkers() as $class) {
-            /** @var ForkerInterface $forker */
             $forker = new $class(
                 $backgroundCommand,
                 $this->serverInfo->getPhpEnv(),

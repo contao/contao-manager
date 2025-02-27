@@ -80,12 +80,30 @@ class AboutCommand extends Command
             $rows[] = ['Architecture', $data['server']['arch']];
         }
 
+        $rows[] = new TableSeparator();
+        $rows[] = ['<info>Background Forkers</info>'];
+        $rows[] = new TableSeparator();
+
+        foreach ($data['forkers'] as $class => $supported) {
+            $rows[] = [substr(strrchr($class, '\\'), 1), $supported ? 'supported' : 'not supported'];
+        }
+
         $io->table([], $rows);
     }
 
     private function collectData(): array
     {
         $version = $this->getManagerVersion();
+        $forkers = [];
+
+        foreach ($this->serverInfo->getProcessForkers() as $class) {
+            $forker = new $class(
+                [],
+                $this->serverInfo->getPhpEnv(),
+            );
+
+            $forkers[$class] = $forker->isSupported();
+        }
 
         $data = [
             'app' => [
@@ -111,6 +129,7 @@ class AboutCommand extends Command
                 'os_version' => php_uname('r'),
                 'arch' => php_uname('m'),
             ],
+            'forkers' => $forkers,
         ];
 
         if ($data['server']['os_name'] === $data['server']['os_version']) {
