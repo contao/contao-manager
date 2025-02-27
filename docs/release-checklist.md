@@ -107,10 +107,10 @@
 - [ ] Ausgabe Console anzeigen und log kopieren
 
 
-## 7. Benutzerveraltung
+## 7. Benutzerverwaltung
 - [ ] Benutzer mit Passkey erstellen und Login erfolgreich
 - [ ] Benutzer mit Passwort erstellen und Login erfolgreich
 - [ ] 2FA hinzufügen und Login erfolgreich
 - [ ] Passwortänderung möglich
-- [ ] Neues Benutzerkonto mit reduzierten Reechten (UPDATE) erstellen
+- [ ] Neues Benutzerkonto mit reduzierten Berechtigungen (UPDATE) erstellen
 - [ ] Pakete aktualisieren mit eingeschränkten Benutzerrechten möglich
