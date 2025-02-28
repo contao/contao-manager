@@ -9,7 +9,7 @@
         - [ ] 5.3 (LTS)
         - [ ] 5.5
     - Webhoster getestet
-        - [ ] 1und1 IONOS
+        - [ ] IONOS
         - [ ] All-Inkl
         - [ ] cyon
         - [ ] DomainFactory
@@ -45,6 +45,8 @@
     - [ ] PHP 8.3
     - [ ] PHP 8.4
 - [ ] Contao aus Backup wiederherstellen mit vorhandener `composer.lock` und `composer.json`
+- [ ] Contao Demo installieren
+- [ ] Downgrade testen, wenn PHP 7.4 genutzt wird
 
 
 ## 2. Fragen zum Installationsprozess
@@ -103,3 +105,12 @@
 - [ ] Übersetzungsfehler
 - [ ] Automatischer Timeout testen
 - [ ] Ausgabe Console anzeigen und log kopieren
+
+
+## 7. Benutzerverwaltung
+- [ ] Benutzer mit Passkey erstellen und Login erfolgreich
+- [ ] Benutzer mit Passwort erstellen und Login erfolgreich
+- [ ] 2FA hinzufügen und Login erfolgreich
+- [ ] Passwortänderung möglich
+- [ ] Neues Benutzerkonto mit reduzierten Berechtigungen (UPDATE) erstellen
+- [ ] Pakete aktualisieren mit eingeschränkten Benutzerrechten möglich
