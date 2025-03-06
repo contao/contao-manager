@@ -1,0 +1,12 @@
+name: 🐞 Report a bug
+description: Report errors and problems
+type: Bug
+labels: [bug]
+body:
+    - type: textarea
+      id: description
+      attributes:
+          label: Description
+          description: Please describe the issue and provide detailed instructions on how to reproduce it.
+      validations:
+          required: true
