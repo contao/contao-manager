@@ -5,8 +5,9 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
     import boot from '../../mixins/boot';
+    import scopes from '../../scopes';
     import BootCheck from '../fragments/BootCheck';
 
     export default {
@@ -15,6 +16,7 @@
 
         computed: {
             ...mapState('tasks', { taskStatus: 'status' }),
+            ...mapGetters('auth', ['isGranted']),
         },
 
         methods: {
@@ -37,10 +39,12 @@
                         this.bootDescription = this.$t('ui.server.composer.success');
                     }
 
-                    const composerConfig = await this.$store.dispatch('config/composer/get');
+                    if (this.isGranted(scopes.INSTALL)) {
+                        const composerConfig = await this.$store.dispatch('config/composer/get');
 
-                    if (!composerConfig || composerConfig.length === 0) {
-                        await this.$store.dispatch('config/composer/writeDefaults');
+                        if (!composerConfig || composerConfig.length === 0) {
+                            await this.$store.dispatch('config/composer/writeDefaults');
+                        }
                     }
                 } catch (response) {
                     if (response.status === 503) {
