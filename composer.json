@@ -67,6 +67,7 @@
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.4",
         "phpunit/phpunit": "^9.5.19",
+        "shipmonk/composer-dependency-analyser": "^1.4",
         "symfony/phpunit-bridge": "^6.4"
     },
     "autoload": {
@@ -98,7 +99,7 @@
         "ecs": "@php vendor-bin/ecs/vendor/bin/ecs check --fix",
         "phpstan": "@php vendor-bin/phpstan/vendor/bin/phpstan analyze",
         "rector": "@php vendor-bin/rector/vendor/bin/rector",
-        "depcheck": "@php vendor-bin/composer-dependency-analyser/vendor/bin/composer-dependency-analyser --config=depcheck.php",
+        "depcheck": "@php vendor/bin/composer-dependency-analyser --config=depcheck.php",
         "unit-tests": "@php vendor/bin/phpunit"
     }
 }

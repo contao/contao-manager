@@ -19,7 +19,7 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: 8.2
+                  php-version: 8.3
                   extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, zlib
                   coverage: none
 
@@ -46,7 +46,7 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: 8.2
+                  php-version: 8.3
                   extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, zlib
                   coverage: none
 
@@ -100,7 +100,7 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: 8.2
+                  php-version: 8.3
                   extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, zlib
                   coverage: none
 
@@ -114,7 +114,7 @@ jobs:
               uses: ramsey/composer-install@v3
 
             - name: Check for unknown symbols
-              run: vendor-bin/composer-dependency-analyser/vendor/bin/composer-dependency-analyser --config=depcheck.php
+              run: vendor/bin/composer-dependency-analyser --config=depcheck.php
 
     tests:
         name: PHP ${{ matrix.php }}

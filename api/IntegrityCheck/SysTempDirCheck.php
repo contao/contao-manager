@@ -21,7 +21,7 @@ class SysTempDirCheck extends AbstractIntegrityCheck
 {
     public function __construct(
         private readonly Filesystem $filesystem,
-        Translator $translator
+        Translator $translator,
     ) {
         parent::__construct($translator);
     }
@@ -46,11 +46,13 @@ class SysTempDirCheck extends AbstractIntegrityCheck
         if ($createDirectory) {
             try {
                 $this->filesystem->remove($path);
-            } catch (IOException) {}
+            } catch (IOException) {
+            }
 
             try {
                 $this->filesystem->mkdir($path);
-            } catch (IOException) {}
+            } catch (IOException) {
+            }
         }
 
         $file = $path.'/'.md5(__FILE__);
@@ -64,12 +66,14 @@ class SysTempDirCheck extends AbstractIntegrityCheck
 
         try {
             $this->filesystem->remove($file);
-        } catch (IOException) {}
+        } catch (IOException) {
+        }
 
         if ($createDirectory) {
             try {
                 $this->filesystem->remove($path);
-            } catch (IOException) {}
+            } catch (IOException) {
+            }
         }
 
         return $result;
