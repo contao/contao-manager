@@ -70,7 +70,7 @@
                     && Object.values(vm.status).indexOf('error') === -1
                     && Object.values(vm.status).indexOf('action') === -1
                     && Object.values(vm.status).indexOf('warning') === -1
-                ) || vm.isOAuth,
+                ),
 
             canContinue: vm => Object.values(vm.status).indexOf(null) === -1
                     && Object.values(vm.status).indexOf('error') === -1
