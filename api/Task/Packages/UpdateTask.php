@@ -73,7 +73,7 @@ class UpdateTask extends AbstractPackagesTask
     protected function buildOperations(TaskConfig $config): array
     {
         $changes = $this->getComposerDefinition($config);
-        $supportsMaintenance = \array_key_exists('contao:maintenance-mode', $this->contaoConsole->getCommandList());
+        $toggleMaintenance = !$changes->getDryRun() && \array_key_exists('contao:maintenance-mode', $this->contaoConsole->getCommandList());
 
         $operations = [];
 
@@ -91,13 +91,13 @@ class UpdateTask extends AbstractPackagesTask
             $operations[] = new UpdateOperation($this->processFactory, $this->environment, $changes->getUpdates(), $changes->getDryRun());
         }
 
-        if ($supportsMaintenance) {
+        if ($toggleMaintenance) {
             $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'enable');
         }
 
         $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $changes->getDryRun(), !$config->isCancelled());
 
-        if ($supportsMaintenance) {
+        if ($toggleMaintenance) {
             $operations[] = new MaintenanceModeOperation($config, $this->processFactory, 'disable');
         }
 
