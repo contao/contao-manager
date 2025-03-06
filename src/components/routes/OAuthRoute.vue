@@ -16,6 +16,9 @@
                 <button class="view-oauth__button widget-button" @click.prevent="denyAccess" :disabled="!valid || authenticating">
                     {{ $t('ui.oauth.deny') }}
                 </button>
+                <button class="view-oauth__button widget-button widget-button--anchor" @click.prevent="logout">
+                    {{ $t('ui.oauth.switchUser') }}
+                </button>
             </template>
             <template v-else>
                 <p class="view-oauth__warning">{{ $t('ui.oauth.outOfScope') }}</p>
@@ -81,7 +84,7 @@
             },
 
             denyAccess() {
-                this.redirect({ error: 'access_denied' })
+                this.redirect({ error: this.scopes.length ? 'access_denied' : 'invalid_scope' })
             },
 
             redirect(query) {
@@ -131,10 +134,6 @@
 
             if (this.$route.query.response_type !== 'token') {
                 return this.redirect({ error: 'unsupported_response_type' })
-            }
-
-            if (!this.scopes.length) {
-                return this.redirect({ error: 'invalid_scope' })
             }
 
             if (!this.$route.query.client_id) {
