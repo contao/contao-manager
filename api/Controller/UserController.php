@@ -276,7 +276,7 @@ class UserController
 
         $tokens = array_filter(
             $this->config->getTokens(),
-            static fn ($token): bool => $token['username'] === $username,
+            static fn ($token): bool => ($token['username'] ?? null) === $username,
         );
 
         return new JsonResponse($tokens);
