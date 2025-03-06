@@ -21,6 +21,7 @@ class SymlinkCheck extends AbstractIntegrityCheck
 {
     public function __construct(
         private readonly ApiKernel $kernel,
+        private readonly Filesystem $filesystem,
         Translator $translator,
     ) {
         parent::__construct($translator);
@@ -45,12 +46,11 @@ class SymlinkCheck extends AbstractIntegrityCheck
         }
 
         try {
-            $filesystem = new Filesystem();
-            $tempname = tempnam(sys_get_temp_dir(), '');
+            $tempname = $this->filesystem->tempnam(sys_get_temp_dir(), '');
 
-            $filesystem->remove($tempname);
-            $filesystem->symlink($this->kernel->getProjectDir(), $tempname);
-            $filesystem->remove($tempname);
+            $this->filesystem->remove($tempname);
+            $this->filesystem->symlink($this->kernel->getProjectDir(), $tempname);
+            $this->filesystem->remove($tempname);
         } catch (\Exception $exception) {
             return $exception->getMessage();
         }

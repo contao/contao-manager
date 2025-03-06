@@ -33,13 +33,16 @@ class Request
         return $this->getContent($url, $statusCode, [], $catch, $timeout);
     }
 
+    /**
+     * @return resource|false
+     */
     public function getStream(string $url, ?int &$statusCode = null, bool $catch = false)
     {
         $context = $this->createStreamContext($url, 0);
 
         try {
             $stream = fopen($url, 'r', false, $context);
-            $statusCode = $this->getLastStatusCode($http_response_header ?? null);
+            $statusCode = $this->getLastStatusCode($http_response_header);
         } catch (\Throwable $throwable) {
             if ($catch) {
                 return false;
@@ -91,7 +94,7 @@ class Request
                 throw new \RuntimeException();
             }
 
-            $statusCode = $this->getLastStatusCode($http_response_header ?? null);
+            $statusCode = $this->getLastStatusCode($http_response_header);
         } catch (\Throwable $throwable) {
             if ($catch) {
                 return null;
@@ -103,6 +106,9 @@ class Request
         return $content;
     }
 
+    /**
+     * @return resource
+     */
     private function createStreamContext(string $url, int $timeout = self::DEFAULT_TIMEOUT, array $options = [])
     {
         $tlsDefaults = $this->getTlsDefaults($options);

@@ -85,7 +85,7 @@ class AboutCommand extends Command
         $rows[] = new TableSeparator();
 
         foreach ($data['forkers'] as $class => $supported) {
-            $rows[] = [substr(strrchr($class, '\\'), 1), $supported ? 'supported' : 'not supported'];
+            $rows[] = [substr(strrchr((string) $class, '\\'), 1), $supported ? 'supported' : 'not supported'];
         }
 
         $io->table([], $rows);

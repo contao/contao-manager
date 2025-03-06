@@ -27,24 +27,42 @@
     "require": {
         "php": "^8.1",
         "ext-json": "*",
+        "ext-session": "*",
         "ext-zip": "*",
-        "symfony/framework-bundle": "^6.4",
-        "symfony/security-bundle": "^6.4",
-        "symfony/http-kernel": "^6.4",
-        "symfony/console": "^6.4",
-        "symfony/finder": "^6.4",
-        "symfony/process": "^6.4",
-        "symfony/yaml": "^6.4",
-        "symfony/monolog-bundle": "^3.3",
-        "firebase/php-jwt": "^6.0",
-        "crell/api-problem": "^3.1",
+        "composer/ca-bundle": "^1.5",
         "composer/composer": "^2.6.2",
-        "studio24/rotate": "^1.0",
+        "composer/semver": "^3.4",
+        "crell/api-problem": "^3.1",
+        "firebase/php-jwt": "^6.0",
+        "justinrainbow/json-schema": "^5.3",
+        "phpdocumentor/reflection-docblock": "^5.6",
+        "psr/container": "^2.0",
+        "psr/log": "^3.0",
         "ramsey/uuid": "^4.0",
+        "seld/jsonlint": "^1.11",
         "spomky-labs/otphp": "^11.3",
-        "web-auth/webauthn-lib": "^4.9",
+        "studio24/rotate": "^1.0",
+        "symfony/config": "^6.4",
+        "symfony/console": "^6.4",
+        "symfony/dependency-injection": "^6.4",
+        "symfony/event-dispatcher": "^6.4",
+        "symfony/filesystem": "^6.4",
+        "symfony/finder": "^6.4",
+        "symfony/framework-bundle": "^6.4",
+        "symfony/http-foundation": "^6.4",
+        "symfony/http-kernel": "^6.4",
+        "symfony/monolog-bundle": "^3.3",
+        "symfony/password-hasher": "^6.4",
+        "symfony/process": "^6.4",
+        "symfony/routing": "^6.4",
+        "symfony/security-bundle": "^6.4",
+        "symfony/security-core": "^6.4",
+        "symfony/security-http": "^6.4",
         "symfony/serializer": "^6.4",
-        "phpdocumentor/reflection-docblock": "^5.6"
+        "symfony/service-contracts": "^3.5",
+        "symfony/yaml": "^6.4",
+        "web-auth/cose-lib": "^4.4",
+        "web-auth/webauthn-lib": "^4.9"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.4",
@@ -54,6 +72,11 @@
     "autoload": {
         "psr-4": {
             "Contao\\ManagerApi\\": "api/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Contao\\ManagerApi\\Tests\\": "api/Tests/"
         }
     },
     "config": {
@@ -75,7 +98,7 @@
         "ecs": "@php vendor-bin/ecs/vendor/bin/ecs check --fix",
         "phpstan": "@php vendor-bin/phpstan/vendor/bin/phpstan analyze",
         "rector": "@php vendor-bin/rector/vendor/bin/rector",
-        "depcheck": "@php vendor-bin/composer-dependency-analyser/vendor/bin/composer-dependency-analyser --config=vendor-bin/composer-dependency-analyser/config.php",
+        "depcheck": "@php vendor-bin/composer-dependency-analyser/vendor/bin/composer-dependency-analyser --config=depcheck.php",
         "unit-tests": "@php vendor/bin/phpunit"
     }
 }

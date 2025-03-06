@@ -79,7 +79,7 @@ class CloudController
                 $this->environment->getComposerJsonFile()->write($jsonFile->read());
             }
         } catch (\Throwable $throwable) {
-            $this->logger->error('Invalid composerJson for /api/packages/cloud.', ['composerJson' => $json, 'composerLock' => $lock]);
+            $this->logger->error('Invalid composerJson for /api/packages/cloud.', ['composerJson' => $json ?? null, 'composerLock' => $lock]);
 
             return ApiProblemResponse::createFromException($throwable);
         }

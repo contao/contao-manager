@@ -12,10 +12,20 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\IntegrityCheck;
 
+use Contao\ManagerApi\I18n\Translator;
 use Crell\ApiProblem\ApiProblem;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 
 class SysTempDirCheck extends AbstractIntegrityCheck
 {
+    public function __construct(
+        private readonly Filesystem $filesystem,
+        Translator $translator
+    ) {
+        parent::__construct($translator);
+    }
+
     public function run(): ApiProblem|null
     {
         $tempdir = rtrim(sys_get_temp_dir(), '/');
@@ -34,18 +44,32 @@ class SysTempDirCheck extends AbstractIntegrityCheck
     private function canWriteFileInDirectory(string $path, bool $createDirectory = false): bool
     {
         if ($createDirectory) {
-            @rmdir($path);
-            @mkdir($path);
+            try {
+                $this->filesystem->remove($path);
+            } catch (IOException) {}
+
+            try {
+                $this->filesystem->mkdir($path);
+            } catch (IOException) {}
         }
 
         $file = $path.'/'.md5(__FILE__);
 
-        $result = touch($file) && is_writable($file);
+        try {
+            $this->filesystem->touch($file);
+            $result = is_writable($file);
+        } catch (IOException) {
+            $result = false;
+        }
 
-        @unlink($file);
+        try {
+            $this->filesystem->remove($file);
+        } catch (IOException) {}
 
         if ($createDirectory) {
-            @rmdir($path);
+            try {
+                $this->filesystem->remove($path);
+            } catch (IOException) {}
         }
 
         return $result;

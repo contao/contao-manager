@@ -185,6 +185,10 @@ class ContaoController
     {
         $content = scandir($this->kernel->getProjectDir());
 
+        if (false === $content) {
+            return [];
+        }
+
         return array_values(array_diff(
             $content,
             [

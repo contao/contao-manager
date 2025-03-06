@@ -15,7 +15,6 @@ namespace Contao\ManagerApi\Process;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Exception\ApiProblemException;
 use Contao\ManagerApi\Exception\InvalidJsonException;
-use Contao\ManagerApi\Process\Forker\ForkerInterface;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerAwareInterface;
