@@ -32,11 +32,9 @@ services:
 
     Contao\ManagerApi\ApiKernel: '@kernel'
 
+    # Service is public for ApiKernel::getTranslator()
     Contao\ManagerApi\I18n\Translator:
         public: true
-
-    locale_listener:
-        class: Contao\ManagerApi\EventListener\LocaleListener
 
     Contao\ManagerApi\Task\TaskManager:
         arguments:
