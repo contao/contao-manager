@@ -51,6 +51,7 @@
     "ui.login.button": "Oturum aç",
     "ui.login.passkey": "Geçiş anahtarı ile oturum aç",
     "ui.login.cancel": "İptal",
+    "ui.login.or": "ya da",
     "ui.login.locked": "Contao Manager kilitlenmiş olduğundan erişim reddedildi. Kilidi açmak için Contao kök klasöründeki {lockFile} dosyasını silin.",
     "ui.logout.headline": "Oturum zaman aşımına uğradı",
     "ui.logout.warning": "25 dakikadan uzun süredir işlem yapmadınız. Güvenlik nedeniyle oturumunuz kısa bir süre içinde sonlandırılacak.",
@@ -521,6 +522,11 @@
     "ui.user-manager.cancel": "İptal",
     "ui.user-manager.close": "Kapat",
     "ui.user-manager.you": "Siz",
+    "ui.user-manager.2fa": "2FA",
+    "ui.user-manager.2faEnabled": "This account is secured by two-factor authentication.",
+    "ui.user-manager.2faDisabled": "This account is insecure due to missing two-factor authentication.",
+    "ui.user-manager.passkey": "Passkey",
+    "ui.user-manager.passkeyTitle": "This account is secured by a Passkey.",
 
     "ui.totp.headline": "İki adımlı doğrulama",
     "ui.totp.setupQr": "Lütfen kare kodu iki adımlı doğrulama uygulamanızla tarayın.",
@@ -535,5 +541,5 @@
     "ui.totp.enabled": "İki adımlı doğrulama açıldı.",
     "ui.totp.disabled": "İki adımlı doğrulama kapatıldı.",
     "ui.totp.setup": "İki adımlı doğrulamayı kur",
-    "ui.totp.skip": "Skip Two-Factor Authentication"
+    "ui.totp.skip": "İki adımlı doğrulamayı atla"
 }
