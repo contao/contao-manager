@@ -30,18 +30,18 @@
 
         <transition name="animate-fade" mode="out-in" style="height:100%">
 
-            <div v-if="isInitializing || isReady" class="view-init">
+            <div v-if="isInitializing || isReady" class="view-init" :inert="hasModal">
                 <div class="view-init__cell animate-initializing">
                     <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo">
                     <p class="view-init__message">{{ $t('ui.app.loading') }}</p>
                 </div>
             </div>
 
-            <task-view :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="username && taskStatus"/>
-            <component :is="currentView" :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="currentView"/>
+            <task-view :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="username && taskStatus" :inert="hasModal"/>
+            <component :is="currentView" :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="currentView" :inert="hasModal"/>
 
             <div v-else>
-                <router-view :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'"/>
+                <router-view :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" :inert="hasModal"/>
             </div>
 
         </transition>
