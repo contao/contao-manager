@@ -63,15 +63,12 @@
     border-radius: var(--border-radius);
 
     &__inside {
-        &:after {
-            display: table;
-            clear: both;
-            content: "";
-        }
-
         padding: 10px 20px 20px;
 
         @include defaults.screen(1024) {
+            display: grid;
+            grid-template: auto / 90px auto 300px;
+            column-gap: 20px;
             padding: 25px 20px;
         }
     }
@@ -88,10 +85,6 @@
 
         @include defaults.screen(1024) {
             display: block;
-            float: left;
-            width: 90px;
-            height: 90px;
-            margin-right: 20px;
         }
     }
 
@@ -99,14 +92,16 @@
         margin-bottom: 20px;
 
         @include defaults.screen(1024) {
-            float: left;
-            width: 510px;
             margin-bottom: 0;
         }
 
         h1 {
             position: relative;
             margin-bottom: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            column-gap: .5em;
+            align-items: baseline;
         }
 
         p {
@@ -119,8 +114,7 @@
     &__error {
         position: relative;
         top: -2px;
-        margin-left: .5em;
-        padding: 2px 8px;
+        padding: 4px 8px;
         font-size: 14px;
         line-height: 1em;
         font-weight: defaults.$font-weight-normal;
@@ -134,30 +128,30 @@
     }
 
     &__actions {
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+        column-gap: 20px;
+
         @include defaults.screen(600) {
-            margin: 0 -10px;
+            flex-direction: row-reverse;
         }
 
         @include defaults.screen(1024) {
-            float: right;
-            width: 280px;
-            margin: 0 0 0 40px;
+            flex-direction: column;
+            margin-left: 20px;
         }
 
         > button,
         > .button-group {
             width: 100%;
-            margin-bottom: 10px;
 
             @include defaults.screen(600) {
-                float: right;
-                width: calc(50% - 20px);
-                margin: 0 10px;
+                width: calc(50% - 10px);
             }
 
             @include defaults.screen(1024) {
                 width: 100%;
-                margin: 0 0 10px;
             }
         }
     }
