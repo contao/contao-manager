@@ -107,5 +107,9 @@
         margin: 1em 0;
         word-break: break-all;
     }
+
+    .sk-circle {
+        margin: 20px auto;
+    }
 }
 </style>

@@ -389,10 +389,19 @@ class UserController
     private function convertToJson(User|array $user): array
     {
         if ($user instanceof User) {
-            return [
+            $json = [
                 'username' => $user->getUserIdentifier(),
                 'scope' => $user->getScope(),
+                'passkey' => $user->getPasskey(),
             ];
+
+            if ($user->getPasskey()) {
+                $json['passkey'] = true;
+            } else {
+                $json['totp_enabled'] = (bool) $user->getTotpSecret();
+            }
+
+            return $json;
         }
 
         foreach ($user as $k => $item) {

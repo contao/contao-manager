@@ -85,12 +85,8 @@ class UserConfig extends AbstractConfig
 
         $users = [];
 
-        foreach ($this->data['users'] as $user) {
-            $users[] = new User(
-                $user['username'],
-                $user['password'],
-                $user['scope'] ?? null,
-            );
+        foreach (array_keys($this->data['users']) as $username) {
+            $users[] = $this->getUser($username);
         }
 
         return $users;
@@ -205,6 +201,8 @@ class UserConfig extends AbstractConfig
             $this->data['users'][$username],
             $data,
         );
+
+        $this->save();
     }
 
     /**
