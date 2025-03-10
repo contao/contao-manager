@@ -128,6 +128,7 @@
         position: absolute;
         top: 39px;
         width: 100%;
+        padding-top: 3px;
         z-index: 100;
 
         &:focus {
@@ -141,7 +142,6 @@
         .link-menu {
             margin-top: 3px;
         }
-
 
         &--top {
             top: auto;

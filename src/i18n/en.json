@@ -51,6 +51,7 @@
     "ui.login.button": "Sign In",
     "ui.login.passkey": "Sign In with Passkey",
     "ui.login.cancel": "Cancel",
+    "ui.login.or": "or",
     "ui.login.locked": "Access has been denied because the Contao Manager is locked. To unlock, delete the {lockFile} file in your Contao root directory.",
     "ui.logout.headline": "Session Timeout",
     "ui.logout.warning": "Your have been inactive for more than 25 minutes. For security reasons your session will be terminated shortly.",

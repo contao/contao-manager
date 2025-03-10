@@ -15,14 +15,16 @@
                     <h1 class="view-login__headline">{{ $t('ui.login.headline') }}</h1>
                     <p class="view-login__description">{{ $t('ui.login.description') }}</p>
 
-                    <text-field ref="username" name="username" autocomplete="username webauthn" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="username" @input="reset"/>
-                    <text-field type="password" name="password" autocomplete="current-password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" minlength="8" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in" v-model="password" @input="reset"/>
+                    <text-field ref="username" name="username" autocomplete="username webauthn" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in || passkey_login" v-model="username" @input="reset"/>
+                    <text-field type="password" name="password" autocomplete="current-password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" minlength="8" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in || passkey_login" v-model="password" @input="reset"/>
 
-                    <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed" :loading="logging_in">
+                    <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed || passkey_login" :loading="logging_in && !passkey_login">
                         {{ $t('ui.login.button') }}
                     </loading-button>
 
-                    <loading-button class="view-login__button" color="primary" :loading="logging_in" @click.prevent="passkeyLogin" v-if="showPasskey">
+                    <p class="view-login__or">{{ $t('ui.login.or') }}</p>
+
+                    <loading-button class="view-login__button" color="primary" :loading="passkey_login" :disabled="logging_in" @click.prevent="passkeyLogin" v-if="showPasskey">
                         {{ $t('ui.login.passkey') }}
                     </loading-button>
 
@@ -74,6 +76,7 @@
             totp: '',
 
             logging_in: false,
+            passkey_login: false,
             requires_totp: false,
             login_failed: false,
             showPasskey: false
@@ -105,6 +108,8 @@
             },
 
             async passkeyLogin ({ useBrowserAutofill }) {
+                this.passkey_login = true;
+
                 const optionsJSON = (await this.$request.get('api/session/options')).data
 
                 try {
@@ -116,6 +121,8 @@
                 } catch (err) {
                     // Ignore Webauthn error
                 }
+
+                this.passkey_login = false;
             },
 
             async doLogin (data) {
@@ -198,7 +205,7 @@
     &__form {
         position: relative;
         max-width: 280px;
-        margin: 0 auto 80px;
+        margin: 0 auto 60px;
 
         input {
             padding-right: 30px;
@@ -226,7 +233,7 @@
 
     &__description {
         margin-top: .5em;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
 
     label {
@@ -274,6 +281,7 @@
 
     &__password {
         margin-top: -1px;
+        margin-bottom: 10px;
 
         input {
             border-radius: 0 0 var(--border-radius) var(--border-radius) !important;
@@ -286,21 +294,31 @@
 
     &__link {
         display: block;
-        margin-top: 1em;
+        margin-top: 2em;
         font-size: 12px;
-        text-align: right;
+        text-align: center;
     }
 
     &__button {
-        margin: 6px 0;
-
-        .widget-text + & {
-            margin: 12px 0 0;
-        }
+        margin: 3px 0;
 
         .sk-circle {
             color: #fff;
             text-align: center;
+        }
+    }
+
+    &__or {
+        display: grid;
+        gap: 15px;
+        grid-template-columns: 1fr auto 1fr;
+        padding: 12px;
+
+        &::before,
+        &::after {
+            align-self: center;
+            border-top: 1px solid var(--border);
+            content: "";
         }
     }
 
