@@ -521,6 +521,11 @@
     "ui.user-manager.cancel": "Cancel",
     "ui.user-manager.close": "Close",
     "ui.user-manager.you": "You",
+    "ui.user-manager.2fa": "2FA",
+    "ui.user-manager.2faEnabled": "This account is secured by two-factor authentication.",
+    "ui.user-manager.2faDisabled": "This account is insecure due to missing two-factor authentication.",
+    "ui.user-manager.passkey": "Passkey",
+    "ui.user-manager.passkeyTitle": "This account is secured by a Passkey.",
 
     "ui.totp.headline": "Two-Factor Authentication",
     "ui.totp.setupQr": "Please scan the QR code with your 2FA/TOTP app.",

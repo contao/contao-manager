@@ -10,7 +10,10 @@
                 <!-- eslint-disable vue/no-v-for-template-key -->
                 <template v-for="(user, k) in users" :key="k">
                     <div class="user-manager__item">
-                        <div class="user-manager__you" v-if="currentUser === user.username">{{ $t('ui.user-manager.you') }}</div>
+                        <div class="user-manager__ribbon" v-if="currentUser === user.username">{{ $t('ui.user-manager.you') }}</div>
+                        <div class="user-manager__ribbon user-manager__ribbon--hint user-manager__ribbon--primary" :title="$t('ui.user-manager.passkeyTitle')" v-else-if="user.passkey">{{ $t('ui.user-manager.passkey') }}</div>
+                        <div class="user-manager__ribbon user-manager__ribbon--hint user-manager__ribbon--primary" :title="$t('ui.user-manager.2faEnabled')" v-else-if="user.totp_enabled">{{ $t('ui.user-manager.2fa') }}</div>
+                        <div class="user-manager__ribbon user-manager__ribbon--hint user-manager__ribbon--warning" :title="$t('ui.user-manager.2faDisabled')" v-else>{{ $t('ui.user-manager.2fa') }}</div>
                         <div class="user-manager__username">{{ user.username }}</div>
                         <user-scope readonly label="Permissions" :model-value="user.scope" class="user-manager__scope"/>
                         <div class="user-manager__spacer"></div>
@@ -141,18 +144,35 @@ export default {
         border-radius: 14px;
     }
 
-    &__you {
+    &__ribbon {
         position: absolute;
-        top: 15px;
-        right: -25px;
+        top: 18px;
+        right: -22px;
         width: 100px;
+        font-size: 12px;
         color: #fff;
         font-weight: defaults.$font-weight-bold;
         line-height: 1.5;
         text-align: center;
-        background: var(--btn-primary);
+        background: var(--btn-info);
         transform-origin: center center;
         transform: rotateZ(45deg);
+
+        &--hint {
+            cursor: help;
+        }
+
+        &--primary {
+            background: var(--btn-primary);
+        }
+
+        &--warning {
+            background: var(--btn-warning);
+        }
+
+        &--alert {
+            background: var(--btn-alert);
+        }
     }
 
     &__new {
