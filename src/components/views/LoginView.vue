@@ -108,7 +108,7 @@
             },
 
             async passkeyLogin ({ useBrowserAutofill }) {
-                this.passkey_login = true;
+                this.passkey_login = !useBrowserAutofill;
 
                 const optionsJSON = (await this.$request.get('api/session/options')).data
 
