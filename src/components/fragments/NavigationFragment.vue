@@ -107,7 +107,6 @@
         },
 
         mounted() {
-            console.log(this.$refs.menu);
             new DisclosureMenu({
                 menuElement: this.$refs.menu,
                 hoverType: "on",
