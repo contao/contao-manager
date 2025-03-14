@@ -34,11 +34,11 @@ abstract class AbstractPackagesTask extends AbstractTask
         return parent::create($config)->setAudit(!$config->getOption('dry_run', false))->setCancellable(true);
     }
 
-    public function update(TaskConfig $config): TaskStatus
+    public function update(TaskConfig $config, bool $continue = false): TaskStatus
     {
         $this->createBackup($config);
 
-        $status = parent::update($config);
+        $status = parent::update($config, $continue);
 
         if ($status->hasError() || $status->isStopped()) {
             $this->restoreState($config);

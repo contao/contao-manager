@@ -69,11 +69,15 @@ class TaskController
             throw new BadRequestHttpException('No active task found.');
         }
 
-        if (TaskStatus::STATUS_ABORTING !== $request->request->get('status')) {
-            throw new BadRequestHttpException('Unsupported task status');
+        if (TaskStatus::STATUS_ABORTING === $request->request->get('status')) {
+            return $this->getResponse($this->taskManager->abortTask());
         }
 
-        return $this->getResponse($this->taskManager->abortTask());
+        if (TaskStatus::STATUS_ACTIVE === $request->request->get('status')) {
+            return $this->getResponse($this->taskManager->updateTask(true));
+        }
+
+        throw new BadRequestHttpException('Unsupported task status');
     }
 
     private function deleteTask(): Response

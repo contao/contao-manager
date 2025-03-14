@@ -112,7 +112,7 @@ class TaskManager implements LoggerAwareInterface
         return $status;
     }
 
-    public function updateTask(): TaskStatus|null
+    public function updateTask(bool $continue = false): TaskStatus|null
     {
         $config = $this->getTaskConfig();
 
@@ -126,7 +126,7 @@ class TaskManager implements LoggerAwareInterface
             $this->logger->info('Updating task status', ['name' => $task->getName(), 'class' => $task::class]);
         }
 
-        $status = $task->update($config);
+        $status = $task->update($config, $continue);
 
         if (null !== $this->logger && $status->isComplete()) {
             $this->logger->info('Task has been completed', ['name' => $task->getName(), 'class' => $task::class]);

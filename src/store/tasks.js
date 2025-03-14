@@ -165,15 +165,27 @@ export default {
 
         abort(store) {
             if (store.state.status === null) {
-                return new Promise((resolve, reject) => {
-                    reject();
-                });
+                return Promise.reject();
             }
 
             store.commit('setStatus', 'aborting');
 
             return new Promise((resolve, reject) => {
                 axios.patch('api/task', {status: 'aborting'})
+                    .then(response => handleTask(response, store, resolve, reject))
+                    .catch(error => failTask(error, store, resolve, reject));
+            });
+        },
+
+        continue(store) {
+            if (!store.state.current?.continuable) {
+                return Promise.reject();
+            }
+
+            store.commit('setStatus', 'active');
+
+            return new Promise((resolve, reject) => {
+                axios.patch('api/task', {status: 'active'})
                     .then(response => handleTask(response, store, resolve, reject))
                     .catch(error => failTask(error, store, resolve, reject));
             });

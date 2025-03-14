@@ -2,7 +2,7 @@
 openapi: 3.1.0
 info:
     title: Contao Manager API
-    version: "1.9.0"
+    version: "1.9.5"
 
 paths:
 
@@ -1500,6 +1500,7 @@ paths:
                                 status:
                                     type: string
                                     enum:
+                                        - active
                                         - aborting
             responses:
                 200:
@@ -2314,7 +2315,7 @@ components:
                     description: If a successful task might requires audit (install tool).
                 status:
                     type: string
-                    enum: [active, complete, error, aborting, stopped]
+                    enum: [active, complete, paused, error, aborting, stopped]
                 operations:
                     type: array
                     items:

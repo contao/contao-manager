@@ -75,6 +75,11 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
         return $this->process->isTerminated() && $this->process->getExitCode() > 0;
     }
 
+    public function continueOnError(): bool
+    {
+        return false;
+    }
+
     public function run(): void
     {
         if (!$this->process->isStarted()) {

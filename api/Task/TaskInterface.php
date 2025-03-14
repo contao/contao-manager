@@ -31,7 +31,7 @@ interface TaskInterface
     /**
      * Updates the task.
      */
-    public function update(TaskConfig $config): TaskStatus;
+    public function update(TaskConfig $config, bool $continue = false): TaskStatus;
 
     /**
      * Cancels a task.

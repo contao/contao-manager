@@ -24,6 +24,8 @@ final class TaskStatus implements \JsonSerializable
 
     public const STATUS_ERROR = 'error';
 
+    public const STATUS_PAUSED = 'paused';
+
     public const STATUS_ABORTING = 'aborting';
 
     public const STATUS_STOPPED = 'stopped';
@@ -108,7 +110,7 @@ final class TaskStatus implements \JsonSerializable
 
     public function getStatus(): string
     {
-        foreach ($this->operations as $operation) {
+        foreach ($this->operations as $i => $operation) {
             if ($this->abort) {
                 if ($operation->isRunning()) {
                     return self::STATUS_ABORTING;
@@ -118,7 +120,17 @@ final class TaskStatus implements \JsonSerializable
             }
 
             if ($operation->hasError()) {
-                return self::STATUS_ERROR;
+                if (
+                    $operation->continueOnError()
+                    && (
+                        $this->operations[$i + 1]?->isRunning()
+                        || $this->operations[$i + 1]?->isSuccessful()
+                    )
+                ) {
+                    continue;
+                }
+
+                return self::STATUS_PAUSED;
             }
 
             if (!$operation->isStarted() || $operation->isRunning()) {
@@ -167,13 +179,16 @@ final class TaskStatus implements \JsonSerializable
 
         $isNext = true;
         $hasError = false;
+        $canContinue = false;
 
         foreach ($this->operations as $operation) {
+            $status = $this->getOperationStatus($operation, $isNext);
+
             $operations[] = [
                 'summary' => $operation->getSummary(),
                 'details' => $operation->getDetails(),
                 'console' => (string) $operation->getConsole(),
-                'status' => $hasError ? self::STATUS_STOPPED : $this->getOperationStatus($operation, $isNext),
+                'status' => $hasError && !$canContinue ? self::STATUS_STOPPED : $status,
             ];
 
             if ($operation instanceof SponsoredOperationInterface) {
@@ -181,6 +196,7 @@ final class TaskStatus implements \JsonSerializable
             }
 
             $isNext = $operation->isSuccessful();
+            $canContinue = $canContinue || (!$hasError && $operation->hasError() && $operation->continueOnError());
             $hasError = $hasError || $operation->hasError();
         }
 
@@ -189,6 +205,7 @@ final class TaskStatus implements \JsonSerializable
             'title' => $this->title,
             'console' => $this->getConsole(),
             'cancellable' => $this->cancellable,
+            'continuable' => $canContinue,
             'autoclose' => $this->autoClose,
             'audit' => $this->audit,
             'status' => $this->getStatus(),

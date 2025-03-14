@@ -3,10 +3,9 @@
         <header class="view-task__header">
             <img src="../../assets/images/task.svg" width="80" height="80" alt="" class="view-task__icon">
             <h1 class="view-task__headline">{{ $t('ui.task.headline') }}</h1>
-            <!--<p class="view-task__description">{{ $t('ui.task.description') }}</p>-->
             <p class="view-task__description" v-if="taskStatus">{{ $t(`ui.task.${taskStatus}`) }}</p>
 
-            <template v-if="isFailed && !awaitTask">
+            <template v-if="isFailed">
                 <p class="view-task__text">
                     {{ $t('ui.task.failedDescription1') }}<br>
                     {{ $t('ui.task.failedDescription2') }}
@@ -17,7 +16,17 @@
                     <loading-button class="view-task__action" :loading="deletingTask" @click="deleteTask">{{ $t('ui.task.buttonClose') }}</loading-button>
                 </div>
             </template>
-            <template v-else-if="hasTask && !awaitTask">
+            <template v-else-if="isPaused">
+                <p class="view-task__text">
+                    {{ $t('ui.task.pausedDescription') }}
+                </p>
+
+                <div class="view-task__actions">
+                    <loading-button class="view-task__action" color="primary" :loading="deletingTask" @click="continueTask">{{ $t('ui.task.buttonContinue') }}</loading-button>
+                    <loading-button class="view-task__action" :loading="deletingTask" @click="deleteTask">{{ $t('ui.task.buttonClose') }}</loading-button>
+                </div>
+            </template>
+            <template v-else-if="hasTask">
                 <div class="view-task__actions">
                     <loading-button class="view-task__action" color="alert" :loading="isAborting" @click="cancelTask" v-if="allowCancel && (isActive || isAborting)">{{ $t('ui.task.buttonCancel') }}</loading-button>
 
@@ -80,6 +89,10 @@ export default {
                 if (confirm(this.$t('ui.task.confirmCancel'))) {
                     this.$store.dispatch('tasks/abort');
                 }
+            },
+
+            continueTask() {
+                this.$store.dispatch('tasks/continue');
             },
 
             async deleteTask() {
@@ -180,7 +193,7 @@ export default {
     &__header {
         margin-left: auto;
         margin-right: auto;
-        padding: 40px 0;
+        padding: 40px 20px;
         text-align: center;
     }
 

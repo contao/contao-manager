@@ -28,6 +28,8 @@ interface TaskOperationInterface
 
     public function hasError(): bool;
 
+    public function continueOnError(): bool;
+
     public function run(): void;
 
     public function abort(): void;

@@ -54,9 +54,9 @@ class UpdateTask extends AbstractPackagesTask
         return 'composer/update';
     }
 
-    public function update(TaskConfig $config): TaskStatus
+    public function update(TaskConfig $config, bool $continue = false): TaskStatus
     {
-        $status = parent::update($config);
+        $status = parent::update($config, $continue);
 
         if ($status->isComplete() && $config->getOption('dry_run', false)) {
             $this->restoreState($config);

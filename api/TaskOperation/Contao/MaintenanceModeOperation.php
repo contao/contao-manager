@@ -50,4 +50,9 @@ class MaintenanceModeOperation extends AbstractInlineOperation
 
         return $process->isSuccessful();
     }
+
+    public function continueOnError(): bool
+    {
+        return true;
+    }
 }

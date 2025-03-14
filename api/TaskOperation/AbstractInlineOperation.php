@@ -55,6 +55,11 @@ abstract class AbstractInlineOperation implements TaskOperationInterface, Logger
         return TaskStatus::STATUS_ERROR === $this->taskConfig->getState($this->getName());
     }
 
+    public function continueOnError(): bool
+    {
+        return false;
+    }
+
     public function run(): void
     {
         // Inline task should never need more than 60secs to complete. Assume something

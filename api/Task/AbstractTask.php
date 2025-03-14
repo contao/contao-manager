@@ -38,15 +38,16 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         return new TaskStatus($config->getId(), $this->getTitle(), $operations);
     }
 
-    public function update(TaskConfig $config): TaskStatus
+    public function update(TaskConfig $config, bool $continue = false): TaskStatus
     {
         if ($config->isCancelled()) {
             return $this->abort($config);
         }
 
         $status = $this->create($config);
+        $operations = $status->getOperations();
 
-        foreach ($status->getOperations() as $operation) {
+        foreach ($operations as $i => $operation) {
             if (!$operation->isStarted() || $operation->isRunning()) {
                 if (null !== $this->logger) {
                     $this->logger->info('Current operation: '.$operation::class);
@@ -67,6 +68,20 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
                 }
 
                 continue;
+            }
+
+            if ($operation->hasError() && $operation->continueOnError()) {
+                if ($continue) {
+                    if (null !== $this->logger) {
+                        $this->logger->info('Continuing after failed operation: '.$operation::class);
+                    }
+
+                    continue;
+                }
+
+                if ($operations[$i+1]?->isRunning() || $operations[$i+1]?->isSuccessful()) {
+                    continue;
+                }
             }
 
             return $status;

@@ -218,6 +218,11 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
         return false === $this->taskConfig->getState('cloud-job-successful');
     }
 
+    public function continueOnError(): bool
+    {
+        return false;
+    }
+
     public function run(): void
     {
         try {
