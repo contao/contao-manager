@@ -45,6 +45,7 @@
         "favicons": "^7.2.0",
         "favicons-webpack-plugin": "^6.0.1",
         "image-webpack-loader": "^8.1.0",
+        "resolve-url-loader": "^5.0.0",
         "sass": "^1.84.0",
         "sass-loader": "^16.0.4",
         "sharp": "^0.33.2"

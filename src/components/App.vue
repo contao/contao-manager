@@ -210,36 +210,8 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-$icons: (
-    'add',
-    'check',
-    'clipboard',
-    'cloud',
-    'cloud-off',
-    'console',
-    'database',
-    'download',
-    'edit',
-    'gear',
-    'hide',
-    'details',
-    'link',
-    'lock',
-    'maintenance',
-    'more',
-    'power',
-    'run',
-    'save',
-    'search',
-    'show',
-    'trash',
-    'unlock',
-    'update',
-    'upload',
-);
-
 @use "~contao-package-list/src/assets/styles/layout";
-@use "~contao-package-list/src/assets/styles/forms" with ($icons: $icons);
+@use "~contao-package-list/src/assets/styles/forms";
 @use "~contao-package-list/src/assets/styles/animations";
 @use "~contao-package-list/src/assets/styles/defaults";
 @use "../assets/styles/defaults" as AppDefaults;
@@ -300,6 +272,43 @@ $icons: (
         font-size: 1.5em;
         text-align: center;
         vertical-align: middle;
+    }
+}
+
+.widget-button {
+    $icons: (
+        'add',
+        'check',
+        'clipboard',
+        'cloud',
+        'cloud-off',
+        'console',
+        'database',
+        'download',
+        'edit',
+        'gear',
+        'hide',
+        'lock',
+        'maintenance',
+        'more',
+        'power',
+        'run',
+        'save',
+        'show',
+        'trash',
+        'unlock',
+        'update',
+        'upload',
+    );
+
+    @each $buttonIcon in $icons {
+        &--#{$buttonIcon} {
+            @extend %button-icon;
+        }
+
+        &--#{$buttonIcon}:before {
+            background-image: url('../assets/images/button-#{$buttonIcon}.svg');
+        }
     }
 }
 </style>
