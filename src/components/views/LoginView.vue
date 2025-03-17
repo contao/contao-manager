@@ -24,7 +24,7 @@
 
                     <p class="view-login__or">{{ $t('ui.login.or') }}</p>
 
-                    <loading-button class="view-login__button" color="primary" :loading="passkey_login" :disabled="logging_in" @click.prevent="passkeyLogin" v-if="showPasskey">
+                    <loading-button class="view-login__button" icon="passkey" color="primary" :loading="passkey_login" :disabled="logging_in" @click.prevent="passkeyLogin" v-if="showPasskey">
                         {{ $t('ui.login.passkey') }}
                     </loading-button>
 

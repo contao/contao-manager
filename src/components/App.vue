@@ -291,6 +291,7 @@
         'lock',
         'maintenance',
         'more',
+        'passkey',
         'power',
         'run',
         'save',
