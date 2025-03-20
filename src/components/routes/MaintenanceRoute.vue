@@ -74,7 +74,7 @@
     }
 
     &__image {
-        aspect-ratio: 1 / 1;
+        aspect-ratio: 1;
         display: none;
 
         img {
