@@ -123,8 +123,9 @@ final class TaskStatus implements \JsonSerializable
                 if (
                     $operation->continueOnError()
                     && (
-                        $this->operations[$i + 1]?->isRunning()
-                        || $this->operations[$i + 1]?->isSuccessful()
+                        !isset($this->operations[$i + 1])
+                        || $this->operations[$i + 1]->isRunning()
+                        || $this->operations[$i + 1]->isSuccessful()
                     )
                 ) {
                     continue;
