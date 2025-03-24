@@ -33,6 +33,11 @@ class MaintenanceModeOperation extends AbstractInlineOperation
         return 'vendor/bin/contao-console contao:maintenance-mode '.$this->state;
     }
 
+    public function continueOnError(): bool
+    {
+        return true;
+    }
+
     protected function getName(): string
     {
         return 'maintenance-'.$this->state;
@@ -49,10 +54,5 @@ class MaintenanceModeOperation extends AbstractInlineOperation
         $process->run();
 
         return $process->isSuccessful();
-    }
-
-    public function continueOnError(): bool
-    {
-        return true;
     }
 }

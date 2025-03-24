@@ -12,6 +12,7 @@ use Rector\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRecto
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
+use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Set\ValueObject\LevelSetList;
@@ -37,6 +38,7 @@ return RectorConfig::configure()
     ->withSkip([
         __DIR__.'/downgrade.php',
         __DIR__.'/stub.php',
+        ChangeOrIfContinueToMultiContinueRector::class,
         CatchExceptionNameMatchingTypeRector::class,
         ReturnBinaryOrToEarlyReturnRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,

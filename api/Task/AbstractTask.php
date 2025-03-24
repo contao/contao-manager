@@ -79,7 +79,11 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
                     continue;
                 }
 
-                if ($operations[$i+1]?->isRunning() || $operations[$i+1]?->isSuccessful()) {
+                if (
+                    !isset($operations[$i + 1])
+                    || $operations[$i + 1]->isRunning()
+                    || $operations[$i + 1]->isSuccessful()
+                ) {
                     continue;
                 }
             }
