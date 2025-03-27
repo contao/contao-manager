@@ -10,7 +10,7 @@
                 </div>
 
                 <fieldset class="maintenance__actions" v-if="!safeMode && isSupported !== false">
-                    <loading-spinner class="maintenance__loader" v-if="isLocked === null"/>
+                    <loading-spinner class="maintenance__loader" v-if="isLocked === null" />
                     <loading-button class="widget-button widget-button--primary widget-button--unlock" :loading="loading" :disabled="!isSupported" v-else-if="isLocked" @click="unlock">{{ $t('ui.maintenance.installTool.unlock') }}</loading-button>
                     <loading-button class="widget-button widget-button--primary widget-button--lock" :loading="loading" :disabled="!isSupported" v-else @click="lock">{{ $t('ui.maintenance.installTool.lock') }}</loading-button>
                 </fieldset>
@@ -20,41 +20,41 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 
-    import MessageOverlay from '../../fragments/MessageOverlay';
-    import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import MessageOverlay from '../../fragments/MessageOverlay';
+import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
-    export default {
-        components: { MessageOverlay, LoadingSpinner, LoadingButton },
+export default {
+    components: { MessageOverlay, LoadingSpinner, LoadingButton },
 
-        data: () => ({
-            loading: false,
-        }),
+    data: () => ({
+        loading: false,
+    }),
 
-        computed: {
-            ...mapState(['safeMode']),
-            ...mapState('contao/install-tool', ['isLocked', 'isSupported']),
-            overlayMessage: vm => vm.safeMode ? vm.$t('ui.maintenance.safeMode') : vm.$t('ui.maintenance.unsupported'),
+    computed: {
+        ...mapState(['safeMode']),
+        ...mapState('contao/install-tool', ['isLocked', 'isSupported']),
+        overlayMessage: (vm) => (vm.safeMode ? vm.$t('ui.maintenance.safeMode') : vm.$t('ui.maintenance.unsupported')),
+    },
+
+    methods: {
+        async unlock() {
+            this.loading = true;
+            await this.$store.dispatch('contao/install-tool/unlock');
+            this.loading = false;
         },
 
-        methods: {
-            async unlock() {
-                this.loading = true;
-                await this.$store.dispatch('contao/install-tool/unlock');
-                this.loading = false;
-            },
-
-            async lock() {
-                this.loading = true;
-                await this.$store.dispatch('contao/install-tool/lock');
-                this.loading = false;
-            },
+        async lock() {
+            this.loading = true;
+            await this.$store.dispatch('contao/install-tool/lock');
+            this.loading = false;
         },
+    },
 
-        mounted() {
-            this.$store.dispatch('contao/install-tool/fetch');
-        },
-    };
+    mounted() {
+        this.$store.dispatch('contao/install-tool/fetch');
+    },
+};
 </script>

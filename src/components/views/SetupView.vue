@@ -1,14 +1,13 @@
 <template>
     <boxed-layout :wide="true" slotClass="view-setup">
-
         <section class="view-setup__steps" v-if="currentStep > 0">
             <ul>
-                <li :class="{ 'active': currentStep > i }" v-for="(step, i) in steps" :key="step.name">
-                    <button @click="currentStep = (i+1)" :disabled="currentStep <= (i+1)">
-                        <img :src="step.icon" width="24" height="24" alt="">
+                <li :class="{ active: currentStep > i }" v-for="(step, i) in steps" :key="step.name">
+                    <button @click="currentStep = i + 1" :disabled="currentStep <= i + 1">
+                        <img :src="step.icon" width="24" height="24" alt="" />
                     </button>
                 </li>
-                <li :class="{ 'active': currentStep > steps.length }">
+                <li :class="{ active: currentStep > steps.length }">
                     <button disabled>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
                     </button>
@@ -32,7 +31,7 @@
                 <a href="/contao" class="widget-button widget-button--primary view-setup__continue">{{ $t('ui.setup.login') }}</a>
             </template>
             <div class="view-setup__funding">
-                <figure><img src="~contao-package-list/src/assets/images/funding.svg" width="80" height="80" alt=""></figure>
+                <figure><img src="~contao-package-list/src/assets/images/funding.svg" width="80" height="80" alt="" /></figure>
                 <div>
                     <p v-for="(line, i) in $t('ui.setup.funding').split('\n')" :key="i">{{ line }}</p>
                     <p><a class="view-setup__funding-link widget-button widget-button--small widget-button--funding widget-button--link" href="https://to.contao.org/donate" target="_blank">{{ $t('ui.setup.fundingLink') }}</a></p>
@@ -40,18 +39,17 @@
             </div>
         </main>
 
-        <component :is="steps[currentStep - 1].component" @continue="currentStep += 1" v-else-if="currentStep > 0"/>
+        <component :is="steps[currentStep - 1].component" @continue="currentStep += 1" v-else-if="currentStep > 0" />
 
         <main class="view-setup__main" v-else>
-            <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="view-setup__icon">
+            <img src="../../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" class="view-setup__icon" />
             <h1 class="view-setup__headline">{{ $t('ui.setup.welcome') }}</h1>
             <p class="view-setup__description">{{ $t('ui.setup.welcome1') }}</p>
             <i18n-t tag="p" class="view-setup__description" keypath="ui.setup.welcome2">
                 <template #support><a href="https://to.contao.org/support" target="_blank">{{ $t('ui.setup.support') }}</a></template>
             </i18n-t>
-            <button class="widget-button widget-button--inline widget-button--primary view-setup__start" @click="currentStep=1">{{ $t('ui.setup.start') }}</button>
+            <button class="widget-button widget-button--inline widget-button--primary view-setup__start" @click="currentStep = 1">{{ $t('ui.setup.start') }}</button>
         </main>
-
     </boxed-layout>
 </template>
 
@@ -95,45 +93,45 @@ export default {
             steps.push({
                 name: 'document-root',
                 icon: DocumentRootIcon,
-                component: DocumentRoot
+                component: DocumentRoot,
             });
 
             steps.push({
                 name: 'create-project',
                 icon: CreateProjectIcon,
-                component: CreateProject
+                component: CreateProject,
             });
 
             if (this.databaseSupported) {
                 steps.push({
                     name: 'database-connection',
                     icon: DatabaseIcon,
-                    component: DatabaseConnection
+                    component: DatabaseConnection,
                 });
-        }
+            }
 
-        if (this.userSupported) {
-            steps.push({
-                name: 'backend-user',
-                icon: UserIcon,
-                component: BackendUser
-            })
-        }
+            if (this.userSupported) {
+                steps.push({
+                    name: 'backend-user',
+                    icon: UserIcon,
+                    component: BackendUser,
+                });
+            }
 
             return steps;
-        }
+        },
     },
 
     methods: {
         launch() {
             this.$store.commit('setView', views.READY);
-        }
+        },
     },
 
-    mounted () {
+    mounted() {
         this.$store.dispatch('server/adminUser/get');
         this.$store.dispatch('contao/backup/fetch');
-    }
+    },
 };
 </script>
 
@@ -184,11 +182,11 @@ export default {
                 margin-left: -21px;
                 width: 42px;
                 height: 42px;
-                color: #FFF;
+                color: #fff;
                 text-indent: 0;
                 text-align: center;
                 line-height: 35px;
-                background:  var(--border);
+                background: var(--border);
                 border-radius: 50%;
                 z-index: 1;
             }
@@ -218,7 +216,7 @@ export default {
         }
 
         svg {
-            fill: #FFF;
+            fill: #fff;
         }
     }
 
@@ -261,7 +259,7 @@ export default {
         padding: 20px 25px;
         border: 2px solid var(--funding);
         border-radius: var(--border-radius);
-        background: rgba(var(--funding-rgb), .025);
+        background: rgba(var(--funding-rgb), 0.025);
         font-weight: 400;
 
         figure {
@@ -269,7 +267,7 @@ export default {
         }
 
         p {
-            margin: 0 0 .5em 0;
+            margin: 0 0 0.5em 0;
         }
 
         &-link {
@@ -333,7 +331,7 @@ export default {
     &__icon {
         background: var(--contao);
         border-radius: 10px;
-        padding:10px;
+        padding: 10px;
     }
 
     &__headline {
@@ -403,7 +401,7 @@ export default {
     }
 
     &__fieldtitle {
-        margin-bottom: .5em;
+        margin-bottom: 0.5em;
         font-size: 18px;
         font-weight: defaults.$font-weight-bold;
         line-height: 30px;

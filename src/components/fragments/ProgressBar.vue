@@ -8,36 +8,36 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            amount: [String, Number],
-            label: String,
+export default {
+    props: {
+        amount: [String, Number],
+        label: String,
+    },
+
+    data: () => ({
+        width: 0,
+    }),
+
+    computed: {
+        progress() {
+            return Math.floor(this.amount);
         },
+    },
 
-        data: () => ({
-            width: 0,
-        }),
+    methods: {
+        updateWidth() {
+            if (!this.$refs.bar) {
+                return;
+            }
 
-        computed: {
-            progress() {
-                return Math.floor(this.amount);
-            },
+            this.width = this.$refs.bar.clientWidth;
         },
+    },
 
-        methods: {
-            updateWidth() {
-                if (!this.$refs.bar) {
-                    return;
-                }
-
-                this.width = this.$refs.bar.clientWidth;
-            },
-        },
-
-        mounted() {
-            setTimeout(this.updateWidth, 0);
-        },
-    };
+    mounted() {
+        setTimeout(this.updateWidth, 0);
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

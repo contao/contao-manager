@@ -3,7 +3,7 @@
         <template #package-actions>
             <slot name="package-actions">
                 <template v-if="isInstalled">
-                    <package-constraint :data="data" v-if="!isFeature && isVisible"/>
+                    <package-constraint :data="data" v-if="!isFeature && isVisible" />
                     <p class="package-popup__installed">
                         <strong>{{ $t('ui.package.installed') }}</strong>
                         <time :dateTime="installedTime" v-if="installedTime" :title="datimFormat(installedTime)">{{ $t('ui.package.version', { version: installedVersion }) }}</time>
@@ -11,82 +11,85 @@
                     </p>
                 </template>
                 <template v-else-if="canBeInstalled || isRequired">
-                    <install-button :data="data"/>
-                    <package-constraint :data="data" v-if="isAdded || isRequired"/>
+                    <install-button :data="data" />
+                    <package-constraint :data="data" v-if="isAdded || isRequired" />
                 </template>
                 <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">{{ $t('ui.package.homepage') }}</a>
                 <div v-else></div>
             </slot>
         </template>
         <template #package-update v-if="metadata.update && metadata.update.valid && !metadata.update.latest">
-            <p class="package-popup__update"><strong>{{ $t('ui.package.update') }}:</strong> {{ $t('ui.package.version', { version: metadata.update.version}) }} ({{ $t('ui.package-details.released') }} {{ datimFormat(metadata.update.time, 'short', 'long') }})</p>
+            <p class="package-popup__update">
+                <strong>{{ $t('ui.package.update') }}:</strong> {{ $t('ui.package.version', { version: metadata.update.version }) }} ({{ $t('ui.package-details.released') }} {{ datimFormat(metadata.update.time, 'short', 'long') }})
+            </p>
         </template>
         <template #package-update v-else-if="!isCompatible">
             <p class="package-popup__incompatible">{{ $t('ui.package.incompatible', { package: data.name, constraint: packageConstraint('contao/manager-bundle') }) }}</p>
         </template>
         <template #suggest-actions="{ name }">
-            <install-button inline small :data="{ name }" v-if="packageSuggested(name)"/>
+            <install-button inline small :data="{ name }" v-if="packageSuggested(name)" />
         </template>
         <template #features-actions="{ name }">
-            <install-button inline small :data="{ name }" v-if="hasRoot && !packageInstalled(name) && !packageRoot(name)"/>
+            <install-button inline small :data="{ name }" v-if="hasRoot && !packageInstalled(name) && !packageRoot(name)" />
         </template>
     </package-details>
 </template>
 
 <script>
-    import { mapGetters, mapState } from 'vuex';
-    import datimFormat from 'contao-package-list/src/filters/datimFormat';
-    import packageStatus from '../../mixins/packageStatus';
+import { mapGetters, mapState } from 'vuex';
+import datimFormat from 'contao-package-list/src/filters/datimFormat';
+import packageStatus from '../../mixins/packageStatus';
 
-    import PackageDetails from 'contao-package-list/src/components/fragments/PackageDetails';
-    import InstallButton from './InstallButton';
-    import PackageConstraint from './PackageConstraint';
+import PackageDetails from 'contao-package-list/src/components/fragments/PackageDetails';
+import InstallButton from './InstallButton';
+import PackageConstraint from './PackageConstraint';
 
-    export default {
-        mixins: [packageStatus],
-        components: { PackageConstraint, PackageDetails, InstallButton },
+export default {
+    mixins: [packageStatus],
+    components: { PackageConstraint, PackageDetails, InstallButton },
 
-        computed: {
-            ...mapState('packages', { allInstalled: 'installed' }),
-            ...mapGetters('packages', ['packageConstraint']),
+    computed: {
+        ...mapState('packages', { allInstalled: 'installed' }),
+        ...mapGetters('packages', ['packageConstraint']),
 
-            current: vm => vm.$route.query.p,
-            data: vm => vm.add[vm.current] || (vm.allInstalled && vm.allInstalled[vm.current]) || ({ name: vm.current }),
+        current: (vm) => vm.$route.query.p,
+        data: (vm) => vm.add[vm.current] || (vm.allInstalled && vm.allInstalled[vm.current]) || { name: vm.current },
 
-            dependents() {
-                if (!this.allInstalled[this.data.name]?.dependents) {
-                    return null;
+        dependents() {
+            if (!this.allInstalled[this.data.name]?.dependents) {
+                return null;
+            }
+
+            const deps = {};
+            const conditions = ['requires', 'replaces', 'provides', 'conflicts'];
+
+            Object.values(this.allInstalled[this.data.name].dependents).forEach((dep) => {
+                if (
+                    dep.source === '__root__' ||
+                    !conditions.includes(dep.description) ||
+                    (dep.source === this.data.name && dep.description === 'replaces')
+                ) {
+                    return;
                 }
 
-                const deps = {};
-                const conditions = ['requires', 'replaces', 'provides', 'conflicts'];
+                const description = this.$t(`ui.package-details.link${dep.description[0].toUpperCase()}${dep.description.slice(1)}`);
+                let target = dep.target;
 
-                Object.values(this.allInstalled[this.data.name].dependents).forEach(dep => {
-                    if (dep.source === '__root__'
-                        || !conditions.includes(dep.description)
-                        || (dep.source === this.data.name && dep.description === 'replaces')
-                    ) {
-                        return;
-                    }
+                if (target === this.data.name && this.metadata && this.metadata.title) {
+                    target = this.metadata.title;
+                }
 
-                    const description = this.$t(`ui.package-details.link${dep.description[0].toUpperCase()}${dep.description.slice(1)}`);
-                    let target = dep.target;
+                deps[dep.source] = `${description} ${target} ${dep.constraint}`;
+            });
 
-                    if (target === this.data.name && this.metadata && this.metadata.title) {
-                        target = this.metadata.title;
-                    }
-
-                    deps[dep.source] = `${description} ${target} ${dep.constraint}`;
-                });
-
-                return deps;
-            },
+            return deps;
         },
+    },
 
-        methods: {
-            datimFormat,
-        }
-    };
+    methods: {
+        datimFormat,
+    },
+};
 </script>
 
 <style lang="scss">

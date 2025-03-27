@@ -31,35 +31,39 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
-    import PopupOverlay from 'contao-package-list/src/components/fragments/PopupOverlay';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import TextField from '../../widgets/TextField.vue';
+import { mapState } from 'vuex';
+import PopupOverlay from 'contao-package-list/src/components/fragments/PopupOverlay';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import TextField from '../../widgets/TextField.vue';
 
-    export default {
-        components: { PopupOverlay, LoadingButton, TextField },
+export default {
+    components: { PopupOverlay, LoadingButton, TextField },
 
-        data: () => ({
-            loading: false,
-            currentPassword: '',
-            newPassword: '',
-            error: '',
-        }),
+    data: () => ({
+        loading: false,
+        currentPassword: '',
+        newPassword: '',
+        error: '',
+    }),
 
-        computed: {
-            ...mapState('auth', ['username']),
+    computed: {
+        ...mapState('auth', ['username']),
 
-            inputValid: vm  => vm.currentPassword.length >= 8 && vm.newPassword.length >= 8,
-        },
+        inputValid: (vm) => vm.currentPassword.length >= 8 && vm.newPassword.length >= 8,
+    },
 
-        methods: {
-            async submit() {
-                this.loading = true;
+    methods: {
+        async submit() {
+            this.loading = true;
 
-                await this.$request.put(`api/users/${ this.username }/password`, {
+            await this.$request.put(
+                `api/users/${this.username}/password`,
+                {
                     current_password: this.currentPassword,
                     new_password: this.newPassword,
-                }, null, {
+                },
+                null,
+                {
                     200: () => {
                         this.$notify.success(this.$t('ui.user-manager.passwordChanged'));
                         this.close();
@@ -70,21 +74,22 @@
                         setTimeout(() => {
                             this.$refs.password.focus();
                         }, 0);
-                    }
-                });
+                    },
+                },
+            );
 
-                this.loading = false;
-            },
-
-            close() {
-                this.$store.commit('modals/close', 'change-password');
-            },
+            this.loading = false;
         },
 
-        mounted () {
-            this.$refs.password.focus();
-        }
-    };
+        close() {
+            this.$store.commit('modals/close', 'change-password');
+        },
+    },
+
+    mounted() {
+        this.$refs.password.focus();
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

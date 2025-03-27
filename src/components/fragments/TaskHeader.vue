@@ -18,38 +18,36 @@
 </template>
 
 <script>
-    import task from '../../mixins/task';
-    import ButtonMenu from '../widgets/ButtonMenu';
+import task from '../../mixins/task';
+import ButtonMenu from '../widgets/ButtonMenu';
 
-    export default {
-        name: 'TaskHeader',
-        components: {ButtonMenu},
-        mixins: [task],
+export default {
+    name: 'TaskHeader',
+    components: { ButtonMenu },
+    mixins: [task],
 
-        props: {
-            showConsole: Boolean,
+    props: {
+        showConsole: Boolean,
+    },
+
+    computed: {
+        taskTitle: (vm) => (vm.hasTask ? vm.currentTask.title : vm.$t('ui.task.loading')),
+    },
+
+    methods: {
+        showLog() {
+            const popup = window.open();
+
+            if (popup) {
+                popup.document.open();
+                popup.document.write(`<pre>${this.currentTask.console}</pre>`);
+                popup.document.close();
+            }
         },
 
-        computed: {
-            taskTitle: vm => vm.hasTask ? vm.currentTask.title : vm.$t('ui.task.loading'),
-        },
-
-        methods: {
-            showLog() {
-                const popup = window.open();
-
-                if (popup) {
-                    popup.document.open();
-                    popup.document.write(`<pre>${this.currentTask.console}</pre>`);
-                    popup.document.close();
-                }
-            },
-
-            copyLog() {
-
-            },
-        },
-    }
+        copyLog() {},
+    },
+};
 </script>
 
 <style lang="scss">

@@ -17,7 +17,7 @@
                     <template v-for="(title, k) in summary" :key="`${k}_title`">
                         <h2 class="console-operation__title" :class="{ 'console-operation__title--disabled': title.match(/^~.+~$/) }">{{ title.replace(/^~(.+)~$/, '$1') }}</h2>
                         <p class="console-operation__description" :key="`${k}_details`" v-if="details[k]">{{ details[k] }}</p>
-                        <br/>
+                        <br />
                     </template>
                 </template>
                 <template v-else>
@@ -27,7 +27,7 @@
             </div>
         </component>
 
-        <div class="console-operation__console" v-if="console" ref="console" @scroll="scrolled" >
+        <div class="console-operation__console" v-if="console" ref="console" @scroll="scrolled">
             <button class="console-operation__scroll console-operation__scroll--top" @click="scrollToTop" v-show="!isScrolledTop">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
             </button>
@@ -48,113 +48,113 @@
 </template>
 
 <script>
-    import 'details-element-polyfill';
+import 'details-element-polyfill';
 
-    export default {
-        name: 'ConsoleOperation',
+export default {
+    name: 'ConsoleOperation',
 
-        props: {
-            status: String,
-            summary: [String, Array],
-            details: [String, Array],
-            console: String,
-            showConsole: Boolean,
-            forceConsole: Boolean,
-        },
+    props: {
+        status: String,
+        summary: [String, Array],
+        details: [String, Array],
+        console: String,
+        showConsole: Boolean,
+        forceConsole: Boolean,
+    },
 
-        data: () => ({
-            openConsole: true,
-            isScrolledTop: true,
-            isScrolledBottom: true,
-            autoScroll: true,
-            swallowScroll: true,
-        }),
+    data: () => ({
+        openConsole: true,
+        isScrolledTop: true,
+        isScrolledBottom: true,
+        autoScroll: true,
+        swallowScroll: true,
+    }),
 
-        computed: {
-            isPending: vm => vm.status === 'pending',
-            isActive: vm => vm.status === 'active',
-            isSuccess: vm => vm.status === 'complete',
-            isError: vm => vm.status === 'error',
-            isStopped: vm => vm.status === 'stopped',
-            isSkipped: vm => vm.status === 'skipped',
+    computed: {
+        isPending: (vm) => vm.status === 'pending',
+        isActive: (vm) => vm.status === 'active',
+        isSuccess: (vm) => vm.status === 'complete',
+        isError: (vm) => vm.status === 'error',
+        isStopped: (vm) => vm.status === 'stopped',
+        isSkipped: (vm) => vm.status === 'skipped',
 
-            consoleLines: vm => vm.console.trim().split('\n'),
-        },
+        consoleLines: (vm) => vm.console.trim().split('\n'),
+    },
 
-        methods: {
-            toggleConsole() {
-                this.openConsole = this.$refs.details.open;
+    methods: {
+        toggleConsole() {
+            this.openConsole = this.$refs.details.open;
 
-                if (this.openConsole && this.$refs.console) {
-                    this.autoScroll = true;
-                    this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
-
-                    this.updatePosition();
-                }
-            },
-
-            scrolled() {
-                if (!this.swallowScroll) {
-                    this.updatePosition();
-                }
-
-                this.swallowScroll = false;
-            },
-
-            updatePosition() {
-                const el = this.$refs.console;
-                const height = (el.scrollTop + el.clientHeight);
-                this.autoScroll = height === el.scrollHeight;
-                this.isScrolledTop = el.clientHeight <= 250 || (el.scrollHeight > 250 && el.scrollTop < 16);
-                this.isScrolledBottom = el.clientHeight <= 250 || (el.scrollHeight > 250 && height >= el.scrollHeight - 16);
-            },
-
-            scrollToTop() {
-                this.$refs.console.scrollTop = 0;
-            },
-
-            scrollToBottom() {
+            if (this.openConsole && this.$refs.console) {
+                this.autoScroll = true;
                 this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
-            },
 
-            updateConsole(value = true) {
-                if (this.isError) {
-                    value = true;
-                }
-
-                if (this.$refs.details) {
-                    this.$refs.details.open = value;
-                }
-            },
+                this.updatePosition();
+            }
         },
 
-        watch: {
-            console(value) {
-                if (!value) {
-                    return;
-                }
+        scrolled() {
+            if (!this.swallowScroll) {
+                this.updatePosition();
+            }
 
-                this.updateConsole(this.openConsole);
-
-                if (this.autoScroll) {
-                    setTimeout(() => {
-                        this.swallowScroll = true;
-                        this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
-                    }, 0);
-                }
-            },
-
-            showConsole(value) {
-                this.openConsole = value;
-                this.updateConsole(value);
-            },
+            this.swallowScroll = false;
         },
 
-        mounted() {
-            this.openConsole = this.showConsole;
+        updatePosition() {
+            const el = this.$refs.console;
+            const height = el.scrollTop + el.clientHeight;
+            this.autoScroll = height === el.scrollHeight;
+            this.isScrolledTop = el.clientHeight <= 250 || (el.scrollHeight > 250 && el.scrollTop < 16);
+            this.isScrolledBottom = el.clientHeight <= 250 || (el.scrollHeight > 250 && height >= el.scrollHeight - 16);
+        },
+
+        scrollToTop() {
+            this.$refs.console.scrollTop = 0;
+        },
+
+        scrollToBottom() {
+            this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
+        },
+
+        updateConsole(value = true) {
+            if (this.isError) {
+                value = true;
+            }
+
+            if (this.$refs.details) {
+                this.$refs.details.open = value;
+            }
+        },
+    },
+
+    watch: {
+        console(value) {
+            if (!value) {
+                return;
+            }
+
             this.updateConsole(this.openConsole);
+
+            if (this.autoScroll) {
+                setTimeout(() => {
+                    this.swallowScroll = true;
+                    this.$refs.console.scrollTop = this.$refs.console.scrollHeight;
+                }, 0);
+            }
         },
-    };
+
+        showConsole(value) {
+            this.openConsole = value;
+            this.updateConsole(value);
+        },
+    },
+
+    mounted() {
+        this.openConsole = this.showConsole;
+        this.updateConsole(this.openConsole);
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -257,9 +257,10 @@
         position: relative;
 
         overflow-y: auto;
-        max-height: 280px;}
+        max-height: 280px;
+    }
 
-        &__lines {
+    &__lines {
         padding: 8px 0 16px;
         font-family: defaults.$font-monospace;
         color: #f6f8fa;

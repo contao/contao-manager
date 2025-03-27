@@ -1,6 +1,5 @@
 <template>
     <main-layout>
-
         <loading-spinner v-if="files === null" class="log-viewer__status log-viewer__status--loader">
             <p class="log-viewer__title">{{ $t('ui.log-viewer.loading') }}</p>
         </loading-spinner>
@@ -14,14 +13,14 @@
             <div class="log-viewer__filters">
                 <div>
                     <div class="log-viewer__file">
-                        <select-menu :options="fileOptions" name="file" :label="$t('ui.log-viewer.file')" v-model="file"/>
+                        <select-menu :options="fileOptions" name="file" :label="$t('ui.log-viewer.file')" v-model="file" />
                         <button class="widget-button widget-button--inline widget-button--update" :title="$t('ui.log-viewer.reload')" @click="load"></button>
                     </div>
-                    <a :href="`api/logs/${encodeURIComponent(file)}`" :download="`${file}.log`" target="_blank" class="widget-button widget-button--inline widget-button--download" :class="{ 'disabled': !file }" :title="$t('ui.log-viewer.downloadTitle', { file: `${file}.log` })">{{ $t('ui.log-viewer.download') }}</a>
+                    <a :href="`api/logs/${encodeURIComponent(file)}`" :download="`${file}.log`" target="_blank" class="widget-button widget-button--inline widget-button--download" :class="{ disabled: !file }" :title="$t('ui.log-viewer.downloadTitle', { file: `${file}.log` })">{{ $t('ui.log-viewer.download') }}</a>
                 </div>
                 <div>
-                    <select-menu :options="channelOptions" name="channel" :label="$t('ui.log-viewer.channel')" v-model="channel"/>
-                    <select-menu :options="levelOptions" name="level" :label="$t('ui.log-viewer.level')" v-model="level"/>
+                    <select-menu :options="channelOptions" name="channel" :label="$t('ui.log-viewer.channel')" v-model="channel" />
+                    <select-menu :options="levelOptions" name="level" :label="$t('ui.log-viewer.level')" v-model="level" />
                 </div>
             </div>
 
@@ -54,8 +53,8 @@
                                     <button class="log-viewer__toggle" :class="{ 'log-viewer__toggle--active': showExtra[k] }" v-if="canShow(line.extra)" @click="toggleExtra(k)">{{ $t(`ui.log-viewer.${showExtra[k] ? 'hide' : 'show'}Extra`) }}</button>
                                 </div>
 
-                                <vue-json-pretty :data="line.context" :deep="1" class="log-viewer__json" v-if="canShow(line.context) && showContext[k]"/>
-                                <vue-json-pretty :data="line.extra" :deep="1" class="log-viewer__json" v-if="canShow(line.extra) && showExtra[k]"/>
+                                <vue-json-pretty :data="line.context" :deep="1" class="log-viewer__json" v-if="canShow(line.context) && showContext[k]" />
+                                <vue-json-pretty :data="line.extra" :deep="1" class="log-viewer__json" v-if="canShow(line.extra) && showExtra[k]" />
                             </div>
                         </div>
                     </template>
@@ -65,216 +64,213 @@
                     <button class="widget-button widget-button--inline widget-button--add" @click="next">{{ $t('ui.log-viewer.more') }}</button>
                 </div>
                 <div class="log-viewer__loading" v-if="loading">
-                    <loading-spinner/>
+                    <loading-spinner />
                 </div>
             </div>
-
         </div>
-
-
     </main-layout>
 </template>
 
 <script>
-    import axios from 'axios';
-    import datimFormat from 'contao-package-list/src/filters/datimFormat';
-    import filesize from '../../tools/filesize';
-    import VueJsonPretty from 'vue-json-pretty';
-    import 'vue-json-pretty/lib/styles.css';
+import axios from 'axios';
+import datimFormat from 'contao-package-list/src/filters/datimFormat';
+import filesize from '../../tools/filesize';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
-    import MainLayout from '../layouts/MainLayout';
-    import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
-    import SelectMenu from '../widgets/SelectMenu.vue';
+import MainLayout from '../layouts/MainLayout';
+import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
+import SelectMenu from '../widgets/SelectMenu.vue';
 
-    export default {
-        components: { MainLayout, LoadingSpinner, SelectMenu, VueJsonPretty },
+export default {
+    components: { MainLayout, LoadingSpinner, SelectMenu, VueJsonPretty },
 
-        data: () => ({
-            files: null,
-            loading: false,
-            file: null,
+    data: () => ({
+        files: null,
+        loading: false,
+        file: null,
 
-            offset: 0,
-            limit: 100,
-            content: [],
-            channel: '',
-            level: '',
-            showContext: {},
-            showExtra: {},
-        }),
+        offset: 0,
+        limit: 100,
+        content: [],
+        channel: '',
+        level: '',
+        showContext: {},
+        showExtra: {},
+    }),
 
-        computed: {
-            channelOptions: (vm) => vm.countOptions('channel'),
-            levelOptions: (vm) => vm.countOptions('level', { 'emergency': 0, 'alert': 0, 'critical': 0, 'error': 0, 'warning': 0, 'notice': 0, 'info': 0, 'debug': 0 }),
+    computed: {
+        channelOptions: (vm) => vm.countOptions('channel'),
+        levelOptions: (vm) => vm.countOptions('level', { emergency: 0, alert: 0, critical: 0, error: 0, warning: 0, notice: 0, info: 0, debug: 0 }),
 
-            fileOptions () {
-                if (!this.files) {
-                    return []
-                }
+        fileOptions() {
+            if (!this.files) {
+                return [];
+            }
 
-                const optgroups = {};
-                const options = [];
+            const optgroups = {};
+            const options = [];
 
-                this.files.forEach((file) => {
-                    const match = file.name.match(/^([a-z]+)-(\d{4}-\d{2}-\d{2})$/i);
+            this.files.forEach((file) => {
+                const match = file.name.match(/^([a-z]+)-(\d{4}-\d{2}-\d{2})$/i);
 
-                    if (match) {
-                        if (!optgroups[match[1]]) {
-                            optgroups[match[1]] = {
-                                label: this.$te(`ui.log-viewer.${match[1]}Environment`) ? this.$t(`ui.log-viewer.${match[1]}Environment`) : match[1],
-                                options: []
-                            };
-                        }
-
-                        optgroups[match[1]].options.push({ value: file.name, label: `${datimFormat(match[2], null, 'long')} (${filesize(file.size)})` });
-                    } else {
-                        options.push({ value: file.name, label: `${file.name} (${filesize(file.size)})` });
+                if (match) {
+                    if (!optgroups[match[1]]) {
+                        optgroups[match[1]] = {
+                            label: this.$te(`ui.log-viewer.${match[1]}Environment`) ? this.$t(`ui.log-viewer.${match[1]}Environment`) : match[1],
+                            options: [],
+                        };
                     }
-                });
 
-                return [...Object.values(optgroups), ...options];
-            },
-
-            current: (vm) => vm.files?.find(f => f.name === vm.file),
-
-            lines: (vm) => vm.content?.filter((line) => {
-                if (typeof line === 'string') {
-                    return true;
+                    optgroups[match[1]].options.push({ value: file.name, label: `${datimFormat(match[2], null, 'long')} (${filesize(file.size)})` });
+                } else {
+                    options.push({ value: file.name, label: `${file.name} (${filesize(file.size)})` });
                 }
+            });
 
-                if (vm.channel && line.channel !== vm.channel) {
-                    return false;
-                }
-
-                if (vm.level && line.level.toLowerCase() !== vm.level) {
-                    return false;
-                }
-
-                return true;
-            }).reverse()
+            return [...Object.values(optgroups), ...options];
         },
 
-        methods: {
-            datimFormat,
+        current: (vm) => vm.files?.find((f) => f.name === vm.file),
 
-            canShow: (data) => data && (!Array.isArray(data) || data.length),
-            pieces: (text) => {
-                let result = [];
-                const pieces = text.split(' "');
-                const max = pieces.length - 1;
-                let level = 0;
+        lines: (vm) => vm.content?.filter((line) => {
+            if (typeof line === 'string') {
+                return true;
+            }
 
-                for (let i = 0; i <= max; i++) {
-                    let piece = pieces[i];
+            if (vm.channel && line.channel !== vm.channel) {
+                return false;
+            }
 
-                    if (level === 0) {
-                        result.push(piece);
+            if (vm.level && line.level.toLowerCase() !== vm.level) {
+                return false;
+            }
 
-                        level++;
-                        continue;
-                    }
+            return true;
+        }).reverse(),
+    },
 
-                    while (level > 0) {
-                        while (!pieces[i].includes('"') && i !== max) {
-                            piece = `${ piece } "${ pieces[i + 1] }`;
-                            level++;
-                            i++;
-                        }
+    methods: {
+        datimFormat,
 
-                        level--;
+        canShow: (data) => data && (!Array.isArray(data) || data.length),
+        pieces: (text) => {
+            let result = [];
+            const pieces = text.split(' "');
+            const max = pieces.length - 1;
+            let level = 0;
 
-                        if (level === 0) {
-                            result[result.length - 1] += ' "';
-                            const pos = piece.indexOf('" ') || piece.lastIndexOf('"');
+            for (let i = 0; i <= max; i++) {
+                let piece = pieces[i];
 
-                            result.push(piece.slice(0, pos));
-                            result.push(piece.slice(pos));
+                if (level === 0) {
+                    result.push(piece);
 
-                            level++;
-                            break;
-                        }
-                    }
+                    level++;
+                    continue;
                 }
 
-                return result
-            },
-
-            toggleContext(k) {
-                this.$set(this.showContext, k, !this.showContext[k]);
-            },
-
-            toggleExtra(k) {
-                this.$set(this.showExtra, k, !this.showExtra[k]);
-            },
-
-            countOptions(key, options = {}) {
-                this.content.forEach((line) => {
-                    if (typeof line === 'string') {
-                        return;
+                while (level > 0) {
+                    while (!pieces[i].includes('"') && i !== max) {
+                        piece = `${piece} "${pieces[i + 1]}`;
+                        level++;
+                        i++;
                     }
 
-                    if (!options[line[key].toLowerCase()]) {
-                        options[line[key].toLowerCase()] = 0;
+                    level--;
+
+                    if (level === 0) {
+                        result[result.length - 1] += ' "';
+                        const pos = piece.indexOf('" ') || piece.lastIndexOf('"');
+
+                        result.push(piece.slice(0, pos));
+                        result.push(piece.slice(pos));
+
+                        level++;
+                        break;
                     }
+                }
+            }
 
-                    options[line[key].toLowerCase()] += 1;
-                });
+            return result;
+        },
 
-                return [{ label: 'all', value: '' }].concat(Object.keys(options).map((value) => ({ value, label: `${value.at(0).toUpperCase()}${value.slice(1)} (${options[value]})` })));
-            },
+        toggleContext(k) {
+            this.$set(this.showContext, k, !this.showContext[k]);
+        },
 
-            next () {
-                this.limit = Math.min(this.offset, 100);
-                this.offset = Math.max(this.offset - 100, 0);
-            },
+        toggleExtra(k) {
+            this.$set(this.showExtra, k, !this.showExtra[k]);
+        },
 
-            async load () {
-                const current = this.file;
-
-                this.files = null;
-                this.file = null;
-
-                this.files = (await axios.get('api/logs')).data;
-                this.file = this.files.find(f => f.name === current)?.name || (this.files.length ? this.files[0].name : null);
-            },
-
-            async fetch () {
-                if (!this.current) {
+        countOptions(key, options = {}) {
+            this.content.forEach((line) => {
+                if (typeof line === 'string') {
                     return;
                 }
 
-                this.loading = true;
+                if (!options[line[key].toLowerCase()]) {
+                    options[line[key].toLowerCase()] = 0;
+                }
 
-                const response = (await axios.get(`api/logs/${encodeURIComponent(this.current.name)}?offset=${this.offset}&limit=${this.limit}`)).data;
+                options[line[key].toLowerCase()] += 1;
+            });
 
-                this.content = this.content.concat(Array.from(response.content.reverse()));
-                this.loading = false;
+            return [{ label: 'all', value: '' }].concat(Object.keys(options).map((value) => ({ value, label: `${value.at(0).toUpperCase()}${value.slice(1)} (${options[value]})` })));
+        },
+
+        next() {
+            this.limit = Math.min(this.offset, 100);
+            this.offset = Math.max(this.offset - 100, 0);
+        },
+
+        async load() {
+            const current = this.file;
+
+            this.files = null;
+            this.file = null;
+
+            this.files = (await axios.get('api/logs')).data;
+            this.file = this.files.find((f) => f.name === current)?.name || (this.files.length ? this.files[0].name : null);
+        },
+
+        async fetch() {
+            if (!this.current) {
+                return;
             }
+
+            this.loading = true;
+
+            const response = (await axios.get(`api/logs/${encodeURIComponent(this.current.name)}?offset=${this.offset}&limit=${this.limit}`)).data;
+
+            this.content = this.content.concat(Array.from(response.content.reverse()));
+            this.loading = false;
+        },
+    },
+
+    watch: {
+        async file() {
+            this.content = [];
+            this.channel = '';
+            this.level = '';
+            this.showContext = {};
+            this.showExtra = {};
+
+            this.limit = 100;
+            this.offset = this.current ? Math.max(this.current.lines - 100, 0) : 0;
+
+            await this.fetch();
         },
 
-        watch: {
-            async file() {
-                this.content = [];
-                this.channel = '';
-                this.level = '';
-                this.showContext = {};
-                this.showExtra = {};
-
-                this.limit = 100;
-                this.offset = this.current ? Math.max(this.current.lines - 100, 0) : 0;
-
-                await this.fetch();
-            },
-
-            async offset () {
-                await this.fetch();
-            }
+        async offset() {
+            await this.fetch();
         },
+    },
 
-        async created() {
-            await this.load();
-        },
-    };
+    async created() {
+        await this.load();
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -389,7 +385,7 @@
                 z-index: 1;
                 font-weight: defaults.$font-weight-bold;
                 background: var(--log-header-bg) !important;
-                color: #FFF;
+                color: #fff;
                 border-top-left-radius: 2px;
                 border-top-right-radius: 2px;
                 border-bottom-color: var(--border);
@@ -424,7 +420,7 @@
             border-bottom: none;
             font-family: defaults.$font-monospace;
             color: #f6f8fa;
-            font-size: .8em;
+            font-size: 0.8em;
             line-height: 1.5;
             white-space: pre-wrap;
 
@@ -482,7 +478,7 @@
         padding: 1px 4px;
         background: var(--border);
         border-radius: var(--border-radius);
-        font-size: .9em;
+        font-size: 0.9em;
         font-weight: defaults.$font-weight-medium;
         text-transform: lowercase;
 

@@ -10,60 +10,60 @@
 
         <div class="feature-package__actions">
             <button class="feature-package__restore" @click="restore" v-if="packageHint && isGranted(scopes.INSTALL)">{{ $t('ui.package.hintRevert') }}</button>
-            <details-button small :name="name"/>
+            <details-button small :name="name" />
             <button :title="$t('ui.package.removeButton')" class="widget-button widget-button--alert widget-button--trash widget-button--small" @click="uninstall" v-if="(isRequired || isRootInstalled) && !willBeRemoved && isGranted(scopes.INSTALL)"></button>
         </div>
     </article>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import scopes from '../../../scopes';
-    import packageStatus from '../../../mixins/packageStatus';
-    import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
+import { mapGetters } from 'vuex';
+import scopes from '../../../scopes';
+import packageStatus from '../../../mixins/packageStatus';
+import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
 
-    export default {
-        mixins: [packageStatus],
-        components: { DetailsButton },
+export default {
+    mixins: [packageStatus],
+    components: { DetailsButton },
 
-        props: {
-            name: String,
-            reason: String,
+    props: {
+        name: String,
+        reason: String,
+    },
+
+    computed: {
+        ...mapGetters('auth', ['isGranted']),
+        scopes: () => scopes,
+
+        data: (vm) => ({ name: vm.name }),
+
+        packageTitle() {
+            if (!this.metadata?.name) {
+                return this.data.name;
+            }
+
+            return this.metadata.title || this.metadata.name;
         },
 
-        computed: {
-            ...mapGetters('auth', ['isGranted']),
-            scopes: () => scopes,
+        packageHint() {
+            if (this.willBeRemoved) {
+                return this.$t('ui.package.hintRemoved');
+            }
 
-            data: vm => ({ name: vm.name, }),
+            if (this.willBeInstalled) {
+                return this.$t('ui.package.hintAdded');
+            }
 
-            packageTitle() {
-                if (!this.metadata?.name) {
-                    return this.data.name;
-                }
-
-                return this.metadata.title || this.metadata.name;
-            },
-
-            packageHint() {
-                if (this.willBeRemoved) {
-                    return this.$t('ui.package.hintRemoved');
-                }
-
-                if (this.willBeInstalled) {
-                    return this.$t('ui.package.hintAdded');
-                }
-
-                return null;
-            },
+            return null;
         },
+    },
 
-        methods: {
-            restore() {
-                this.$store.commit('packages/restore', this.data.name);
-            },
+    methods: {
+        restore() {
+            this.$store.commit('packages/restore', this.data.name);
         },
-    };
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -91,7 +91,7 @@
         -webkit-line-clamp: 1;
         line-clamp: 1;
         -webkit-box-orient: vertical;
-        margin-right: .5em;
+        margin-right: 0.5em;
         padding: 4px 0;
         line-height: 20px;
 

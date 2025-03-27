@@ -33,53 +33,53 @@
 </template>
 
 <script>
-    import ButtonMenu from '../widgets/ButtonMenu';
-    import ConsoleOperation from './ConsoleOperation';
+import ButtonMenu from '../widgets/ButtonMenu';
+import ConsoleOperation from './ConsoleOperation';
 
-    export default {
-        components: { ConsoleOperation, ButtonMenu },
+export default {
+    components: { ConsoleOperation, ButtonMenu },
 
-        props: {
-            title: {
-                type: String,
-                required: true,
-            },
-            description: String,
-            operations: {
-                type: Array,
-                required: true
-            },
-            forceConsole: {
-                type: Boolean,
-                default: false,
-            },
-            consoleOutput: String,
+    props: {
+        title: {
+            type: String,
+            required: true,
         },
-
-        data: () => ({
-            showConsole: false,
-        }),
-
-        methods: {
-            toggleConsole() {
-                this.showConsole = !this.showConsole;
-                window.localStorage.setItem('contao_manager_console', this.showConsole ? '1' : '0');
-            },
-            showLog() {
-                const popup = window.open();
-
-                if (popup) {
-                    popup.document.open();
-                    popup.document.write(`<pre>${this.consoleOutput}</pre>`);
-                    popup.document.close();
-                }
-            },
+        description: String,
+        operations: {
+            type: Array,
+            required: true,
         },
+        forceConsole: {
+            type: Boolean,
+            default: false,
+        },
+        consoleOutput: String,
+    },
 
-        mounted () {
-            this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
-        }
-    }
+    data: () => ({
+        showConsole: false,
+    }),
+
+    methods: {
+        toggleConsole() {
+            this.showConsole = !this.showConsole;
+            window.localStorage.setItem('contao_manager_console', this.showConsole ? '1' : '0');
+        },
+        showLog() {
+            const popup = window.open();
+
+            if (popup) {
+                popup.document.open();
+                popup.document.write(`<pre>${this.consoleOutput}</pre>`);
+                popup.document.close();
+            }
+        },
+    },
+
+    mounted() {
+        this.showConsole = window.localStorage.getItem('contao_manager_console') === '1';
+    },
+};
 </script>
 
 <style lang="scss">
@@ -93,7 +93,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 12px 12px 12px 24px;
-        border-bottom: 1px solid #444D56;
+        border-bottom: 1px solid #444d56;
     }
 
     &__headline {

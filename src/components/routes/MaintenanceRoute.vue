@@ -1,57 +1,55 @@
 <template>
     <main-layout>
-
-        <rebuild-cache/>
-        <database-status/>
-        <maintenance-mode/>
-        <install-tool/>
-        <debug-mode/>
-        <dump-autoload/>
-        <composer-install/>
-        <composer-cache/>
-        <opcode-cache/>
-
+        <rebuild-cache />
+        <database-status />
+        <maintenance-mode />
+        <install-tool />
+        <debug-mode />
+        <dump-autoload />
+        <composer-install />
+        <composer-cache />
+        <opcode-cache />
     </main-layout>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import scopes from '../../scopes';
-    import MainLayout from '../layouts/MainLayout';
-    import DatabaseStatus from './maintenance/DatabaseStatus';
-    import RebuildCache from './maintenance/RebuildCache';
-    import InstallTool from './maintenance/InstallTool';
-    import DebugMode from './maintenance/DebugMode';
-    import DumpAutoload from './maintenance/DumpAutoload';
-    import ComposerInstall from './maintenance/ComposerInstall';
-    import ComposerCache from './maintenance/ComposerCache';
-    import OpcodeCache from './maintenance/OpcodeCache';
-    import MaintenanceMode from './maintenance/MaintenanceMode';
+import { mapGetters } from 'vuex';
+import scopes from '../../scopes';
+import MainLayout from '../layouts/MainLayout';
+import DatabaseStatus from './maintenance/DatabaseStatus';
+import RebuildCache from './maintenance/RebuildCache';
+import InstallTool from './maintenance/InstallTool';
+import DebugMode from './maintenance/DebugMode';
+import DumpAutoload from './maintenance/DumpAutoload';
+import ComposerInstall from './maintenance/ComposerInstall';
+import ComposerCache from './maintenance/ComposerCache';
+import OpcodeCache from './maintenance/OpcodeCache';
+import MaintenanceMode from './maintenance/MaintenanceMode';
 
-    export default {
-        components: {
-            MainLayout,
-            DatabaseStatus,
-            RebuildCache,
-            InstallTool,
-            MaintenanceMode,
-            DebugMode,
-            DumpAutoload,
-            ComposerInstall,
-            ComposerCache,
-            OpcodeCache,
-        },
+export default {
+    components: {
+        MainLayout,
+        DatabaseStatus,
+        RebuildCache,
+        InstallTool,
+        MaintenanceMode,
+        DebugMode,
+        DumpAutoload,
+        ComposerInstall,
+        ComposerCache,
+        OpcodeCache,
+    },
 
-        computed: {
-            ...mapGetters('auth', ['isGranted']),
-        },
+    computed: {
+        ...mapGetters('auth', ['isGranted']),
+    },
 
-        mounted () {
-            if (!this.isGranted(scopes.UPDATE)) {
-                this.$router.push('/');
-            }
-        },
-    };
+    mounted() {
+        if (!this.isGranted(scopes.UPDATE)) {
+            this.$router.push('/');
+        }
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -101,7 +99,7 @@
             margin-bottom: 5px;
             display: flex;
             flex-wrap: wrap;
-            column-gap: .5em;
+            column-gap: 0.5em;
             align-items: baseline;
         }
 

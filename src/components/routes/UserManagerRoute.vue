@@ -1,6 +1,5 @@
 <template>
     <main-layout class="user-manager">
-
         <loading-spinner class="user-manager__loading" v-if="users === null">
             <p>{{ $t('ui.user-manager.loading') }}</p>
         </loading-spinner>
@@ -15,7 +14,7 @@
                         <div class="user-manager__ribbon user-manager__ribbon--hint user-manager__ribbon--primary" :title="$t('ui.user-manager.2faEnabled')" v-else-if="user.totp_enabled">{{ $t('ui.user-manager.2fa') }}</div>
                         <div class="user-manager__ribbon user-manager__ribbon--hint user-manager__ribbon--warning" :title="$t('ui.user-manager.2faDisabled')" v-else>{{ $t('ui.user-manager.2fa') }}</div>
                         <div class="user-manager__username">{{ user.username }}</div>
-                        <user-scope readonly label="Permissions" :model-value="user.scope" class="user-manager__scope"/>
+                        <user-scope readonly label="Permissions" :model-value="user.scope" class="user-manager__scope" />
                         <div class="user-manager__spacer"></div>
 
                         <button class="widget-button" @click="changePassword" v-if="currentUser === user.username && !hasPasskey">{{ $t('ui.user-manager.changePassword') }}</button>
@@ -30,7 +29,6 @@
                 <button class="widget-button widget-button--inline widget-button--add" @click="addUser" v-if="isGranted(scopes.ADMIN)">{{ $t('ui.user-manager.invite') }}</button>
             </div>
         </div>
-
     </main-layout>
 </template>
 
@@ -59,11 +57,11 @@ export default {
     },
 
     methods: {
-        load () {
+        load() {
             this.$request.get('api/users', null, {
                 200: (response) => {
-                    this.users = response.data
-                }
+                    this.users = response.data;
+                },
             });
         },
 
@@ -85,14 +83,14 @@ export default {
 
         async deleteUser(username) {
             if (confirm(this.$t('ui.user-manager.deleteConfirm', { username }))) {
-                await this.$request.delete(`api/users/${ username }`);
+                await this.$request.delete(`api/users/${username}`);
                 this.$notify.success(this.$t('ui.user-manager.deleted'));
                 this.load();
             }
-        }
+        },
     },
 
-    async mounted () {
+    async mounted() {
         this.load();
     },
 };

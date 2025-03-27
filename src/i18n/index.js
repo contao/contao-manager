@@ -1,11 +1,12 @@
-import { createI18n } from 'vue-i18n'
+import { createI18n } from 'vue-i18n';
 import store from '../store';
-import { setLocale as setDatimLocale } from 'contao-package-list/src/filters/datimFormat'
+import { setLocale as setDatimLocale } from 'contao-package-list/src/filters/datimFormat';
 
 const merge = async (...files) => {
-    let data = {}, i;
+    let data = {},
+        i;
 
-    for(i = 0; i < files.length; i++) {
+    for (i = 0; i < files.length; i++) {
         data = Object.assign(data, (await files[i]).default);
     }
 

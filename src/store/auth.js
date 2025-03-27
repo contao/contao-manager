@@ -4,7 +4,7 @@ import axios from 'axios';
 import request from '../tools/request';
 import scopes from '../scopes';
 import views from '../router/views';
-import LogoutWarning from "../components/fragments/LogoutWarning";
+import LogoutWarning from '../components/fragments/LogoutWarning';
 
 let timer;
 let countdown;
@@ -14,7 +14,7 @@ let $store;
 const startCountdown = function () {
     clearTimeout(timer);
 
-    expires = (Date.now() + 30 * 60 * 1000);
+    expires = Date.now() + 30 * 60 * 1000;
     countdown = 30 * 60;
 
     timer = setInterval(runCountdown, 1000);
@@ -38,7 +38,7 @@ const runCountdown = function () {
         countdown = Math.floor(Math.max(expires - Date.now(), 0) / 1000);
     }
 
-    if (countdown <= (5 * 60)) {
+    if (countdown <= 5 * 60) {
         $store.commit('modals/open', { id: 'logout-warning', component: LogoutWarning, priority: 255 }, { root: true });
     }
 
@@ -63,11 +63,11 @@ export default {
     },
 
     getters: {
-        isGranted: state => scope => {
+        isGranted: (state) => (scope) => {
             const all = Object.values(scopes);
 
             return state.scope && all.indexOf(state.scope) <= all.indexOf(scope);
-        }
+        },
     },
 
     mutations: {
@@ -100,7 +100,8 @@ export default {
         status(store) {
             $store = store;
 
-            return axios.get('api/session')
+            return axios
+                .get('api/session')
                 .then((response) => {
                     if (response.data.username) {
                         store.commit('setUser', response.data);
@@ -149,18 +150,21 @@ export default {
         },
 
         logout({ commit }) {
-            return axios.delete('api/session').then(
-                () => true,
-                response => (response.status === 401),
-            ).then((result) => {
-                if (result) {
-                    commit('setUser', null);
-                    commit('setView', views.LOGIN, { root: true });
-                    stopCountdown();
-                }
+            return axios
+                .delete('api/session')
+                .then(
+                    () => true,
+                    (response) => response.status === 401,
+                )
+                .then((result) => {
+                    if (result) {
+                        commit('setUser', null);
+                        commit('setView', views.LOGIN, { root: true });
+                        stopCountdown();
+                    }
 
-                return result;
-            });
+                    return result;
+                });
         },
     },
 };

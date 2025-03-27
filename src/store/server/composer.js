@@ -23,14 +23,14 @@ export default {
                 });
             }
 
-            return axios.get('api/server/composer').then(
-                response => response.data,
-            ).then((result) => {
-                commit('setCache', result);
+            return axios
+                .get('api/server/composer')
+                .then((response) => response.data)
+                .then((result) => {
+                    commit('setCache', result);
 
-                return result;
-            });
+                    return result;
+                });
         },
-
     },
 };

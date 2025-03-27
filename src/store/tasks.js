@@ -12,8 +12,8 @@ const pollTask = (store, resolve, reject, delay = 5000, attempt = 1) => {
     setTimeout(() => {
         axios
             .get('api/task', { timeout: 5000 * attempt })
-            .then(response => handleTask(response, store, resolve, reject))
-            .catch(error => failTask(error, store, resolve, reject));
+            .then((response) => handleTask(response, store, resolve, reject))
+            .catch((error) => failTask(error, store, resolve, reject));
     }, delay);
 };
 
@@ -27,7 +27,7 @@ handleTask = (response, store, resolve, reject) => {
 
     if (!(response.data instanceof Object)) {
         if (!ignoreErrors) {
-            store.commit('apiError', response, {root: true});
+            store.commit('apiError', response, { root: true });
         }
         reject();
         return;
@@ -133,7 +133,7 @@ export default {
                 queue = null;
             };
 
-            pollTask(store, init, init)
+            pollTask(store, init, init);
 
             return queue.promise;
         },
@@ -165,9 +165,10 @@ export default {
             store.commit('setCurrent', task);
             store.commit('setStatus', 'created');
 
-            axios.put('api/task', task)
-                .then(response => handleTask(response, store, queue.resolve, queue.reject))
-                .catch(error => failTask(error, store, queue.resolve, queue.reject));
+            axios
+                .put('api/task', task)
+                .then((response) => handleTask(response, store, queue.resolve, queue.reject))
+                .catch((error) => failTask(error, store, queue.resolve, queue.reject));
 
             return queue.promise;
         },
@@ -183,9 +184,10 @@ export default {
                 queue = Promise.withResolvers();
             }
 
-            axios.patch('api/task', {status: 'aborting'})
-                .then(response => handleTask(response, store, queue.resolve, queue.reject))
-                .catch(error => failTask(error, store, queue.resolve, queue.reject));
+            axios
+                .patch('api/task', { status: 'aborting' })
+                .then((response) => handleTask(response, store, queue.resolve, queue.reject))
+                .catch((error) => failTask(error, store, queue.resolve, queue.reject));
 
             return queue.promise;
         },
@@ -197,9 +199,10 @@ export default {
 
             store.commit('setStatus', 'active');
 
-            axios.patch('api/task', {status: 'active'})
-                .then(response => handleTask(response, store, queue.resolve, queue.reject))
-                .catch(error => failTask(error, store, queue.resolve, queue.reject));
+            axios
+                .patch('api/task', { status: 'active' })
+                .then((response) => handleTask(response, store, queue.resolve, queue.reject))
+                .catch((error) => failTask(error, store, queue.resolve, queue.reject));
         },
 
         async deleteCurrent({ commit, dispatch }, retry = 2) {
@@ -232,11 +235,15 @@ export default {
                 if (response.headers.get('Content-Type') === 'application/problem+json') {
                     commit('setError', response.data, { root: true });
                 } else {
-                    commit('setError', {
-                        type: 'about:blank',
-                        status: response.status,
-                        response,
-                    }, { root: true });
+                    commit(
+                        'setError',
+                        {
+                            type: 'about:blank',
+                            status: response.status,
+                            response,
+                        },
+                        { root: true },
+                    );
                 }
 
                 throw response;

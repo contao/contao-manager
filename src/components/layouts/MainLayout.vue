@@ -1,28 +1,28 @@
 <template>
     <div class="layout-main">
         <header class="layout-main__header" :class="{ 'layout-main__header--margin': !$slots.search, 'layout-main__has-badge-title': badgeTitle }">
-            <div class="layout-main__logo"><img src="../../assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />
+            <div class="layout-main__logo">
+                <img src="../../assets/images/logo.svg" width="40" height="40" alt="Contao Logo" />
                 <span class="layout-main__title">
                     <span class="layout-main__manager-title">Contao Manager</span>
                     <span v-if="badgeTitle" class="layout-main__badge-title">{{ badgeTitle }}</span>
                 </span>
             </div>
-            <navigation-fragment/>
+            <navigation-fragment />
         </header>
 
         <div class="layout-main__subheader" v-if="$slots.search">
             <div class="layout-main__subheader-inside">
-
                 <div class="layout-main__news" v-if="currentNews">
-                    <a :href="currentNews.url" :title="currentNews.title" target="_blank" rel="noreferrer noopener"><img :src="currentNews.image" width="320" height="50" :alt="currentNews.title"></a>
+                    <a :href="currentNews.url" :title="currentNews.title" target="_blank" rel="noreferrer noopener"><img :src="currentNews.image" width="320" height="50" :alt="currentNews.title" /></a>
                 </div>
 
-                <slot name="search"/>
+                <slot name="search" />
             </div>
         </div>
 
         <main class="layout-main__content">
-            <slot/>
+            <slot />
         </main>
 
         <footer-fragment display="main"></footer-fragment>
@@ -30,36 +30,35 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
-    import NavigationFragment from '../fragments/NavigationFragment';
-    import FooterFragment from '../fragments/FooterFragment';
+import NavigationFragment from '../fragments/NavigationFragment';
+import FooterFragment from '../fragments/FooterFragment';
 
-    export default {
-        components: { NavigationFragment, FooterFragment },
+export default {
+    components: { NavigationFragment, FooterFragment },
 
-        computed: {
-            ...mapState('algolia', ['news']),
-            ...mapGetters('server/contao', ['badgeTitle']),
+    computed: {
+        ...mapState('algolia', ['news']),
+        ...mapGetters('server/contao', ['badgeTitle']),
 
-            currentNews: vm => vm.news.length ? vm.news[0] : null,
-        },
+        currentNews: (vm) => (vm.news.length ? vm.news[0] : null),
+    },
 
-        mounted () {
-            // Fetch the Contao config for the badge title.
-            // This is most likely already done by the boot process.
-            this.$store.dispatch('server/contao/get');
-        }
-    };
+    mounted() {
+        // Fetch the Contao config for the badge title.
+        // This is most likely already done by the boot process.
+        this.$store.dispatch('server/contao/get');
+    },
+};
 </script>
-
 
 <style rel="stylesheet/scss" lang="scss">
 @use "~contao-package-list/src/assets/styles/defaults";
 
 .layout-main {
     overflow: hidden;
-    min-height:100vh;
+    min-height: 100vh;
 
     &__header {
         display: flex;
@@ -80,7 +79,7 @@
         position: relative;
         top: -5px;
         border-radius: 8px;
-        font-size: .75rem;
+        font-size: 0.75rem;
         font-weight: 600;
         line-height: 1;
         display: -webkit-box;
@@ -111,7 +110,8 @@
         height: 50px;
         margin-bottom: 20px;
 
-        a, img {
+        a,
+        img {
             display: block;
         }
     }

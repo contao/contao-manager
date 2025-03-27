@@ -1,6 +1,5 @@
 <template>
-    <article class="package" :class="(hint || !slotEmpty($slots.hint)) ? 'is--hint' : ''">
-
+    <article class="package" :class="hint || !slotEmpty($slots.hint) ? 'is--hint' : ''">
         <div class="package__hint" v-if="hint || !slotEmpty($slots.hint)">
             <slot name="hint">
                 <a href="#" class="package__hint-close" @click.prevent="$emit('close-hint')" v-if="hintClose">{{ hintClose }}</a>
@@ -9,10 +8,9 @@
         </div>
 
         <div class="package__inside">
-            <package-logo class="package__icon" :src="logo"/>
+            <package-logo class="package__icon" :src="logo" />
 
             <div class="package__details">
-
                 <div class="package__about">
                     <h1 :class="{ package__headline: true, 'package__headline--badge': badge }">
                         <span class="package__badge" :title="badge.title" v-if="badge">{{ badge.text }}</span>
@@ -21,7 +19,7 @@
 
                     <p class="package__description">{{ description }}</p>
                     <p class="package__additional">
-                        <slot name="additional"/>
+                        <slot name="additional" />
                     </p>
                 </div>
 
@@ -36,35 +34,33 @@
                         <div></div>
                     </slot>
                 </fieldset>
-
             </div>
-
         </div>
 
-        <slot name="features"/>
+        <slot name="features" />
     </article>
 </template>
 
 <script>
-    import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
-    import PackageLogo from 'contao-package-list/src/components/fragments/PackageLogo';
+import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
+import PackageLogo from 'contao-package-list/src/components/fragments/PackageLogo';
 
-    export default {
-        components: { PackageLogo },
+export default {
+    components: { PackageLogo },
 
-        props: {
-            title: String,
-            logo: String,
-            badge: Object,
-            description: String,
-            hint: String,
-            hintClose: String,
-        },
+    props: {
+        title: String,
+        logo: String,
+        badge: Object,
+        description: String,
+        hint: String,
+        hintClose: String,
+    },
 
-        methods: {
-            slotEmpty,
-        }
-    };
+    methods: {
+        slotEmpty,
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -84,7 +80,6 @@ $package-padding: 16px;
     }
 
     &--contao {
-
         &:not(:last-child) {
             margin-bottom: 5em;
         }
@@ -136,7 +131,7 @@ $package-padding: 16px;
 
     &__badge {
         display: inline-block;
-        margin-bottom: .5em;
+        margin-bottom: 0.5em;
         padding: 2px 5px;
         color: #fff;
         font-size: 12px;
@@ -186,7 +181,7 @@ $package-padding: 16px;
 
     &__headline {
         position: relative;
-        margin-bottom: .2em;
+        margin-bottom: 0.2em;
         line-height: 1;
         overflow-wrap: break-word;
         margin-right: 70px;
@@ -296,7 +291,6 @@ $package-padding: 16px;
 
 @include defaults.screen(600) {
     .package {
-
         &__title,
         &__description {
             margin-right: 0;
@@ -376,7 +370,6 @@ $package-padding: 16px;
 
 @include defaults.screen(680) {
     .package {
-
         .package__release {
             display: block;
             float: left;
@@ -399,7 +392,6 @@ $package-padding: 16px;
 
 @include defaults.screen(1024) {
     .package {
-
         &__version {
             &--additional {
                 display: none;

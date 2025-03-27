@@ -1,7 +1,7 @@
 <template>
     <boxed-layout :wide="true" slotClass="database-migration">
         <header class="database-migration__header">
-            <img src="../../assets/images/database.svg" width="80" height="80" alt="" class="database-migration__icon">
+            <img src="../../assets/images/database.svg" width="80" height="80" alt="" class="database-migration__icon" />
             <h1 class="database-migration__headline">{{ $t('ui.migrate.headline') }}</h1>
             <p class="database-migration__text" v-if="type === 'migrations-only'">{{ $t('ui.migrate.migrationsOnly') }}</p>
             <p class="database-migration__text" v-if="type === 'schema-only'">{{ $t('ui.migrate.schemaOnly') }}</p>
@@ -9,7 +9,7 @@
             <template v-if="checking">
                 <p class="database-migration__description">{{ $t('ui.migrate.loading') }}</p>
                 <div class="database-migration__loading">
-                    <loading-spinner/>
+                    <loading-spinner />
                 </div>
             </template>
 
@@ -24,7 +24,7 @@
             </template>
 
             <template v-else-if="!executing && (isComplete || hasError || hasProblem)">
-                <p class="database-migration__description" v-for="(line,i) in description.split('\n')" :key="i">{{ line }}</p>
+                <p class="database-migration__description" v-for="(line, i) in description.split('\n')" :key="i">{{ line }}</p>
                 <div class="database-migration__actions">
                     <template v-if="type === 'problem'">
                         <loading-button :loading="closing" @click="close">{{ $t('ui.migrate.cancel') }}</loading-button>
@@ -53,10 +53,9 @@
                     <loading-button class="database-migration__action" color="primary" :loading="executing" :disabled="closing" @click="execute">{{ $t('ui.migrate.execute') }}</loading-button>
                 </div>
                 <div class="database-migration__actions" v-if="hasDeletes">
-                    <check-box name="withDeletes" :label="$t('ui.migrate.withDeletes')" :disabled="executing" v-model="withDeletes"/>
+                    <check-box name="withDeletes" :label="$t('ui.migrate.withDeletes')" :disabled="executing" v-model="withDeletes" />
                 </div>
             </template>
-
         </header>
 
         <console-output
@@ -82,368 +81,367 @@ import ConsoleOutput from '../fragments/ConsoleOutput';
 import CheckBox from '../widgets/CheckBox';
 
 export default {
-        components: { BoxedLayout, LoadingSpinner, LoadingButton, ConsoleOutput, CheckBox },
+    components: { BoxedLayout, LoadingSpinner, LoadingButton, ConsoleOutput, CheckBox },
 
-        data: () => ({
-            type: null,
-            status: '',
-            changes: null,
-            hasDeletes: false,
-            operations: null,
-            hash: null,
-            withDeletes: false,
+    data: () => ({
+        type: null,
+        status: '',
+        changes: null,
+        hasDeletes: false,
+        operations: null,
+        hash: null,
+        withDeletes: false,
 
-            previousResult: true,
-            checking: true,
-            executing: false,
-            closing: false,
-        }),
+        previousResult: true,
+        checking: true,
+        executing: false,
+        closing: false,
+    }),
 
-        computed: {
-            ...mapState('server/database', ['supported']),
-            ...mapState(['setupStep']),
-            ...mapGetters('server/database', ['hasChanges']),
+    computed: {
+        ...mapState('server/database', ['supported']),
+        ...mapState(['setupStep']),
+        ...mapGetters('server/database', ['hasChanges']),
 
-            isEmpty: vm => vm.status !== 'active' && vm.operations && !vm.operations.length,
-            isComplete: vm => vm.status === 'complete',
-            hasError: vm => vm.status === 'error',
-            hasProblem: vm => vm.type === 'problem' || vm.type === 'warning',
+        isEmpty: (vm) => vm.status !== 'active' && vm.operations && !vm.operations.length,
+        isComplete: (vm) => vm.status === 'complete',
+        hasError: (vm) => vm.status === 'error',
+        hasProblem: (vm) => vm.type === 'problem' || vm.type === 'warning',
 
-            description () {
-                if (this.type === 'problem') {
-                    return this.$tc('ui.migrate.problem', this.operations?.length || 0);
-                }
+        description() {
+            if (this.type === 'problem') {
+                return this.$tc('ui.migrate.problem', this.operations?.length || 0);
+            }
 
-                if (this.type === 'warning') {
-                    return this.$t('ui.migrate.warning');
-                }
+            if (this.type === 'warning') {
+                return this.$t('ui.migrate.warning');
+            }
 
+            if (this.previousResult && this.hasChanges) {
+                return this.$t('ui.migrate.previousChanges');
+            }
 
-                if (this.previousResult && this.hasChanges) {
-                    return this.$t('ui.migrate.previousChanges');
-                }
+            if (this.previousResult) {
+                return this.$t('ui.migrate.previousComplete');
+            }
 
-                if (this.previousResult) {
-                    return this.$t('ui.migrate.previousComplete');
-                }
+            if (this.isComplete && this.hasChanges) {
+                return this.$t('ui.migrate.appliedChanges');
+            }
 
-                if (this.isComplete && this.hasChanges) {
-                    return this.$t('ui.migrate.appliedChanges');
-                }
+            if (this.isComplete) {
+                return this.$t('ui.migrate.appliedComplete');
+            }
 
-                if (this.isComplete) {
-                    return this.$t('ui.migrate.appliedComplete');
-                }
-
-                return this.$t('ui.migrate.error');
-            },
-
-            consoleTitle () {
-                switch (this.type) {
-                    case 'migrations':
-                    case 'migrations-only':
-                        return this.$t('ui.migrate.migrationTitle');
-
-                    case 'schema':
-                    case 'schema-only':
-                        return this.$t('ui.migrate.schemaTitle');
-
-                    case 'problem':
-                        return this.$t('ui.migrate.problemTitle');
-
-                    case 'warning':
-                        return this.$t('ui.migrate.warningTitle');
-                }
-
-                return '';
-            },
-
-            console () {
-                if (!this.changes || !this.changes.length) {
-                    return '';
-                }
-
-                let console = ''
-                this.changes.forEach((change) => {
-                    console += `${change.name}\n`;
-                });
-
-                return console;
-            },
+            return this.$t('ui.migrate.error');
         },
 
-        methods: {
-            async poll (response) {
-                if (response.status === 201) {
-                    return new Promise((resolve) => {
-                        setTimeout(async () => {
-                            await this.poll(await axios.get('api/contao/database-migration'));
-                            resolve();
-                        }, 1000);
-                    });
-                }
+        consoleTitle() {
+            switch (this.type) {
+                case 'migrations':
+                case 'migrations-only':
+                    return this.$t('ui.migrate.migrationTitle');
 
-                const data = response.data
+                case 'schema':
+                case 'schema-only':
+                    return this.$t('ui.migrate.schemaTitle');
 
-                if (!this.changes || data.status) {
-                    this.type = data.type;
-                    this.status = data.status;
-                    this.hash = data.hash;
-                    this.changes = data.operations;
-                }
+                case 'problem':
+                    return this.$t('ui.migrate.problemTitle');
 
-                if (!data.status || data.status === 'active') {
-                    return new Promise((resolve) => {
-                        setTimeout(async () => {
-                            await this.poll(await axios.get('api/contao/database-migration'));
-                            resolve();
-                        }, 1000);
-                    })
-                }
-            },
+                case 'warning':
+                    return this.$t('ui.migrate.warningTitle');
+            }
 
-            async execute () {
-                this.executing = true;
+            return '';
+        },
 
-                await axios.put('api/contao/database-migration', {
-                    type: this.type,
-                    hash: this.hash,
-                    withDeletes: this.withDeletes && this.hasDeletes,
+        console() {
+            if (!this.changes || !this.changes.length) {
+                return '';
+            }
+
+            let console = '';
+            this.changes.forEach((change) => {
+                console += `${change.name}\n`;
+            });
+
+            return console;
+        },
+    },
+
+    methods: {
+        async poll(response) {
+            if (response.status === 201) {
+                return new Promise((resolve) => {
+                    setTimeout(async () => {
+                        await this.poll(await axios.get('api/contao/database-migration'));
+                        resolve();
+                    }, 1000);
                 });
+            }
 
-                setTimeout(async () => {
-                    await this.poll(await axios.get('api/contao/database-migration'));
-                    await this.$store.dispatch('server/database/get', false);
-                    this.executing = false;
-                }, 1000);
-            },
+            const data = response.data;
 
-            async check (skipWarnings = false) {
-                this.checking = true;
-                const type = this.type || this.$store.state.migrationsType;
+            if (!this.changes || data.status) {
+                this.type = data.type;
+                this.status = data.status;
+                this.hash = data.hash;
+                this.changes = data.operations;
+            }
 
-                if (this.status) {
-                    this.type = null;
-                    this.status = '';
-                    this.changes = null;
-                    this.hash = null;
+            if (!data.status || data.status === 'active') {
+                return new Promise((resolve) => {
+                    setTimeout(async () => {
+                        await this.poll(await axios.get('api/contao/database-migration'));
+                        resolve();
+                    }, 1000);
+                });
+            }
+        },
 
-                    await axios.delete('api/contao/database-migration')
-                }
+        async execute() {
+            this.executing = true;
 
-                let response = await axios.get('api/contao/database-migration');
+            await axios.put('api/contao/database-migration', {
+                type: this.type,
+                hash: this.hash,
+                withDeletes: this.withDeletes && this.hasDeletes,
+            });
 
-                if (response.status === 204) {
-                    this.previousResult = false;
-                    response = await axios.put('api/contao/database-migration', { type, skipWarnings });
-                }
-
-                await this.poll(response)
-                await axios.delete('api/contao/database-migration')
-
-                this.checking = false;
-            },
-
-            checkAll (skipWarnings = false) {
-                this.type = null;
-                this.check(skipWarnings);
-            },
-
-            generateStatus (label, strike) {
-                return strike ? `~${label}~` : label;
-            },
-
-            async close () {
-                this.closing = true;
-                await axios.delete('api/contao/database-migration');
+            setTimeout(async () => {
+                await this.poll(await axios.get('api/contao/database-migration'));
                 await this.$store.dispatch('server/database/get', false);
+                this.executing = false;
+            }, 1000);
+        },
 
-                if (this.setupStep > 0) {
-                    await this.$store.dispatch('server/adminUser/get', false);
-                    this.$store.commit('setView', views.SETUP);
-                } else {
-                    this.$store.commit('setView', views.READY);
-                }
+        async check(skipWarnings = false) {
+            this.checking = true;
+            const type = this.type || this.$store.state.migrationsType;
 
-                this.closing = false;
-            },
+            if (this.status) {
+                this.type = null;
+                this.status = '';
+                this.changes = null;
+                this.hash = null;
 
-            async setup () {
-                this.$store.commit('setup', 3);
-            },
+                await axios.delete('api/contao/database-migration');
+            }
 
-            updateOperations () {
-                this.hasDeletes = false;
-                this.operations = null;
+            let response = await axios.get('api/contao/database-migration');
 
-                if (!this.changes) {
-                    return;
-                }
+            if (response.status === 204) {
+                this.previousResult = false;
+                response = await axios.put('api/contao/database-migration', { type, skipWarnings });
+            }
 
-                if (this.hasProblem) {
-                    this.operations = this.changes.map(change => ({
-                        status: change.status,
-                        summary: change.name,
-                        details: change.message,
-                        console: change.trace,
-                    }));
-                    return;
-                }
+            await this.poll(response);
+            await axios.delete('api/contao/database-migration');
 
-                if (this.type === 'migrations' || this.type === 'migrations-only') {
-                    this.operations = this.changes.map(change => ({
-                        status: change.status,
-                        summary: change.name,
-                        details: change.message,
-                    }));
-                    return;
-                }
+            this.checking = false;
+        },
 
-                const operations = [];
-                this.changes.forEach((change) => {
-                    let result;
+        checkAll(skipWarnings = false) {
+            this.type = null;
+            this.check(skipWarnings);
+        },
 
-                    result = new RegExp('^CREATE TABLE ([^ ]+) .+$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.addTable', { table: result[1] }),
-                            details: change.message,
-                            console: change.name,
-                        });
-                        return;
-                    }
+        generateStatus(label, strike) {
+            return strike ? `~${label}~` : label;
+        },
 
-                    result = new RegExp('^DROP TABLE (.+)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: this.withDeletes ? change.status : 'skipped',
-                            summary: this.generateStatus(this.$t('ui.migrate.dropTable', { table: result[1] }), !this.withDeletes),
-                            details: change.message,
-                            console: change.name,
-                        });
-                        this.hasDeletes = true;
-                        return;
-                    }
+        async close() {
+            this.closing = true;
+            await axios.delete('api/contao/database-migration');
+            await this.$store.dispatch('server/database/get', false);
 
-                    result = new RegExp('^CREATE INDEX ([^ ]+) ON ([^ ]+) \\(([^)]+)\\)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: change.status,
-                            summary: this.$t('ui.migrate.createIndex', { name: result[1], table: result[2] }),
-                            details: change.message || result[3],
-                            console: change.name,
-                        });
-                        return;
-                    }
+            if (this.setupStep > 0) {
+                await this.$store.dispatch('server/adminUser/get', false);
+                this.$store.commit('setView', views.SETUP);
+            } else {
+                this.$store.commit('setView', views.READY);
+            }
 
-                    result = new RegExp('^DROP INDEX ([^ ]+) ON ([^ ]+)$').exec(change.name);
-                    if (result) {
-                        operations.push({
-                            status: this.withDeletes ? change.status : 'skipped',
-                            summary: this.generateStatus(this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }), !this.withDeletes),
-                            details: change.message,
-                            console: change.name,
-                        });
-                        this.hasDeletes = true;
-                        return;
-                    }
+            this.closing = false;
+        },
 
-                    result = new RegExp('^ALTER TABLE ([^ ]+) (.+)$').exec(change.name);
-                    if (result) {
-                        const table = result[1];
-                        const operation = {
-                            status: change.status,
-                            summary: [],
-                            details: [],
-                            console: change.name,
-                        };
+        async setup() {
+            this.$store.commit('setup', 3);
+        },
 
-                        if (change.message) {
-                            operation.details.push(change.message);
-                        }
+        updateOperations() {
+            this.hasDeletes = false;
+            this.operations = null;
 
-                        let stm = '';
-                        result[2].split("'").forEach((ex, i) => {
-                            if (i % 2) {
-                                stm = `${stm}'${ex.replace(',', '%comma%')}'`;
-                            } else {
-                                stm = `${stm}${ex}`;
-                            }
-                        });
+            if (!this.changes) {
+                return;
+            }
 
-                        const ops = stm.split(',').map(p => p.trim().replace('%comma%', ','))
-                        let deleteOps = 0;
-                        ops.forEach((part) => {
-                            let alter;
-                            alter = new RegExp('^ADD ([^ ]+) (.+)$').exec(part);
-                            if (alter) {
-                                operation.summary.push(this.$t('ui.migrate.addField', { table, field: alter[1] }));
-                                if (!change.message) {
-                                    operation.details.push(alter[2]);
-                                }
-                                return;
-                            }
+            if (this.hasProblem) {
+                this.operations = this.changes.map((change) => ({
+                    status: change.status,
+                    summary: change.name,
+                    details: change.message,
+                    console: change.trace,
+                }));
+                return;
+            }
 
-                            alter = new RegExp('^CHANGE ([^ ]+) ([^ ]+) (.+)$').exec(part);
-                            if (alter) {
-                                operation.summary.push(this.$t('ui.migrate.changeField', { table, field: alter[1] }));
-                                if (!change.message) {
-                                    operation.details.push(alter[3]);
-                                }
-                                return;
-                            }
+            if (this.type === 'migrations' || this.type === 'migrations-only') {
+                this.operations = this.changes.map((change) => ({
+                    status: change.status,
+                    summary: change.name,
+                    details: change.message,
+                }));
+                return;
+            }
 
-                            alter = new RegExp('^DROP (.+)$').exec(part);
-                            if (alter) {
-                                operation.summary.push(this.generateStatus(this.$t('ui.migrate.dropField', { table, field: alter[1] }), !this.withDeletes));
-                                operation.details.push('');
-                                this.hasDeletes = true;
-                                deleteOps++;
-                                return;
-                            }
+            const operations = [];
+            this.changes.forEach((change) => {
+                let result;
 
-                            operation.summary.push(`ALTER TABLE ${table} ${part}`);
-                            operation.details.push('');
-                        })
-
-                        if (deleteOps === ops.length) {
-                            operation.status = this.withDeletes ? change.status : 'skipped'
-                        }
-
-                        operations.push(operation);
-                        return;
-                    }
-
+                result = new RegExp('^CREATE TABLE ([^ ]+) .+$').exec(change.name);
+                if (result) {
                     operations.push({
                         status: change.status,
-                        summary: change.name,
+                        summary: this.$t('ui.migrate.addTable', { table: result[1] }),
                         details: change.message,
                         console: change.name,
                     });
+                    return;
+                }
 
-                    // Unknown operation, assume it could be a DROP
+                result = new RegExp('^DROP TABLE (.+)$').exec(change.name);
+                if (result) {
+                    operations.push({
+                        status: this.withDeletes ? change.status : 'skipped',
+                        summary: this.generateStatus(this.$t('ui.migrate.dropTable', { table: result[1] }), !this.withDeletes),
+                        details: change.message,
+                        console: change.name,
+                    });
                     this.hasDeletes = true;
-                })
+                    return;
+                }
 
-                this.operations = operations;
-            },
+                result = new RegExp('^CREATE INDEX ([^ ]+) ON ([^ ]+) \\(([^)]+)\\)$').exec(change.name);
+                if (result) {
+                    operations.push({
+                        status: change.status,
+                        summary: this.$t('ui.migrate.createIndex', { name: result[1], table: result[2] }),
+                        details: change.message || result[3],
+                        console: change.name,
+                    });
+                    return;
+                }
+
+                result = new RegExp('^DROP INDEX ([^ ]+) ON ([^ ]+)$').exec(change.name);
+                if (result) {
+                    operations.push({
+                        status: this.withDeletes ? change.status : 'skipped',
+                        summary: this.generateStatus(this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }), !this.withDeletes),
+                        details: change.message,
+                        console: change.name,
+                    });
+                    this.hasDeletes = true;
+                    return;
+                }
+
+                result = new RegExp('^ALTER TABLE ([^ ]+) (.+)$').exec(change.name);
+                if (result) {
+                    const table = result[1];
+                    const operation = {
+                        status: change.status,
+                        summary: [],
+                        details: [],
+                        console: change.name,
+                    };
+
+                    if (change.message) {
+                        operation.details.push(change.message);
+                    }
+
+                    let stm = '';
+                    result[2].split("'").forEach((ex, i) => {
+                        if (i % 2) {
+                            stm = `${stm}'${ex.replace(',', '%comma%')}'`;
+                        } else {
+                            stm = `${stm}${ex}`;
+                        }
+                    });
+
+                    const ops = stm.split(',').map((p) => p.trim().replace('%comma%', ','));
+                    let deleteOps = 0;
+                    ops.forEach((part) => {
+                        let alter;
+                        alter = new RegExp('^ADD ([^ ]+) (.+)$').exec(part);
+                        if (alter) {
+                            operation.summary.push(this.$t('ui.migrate.addField', { table, field: alter[1] }));
+                            if (!change.message) {
+                                operation.details.push(alter[2]);
+                            }
+                            return;
+                        }
+
+                        alter = new RegExp('^CHANGE ([^ ]+) ([^ ]+) (.+)$').exec(part);
+                        if (alter) {
+                            operation.summary.push(this.$t('ui.migrate.changeField', { table, field: alter[1] }));
+                            if (!change.message) {
+                                operation.details.push(alter[3]);
+                            }
+                            return;
+                        }
+
+                        alter = new RegExp('^DROP (.+)$').exec(part);
+                        if (alter) {
+                            operation.summary.push(this.generateStatus(this.$t('ui.migrate.dropField', { table, field: alter[1] }), !this.withDeletes));
+                            operation.details.push('');
+                            this.hasDeletes = true;
+                            deleteOps++;
+                            return;
+                        }
+
+                        operation.summary.push(`ALTER TABLE ${table} ${part}`);
+                        operation.details.push('');
+                    });
+
+                    if (deleteOps === ops.length) {
+                        operation.status = this.withDeletes ? change.status : 'skipped';
+                    }
+
+                    operations.push(operation);
+                    return;
+                }
+
+                operations.push({
+                    status: change.status,
+                    summary: change.name,
+                    details: change.message,
+                    console: change.name,
+                });
+
+                // Unknown operation, assume it could be a DROP
+                this.hasDeletes = true;
+            });
+
+            this.operations = operations;
+        },
+    },
+
+    watch: {
+        changes() {
+            this.updateOperations();
         },
 
-        watch: {
-            changes () {
-                this.updateOperations();
-            },
-
-            withDeletes () {
-                this.updateOperations();
-            },
+        withDeletes() {
+            this.updateOperations();
         },
+    },
 
-        mounted () {
-            this.check()
-        }
-    }
+    mounted() {
+        this.check();
+    },
+};
 </script>
 
 <style lang="scss">
@@ -460,12 +458,12 @@ export default {
     &__icon {
         background: var(--contao);
         border-radius: 10px;
-        padding:10px;
+        padding: 10px;
     }
 
     &__headline {
-        margin-top: .5em;
-        margin-bottom: .5em;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
         font-size: 36px;
         font-weight: defaults.$font-weight-light;
         line-height: 1;

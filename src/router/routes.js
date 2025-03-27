@@ -1,4 +1,3 @@
-
 export default {
     discover: { name: 'discover' },
     packages: { name: 'packages' },

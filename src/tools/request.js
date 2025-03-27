@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from '../store';
 
 const request = new Proxy(axios, {
-    get (target, prop) {
+    get(target, prop) {
         const methods = {
             request: 1,
             get: 2,
@@ -39,8 +39,8 @@ const request = new Proxy(axios, {
             }
 
             return response;
-        }
-    }
+        };
+    },
 });
 
 export default request;

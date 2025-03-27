@@ -11,34 +11,34 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import scopes from '../../scopes';
-    import packageStatus from '../../mixins/packageStatus';
-    import ConfirmButton from '../widgets/ConfirmButton';
+import { mapGetters } from 'vuex';
+import scopes from '../../scopes';
+import packageStatus from '../../mixins/packageStatus';
+import ConfirmButton from '../widgets/ConfirmButton';
 
-    export default {
-        components: { ConfirmButton },
-        mixins: [packageStatus],
+export default {
+    components: { ConfirmButton },
+    mixins: [packageStatus],
 
-        props: {
-            data: {
-                type: Object,
-                required: true,
-            },
-            small: Boolean,
-            inline: Boolean,
-            disabled: Boolean,
+    props: {
+        data: {
+            type: Object,
+            required: true,
         },
+        small: Boolean,
+        inline: Boolean,
+        disabled: Boolean,
+    },
 
-        computed: {
-            ...mapGetters('auth', ['isGranted']),
-            scopes: () => scopes,
+    computed: {
+        ...mapGetters('auth', ['isGranted']),
+        scopes: () => scopes,
+    },
+
+    methods: {
+        install() {
+            this.$store.commit('packages/add', { name: this.data.name });
         },
-
-        methods: {
-            install() {
-                this.$store.commit('packages/add', { name: this.data.name });
-            },
-        }
-    };
+    },
+};
 </script>

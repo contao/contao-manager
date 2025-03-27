@@ -16,7 +16,6 @@ export default {
     },
 
     actions: {
-
         async get({ state, commit }, cache = true) {
             if (cache && state.cache) {
                 return state.cache;
@@ -27,6 +26,5 @@ export default {
 
             return content;
         },
-
     },
 };

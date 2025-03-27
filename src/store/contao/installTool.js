@@ -39,9 +39,12 @@ export default {
                 store.commit('setCache', response);
 
                 return Promise.resolve(response);
-            }
+            };
 
-            return axios.get('api/contao/install-tool/lock').then(handle).catch(error => handle(error.response));
+            return axios
+                .get('api/contao/install-tool/lock')
+                .then(handle)
+                .catch((error) => handle(error.response));
         },
 
         lock(store) {
@@ -49,9 +52,12 @@ export default {
                 store.commit('setCache', response);
 
                 return Promise.resolve(response);
-            }
+            };
 
-            return axios.put('api/contao/install-tool/lock').then(handle).catch(error => handle(error.response));
+            return axios
+                .put('api/contao/install-tool/lock')
+                .then(handle)
+                .catch((error) => handle(error.response));
         },
 
         unlock(store) {
@@ -59,9 +65,12 @@ export default {
                 store.commit('setCache', response);
 
                 return Promise.resolve(response);
-            }
+            };
 
-            return axios.delete('api/contao/install-tool/lock').then(handle).catch(error => handle(error.response));
+            return axios
+                .delete('api/contao/install-tool/lock')
+                .then(handle)
+                .catch((error) => handle(error.response));
         },
     },
 };

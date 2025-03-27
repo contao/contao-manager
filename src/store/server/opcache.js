@@ -16,7 +16,6 @@ export default {
     },
 
     actions: {
-
         get({ state, commit }, cache = true) {
             if (cache && state.cache) {
                 return new Promise((resolve) => {
@@ -24,24 +23,25 @@ export default {
                 });
             }
 
-            return axios.get('api/server/opcache').then(
-                response => response.data,
-            ).then((result) => {
-                commit('setCache', result);
+            return axios
+                .get('api/server/opcache')
+                .then((response) => response.data)
+                .then((result) => {
+                    commit('setCache', result);
 
-                return result;
-            });
+                    return result;
+                });
         },
 
         delete({ commit }, token) {
-            return axios.delete(`api/server/opcache?opcache_reset=${encodeURIComponent(token)}`).then(
-                response => response.data,
-            ).then((result) => {
-                commit('setCache', result);
+            return axios
+                .delete(`api/server/opcache?opcache_reset=${encodeURIComponent(token)}`)
+                .then((response) => response.data)
+                .then((result) => {
+                    commit('setCache', result);
 
-                return result;
-            });
+                    return result;
+                });
         },
-
     },
 };

@@ -16,7 +16,6 @@ export default {
     },
 
     actions: {
-
         get({ state, commit }, cache = true) {
             if (cache && state.cache) {
                 return new Promise((resolve) => {
@@ -24,14 +23,14 @@ export default {
                 });
             }
 
-            return axios.get('api/server/php-cli').then(
-                response => response.data,
-            ).then((result) => {
-                commit('setCache', result);
+            return axios
+                .get('api/server/php-cli')
+                .then((response) => response.data)
+                .then((result) => {
+                    commit('setCache', result);
 
-                return result;
-            });
+                    return result;
+                });
         },
-
     },
 };

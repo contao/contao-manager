@@ -18,31 +18,35 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
-    import PopupOverlay from 'contao-package-list/src/components/fragments/PopupOverlay';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import TextField from '../../widgets/TextField.vue';
+import { mapState } from 'vuex';
+import PopupOverlay from 'contao-package-list/src/components/fragments/PopupOverlay';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import TextField from '../../widgets/TextField.vue';
 
-    export default {
-        components: { PopupOverlay, LoadingButton, TextField },
+export default {
+    components: { PopupOverlay, LoadingButton, TextField },
 
-        data: () => ({
-            loading: false,
-            error: '',
-            totp: null,
-        }),
+    data: () => ({
+        loading: false,
+        error: '',
+        totp: null,
+    }),
 
-        computed: {
-            ...mapState('auth', ['username']),
-        },
+    computed: {
+        ...mapState('auth', ['username']),
+    },
 
-        methods: {
-            submit() {
-                this.loading = true;
+    methods: {
+        submit() {
+            this.loading = true;
 
-                this.$request.delete(`api/users/${ this.username }/totp`, {
-                    data: { totp: this.totp, },
-                }, null, {
+            this.$request.delete(
+                `api/users/${this.username}/totp`,
+                {
+                    data: { totp: this.totp },
+                },
+                null,
+                {
                     200: async () => {
                         await this.$store.dispatch('auth/status');
                         this.$notify.success(this.$t('ui.totp.disabled'));
@@ -52,21 +56,22 @@
                         this.loading = false;
                         this.error = this.$t('ui.totp.invalid');
                         this.$refs.totp.focus();
-                    }
-                });
-            },
-
-            close() {
-                this.$store.commit('modals/close', 'disable-totp');
-            },
+                    },
+                },
+            );
         },
 
-        mounted() {
-            setTimeout(() => {
-                this.$refs.totp.focus();
-            }, 0);
-        }
-    };
+        close() {
+            this.$store.commit('modals/close', 'disable-totp');
+        },
+    },
+
+    mounted() {
+        setTimeout(() => {
+            this.$refs.totp.focus();
+        }, 0);
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

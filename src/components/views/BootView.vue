@@ -1,19 +1,18 @@
 <template>
     <boxed-layout :wide="true" slotClass="view-boot">
         <header class="view-boot__header">
-            <img src="../../assets/images/boot.svg" width="80" height="80" alt="" class="view-boot__icon">
+            <img src="../../assets/images/boot.svg" width="80" height="80" alt="" class="view-boot__icon" />
             <h1 class="view-boot__headline">{{ $t('ui.boot.headline') }}</h1>
             <p class="view-boot__description">{{ $t('ui.boot.description') }}</p>
         </header>
         <main v-if="tasksInitialized" class="view-boot__checks">
-
             <div>
-                <boot-php-web :ready="canShow('PhpWeb')" @result="(...args) => result('PhpWeb', ...args)"/>
-                <boot-config :ready="canShow('Config')" @result="(...args) => result('Config', ...args)"/>
-                <boot-php-cli :ready="canShow('PhpCli')" @result="(...args) => result('PhpCli', ...args)"/>
-                <boot-self-update :ready="canShow('SelfUpdate')" @result="(...args) => result('SelfUpdate', ...args)" v-if="isGranted(scopes.UPDATE)"/>
-                <boot-composer :ready="canShow('Composer')" @result="(...args) => result('Composer', ...args)" v-if="!isOAuth"/>
-                <boot-contao :ready="canShow('Contao')" @result="(...args) => result('Contao', ...args)" v-if="!isOAuth"/>
+                <boot-php-web :ready="canShow('PhpWeb')" @result="(...args) => result('PhpWeb', ...args)" />
+                <boot-config :ready="canShow('Config')" @result="(...args) => result('Config', ...args)" />
+                <boot-php-cli :ready="canShow('PhpCli')" @result="(...args) => result('PhpCli', ...args)" />
+                <boot-self-update :ready="canShow('SelfUpdate')" @result="(...args) => result('SelfUpdate', ...args)" v-if="isGranted(scopes.UPDATE)" />
+                <boot-composer :ready="canShow('Composer')" @result="(...args) => result('Composer', ...args)" v-if="!isOAuth" />
+                <boot-contao :ready="canShow('Contao')" @result="(...args) => result('Contao', ...args)" v-if="!isOAuth" />
             </div>
 
             <div class="clearfix"></div>
@@ -31,123 +30,122 @@
             </div>
         </main>
         <main v-else class="view-boot__loading">
-            <loading-spinner/>
+            <loading-spinner />
         </main>
     </boxed-layout>
 </template>
 
 <script>
-    import { mapGetters, mapState } from 'vuex';
-    import scopes from '../../scopes';
-    import views from '../../router/views';
-    import routes from '../../router/routes';
+import { mapGetters, mapState } from 'vuex';
+import scopes from '../../scopes';
+import views from '../../router/views';
+import routes from '../../router/routes';
 
-    import BoxedLayout from '../layouts/BoxedLayout';
-    import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
-    import BootPhpWeb from '../boot/BootPhpWeb.vue';
-    import BootConfig from '../boot/BootConfig.vue';
-    import BootPhpCli from '../boot/BootPhpCli.vue';
-    import BootSelfUpdate from '../boot/BootSelfUpdate.vue';
-    import BootComposer from '../boot/BootComposer.vue';
-    import BootContao from '../boot/BootContao.vue';
+import BoxedLayout from '../layouts/BoxedLayout';
+import LoadingSpinner from 'contao-package-list/src/components/fragments/LoadingSpinner';
+import BootPhpWeb from '../boot/BootPhpWeb.vue';
+import BootConfig from '../boot/BootConfig.vue';
+import BootPhpCli from '../boot/BootPhpCli.vue';
+import BootSelfUpdate from '../boot/BootSelfUpdate.vue';
+import BootComposer from '../boot/BootComposer.vue';
+import BootContao from '../boot/BootContao.vue';
 
-    export default {
-        components: { BoxedLayout, LoadingSpinner, BootPhpWeb, BootConfig, BootPhpCli, BootSelfUpdate, BootComposer, BootContao },
+export default {
+    components: { BoxedLayout, LoadingSpinner, BootPhpWeb, BootConfig, BootPhpCli, BootSelfUpdate, BootComposer, BootContao },
 
-        data: () => ({
-            status: {},
-        }),
+    data: () => ({
+        status: {},
+    }),
 
-        computed: {
-            ...mapState(['safeMode']),
-            ...mapState('tasks', { tasksInitialized: 'initialized' }),
-            ...mapGetters('auth', ['isGranted']),
-            scopes: () => scopes,
+    computed: {
+        ...mapState(['safeMode']),
+        ...mapState('tasks', { tasksInitialized: 'initialized' }),
+        ...mapGetters('auth', ['isGranted']),
+        scopes: () => scopes,
 
-            isOAuth: vm => vm.$route.name === routes.oauth.name,
-            hasError: vm => Object.values(vm.status).indexOf('error') !== -1,
-            autoContinue: vm => (window.localStorage.getItem('contao_manager_booted') === '1'
-                    && Object.values(vm.status).indexOf('error') === -1
-                    && Object.values(vm.status).indexOf('action') === -1
-                    && Object.values(vm.status).indexOf('warning') === -1
-                ),
+        isOAuth: (vm) => vm.$route.name === routes.oauth.name,
+        hasError: (vm) => Object.values(vm.status).indexOf('error') !== -1,
+        autoContinue: (vm) => window.localStorage.getItem('contao_manager_booted') === '1'
+            && Object.values(vm.status).indexOf('error') === -1
+            && Object.values(vm.status).indexOf('action') === -1
+            && Object.values(vm.status).indexOf('warning') === -1,
 
-            canContinue: vm => Object.values(vm.status).indexOf(null) === -1
-                    && Object.values(vm.status).indexOf('error') === -1
-                    && Object.values(vm.status).indexOf('action') === -1,
+        canContinue: (vm) => Object.values(vm.status).indexOf(null) === -1
+            && Object.values(vm.status).indexOf('error') === -1
+            && Object.values(vm.status).indexOf('action') === -1,
 
-            shouldContinue: vm => Object.values(vm.status).indexOf(null) === -1
-                    && Object.values(vm.status).indexOf('error') === -1
-                    && Object.values(vm.status).indexOf('action') === -1
-                    && Object.values(vm.status).indexOf('warning') === -1,
+        shouldContinue: (vm) => Object.values(vm.status).indexOf(null) === -1
+            && Object.values(vm.status).indexOf('error') === -1
+            && Object.values(vm.status).indexOf('action') === -1
+            && Object.values(vm.status).indexOf('warning') === -1,
+    },
+
+    methods: {
+        runSafeMode() {
+            this.$store.commit('setSafeMode', true);
+            this.$store.commit('setView', views.READY);
         },
 
-        methods: {
-            runSafeMode() {
-                this.$store.commit('setSafeMode', true);
-                this.$store.commit('setView', views.READY);
-            },
+        finish() {
+            window.localStorage.setItem('contao_manager_booted', '1');
+            this.$store.commit('setSafeMode', false);
+            this.$store.commit('setView', views.READY);
+        },
 
-            finish() {
-                window.localStorage.setItem('contao_manager_booted', '1');
-                this.$store.commit('setSafeMode', false);
-                this.$store.commit('setView', views.READY);
-            },
+        result(name, state) {
+            this.status[name] = state;
+        },
 
-            result(name, state) {
-                this.status[name] = state;
-            },
-
-            canShow(name) {
-                const keys = Object.keys(this.status);
-                for (let k = 0; k < keys.length; k += 1) {
-                    if (keys[k] === name) {
-                        return true;
-                    }
-
-                    if (this.status[keys[k]] === null || this.status[keys[k]] === 'error' || this.status[keys[k]] === 'action') {
-                        return false;
-                    }
+        canShow(name) {
+            const keys = Object.keys(this.status);
+            for (let k = 0; k < keys.length; k += 1) {
+                if (keys[k] === name) {
+                    return true;
                 }
 
-                return false;
-            },
-        },
-
-        watch: {
-            shouldContinue(value) {
-                if (value && this.autoContinue) {
-                    this.finish();
+                if (this.status[keys[k]] === null || this.status[keys[k]] === 'error' || this.status[keys[k]] === 'action') {
+                    return false;
                 }
-            },
+            }
+
+            return false;
         },
+    },
 
-        async mounted() {
-            await this.$store.dispatch('reset');
-
-            if (this.isGranted(scopes.UPDATE)) {
-                await this.$store.dispatch('tasks/init');
-            } else {
-                this.$store.commit('tasks/setInitialized', true);
+    watch: {
+        shouldContinue(value) {
+            if (value && this.autoContinue) {
+                this.finish();
             }
-
-            const status = {};
-            status.PhpWeb = null;
-            status.Config = null;
-            status.PhpCli = null;
-
-            if (this.isGranted(scopes.UPDATE)) {
-                status.SelfUpdate = null;
-            }
-
-            if (this.$route.name !== routes.oauth.name) {
-                status.Composer = null;
-                status.Contao = null;
-            }
-
-            this.status = status;
         },
-    };
+    },
+
+    async mounted() {
+        await this.$store.dispatch('reset');
+
+        if (this.isGranted(scopes.UPDATE)) {
+            await this.$store.dispatch('tasks/init');
+        } else {
+            this.$store.commit('tasks/setInitialized', true);
+        }
+
+        const status = {};
+        status.PhpWeb = null;
+        status.Config = null;
+        status.PhpCli = null;
+
+        if (this.isGranted(scopes.UPDATE)) {
+            status.SelfUpdate = null;
+        }
+
+        if (this.$route.name !== routes.oauth.name) {
+            status.Composer = null;
+            status.Contao = null;
+        }
+
+        this.status = status;
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -164,7 +162,7 @@
     &__icon {
         background: var(--contao);
         border-radius: 10px;
-        padding:10px;
+        padding: 10px;
     }
 
     &__headline {

@@ -1,7 +1,7 @@
 <template>
     <section>
         <header class="setup__header">
-            <img src="../../assets/images/database.svg" width="80" height="80" class="setup__icon" alt="">
+            <img src="../../assets/images/database.svg" width="80" height="80" class="setup__icon" alt="" />
             <h1 class="setup__headline">{{ $t('ui.setup.database-connection.headline') }}</h1>
             <i18n-t tag="p" keypath="ui.setup.database-connection.description" class="setup__description">
                 <template #env><code>.env.local</code></template>
@@ -9,7 +9,6 @@
         </header>
 
         <transition name="animate-flip" type="transition" mode="out-in" v-if="currentState">
-
             <main class="setup__form" v-if="currentState === 'error' || currentState === 'edit'" v-bind:key="'setup'">
                 <form @submit.prevent="save">
                     <div class="setup__fields">
@@ -29,10 +28,10 @@
 
                         <div class="setup__or"><span>{{ $t('ui.setup.database-connection.or') }}</span></div>
 
-                        <text-field name="user" :label="$t('ui.setup.database-connection.user')" :disabled="processing" v-model="user"/>
-                        <text-field name="password" type="password" :label="$t('ui.setup.database-connection.password')" :disabled="processing" v-model="password"/>
-                        <text-field name="server" :label="$t('ui.setup.database-connection.server')" :disabled="processing" required v-model="server"/>
-                        <text-field name="database" :label="$t('ui.setup.database-connection.database')" :disabled="processing" required v-model="database"/>
+                        <text-field name="user" :label="$t('ui.setup.database-connection.user')" :disabled="processing" v-model="user" />
+                        <text-field name="password" type="password" :label="$t('ui.setup.database-connection.password')" :disabled="processing" v-model="password" />
+                        <text-field name="server" :label="$t('ui.setup.database-connection.server')" :disabled="processing" required v-model="server" />
+                        <text-field name="database" :label="$t('ui.setup.database-connection.database')" :disabled="processing" required v-model="database" />
                     </div>
                     <div class="setup__actions">
                         <loading-button submit color="primary" icon="save" :loading="processing" :disabled="!valid">{{ $t('ui.setup.database-connection.save') }}</loading-button>
@@ -52,7 +51,6 @@
                 </div>
 
                 <transition name="animate-flip" type="transition" mode="out-in">
-
                     <div v-if="hasDatabaseError || !backupRestore || !hasBackups" v-bind:key="'migrate'">
                         <div class="setup__fields">
                             <h2 class="setup__fieldtitle">{{ $t('ui.setup.database-connection.schemaTitle') }}</h2>
@@ -83,13 +81,13 @@
                         <div class="setup__fields">
                             <h2 class="setup__fieldtitle">{{ $t('ui.setup.database-connection.restoreTitle') }}</h2>
                             <p class="setup__fielddesc">{{ $tc('ui.setup.database-connection.restoreText', files.length) }}</p>
-                            <radio-button required allow-html :options="fileOptions" name="selection" v-model="selection" v-if="files.length > 1"/>
+                            <radio-button required allow-html :options="fileOptions" name="selection" v-model="selection" v-if="files.length > 1" />
 
                             <p class="setup__fielddesc setup__warning">{{ $t('ui.setup.database-connection.backupWarning') }}</p>
-<!--
+                            <!--
                             TODO: re-enable when we fix the restore deleting file problem
                             <check-box :label="$t('ui.setup.database-connection.backup')" name="backup" v-model="backup"/>
--->
+                            -->
                         </div>
 
                         <div class="setup__actions">
@@ -141,12 +139,12 @@ export default {
         ...mapGetters('server/database', { hasDatabaseError: 'hasError' }),
         ...mapGetters('contao/backup', ['hasBackups']),
 
-        fileOptions () {
+        fileOptions() {
             return this.files.map((f) => ({
                 value: f.name,
                 label: this.$t('ui.setup.database-connection.restoreOption', { date: datimFormat(f.createdAt), size: filesize(f.size) }),
             }));
-        }
+        },
     },
 
     methods: {
@@ -165,7 +163,7 @@ export default {
 
             this.validating = true;
 
-            const match = new RegExp(this.urlPattern, 'i').exec(this.url)
+            const match = new RegExp(this.urlPattern, 'i').exec(this.url);
 
             this.user = match[3] ? decodeURIComponent(match[3]) : '';
             this.password = match[5] ? decodeURIComponent(match[5]) : '';
@@ -202,7 +200,7 @@ export default {
                 url += encodeURIComponent(this.user);
 
                 if (this.password) {
-                    url += ':'+encodeURIComponent(this.password);
+                    url += ':' + encodeURIComponent(this.password);
                 }
 
                 url += '@';
@@ -211,7 +209,7 @@ export default {
             url += server;
 
             if (this.database) {
-                url += '/'+encodeURIComponent(this.database);
+                url += '/' + encodeURIComponent(this.database);
             }
 
             this.url = url;
@@ -254,18 +252,18 @@ export default {
                 return;
             }
 
-            await this.$store.dispatch('server/adminUser/get', false)
+            await this.$store.dispatch('server/adminUser/get', false);
 
             this.processing = false;
         },
 
-        async restore () {
+        async restore() {
             await this.$store.dispatch('tasks/execute', {
                 name: 'contao/backup-restore',
                 config: {
                     file: this.files.length > 1 ? this.selection : this.files[0].name,
                     backup: false, // TODO this.backup when we fix the restore deleting file problem
-                }
+                },
             });
 
             if (this.taskStatus !== 'complete') {
@@ -274,7 +272,7 @@ export default {
 
             this.$store.commit('contao/backup/setRestored');
             await this.$store.dispatch('tasks/deleteCurrent');
-        }
+        },
     },
 
     watch: {
@@ -293,7 +291,7 @@ export default {
 
         status() {
             this.currentState = this.status?.type;
-        }
+        },
     },
 
     mounted() {
@@ -316,7 +314,7 @@ export default {
         &:before {
             content: "";
             position: absolute;
-            top: .8em;
+            top: 0.8em;
             left: 0;
             right: 0;
             display: block;

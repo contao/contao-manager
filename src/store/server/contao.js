@@ -13,7 +13,7 @@ export default {
     },
 
     getters: {
-        badgeTitle: state => state.contaoConfig?.backend?.badge_title,
+        badgeTitle: (state) => state.contaoConfig?.backend?.badge_title,
     },
 
     mutations: {
@@ -45,19 +45,22 @@ export default {
                 return response;
             };
 
-            return axios.get('api/server/contao').then(handle).catch(error => handle(error.response));
+            return axios
+                .get('api/server/contao')
+                .then(handle)
+                .catch((error) => handle(error.response));
         },
 
         documentRoot(store, { directory, usePublicDir = false }) {
             const params = {
-                usePublicDir
+                usePublicDir,
             };
 
             if (directory) {
                 params.directory = directory;
             }
 
-            return axios.post('api/server/contao', params).catch(response => response);
-        }
+            return axios.post('api/server/contao', params).catch((response) => response);
+        },
     },
 };

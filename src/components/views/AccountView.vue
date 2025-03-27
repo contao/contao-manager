@@ -14,7 +14,7 @@
                         </i18n-t>
                     </template>
                 </i18n-t>
-                <br><br>
+                <br /><br />
                 <i18n-t keypath="ui.account.intro2">
                     <template #ourGithubIssues><a href="https://github.com/contao/contao-manager/issues" target="_blank">{{ $t('ui.account.introIssues') }}</a></template>
                 </i18n-t>
@@ -66,7 +66,7 @@
 
         <aside class="view-account__contribute">
             <p>
-                {{ $t('ui.account.contribute1') }}<br>
+                {{ $t('ui.account.contribute1') }}<br />
                 <i18n-t keypath="ui.account.contribute2">
                     <template #donate><a href="https://to.contao.org/donate" target="_blank">{{ $t('ui.account.contributeDonate') }}</a></template>
                 </i18n-t>
@@ -86,128 +86,128 @@ import ButtonGroup from '@/components/widgets/ButtonGroup.vue';
 import SetupTotp from '../routes/Users/SetupTotp.vue';
 
 export default {
-        components: { BoxedLayout, TextField, LoadingButton, ButtonGroup },
+    components: { BoxedLayout, TextField, LoadingButton, ButtonGroup },
 
-        data: () => ({
+    data: () => ({
+        username: '',
+        password: '',
+
+        errors: {
             username: '',
             password: '',
-
-            errors: {
-                username: '',
-                password: '',
-            },
-
-            valid: false,
-            logging_in: false,
-            usePassword: false,
-            supportsWebAuthn: true,
-        }),
-
-        computed: {
-            ...mapState('auth', { currentUser: 'username', hasTotp: 'totpEnabled' }),
-            isInvitation: vm => !!vm.$route.query.invitation,
         },
 
-        methods: {
-            validate() {
-                this.valid = this.$refs.username.checkValidity()
-                    && (!this.usePassword || this.$refs.password.checkValidity());
-            },
+        valid: false,
+        logging_in: false,
+        usePassword: false,
+        supportsWebAuthn: true,
+    }),
 
-            validatePassword() {
-                this.errors.password = null;
+    computed: {
+        ...mapState('auth', { currentUser: 'username', hasTotp: 'totpEnabled' }),
+        isInvitation: (vm) => !!vm.$route.query.invitation,
+    },
 
-                if (this.password === '') {
-                    return;
-                }
+    methods: {
+        validate() {
+            this.valid = this.$refs.username.checkValidity()
+                && (!this.usePassword || this.$refs.password.checkValidity());
+        },
 
-                if (this.password.length < 8) {
-                    this.errors.password = this.$t('ui.account.passwordLength');
-                }
-            },
+        validatePassword() {
+            this.errors.password = null;
 
-            async createAccount() {
-                if (!this.valid) {
-                    return;
-                }
+            if (this.password === '') {
+                return;
+            }
 
-                this.logging_in = true;
+            if (this.password.length < 8) {
+                this.errors.password = this.$t('ui.account.passwordLength');
+            }
+        },
 
-                const data = {
-                    username: this.username,
-                };
+        async createAccount() {
+            if (!this.valid) {
+                return;
+            }
 
-                if (this.isInvitation) {
-                    data.invitation = this.$route.query.invitation;
-                }
+            this.logging_in = true;
 
-                if (this.usePassword) {
-                    data.password = this.password;
-                } else {
-                    const optionsJSON = (await this.$request.post('api/session/options', data)).data
-                    let passkey;
+            const data = {
+                username: this.username,
+            };
 
-                    try {
-                        passkey = await startRegistration({ optionsJSON });
-                    } catch (error) {
-                        this.logging_in = false;
-                        return;
-                    }
+            if (this.isInvitation) {
+                data.invitation = this.$route.query.invitation;
+            }
 
-                    if (!passkey) {
-                        this.logging_in = false;
-                        return;
-                    }
+            if (this.usePassword) {
+                data.password = this.password;
+            } else {
+                const optionsJSON = (await this.$request.post('api/session/options', data)).data;
+                let passkey;
 
-                    data.passkey = JSON.stringify(passkey);
-                }
-
-                if ((await this.$store.dispatch('auth/login', data)).status !== 201) {
+                try {
+                    passkey = await startRegistration({ optionsJSON });
+                } catch (error) {
                     this.logging_in = false;
-                    this.errors.username = this.$t('ui.account.loginInvalid');
-                    setTimeout(() => {
-                        this.$refs.username.focus();
-                    }, 0);
+                    return;
                 }
-            },
 
-            setupTotp () {
-                this.$store.commit('modals/open', { id: 'setup-totp', component: SetupTotp, });
-            },
+                if (!passkey) {
+                    this.logging_in = false;
+                    return;
+                }
 
-            skipTotp () {
-                this.$store.commit('setView', views.BOOT);
-            },
+                data.passkey = JSON.stringify(passkey);
+            }
 
-            gotoLogin () {
-                this.$router.replace({ name: this.$route.name, query: null });
-                this.$store.commit('setView', views.LOGIN);
+            if ((await this.$store.dispatch('auth/login', data)).status !== 201) {
+                this.logging_in = false;
+                this.errors.username = this.$t('ui.account.loginInvalid');
+                setTimeout(() => {
+                    this.$refs.username.focus();
+                }, 0);
             }
         },
 
-        watch: {
-            username () {
-                this.validate();
-            },
-
-            password () {
-                this.validate();
-            },
-
-            hasTotp () {
-                this.$store.commit('setView', views.BOOT);
-            }
+        setupTotp() {
+            this.$store.commit('modals/open', { id: 'setup-totp', component: SetupTotp });
         },
 
-        mounted() {
-            this.supportsWebAuthn = (location.protocol === 'https:' || process.env.NODE_ENV === 'development') && browserSupportsWebAuthn();
-            this.usePassword = !this.supportsWebAuthn;
-
-            if (this.$refs.username) {
-                this.$refs.username.focus();
-            }
+        skipTotp() {
+            this.$store.commit('setView', views.BOOT);
         },
-    };
+
+        gotoLogin() {
+            this.$router.replace({ name: this.$route.name, query: null });
+            this.$store.commit('setView', views.LOGIN);
+        },
+    },
+
+    watch: {
+        username() {
+            this.validate();
+        },
+
+        password() {
+            this.validate();
+        },
+
+        hasTotp() {
+            this.$store.commit('setView', views.BOOT);
+        },
+    },
+
+    mounted() {
+        this.supportsWebAuthn = (location.protocol === 'https:' || process.env.NODE_ENV === 'development') && browserSupportsWebAuthn();
+        this.usePassword = !this.supportsWebAuthn;
+
+        if (this.$refs.username) {
+            this.$refs.username.focus();
+        }
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -237,7 +237,7 @@ export default {
     }
 
     &__headline {
-        margin-bottom: .5em;
+        margin-bottom: 0.5em;
         font-size: 18px;
         font-weight: defaults.$font-weight-bold;
         line-height: 30px;

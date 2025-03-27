@@ -1,13 +1,13 @@
 <template>
     <boxed-layout :wide="true" slotClass="view-task">
         <header class="view-task__header">
-            <img src="../../assets/images/task.svg" width="80" height="80" alt="" class="view-task__icon">
+            <img src="../../assets/images/task.svg" width="80" height="80" alt="" class="view-task__icon" />
             <h1 class="view-task__headline">{{ $t('ui.task.headline') }}</h1>
             <p class="view-task__description" v-if="taskStatus">{{ $t(`ui.task.${taskStatus}`) }}</p>
 
             <template v-if="isFailed">
                 <p class="view-task__text">
-                    {{ $t('ui.task.failedDescription1') }}<br>
+                    {{ $t('ui.task.failedDescription1') }}<br />
                     {{ $t('ui.task.failedDescription2') }}
                 </p>
                 <p class="view-task__text"><br><a href="https://github.com/contao/contao-manager/issues/new" target="_blank">{{ $t('ui.task.reportProblem') }}</a></p>
@@ -33,11 +33,11 @@
                     <loading-button class="view-task__action" color="primary" :loading="loadingMigrations" :disabled="(supportsMigrations && !hasDatabaseChanges) || deletingTask" @click="updateDatabase" v-if="requiresAudit">{{ $t('ui.task.buttonAudit') }}</loading-button>
 
                     <loading-button class="view-task__action" :loading="deletingTask" @click="deleteTask" v-if="!isActive && !isAborting">{{ $t('ui.task.buttonConfirm') }}</loading-button>
-                    <check-box name="autoclose" :label="$t('ui.task.autoclose')" v-model="autoClose" v-if="isActive && allowAutoClose"/>
+                    <check-box name="autoclose" :label="$t('ui.task.autoclose')" v-model="autoClose" v-if="isActive && allowAutoClose" />
                 </div>
             </template>
             <div class="view-task__loading" v-else>
-                <loading-spinner/>
+                <loading-spinner />
             </div>
         </header>
 
@@ -51,9 +51,9 @@
 
         <div class="view-task__sponsor" v-if="currentTask && currentTask.sponsor">
             <i18n-t keypath="ui.task.sponsor">
-                <template #sponsor><br><a :href="currentTask.sponsor.link" target="_blank" rel="noreferrer noopener">{{ currentTask.sponsor.name }}</a></template>
+                <template #sponsor><br /><a :href="currentTask.sponsor.link" target="_blank" rel="noreferrer noopener">{{ currentTask.sponsor.name }}</a></template>
             </i18n-t>
-            <a href="https://to.contao.org/donate" target="_blank" rel="noreferrer noopener" class="view-task__donate"><img src="~contao-package-list/src/assets/images/funding.svg" alt="" width="20" height="20"></a>
+            <a href="https://to.contao.org/donate" target="_blank" rel="noreferrer noopener" class="view-task__donate"><img src="~contao-package-list/src/assets/images/funding.svg" alt="" width="20" height="20" /></a>
         </div>
     </boxed-layout>
 </template>
@@ -69,115 +69,115 @@ import ConsoleOutput from '../fragments/ConsoleOutput';
 import CheckBox from '../widgets/CheckBox';
 
 export default {
-        name: 'TaskView',
-        mixins: [task],
-        components: { BoxedLayout, LoadingSpinner, LoadingButton, ConsoleOutput, CheckBox },
+    name: 'TaskView',
+    mixins: [task],
+    components: { BoxedLayout, LoadingSpinner, LoadingButton, ConsoleOutput, CheckBox },
 
-        data: () => ({
-            autoClose: false,
-            favicons: null,
-            faviconInterval: null,
-        }),
+    data: () => ({
+        autoClose: false,
+        favicons: null,
+        faviconInterval: null,
+    }),
 
-        computed: {
-            ...mapState('server/database', { supportsMigrations: 'supported', loadingMigrations: 'loading' }),
-            ...mapGetters('server/database', { hasDatabaseChanges: 'hasChanges' }),
-        },
+    computed: {
+        ...mapState('server/database', { supportsMigrations: 'supported', loadingMigrations: 'loading' }),
+        ...mapGetters('server/database', { hasDatabaseChanges: 'hasChanges' }),
+    },
 
-        methods: {
-            cancelTask() {
-                if (confirm(this.$t('ui.task.confirmCancel'))) {
-                    this.$store.dispatch('tasks/abort');
-                }
-            },
-
-            continueTask() {
-                this.$store.dispatch('tasks/continue');
-            },
-
-            async deleteTask() {
-                await this.$store.dispatch('tasks/deleteCurrent');
-            },
-
-            async updateDatabase() {
-                if (this.supportsMigrations) {
-                    await this.$store.dispatch('tasks/deleteCurrent');
-                    this.$store.commit('checkMigrations');
-                } else {
-                    window.open('/contao/install');
-                }
-            },
-
-            updateFavicon() {
-                let base;
-
-                if (this.faviconInterval) {
-                    clearInterval(this.faviconInterval);
-                }
-
-                const replaceIcon = (base) => {
-                    this.favicons.forEach((el) => {
-                        el.href = `${base}/${el.href.split('/').pop()}`;
-                    });
-                };
-
-                switch (this.taskStatus) {
-                    case 'active':
-                        base = 'icons/task-active';
-                        break;
-
-                    case 'complete':
-                        base = 'icons/task-success';
-                        break;
-
-                    case 'error':
-                    case 'failed':
-                    case 'stopped':
-                        base = 'icons/task-error';
-                        break;
-
-                    default:
-                        setTimeout(replaceIcon.bind(this, 'icons'), 2000);
-                        return;
-                }
-
-                let replace = false;
-                this.faviconInterval = setInterval(() => {
-                    replace = !replace;
-                    replaceIcon(replace ? base : 'icons');
-                }, 2000);
-            },
-        },
-
-        watch: {
-            taskStatus() {
-                this.updateFavicon();
-            },
-
-            autoClose(value) {
-                window.localStorage.setItem('contao_manager_autoclose', value ? '1' : '0');
-            },
-
-            isComplete() {
-                if (this.isComplete) {
-                    this.$store.dispatch('server/database/get', false);
-                }
+    methods: {
+        cancelTask() {
+            if (confirm(this.$t('ui.task.confirmCancel'))) {
+                this.$store.dispatch('tasks/abort');
             }
         },
 
-        mounted() {
-            this.favicons = document.querySelectorAll('link[class="favicon"]');
-            this.updateFavicon();
-
-            this.autoClose = window.localStorage.getItem('contao_manager_autoclose') === '1';
-
-            this.$store.dispatch('server/database/get');
+        continueTask() {
+            this.$store.dispatch('tasks/continue');
         },
 
-        beforeUnmount() {
+        async deleteTask() {
+            await this.$store.dispatch('tasks/deleteCurrent');
+        },
+
+        async updateDatabase() {
+            if (this.supportsMigrations) {
+                await this.$store.dispatch('tasks/deleteCurrent');
+                this.$store.commit('checkMigrations');
+            } else {
+                window.open('/contao/install');
+            }
+        },
+
+        updateFavicon() {
+            let base;
+
+            if (this.faviconInterval) {
+                clearInterval(this.faviconInterval);
+            }
+
+            const replaceIcon = (base) => {
+                this.favicons.forEach((el) => {
+                    el.href = `${base}/${el.href.split('/').pop()}`;
+                });
+            };
+
+            switch (this.taskStatus) {
+                case 'active':
+                    base = 'icons/task-active';
+                    break;
+
+                case 'complete':
+                    base = 'icons/task-success';
+                    break;
+
+                case 'error':
+                case 'failed':
+                case 'stopped':
+                    base = 'icons/task-error';
+                    break;
+
+                default:
+                    setTimeout(replaceIcon.bind(this, 'icons'), 2000);
+                    return;
+            }
+
+            let replace = false;
+            this.faviconInterval = setInterval(() => {
+                replace = !replace;
+                replaceIcon(replace ? base : 'icons');
+            }, 2000);
+        },
+    },
+
+    watch: {
+        taskStatus() {
             this.updateFavicon();
         },
-    }
+
+        autoClose(value) {
+            window.localStorage.setItem('contao_manager_autoclose', value ? '1' : '0');
+        },
+
+        isComplete() {
+            if (this.isComplete) {
+                this.$store.dispatch('server/database/get', false);
+            }
+        },
+    },
+
+    mounted() {
+        this.favicons = document.querySelectorAll('link[class="favicon"]');
+        this.updateFavicon();
+
+        this.autoClose = window.localStorage.getItem('contao_manager_autoclose') === '1';
+
+        this.$store.dispatch('server/database/get');
+    },
+
+    beforeUnmount() {
+        this.updateFavicon();
+    },
+};
 </script>
 
 <style lang="scss">
@@ -194,7 +194,7 @@ export default {
     &__icon {
         background: var(--contao);
         border-radius: 10px;
-        padding:10px;
+        padding: 10px;
     }
 
     &__headline {
@@ -261,7 +261,7 @@ export default {
     &__donate {
         position: relative;
         top: 5px;
-        margin-left: .5em;
+        margin-left: 0.5em;
         line-height: 0;
     }
 }

@@ -30,41 +30,50 @@ export default {
 
     getters: {
         hasRoot: (state) => !!state.root,
-        packageInstalled: (state, g) => name => Object.keys(state.installed).includes(name) && !g.packageMissing(name),
-        versionInstalled: state => (name, version) => Object.keys(state.installed).includes(name) && state.installed[name].version === version,
-        packageRoot: state => name => !!state.root && Object.keys(state.root.require).includes(name),
-        packageRequired: state => name => Object.keys(state.required).includes(name) && !!state.required[name].constraint,
-        packageMissing: state => name => Object.keys(state.required).includes(name) && !state.required[name].constraint,
-        packageAdded: state => name => Object.keys(state.add).includes(name),
-        packageChanged: state => name => Object.keys(state.change).includes(name),
-        packageUpdated: state => name => state.update.includes(name),
-        packageRemoved: state => name => state.remove.includes(name),
-        packageFeatures: () => name => features[name] ? features[name] : [],
-        packageFeature: (s, g) => name => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
-        packageVisible: (s, g) => name => isVisible(name, g),
-        packageSuggested: state => name => !!Object.values(state.local || {}).concat(Object.values(state.add || {})).find(
-            pkg => (pkg.type && (pkg.type.substr(0, 7) === 'contao-' || pkg.name.substr(0, 7) === 'contao/') && pkg.suggest && Object.prototype.hasOwnProperty.call(pkg.suggest, name))
-        ),
+        packageInstalled: (state, g) => (name) => Object.keys(state.installed).includes(name) && !g.packageMissing(name),
+        versionInstalled: (state) => (name, version) => Object.keys(state.installed).includes(name) && state.installed[name].version === version,
+        packageRoot: (state) => (name) => !!state.root && Object.keys(state.root.require).includes(name),
+        packageRequired: (state) => (name) => Object.keys(state.required).includes(name) && !!state.required[name].constraint,
+        packageMissing: (state) => (name) => Object.keys(state.required).includes(name) && !state.required[name].constraint,
+        packageAdded: (state) => (name) => Object.keys(state.add).includes(name),
+        packageChanged: (state) => (name) => Object.keys(state.change).includes(name),
+        packageUpdated: (state) => (name) => state.update.includes(name),
+        packageRemoved: (state) => (name) => state.remove.includes(name),
+        packageFeatures: () => (name) => (features[name] ? features[name] : []),
+        packageFeature: (s, g) => (name) => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
+        packageVisible: (s, g) => (name) => isVisible(name, g),
+        packageSuggested: (state) => (name) =>
+            !!Object.values(state.local || {})
+                .concat(Object.values(state.add || {}))
+                .find(
+                    (pkg) =>
+                        pkg.type &&
+                        (pkg.type.substr(0, 7) === 'contao-' || pkg.name.substr(0, 7) === 'contao/') &&
+                        pkg.suggest &&
+                        Object.prototype.hasOwnProperty.call(pkg.suggest, name),
+                ),
 
-        totalChanges: state => Object.keys(state.add).filter(isCountable).length
-            + Object.keys(state.required).filter(isCountable).length
-            + Object.keys(state.change).filter(isCountable).length
-            + state.update.length
-            + state.remove.length
-            - Object.values(state.add).filter(p => Object.keys(state.required).includes(p.name)).length
-            - Object.values(state.change).filter(p => Object.keys(state.required).includes(p.name)).length
-            - state.remove.filter(p => Object.keys(state.required).includes(p)).length,
+        totalChanges: (state) =>
+            Object.keys(state.add).filter(isCountable).length +
+            Object.keys(state.required).filter(isCountable).length +
+            Object.keys(state.change).filter(isCountable).length +
+            state.update.length +
+            state.remove.length -
+            Object.values(state.add).filter((p) => Object.keys(state.required).includes(p.name)).length -
+            Object.values(state.change).filter((p) => Object.keys(state.required).includes(p.name)).length -
+            state.remove.filter((p) => Object.keys(state.required).includes(p)).length,
 
-        totalRequired: state => Object.keys(state.required).length
-            - Object.values(state.add).filter(pkg => Object.keys(state.required).includes(pkg.name)).length
-            - Object.values(state.change).filter(pkg => Object.keys(state.required).includes(pkg.name)).length
-            - state.remove.filter(pkg => Object.keys(state.required).includes(pkg)).length,
+        totalRequired: (state) =>
+            Object.keys(state.required).length -
+            Object.values(state.add).filter((pkg) => Object.keys(state.required).includes(pkg.name)).length -
+            Object.values(state.change).filter((pkg) => Object.keys(state.required).includes(pkg.name)).length -
+            state.remove.filter((pkg) => Object.keys(state.required).includes(pkg)).length,
 
         canResetChanges: (s, get) => get.totalChanges > get.totalRequired,
 
-        visibleRequired: (s, g) => Object.values(s.required).filter(pkg => isVisible(pkg.name, g)),
-        visibleInstalled: (s, g) => Object.values(g.installed).filter(pkg => isVisible(pkg.name, g)),
-        visibleAdded: (s, g) => Object.values(s.add).filter(pkg => isVisible(pkg.name, g)),
+        visibleRequired: (s, g) => Object.values(s.required).filter((pkg) => isVisible(pkg.name, g)),
+        visibleInstalled: (s, g) => Object.values(g.installed).filter((pkg) => isVisible(pkg.name, g)),
+        visibleAdded: (s, g) => Object.values(s.add).filter((pkg) => isVisible(pkg.name, g)),
 
         installed: (state) => {
             if (!state.root || !state.installed) {
@@ -92,14 +101,20 @@ export default {
             return packages;
         },
 
-        packageConstraint: (s, g) => name => g.packageConstraintAdded(name) || g.packageConstraintChanged(name) || g.packageConstraintInstalled(name) || g.packageConstraintRequired(name),
-        packageConstraintAdded: (s, g) => name => g.packageAdded(name) ? s.add[name].constraint : null,
-        packageConstraintChanged: (s, g) => name => g.packageChanged(name) ? s.change[name] : null,
-        packageConstraintInstalled: (s, g) => name => (g.packageInstalled(name) && g.packageRoot(name)) ? g.installed[name].constraint : null,
-        packageConstraintRequired: (s, g) => name => g.packageRequired(name) ? (g.packageChanged(name) ? g.constraintChanged(name) : s.required[name].constraint) : null,
+        packageConstraint: (s, g) => (name) =>
+            g.packageConstraintAdded(name) || g.packageConstraintChanged(name) || g.packageConstraintInstalled(name) || g.packageConstraintRequired(name),
+        packageConstraintAdded: (s, g) => (name) => (g.packageAdded(name) ? s.add[name].constraint : null),
+        packageConstraintChanged: (s, g) => (name) => (g.packageChanged(name) ? s.change[name] : null),
+        packageConstraintInstalled: (s, g) => (name) => (g.packageInstalled(name) && g.packageRoot(name) ? g.installed[name].constraint : null),
+        packageConstraintRequired: (s, g) => (name) => {
+            if (g.packageRequired(name)) {
+                return null;
+            }
 
+            return g.packageChanged(name) ? g.constraintChanged(name) : s.required[name].constraint;
+        },
         contaoConstraint: (s, g) => coerce(g.packageConstraint('contao/manager-bundle'), { includePrerelease: true }).toString(),
-        contaoSupported: (s, g) => constraint => constraint ? intersects(constraint, g.contaoConstraint, true) : true,
+        contaoSupported: (s, g) => (constraint) => (constraint ? intersects(constraint, g.contaoConstraint, true) : true),
     },
 
     mutations: {
@@ -204,11 +219,11 @@ export default {
 
             const getVersion = (packageData) => {
                 if (packageData.version && valid(packageData.version)) {
-                    return parse(packageData.version)
+                    return parse(packageData.version);
                 }
 
                 if (packageData.version_normalized) {
-                    return coerce(packageData.version_normalized, { loose: true })
+                    return coerce(packageData.version_normalized, { loose: true });
                 }
 
                 return null;
@@ -222,46 +237,34 @@ export default {
                 let update;
                 metadata.update = { valid: true, latest: true, version: null, time: null };
                 if (rootConstraint && rootVersion) {
-                    update = metadata.versions.filter(pkg => {
-                        return pkg.version === rootVersion.version || satisfies(getVersion(pkg), rootConstraint);
-                    }).pop();
+                    update = metadata.versions.filter((pkg) => pkg.version === rootVersion.version || satisfies(getVersion(pkg), rootConstraint)).pop();
 
                     if (!update) {
                         metadata.update.valid = false;
                     } else {
                         metadata.update.version = update.version;
                         metadata.update.time = update.time;
-                        metadata.update.latest = eq(
-                            getVersion(update),
-                            rootVersion
-                        );
+                        metadata.update.latest = eq(getVersion(update), rootVersion);
 
                         if (metadata.latest && metadata.latest.version) {
-                            metadata.latest.active = eq(
-                                getVersion(update),
-                                metadata.latest.version
-                            )
+                            metadata.latest.active = eq(getVersion(update), metadata.latest.version);
                         }
                     }
                 }
             }
 
-            const result = Object.assign(
-                {},
-                metadata,
-                {
-                    dependents: data.dependents || metadata.dependents,
-                    conflict: data.conflict || metadata.conflict,
-                    require: data.require || metadata.require,
-                    'require-dev': data['require-dev'] || metadata['require-dev'],
-                    suggest: metadata.suggest,
-                },
-            );
+            const result = Object.assign({}, metadata, {
+                dependents: data.dependents || metadata.dependents,
+                conflict: data.conflict || metadata.conflict,
+                require: data.require || metadata.require,
+                'require-dev': data['require-dev'] || metadata['require-dev'],
+                suggest: metadata.suggest,
+            });
 
             if (data.suggest) {
                 result.suggest = {};
-                Object.keys(data.suggest).forEach(k => {
-                    result.suggest[k] = metadata.suggest && metadata.suggest[k] || data.suggest[k];
+                Object.keys(data.suggest).forEach((k) => {
+                    result.suggest[k] = (metadata.suggest && metadata.suggest[k]) || data.suggest[k];
                 });
             }
 
@@ -274,16 +277,12 @@ export default {
             commit('algolia/reset', null, { root: true });
 
             const packages = {};
-            const load = [
-                axios.get('api/packages/root'),
-                axios.get('api/packages/local'),
-                axios.get('api/packages/missing'),
-            ];
+            const load = [axios.get('api/packages/root'), axios.get('api/packages/local'), axios.get('api/packages/missing')];
 
             commit('setInstalled', {
                 root: (await load[0]).data,
                 local: (await load[1]).data,
-                missing: (await load[2]).data
+                missing: (await load[2]).data,
             });
 
             return packages;
@@ -294,8 +293,8 @@ export default {
             const remove = state.remove;
             const update = state.update.concat(
                 Object.keys(state.required),
-                Object.keys(state.change).filter(pkg => !Object.keys(state.required).includes(pkg)),
-                state.remove.filter(pkg => !Object.keys(state.required).includes(pkg)),
+                Object.keys(state.change).filter((pkg) => !Object.keys(state.required).includes(pkg)),
+                state.remove.filter((pkg) => !Object.keys(state.required).includes(pkg)),
             );
 
             Object.keys(state.add).forEach((pkg) => {

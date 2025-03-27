@@ -15,7 +15,7 @@
                     </tr>
                     <tr>
                         <th>{{ $t('ui.cloudStatus.jobs') }}:</th>
-                        <td>{{ status.numberOfJobsInQueue > 0 ? (status.numberOfJobsInQueue + status.numberOfWorkers) : `≤ ${status.numberOfWorkers}` }}</td>
+                        <td>{{ status.numberOfJobsInQueue > 0 ? status.numberOfJobsInQueue + status.numberOfWorkers : `≤ ${status.numberOfWorkers}` }}</td>
                     </tr>
                     <tr>
                         <th>{{ $t('ui.cloudStatus.workers') }}:</th>
@@ -46,84 +46,84 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import { mapState, mapGetters } from 'vuex';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
-    export default {
-        components: { LoadingButton },
+export default {
+    components: { LoadingButton },
 
-        props: {
-            buttonClass: String,
+    props: {
+        buttonClass: String,
+    },
+
+    data: () => ({
+        visible: false,
+
+        timeout: null,
+        mouseout: null,
+    }),
+
+    computed: {
+        ...mapState('cloud', ['enabled', 'status']),
+        ...mapGetters('cloud', ['isLoading', 'isReady', 'hasError']),
+
+        waitingTime: (vm) => Math.round((vm.status.numberOfJobsInQueue * (vm.status.averageProcessingTimeInMs / 1000)) / Math.max(vm.status.numberOfWorkers, 1)),
+        waitingMinutes: (vm) => Math.floor(vm.waitingTime / 60),
+        waitingSeconds: (vm) => vm.waitingTime - 60 * vm.waitingMinutes,
+        approxMinutes: (vm) => Math.round(vm.waitingTime / 60),
+
+        waitingLabel() {
+            if (!this.waitingTime) {
+                return this.$t('ui.cloudStatus.none');
+            }
+
+            if (!this.waitingSeconds) {
+                return this.$t('ui.cloudStatus.short', { minutes: this.waitingMinutes });
+            }
+
+            return this.$t('ui.cloudStatus.long', { minutes: this.waitingMinutes, seconds: this.waitingSeconds });
+        },
+    },
+
+    methods: {
+        open() {
+            this.visible = true;
+            setTimeout(() => this.$refs.menu?.focus(), 0);
         },
 
-        data: () => ({
-            visible: false,
+        close(event) {
+            if (event && this.$refs.menu?.contains(event.relatedTarget)) {
+                return;
+            }
 
-            timeout: null,
-            mouseout: null,
-        }),
-
-        computed: {
-            ...mapState('cloud', ['enabled', 'status']),
-            ...mapGetters('cloud', ['isLoading', 'isReady', 'hasError']),
-
-            waitingTime: vm => Math.round(vm.status.numberOfJobsInQueue * (vm.status.averageProcessingTimeInMs / 1000) / Math.max(vm.status.numberOfWorkers, 1)),
-            waitingMinutes: vm => Math.floor(vm.waitingTime / 60),
-            waitingSeconds: vm => vm.waitingTime - (60 * vm.waitingMinutes),
-            approxMinutes: vm => Math.round(vm.waitingTime / 60),
-
-            waitingLabel() {
-                if (!this.waitingTime) {
-                    return this.$t('ui.cloudStatus.none');
-                }
-
-                if (!this.waitingSeconds) {
-                    return this.$t('ui.cloudStatus.short', { minutes: this.waitingMinutes });
-                }
-
-                return this.$t('ui.cloudStatus.long', { minutes: this.waitingMinutes, seconds: this.waitingSeconds });
-            },
+            this.$refs.menu.blur();
+            setTimeout(() => {
+                this.visible = false;
+            }, 100);
         },
 
-        methods: {
-            open() {
-                this.visible = true;
-                setTimeout(() => this.$refs.menu?.focus(), 0);
-            },
-
-            close(event) {
-                if (event && this.$refs.menu?.contains(event.relatedTarget)) {
-                    return;
-                }
-
-                this.$refs.menu.blur();
-                setTimeout(() => {
-                    this.visible = false;
-                }, 100);
-            },
-
-            refreshCloud() {
-                this.$store.commit('cloud/setStatus', null);
-                this.fetchCloud();
-            },
-
-            async fetchCloud() {
-                await this.$store.dispatch('cloud/fetch');
-
-                if (this.enabled && !this.hasError) {
-                    this.timeout = setTimeout(this.fetchCloud, 1000 * 60);
-                }
-            },
-        },
-
-        mounted() {
+        refreshCloud() {
+            this.$store.commit('cloud/setStatus', null);
             this.fetchCloud();
         },
 
-        beforeUnmount() {
-            clearTimeout(this.timeout);
-        }
-    };
+        async fetchCloud() {
+            await this.$store.dispatch('cloud/fetch');
+
+            if (this.enabled && !this.hasError) {
+                this.timeout = setTimeout(this.fetchCloud, 1000 * 60);
+            }
+        },
+    },
+
+    mounted() {
+        this.fetchCloud();
+    },
+
+    beforeUnmount() {
+        clearTimeout(this.timeout);
+    },
+};
 </script>
 
 <style lang="scss">

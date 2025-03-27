@@ -22,39 +22,39 @@
 </template>
 
 <script>
-    export default {
-        emits: ['input', 'update:modelValue'],
+export default {
+    emits: ['input', 'update:modelValue'],
 
-        props: {
-            name: {
-                type: String,
-                required: true,
-            },
-            options: {
-                type: Array,
-                required: true,
-            },
-            label: String,
-            modelValue: String,
-            disabled: Boolean,
-            required: Boolean,
-            error: String,
-            includeBlank: Boolean,
+    props: {
+        name: {
+            type: String,
+            required: true,
         },
+        options: {
+            type: Array,
+            required: true,
+        },
+        label: String,
+        modelValue: String,
+        disabled: Boolean,
+        required: Boolean,
+        error: String,
+        includeBlank: Boolean,
+    },
 
-        methods: {
-            input(value) {
-                this.$emit('input');
-                this.$emit('update:modelValue', value);
-            },
+    methods: {
+        input(value) {
+            this.$emit('input');
+            this.$emit('update:modelValue', value);
         },
+    },
 
-        mounted() {
-            this.$emit('update:modelValue', this.$refs.input.value);
-        },
+    mounted() {
+        this.$emit('update:modelValue', this.$refs.input.value);
+    },
 
-        updated() {
-            this.$emit('update:modelValue', this.$refs.input.value);
-        },
-    };
+    updated() {
+        this.$emit('update:modelValue', this.$refs.input.value);
+    },
+};
 </script>

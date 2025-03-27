@@ -2,20 +2,21 @@
 
 import axios from 'axios';
 
-const handle = (request, { commit }) => new Promise((resolve, reject) => {
-    request
-        .then((response) => {
-            commit('setCache', response.data);
-            commit('setIsDebugEnabled', response.status !== 204 && response.data.debug);
+const handle = (request, { commit }) =>
+    new Promise((resolve, reject) => {
+        request
+            .then((response) => {
+                commit('setCache', response.data);
+                commit('setIsDebugEnabled', response.status !== 204 && response.data.debug);
 
-            resolve(response.data);
-        })
-        .catch(() => {
-            commit('setIsDebugEnabled', false);
+                resolve(response.data);
+            })
+            .catch(() => {
+                commit('setIsDebugEnabled', false);
 
-            reject();
-        });
-});
+                reject();
+            });
+    });
 
 export default {
     namespaced: true,
@@ -41,9 +42,10 @@ export default {
                 return Promise.resolve(store.state.cache);
             }
 
-            if (store.rootState.safeMode
-                || store.rootState.server.contao.contaoApi.version < 2
-                || !store.rootState.server.contao.contaoApi.features?.['contao/manager-bundle']?.['jwt-cookie']?.includes('debug')
+            if (
+                store.rootState.safeMode ||
+                store.rootState.server.contao.contaoApi.version < 2 ||
+                !store.rootState.server.contao.contaoApi.features?.['contao/manager-bundle']?.['jwt-cookie']?.includes('debug')
             ) {
                 return Promise.reject();
             }

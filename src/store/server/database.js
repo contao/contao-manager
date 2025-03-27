@@ -13,13 +13,13 @@ export default {
     },
 
     getters: {
-        totalMigrations: state => (!!state.status && state.status.type === 'migration') ? state.status.total : 0,
-        totalSchemaUpdates: state => (!!state.status && state.status.type === 'schema') ? state.status.total : 0,
-        hasError: state => !!state.status && (state.status.type === 'error' || state.status.type === 'problem'),
-        hasWarning: state => !!state.status && state.status.warnings > 0,
+        totalMigrations: (state) => (!!state.status && state.status.type === 'migration' ? state.status.total : 0),
+        totalSchemaUpdates: (state) => (!!state.status && state.status.type === 'schema' ? state.status.total : 0),
+        hasError: (state) => !!state.status && (state.status.type === 'error' || state.status.type === 'problem'),
+        hasWarning: (state) => !!state.status && state.status.warnings > 0,
         hasChanges: (state, getters) => !!getters.totalMigrations || !!getters.totalSchemaUpdates,
         totalChanges: (state, getters) => getters.totalMigrations + getters.totalSchemaUpdates,
-        accessProblem: state => !!state.status && state.status.type === 'error' && state.status.message.toLowerCase().includes('access denied'),
+        accessProblem: (state) => !!state.status && state.status.type === 'error' && state.status.message.toLowerCase().includes('access denied'),
     },
 
     mutations: {
@@ -59,7 +59,10 @@ export default {
 
             commit('setLoading', true);
 
-            return axios.get('api/server/database').then(handle).catch(error => handle(error.response));
+            return axios
+                .get('api/server/database')
+                .then(handle)
+                .catch((error) => handle(error.response));
         },
 
         set({ commit }, url) {
@@ -71,7 +74,10 @@ export default {
 
             commit('setLoading', true);
 
-            return axios.post('api/server/database', { url }).then(handle).catch(error => handle(error.response));
+            return axios
+                .post('api/server/database', { url })
+                .then(handle)
+                .catch((error) => handle(error.response));
         },
     },
 };

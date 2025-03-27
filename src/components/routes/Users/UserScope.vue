@@ -41,14 +41,14 @@ export default {
 
     computed: {
         all: () => Object.values(scopes).reverse(),
-        scopes: vm => vm.all.filter(r => !vm.allowed || vm.allowed.includes(r)),
+        scopes: (vm) => vm.all.filter((r) => !vm.allowed || vm.allowed.includes(r)),
 
-        isRequested: vm => scope => vm.scopes.includes(scope),
-        isRequired: vm => scope => vm.all.indexOf(scope) <= vm.all.indexOf(vm.all.find(s => vm.scopes.includes(s))),
+        isRequested: (vm) => (scope) => vm.scopes.includes(scope),
+        isRequired: (vm) => (scope) => vm.all.indexOf(scope) <= vm.all.indexOf(vm.all.find((s) => vm.scopes.includes(s))),
     },
 
     methods: {
-        init () {
+        init() {
             this.all.forEach((scope) => {
                 this.model[scope] = false;
             });
@@ -56,7 +56,7 @@ export default {
             this.setEnabled(this.modelValue || this.scopes[this.scopes.length - 1], true);
         },
 
-        setEnabled (scope, value) {
+        setEnabled(scope, value) {
             this.all.forEach((r) => {
                 if (this.isRequired(r)) {
                     this.model[r] = true;
@@ -67,13 +67,18 @@ export default {
                 }
             });
 
-            this.$emit('update:modelValue', Array.from(this.all).reverse().find(k => this.model[k]));
+            this.$emit(
+                'update:modelValue',
+                Array.from(this.all)
+                    .reverse()
+                    .find((k) => this.model[k]),
+            );
         },
     },
 
     watch: {
         scopes: {
-            handler () {
+            handler() {
                 this.init();
             },
             deep: true,
@@ -82,8 +87,8 @@ export default {
 
     mounted() {
         this.init();
-    }
-}
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

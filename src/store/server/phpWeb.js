@@ -36,9 +36,12 @@ export default {
                 commit('setCache', response);
 
                 return Promise.resolve(response);
-            }
+            };
 
-            return axios.get('api/server/php-web').then(handle).catch(error => handle(error.response));
+            return axios
+                .get('api/server/php-web')
+                .then(handle)
+                .catch((error) => handle(error.response));
         },
     },
 };

@@ -5,71 +5,71 @@
             @click="toggle"
         ></button>
         <div ref="menu" class="button-menu__menu" v-show="showMenu" tabindex="-1" @focusout="close" @click="close">
-            <slot/>
+            <slot />
         </div>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'ButtonMenu',
-        props: {
-            buttonClass: String,
+export default {
+    name: 'ButtonMenu',
+    props: {
+        buttonClass: String,
+        type: String,
+        icon: {
             type: String,
-            icon: {
-                type: String,
-                default: 'more',
-            },
-            transparent: Boolean,
-            disabled: Boolean,
+            default: 'more',
+        },
+        transparent: Boolean,
+        disabled: Boolean,
+    },
+
+    data: () => ({
+        showMenu: false,
+    }),
+
+    computed: {
+        classes() {
+            let className = `widget-button widget-button--${this.icon} button-menu__button ${this.buttonClass}`;
+
+            if (this.type) {
+                className += ` widget-button--${this.type}`;
+            }
+
+            if (this.transparent) {
+                className += ` widget-button--transparent`;
+            }
+
+            return className;
+        },
+    },
+
+    methods: {
+        open() {
+            this.showMenu = true;
+            setTimeout(() => this.$refs.menu?.focus(), 0);
         },
 
-        data: () => ({
-            showMenu: false,
-        }),
+        close(event) {
+            if (event && this.$refs.menu?.contains(event.relatedTarget)) {
+                return;
+            }
 
-        computed: {
-            classes() {
-                let className = `widget-button widget-button--${this.icon} button-menu__button ${this.buttonClass}`;
-
-                if (this.type) {
-                    className += ` widget-button--${this.type}`;
-                }
-
-                if (this.transparent) {
-                    className += ` widget-button--transparent`;
-                }
-
-                return className;
-            },
+            this.$refs.menu.blur();
+            setTimeout(() => {
+                this.showMenu = false;
+            }, 100);
         },
 
-        methods: {
-            open() {
-                this.showMenu = true;
-                setTimeout(() => this.$refs.menu?.focus(), 0);
-            },
-
-            close(event) {
-                if (event && this.$refs.menu?.contains(event.relatedTarget)) {
-                    return;
-                }
-
-                this.$refs.menu.blur();
-                setTimeout(() => {
-                    this.showMenu = false;
-                }, 100);
-            },
-
-            toggle() {
-                if (this.showMenu) {
-                    this.close();
-                } else {
-                    this.open();
-                }
-            },
+        toggle() {
+            if (this.showMenu) {
+                this.close();
+            } else {
+                this.open();
+            }
         },
-    };
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

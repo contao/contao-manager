@@ -2,20 +2,21 @@
 
 import axios from 'axios';
 
-const handle = (request, { commit }) => new Promise((resolve, reject) => {
-    request
-        .then((response) => {
-            commit('setCache', response.data.enabled);
-            commit('setIsEnabled', response.data.enabled === true);
+const handle = (request, { commit }) =>
+    new Promise((resolve, reject) => {
+        request
+            .then((response) => {
+                commit('setCache', response.data.enabled);
+                commit('setIsEnabled', response.data.enabled === true);
 
-            resolve(response.data.enabled);
-        })
-        .catch(() => {
-            commit('setIsEnabled', false);
+                resolve(response.data.enabled);
+            })
+            .catch(() => {
+                commit('setIsEnabled', false);
 
-            reject();
-        });
-});
+                reject();
+            });
+    });
 
 export default {
     namespaced: true,

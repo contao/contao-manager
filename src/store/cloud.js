@@ -9,8 +9,8 @@ export default {
     },
 
     getters: {
-        isLoading: state => state.enabled === null || state.status === null,
-        isReady: state => state.enabled && state.status !== null && !!state.status.appVersion,
+        isLoading: (state) => state.enabled === null || state.status === null,
+        isReady: (state) => state.enabled && state.status !== null && !!state.status.appVersion,
         hasError: (state, getters) => state.enabled && !getters.isLoading && !getters.isReady,
     },
 
@@ -30,7 +30,7 @@ export default {
 
             if (state.enabled === null) {
                 try {
-                    const config = await dispatch('server/config/get', null, {root: true});
+                    const config = await dispatch('server/config/get', null, { root: true });
                     enabled = !!config.cloud?.enabled;
                 } catch (err) {
                     enabled = false;
@@ -45,10 +45,11 @@ export default {
             }
 
             try {
-                const response = (await axios.get(
-                    'https://www.composer-resolver.cloud/',
-                    { timeout: 2500, responseType: 'json', headers: {'Composer-Resolver-Client': 'contao'} },
-                ));
+                const response = await axios.get('https://www.composer-resolver.cloud/', {
+                    timeout: 2500,
+                    responseType: 'json',
+                    headers: { 'Composer-Resolver-Client': 'contao' },
+                });
 
                 if (!response.data?.appVersion) {
                     commit('setStatus', {});

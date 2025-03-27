@@ -8,12 +8,22 @@
             <li class="navigation__item navigation__item--main">
                 <button>{{ $t('ui.navigation.tools') }}</button>
                 <ul class="navigation__group navigation__group--sub">
-                    <li class="navigation__item navigation__item--sub" v-if="!safeMode"><a :href="backendUrl">{{ $t('ui.navigation.backend') }}</a></li>
-                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showAppDev"><a href="/app_dev.php/" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
-                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showPreview"><a :href="previewUrl" target="_blank">{{ $t('ui.navigation.debug') }}</a></li>
-                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showInstallTool"><a :href="installToolUrl" target="_blank">{{ $t('ui.navigation.installTool') }}</a></li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode">
+                        <a :href="backendUrl">{{ $t('ui.navigation.backend') }}</a>
+                    </li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showAppDev">
+                        <a href="/app_dev.php/" target="_blank">{{ $t('ui.navigation.debug') }}</a>
+                    </li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showPreview">
+                        <a :href="previewUrl" target="_blank">{{ $t('ui.navigation.debug') }}</a>
+                    </li>
+                    <li class="navigation__item navigation__item--sub" v-if="!safeMode && showInstallTool">
+                        <a :href="installToolUrl" target="_blank">{{ $t('ui.navigation.installTool') }}</a>
+                    </li>
                     <navigation-item :to="routes.logViewer" sub @navigate="closeNavigation">{{ $t('ui.navigation.logViewer') }}</navigation-item>
-                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="phpinfo">{{ $t('ui.navigation.phpinfo') }}</a></li>
+                    <li class="navigation__item navigation__item--sub">
+                        <a href="#" @click.prevent="phpinfo">{{ $t('ui.navigation.phpinfo') }}</a>
+                    </li>
                 </ul>
             </li>
             <li class="navigation__item navigation__item--main navigation__item--icon">
@@ -23,8 +33,12 @@
                 </button>
                 <ul class="navigation__group navigation__group--sub navigation__group--right">
                     <navigation-item :to="routes.userManager" sub @navigate="closeNavigation">{{ $t('ui.navigation.users') }}</navigation-item>
-                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="systemCheck">{{ $t('ui.navigation.systemCheck') }}</a></li>
-                    <li class="navigation__item navigation__item--sub"><a href="#" @click.prevent="doLogout">{{ $t('ui.navigation.logout') }}</a></li>
+                    <li class="navigation__item navigation__item--sub">
+                        <a href="#" @click.prevent="systemCheck">{{ $t('ui.navigation.systemCheck') }}</a>
+                    </li>
+                    <li class="navigation__item navigation__item--sub">
+                        <a href="#" @click.prevent="doLogout">{{ $t('ui.navigation.logout') }}</a>
+                    </li>
                 </ul>
             </li>
         </ul>
@@ -32,94 +46,94 @@
 </template>
 
 <script>
-    import { mapState, mapGetters, mapActions } from 'vuex';
-    import DisclosureMenu from 'accessible-menu/disclosure-menu';
-    import views from '../../router/views';
-    import routes from '../../router/routes';
-    import NavigationItem from './NavigationItem.vue';
-    import scopes from '../../scopes';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import DisclosureMenu from 'accessible-menu/disclosure-menu';
+import views from '../../router/views';
+import routes from '../../router/routes';
+import NavigationItem from './NavigationItem.vue';
+import scopes from '../../scopes';
 
-    export default {
-        components: { NavigationItem },
+export default {
+    components: { NavigationItem },
 
-        data: () => ({
-            routes,
-            databaseChanges: 0,
-        }),
+    data: () => ({
+        routes,
+        databaseChanges: 0,
+    }),
 
-        computed: {
-            ...mapState(['safeMode']),
-            ...mapState('contao/install-tool', { showInstallTool: 'isSupported' }),
-            ...mapState('contao/access-key', { showAppDev: 'isEnabled' }),
-            ...mapState('contao/jwt-cookie', { showPreview: 'isDebugEnabled' }),
-            ...mapState('server/contao', ['contaoConfig']),
-            ...mapGetters('auth', ['isGranted']),
-            ...mapGetters('packages', ['totalChanges']),
-            ...mapGetters('packages/uploads', ['totalUploads']),
-            ...mapGetters('server/database', { hasDatabaseChanges: 'hasChanges', hasDatabaseWarning: 'hasWarning', hasDatabaseError: 'hasError' }),
+    computed: {
+        ...mapState(['safeMode']),
+        ...mapState('contao/install-tool', { showInstallTool: 'isSupported' }),
+        ...mapState('contao/access-key', { showAppDev: 'isEnabled' }),
+        ...mapState('contao/jwt-cookie', { showPreview: 'isDebugEnabled' }),
+        ...mapState('server/contao', ['contaoConfig']),
+        ...mapGetters('auth', ['isGranted']),
+        ...mapGetters('packages', ['totalChanges']),
+        ...mapGetters('packages/uploads', ['totalUploads']),
+        ...mapGetters('server/database', { hasDatabaseChanges: 'hasChanges', hasDatabaseWarning: 'hasWarning', hasDatabaseError: 'hasError' }),
 
-            scopes: () => scopes,
-            packageChanges: vm => vm.totalChanges + vm.totalUploads,
+        scopes: () => scopes,
+        packageChanges: (vm) => vm.totalChanges + vm.totalUploads,
 
-            backendUrl: vm => vm.contaoConfig?.backend?.route_prefix || '/contao',
-            previewUrl: vm => `${vm.contaoConfig?.backend?.preview_script || '/preview.php'}/`,
-            installToolUrl: vm => `${vm.contaoConfig?.backend?.route_prefix || '/contao'}/install`,
+        backendUrl: (vm) => vm.contaoConfig?.backend?.route_prefix || '/contao',
+        previewUrl: (vm) => `${vm.contaoConfig?.backend?.preview_script || '/preview.php'}/`,
+        installToolUrl: (vm) => `${vm.contaoConfig?.backend?.route_prefix || '/contao'}/install`,
+    },
+
+    methods: {
+        ...mapActions('auth', ['logout']),
+
+        toggleNavigation() {
+            document.body.classList.toggle('nav-active');
         },
 
-        methods: {
-            ...mapActions('auth', ['logout']),
+        closeNavigation() {
+            document.body.classList.remove('nav-active');
+        },
 
-            toggleNavigation() {
-                document.body.classList.toggle('nav-active');
-            },
+        phpinfo() {
+            const popup = window.open();
 
-            closeNavigation() {
-                document.body.classList.remove('nav-active')
-            },
+            if (popup) {
+                popup.document.open();
+                popup.document.write('<p class="phpinfo__loading" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; font: 4vmin -apple-system, system-ui, &quot;Segoe UI&quot;, Roboto, Oxygen-Sans, Ubuntu, Cantarell, &quot;Helvetica Neue&quot;, sans-serif;">');
+                popup.document.write(this.$t('ui.navigation.phpinfoLoading'));
+                popup.document.write('</p>');
 
-            phpinfo() {
-                const popup = window.open();
-
-                if (popup) {
-                    popup.document.open();
-                    popup.document.write('<p class="phpinfo__loading" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; font: 4vmin -apple-system, system-ui, &quot;Segoe UI&quot;, Roboto, Oxygen-Sans, Ubuntu, Cantarell, &quot;Helvetica Neue&quot;, sans-serif;">');
-                    popup.document.write(this.$t('ui.navigation.phpinfoLoading'));
-                    popup.document.write('</p>');
-
-                    this.$store.dispatch('server/phpinfo/get').then((content) => {
-                        popup.document.write(content);
-                        popup.document.close();
-                        popup.document.body.removeChild(popup.document.querySelector('.phpinfo__loading'));
-                    });
-                }
-            },
-
-            systemCheck() {
-                this.closeNavigation();
-                window.localStorage.removeItem('contao_manager_booted');
-                this.$store.commit('setView', views.BOOT);
-            },
-
-            doLogout() {
-                this.closeNavigation();
-                this.logout();
+                this.$store.dispatch('server/phpinfo/get').then((content) => {
+                    popup.document.write(content);
+                    popup.document.close();
+                    popup.document.body.removeChild(popup.document.querySelector('.phpinfo__loading'));
+                });
             }
         },
 
-        mounted() {
-            new DisclosureMenu({
-                menuElement: this.$refs.menu,
-                hoverType: "on",
-            });
-
-            if (this.isGranted(scopes.UPDATE)) {
-                this.$store.dispatch('contao/install-tool/fetch');
-                this.$store.dispatch('contao/jwt-cookie/get').catch(() => {});
-                this.$store.dispatch('contao/access-key/get').catch(() => {});
-                this.$store.dispatch('server/database/get');
-            }
+        systemCheck() {
+            this.closeNavigation();
+            window.localStorage.removeItem('contao_manager_booted');
+            this.$store.commit('setView', views.BOOT);
         },
-    };
+
+        doLogout() {
+            this.closeNavigation();
+            this.logout();
+        },
+    },
+
+    mounted() {
+        new DisclosureMenu({
+            menuElement: this.$refs.menu,
+            hoverType: 'on',
+        });
+
+        if (this.isGranted(scopes.UPDATE)) {
+            this.$store.dispatch('contao/install-tool/fetch');
+            this.$store.dispatch('contao/jwt-cookie/get').catch(() => {});
+            this.$store.dispatch('contao/access-key/get').catch(() => {});
+            this.$store.dispatch('server/database/get');
+        }
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -182,12 +196,16 @@ body.nav-active {
 
             &:before {
                 top: -10px;
-                transition: top 0.075s 0.12s ease, opacity 0.075s ease;
+                transition:
+                    top 0.075s 0.12s ease,
+                    opacity 0.075s ease;
             }
 
             &:after {
                 bottom: -10px;
-                transition: bottom 0.075s 0.12s ease, transform 0.075s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+                transition:
+                    bottom 0.075s 0.12s ease,
+                    transform 0.075s cubic-bezier(0.55, 0.055, 0.675, 0.19);
             }
         }
 
@@ -200,11 +218,15 @@ body.nav-active {
                 &:before {
                     top: 0;
                     opacity: 0;
-                    transition: top 0.075s ease, opacity 0.075s 0.12s ease;
+                    transition:
+                        top 0.075s ease,
+                        opacity 0.075s 0.12s ease;
                 }
 
                 &:after {
-                    transition: bottom 0.075s ease, transform 0.075s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+                    transition:
+                        bottom 0.075s ease,
+                        transform 0.075s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
                     bottom: 0;
                     transform: rotate(-90deg);
                 }

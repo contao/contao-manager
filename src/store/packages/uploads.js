@@ -1,16 +1,13 @@
 import axios from 'axios';
 
 const hasDuplicates = (uploads) => {
-    const count = Object.values(uploads).reduce(
-        (prev, upload) => {
-            prev[upload.hash] = (prev[upload.hash] || 0) + 1;
+    const count = Object.values(uploads).reduce((prev, upload) => {
+        prev[upload.hash] = (prev[upload.hash] || 0) + 1;
 
-            return prev;
-        },
-        {},
-    );
+        return prev;
+    }, {});
 
-    return !!Object.values(count).find(v => v > 1);
+    return !!Object.values(count).find((v) => v > 1);
 };
 
 export default {
@@ -26,19 +23,25 @@ export default {
 
     getters: {
         hasUploads: (state, get) => get.totalUploads > 0,
-        isDuplicate: state => (id, name) => Object.values(state.uploads).find(v => v.id !== id && (v.hash === state.uploads[id].hash || state.uploads[v.id]?.package?.name === name)),
-        isRemoving: state => id => state.removing.includes(id),
+        isDuplicate: (state) => (id, name) =>
+            Object.values(state.uploads).find((v) => v.id !== id && (v.hash === state.uploads[id].hash || state.uploads[v.id]?.package?.name === name)),
+        isRemoving: (state) => (id) => state.removing.includes(id),
 
-        totalUploads: (state, get) => state.uploads ? get.unconfirmedUploads.length : 0,
-        unconfirmedUploads: state => Object.values(state.uploads).filter(item => !state.confirmed.includes(item.id)),
+        totalUploads: (state, get) => (state.uploads ? get.unconfirmedUploads.length : 0),
+        unconfirmedUploads: (state) => Object.values(state.uploads).filter((item) => !state.confirmed.includes(item.id)),
 
-        canConfirmUploads: (state, get, rootState, rootGet) => state.uploads
-            ? Object.values(state.uploads).find(
-                item => !item.success || item.error
-                    || (Object.keys(rootState.packages.installed).includes(item.package.name) && rootState.packages.installed[item.package.name].version === item.package.version)
-                    || (item.package.require && !rootGet['packages/contaoSupported'](item.package.require['contao/core-bundle'] || item.package.require['contao/manager-bundle']))
-            ) === undefined && !hasDuplicates(state.uploads)
-            : false,
+        canConfirmUploads: (state, get, rootState, rootGet) =>
+            state.uploads
+                ? Object.values(state.uploads).find(
+                      (item) =>
+                          !item.success ||
+                          item.error ||
+                          (Object.keys(rootState.packages.installed).includes(item.package.name) &&
+                              rootState.packages.installed[item.package.name].version === item.package.version) ||
+                          (item.package.require &&
+                              !rootGet['packages/contaoSupported'](item.package.require['contao/core-bundle'] || item.package.require['contao/manager-bundle'])),
+                  ) === undefined && !hasDuplicates(state.uploads)
+                : false,
     },
 
     mutations: {
@@ -67,7 +70,7 @@ export default {
         },
 
         setRemoved(state, id) {
-            state.removing = state.removing.filter(r => r !== id);
+            state.removing = state.removing.filter((r) => r !== id);
         },
     },
 
@@ -98,8 +101,8 @@ export default {
             }
 
             if (pkg.suggest) {
-                await Promise.all(Object.keys(pkg.suggest).map(
-                    async (name) => {
+                await Promise.all(
+                    Object.keys(pkg.suggest).map(async (name) => {
                         if (!this.getters['packages/packageInstalled'](name)) {
                             const metadata = await this.dispatch('packages/metadata', { name });
 
@@ -107,23 +110,21 @@ export default {
                                 this.commit('packages/add', { name });
                             }
                         }
-                    }
-                ));
+                    }),
+                );
             }
 
             commit('setConfirmed', id);
         },
 
         confirmAll({ state, dispatch }) {
-            Object.keys(state.uploads).forEach(id => dispatch('confirm', id));
+            Object.keys(state.uploads).forEach((id) => dispatch('confirm', id));
         },
 
         unconfirm({ state, commit }, idOrName) {
             const id = state.confirmed.includes(idOrName)
                 ? idOrName
-                : Object.keys(state.uploads).find(
-                    (id) => state.uploads[id].package && state.uploads[id].package.name === idOrName && state.confirmed.includes(id)
-                );
+                : Object.keys(state.uploads).find((id) => state.uploads[id].package && state.uploads[id].package.name === idOrName && state.confirmed.includes(id));
 
             if (!id) {
                 return;
@@ -143,7 +144,7 @@ export default {
         },
 
         unconfirmAll({ state, dispatch }) {
-            Object.keys(state.uploads).forEach(id => dispatch('unconfirm', id));
+            Object.keys(state.uploads).forEach((id) => dispatch('unconfirm', id));
         },
 
         async remove({ commit, dispatch }, id) {
@@ -155,16 +156,16 @@ export default {
         },
 
         async removeAll({ state, commit, dispatch }) {
-            await Promise.all(Object.keys(state.uploads).map(
-                async (id) => {
+            await Promise.all(
+                Object.keys(state.uploads).map(async (id) => {
                     if (!state.confirmed.includes(id)) {
                         commit('setRemoving', id);
                         await axios.delete(`api/packages/uploads/${id}`);
                         commit('setRemoved', id);
                     }
-                },
-            ));
+                }),
+            );
             await dispatch('load');
-        }
+        },
     },
 };

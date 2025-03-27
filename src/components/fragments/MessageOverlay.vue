@@ -1,6 +1,6 @@
 <template>
     <div class="message-overlay">
-        <div :class="{ 'message-overlay__blur': active }"><slot/></div>
+        <div :class="{ 'message-overlay__blur': active }"><slot /></div>
         <div class="message-overlay__overlay" v-if="active">
             <span class="message-overlay__message">{{ message }}</span>
         </div>
@@ -8,18 +8,18 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            message: {
-                type: String,
-                required: true,
-            },
-            active: {
-                type: Boolean,
-                required: true,
-            },
+export default {
+    props: {
+        message: {
+            type: String,
+            required: true,
         },
-    };
+        active: {
+            type: Boolean,
+            required: true,
+        },
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -31,7 +31,9 @@
     &__blur {
         opacity: 0.75;
         filter: blur(2px);
-        transition: opacity .5s, filter .5s;
+        transition:
+            opacity 0.5s,
+            filter 0.5s;
     }
 
     &__overlay {

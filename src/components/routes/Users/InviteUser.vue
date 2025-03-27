@@ -3,7 +3,7 @@
         <template v-if="token">
             <div class="invite-user__check">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z"/>
+                    <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
                 </svg>
             </div>
 
@@ -23,7 +23,7 @@
         </template>
         <template v-else>
             <p class="invite-user__text">{{ $t('ui.user-manager.inviteText') }}</p>
-            <user-scope v-model="scope"/>
+            <user-scope v-model="scope" />
             <a class="invite-user__help" :href="`https://to.contao.org/docs/manager-users?lang=${$i18n.locale}`" target="_blank">{{ $t('ui.user-manager.permissions') }}</a>
         </template>
         <template #actions>
@@ -34,48 +34,48 @@
 </template>
 
 <script>
-    import datimFormat from 'contao-package-list/src/filters/datimFormat';
-    import PopupOverlay from 'contao-package-list/src/components/fragments/PopupOverlay';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import UserScope from './UserScope';
+import datimFormat from 'contao-package-list/src/filters/datimFormat';
+import PopupOverlay from 'contao-package-list/src/components/fragments/PopupOverlay';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import UserScope from './UserScope';
 
-    export default {
-        components: { PopupOverlay, LoadingButton, UserScope },
+export default {
+    components: { PopupOverlay, LoadingButton, UserScope },
 
-        data: () => ({
-            loading: false,
-            scope: 'admin',
-            token: null,
-            copied: false,
-        }),
+    data: () => ({
+        loading: false,
+        scope: 'admin',
+        token: null,
+        copied: false,
+    }),
 
-        methods: {
-            datimFormat,
+    methods: {
+        datimFormat,
 
-            markCopy () {
-                this.copied = true;
+        markCopy() {
+            this.copied = true;
 
-                setTimeout(() => {
-                    this.copied = false;
-                }, 1000);
-            },
-
-            async submit() {
-                this.loading = true;
-
-                this.$request.post('api/invitations', { scope: this.scope }, null, {
-                    201: (response) => {
-                        this.token = response.data;
-                        this.loading = false;
-                    }
-                });
-            },
-
-            close() {
-                this.$store.commit('modals/close', 'invite-user');
-            },
+            setTimeout(() => {
+                this.copied = false;
+            }, 1000);
         },
-    };
+
+        async submit() {
+            this.loading = true;
+
+            this.$request.post('api/invitations', { scope: this.scope }, null, {
+                201: (response) => {
+                    this.token = response.data;
+                    this.loading = false;
+                },
+            });
+        },
+
+        close() {
+            this.$store.commit('modals/close', 'invite-user');
+        },
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

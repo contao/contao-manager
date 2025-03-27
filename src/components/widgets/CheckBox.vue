@@ -10,7 +10,7 @@
                 :required="required"
                 :checked="modelValue || null"
                 @change="toggle($event.target.checked)"
-            >
+            />
             <label v-if="label" :for="'ctrl_'+name">{{ label }}</label>
         </div>
         <div class="widget__description" :class="{ 'widget__description--disabled': disabled }" v-if="description || $slots.description">
@@ -20,43 +20,43 @@
 </template>
 
 <script>
-    export default {
-        emits: ['input', 'update:modelValue'],
+export default {
+    emits: ['input', 'update:modelValue'],
 
-        props: {
-            name: {
-                type: String,
-                required: true,
-            },
-            label: {
-                type: String,
-                required: true,
-            },
-            description: String,
-            modelValue: Boolean,
-            disabled: Boolean,
-            required: Boolean,
+    props: {
+        name: {
+            type: String,
+            required: true,
         },
-        methods: {
-            toggle(value) {
-                this.$emit('input');
-                this.$emit('update:modelValue', !!value);
-            },
+        label: {
+            type: String,
+            required: true,
         },
-    };
+        description: String,
+        modelValue: Boolean,
+        disabled: Boolean,
+        required: Boolean,
+    },
+    methods: {
+        toggle(value) {
+            this.$emit('input');
+            this.$emit('update:modelValue', !!value);
+        },
+    },
+};
 </script>
 
 <style lang="scss">
 .widget-checkbox {
     input {
-        border:0;
-        clip:rect(0 0 0 0);
-        height:1px;
-        margin:-1px;
-        overflow:hidden;
-        padding:0;
-        position:absolute;
-        width:1px;
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
     }
 
     label {
@@ -88,14 +88,14 @@
     }
 
     input:disabled + label {
-        opacity: .5;
+        opacity: 0.5;
     }
 
     .widget__description {
         padding-left: 25px;
 
         &--disabled {
-            opacity: .5;
+            opacity: 0.5;
         }
     }
 }

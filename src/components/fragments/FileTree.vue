@@ -4,50 +4,52 @@
         <template v-for="(file, i) in files" :key="i">
             <li :class="`file-tree__folder${isOpen(file) ? ' file-tree__folder--open' : ''}`" v-if="file.children.length">
                 <button @click="toggle(file)">{{ name(file) }}</button>
-                <file-tree :files="file.children" v-if="isOpen(file)"/>
+                <file-tree :files="file.children" v-if="isOpen(file)" />
             </li>
-            <li class="file-tree__file" v-else><span>{{ name(file) }}</span></li>
+            <li class="file-tree__file" v-else>
+                <span>{{ name(file) }}</span>
+            </li>
         </template>
     </ul>
 </template>
 
 <script>
-    export default {
-        name: 'FileTree',
+export default {
+    name: 'FileTree',
 
-        props: {
-            files: {
-                type: Array,
-                required: true,
-            },
+    props: {
+        files: {
+            type: Array,
+            required: true,
         },
+    },
 
-        data: () => ({
-            open: [],
-        }),
+    data: () => ({
+        open: [],
+    }),
 
-        computed: {
-            name: () => (file) => {
-                if (file.name) {
-                    return file.name;
-                }
-
-                return file.path.substring(file.path.lastIndexOf('/') + 1);
-            },
-
-            isOpen: (vm) => (file) => vm.open.includes(file),
-        },
-
-        methods: {
-            toggle (file) {
-                if (this.open.includes(file)) {
-                    this.open = this.open.filter((e) => e !== file);
-                } else {
-                    this.open.push(file);
-                }
+    computed: {
+        name: () => (file) => {
+            if (file.name) {
+                return file.name;
             }
-        }
-    };
+
+            return file.path.substring(file.path.lastIndexOf('/') + 1);
+        },
+
+        isOpen: (vm) => (file) => vm.open.includes(file),
+    },
+
+    methods: {
+        toggle(file) {
+            if (this.open.includes(file)) {
+                this.open = this.open.filter((e) => e !== file);
+            } else {
+                this.open.push(file);
+            }
+        },
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -72,7 +74,7 @@
             border-top: 5px solid transparent;
             border-bottom: 5px solid transparent;
             border-left: 5px solid var(--text);
-            transition: transform .1s ease-in-out;
+            transition: transform 0.1s ease-in-out;
         }
 
         &--open {

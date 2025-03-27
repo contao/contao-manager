@@ -1,4 +1,3 @@
-
 export default {
     INIT: 'init',
     ACCOUNT: 'account',

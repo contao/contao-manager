@@ -5,23 +5,25 @@
 </template>
 
 <script>
-    import boot from '../../mixins/boot';
+import boot from '../../mixins/boot';
 
-    import BootCheck from '../fragments/BootCheck';
+import BootCheck from '../fragments/BootCheck';
 
-    export default {
-        mixins: [boot],
-        components: { BootCheck },
+export default {
+    mixins: [boot],
+    components: { BootCheck },
 
-        data: () => ({
-            problem: {},
-        }),
+    data: () => ({
+        problem: {},
+    }),
 
-        methods: {
-            boot() {
-                this.bootDescription = this.$t('ui.server.running');
+    methods: {
+        boot() {
+            this.bootDescription = this.$t('ui.server.running');
 
-                this.$store.dispatch('server/php-cli/get').then((result) => {
+            this.$store
+                .dispatch('server/php-cli/get')
+                .then((result) => {
                     if (result.problem) {
                         this.problem = result.problem;
                         this.bootState = 'error';
@@ -30,7 +32,8 @@
                         this.bootState = 'success';
                         this.bootDescription = this.$t('ui.server.php_cli.success', { version: result.version });
                     }
-                }).catch((response) => {
+                })
+                .catch((response) => {
                     if (response.status === 503) {
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.prerequisite');
@@ -38,10 +41,11 @@
                         this.bootState = 'error';
                         this.bootDescription = this.$t('ui.server.error');
                     }
-                }).then(() => {
+                })
+                .then(() => {
                     this.$emit('result', this.bootState);
                 });
-            },
         },
-    };
+    },
+};
 </script>

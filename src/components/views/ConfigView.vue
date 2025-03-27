@@ -1,7 +1,7 @@
 <template>
     <boxed-layout :wide="true" slotClass="config-check">
         <header class="config-check__header">
-            <img src="../../assets/images/server-config.svg" width="80" height="80" class="config-check__icon" alt="">
+            <img src="../../assets/images/server-config.svg" width="80" height="80" class="config-check__icon" alt="" />
             <h1 class="config-check__headline">{{ $t('ui.server.config.title') }}</h1>
             <p class="config-check__description">{{ $t('ui.server.config.description') }}</p>
         </header>
@@ -26,11 +26,11 @@
                     <div class="config-check__issues" v-if="cloudIssues && cloudIssues.length">
                         <p>{{ $t('ui.server.config.stateErrorCloud') }}</p>
                         <ul>
-                            <li v-for="(issue,k) in cloudIssues" :key="k">{{ issue }}</li>
+                            <li v-for="(issue, k) in cloudIssues" :key="k">{{ issue }}</li>
                         </ul>
                     </div>
 
-                    <check-box name="cloud" :label="$t('ui.server.config.cloud')" :disabled="processing" v-model="cloud"/>
+                    <check-box name="cloud" :label="$t('ui.server.config.cloud')" :disabled="processing" v-model="cloud" />
                 </fieldset>
 
                 <loading-button submit color="primary" :disabled="!php_cli" :loading="processing">{{ $t('ui.server.config.save') }}</loading-button>
@@ -48,55 +48,55 @@ import LoadingButton from 'contao-package-list/src/components/fragments/LoadingB
 import views from '../../router/views';
 
 export default {
-        components: { BoxedLayout, TextField, CheckBox, LoadingButton },
+    components: { BoxedLayout, TextField, CheckBox, LoadingButton },
 
-        data: () => ({
-            processing: true,
-            error: '',
+    data: () => ({
+        processing: true,
+        error: '',
 
-            php_cli: '',
-            cloud: true,
-            cloudIssues: [],
-        }),
+        php_cli: '',
+        cloud: true,
+        cloudIssues: [],
+    }),
 
-        methods: {
-            async save() {
-                this.processing = true;
-                this.error = '';
+    methods: {
+        async save() {
+            this.processing = true;
+            this.error = '';
 
-                const config = {
-                    php_cli: this.php_cli,
-                    cloud: this.cloud,
-                };
+            const config = {
+                php_cli: this.php_cli,
+                cloud: this.cloud,
+            };
 
-                const data = await this.$store.dispatch('server/config/set', config);
+            const data = await this.$store.dispatch('server/config/set', config);
 
-                if (data.status === 400 && data.detail) {
-                    this.error = data.detail;
-                    this.processing = false;
-                    setTimeout(() => {
-                        this.$refs.cli.focus();
-                    }, 0)
-                } else {
-                    window.location.reload(true);
-                }
-            },
-
-            cancel() {
-                this.$store.commit('setView', views.BOOT);
+            if (data.status === 400 && data.detail) {
+                this.error = data.detail;
+                this.processing = false;
+                setTimeout(() => {
+                    this.$refs.cli.focus();
+                }, 0);
+            } else {
+                window.location.reload(true);
             }
         },
 
-        async mounted() {
-            const result = await this.$store.dispatch('server/config/get');
-
-            this.php_cli = result.php_cli;
-            this.cloud = result.cloud.enabled;
-            this.cloudIssues = result.cloud.issues;
-
-            this.processing = false;
+        cancel() {
+            this.$store.commit('setView', views.BOOT);
         },
-    };
+    },
+
+    async mounted() {
+        const result = await this.$store.dispatch('server/config/get');
+
+        this.php_cli = result.php_cli;
+        this.cloud = result.cloud.enabled;
+        this.cloudIssues = result.cloud.issues;
+
+        this.processing = false;
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -114,7 +114,7 @@ export default {
     &__icon {
         background: var(--contao);
         border-radius: 10px;
-        padding:10px;
+        padding: 10px;
     }
 
     &__headline {
@@ -151,7 +151,7 @@ export default {
     }
 
     &__fieldtitle {
-        margin-bottom: .5em;
+        margin-bottom: 0.5em;
         font-size: 18px;
         font-weight: defaults.$font-weight-bold;
         line-height: 30px;
@@ -175,13 +175,13 @@ export default {
         }
 
         li {
-            margin: .5em 0 0 25px;
+            margin: 0.5em 0 0 25px;
             padding: 0;
         }
     }
 
     .widget-button {
-        margin-bottom: .5em;
+        margin-bottom: 0.5em;
     }
 
     @include defaults.screen(960) {

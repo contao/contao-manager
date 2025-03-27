@@ -2,20 +2,21 @@
 
 import axios from 'axios';
 
-const handle = (request, { commit }) => new Promise((resolve, reject) => {
-    request
-        .then((response) => {
-            commit('setCache', response.data['access-key']);
-            commit('setIsEnabled', response.data['access-key'] !== '');
+const handle = (request, { commit }) =>
+    new Promise((resolve, reject) => {
+        request
+            .then((response) => {
+                commit('setCache', response.data['access-key']);
+                commit('setIsEnabled', response.data['access-key'] !== '');
 
-            resolve(response.data['access-key']);
-        })
-        .catch(() => {
-            commit('setIsEnabled', false);
+                resolve(response.data['access-key']);
+            })
+            .catch(() => {
+                commit('setIsEnabled', false);
 
-            reject();
-        });
-});
+                reject();
+            });
+    });
 
 export default {
     namespaced: true,
@@ -41,9 +42,10 @@ export default {
                 return Promise.resolve(store.state.cache);
             }
 
-            if (store.rootState.safeMode
-                || store.rootState.server.contao.contaoApi.version < 1
-                || !store.rootState.server.contao.contaoApi.features?.['contao/manager-bundle']?.['dot-env']?.includes('APP_DEV_ACCESSKEY')
+            if (
+                store.rootState.safeMode ||
+                store.rootState.server.contao.contaoApi.version < 1 ||
+                !store.rootState.server.contao.contaoApi.features?.['contao/manager-bundle']?.['dot-env']?.includes('APP_DEV_ACCESSKEY')
             ) {
                 return Promise.reject();
             }

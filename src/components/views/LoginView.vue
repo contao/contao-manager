@@ -6,7 +6,7 @@
         </header>
         <main class="view-login__locked" v-if="locked">
             <i18n-t tag="p" keypath="ui.login.locked">
-                <template #lockFile><strong>contao-manager/login.lock</strong><br></template>
+                <template #lockFile><strong>contao-manager/login.lock</strong><br /></template>
             </i18n-t>
         </main>
         <transition name="animate-flip" type="transition" mode="out-in" v-else>
@@ -15,8 +15,8 @@
                     <h1 class="view-login__headline">{{ $t('ui.login.headline') }}</h1>
                     <p class="view-login__description">{{ $t('ui.login.description') }}</p>
 
-                    <text-field ref="username" name="username" autocomplete="username webauthn" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in || passkey_login" v-model="username" @input="reset"/>
-                    <text-field type="password" name="password" autocomplete="current-password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" minlength="8" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in || passkey_login" v-model="password" @input="reset"/>
+                    <text-field ref="username" name="username" autocomplete="username webauthn" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in || passkey_login" v-model="username" @input="reset" />
+                    <text-field type="password" name="password" autocomplete="current-password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" minlength="8" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in || passkey_login" v-model="password" @input="reset" />
 
                     <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed || passkey_login" :loading="logging_in && !passkey_login">
                         {{ $t('ui.login.button') }}
@@ -59,129 +59,129 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
-    import { startAuthentication, browserSupportsWebAuthn, browserSupportsWebAuthnAutofill } from '@simplewebauthn/browser';
-    import views from '../../router/views';
+import { mapState } from 'vuex';
+import { startAuthentication, browserSupportsWebAuthn, browserSupportsWebAuthnAutofill } from '@simplewebauthn/browser';
+import views from '../../router/views';
 
-    import BoxedLayout from '../layouts/BoxedLayout';
-    import TextField from '../widgets/TextField';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import BoxedLayout from '../layouts/BoxedLayout';
+import TextField from '../widgets/TextField';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
-    export default {
-        components: { BoxedLayout, TextField, LoadingButton },
+export default {
+    components: { BoxedLayout, TextField, LoadingButton },
 
-        data: () => ({
-            username: '',
-            password: '',
-            totp: '',
+    data: () => ({
+        username: '',
+        password: '',
+        totp: '',
 
-            logging_in: false,
-            passkey_login: false,
-            requires_totp: false,
-            login_failed: false,
-            showPasskey: false
-        }),
+        logging_in: false,
+        passkey_login: false,
+        requires_totp: false,
+        login_failed: false,
+        showPasskey: false,
+    }),
 
-        computed: {
-            ...mapState(['locked']),
+    computed: {
+        ...mapState(['locked']),
 
-            inputValid() {
-                return this.username !== '' && this.password !== '' && this.password.length >= 8;
-            },
-
-            totpValid() {
-                return this.totp !== '' && /^\d{6}$/.test(this.totp);
-            }
+        inputValid() {
+            return this.username !== '' && this.password !== '' && this.password.length >= 8;
         },
 
-        methods: {
-            async login() {
-                if (!this.inputValid) {
-                    return;
-                }
+        totpValid() {
+            return this.totp !== '' && /^\d{6}$/.test(this.totp);
+        },
+    },
 
-                this.doLogin({
-                    username: this.username,
-                    password: this.password,
-                    totp: this.totp,
+    methods: {
+        async login() {
+            if (!this.inputValid) {
+                return;
+            }
+
+            this.doLogin({
+                username: this.username,
+                password: this.password,
+                totp: this.totp,
+            });
+        },
+
+        async passkeyLogin({ useBrowserAutofill }) {
+            this.passkey_login = !useBrowserAutofill;
+
+            const optionsJSON = (await this.$request.get('api/session/options')).data;
+
+            try {
+                const resp = await startAuthentication({ optionsJSON, useBrowserAutofill: !!useBrowserAutofill });
+
+                await this.doLogin({
+                    passkey: JSON.stringify(resp),
                 });
-            },
+            } catch (err) {
+                // Ignore Webauthn error
+            }
 
-            async passkeyLogin ({ useBrowserAutofill }) {
-                this.passkey_login = !useBrowserAutofill;
+            this.passkey_login = false;
+        },
 
-                const optionsJSON = (await this.$request.get('api/session/options')).data
+        async doLogin(data) {
+            this.logging_in = true;
 
-                try {
-                    const resp = await startAuthentication({ optionsJSON, useBrowserAutofill: !!useBrowserAutofill });
+            const response = await this.$store.dispatch('auth/login', data);
 
-                    await this.doLogin({
-                        passkey: JSON.stringify(resp),
-                    });
-                } catch (err) {
-                    // Ignore Webauthn error
-                }
-
-                this.passkey_login = false;
-            },
-
-            async doLogin (data) {
-                this.logging_in = true;
-
-                const response = await this.$store.dispatch('auth/login', data);
-
-                if (response.status === 201) {
-                    this.$store.commit('setView', views.BOOT)
-                } else if (response.status === 401 && response.data.totp_enabled) {
-                    this.logging_in = false;
-                    this.requires_totp = true;
-                    this.login_failed = !!this.totp;
-                } else {
-                    this.logging_in = false;
-                    this.login_failed = true;
-                }
-            },
-
-            reset() {
-                this.login_failed = false;
-            },
-
-            cancelTotp() {
-                this.username = '';
-                this.password = '';
-                this.totp = '';
+            if (response.status === 201) {
+                this.$store.commit('setView', views.BOOT);
+            } else if (response.status === 401 && response.data.totp_enabled) {
                 this.logging_in = false;
-                this.requires_totp = false;
-                this.login_failed = false;
-            },
-        },
-
-        async mounted() {
-            // Hide error screen when redirecting to login (timeout or 401 error).
-            this.$store.commit('setError', null);
-
-            if (this.locked) {
-                return;
-            }
-
-            if (this.$refs.username) {
-                this.$refs.username.focus();
-            }
-
-            if (location.protocol !== 'https:' && process.env.NODE_ENV !== 'development') {
-                this.showPasskey = false;
-                return;
-            }
-
-            const supportsWebAuthn = browserSupportsWebAuthn();
-            const supportsAutofill = await browserSupportsWebAuthnAutofill();
-            this.showPasskey = supportsWebAuthn;
-
-            if (supportsWebAuthn && supportsAutofill) {
-                this.passkeyLogin({ useBrowserAutofill: true });
+                this.requires_totp = true;
+                this.login_failed = !!this.totp;
+            } else {
+                this.logging_in = false;
+                this.login_failed = true;
             }
         },
-    };
+
+        reset() {
+            this.login_failed = false;
+        },
+
+        cancelTotp() {
+            this.username = '';
+            this.password = '';
+            this.totp = '';
+            this.logging_in = false;
+            this.requires_totp = false;
+            this.login_failed = false;
+        },
+    },
+
+    async mounted() {
+        // Hide error screen when redirecting to login (timeout or 401 error).
+        this.$store.commit('setError', null);
+
+        if (this.locked) {
+            return;
+        }
+
+        if (this.$refs.username) {
+            this.$refs.username.focus();
+        }
+
+        if (location.protocol !== 'https:' && process.env.NODE_ENV !== 'development') {
+            this.showPasskey = false;
+            return;
+        }
+
+        const supportsWebAuthn = browserSupportsWebAuthn();
+        const supportsAutofill = await browserSupportsWebAuthnAutofill();
+        this.showPasskey = supportsWebAuthn;
+
+        if (supportsWebAuthn && supportsAutofill) {
+            this.passkeyLogin({ useBrowserAutofill: true });
+        }
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -232,7 +232,7 @@
     }
 
     &__description {
-        margin-top: .5em;
+        margin-top: 0.5em;
         margin-bottom: 20px;
     }
 

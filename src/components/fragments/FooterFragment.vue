@@ -1,49 +1,53 @@
 <template>
-    <footer :class="'fragment-footer' + (display ? (' fragment-footer--'+display) : '')">
+    <footer :class="'fragment-footer' + (display ? ' fragment-footer--' + display : '')">
         <strong class="fragment-footer__product" v-if="!isLogin">Contao Manager @manager_version@</strong>
         <ul class="fragment-footer__links">
-            <li><a href="https://docs.contao.org" target="_blank">{{ $t('ui.footer.help') }}</a></li>
-            <li><a href="https://to.contao.org/support" target="_blank">{{ $t('ui.footer.reportProblem') }}</a></li>
+            <li>
+                <a href="https://docs.contao.org" target="_blank">{{ $t('ui.footer.help') }}</a>
+            </li>
+            <li>
+                <a href="https://to.contao.org/support" target="_blank">{{ $t('ui.footer.reportProblem') }}</a>
+            </li>
         </ul>
         <div class="fragment-footer__settings">
-            <footer-languages :locales="languageOptions" :current="currentLanguage" @change="updateLanguage"/>
-            <theme-toggle/>
+            <footer-languages :locales="languageOptions" :current="currentLanguage" @change="updateLanguage" />
+            <theme-toggle />
         </div>
     </footer>
 </template>
 
 <script>
-    import i18n from '../../i18n';
-    import locales from 'contao-package-list/src/i18n/locales';
-    import views from '../../router/views';
-    import FooterLanguages from 'contao-package-list/src/components/fragments/FooterLanguages.vue';
-    import ThemeToggle from 'contao-package-list/src/components/fragments/ThemeToggle.vue';
+import i18n from '../../i18n';
+import locales from 'contao-package-list/src/i18n/locales';
+import views from '../../router/views';
+import FooterLanguages from 'contao-package-list/src/components/fragments/FooterLanguages.vue';
+import ThemeToggle from 'contao-package-list/src/components/fragments/ThemeToggle.vue';
 
-    export default {
-        components: { FooterLanguages, ThemeToggle},
+export default {
+    components: { FooterLanguages, ThemeToggle },
 
-        props: {
-            display: String,
+    props: {
+        display: String,
+    },
+
+    computed: {
+        isLogin: (vm) => vm.$store.state.view === views.LOGIN,
+
+        currentLanguage() {
+            return this.$i18n.locale;
         },
 
-        computed: {
-            isLogin: vm => vm.$store.state.view === views.LOGIN,
-
-            currentLanguage() {
-                return this.$i18n.locale;
-            },
-
-            languageOptions() {
-                return locales;
-            },
+        languageOptions() {
+            return locales;
         },
+    },
 
-        methods: {
-            updateLanguage(value) {
-                i18n.switch(value);
-            },
+    methods: {
+        updateLanguage(value) {
+            i18n.switch(value);
         },
-    };
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -130,5 +134,4 @@
         }
     }
 }
-
 </style>

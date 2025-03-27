@@ -22,170 +22,161 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import axios from 'axios';
-    import scopes from '../../scopes';
-    import packageStatus from '../../mixins/packageStatus';
+import { mapGetters } from 'vuex';
+import axios from 'axios';
+import scopes from '../../scopes';
+import packageStatus from '../../mixins/packageStatus';
 
-    export default {
-        mixins: [packageStatus],
+export default {
+    mixins: [packageStatus],
 
-        props: {
-            data: {
-                type: Object,
-                required: true,
+    props: {
+        data: {
+            type: Object,
+            required: true,
+        },
+        emit: {
+            type: Boolean,
+            default: false,
+        },
+        value: {
+            type: String,
+            default: '',
+        },
+    },
+
+    data: () => ({
+        constraint: '',
+        constraintEditable: false,
+        constraintValidating: false,
+        constraintError: false,
+    }),
+
+    computed: {
+        ...mapGetters('auth', ['isGranted']),
+        scopes: () => scopes,
+
+        buttonTitle: (vm) => (vm.isUpload ? vm.$t('ui.package.uploadConstraint') : ''),
+        buttonValue: (vm) => (vm.isUpload ? vm.$t('ui.package.editConstraint') : vm.$t('ui.package.private')),
+        inputTitle: (vm) => (vm.isUpload ? vm.$t('ui.package.privateTitle') : vm.constraint),
+        inputPlaceholder: (vm) => (!vm.isUpload && (!vm.$store.state.packages.root || !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name)) ? vm.$t('ui.package.latestConstraint') : ''),
+
+        inputValue: {
+            get: (vm) => (vm.isUpload ? vm.$t('ui.package.private') : vm.constraint),
+            set(value) {
+                if (!this.isUpload) {
+                    this.constraint = value;
+                }
             },
-            emit: {
-                type: Boolean,
-                default: false,
-            },
-            value: {
-                type: String,
-                default: '',
+        },
+    },
+
+    methods: {
+        editConstraint() {
+            if (this.constraintValidating) {
+                return;
             }
+
+            this.constraintEditable = true;
+
+            setTimeout(() => {
+                this.$refs.constraint.focus();
+            }, 0);
         },
 
-        data: () => ({
-            constraint: '',
-            constraintEditable: false,
-            constraintValidating: false,
-            constraintError: false,
-        }),
+        saveConstraint() {
+            if (!this.constraintEditable) {
+                return;
+            }
 
-        computed: {
-            ...mapGetters('auth', ['isGranted']),
-            scopes: () => scopes,
+            this.constraintEditable = false;
+            this.constraintError = false;
 
-            buttonTitle: vm => vm.isUpload ? vm.$t('ui.package.uploadConstraint') : '',
-            buttonValue: vm => vm.isUpload ? vm.$t('ui.package.editConstraint') : vm.$t('ui.package.private'),
-            inputTitle: vm => vm.isUpload ? vm.$t('ui.package.privateTitle') : vm.constraint,
-            inputPlaceholder: vm => (!vm.isUpload && (!vm.$store.state.packages.root || !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name))) ? vm.$t('ui.package.latestConstraint') : '',
+            if (!this.emit
+                && (
+                    (this.isInstalled && (!this.constraint || this.constraintInstalled === this.constraint))
+                    || (this.isRequired && (!this.constraint || this.constraintRequired === this.constraint))
+                )
+            ) {
+                this.$store.commit('packages/restore', this.data.name);
+                this.$store.dispatch('packages/uploads/unconfirm', this.data.name);
+                this.resetConstraint();
+                return;
+            }
 
-            inputValue: {
-                get: vm => vm.isUpload ? vm.$t('ui.package.private') : vm.constraint,
-                set(value) {
-                    if (!this.isUpload) {
-                        this.constraint = value;
-                    }
-                },
-            },
-        },
+            if (!this.emit && !this.isRequired && this.willBeInstalled && !this.constraint) {
+                this.$store.commit('packages/add', Object.assign({}, this.data, { constraint: null }));
+                this.resetConstraint();
+                return;
+            }
 
-        methods: {
-            editConstraint() {
-                if (this.constraintValidating) {
-                    return;
-                }
+            if (this.emit && !this.constraint) {
+                this.$emit('input', this.constraint);
+                this.resetConstraint();
+                return;
+            }
 
-                this.constraintEditable = true;
+            this.$refs.constraint.blur();
+            this.constraintValidating = true;
 
-                setTimeout(() => {
-                    this.$refs.constraint.focus();
-                }, 0);
-            },
-
-            saveConstraint() {
-                if (!this.constraintEditable) {
-                    return;
-                }
-
-                this.constraintEditable = false;
-                this.constraintError = false;
-
-                if (!this.emit
-                    && (
-                        (this.isInstalled && (!this.constraint || this.constraintInstalled === this.constraint))
-                        || (this.isRequired && (!this.constraint || this.constraintRequired === this.constraint))
-                    )
-                ) {
-                    this.$store.commit('packages/restore', this.data.name);
-                    this.$store.dispatch('packages/uploads/unconfirm', this.data.name);
-                    this.resetConstraint();
-                    return;
-                }
-
-                if (!this.emit && !this.isRequired && this.willBeInstalled && !this.constraint) {
-                    this.$store.commit(
-                        'packages/add',
-                        Object.assign({}, this.data, { constraint: null }),
-                    );
-                    this.resetConstraint();
-                    return;
-                }
-
-                if (this.emit && !this.constraint) {
-                    this.$emit('input', this.constraint);
-                    this.resetConstraint();
-                    return;
-                }
-
-                this.$refs.constraint.blur();
-                this.constraintValidating = true;
-
-                axios.post('api/constraint', { constraint: this.constraint }).then(
-                    (response) => {
-                        this.constraintValidating = false;
-                        if (response.data.valid) {
-                            if (this.emit) {
-                                this.$emit('input', this.constraint);
-                            } else if (this.isRootInstalled || this.isRequired) {
-                                this.$store.commit('packages/change', { name: this.data.name, version: this.constraint });
-                            } else {
-                                this.$store.commit(
-                                    'packages/add',
-                                    Object.assign({}, this.data, { constraint: this.constraint }),
-                                );
-                            }
-                        } else {
-                            this.constraintError = true;
-                            setTimeout(() => this.editConstraint(), 0);
-                        }
-                    },
-                );
-            },
-
-            resetConstraint() {
-
-                if (this.emit) {
-                    this.constraint = this.value;
-                } else if (this.willBeInstalled) {
-                    this.constraint = this.constraintAdded;
-                } else if (this.isChanged) {
-                    this.constraint = this.constraintChanged;
-                } else if (this.isInstalled) {
-                    this.constraint = this.constraintInstalled;
-                } else if (this.isRequired) {
-                    this.constraint = this.constraintRequired;
-                }
-
-                if (!this.constraintEditable) {
-                    return;
-                }
-
-                this.constraintEditable = false;
-                this.constraintError = false;
+            axios.post('api/constraint', { constraint: this.constraint }).then((response) => {
                 this.constraintValidating = false;
-            },
+                if (response.data.valid) {
+                    if (this.emit) {
+                        this.$emit('input', this.constraint);
+                    } else if (this.isRootInstalled || this.isRequired) {
+                        this.$store.commit('packages/change', { name: this.data.name, version: this.constraint });
+                    } else {
+                        this.$store.commit('packages/add', Object.assign({}, this.data, { constraint: this.constraint }));
+                    }
+                } else {
+                    this.constraintError = true;
+                    setTimeout(() => this.editConstraint(), 0);
+                }
+            });
         },
 
-        watch: {
-            value(value) {
-                this.constraint = value;
-            },
+        resetConstraint() {
+            if (this.emit) {
+                this.constraint = this.value;
+            } else if (this.willBeInstalled) {
+                this.constraint = this.constraintAdded;
+            } else if (this.isChanged) {
+                this.constraint = this.constraintChanged;
+            } else if (this.isInstalled) {
+                this.constraint = this.constraintInstalled;
+            } else if (this.isRequired) {
+                this.constraint = this.constraintRequired;
+            }
 
-            constraintAdded(value) {
-                this.constraint = value;
-            },
+            if (!this.constraintEditable) {
+                return;
+            }
 
-            constraintChanged(value) {
-                this.constraint = value || this.constraintInstalled || this.constraintRequired;
-            },
+            this.constraintEditable = false;
+            this.constraintError = false;
+            this.constraintValidating = false;
+        },
+    },
+
+    watch: {
+        value(value) {
+            this.constraint = value;
         },
 
-        mounted() {
-            this.resetConstraint();
+        constraintAdded(value) {
+            this.constraint = value;
         },
-    };
+
+        constraintChanged(value) {
+            this.constraint = value || this.constraintInstalled || this.constraintRequired;
+        },
+    },
+
+    mounted() {
+        this.resetConstraint();
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
@@ -220,7 +211,7 @@
         }
 
         &.error {
-            animation: input-error .15s linear 3;
+            animation: input-error 0.15s linear 3;
         }
     }
 

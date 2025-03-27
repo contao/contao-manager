@@ -26,187 +26,185 @@
             <button class="app-hint__link" @click="setupTotp">{{ $t('ui.app.totpSetup') }}</button>
         </div>
 
-        <error-view v-if="error"/>
+        <error-view v-if="error" />
 
-        <transition name="animate-fade" mode="out-in" style="height:100%">
-
+        <transition name="animate-fade" mode="out-in" style="height: 100%">
             <div v-if="isInitializing || isReady" class="view-init" :inert="hasModal">
                 <div class="view-init__cell animate-initializing">
-                    <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo">
+                    <img src="../assets/images/logo.svg" width="100" height="100" alt="Contao Logo" />
                     <p class="view-init__message">{{ $t('ui.app.loading') }}</p>
                 </div>
             </div>
 
-            <task-view :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="username && taskStatus" :inert="hasModal"/>
-            <component :is="currentView" :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="currentView" :inert="hasModal"/>
+            <task-view :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="username && taskStatus" :inert="hasModal" />
+            <component :is="currentView" :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" v-else-if="currentView" :inert="hasModal" />
 
             <div v-else>
-                <router-view :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" :inert="hasModal"/>
+                <router-view :class="hasModal ? 'animate-blur-in' : 'animate-blur-out'" :inert="hasModal" />
             </div>
-
         </transition>
 
-        <component :is="currentModal" v-if="hasModal"/>
+        <component :is="currentModal" v-if="hasModal" />
     </div>
 </template>
 
 <script>
-    import { defineAsyncComponent, markRaw } from "vue";
-    import { mapState, mapGetters, mapActions } from 'vuex';
-    import axios from 'axios';
-    import { Notivue, Notification } from 'notivue';
-    import views from '../router/views';
+import { defineAsyncComponent, markRaw } from 'vue';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
+import { Notivue, Notification } from 'notivue';
+import views from '../router/views';
 
-    import ErrorView from './views/ErrorView';
-    import TaskView from './views/TaskView';
-    import SetupTotp from './routes/Users/SetupTotp.vue';
+import ErrorView from './views/ErrorView';
+import TaskView from './views/TaskView';
+import SetupTotp from './routes/Users/SetupTotp.vue';
 
-    export default {
-        components: { ErrorView, TaskView, Notivue, Notification },
+export default {
+    components: { ErrorView, TaskView, Notivue, Notification },
 
-        data: () => ({
-            views: {
-                [views.ACCOUNT]: markRaw(defineAsyncComponent(() => import('././views/AccountView'))),
-                [views.LOGIN]: markRaw(defineAsyncComponent(() => import('././views/LoginView'))),
-                [views.BOOT]: markRaw(defineAsyncComponent(() => import('././views/BootView'))),
-                [views.CONFIG]: markRaw(defineAsyncComponent(() => import('././views/ConfigView'))),
-                [views.SETUP]: markRaw(defineAsyncComponent(() => import('././views/SetupView'))),
-                [views.RECOVERY]: markRaw(defineAsyncComponent(() => import('././views/RecoveryView'))),
-                [views.MIGRATION]: markRaw(defineAsyncComponent(() => import('././views/MigrationView'))),
-            },
-            loaded: false,
-        }),
+    data: () => ({
+        views: {
+            [views.ACCOUNT]: markRaw(defineAsyncComponent(() => import('././views/AccountView'))),
+            [views.LOGIN]: markRaw(defineAsyncComponent(() => import('././views/LoginView'))),
+            [views.BOOT]: markRaw(defineAsyncComponent(() => import('././views/BootView'))),
+            [views.CONFIG]: markRaw(defineAsyncComponent(() => import('././views/ConfigView'))),
+            [views.SETUP]: markRaw(defineAsyncComponent(() => import('././views/SetupView'))),
+            [views.RECOVERY]: markRaw(defineAsyncComponent(() => import('././views/RecoveryView'))),
+            [views.MIGRATION]: markRaw(defineAsyncComponent(() => import('././views/MigrationView'))),
+        },
+        loaded: false,
+    }),
 
-        computed: {
-            ...mapState(['safeMode']),
-            ...mapState(['view', 'error']),
-            ...mapState('auth', ['username', 'limited', 'totpEnabled']),
-            ...mapState('tasks', { taskStatus: 'status' }),
-            ...mapGetters('modals', ['hasModal', 'currentModal']),
+    computed: {
+        ...mapState(['safeMode']),
+        ...mapState(['view', 'error']),
+        ...mapState('auth', ['username', 'limited', 'totpEnabled']),
+        ...mapState('tasks', { taskStatus: 'status' }),
+        ...mapGetters('modals', ['hasModal', 'currentModal']),
 
-            isInitializing: vm => vm.view === views.INIT,
-            isReady: vm => !vm.isInitializing && !vm.currentView && !vm.loaded,
-            isInsecure: () => location.protocol !== 'https:' && location.hostname !== 'localhost',
+        isInitializing: (vm) => vm.view === views.INIT,
+        isReady: (vm) => !vm.isInitializing && !vm.currentView && !vm.loaded,
+        isInsecure: () => location.protocol !== 'https:' && location.hostname !== 'localhost',
 
-            currentView: vm => vm.views[vm.view] || null,
+        currentView: (vm) => vm.views[vm.view] || null,
+    },
+
+    methods: {
+        ...mapActions('auth', ['logout']),
+
+        exitSafeMode() {
+            window.location.reload();
         },
 
-        methods: {
-            ...mapActions('auth', ['logout']),
+        initColorMode() {
+            let prefersDark = localStorage.getItem('contao--prefers-dark');
 
-            exitSafeMode() {
-                window.location.reload();
-            },
-
-            initColorMode() {
-                let prefersDark = localStorage.getItem('contao--prefers-dark');
-
-                if (null === prefersDark) {
-                    prefersDark = String(window.matchMedia('(prefers-color-scheme: dark)').matches);
-                }
-
-                document.documentElement.dataset.colorScheme = prefersDark === 'true' ? 'dark' : 'light';
-            },
-
-            async checkPublicConfig () {
-                const chunks = location.pathname.split('/').filter(v => v !== '');
-                chunks.unshift('');
-
-                while (chunks.pop() !== undefined && chunks.length) {
-                    let config;
-
-                    try {
-                        config = (await axios.get(`${chunks.join('/')}/contao-manager/users.json`)).data;
-                    } catch (err) {
-                        // user.json could not be loaded, seems like a valid config
-                        continue;
-                    }
-
-                    if (!config.users && !config.version) {
-                        continue;
-                    }
-
-                    this.$store.commit('setError', {
-                        title: this.$t('ui.app.configSecurity1'),
-                        type: 'about:blank',
-                        status: '500',
-                        detail: this.$t('ui.app.configSecurity2'),
-                    });
-
-                    throw new Error(this.$t('ui.app.configSecurity1'));
-                }
-            },
-
-            setupTotp () {
-                this.$store.commit('modals/open', { id: 'setup-totp', component: SetupTotp, });
-            }
-        },
-
-        watch: {
-            async isReady(ready) {
-                if (ready) {
-                    try {
-                        await this.$store.dispatch('packages/uploads/load');
-                        await this.$store.dispatch('packages/load');
-                        await this.$store.dispatch('algolia/discover');
-                    } catch (err) {
-                        // do nothing
-                    }
-
-                    this.loaded = true;
-                    this.$store.dispatch('packages/details/init', {
-                        vue: this,
-                        component: defineAsyncComponent(() => import('./fragments/PackageDetails'))
-                    });
-                }
-            },
-
-            username(username) {
-                if (username === null) {
-                    this.$store.commit('tasks/setCurrent', null);
-                    this.$store.commit('tasks/setInitialized', false);
-                }
-            },
-        },
-
-        async mounted() {
-            this.initColorMode();
-            await this.checkPublicConfig()
-
-            await this.$router.isReady();
-
-            if (this.$route.query.invitation) {
-                this.$store.commit('setView', views.ACCOUNT);
-                return;
+            if (null === prefersDark) {
+                prefersDark = String(window.matchMedia('(prefers-color-scheme: dark)').matches);
             }
 
-            if (this.$route.query.token) {
+            document.documentElement.dataset.colorScheme = prefersDark === 'true' ? 'dark' : 'light';
+        },
+
+        async checkPublicConfig() {
+            const chunks = location.pathname.split('/').filter((v) => v !== '');
+            chunks.unshift('');
+
+            while (chunks.pop() !== undefined && chunks.length) {
+                let config;
+
                 try {
-                    await axios.post('api/session', { token: this.$route.query.token });
+                    config = (await axios.get(`${chunks.join('/')}/contao-manager/users.json`)).data;
                 } catch (err) {
-                    // ignore authentication errors
+                    // user.json could not be loaded, seems like a valid config
+                    continue;
                 }
 
-                this.$router.replace({ name: this.$route.name, query: null });
-            }
+                if (!config.users && !config.version) {
+                    continue;
+                }
 
-            const accountStatus = await this.$store.dispatch('auth/status');
+                this.$store.commit('setError', {
+                    title: this.$t('ui.app.configSecurity1'),
+                    type: 'about:blank',
+                    status: '500',
+                    detail: this.$t('ui.app.configSecurity2'),
+                });
 
-            if (accountStatus === 200) {
-                this.$store.commit('setView', views.BOOT);
-            } else if (accountStatus === 204) {
-                this.$store.commit('setView', views.ACCOUNT);
-            } else if (accountStatus === 401 || accountStatus === 403) {
-                this.$store.commit('setView', views.LOGIN);
-            } else {
-                this.$store.commit('setError', { type: 'about:blank', status: accountStatus });
+                throw new Error(this.$t('ui.app.configSecurity1'));
             }
         },
 
-        created() {
-            document.title = `Contao Manager | ${location.hostname}`;
+        setupTotp() {
+            this.$store.commit('modals/open', { id: 'setup-totp', component: SetupTotp });
         },
-    };
+    },
+
+    watch: {
+        async isReady(ready) {
+            if (ready) {
+                try {
+                    await this.$store.dispatch('packages/uploads/load');
+                    await this.$store.dispatch('packages/load');
+                    await this.$store.dispatch('algolia/discover');
+                } catch (err) {
+                    // do nothing
+                }
+
+                this.loaded = true;
+                this.$store.dispatch('packages/details/init', {
+                    vue: this,
+                    component: defineAsyncComponent(() => import('./fragments/PackageDetails')),
+                });
+            }
+        },
+
+        username(username) {
+            if (username === null) {
+                this.$store.commit('tasks/setCurrent', null);
+                this.$store.commit('tasks/setInitialized', false);
+            }
+        },
+    },
+
+    async mounted() {
+        this.initColorMode();
+        await this.checkPublicConfig();
+
+        await this.$router.isReady();
+
+        if (this.$route.query.invitation) {
+            this.$store.commit('setView', views.ACCOUNT);
+            return;
+        }
+
+        if (this.$route.query.token) {
+            try {
+                await axios.post('api/session', { token: this.$route.query.token });
+            } catch (err) {
+                // ignore authentication errors
+            }
+
+            this.$router.replace({ name: this.$route.name, query: null });
+        }
+
+        const accountStatus = await this.$store.dispatch('auth/status');
+
+        if (accountStatus === 200) {
+            this.$store.commit('setView', views.BOOT);
+        } else if (accountStatus === 204) {
+            this.$store.commit('setView', views.ACCOUNT);
+        } else if (accountStatus === 401 || accountStatus === 403) {
+            this.$store.commit('setView', views.LOGIN);
+        } else {
+            this.$store.commit('setError', { type: 'about:blank', status: accountStatus });
+        }
+    },
+
+    created() {
+        document.title = `Contao Manager | ${location.hostname}`;
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 import Clipboard from 'v-clipboard';
 import { createNotivue, push } from 'notivue';
 
@@ -27,7 +27,7 @@ axios.interceptors.request.use(function (config) {
 });
 
 axios.interceptors.response.use(
-    response => {
+    (response) => {
         store.commit('auth/renewCountdown');
 
         return response;
@@ -58,10 +58,11 @@ axios.interceptors.response.use(
             return response;
         }
 
-        if (url.substring(0, 4) === 'api/'
-            && response.headers['content-type'] !== 'application/json'
-            && response.status >= 400
-            && response.status <= 599
+        if (
+            url.substring(0, 4) === 'api/' &&
+            response.headers['content-type'] !== 'application/json' &&
+            response.status >= 400 &&
+            response.status <= 599
         ) {
             store.commit('setError', {
                 type: 'about:blank',
@@ -73,7 +74,7 @@ axios.interceptors.response.use(
         }
 
         return Promise.reject(error);
-    }
+    },
 );
 
 const notivue = createNotivue({

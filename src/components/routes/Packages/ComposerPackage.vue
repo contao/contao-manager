@@ -48,7 +48,7 @@
 
         <template #actions>
             <slot name="actions">
-                <details-button :name="data.name" v-if="data.name"/>
+                <details-button :name="data.name" v-if="data.name" />
                 <template v-if="isGranted(scopes.UPDATE)">
                     <template v-if="isContao">
                         <button class="widget-button widget-button--update" :disabled="isModified" v-if="!isRequired" @click="update">{{ $t('ui.package.updateButton') }}</button>
@@ -72,148 +72,144 @@
                 </template>
             </section>
         </template>
-
     </base-package>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import scopes from '../../../scopes';
-    import datimFormat from 'contao-package-list/src/filters/datimFormat'
-    import numberFormat from 'contao-package-list/src/filters/numberFormat'
-    import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
-    import packageStatus from '../../../mixins/packageStatus';
+import { mapGetters } from 'vuex';
+import scopes from '../../../scopes';
+import datimFormat from 'contao-package-list/src/filters/datimFormat';
+import numberFormat from 'contao-package-list/src/filters/numberFormat';
+import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
+import packageStatus from '../../../mixins/packageStatus';
 
-    import BasePackage from './BasePackage';
-    import FeaturePackage from './FeaturePackage';
-    import PackageConstraint from '../../fragments/PackageConstraint';
-    import ButtonGroup from '../../widgets/ButtonGroup';
-    import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
+import BasePackage from './BasePackage';
+import FeaturePackage from './FeaturePackage';
+import PackageConstraint from '../../fragments/PackageConstraint';
+import ButtonGroup from '../../widgets/ButtonGroup';
+import DetailsButton from 'contao-package-list/src/components/fragments/DetailsButton';
 
-    export default {
-        mixins: [packageStatus],
-        components: { BasePackage, FeaturePackage, PackageConstraint, ButtonGroup, DetailsButton },
+export default {
+    mixins: [packageStatus],
+    components: { BasePackage, FeaturePackage, PackageConstraint, ButtonGroup, DetailsButton },
 
-        props: {
-            data: {
-                type: Object,
-                required: true,
-            },
-            hint: String,
-            uncloseableHint: Boolean,
+    props: {
+        data: {
+            type: Object,
+            required: true,
+        },
+        hint: String,
+        uncloseableHint: Boolean,
+    },
+
+    computed: {
+        ...mapGetters('auth', ['isGranted']),
+        ...mapGetters('packages', ['packageFeatures']),
+        scopes: () => scopes,
+
+        packageData: vm => Object.assign(
+            {},
+            vm.data,
+            vm.installed[vm.data.name] || {},
+            vm.metadata || {},
+        ),
+
+        license: (vm) => (vm.packageData.license instanceof Array ? vm.packageData.license.join('/') : vm.packageData.license),
+
+        packageHint() {
+            if (this.hint) {
+                return this.hint;
+            }
+
+            if (this.willBeRemoved || (this.isMissing && !this.willBeInstalled)) {
+                return this.$t('ui.package.hintRemoved');
+            }
+
+            if (this.isRequired) {
+                return this.$t('ui.package.hintConstraint', { constraint: this.constraintRequired });
+            }
+
+            if (this.willBeInstalled) {
+                if (this.constraintAdded) {
+                    return this.$t('ui.package.hintConstraint', { constraint: this.constraintAdded });
+                }
+
+                return this.$t('ui.package.hintConstraintBest');
+            }
+
+            if (this.isChanged) {
+                return this.$t('ui.package.hintConstraintChange', {
+                    from: this.constraintInstalled,
+                    to: this.constraintChanged,
+                });
+            }
+
+            if (this.isUpdated) {
+                return this.$t('ui.package.hintConstraintUpdate');
+            }
+
+            return null;
         },
 
-        computed: {
-            ...mapGetters('auth', ['isGranted']),
-            ...mapGetters('packages', ['packageFeatures']),
-            scopes: () => scopes,
-
-            packageData: vm => Object.assign(
-                {},
-                vm.data,
-                vm.installed[vm.data.name] || {},
-                vm.metadata || {},
-            ),
-
-            license: vm => vm.packageData.license instanceof Array ? vm.packageData.license.join('/') : vm.packageData.license,
-
-            packageHint() {
-                if (this.hint) {
-                    return this.hint;
-                }
-
-                if (this.willBeRemoved || (this.isMissing && !this.willBeInstalled)) {
-                    return this.$t('ui.package.hintRemoved');
-                }
-
-                if (this.isRequired) {
-                    return this.$t('ui.package.hintConstraint', { constraint: this.constraintRequired });
-                }
-
-                if (this.willBeInstalled) {
-                    if (this.constraintAdded) {
-                        return this.$t('ui.package.hintConstraint', { constraint: this.constraintAdded });
-                    }
-
-                    return this.$t('ui.package.hintConstraintBest');
-                }
-
-                if (this.isChanged) {
-                    return this.$t(
-                        'ui.package.hintConstraintChange',
-                        {
-                            from: this.constraintInstalled,
-                            to: this.constraintChanged,
-                        },
-                    );
-                }
-
-                if (this.isUpdated) {
-                    return this.$t('ui.package.hintConstraintUpdate');
-                }
-
+        packageHintClose() {
+            if (this.uncloseableHint || (this.isRequired && !this.willBeRemoved && !this.isChanged) || (this.isMissing && !this.willBeInstalled)) {
                 return null;
-            },
+            }
 
-            packageHintClose() {
-                if (this.uncloseableHint || (this.isRequired && !this.willBeRemoved && !this.isChanged) || (this.isMissing && !this.willBeInstalled)) {
-                    return null;
-                }
+            if (this.isUpdated) {
+                return this.$t('ui.package.hintNoupdate');
+            }
 
-                if (this.isUpdated) {
-                    return this.$t('ui.package.hintNoupdate');
-                }
-
-                return this.$t('ui.package.hintRevert');
-            },
-
-
-            packageUpdates() {
-                return this.isInstalled && (
-                    Object.keys(this.$store.state.packages.add).length > 0
-                    || Object.keys(this.$store.state.packages.change).length > 0
-                    || this.$store.state.packages.update.length > 0
-                    || this.$store.state.packages.remove.length > 0
-                );
-            },
-
-            badge() {
-                if (this.isRequired) {
-                    return {
-                        title: this.$t('ui.package.requiredText'),
-                        text: this.$t('ui.package.requiredTitle'),
-                    };
-                }
-
-                if (this.isMissing) {
-                    return {
-                        title: this.$t('ui.package.removedText'),
-                        text: this.$t('ui.package.removedTitle'),
-                    };
-                }
-
-                if (this.packageData.abandoned) {
-                    return {
-                        title: this.packageData.abandoned === true ? this.$t('ui.package.abandonedText') : this.$t('ui.package.abandonedReplace', { replacement: this.packageData.abandoned }),
-                        text: this.$t('ui.package.abandoned'),
-                    };
-                }
-
-                return null;
-            },
+            return this.$t('ui.package.hintRevert');
         },
 
-        methods: {
-            datimFormat,
-            numberFormat,
-            slotEmpty,
 
-            restore() {
-                this.$store.commit('packages/restore', this.data.name);
-                this.$store.dispatch('packages/uploads/unconfirm', this.data.name);
-            },
+        packageUpdates() {
+            return this.isInstalled && (
+                Object.keys(this.$store.state.packages.add).length > 0
+                || Object.keys(this.$store.state.packages.change).length > 0
+                || this.$store.state.packages.update.length > 0
+                || this.$store.state.packages.remove.length > 0
+            );
         },
-    };
+
+        badge() {
+            if (this.isRequired) {
+                return {
+                    title: this.$t('ui.package.requiredText'),
+                    text: this.$t('ui.package.requiredTitle'),
+                };
+            }
+
+            if (this.isMissing) {
+                return {
+                    title: this.$t('ui.package.removedText'),
+                    text: this.$t('ui.package.removedTitle'),
+                };
+            }
+
+            if (this.packageData.abandoned) {
+                return {
+                    title: this.packageData.abandoned === true ? this.$t('ui.package.abandonedText') : this.$t('ui.package.abandonedReplace', { replacement: this.packageData.abandoned }),
+                    text: this.$t('ui.package.abandoned'),
+                };
+            }
+
+            return null;
+        },
+    },
+
+    methods: {
+        datimFormat,
+        numberFormat,
+        slotEmpty,
+
+        restore() {
+            this.$store.commit('packages/restore', this.data.name);
+            this.$store.dispatch('packages/uploads/unconfirm', this.data.name);
+        },
+    },
+};
 </script>
 
 <style lang="scss">

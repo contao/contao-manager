@@ -1,7 +1,7 @@
 <template>
     <section class="maintenance">
         <div class="maintenance__inside">
-            <figure class="maintenance__image"><img src="../../../assets/images/composer-logo.png" alt=""></figure>
+            <figure class="maintenance__image"><img src="../../../assets/images/composer-logo.png" alt="" /></figure>
 
             <div class="maintenance__about">
                 <h1>{{ $t('ui.maintenance.composerCache.title') }}</h1>
@@ -16,11 +16,11 @@
 </template>
 
 <script>
-    export default {
-        methods: {
-            execute() {
-                this.$store.dispatch('tasks/execute', { name: 'composer/clear-cache' });
-            },
+export default {
+    methods: {
+        execute() {
+            this.$store.dispatch('tasks/execute', { name: 'composer/clear-cache' });
         },
-    };
+    },
+};
 </script>

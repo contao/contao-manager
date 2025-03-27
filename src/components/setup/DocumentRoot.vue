@@ -1,5 +1,4 @@
 <template>
-
     <section>
         <header class="setup__header">
             <img src="../../assets/images/document-root.svg" width="80" height="80" alt="" class="setup__icon" />
@@ -11,9 +10,7 @@
         </header>
 
         <transition :name="forceInstall ? 'none' : 'animate-flip'" type="transition" mode="out-in" v-if="projectDir !== null">
-
             <template v-if="needsFix || wantsFix">
-
                 <main class="setup__form setup__form--center" v-if="directoryUpdated" v-bind:key="'updated'">
                     <div class="setup__fields">
                         <svg class="setup__check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" /></svg>
@@ -43,19 +40,20 @@
                             <li v-for="file in conflicts.slice(0, 5)" :key="file">{{ file }}</li>
                             <li v-if="conflicts.length > 5">...</li>
                         </ul>
-                        <check-box name="ignoreConflicts" :label="$t('ui.setup.document-root.ignoreConflicts')" :disabled="processing" v-if="isPublic || isWeb" v-model="forceInstall"/>
+                        <check-box name="ignoreConflicts" :label="$t('ui.setup.document-root.ignoreConflicts')" :disabled="processing" v-if="isPublic || isWeb" v-model="forceInstall" />
                     </div>
                     <div class="setup__actions setup__actions--center">
                         <button class="widget-button widget-button--alert widget-button--run" v-if="forceInstall" @click="$emit('continue')">{{ $t('ui.server.contao.setup') }}</button>
                         <template v-else>
                             <loading-button inline icon="update" :loading="processing" @click="init(false)">{{ $t('ui.setup.document-root.check') }}</loading-button>
-                            <button class="widget-button widget-button--inline widget-button--primary widget-button--gear" :disabled="processing" @click="conflicts=[]">{{ $t('ui.setup.document-root.create') }}</button>
+                            <button class="widget-button widget-button--inline widget-button--primary widget-button--gear" :disabled="processing" @click="conflicts = []">{{ $t('ui.setup.document-root.create') }}</button>
                         </template>
                     </div>
                 </main>
 
                 <main class="setup__form" v-else v-bind:key="'setup'">
-                    <img src="../../assets/images/button-update.svg" class="invisible" alt=""> <!-- prefetch the update icon for the confirmation page -->
+                    <img src="../../assets/images/button-update.svg" class="invisible" alt="" />
+                    <!-- prefetch the update icon for the confirmation page -->
                     <div class="setup__fields">
                         <h2 class="setup__fieldtitle">{{ $t('ui.setup.document-root.formTitle') }}</h2>
                         <p class="setup__fielddesc">{{ $t('ui.setup.document-root.formText1') }} <u>{{ $t('ui.setup.document-root.formText2') }}</u></p>
@@ -67,7 +65,7 @@
                             v-if="!isEmpty || wantsFix"
                         />
 
-                        <radio-button name="usePublicDir" :options="publicDirOptions" allow-html v-model="usePublicDir" v-if="canUsePublicDir"/>
+                        <radio-button name="usePublicDir" :options="publicDirOptions" allow-html v-model="usePublicDir" v-if="canUsePublicDir" />
                         <dl class="setup__directories">
                             <dt>{{ $t('ui.setup.document-root.currentRoot') }}</dt>
                             <dd v-if="isWeb">{{ projectDir }}{{ directorySeparator }}web</dd>
@@ -79,7 +77,7 @@
                             <dd v-else-if="canUsePublicDir && usePublicDir">{{ projectDir }}<span>{{ directorySeparator }}{{ directory }}{{ directorySeparator }}public</span></dd>
                             <dd v-else>{{ projectDir }}<span>{{ directorySeparator }}{{ directory }}{{ directorySeparator }}web</span></dd>
                         </dl>
-                        <check-box name="autoconfig" :label="$t('ui.setup.document-root.autoconfig')" :disabled="processing" v-model="autoconfig"/>
+                        <check-box name="autoconfig" :label="$t('ui.setup.document-root.autoconfig')" :disabled="processing" v-model="autoconfig" />
                     </div>
                     <div class="setup__actions setup__actions--center">
                         <loading-button color="primary" icon="run" :loading="processing" :disabled="!autoconfig || !!directoryError || (wantsFix && !directory && ((isPublic && usePublicDir) || (isWeb && !usePublicDir)))" @click="setupDocroot">{{ $t('ui.setup.document-root.finish') }}</loading-button>
@@ -107,130 +105,127 @@
                 </main>
             </template>
         </transition>
-
     </section>
-
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 
-    import TextField from '../widgets/TextField';
-    import RadioButton from '../widgets/RadioButton';
-    import CheckBox from '../widgets/CheckBox';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import TextField from '../widgets/TextField';
+import RadioButton from '../widgets/RadioButton';
+import CheckBox from '../widgets/CheckBox';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
 
-    export default {
-        components: { TextField, RadioButton, CheckBox, LoadingButton },
+export default {
+    components: { TextField, RadioButton, CheckBox, LoadingButton },
 
-        data: () => ({
-            processing: false,
-            usePublicDir: false,
-            wantsFix: false,
+    data: () => ({
+        processing: false,
+        usePublicDir: false,
+        wantsFix: false,
 
-            conflicts: [],
-            isEmpty: true,
-            isWeb: true,
-            isPublic: false,
-            projectDir: null,
-            autoconfig: false,
-            forceInstall: false,
-            directory: '',
-            directoryExists: false,
-            directoryUpdated: false,
-            directorySeparator: '/',
-        }),
+        conflicts: [],
+        isEmpty: true,
+        isWeb: true,
+        isPublic: false,
+        projectDir: null,
+        autoconfig: false,
+        forceInstall: false,
+        directory: '',
+        directoryExists: false,
+        directoryUpdated: false,
+        directorySeparator: '/',
+    }),
 
-        computed: {
-            ...mapState('server/php-web', ['phpVersionId']),
-            ...mapState('server/contao', ['contaoVersion']),
+    computed: {
+        ...mapState('server/php-web', ['phpVersionId']),
+        ...mapState('server/contao', ['contaoVersion']),
 
-            needsFix: vm => !vm.isEmpty || (!vm.isWeb && (!vm.isPublic || !vm.canUsePublicDir)),
+        needsFix: (vm) => !vm.isEmpty || (!vm.isWeb && (!vm.isPublic || !vm.canUsePublicDir)),
 
-            publicDirOptions: vm => [
-                { label: vm.$t('ui.setup.document-root.publicDir', { dir: '<code>web</code>', version: '4.9+' }), value: false },
-                { label: vm.$t('ui.setup.document-root.publicDir', { dir: '<code>public</code>', version: '4.13+' }), value: true }
-            ],
+        publicDirOptions: (vm) => [
+            { label: vm.$t('ui.setup.document-root.publicDir', { dir: '<code>web</code>', version: '4.9+' }), value: false },
+            { label: vm.$t('ui.setup.document-root.publicDir', { dir: '<code>public</code>', version: '4.13+' }), value: true },
+        ],
 
-            canUsePublicDir: vm => vm.phpVersionId >= 70400,
+        canUsePublicDir: (vm) => vm.phpVersionId >= 70400,
 
-            publicDir: vm => vm.isWeb ? `${vm.projectDir}${vm.directorySeparator}web` : `${vm.projectDir}${vm.directorySeparator}public`,
+        publicDir: (vm) => (vm.isWeb ? `${vm.projectDir}${vm.directorySeparator}web` : `${vm.projectDir}${vm.directorySeparator}public`),
 
-            directoryError() {
-                if (this.directoryExists) {
-                    return this.$t('ui.setup.document-root.directoryExists');
-                }
+        directoryError() {
+            if (this.directoryExists) {
+                return this.$t('ui.setup.document-root.directoryExists');
+            }
 
-                if (this.directory && !this.directory.match(/^[^/]+$/)) {
-                    return this.$t('ui.setup.document-root.directoryInvalid')
-                }
+            if (this.directory && !this.directory.match(/^[^/]+$/)) {
+                return this.$t('ui.setup.document-root.directoryInvalid');
+            }
 
-                if (!this.wantsFix && !this.isEmpty && !this.directory) {
-                    return this.$t('ui.setup.document-root.directoryInvalid')
-                }
+            if (!this.wantsFix && !this.isEmpty && !this.directory) {
+                return this.$t('ui.setup.document-root.directoryInvalid');
+            }
 
-                return '';
-            },
+            return '';
+        },
+    },
+
+    methods: {
+        reload() {
+            this.processing = true;
+            window.location.reload();
         },
 
-        methods: {
-            reload() {
-                this.processing = true;
-                window.location.reload();
-            },
+        async setupDocroot() {
+            this.processing = true;
+            const response = await this.$store.dispatch('server/contao/documentRoot', {
+                directory: !this.isEmpty || this.wantsFix ? this.directory : null,
+                usePublicDir: this.canUsePublicDir && this.usePublicDir,
+            });
 
-            async setupDocroot() {
-                this.processing = true;
-                const response = await this.$store.dispatch('server/contao/documentRoot', {
-                    directory: (!this.isEmpty || this.wantsFix) ? this.directory : null,
-                    usePublicDir: this.canUsePublicDir && this.usePublicDir,
-                });
-
-                // The target directory exists
-                if (response.status === 403) {
-                    this.directoryExists = true;
-                    this.processing = false;
-                    this.$refs.directory.focus();
-                    return;
-                }
-
+            // The target directory exists
+            if (response.status === 403) {
+                this.directoryExists = true;
                 this.processing = false;
-                this.directoryUpdated = true;
+                this.$refs.directory.focus();
+                return;
+            }
 
-                // Stop the logout countdown when moving the manager files to prevent 404 error
-                this.$store.commit('auth/resetCountdown');
-            },
+            this.processing = false;
+            this.directoryUpdated = true;
 
-            async init(cache = true) {
-                this.processing = true;
-                const response = await this.$store.dispatch('server/contao/get', cache);
-
-                this.projectDir = response.data.project_dir;
-                this.conflicts = response.data.conflicts;
-                this.isEmpty = response.data.conflicts.length === 0;
-                this.isWeb = response.data.public_dir === 'web';
-                this.isPublic = response.data.public_dir === 'public';
-                this.usePublicDir = response.data.public_dir === 'public';
-                this.wantsFix = false;
-                this.directory = this.isEmpty ? '' : location.hostname;
-                this.directorySeparator = response.data.directory_separator;
-
-                this.processing = false;
-            },
+            // Stop the logout countdown when moving the manager files to prevent 404 error
+            this.$store.commit('auth/resetCountdown');
         },
 
-        watch: {
-            directory() {
-                this.directoryExists = false;
-            },
-        },
+        async init(cache = true) {
+            this.processing = true;
+            const response = await this.$store.dispatch('server/contao/get', cache);
 
-        async mounted () {
-            this.init();
-        }
-    };
+            this.projectDir = response.data.project_dir;
+            this.conflicts = response.data.conflicts;
+            this.isEmpty = response.data.conflicts.length === 0;
+            this.isWeb = response.data.public_dir === 'web';
+            this.isPublic = response.data.public_dir === 'public';
+            this.usePublicDir = response.data.public_dir === 'public';
+            this.wantsFix = false;
+            this.directory = this.isEmpty ? '' : location.hostname;
+            this.directorySeparator = response.data.directory_separator;
+
+            this.processing = false;
+        },
+    },
+
+    watch: {
+        directory() {
+            this.directoryExists = false;
+        },
+    },
+
+    async mounted() {
+        this.init();
+    },
+};
 </script>
-
 
 <style rel="stylesheet/scss" lang="scss">
 @use "~contao-package-list/src/assets/styles/defaults";

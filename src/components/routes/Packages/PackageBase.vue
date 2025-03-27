@@ -1,6 +1,5 @@
 <template>
     <main-layout>
-
         <section class="package-tools" v-if="isGranted(scopes.UPDATE)">
             <slot name="search">
                 <button class="package-tools__button widget-button widget-button--update" :disabled="totalChanges > 0 || uploading" @click="updateAll">{{ $t('ui.packages.updateButton') }}</button>
@@ -8,51 +7,49 @@
             </slot>
         </section>
 
-        <slot/>
+        <slot />
 
         <div :class="{ 'package-actions': true, 'package-actions--active': !slotEmpty($slots.actions) }">
-            <slot name="actions"/>
+            <slot name="actions" />
         </div>
-
     </main-layout>
 </template>
 
 <script>
-    import { mapState, mapGetters, mapActions } from 'vuex';
-    import scopes from '../../../scopes';
-    import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
-    import MainLayout from '../../layouts/MainLayout';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import scopes from '../../../scopes';
+import slotEmpty from 'contao-package-list/src/filters/slotEmpty';
+import MainLayout from '../../layouts/MainLayout';
 
-    export default {
-        components: { MainLayout },
+export default {
+    components: { MainLayout },
 
-        computed: {
-            ...mapGetters('auth', ['isGranted']),
-            ...mapGetters('packages', ['totalChanges']),
-            ...mapState('packages/uploads', ['uploads', 'uploading']),
-            scopes: () => scopes,
+    computed: {
+        ...mapGetters('auth', ['isGranted']),
+        ...mapGetters('packages', ['totalChanges']),
+        ...mapState('packages/uploads', ['uploads', 'uploading']),
+        scopes: () => scopes,
 
-            uploadError: vm => {
-                if (vm.uploads === false) {
-                    return vm.$t('ui.packages.uploadUnsupported');
-                }
-
-                if (!vm.isGranted(scopes.INSTALL)) {
-                    return vm.$t('ui.error.permission');
-                }
-
-                return '';
+        uploadError: (vm) => {
+            if (vm.uploads === false) {
+                return vm.$t('ui.packages.uploadUnsupported');
             }
-        },
 
-        methods: {
-            slotEmpty,
+            if (!vm.isGranted(scopes.INSTALL)) {
+                return vm.$t('ui.error.permission');
+            }
 
-            ...mapActions('packages', ['updateAll']),
+            return '';
         },
-    };
+    },
+
+    methods: {
+        slotEmpty,
+
+        ...mapActions('packages', ['updateAll']),
+    },
+};
 </script>
-
 
 <style rel="stylesheet/scss" lang="scss">
 @use "~contao-package-list/src/assets/styles/defaults";
@@ -92,9 +89,9 @@
     bottom: 0;
     max-height: 0;
     background: #000;
-    background: rgba(0,0,0, 0.8);
+    background: rgba(0, 0, 0, 0.8);
     color: #fff;
-    transition: max-height .4s ease;
+    transition: max-height 0.4s ease;
     z-index: 100;
 
     &--active {

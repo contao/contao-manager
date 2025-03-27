@@ -5,43 +5,43 @@
 </template>
 
 <script>
-    import boot from '../../mixins/boot';
+import boot from '../../mixins/boot';
 
-    import BootCheck from '../fragments/BootCheck';
+import BootCheck from '../fragments/BootCheck';
 
-    export default {
-        mixins: [boot],
-        components: { BootCheck },
+export default {
+    mixins: [boot],
+    components: { BootCheck },
 
-        data: () => ({
-            problem: {},
-        }),
+    data: () => ({
+        problem: {},
+    }),
 
-        methods: {
-            async boot() {
-                this.bootDescription = this.$t('ui.server.running');
+    methods: {
+        async boot() {
+            this.bootDescription = this.$t('ui.server.running');
 
-                const response = await this.$store.dispatch('server/php-web/get');
+            const response = await this.$store.dispatch('server/php-web/get');
 
-                if (response.status === 200) {
-                    if (response.data.problem) {
-                        this.problem = response.data.problem;
-                        this.bootState = 'error';
-                        this.bootDescription = response.data.problem.title;
-                    } else if (response.data.version_id < 70000) {
-                        this.bootState = 'info';
-                        this.bootDescription = this.$t('ui.server.php_web.below7', response.data);
-                    } else {
-                        this.bootState = 'success';
-                        this.bootDescription = this.$t('ui.server.php_web.success', response.data);
-                    }
-                } else {
+            if (response.status === 200) {
+                if (response.data.problem) {
+                    this.problem = response.data.problem;
                     this.bootState = 'error';
-                    this.bootDescription = this.$t('ui.server.error');
+                    this.bootDescription = response.data.problem.title;
+                } else if (response.data.version_id < 70000) {
+                    this.bootState = 'info';
+                    this.bootDescription = this.$t('ui.server.php_web.below7', response.data);
+                } else {
+                    this.bootState = 'success';
+                    this.bootDescription = this.$t('ui.server.php_web.success', response.data);
                 }
+            } else {
+                this.bootState = 'error';
+                this.bootDescription = this.$t('ui.server.error');
+            }
 
-                this.$emit('result', this.bootState);
-            },
+            this.$emit('result', this.bootState);
         },
-    };
+    },
+};
 </script>

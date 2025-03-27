@@ -10,15 +10,15 @@
 </template>
 
 <script>
-    import FooterFragment from './../fragments/FooterFragment';
+import FooterFragment from './../fragments/FooterFragment';
 
-    export default {
-        components: { FooterFragment },
-        props: {
-            slotClass: String,
-            wide: Boolean,
-        },
-    };
+export default {
+    components: { FooterFragment },
+    props: {
+        slotClass: String,
+        wide: Boolean,
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -33,7 +33,6 @@
 }
 
 .layout-boxed {
-
     &__cell {
         display: table-cell;
         overflow: hidden;

@@ -1,7 +1,7 @@
 <template>
     <boxed-layout :wide="true" slotClass="view-recovery">
         <header class="view-recovery__header">
-            <img src="../../assets/images/recovery.svg" width="80" height="80" alt="" class="view-recovery__icon">
+            <img src="../../assets/images/recovery.svg" width="80" height="80" alt="" class="view-recovery__icon" />
             <h1 class="view-recovery__headline">{{ $t('ui.recovery.headline') }}</h1>
         </header>
 
@@ -33,76 +33,75 @@
                 <button class="widget-button widget-button--inline widget-button--primary" :disabled="repairStarted && !repairFailed" @click="runSafeMode">{{ $t('ui.recovery.safeModeButton') }}</button>
             </div>
         </main>
-
     </boxed-layout>
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 
-    import views from '../../router/views';
+import views from '../../router/views';
 
-    import BoxedLayout from '../layouts/BoxedLayout';
-    import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
-    import ConsoleOutput from '../fragments/ConsoleOutput';
+import BoxedLayout from '../layouts/BoxedLayout';
+import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
+import ConsoleOutput from '../fragments/ConsoleOutput';
 
-    export default {
-        components: { BoxedLayout, LoadingButton, ConsoleOutput },
+export default {
+    components: { BoxedLayout, LoadingButton, ConsoleOutput },
 
-        data: () => ({
-            repairStarted: false,
-            repairFailed: false,
-            error: '',
-        }),
+    data: () => ({
+        repairStarted: false,
+        repairFailed: false,
+        error: '',
+    }),
 
-        computed: {
-            ...mapState('tasks', { taskStatus: 'status' }),
-        },
+    computed: {
+        ...mapState('tasks', { taskStatus: 'status' }),
+    },
 
-        methods: {
-            async runRepair() {
-                this.repairStarted = true;
+    methods: {
+        async runRepair() {
+            this.repairStarted = true;
 
-                let task;
-                const tasks = [
-                    { name: 'contao/rebuild-cache' },
-                    { name: 'composer/install' },
-                    { name: 'composer/install', config: { 'remove-vendor': true } },
-                ];
+            let task;
+            const tasks = [
+                { name: 'contao/rebuild-cache' },
+                { name: 'composer/install' },
+                { name: 'composer/install', config: { 'remove-vendor': true } },
+            ];
 
-                while ((task = tasks.shift()) !== undefined) {
-                    try {
-                        await this.$store.dispatch('tasks/execute', task);
+            while ((task = tasks.shift()) !== undefined) {
+                try {
+                    await this.$store.dispatch('tasks/execute', task);
+                    await this.$store.dispatch('tasks/deleteCurrent');
+                    window.location.reload(true);
+                    return;
+                } catch (err) {
+                    if (this.taskStatus === 'failed') {
                         await this.$store.dispatch('tasks/deleteCurrent');
-                        window.location.reload(true);
-                        return;
-                    } catch (err) {
-                        if (this.taskStatus === 'failed') {
-                            await this.$store.dispatch('tasks/deleteCurrent');
-                            break;
-                        }
-
-                        await this.$store.dispatch('tasks/deleteCurrent');
+                        break;
                     }
+
+                    await this.$store.dispatch('tasks/deleteCurrent');
                 }
+            }
 
-                this.repairFailed = true;
-            },
-
-            runSafeMode() {
-                this.$store.commit('setSafeMode', true);
-                this.$store.commit('setView', views.READY);
-            },
+            this.repairFailed = true;
         },
 
-        async mounted () {
-            const response = await this.$store.dispatch('server/contao/get');
+        runSafeMode() {
+            this.$store.commit('setSafeMode', true);
+            this.$store.commit('setView', views.READY);
+        },
+    },
 
-            if (response.status === 502 && response.data.error) {
-                this.error = response.data.error;
-            }
+    async mounted() {
+        const response = await this.$store.dispatch('server/contao/get');
+
+        if (response.status === 502 && response.data.error) {
+            this.error = response.data.error;
         }
-    };
+    },
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -120,7 +119,7 @@
     &__icon {
         background: var(--contao);
         border-radius: 10px;
-        padding:10px;
+        padding: 10px;
     }
 
     &__headline {

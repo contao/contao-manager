@@ -11,7 +11,7 @@
                 :required="required"
                 :checked="modelValue === option.value"
                 @click="input(option.value)"
-            >
+            />
             <label :for="`ctrl_${name}_${option.value}`" v-if="allowHtml" v-html="option.label"></label>
             <label :for="`ctrl_${name}_${option.value}`" v-else>{{ option.label }}</label>
         </div>
@@ -19,37 +19,37 @@
 </template>
 
 <script>
-    export default {
-        emits: ['input', 'update:modelValue'],
+export default {
+    emits: ['input', 'update:modelValue'],
 
-        props: {
-            name: {
-                type: String,
-                required: true,
-            },
-            options: {
-                type: Array,
-                required: true,
-            },
-            label: String,
-            modelValue: {
-                required: true,
-            },
-            disabled: Boolean,
-            required: Boolean,
-            allowHtml: {
-                type: Boolean,
-                default: false,
-            },
+    props: {
+        name: {
+            type: String,
+            required: true,
         },
+        options: {
+            type: Array,
+            required: true,
+        },
+        label: String,
+        modelValue: {
+            required: true,
+        },
+        disabled: Boolean,
+        required: Boolean,
+        allowHtml: {
+            type: Boolean,
+            default: false,
+        },
+    },
 
-        methods: {
-            input(value) {
-                this.$emit('input');
-                this.$emit('update:modelValue', value);
-            },
+    methods: {
+        input(value) {
+            this.$emit('input');
+            this.$emit('update:modelValue', value);
         },
-    };
+    },
+};
 </script>
 
 <style lang="scss">
@@ -60,18 +60,18 @@
 
     > div {
         position: relative;
-        margin: .25em 0;
+        margin: 0.25em 0;
     }
 
     input {
-        border:0;
-        clip:rect(0 0 0 0);
-        height:1px;
-        margin:-1px;
-        overflow:hidden;
-        padding:0;
-        position:absolute;
-        width:1px;
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
     }
 
     label {
@@ -91,7 +91,7 @@
     }
 
     input:disabled + label {
-        opacity: .5;
+        opacity: 0.5;
     }
 }
 </style>

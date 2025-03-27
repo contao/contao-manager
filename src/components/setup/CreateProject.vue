@@ -1,5 +1,4 @@
 <template>
-
     <div>
         <file-upload
             name="package"
@@ -15,10 +14,9 @@
         ></file-upload>
 
         <template v-if="theme">
-
             <header class="setup__header">
-                <img class="setup__theme-image" :src="themeImage" :alt="theme.composerJson.name" v-if="themeImage"/>
-                <img src="../../assets/images/create-project.svg" width="80" height="80" alt="" class="setup__icon" v-else/>
+                <img class="setup__theme-image" :src="themeImage" :alt="theme.composerJson.name" v-if="themeImage" />
+                <img src="../../assets/images/create-project.svg" width="80" height="80" alt="" class="setup__icon" v-else />
                 <h1 class="setup__headline">{{ $t('ui.setup.create-project.headline') }}</h1>
                 <p class="setup__description">{{ $t('ui.setup.create-project.theme.uploaded') }}</p>
 
@@ -34,7 +32,7 @@
 
                 <div class="setup__version" v-if="theme.composerJson.authors || theme.authors">
                     <strong>{{ $t('ui.setup.create-project.theme.authors') }}:</strong>
-                    <template v-if="theme.composerJson.authors"> {{ theme.composerJson.authors.map(a => a.name).join(', ') }}</template>
+                    <template v-if="theme.composerJson.authors"> {{ theme.composerJson.authors.map((a) => a.name).join(', ') }}</template>
                     <template v-else> {{ theme.authors }}</template>
                 </div>
                 <div class="setup__version" v-if="theme.composerJson.license">
@@ -47,11 +45,9 @@
                 </div>
 
                 <button class="widget-button widget-button--info widget-button--details" @click="themeDetails">{{ $t('ui.package.detailsButton') }}</button>
-
             </header>
 
             <main class="setup__form">
-
                 <div class="setup__fields" v-if="theme.files">
                     <h2 class="setup__fieldtitle">{{ $t('ui.setup.create-project.themeTitle') }}</h2>
                     <p class="setup__fielddesc">{{ $t('ui.setup.create-project.themeDetails') }}</p>
@@ -64,18 +60,18 @@
                         <div class="setup__tab" v-if="view === 'require'">
                             <table class="setup__requires">
                                 <tbody>
-                                <!-- eslint-disable vue/no-v-for-template-key -->
-                                <template v-for="(version, name) in theme.composerJson.require" :key="name">
-                                    <tr>
-                                        <td>{{ name }}:</td>
-                                        <td>{{ version }}</td>
-                                    </tr>
-                                </template>
+                                    <!-- eslint-disable vue/no-v-for-template-key -->
+                                    <template v-for="(version, name) in theme.composerJson.require" :key="name">
+                                        <tr>
+                                            <td>{{ name }}:</td>
+                                            <td>{{ version }}</td>
+                                        </tr>
+                                    </template>
                                 </tbody>
                             </table>
                         </div>
                         <div class="setup__tab setup__tab--files" v-if="view === 'files'">
-                            <file-tree :files="themeFiles"/>
+                            <file-tree :files="themeFiles" />
                         </div>
                     </div>
 
@@ -91,7 +87,7 @@
 
         <template v-else>
             <header class="setup__header">
-                <img src="../../assets/images/create-project.svg" width="80" height="80" alt="" class="setup__icon"/>
+                <img src="../../assets/images/create-project.svg" width="80" height="80" alt="" class="setup__icon" />
                 <h1 class="setup__headline">{{ $t('ui.setup.create-project.headline') }}</h1>
                 <i18n-t tag="p" keypath="ui.setup.create-project.description" class="setup__description">
                     <template #semver>
@@ -103,11 +99,13 @@
                     <template v-for="version in versions">
                         <template v-if="version.description">
                             <li class="setup__version" :key="version.value" v-if="!version.disabled">
-                                <strong>{{ version.label }}</strong><br>
+                                <strong>{{ version.label }}</strong>
+                                <br />
                                 {{ version.description }}
                             </li>
                             <li class="setup__version" :key="version.value" v-else>
-                                <strong>{{ version.label }}</strong><br>
+                                <strong>{{ version.label }}</strong>
+                                <br />
                                 <span class="setup__version--warning">{{ version.problem }}</span>
                             </li>
                         </template>
@@ -124,7 +122,7 @@
             <main class="setup__form" v-if="!!contaoVersion">
                 <div class="setup__fields setup__fields--center">
                     <svg class="setup__check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                        <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z"/>
+                        <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
                     </svg>
                     <p class="setup__fielddesc">{{ $t('ui.setup.create-project.installed', { version: contaoVersion }) }}</p>
                 </div>
@@ -135,11 +133,10 @@
             </main>
 
             <main class="setup__form" v-else>
-
                 <div class="setup__fields">
                     <h2 class="setup__fieldtitle">{{ $t('ui.setup.create-project.formTitle') }}</h2>
                     <p class="setup__fielddesc setup__fielddesc--version">{{ $t('ui.setup.create-project.formText') }}</p>
-                    <radio-button name="version" :options="versions" :disabled="processing" v-model="version"/>
+                    <radio-button name="version" :options="versions" :disabled="processing" v-model="version" />
 
                     <div class="setup__theme" v-if="version === 'theme'">
                         <p>{{ $t('ui.setup.create-project.themeInstall') }}</p>
@@ -148,7 +145,7 @@
                         </i18n-t>
                         <div v-show="$refs.uploader && $refs.uploader.dropActive" class="package-uploads__overlay">
                             <div>
-                                <img src="../../assets/images/button-upload.svg" alt="" width="128" height="128">
+                                <img src="../../assets/images/button-upload.svg" alt="" width="128" height="128" />
                                 <p>{{ $t('ui.packages.uploadOverlay') }}</p>
                             </div>
                         </div>
@@ -168,15 +165,16 @@
                 <div class="setup__fields">
                     <template v-if="version === 'theme'">
                         <loading-button color="primary" icon="upload" :loading="processing" @click="openFileSelector">{{ $t('ui.setup.create-project.themeUpload') }}</loading-button>
-                        <div class="setup__or"><span>{{ $t('ui.setup.create-project.theme.or') }}</span></div>
-                        <search-input :placeholder="$t('ui.setup.create-project.theme.search')" :disabled="processing"/>
+                        <div class="setup__or">
+                            <span>{{ $t('ui.setup.create-project.theme.or') }}</span>
+                        </div>
+                        <search-input :placeholder="$t('ui.setup.create-project.theme.search')" :disabled="processing" />
                     </template>
                     <button-group color="primary" icon="run" :disabled="!version" :loading="processing" @click="() => install()" :label="$t('ui.setup.create-project.install')" v-else>
                         <button class="widget-button" :disabled="!version || processing" @click="installCoreOnly" v-if="!demo">{{ $t('ui.setup.create-project.coreOnly') }}</button>
                         <button class="widget-button" :disabled="!version || processing" @click="installNoUpdate">{{ $t('ui.setup.create-project.noUpdate') }}</button>
                     </button-group>
                 </div>
-
             </main>
 
             <div class="clearfix"></div>
@@ -199,7 +197,7 @@
 
                 <template v-else-if="isSearching && results">
                     <div class="setup__themes-results">
-                        <discover-package class="setup__themes-item" v-for="item in results" :data="item" :key="item.name"/>
+                        <discover-package class="setup__themes-item" v-for="item in results" :data="item" :key="item.name" />
                     </div>
                     <div class="setup__themes-more">
                         <loading-button inline icon="search" :loading="searching" v-if="hasMore" @click="loadMore">{{ $t('ui.setup.create-project.theme.more') }}</loading-button>
@@ -208,7 +206,6 @@
             </div>
         </template>
     </div>
-
 </template>
 
 <script>
@@ -254,14 +251,14 @@ export default {
         ...mapState('server/contao', ['contaoVersion']),
         ...mapState('contao', { themeName: 'package', themeVersion: 'version' }),
 
-        themeFiles: vm => treeifyPaths(vm.theme.files, { directoriesFirst: true }).children,
+        themeFiles: (vm) => treeifyPaths(vm.theme.files, { directoriesFirst: true }).children,
 
-        versions () {
+        versions() {
             const versions = [];
 
             versions.push({
                 value: '5.5',
-                label: `Contao 5.5 (${ this.$t('ui.setup.create-project.latestTitle') })`,
+                label: `Contao 5.5 (${this.$t('ui.setup.create-project.latestTitle')})`,
                 disabled: this.phpVersionId < 80200,
                 description: this.$t('ui.setup.create-project.latestQ3', { year: '2025' }),
                 problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.2.0', current: this.phpVersion }),
@@ -269,7 +266,7 @@ export default {
 
             versions.push({
                 value: '5.3',
-                label: `Contao 5.3 (${ this.$t('ui.setup.create-project.ltsTitle') })`,
+                label: `Contao 5.3 (${this.$t('ui.setup.create-project.ltsTitle')})`,
                 disabled: this.phpVersionId < 80100,
                 description: this.$t('ui.setup.create-project.ltsText', { year: '2027' }),
                 problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.1.0', current: this.phpVersion }),
@@ -277,7 +274,7 @@ export default {
 
             versions.push({
                 value: '4.13',
-                label: `Contao 4.13 (${ this.$t('ui.setup.create-project.ltsTitle') })`,
+                label: `Contao 4.13 (${this.$t('ui.setup.create-project.ltsTitle')})`,
                 disabled: this.phpVersionId < 70400,
                 description: this.$t('ui.setup.create-project.pltsText', { year: '2025' }),
                 problem: this.$t('ui.setup.create-project.requiresPHP', { version: '7.4.0', current: this.phpVersion }),
@@ -289,11 +286,11 @@ export default {
             });
 
             return versions;
-        }
+        },
     },
 
     watch: {
-        version () {
+        version() {
             this.stopSearch();
             this.searching = false;
             this.results = null;
@@ -325,7 +322,7 @@ export default {
                 package: this.themeName,
                 version: this.themeVersion,
             });
-        }
+        },
     },
 
     methods: {
@@ -363,7 +360,6 @@ export default {
                 });
 
                 this.results = packages;
-
             } catch (err) {
                 this.offline = true;
             }
@@ -371,7 +367,7 @@ export default {
             this.searching = false;
         },
 
-        async install (data, mode = null) {
+        async install(data, mode = null) {
             this.processing = true;
 
             let config;
@@ -423,15 +419,15 @@ export default {
             this.$store.dispatch('tasks/deleteCurrent');
         },
 
-        installNoUpdate () {
+        installNoUpdate() {
             this.install(null, 'no-update');
         },
 
-        installCoreOnly () {
+        installCoreOnly() {
             this.install(null, 'core-only');
         },
 
-        launch () {
+        launch() {
             this.$store.commit('setView', views.READY);
         },
 
@@ -444,7 +440,6 @@ export default {
         },
 
         async filterTheme(newFile, oldFile, prevent) {
-
             // New file has been added
             if (newFile && !oldFile) {
                 if (!/(\.cto|\.zip)$/i.test(newFile.name)) {
@@ -483,7 +478,7 @@ export default {
                     return !['composer.json', 'theme.xml'].includes(path) && !path.startsWith('__MACOSX/') && !path.includes('.DS_Store') && !path.endsWith('/');
                 }).map(f => f.name);
 
-                let root = files[0].substring(0, files[0].indexOf('/')+1);
+                let root = files[0].substring(0, files[0].indexOf('/') + 1);
                 if (files.find((file) => file.substr(0, root.length) !== root)) {
                     root = '';
                 }
@@ -492,7 +487,7 @@ export default {
                 const theme = await zip.file(`${root}theme.xml`).async('string');
 
                 const parser = new DOMParser();
-                const doc = parser.parseFromString(theme, "application/xml");
+                const doc = parser.parseFromString(theme, 'application/xml');
 
                 this.theme = {
                     tstamp: doc.querySelector('table[name="tl_theme"] field[name="tstamp"]')?.innerHTML,
@@ -505,7 +500,7 @@ export default {
 
                 if (this.theme.screenshot && this.theme.screenshot !== 'NULL') {
                     try {
-                        const image = await zip.file(`${root}${ this.theme.screenshot }`);
+                        const image = await zip.file(`${root}${this.theme.screenshot}`);
                         this.themeImage = image ? URL.createObjectURL(await image.async('blob')) : null;
                     } catch (err) {
                         // Ignore invalid theme image
@@ -520,12 +515,12 @@ export default {
             this.processing = false;
         },
 
-        cancelTheme () {
+        cancelTheme() {
             this.theme = null;
             this.$refs.uploader.clear();
         },
 
-        themeDetails () {
+        themeDetails() {
             this.$store.commit('packages/setInstalled', {
                 local: {
                     [this.theme.composerJson.name]: Object.assign({}, this.theme.composerJson, { uploaded: true }),
@@ -535,7 +530,7 @@ export default {
             this.$store.commit('packages/details/setCurrent', this.theme.composerJson.name);
         },
 
-        installTheme () {
+        installTheme() {
             if (!this.$refs.uploader.active) {
                 this.processing = true;
                 this.$refs.uploader.active = true;
@@ -543,7 +538,7 @@ export default {
         },
     },
 
-    async mounted () {
+    async mounted() {
         await this.$router.isReady();
 
         // remove existing package query parameters
@@ -555,7 +550,7 @@ export default {
         this.$store.commit('packages/setInstalled', {});
         this.isWeb = (await this.$store.dispatch('server/contao/get')).data.public_dir === 'web';
         this.version = this.versions.find((v) => !v.disabled).value;
-    }
+    },
 };
 </script>
 
@@ -569,7 +564,7 @@ export default {
     }
 
     &__version {
-        margin: .5em 0;
+        margin: 0.5em 0;
         text-align: left;
 
         &--warning {
@@ -701,9 +696,9 @@ export default {
         border: 1px solid var(--border);
 
         &--files {
-            white-space:pre;
-            overflow:scroll;
-            height:200px;
+            white-space: pre;
+            overflow: scroll;
+            height: 200px;
         }
     }
 
@@ -711,7 +706,8 @@ export default {
         width: 100%;
         border-collapse: collapse;
 
-        th, td {
+        th,
+        td {
             margin: 0;
             padding: 3px 10px;
             text-align: start;

@@ -15,7 +15,7 @@ export default {
     },
 
     getters: {
-        hasBackups: state => state.supported && state.files && state.files.length > 0,
+        hasBackups: (state) => state.supported && state.files && state.files.length > 0,
     },
 
     mutations: {
@@ -31,7 +31,7 @@ export default {
 
             if (response && response.status === 200) {
                 state.supported = true;
-                state.files = response.data
+                state.files = response.data;
             }
         },
 
@@ -41,7 +41,7 @@ export default {
 
         setRestored(state) {
             state.restored = true;
-        }
+        },
     },
 
     actions: {
@@ -60,7 +60,10 @@ export default {
 
             commit('setLoading', true);
 
-            return axios.get('api/contao/backup').then(handle).catch(error => handle(error.response));
-        }
+            return axios
+                .get('api/contao/backup')
+                .then(handle)
+                .catch((error) => handle(error.response));
+        },
     },
 };
