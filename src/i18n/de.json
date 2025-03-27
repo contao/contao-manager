@@ -275,6 +275,7 @@
     "ui.task.created": "Lade Details …",
     "ui.task.active": "Bitte warte, während der Contao Manager die nötigen Operationen im Hintergrund ausführt.",
     "ui.task.complete": "Alle Operationen erfolgreich abgeschlossen. Weitere Details findest du in der Konsolen-Ausgabe.",
+    "ui.task.paused": "Ein Hintergrund-Prozess wurde unerwartet beendet. Bitte prüfe die Konsolen-Ausgabe.",
     "ui.task.aborting": "Bitte warte, während der Hintergrund-Prozess abgebrochen wird.",
     "ui.task.stopped": "Einige Operationen wurden abgebrochen. Bitte prüfe die Konsolen-Ausgabe.",
     "ui.task.error": "Ein Hintergrund-Prozess wurde unerwartet beendet. Bitte prüfe die Konsolen-Ausgabe.",
@@ -282,10 +283,12 @@
     "ui.task.failedDescription1": "Die Ausführung der Aufgabe ist fehlgeschlagen.",
     "ui.task.failedDescription2": "Sollte dies wiederholt geschehen, wird dein Server möglicherweise nicht unterstützt.",
     "ui.task.reportProblem": "Probleme melden",
+    "ui.task.pausedDescription": "Klick auf \"Weiter\", um den Fehler zu ignorieren und die verbleibenden Aufgaben auszuführen.",
     "ui.task.sponsor": "Composer Cloud gesponsert von {sponsor}",
     "ui.task.buttonAudit": "Datenbank aktualisieren",
     "ui.task.buttonClose": "Schließen",
     "ui.task.buttonConfirm": "Bestätigen & Schließen",
+    "ui.task.buttonContinue": "Weiter",
     "ui.task.buttonCancel": "Abbrechen",
     "ui.task.confirmCancel": "Möchtest du diesen Prozess wirklich abbrechen? Deine Contao-Installation könnte in einem defekten Zustand zurückbleiben!",
     "ui.task.autoclose": "Fenster bei Erfolg schließen",
@@ -541,5 +544,5 @@
     "ui.totp.enabled": "Die Zwei-Faktor-Anmeldung wurde erfolgreich aktiviert.",
     "ui.totp.disabled": "Die Zwei-Faktor-Anmeldung wurde erfolgreich deaktiviert.",
     "ui.totp.setup": "Zwei-Faktor-Anmeldung konfigurieren",
-    "ui.totp.skip": "Two-Factor-Anmeldung überspringen"
+    "ui.totp.skip": "Zwei-Faktor-Anmeldung überspringen"
 }
