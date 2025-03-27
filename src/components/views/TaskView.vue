@@ -16,7 +16,7 @@
                     <loading-button class="view-task__action" :loading="deletingTask" @click="deleteTask">{{ $t('ui.task.buttonClose') }}</loading-button>
                 </div>
             </template>
-            <template v-else-if="isPaused">
+            <template v-else-if="isPaused && allowContinue">
                 <p class="view-task__text">
                     {{ $t('ui.task.pausedDescription') }}
                 </p>
@@ -96,13 +96,7 @@ export default {
             },
 
             async deleteTask() {
-                const reload = this.isError;
-
-                await this.$store.dispatch('tasks/deleteCurrent')
-
-                if (reload) {
-                    window.location.reload();
-                }
+                await this.$store.dispatch('tasks/deleteCurrent');
             },
 
             async updateDatabase() {

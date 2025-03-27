@@ -137,12 +137,22 @@
             },
 
             async applyChanges() {
-                await this.$store.dispatch('packages/apply');
+                try {
+                    await this.$store.dispatch('packages/apply');
+                } catch (err) {
+                    // Ignore failed task, always reload packages
+                }
+
                 await this.$store.dispatch('packages/load');
             },
 
             async applyChangesAll() {
-                await this.$store.dispatch('packages/apply', { update_all: true });
+                try {
+                    await this.$store.dispatch('packages/apply', { update_all: true });
+                } catch (err) {
+                    // Ignore failed task, always reload packages
+                }
+
                 await this.$store.dispatch('packages/load');
             },
 

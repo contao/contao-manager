@@ -14,6 +14,7 @@ export default {
 
         allowAutoClose: vm => vm.hasTask && vm.currentTask.autoclose,
         allowCancel: vm => vm.hasTask && vm.currentTask.cancellable,
+        allowContinue: vm => vm.hasTask && vm.currentTask.continuable,
 
         requiresAudit: vm => vm.isComplete && vm.currentTask.audit,
     },

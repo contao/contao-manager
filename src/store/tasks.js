@@ -4,7 +4,7 @@ import axios from 'axios';
 
 let handleTask;
 let failTask;
-let initP;
+let queue;
 let pending = 0;
 let ignoreErrors = false;
 
@@ -38,6 +38,10 @@ handleTask = (response, store, resolve, reject) => {
     store.commit('setCurrent', task);
 
     switch (task.status) {
+        case 'paused':
+            // Do nothing, let the promise/queue keep running until the task is continued or aborted
+            break;
+
         case 'active':
         case 'aborting':
             pollTask(store, resolve, reject);
@@ -108,59 +112,64 @@ export default {
 
         setInitialized(state, value) {
             state.initialized = !!value;
-
-            if (!value) {
-                initP = null;
-            }
         },
     },
 
     actions: {
         async init(store) {
-            if (!initP) {
-                initP = new Promise((resolve) => {
-                    const init = () => {
-                        store.commit('setInitialized', true);
-                        resolve();
-                    };
-
-                    pollTask(store, init, init)
-                })
+            if (store.state.initialized) {
+                return Promise.resolve();
             }
 
-            return initP;
+            if (queue) {
+                return queue.promise;
+            }
+
+            queue = Promise.withResolvers();
+
+            const init = () => {
+                store.commit('setInitialized', true);
+                queue.resolve();
+                queue = null;
+            };
+
+            pollTask(store, init, init)
+
+            return queue.promise;
         },
 
         execute(store, task) {
-            return new Promise((resolve, reject) => {
-                if (store.state.status !== null) {
-                    reject();
-                }
+            if (store.state.status !== null) {
+                return Promise.reject();
+            }
 
-                ignoreErrors = !!task.ignoreErrors;
-                delete task.ignoreErrors;
+            queue = Promise.withResolvers();
 
-                if (ignoreErrors) {
-                    // Vue.http.interceptors.unshift((request, next) => {
-                    //     next((response) => {
-                    //         if (request.url.substring(0, 4) === 'api/'
-                    //             && response.headers.get('Content-Type') !== 'application/json'
-                    //             && response.status >= 400
-                    //             && response.status <= 599
-                    //         ) {
-                    //             throw response.data;
-                    //         }
-                    //     })
-                    // });
-                }
+            ignoreErrors = !!task.ignoreErrors;
+            delete task.ignoreErrors;
 
-                store.commit('setCurrent', task);
-                store.commit('setStatus', 'created');
+            if (ignoreErrors) {
+                // Vue.http.interceptors.unshift((request, next) => {
+                //     next((response) => {
+                //         if (request.url.substring(0, 4) === 'api/'
+                //             && response.headers.get('Content-Type') !== 'application/json'
+                //             && response.status >= 400
+                //             && response.status <= 599
+                //         ) {
+                //             throw response.data;
+                //         }
+                //     })
+                // });
+            }
 
-                axios.put('api/task', task)
-                    .then(response => handleTask(response, store, resolve, reject))
-                    .catch(error => failTask(error, store, resolve, reject));
-            });
+            store.commit('setCurrent', task);
+            store.commit('setStatus', 'created');
+
+            axios.put('api/task', task)
+                .then(response => handleTask(response, store, queue.resolve, queue.reject))
+                .catch(error => failTask(error, store, queue.resolve, queue.reject));
+
+            return queue.promise;
         },
 
         abort(store) {
@@ -170,29 +179,36 @@ export default {
 
             store.commit('setStatus', 'aborting');
 
-            return new Promise((resolve, reject) => {
-                axios.patch('api/task', {status: 'aborting'})
-                    .then(response => handleTask(response, store, resolve, reject))
-                    .catch(error => failTask(error, store, resolve, reject));
-            });
+            if (!queue) {
+                queue = Promise.withResolvers();
+            }
+
+            axios.patch('api/task', {status: 'aborting'})
+                .then(response => handleTask(response, store, queue.resolve, queue.reject))
+                .catch(error => failTask(error, store, queue.resolve, queue.reject));
+
+            return queue.promise;
         },
 
         continue(store) {
-            if (!store.state.current?.continuable) {
+            if (!queue || !store.state.current?.continuable) {
                 return Promise.reject();
             }
 
             store.commit('setStatus', 'active');
 
-            return new Promise((resolve, reject) => {
-                axios.patch('api/task', {status: 'active'})
-                    .then(response => handleTask(response, store, resolve, reject))
-                    .catch(error => failTask(error, store, resolve, reject));
-            });
+            axios.patch('api/task', {status: 'active'})
+                .then(response => handleTask(response, store, queue.resolve, queue.reject))
+                .catch(error => failTask(error, store, queue.resolve, queue.reject));
         },
 
         async deleteCurrent({ commit, dispatch }, retry = 2) {
             commit('setDeleting', true);
+
+            if (queue) {
+                queue.resolve();
+                queue = null;
+            }
 
             try {
                 await axios.delete('api/task');
