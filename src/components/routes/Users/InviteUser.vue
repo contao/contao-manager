@@ -2,9 +2,8 @@
     <popup-overlay class="invite-user" :headline="$t('ui.user-manager.inviteHeadline')" @submit="submit" @clear="close">
         <template v-if="token">
             <div class="invite-user__check">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
-                </svg>
+                <!-- prettier-ignore -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z"/></svg>
             </div>
 
             <i18n-t tag="p" keypath="ui.user-manager.inviteSuccess1" class="invite-user__text">
@@ -16,10 +15,12 @@
             <button
                 type="button"
                 class="widget-button widget-button--small invite-user__clipboard"
-                :class="{ 'widget-button--clipboard': !copied, 'widget-button--check': copied }"
-                v-clipboard="token.url"
-                @click="markCopy"
-            >{{ $t('ui.user-manager.clipboard') }}</button>
+                :class="{ 'widget-button--clipboard': !clipboard.copied, 'widget-button--check': clipboard.copied }"
+                @click="clipboard.copy(token.url)"
+                v-if="clipboard.isSupported"
+            >
+                {{ $t('ui.user-manager.clipboard') }}
+            </button>
         </template>
         <template v-else>
             <p class="invite-user__text">{{ $t('ui.user-manager.inviteText') }}</p>
@@ -34,6 +35,7 @@
 </template>
 
 <script>
+import { useClipboard } from '@vueuse/core';
 import datimFormat from 'contao-package-list/src/filters/datimFormat';
 import PopupOverlay from 'contao-package-list/src/components/fragments/PopupOverlay';
 import LoadingButton from 'contao-package-list/src/components/fragments/LoadingButton';
@@ -46,19 +48,11 @@ export default {
         loading: false,
         scope: 'admin',
         token: null,
-        copied: false,
+        clipboard: useClipboard(),
     }),
 
     methods: {
         datimFormat,
-
-        markCopy() {
-            this.copied = true;
-
-            setTimeout(() => {
-                this.copied = false;
-            }, 1000);
-        },
 
         async submit() {
             this.loading = true;
@@ -79,7 +73,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@use "~contao-package-list/src/assets/styles/defaults";
+@use '~contao-package-list/src/assets/styles/defaults';
 
 .invite-user {
     &__check {

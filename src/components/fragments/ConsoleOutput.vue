@@ -15,24 +15,21 @@
                 />
                 <button-menu transparent button-class="console__action">
                     <button @click="showLog">{{ $t('ui.console.showLog') }}</button>
-                    <button v-clipboard="consoleOutput">{{ $t('ui.console.copyLog') }}</button>
+                    <button @click="clipboard.copy(consoleOutput)">{{ $t('ui.console.copyLog') }}</button>
                 </button-menu>
             </div>
         </section>
         <div class="console__operations">
             <!-- eslint-disable vue/no-v-for-template-key -->
             <template v-for="(operation, i) in operations" :key="i">
-                <console-operation
-                    v-bind="operation"
-                    :show-console="showConsole"
-                    :force-console="forceConsole"
-                />
+                <console-operation v-bind="operation" :show-console="showConsole" :force-console="forceConsole" />
             </template>
         </div>
     </div>
 </template>
 
 <script>
+import { useClipboard } from '@vueuse/core';
 import ButtonMenu from '../widgets/ButtonMenu';
 import ConsoleOperation from './ConsoleOperation';
 
@@ -58,6 +55,7 @@ export default {
 
     data: () => ({
         showConsole: false,
+        clipboard: useClipboard(),
     }),
 
     methods: {

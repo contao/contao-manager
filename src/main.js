@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Clipboard from 'v-clipboard';
 import { createNotivue, push } from 'notivue';
 
 import bootstrap from 'contao-package-list/src/bootstrap';
@@ -58,12 +57,7 @@ axios.interceptors.response.use(
             return response;
         }
 
-        if (
-            url.substring(0, 4) === 'api/' &&
-            response.headers['content-type'] !== 'application/json' &&
-            response.status >= 400 &&
-            response.status <= 599
-        ) {
+        if (url.substring(0, 4) === 'api/' && response.headers['content-type'] !== 'application/json' && response.status >= 400 && response.status <= 599) {
             store.commit('setError', {
                 type: 'about:blank',
                 status: response.status,
@@ -83,7 +77,7 @@ const notivue = createNotivue({
     enqueue: true,
 });
 
-bootstrap(App, i18n, [store, router, Clipboard, notivue], (app) => {
+bootstrap(App, i18n, [store, router, notivue], (app) => {
     app.config.globalProperties.$notify = push;
     app.config.globalProperties.$request = request;
 });
