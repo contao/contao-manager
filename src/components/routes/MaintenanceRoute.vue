@@ -72,7 +72,6 @@ export default {
     }
 
     &__image {
-        aspect-ratio: 1;
         display: none;
 
         img {
@@ -80,6 +79,7 @@ export default {
             height: 100%;
             border-radius: var(--border-radius);
             overflow: hidden;
+            aspect-ratio: 1;
         }
 
         @include defaults.screen(1024) {
