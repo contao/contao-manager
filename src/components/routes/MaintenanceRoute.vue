@@ -72,18 +72,19 @@ export default {
     }
 
     &__image {
-        aspect-ratio: 1;
         display: none;
 
         img {
             width: 100%;
-            height: 100%;
             border-radius: var(--border-radius);
             overflow: hidden;
+            aspect-ratio: 1;
+            object-fit:contain;
         }
 
         @include defaults.screen(1024) {
-            display: block;
+            display: flex;
+            align-items: center;
         }
     }
 
