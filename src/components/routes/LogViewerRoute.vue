@@ -196,11 +196,11 @@ export default {
         },
 
         toggleContext(k) {
-            this.$set(this.showContext, k, !this.showContext[k]);
+            this.showContext[k] ^= 1;
         },
 
         toggleExtra(k) {
-            this.$set(this.showExtra, k, !this.showExtra[k]);
+            this.showExtra[k] ^= 1;
         },
 
         countOptions(key, options = {}) {
