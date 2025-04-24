@@ -14,7 +14,6 @@ namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Crell\ApiProblem\ApiProblem;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +23,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/files/{file}', methods: ['GET', 'PUT'])]
 #[IsGranted('ROLE_ADMIN')]
-class FileController extends AbstractController
+class FileController
 {
     private const ALLOWED_FILES = [
         'composer.json',

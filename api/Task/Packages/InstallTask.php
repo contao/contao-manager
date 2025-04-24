@@ -64,16 +64,9 @@ class InstallTask extends AbstractPackagesTask
             $operations[] = new RemoveVendorOperation($config, $this->environment, $this->filesystem);
         }
 
-        if (
-            $this->environment->useCloudResolver()
-            && (!$this->filesystem->exists($this->environment->getLockFile()) || $config->getOption('cloud-job'))
-        ) {
+        if ($this->environment->useCloudResolver() && !$this->filesystem->exists($this->environment->getLockFile())) {
             $changes = new CloudChanges();
             $changes->setDryRun($dryRun);
-
-            if ($config->getOption('cloud-job') && !$config->getState('cloud-job')) {
-                $config->setState('cloud-job', $config->getOption('cloud-job'));
-            }
 
             $operations[] = new CloudOperation(
                 $this->cloudResolver,

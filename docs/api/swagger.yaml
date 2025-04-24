@@ -2259,9 +2259,6 @@ components:
                             type: boolean
                             default: false
                             description: Removes the `vendor` folder before installation (clean install).
-                        cloud-job:
-                            type: string
-                            description: ID of a composer cloud job if a lock file should be downloaded before installation.
 
         TaskPackagesUpdate:
             type: object
