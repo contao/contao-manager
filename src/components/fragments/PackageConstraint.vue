@@ -11,13 +11,15 @@
             @keypress.enter.prevent="saveConstraint"
             @keypress.esc.prevent="resetConstraint"
             @blur="saveConstraint"
-        >
+        />
         <button
             :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
             :title="buttonTitle"
             @click="editConstraint"
             :disabled="!emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.UPDATE))"
-        >{{ buttonValue }}</button>
+        >
+            {{ buttonValue }}
+        </button>
     </fieldset>
 </template>
 
@@ -59,7 +61,10 @@ export default {
         buttonTitle: (vm) => (vm.isUpload ? vm.$t('ui.package.uploadConstraint') : ''),
         buttonValue: (vm) => (vm.isUpload ? vm.$t('ui.package.editConstraint') : vm.$t('ui.package.private')),
         inputTitle: (vm) => (vm.isUpload ? vm.$t('ui.package.privateTitle') : vm.constraint),
-        inputPlaceholder: (vm) => (!vm.isUpload && (!vm.$store.state.packages.root || !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name)) ? vm.$t('ui.package.latestConstraint') : ''),
+        inputPlaceholder: (vm) =>
+            !vm.isUpload && (!vm.$store.state.packages.root || !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name))
+                ? vm.$t('ui.package.latestConstraint')
+                : '',
 
         inputValue: {
             get: (vm) => (vm.isUpload ? vm.$t('ui.package.private') : vm.constraint),
@@ -92,11 +97,10 @@ export default {
             this.constraintEditable = false;
             this.constraintError = false;
 
-            if (!this.emit
-                && (
-                    (this.isInstalled && (!this.constraint || this.constraintInstalled === this.constraint))
-                    || (this.isRequired && (!this.constraint || this.constraintRequired === this.constraint))
-                )
+            if (
+                !this.emit &&
+                ((this.isInstalled && (!this.constraint || this.constraintInstalled === this.constraint)) ||
+                    (this.isRequired && (!this.constraint || this.constraintRequired === this.constraint)))
             ) {
                 this.$store.commit('packages/restore', this.data.name);
                 this.$store.dispatch('packages/uploads/unconfirm', this.data.name);
@@ -180,10 +184,10 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-@use "~contao-package-list/src/assets/styles/defaults";
+@use '~contao-package-list/src/assets/styles/defaults';
 
 .package-constraint {
-    input[type=text] {
+    input[type='text'] {
         margin-right: 2px;
         background: #fff;
         border: 2px solid var(--btn-warning);
@@ -195,6 +199,7 @@ export default {
 
         &::placeholder {
             color: #fff;
+            -webkit-text-fill-color: #fff;
             opacity: 1;
         }
 
@@ -215,8 +220,8 @@ export default {
         }
     }
 
-    & > input[type=text],
-    & > input[type=text]:disabled {
+    & > input[type='text'],
+    & > input[type='text']:disabled {
         float: left;
         width: calc(100% - 32px);
     }
@@ -254,7 +259,7 @@ export default {
     }
 
     @include defaults.screen(1024) {
-        input[type=text],
+        input[type='text'],
         button {
             height: 30px;
         }
