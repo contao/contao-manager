@@ -271,12 +271,14 @@ export default {
             return result;
         },
 
-        async load({ commit }) {
+        async load({ state, commit, getters }, reset = true) {
             commit('clearInstalled');
-            commit('reset');
             commit('algolia/reset', null, { root: true });
 
-            const packages = {};
+            if (reset) {
+                commit('reset');
+            }
+
             const load = [axios.get('api/packages/root'), axios.get('api/packages/local'), axios.get('api/packages/missing')];
 
             commit('setInstalled', {
@@ -285,7 +287,27 @@ export default {
                 missing: (await load[2]).data,
             });
 
-            return packages;
+            if (!reset) {
+                Object.keys(state.add).forEach((name) => {
+                    if (getters.packageInstalled(name)) {
+                        commit('restore', name);
+                        commit('update', name);
+                    }
+                });
+
+                Object.keys(state.change).forEach((name) => {
+                    if (getters.versionInstalled(name, state.change[name])) {
+                        commit('restore', name);
+                        commit('update', name);
+                    }
+                });
+
+                state.remove.forEach((name) => {
+                    if (!getters.packageInstalled(name)) {
+                        commit('restore', name);
+                    }
+                });
+            }
         },
 
         apply({ state, dispatch }, options = { dry_run: false, update_all: false }) {
