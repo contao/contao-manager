@@ -16,7 +16,6 @@ use Composer\Json\JsonFile;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Task\TaskManager;
-use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -25,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Terminal42\ComposerLockValidator\Validator;
 
@@ -97,7 +95,8 @@ class CloudController extends AbstractController
             return ApiProblemResponse::createFromException($throwable)->setStatusCode(Response::HTTP_BAD_REQUEST);
         }
 
-        // If a composer.json was submitted as well, the composer.lock has already been validated at this point.
+        // If a composer.json was submitted as well, the composer.lock has already been
+        // validated at this point.
         if (!$valid) {
             try {
                 Validator::createFromComposer($this->environment->getComposer(true))->validate($lockContent);
