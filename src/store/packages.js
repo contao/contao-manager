@@ -289,12 +289,12 @@ export default {
         },
 
         apply({ state, dispatch }, options = { dry_run: false, update_all: false }) {
-            const require = state.change;
-            const remove = state.remove;
-            const update = state.update.concat(
+            const require = Object.create(state.change);
+            const remove = Array.from(state.remove);
+            const update = Array.from(state.update).concat(
                 Object.keys(state.required),
                 Object.keys(state.change).filter((pkg) => !Object.keys(state.required).includes(pkg)),
-                state.remove.filter((pkg) => !Object.keys(state.required).includes(pkg)),
+                Array.from(state.remove).filter((pkg) => !Object.keys(state.required).includes(pkg)),
             );
 
             Object.keys(state.add).forEach((pkg) => {
