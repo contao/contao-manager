@@ -14,7 +14,6 @@ namespace Contao\ManagerApi\Controller\Packages;
 
 use Composer\Json\JsonFile;
 use Contao\ManagerApi\Composer\Environment;
-use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\Task\TaskManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,6 +22,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Terminal42\ComposerLockValidator\Validator;
@@ -57,7 +58,7 @@ class CloudController extends AbstractController
             throw new BadRequestHttpException('A task is already active');
         }
 
-        $valid = false;
+        $backupCreated = false;
         $lock = $request->request->all('composerLock');
 
         if ([] === $lock) {
@@ -71,7 +72,7 @@ class CloudController extends AbstractController
         } catch (\Throwable $throwable) {
             $this->logger->error('Invalid composerLock for /api/packages/cloud.', ['composerLock' => $lock]);
 
-            return ApiProblemResponse::createFromException($throwable)->setStatusCode(Response::HTTP_BAD_REQUEST);
+            throw new BadRequestHttpException($throwable->getMessage(), $throwable);
         }
 
         try {
@@ -80,31 +81,39 @@ class CloudController extends AbstractController
                 $jsonFile->write($json);
                 $jsonFile->validateSchema(JsonFile::LAX_SCHEMA);
 
-                if (!$this->isGranted('ROLE_INSTALL') && $jsonFile->read() !== $this->environment->getComposerJson()) {
+                if (!$this->isGranted('ROLE_INSTALL') && $jsonFile->read() !== $this->environment->getComposerJsonFile()->read()) {
                     throw $this->createAccessDeniedException('No permission to change the composer.json');
                 }
 
-                Validator::createFromComposerJson($jsonFile->getPath())->validate($lockContent);
-                $valid = true;
+                if (!$this->environment->createBackup()) {
+                    $this->logger->error('Unable to create backup of composer files.', ['composerJson' => $json ?? null, 'composerLock' => $lock]);
 
+                    throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Unable to create backup of composer files.');
+                }
+
+                $backupCreated = true;
                 $this->environment->getComposerJsonFile()->write($jsonFile->read());
             }
         } catch (\Throwable $throwable) {
             $this->logger->error('Invalid composerJson for /api/packages/cloud.', ['composerJson' => $json ?? null, 'composerLock' => $lock]);
 
-            return ApiProblemResponse::createFromException($throwable)->setStatusCode(Response::HTTP_BAD_REQUEST);
+            if ($throwable instanceof HttpExceptionInterface) {
+                throw $throwable;
+            }
+
+            throw new BadRequestHttpException($throwable->getMessage(), $throwable);
         }
 
-        // If a composer.json was submitted as well, the composer.lock has already been
-        // validated at this point.
-        if (!$valid) {
-            try {
-                Validator::createFromComposer($this->environment->getComposer(true))->validate($lockContent);
-            } catch (\Throwable $throwable) {
-                $this->logger->error('Invalid composerJson for /api/packages/cloud.', ['composerJson' => $json ?? null, 'composerLock' => $lock]);
+        try {
+            Validator::createFromComposer($this->environment->getComposer(true))->validate($lockContent);
+        } catch (\Throwable $throwable) {
+            $this->logger->error('Invalid composerJson for /api/packages/cloud.', ['composerJson' => $json ?? null, 'composerLock' => $lock]);
 
-                return ApiProblemResponse::createFromException($throwable)->setStatusCode(Response::HTTP_BAD_REQUEST);
+            if ($backupCreated) {
+                $this->environment->restoreBackup();
             }
+
+            throw new BadRequestHttpException($throwable->getMessage(), $throwable);
         }
 
         // Only write after composer.json was validated

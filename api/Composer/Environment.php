@@ -24,6 +24,7 @@ use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ComposerConfig;
 use Contao\ManagerApi\Config\ManagerConfig;
 use Contao\ManagerApi\System\Request;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -39,6 +40,7 @@ class Environment
         private readonly ComposerConfig $composerConfig,
         private readonly Filesystem $filesystem,
         private readonly Request $request,
+        private readonly LoggerInterface|null $logger = null,
     ) {
     }
 
@@ -64,6 +66,65 @@ class Environment
     public function getBackupDir(): string
     {
         return $this->kernel->getConfigDir();
+    }
+
+    public function getBackupPaths(): array
+    {
+        return [
+            $this->getJsonFile() => \sprintf('%s/%s~', $this->getBackupDir(), basename($this->getJsonFile())),
+            $this->getLockFile() => \sprintf('%s/%s~', $this->getBackupDir(), basename($this->getLockFile())),
+        ];
+    }
+
+    public function createBackup(): bool
+    {
+        if (!$this->filesystem->exists($this->getJsonFile())) {
+            if (null !== $this->logger) {
+                $this->logger->info('Cannot create composer file backup, source JSON does not exist', ['file' => $this->getJsonFile()]);
+            }
+
+            return false;
+        }
+
+        if (null !== $this->logger) {
+            $this->logger->info('Creating backup of composer files');
+        }
+
+        foreach ($this->getBackupPaths() as $source => $target) {
+            if ($this->filesystem->exists($source)) {
+                $this->filesystem->copy($source, $target, true);
+
+                if (null !== $this->logger) {
+                    $this->logger->info(\sprintf('Copied "%s" to "%s"', $source, $target));
+                }
+            } elseif (null !== $this->logger) {
+                $this->logger->info(\sprintf('File "%s" does not exist', $source));
+            }
+        }
+
+        return true;
+    }
+
+    public function restoreBackup(): bool
+    {
+        if (null !== $this->logger) {
+            $this->logger->info('Restoring backup of composer files');
+        }
+
+        foreach (array_flip($this->getBackupPaths()) as $source => $target) {
+            if ($this->filesystem->exists($source)) {
+                $this->filesystem->copy($source, $target, true);
+                $this->filesystem->remove($source);
+
+                if (null !== $this->logger) {
+                    $this->logger->info(\sprintf('Copied "%s" to "%s"', $source, $target));
+                }
+            } elseif (null !== $this->logger) {
+                $this->logger->info(\sprintf('File "%s" does not exist', $source));
+            }
+        }
+
+        return true;
     }
 
     /**

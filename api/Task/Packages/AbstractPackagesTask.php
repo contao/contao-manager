@@ -68,28 +68,8 @@ abstract class AbstractPackagesTask extends AbstractTask
             return;
         }
 
-        if (!$this->filesystem->exists($this->environment->getJsonFile())) {
-            if (null !== $this->logger) {
-                $this->logger->info('Cannot create composer file backup, source JSON does not exist', ['file' => $this->environment->getJsonFile()]);
-            }
-
+        if (!$this->environment->createBackup()) {
             return;
-        }
-
-        if (null !== $this->logger) {
-            $this->logger->info('Creating backup of composer files');
-        }
-
-        foreach ($this->getBackupPaths() as $source => $target) {
-            if ($this->filesystem->exists($source)) {
-                $this->filesystem->copy($source, $target, true);
-
-                if (null !== $this->logger) {
-                    $this->logger->info(\sprintf('Copied "%s" to "%s"', $source, $target));
-                }
-            } elseif (null !== $this->logger) {
-                $this->logger->info(\sprintf('File "%s" does not exist', $source));
-            }
         }
 
         $config->setState('backup-artifacts', $this->environment->getArtifacts());
@@ -102,21 +82,8 @@ abstract class AbstractPackagesTask extends AbstractTask
     protected function restoreState(TaskConfig $config): void
     {
         if ($config->getState('backup-created', false) && !$config->getState('backup-restored', false)) {
-            if (null !== $this->logger) {
-                $this->logger->info('Restoring backup of composer files');
-            }
-
-            foreach (array_flip($this->getBackupPaths()) as $source => $target) {
-                if ($this->filesystem->exists($source)) {
-                    $this->filesystem->copy($source, $target, true);
-                    $this->filesystem->remove($source);
-
-                    if (null !== $this->logger) {
-                        $this->logger->info(\sprintf('Copied "%s" to "%s"', $source, $target));
-                    }
-                } elseif (null !== $this->logger) {
-                    $this->logger->info(\sprintf('File "%s" does not exist', $source));
-                }
+            if (!$this->environment->restoreBackup()) {
+                return;
             }
 
             if (null !== ($previous = $config->getState('backup-artifacts'))) {
@@ -127,16 +94,5 @@ abstract class AbstractPackagesTask extends AbstractTask
 
             $config->setState('backup-restored', true);
         }
-    }
-
-    /**
-     * Gets source and backup paths for composer.json and composer.lock.
-     */
-    private function getBackupPaths(): array
-    {
-        return [
-            $this->environment->getJsonFile() => \sprintf('%s/%s~', $this->environment->getBackupDir(), basename($this->environment->getJsonFile())),
-            $this->environment->getLockFile() => \sprintf('%s/%s~', $this->environment->getBackupDir(), basename($this->environment->getLockFile())),
-        ];
     }
 }
