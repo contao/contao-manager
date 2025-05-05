@@ -166,7 +166,11 @@ class TaskManager implements LoggerAwareInterface
             $this->logger->info('Deleting task', ['name' => $task->getName(), 'class' => $task::class]);
         }
 
-        $status = $task->create($config);
+        if ($config->isCancelled()) {
+            $status = $task->abort($config);
+        } else {
+            $status = $task->create($config);
+        }
 
         if ($status->isActive() || !$task->delete($config)) {
             throw new \RuntimeException('Active task cannot be deleted');

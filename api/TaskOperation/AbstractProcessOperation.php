@@ -30,6 +30,8 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
         15 => 'SIGTERM',
     ];
 
+    private bool $abort = false;
+
     public function __construct(protected readonly Process|ProcessController $process)
     {
     }
@@ -72,7 +74,7 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
 
     public function hasError(): bool
     {
-        return $this->process->isTerminated() && $this->process->getExitCode() > 0;
+        return $this->abort || ($this->process->isTerminated() && $this->process->getExitCode() > 0);
     }
 
     public function continueOnError(): bool
@@ -89,6 +91,8 @@ abstract class AbstractProcessOperation implements TaskOperationInterface, Logge
 
     public function abort(): void
     {
+        $this->abort = true;
+
         if ($this->isRunning()) {
             $this->process->stop();
         }

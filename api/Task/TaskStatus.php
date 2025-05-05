@@ -178,7 +178,7 @@ final class TaskStatus implements \JsonSerializable
         $operations = [];
         $sponsor = null;
 
-        $isNext = true;
+        $isNext = !$this->abort;
         $hasError = false;
         $canContinue = false;
 
