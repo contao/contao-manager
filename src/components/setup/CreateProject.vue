@@ -31,9 +31,9 @@
                 </div>
 
                 <div class="setup__version" v-if="theme.composerJson.authors || theme.authors">
-                    <strong>{{ $t('ui.setup.create-project.theme.authors') }}:</strong>
-                    <template v-if="theme.composerJson.authors"> {{ theme.composerJson.authors.map((a) => a.name).join(', ') }}</template>
-                    <template v-else> {{ theme.authors }}</template>
+                    <strong>{{ $t('ui.setup.create-project.theme.authors') }}: </strong>
+                    <template v-if="theme.composerJson.authors">{{ theme.composerJson.authors.map((a) => a.name).join(', ') }}</template>
+                    <template v-else>{{ theme.authors }}</template>
                 </div>
                 <div class="setup__version" v-if="theme.composerJson.license">
                     <strong>{{ $t('ui.package-details.license') }}:</strong>
@@ -54,8 +54,12 @@
 
                     <div class="setup__tabs">
                         <div class="setup__tab-controls">
-                            <button class="setup__tab-control" :class="{ 'setup__tab-control--active': view === 'require' }" @click="view = 'require'">{{ $tc('ui.setup.create-project.themeRequire', Object.keys(theme.composerJson.require).length) }}</button>
-                            <button class="setup__tab-control" :class="{ 'setup__tab-control--active': view === 'files' }" @click="view = 'files'">{{ $tc('ui.setup.create-project.themeFiles', theme.files.length) }}</button>
+                            <button class="setup__tab-control" :class="{ 'setup__tab-control--active': view === 'require' }" @click="view = 'require'">
+                                {{ $tc('ui.setup.create-project.themeRequire', Object.keys(theme.composerJson.require).length) }}
+                            </button>
+                            <button class="setup__tab-control" :class="{ 'setup__tab-control--active': view === 'files' }" @click="view = 'files'">
+                                {{ $tc('ui.setup.create-project.themeFiles', theme.files.length) }}
+                            </button>
                         </div>
                         <div class="setup__tab" v-if="view === 'require'">
                             <table class="setup__requires">
@@ -114,7 +118,9 @@
 
                 <i18n-t tag="p" keypath="ui.setup.create-project.releaseplan" class="setup__releaseplan">
                     <template #contaoReleasePlan>
-                        <a :href="`https://to.contao.org/release-plan?lang=${$i18n.locale}`" target="_blank" rel="noreferrer noopener">{{ $t('ui.setup.create-project.releaseplanLink') }}</a>
+                        <a :href="`https://to.contao.org/release-plan?lang=${$i18n.locale}`" target="_blank" rel="noreferrer noopener">{{
+                            $t('ui.setup.create-project.releaseplanLink')
+                        }}</a>
                     </template>
                 </i18n-t>
             </header>
@@ -122,7 +128,9 @@
             <main class="setup__form" v-if="!!contaoVersion">
                 <div class="setup__fields setup__fields--center">
                     <svg class="setup__check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                        <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
+                        <path
+                            d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z"
+                        />
                     </svg>
                     <p class="setup__fielddesc">{{ $t('ui.setup.create-project.installed', { version: contaoVersion }) }}</p>
                 </div>
@@ -141,7 +149,9 @@
                     <div class="setup__theme" v-if="version === 'theme'">
                         <p>{{ $t('ui.setup.create-project.themeInstall') }}</p>
                         <i18n-t keypath="ui.setup.create-project.themeBuy" tag="p">
-                            <template #store><a href="https://themes.contao.org" target="_blank">{{ $t('ui.setup.create-project.themeStore') }}</a></template>
+                            <template #store>
+                                <a href="https://themes.contao.org" target="_blank">{{ $t('ui.setup.create-project.themeStore') }}</a>
+                            </template>
                         </i18n-t>
                         <div v-show="$refs.uploader && $refs.uploader.dropActive" class="package-uploads__overlay">
                             <div>
@@ -155,7 +165,9 @@
                         <check-box name="demo" :label="$t('ui.setup.create-project.demo')" :disabled="processing" v-model="demo">
                             <template #description>
                                 <i18n-t tag="p" keypath="ui.setup.create-project.demoDescription">
-                                    <template #store><a href="https://themes.contao.org" target="_blank">{{ $t('ui.setup.create-project.themeStore') }}</a></template>
+                                    <template #store>
+                                        <a href="https://themes.contao.org" target="_blank">{{ $t('ui.setup.create-project.themeStore') }}</a>
+                                    </template>
                                 </i18n-t>
                             </template>
                         </check-box>
@@ -164,13 +176,23 @@
 
                 <div class="setup__fields">
                     <template v-if="version === 'theme'">
-                        <loading-button color="primary" icon="upload" :loading="processing" @click="openFileSelector">{{ $t('ui.setup.create-project.themeUpload') }}</loading-button>
+                        <loading-button color="primary" icon="upload" :loading="processing" @click="openFileSelector">
+                            {{ $t('ui.setup.create-project.themeUpload') }}
+                        </loading-button>
                         <div class="setup__or">
                             <span>{{ $t('ui.setup.create-project.theme.or') }}</span>
                         </div>
                         <search-input :placeholder="$t('ui.setup.create-project.theme.search')" :disabled="processing" />
                     </template>
-                    <button-group color="primary" icon="run" :disabled="!version" :loading="processing" @click="() => install()" :label="$t('ui.setup.create-project.install')" v-else>
+                    <button-group
+                        color="primary"
+                        icon="run"
+                        :disabled="!version"
+                        :loading="processing"
+                        @click="() => install()"
+                        :label="$t('ui.setup.create-project.install')"
+                        v-else
+                    >
                         <button class="widget-button" :disabled="!version || processing" @click="installCoreOnly" v-if="!demo">{{ $t('ui.setup.create-project.coreOnly') }}</button>
                         <button class="widget-button" :disabled="!version || processing" @click="installNoUpdate">{{ $t('ui.setup.create-project.noUpdate') }}</button>
                     </button-group>
@@ -191,7 +213,9 @@
 
                 <div v-else-if="isSearching && results && !Object.keys(results).length" class="setup__theme-search setup__theme-search--empty">
                     <i18n-t tag="p" keypath="ui.setup.create-project.theme.empty">
-                        <template #query><i>{{ query }}</i></template>
+                        <template #query>
+                            <i>{{ query }}</i>
+                        </template>
                     </i18n-t>
                 </div>
 
@@ -409,7 +433,7 @@ export default {
                 await Promise.all([
                     this.$store.dispatch('contao/install-tool/fetch', false),
                     this.$store.dispatch('server/database/get', false),
-                    this.$store.dispatch('contao/backup/fetch', false)
+                    this.$store.dispatch('contao/backup/fetch', false),
                 ]);
 
                 this.$store.commit('contao/backup/setRestore', true);
@@ -474,9 +498,11 @@ export default {
                 const file = new File([newFile.file], newFile.name, { type: newFile.type });
                 const JSZip = (await import('jszip')).default;
                 const zip = await JSZip.loadAsync(file);
-                const files = zip.filter((path) => {
-                    return !['composer.json', 'theme.xml'].includes(path) && !path.startsWith('__MACOSX/') && !path.includes('.DS_Store') && !path.endsWith('/');
-                }).map(f => f.name);
+                const files = zip
+                    .filter((path) => {
+                        return !['composer.json', 'theme.xml'].includes(path) && !path.startsWith('__MACOSX/') && !path.includes('.DS_Store') && !path.endsWith('/');
+                    })
+                    .map((f) => f.name);
 
                 let root = files[0].substring(0, files[0].indexOf('/') + 1);
                 if (files.find((file) => file.substr(0, root.length) !== root)) {
@@ -555,7 +581,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@use "~contao-package-list/src/assets/styles/defaults";
+@use '~contao-package-list/src/assets/styles/defaults';
 
 .setup {
     &__versions {
