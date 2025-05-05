@@ -341,6 +341,10 @@ export default {
         },
 
         themeName() {
+            if (!this.themeName) {
+                return;
+            }
+
             this.closePopup();
             this.install({
                 package: this.themeName,
@@ -416,7 +420,13 @@ export default {
                 };
             }
 
-            await this.$store.dispatch('contao/install', config);
+            try {
+                await this.$store.dispatch('contao/install', config);
+            } catch (err) {
+                // taskStatus will not be "complete"
+            }
+
+            this.processing = false;
 
             if (this.taskStatus !== 'complete') {
                 return;

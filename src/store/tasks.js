@@ -217,7 +217,9 @@ export default {
                 await axios.delete('api/task');
                 commit('setCurrent', null);
                 await dispatch('server/contao/get', false, { root: true });
-            } catch (response) {
+            } catch (error) {
+                const response = error.response;
+
                 // Bad request, there are no tasks
                 if (response.status === 400) {
                     commit('setCurrent', null);
@@ -245,8 +247,6 @@ export default {
                         { root: true },
                     );
                 }
-
-                throw response;
             }
         },
     },

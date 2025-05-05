@@ -6,7 +6,9 @@
                     <package-constraint :data="data" v-if="!isFeature && isVisible" />
                     <p class="package-popup__installed">
                         <strong>{{ $t('ui.package.installed') }}</strong>
-                        <time :dateTime="installedTime" v-if="installedTime" :title="datimFormat(installedTime)">{{ $t('ui.package.version', { version: installedVersion }) }}</time>
+                        <time :dateTime="installedTime" v-if="installedTime" :title="datimFormat(installedTime)">
+                            {{ $t('ui.package.version', { version: installedVersion }) }}
+                        </time>
                         <template v-else>{{ $t('ui.package.version', { version: installedVersion }) }}</template>
                     </p>
                 </template>
@@ -14,13 +16,16 @@
                     <install-button :data="data" />
                     <package-constraint :data="data" v-if="isAdded || isRequired" />
                 </template>
-                <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">{{ $t('ui.package.homepage') }}</a>
+                <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="metadata.homepage" v-else-if="isPrivate">
+                    {{ $t('ui.package.homepage') }}
+                </a>
                 <div v-else></div>
             </slot>
         </template>
         <template #package-update v-if="metadata.update && metadata.update.valid && !metadata.update.latest">
             <p class="package-popup__update">
-                <strong>{{ $t('ui.package.update') }}:</strong> {{ $t('ui.package.version', { version: metadata.update.version }) }} ({{ $t('ui.package-details.released') }} {{ datimFormat(metadata.update.time, 'short', 'long') }})
+                <strong>{{ $t('ui.package.update') }}:</strong> {{ $t('ui.package.version', { version: metadata.update.version }) }} ({{ $t('ui.package-details.released') }}
+                {{ datimFormat(metadata.update.time, 'short', 'long') }})
             </p>
         </template>
         <template #package-update v-else-if="!isCompatible">
@@ -56,7 +61,7 @@ export default {
         data: (vm) => vm.add[vm.current] || (vm.allInstalled && vm.allInstalled[vm.current]) || { name: vm.current },
 
         dependents() {
-            if (!this.allInstalled[this.data.name]?.dependents) {
+            if (!this.allInstalled || !this.allInstalled[this.data.name]?.dependents) {
                 return null;
             }
 
@@ -64,11 +69,7 @@ export default {
             const conditions = ['requires', 'replaces', 'provides', 'conflicts'];
 
             Object.values(this.allInstalled[this.data.name].dependents).forEach((dep) => {
-                if (
-                    dep.source === '__root__' ||
-                    !conditions.includes(dep.description) ||
-                    (dep.source === this.data.name && dep.description === 'replaces')
-                ) {
+                if (dep.source === '__root__' || !conditions.includes(dep.description) || (dep.source === this.data.name && dep.description === 'replaces')) {
                     return;
                 }
 
@@ -93,7 +94,7 @@ export default {
 </script>
 
 <style lang="scss">
-@use "~contao-package-list/src/assets/styles/defaults";
+@use '~contao-package-list/src/assets/styles/defaults';
 
 .package-popup {
     &__installed {

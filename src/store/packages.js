@@ -111,9 +111,10 @@ export default {
                 return null;
             }
 
-            return g.packageChanged(name) ? g.constraintChanged(name) : s.required[name].constraint;
+            return g.packageChanged(name) ? g.constraintChanged(name) : s.required[name]?.constraint;
         },
-        contaoConstraint: (s, g) => coerce(g.packageConstraint('contao/manager-bundle'), { includePrerelease: true }).toString(),
+        contaoConstraint: (s, g) =>
+            g.packageConstraint('contao/manager-bundle') ? coerce(g.packageConstraint('contao/manager-bundle'), { includePrerelease: true }).toString() : '',
         contaoSupported: (s, g) => (constraint) => (constraint ? intersects(constraint, g.contaoConstraint, true) : true),
     },
 

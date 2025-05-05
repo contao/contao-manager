@@ -30,14 +30,16 @@ export default {
     },
 
     actions: {
-        install({ dispatch }, config) {
+        install({ commit, dispatch }, config) {
+            // Reset the state of installed theme
+            commit('installTheme', { package: null, version: null });
+
             const task = {
                 name: 'contao/install',
                 config,
             };
 
-            return dispatch('config/composer/writeDefaults', null, { root: true })
-                .then(() => dispatch('tasks/execute', task, { root: true }));
+            return dispatch('config/composer/writeDefaults', null, { root: true }).then(() => dispatch('tasks/execute', task, { root: true }));
         },
     },
 };

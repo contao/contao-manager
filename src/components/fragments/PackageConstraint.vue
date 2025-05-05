@@ -90,7 +90,7 @@ export default {
             }, 0);
         },
 
-        saveConstraint() {
+        async saveConstraint() {
             if (!this.constraintEditable) {
                 return;
             }
@@ -124,7 +124,8 @@ export default {
             this.$refs.constraint.blur();
             this.constraintValidating = true;
 
-            axios.post('api/constraint', { constraint: this.constraint }).then((response) => {
+            try {
+                const response = await axios.post('api/constraint', { constraint: this.constraint });
                 this.constraintValidating = false;
                 if (response.data.valid) {
                     if (this.emit) {
@@ -138,7 +139,11 @@ export default {
                     this.constraintError = true;
                     setTimeout(() => this.editConstraint(), 0);
                 }
-            });
+            } catch (err) {
+                this.constraintValidating = false;
+                this.constraintError = true;
+                setTimeout(() => this.editConstraint(), 0);
+            }
         },
 
         resetConstraint() {
