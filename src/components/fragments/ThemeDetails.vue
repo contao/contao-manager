@@ -5,8 +5,17 @@
                 <button class="widget-button widget-button--primary widget-button--run" @click="install">{{ $t('ui.setup.create-project.install') }}</button>
                 <package-constraint class="theme-details__constraint" :emit="true" :data="data" v-model="version" />
             </template>
-            <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="data.homepage || metadata.homepage" v-else-if="data.homepage || metadata.homepage">{{ $t('ui.package.homepage') }}</a>
-            <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="`https://packagist.org/packages/${data.name}`" v-else-if="!isPrivate">{{ $t('ui.package-details.packagist') }}</a>
+            <a
+                class="widget-button widget-button--primary widget-button--link"
+                target="_blank"
+                :href="data.homepage || metadata.homepage"
+                v-else-if="data.homepage || metadata.homepage"
+            >
+                {{ $t('ui.package.homepage') }}
+            </a>
+            <a class="widget-button widget-button--primary widget-button--link" target="_blank" :href="`https://packagist.org/packages/${data.name}`" v-else-if="!isPrivate">
+                {{ $t('ui.package-details.packagist') }}
+            </a>
             <div v-else></div>
         </template>
     </package-details>

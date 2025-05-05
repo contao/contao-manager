@@ -31,6 +31,7 @@ import packageStatus from '../../mixins/packageStatus';
 
 export default {
     mixins: [packageStatus],
+    emits: ['update:modelValue'],
 
     props: {
         data: {
@@ -41,7 +42,7 @@ export default {
             type: Boolean,
             default: false,
         },
-        value: {
+        modelValue: {
             type: String,
             default: '',
         },
@@ -115,7 +116,7 @@ export default {
             }
 
             if (this.emit && !this.constraint) {
-                this.$emit('input', this.constraint);
+                this.$emit('update:modelValue', this.constraint);
                 this.resetConstraint();
                 return;
             }
@@ -127,7 +128,7 @@ export default {
                 this.constraintValidating = false;
                 if (response.data.valid) {
                     if (this.emit) {
-                        this.$emit('input', this.constraint);
+                        this.$emit('update:modelValue', this.constraint);
                     } else if (this.isRootInstalled || this.isRequired) {
                         this.$store.commit('packages/change', { name: this.data.name, version: this.constraint });
                     } else {
@@ -142,7 +143,7 @@ export default {
 
         resetConstraint() {
             if (this.emit) {
-                this.constraint = this.value;
+                this.constraint = this.modelValue;
             } else if (this.willBeInstalled) {
                 this.constraint = this.constraintAdded;
             } else if (this.isChanged) {
@@ -164,7 +165,7 @@ export default {
     },
 
     watch: {
-        value(value) {
+        modelValue(value) {
             this.constraint = value;
         },
 
