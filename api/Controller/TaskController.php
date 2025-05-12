@@ -99,6 +99,22 @@ class TaskController
             return new Response('', Response::HTTP_NO_CONTENT);
         }
 
-        return new JsonResponse($status);
+        $json = $status->jsonSerialize();
+
+        try {
+            return new JsonResponse($json);
+        } catch (\InvalidArgumentException) {
+            $json['console'] = utf8_encode($json['console']);
+
+            foreach ($json['operations'] as &$operation) {
+                try {
+                    new JsonResponse($operation);
+                } catch (\InvalidArgumentException) {
+                    $operation['console'] = utf8_encode($operation['console']);
+                }
+            }
+
+            return new JsonResponse($json);
+        }
     }
 }
