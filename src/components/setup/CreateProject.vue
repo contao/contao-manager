@@ -433,6 +433,7 @@ export default {
             }
 
             this.$store.commit('tasks/setDeleting', true);
+            await this.$store.dispatch('server/composer/get', false);
 
             if (mode === 'no-update') {
                 this.$store.commit('setSafeMode', true);
@@ -450,7 +451,7 @@ export default {
                 this.$store.commit('setup', 3);
             }
 
-            this.$store.dispatch('tasks/deleteCurrent');
+            await this.$store.dispatch('tasks/deleteCurrent');
         },
 
         installNoUpdate() {
