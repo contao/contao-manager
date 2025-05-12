@@ -104,13 +104,13 @@ class TaskController
         try {
             return new JsonResponse($json);
         } catch (\InvalidArgumentException) {
-            $json['console'] = utf8_encode($json['console']);
+            $json['console'] = utf8_encode((string) $json['console']);
 
             foreach ($json['operations'] as &$operation) {
                 try {
                     new JsonResponse($operation);
                 } catch (\InvalidArgumentException) {
-                    $operation['console'] = utf8_encode($operation['console']);
+                    $operation['console'] = utf8_encode((string) $operation['console']);
                 }
             }
 
