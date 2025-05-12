@@ -312,7 +312,7 @@ export default {
         },
 
         apply({ state, dispatch }, options = { dry_run: false, update_all: false }) {
-            const require = Object.create(state.change);
+            const require = Object.assign({}, state.change);
             const remove = Array.from(state.remove);
             const update = Array.from(state.update).concat(
                 Object.keys(state.required),
