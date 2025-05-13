@@ -95,7 +95,7 @@ class CloudController extends AbstractController
                 $this->environment->getComposerJsonFile()->write($jsonFile->read());
             }
         } catch (\Throwable $throwable) {
-            $this->logger->error('Invalid composerJson for /api/packages/cloud.', ['composerJson' => $json ?? null, 'composerLock' => $lock]);
+            $this->logger->error('Invalid composerJson for /api/packages/cloud: '.$throwable->getMessage(), ['composerJson' => $json ?? null, 'composerLock' => $lock]);
 
             if ($throwable instanceof HttpExceptionInterface) {
                 throw $throwable;
@@ -107,7 +107,7 @@ class CloudController extends AbstractController
         try {
             Validator::createFromComposer($this->environment->getComposer(true))->validate($lockContent);
         } catch (\Throwable $throwable) {
-            $this->logger->error('Invalid composerJson for /api/packages/cloud.', ['composerJson' => $json ?? null, 'composerLock' => $lock]);
+            $this->logger->error('Invalid composerLock for /api/packages/cloud: '.$throwable->getMessage(), ['composerJson' => $json ?? null, 'composerLock' => $lock]);
 
             if ($backupCreated) {
                 $this->environment->restoreBackup();
