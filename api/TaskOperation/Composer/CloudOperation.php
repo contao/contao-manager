@@ -24,8 +24,11 @@ use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\ConsoleOutput;
 use Contao\ManagerApi\TaskOperation\SponsoredOperationInterface;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Terminal42\ComposerLockValidator\Validator;
 
 #[IsGranted('ROLE_UPDATE')]
 class CloudOperation implements TaskOperationInterface, SponsoredOperationInterface
@@ -45,6 +48,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
         private readonly Environment $environment,
         private readonly Translator $translator,
         private readonly Filesystem $filesystem,
+        private readonly LoggerInterface|null $logger = null,
     ) {
     }
 
@@ -253,17 +257,13 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
             }
 
             if ($job->isSuccessful() && !$this->taskConfig->getState('cloud-job-successful', false)) {
-                if (!$this->validateComposerJson($job)) {
+                if (false === ($lockJson = $this->validateComposerFiles($job))) {
                     $this->taskConfig->setState('cloud-job-successful', false);
 
                     return;
                 }
 
-                $this->filesystem->dumpFile(
-                    $this->environment->getLockFile(),
-                    $this->cloud->getComposerLock($job),
-                );
-
+                $this->filesystem->dumpFile($this->environment->getLockFile(), $lockJson);
                 $this->taskConfig->setState('cloud-job-successful', true);
             }
 
@@ -417,11 +417,26 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
      * local composer.json was modified after the cloud job was started. Both cases
      * are not valid and unsupported.
      */
-    private function validateComposerJson(CloudJob $job): bool
+    private function validateComposerFiles(CloudJob $job): string|false
     {
-        $remoteJson = JsonFile::parseJson($this->cloud->getComposerJson($job));
-        $localJson = $this->environment->getComposerJson();
+        try {
+            $remoteJson = JsonFile::parseJson($this->cloud->getComposerJson($job));
+            $localJson = $this->environment->getComposerJson();
 
-        return $remoteJson === $localJson;
+            if ($remoteJson !== $localJson) {
+                return false;
+            }
+
+            $remoteLock = $this->cloud->getComposerLock($job);
+            $lockContent = JsonFile::parseJson($remoteLock);
+
+            Validator::createFromComposer($this->environment->getComposer(true))->validate($lockContent);
+        } catch (\Throwable $throwable) {
+            $this->logger?->error('Failed validating files for /api/packages/cloud: '.$throwable->getMessage(), ['composerJson' => $remoteJson ?? null, 'composerLock' => $remoteLock]);
+
+            return false;
+        }
+
+        return $remoteLock;
     }
 }

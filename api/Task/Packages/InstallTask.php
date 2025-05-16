@@ -75,6 +75,7 @@ class InstallTask extends AbstractPackagesTask
                 $this->environment,
                 $this->translator,
                 $this->filesystem,
+                $this->logger,
             );
         }
 
