@@ -16,7 +16,7 @@
             :drop-directory="false"
             :chunk-enabled="true"
             :chunk="{ action: 'api/packages/uploads' }"
-            @input="setFiles"
+            @update:modelValue="setFiles"
             @input-file="updateFile"
             @input-filter="filterFile"
         ></file-upload>
