@@ -1,9 +1,5 @@
 <template>
-    <base-package
-        :title="upload.name"
-        :hint="hintUploading"
-        v-if="!upload.success || upload.error"
-    >
+    <base-package :title="upload.name" :hint="hintUploading" v-if="!upload.success || upload.error">
         <template #hint v-if="upload.error">
             <p>
                 {{ upload.error }}
@@ -14,7 +10,9 @@
         <template #release>
             <progress-bar :amount="progress" />
             <div class="package__version package__version--release">
-                <p><strong>{{ filesize(upload.size) }}</strong></p>
+                <p>
+                    <strong>{{ filesize(upload.size) }}</strong>
+                </p>
             </div>
         </template>
 
@@ -68,15 +66,16 @@ export default {
         removing: (vm) => vm.isRemoving(vm.upload.id),
         progress: (vm) => (100 / vm.upload.size) * vm.upload.filesize,
 
-        isTheme: (vm) => vm.data.type === 'contao-theme' || (vm.metadata && vm.metadata.type === 'contao-theme'),
+        isTheme: (vm) => vm.data.type === 'contao-theme',
         isCompatible: (vm) => !vm.data.require || vm.contaoSupported(vm.data.require['contao/core-bundle'] || vm.data.require['contao/manager-bundle'] || null),
 
-        canBeInstalled: vm => !vm.isDuplicate(vm.upload.id, vm.pkg.name)
-            && !vm.versionInstalled(vm.pkg.name, vm.pkg.version)
-            && !vm.removing
-            && !vm.packageRemoved(vm.pkg.name)
-            && !vm.isTheme
-            && vm.isCompatible,
+        canBeInstalled: (vm) =>
+            !vm.isDuplicate(vm.upload.id, vm.pkg.name) &&
+            !vm.versionInstalled(vm.pkg.name, vm.pkg.version) &&
+            !vm.removing &&
+            !vm.packageRemoved(vm.pkg.name) &&
+            !vm.isTheme &&
+            vm.isCompatible,
 
         data: (vm) => vm.upload.package || { name: '' },
 
