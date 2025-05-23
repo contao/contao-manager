@@ -431,7 +431,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
             $localJson = $this->environment->getComposerJson();
 
             if ($remoteJson !== $localJson) {
-                $this->logger?->error('The composer.json file of the cloud job does not match the local composer.json', ['local' => $localJson ?? null, 'remote' => $remoteJson]);
+                $this->logger?->error('The composer.json file of the cloud job does not match the local composer.json', ['local' => $localJson, 'remote' => $remoteJson]);
 
                 throw new \RuntimeException('The composer.json file of the cloud job does not match the local composer.json');
             }
@@ -441,7 +441,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
 
             Validator::createFromComposer($this->environment->getComposer(true))->validate($lockContent);
         } catch (ValidationException $throwable) {
-            $this->logger?->error('Failed validating composer.lock from cloud job: '.$throwable->getMessage(), ['composerJson' => $remoteJson ?? null, 'composerLock' => $remoteLock]);
+            $this->logger?->error('Failed validating composer.lock from cloud job: '.$throwable->getMessage(), ['composerJson' => $remoteJson, 'composerLock' => $remoteLock]);
 
             throw $throwable;
         }

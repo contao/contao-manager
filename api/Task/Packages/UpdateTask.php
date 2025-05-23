@@ -133,8 +133,8 @@ class UpdateTask extends AbstractPackagesTask
             }
         }
 
-        if ($removed) {
-            $artifacts = array_filter($this->environment->getArtifacts(), static function (string $file) use ($removed) {
+        if ([] !== $removed) {
+            $artifacts = array_filter($this->environment->getArtifacts(), static function (string $file) use ($removed): bool {
                 foreach ($removed as $packageName) {
                     if (str_starts_with($file, str_replace('/', '__', $packageName))) {
                         return true;
