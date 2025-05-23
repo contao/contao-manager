@@ -20,6 +20,7 @@ use Composer\Package\Dumper\ArrayDumper;
 use Composer\Repository\ArtifactRepository;
 use Composer\Repository\PathRepository;
 use Composer\Repository\PlatformRepository;
+use Composer\Repository\RepositoryInterface;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ComposerConfig;
 use Contao\ManagerApi\Config\ManagerConfig;
@@ -207,6 +208,7 @@ class Environment
 
         if (null === $this->composer || $reload) {
             $this->composer = Factory::create(new NullIO(), $this->getJsonFile());
+            $this->fixManagerPlugin();
         }
 
         return $this->composer;
@@ -379,5 +381,40 @@ class Environment
         }
 
         return $normalizedPath;
+    }
+
+    /**
+     * Fix order of repositories if the latest manager-plugin is not installed.
+     *
+     * @see https://github.com/contao/manager-plugin/pull/59
+     */
+    private function fixManagerPlugin(): void
+    {
+        $repoManager = $this->composer->getRepositoryManager();
+
+        // Skip if contao/manager-plugin was found in a version newer than 2.13.3 (the
+        // last before the bugfix)
+        if ($repoManager->getLocalRepository()->findPackage('contao/manager-plugin', '> 2.13.3')) {
+            return;
+        }
+
+        $ref = new \ReflectionProperty($repoManager, 'repositories');
+
+        /** @var array<RepositoryInterface> $repositories */
+        $repositories = $ref->getValue($repoManager);
+        $changed = false;
+
+        foreach ($repositories as $k => $repo) {
+            if ('composer repo (https://repo.packagist.org)' === $repo->getRepoName()) {
+                unset($repositories[$k]);
+                $repositories[] = $repo;
+                $changed = true;
+                break;
+            }
+        }
+
+        if ($changed) {
+            $ref->setValue($repoManager, $repositories);
+        }
     }
 }
