@@ -31,6 +31,7 @@ use Contao\ManagerApi\TaskOperation\Composer\RequireOperation;
 use Contao\ManagerApi\TaskOperation\Composer\UpdateOperation;
 use Contao\ManagerApi\TaskOperation\Contao\MaintenanceModeOperation;
 use Contao\ManagerApi\TaskOperation\Filesystem\InstallUploadsOperation;
+use Contao\ManagerApi\TaskOperation\Filesystem\RemoveArtifactsOperation;
 use Contao\ManagerApi\TaskOperation\Filesystem\RemoveUploadsOperation;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -124,6 +125,28 @@ class UpdateTask extends AbstractPackagesTask
                 $operations[] = new RemoveUploadsOperation(
                     $uploads,
                     $this->uploads,
+                    $config,
+                    $this->environment,
+                    $this->translator,
+                    $this->filesystem,
+                );
+            }
+        }
+
+        if ($removed) {
+            $artifacts = array_filter($this->environment->getArtifacts(), static function (string $file) use ($removed) {
+                foreach ($removed as $packageName) {
+                    if (str_starts_with($file, str_replace('/', '__', $packageName))) {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+
+            if ([] !== $artifacts) {
+                $operations[] = new RemoveArtifactsOperation(
+                    $artifacts,
                     $config,
                     $this->environment,
                     $this->translator,
