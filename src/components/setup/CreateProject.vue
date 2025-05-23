@@ -13,7 +13,14 @@
             @input-filter="filterTheme"
         ></file-upload>
 
-        <template v-if="theme">
+        <template v-if="upload">
+            <main class="setup__theme-upload">
+                <h1>{{ $t('ui.setup.create-project.theme.upload', { name: upload.name, size: uploadSize }) }}</h1>
+                <progress-bar :amount="upload.progress" />
+            </main>
+        </template>
+
+        <template v-else-if="theme">
             <header class="setup__header">
                 <img class="setup__theme-image" :src="themeImage" :alt="theme.composerJson.name" v-if="themeImage" />
                 <img src="../../assets/images/create-project.svg" width="80" height="80" alt="" class="setup__icon" v-else />
@@ -247,10 +254,12 @@ import LoadingSpinner from 'contao-package-list/src/components/fragments/Loading
 import DiscoverPackage from 'contao-package-list/src/components/fragments/DiscoverPackage';
 import FileTree from '../fragments/FileTree.vue';
 import ButtonGroup from '../widgets/ButtonGroup.vue';
+import ProgressBar from '../fragments/ProgressBar.vue';
+import filesize from '@/tools/filesize';
 
 export default {
     mixins: [search],
-    components: { ButtonGroup, FileTree, DiscoverPackage, LoadingSpinner, SearchInput, FileUpload, RadioButton, CheckBox, LoadingButton },
+    components: { ButtonGroup, FileTree, DiscoverPackage, LoadingSpinner, SearchInput, FileUpload, RadioButton, CheckBox, LoadingButton, ProgressBar },
 
     data: () => ({
         processing: false,
@@ -262,6 +271,7 @@ export default {
         view: 'require',
         theme: null,
         themeImage: null,
+        upload: null,
 
         searching: false,
         results: null,
@@ -276,6 +286,7 @@ export default {
         ...mapState('contao', { themeName: 'package', themeVersion: 'version' }),
 
         themeFiles: (vm) => treeifyPaths(vm.theme.files, { directoriesFirst: true }).children,
+        uploadSize: (vm) => (vm.upload && filesize(vm.upload.size)) || '',
 
         versions() {
             const versions = [];
@@ -493,13 +504,25 @@ export default {
 
             this.processing = true;
 
+            // Theme file uploaded successfully
             if (this.$refs.uploader.uploaded && newFile && oldFile && !newFile.active && oldFile.active) {
                 this.theme.upload = newFile.response.data;
 
                 if (newFile.success) {
-                    this.install();
+                    try {
+                        await this.install();
+                    } catch (err) {
+                        this.upload = null;
+                        this.processing = false;
+                    }
                 }
 
+                return;
+            }
+
+            // Theme is being uploaded
+            if (newFile.active && !oldFile.active) {
+                this.upload = newFile;
                 return;
             }
 
@@ -634,11 +657,6 @@ export default {
         }
     }
 
-    &__theme-upload {
-        position: absolute !important;
-        visibility: hidden;
-    }
-
     &__themes {
         padding: 0 14px;
 
@@ -766,6 +784,15 @@ export default {
 
         tr:nth-child(odd) td {
             background: var(--table-odd-bg);
+        }
+    }
+
+    &__theme-upload {
+        padding: 0 50px;
+        text-align: center;
+
+        @include defaults.screen(960) {
+            padding: 0 150px;
         }
     }
 }
