@@ -158,6 +158,8 @@ export default {
             } catch (err) {
                 await this.$store.dispatch('packages/load', false);
             }
+
+            await this.$store.dispatch('packages/uploads/load');
         },
 
         async applyChangesAll() {
@@ -167,6 +169,8 @@ export default {
             } catch (err) {
                 await this.$store.dispatch('packages/load', false);
             }
+
+            await this.$store.dispatch('packages/uploads/load');
         },
 
         resetChanges() {
