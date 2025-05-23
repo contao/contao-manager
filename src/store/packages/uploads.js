@@ -62,7 +62,7 @@ export default {
         },
 
         setUnconfirmed(state, id) {
-            axios.delete(state.confirmed, state.confirmed.indexOf(id));
+            delete state.confirmed[state.confirmed.indexOf(id)];
         },
 
         setRemoving(state, id) {
