@@ -6,8 +6,8 @@
             :placeholder="inputPlaceholder"
             :title="inputTitle"
             v-model="inputValue"
-            :class="{ disabled: !emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.UPDATE)), error: constraintError }"
-            :disabled="!constraintEditable || willBeRemoved || (!emit && !isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.UPDATE)"
+            :class="{ disabled: !emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.INSTALL)), error: constraintError }"
+            :disabled="!constraintEditable || willBeRemoved || (!emit && !isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.INSTALL)"
             @keypress.enter.prevent="saveConstraint"
             @keypress.esc.prevent="resetConstraint"
             @blur="saveConstraint"
@@ -16,7 +16,7 @@
             :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
             :title="buttonTitle"
             @click="editConstraint"
-            :disabled="!emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.UPDATE))"
+            :disabled="!emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.INSTALL))"
         >
             {{ buttonValue }}
         </button>
