@@ -75,6 +75,8 @@ ja:
             console: '{package} (バージョン {version})のインストール過程[packages/{name}に存在]'
         remove-uploads:
             summary: 'アップロードしたファイルを削除中'
+        remove-artifacts:
+            summary: 'アップロードしたパッケージを削除中'
         composer-install:
             retry: '再試行中 {current}/{max}'
             nothing: 'インストールやアップデートはなし'

@@ -75,6 +75,8 @@ zh:
             console: '已安装的artifact类型 for {package} (版本 {version}) [to packages/{name}]'
         remove-uploads:
             summary: ''
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: ''
             nothing: ''

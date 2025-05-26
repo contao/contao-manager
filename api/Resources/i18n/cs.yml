@@ -75,6 +75,8 @@ cs:
             console: 'Nainstalovaný artefakt pro {package} (verze {version}) [do balíčků/{name}]'
         remove-uploads:
             summary: 'Smazat nahrané soubory'
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: 'Nový pokus {current}/{max}'
             nothing: 'Neexistuje nic k nainstalování či aktualizování'

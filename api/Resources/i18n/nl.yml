@@ -75,6 +75,8 @@ nl:
             console: 'Artefact geïnstalleerd voor {package} (version {version}) [to packages/{name}]'
         remove-uploads:
             summary: 'Uploads verwijderen'
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: '{current} / {max} opnieuw proberen'
             nothing: 'Niets om te installeren of bij te werken'

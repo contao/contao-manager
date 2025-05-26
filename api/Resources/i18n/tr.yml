@@ -75,6 +75,8 @@ tr:
             console: '{package} ({version} sürümü) için [to packages/{name}] artifaktı kuruldu'
         remove-uploads:
             summary: 'Yüklemeler kaldırılıyor'
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: 'yeniden deneniyor {current}/{max}'
             nothing: 'Kurulacak ya da güncellenecek bir şey yok'

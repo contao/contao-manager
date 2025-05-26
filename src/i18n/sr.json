@@ -224,6 +224,7 @@
     "ui.setup.create-project.theme.packageName": "Име пакета",
     "ui.setup.create-project.theme.version": "Верзија",
     "ui.setup.create-project.theme.authors": "Аутор(и)",
+    "ui.setup.create-project.theme.upload": "Uploading {name} ({size})",
     "ui.setup.create-project.install": "Инсталирај",
     "ui.setup.create-project.cancel": "Откажи",
     "ui.setup.database-connection.headline": "Конекција са базом података",

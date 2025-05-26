@@ -75,6 +75,8 @@ ru:
             console: 'Установлен артефакт для {package} (версии {version}) [к пакетам/{name}]'
         remove-uploads:
             summary: 'Удаление загрузок'
+        remove-artifacts:
+            summary: 'Удаление загруженных пакетов'
         composer-install:
             retry: 'повторная попытка {current}/{max}'
             nothing: 'Нечего устанавливать или обновлять'

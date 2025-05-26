@@ -224,6 +224,7 @@
     "ui.setup.create-project.theme.packageName": "パッケージ名",
     "ui.setup.create-project.theme.version": "バージョン",
     "ui.setup.create-project.theme.authors": "作成者",
+    "ui.setup.create-project.theme.upload": "{name} ({size})をアップロード中",
     "ui.setup.create-project.install": "インストール",
     "ui.setup.create-project.cancel": "取り止め",
     "ui.setup.database-connection.headline": "データベース接続",

@@ -75,6 +75,8 @@ it:
             console: 'Installate modifiche per {package} (versione {version}) [su pacchetti / {name}]'
         remove-uploads:
             summary: 'Rimuovi uploads'
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: 'riprova {current}/{max}'
             nothing: 'Niente da installare o aggiornare'

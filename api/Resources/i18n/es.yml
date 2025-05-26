@@ -75,6 +75,8 @@ es:
             console: 'Artefacto instalado para {package} (versión {version}) [a paquetes / {name}]'
         remove-uploads:
             summary: 'Eliminando cargas'
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: 'volviendo a intentar {current}/{max}'
             nothing: 'Nada que instalar o actualizar'

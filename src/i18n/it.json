@@ -224,6 +224,7 @@
     "ui.setup.create-project.theme.packageName": "Nome Package",
     "ui.setup.create-project.theme.version": "Versione",
     "ui.setup.create-project.theme.authors": "Autore/i",
+    "ui.setup.create-project.theme.upload": "Uploading {name} ({size})",
     "ui.setup.create-project.install": "Installa",
     "ui.setup.create-project.cancel": "Annulla",
     "ui.setup.database-connection.headline": "Connessione al database",

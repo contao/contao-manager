@@ -75,6 +75,8 @@ pt:
             console: 'Artifact instalado de {package} (versão {version}) [para packages/{name}]'
         remove-uploads:
             summary: 'Remoção de uploads'
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: 'tentando de novo {current}/{max}'
             nothing: 'Nada para instalar ou actualizar'

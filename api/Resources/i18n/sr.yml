@@ -75,6 +75,8 @@ sr:
             console: 'Инсталисани артифакти за {package} (верзија {version}) [to packages/{name}]'
         remove-uploads:
             summary: 'Уклањање преузетих фајлова'
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: 'покушај {current}/{max}'
             nothing: 'Нема ништа за инсталацију или преузимање'

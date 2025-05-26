@@ -224,6 +224,7 @@
     "ui.setup.create-project.theme.packageName": "Název balíčku",
     "ui.setup.create-project.theme.version": "Verze",
     "ui.setup.create-project.theme.authors": "Autor/Autoři",
+    "ui.setup.create-project.theme.upload": "Uploading {name} ({size})",
     "ui.setup.create-project.install": "Nainstalovat",
     "ui.setup.create-project.cancel": "Zrušit",
     "ui.setup.database-connection.headline": "Připojení k databázi",

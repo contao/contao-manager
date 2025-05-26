@@ -75,6 +75,8 @@ lv:
             console: 'Instalēts artefakts {package} (versija {version}) [uz packages/{name}]'
         remove-uploads:
             summary: 'Augšupielādes noņemšana'
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: 'atkārtots mēģinājums {current}/{max}'
             nothing: 'Nekas nav jāinstalē vai jāatjaunina'

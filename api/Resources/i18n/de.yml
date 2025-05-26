@@ -75,6 +75,8 @@ de:
             console: 'Artefakt für {package} (Version {version}) [nach packages/{name}] installiert'
         remove-uploads:
             summary: 'Entferne hochgeladene Dateien'
+        remove-artifacts:
+            summary: 'Entferne hochgeladene Pakete'
         composer-install:
             retry: 'Versuch {current}/{max}'
             nothing: 'Keine Aktualisierungen'

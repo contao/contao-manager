@@ -75,6 +75,8 @@ pl:
             console: 'Zainstalowano artifact dla {package} (wersja {version}) [w packages/{name}]'
         remove-uploads:
             summary: 'Usuwanie załadowanych plików'
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: 'ponawianie {current}/{max}'
             nothing: 'Nic od instalacji lub aktualizacji'

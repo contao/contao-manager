@@ -75,6 +75,8 @@ sv:
             console: 'Installerad artefakt för {package} (version {version}) [till package/{name}]'
         remove-uploads:
             summary: 'Tar bort uppladdningar'
+        remove-artifacts:
+            summary: ''
         composer-install:
             retry: 'försöker igen {current}/{max}'
             nothing: 'Inget att installera eller uppdatera'
