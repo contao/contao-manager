@@ -9,13 +9,15 @@
         :hint-close="packageHintClose"
         @close-hint="restore"
     >
-        <template #hint v-if="!slotEmpty($slots.hint)"><slot name="hint"/></template>
+        <template #hint v-if="!slotEmpty($slots.hint)"><slot name="hint" /></template>
         <template #additional>
             <div class="package__version package__version--additional" v-if="packageData.version">
                 <strong :title="packageData.time ? datimFormat(packageData.time) : ''">{{ $t('ui.package.version', { version: packageData.version }) }}</strong>
                 <template v-if="packageData.update">
                     <div class="package__version-update package__version-update--error" v-if="!packageData.update.valid">{{ $t('ui.package.updateUnknown') }}</div>
-                    <div class="package__version-update package__version-update--available" v-else-if="!packageData.update.latest">{{ $t('ui.package.updateAvailable', { version: packageData.update.version }) }}</div>
+                    <div class="package__version-update package__version-update--available" v-else-if="!packageData.update.latest">
+                        {{ $t('ui.package.updateAvailable', { version: packageData.update.version }) }}
+                    </div>
                     <div class="package__version-update package__version-update--none" v-else>
                         {{ $t('ui.package.updateLatest') }}
                         <span class="package__version-latest" :title="$t('ui.package.updateConstraint')" v-if="packageData.latest && !packageData.latest.active"></span>
@@ -23,7 +25,11 @@
                 </template>
             </div>
             <span class="composer-package__stats composer-package__stats--license" v-if="license">{{ license }}</span>
-            <ul class="composer-package__stats composer-package__stats--versions" :title="`${$t('ui.package.contaoVersion')} ${packageData.contaoVersions.join(', ')}`" v-if="packageData.contaoVersions && !isContao">
+            <ul
+                class="composer-package__stats composer-package__stats--versions"
+                :title="`${$t('ui.package.contaoVersion')} ${packageData.contaoVersions.join(', ')}`"
+                v-if="packageData.contaoVersions && !isContao"
+            >
                 <li class="composer-package__stats--version" v-for="(version, i) in packageData.contaoVersions" :key="i">{{ version }}</li>
             </ul>
             <router-link class="composer-package__stats composer-package__stats--funding" :to="{ query: { p: data.name } }" v-if="packageData.funding">&nbsp;</router-link>
@@ -36,7 +42,9 @@
                     <strong :title="packageData.time ? datimFormat(packageData.time) : ''">{{ $t('ui.package.version', { version: packageData.version }) }}</strong>
                     <template v-if="packageData.update">
                         <div class="package__version-update package__version-update--error" v-if="!packageData.update.valid">{{ $t('ui.package.updateUnknown') }}</div>
-                        <div class="package__version-update package__version-update--available" v-else-if="!packageData.update.latest">{{ $t('ui.package.updateAvailable', { version: packageData.update.version }) }}</div>
+                        <div class="package__version-update package__version-update--available" v-else-if="!packageData.update.latest">
+                            {{ $t('ui.package.updateAvailable', { version: packageData.update.version }) }}
+                        </div>
                         <div class="package__version-update package__version-update--none" v-else>
                             {{ $t('ui.package.updateLatest') }}
                             <span class="package__version-latest" :title="$t('ui.package.updateConstraint')" v-if="packageData.latest && !packageData.latest.active"></span>
@@ -54,11 +62,22 @@
                         <button class="widget-button widget-button--update" :disabled="isModified" v-if="!isRequired" @click="update">{{ $t('ui.package.updateButton') }}</button>
                     </template>
                     <template v-else>
-                        <button class="widget-button widget-button--primary widget-button--add" v-if="isMissing" @click="install" :disabled="willBeInstalled">{{ $t('ui.package.installButton') }}</button>
-                        <button class="widget-button widget-button--alert widget-button--trash" v-else-if="isRequired" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
-                        <button-group :label="$t('ui.package.updateButton')" icon="update" v-else-if="isRootInstalled" :disabled="isModified" @click="update">
-                            <button class="widget-button widget-button--alert widget-button--trash" @click="uninstall" :disabled="willBeRemoved">{{ $t('ui.package.removeButton') }}</button>
-                        </button-group>
+                        <button class="widget-button widget-button--primary widget-button--add" :disabled="willBeInstalled" @click="install" v-if="isMissing">
+                            {{ $t('ui.package.installButton') }}
+                        </button>
+                        <button class="widget-button widget-button--alert widget-button--trash" :disabled="willBeRemoved" @click="uninstall" v-else-if="isRequired">
+                            {{ $t('ui.package.removeButton') }}
+                        </button>
+                        <template v-else-if="isRootInstalled">
+                            <button-group :label="$t('ui.package.updateButton')" icon="update" :disabled="isModified" @click="update" v-if="isGranted(scopes.INSTALL)">
+                                <button class="widget-button widget-button--alert widget-button--trash" :disabled="willBeRemoved" @click="uninstall">
+                                    {{ $t('ui.package.removeButton') }}
+                                </button>
+                            </button-group>
+                            <button class="widget-button widget-button--update" :disabled="isModified" @click="update" v-else>
+                                {{ $t('ui.package.updateButton') }}
+                            </button>
+                        </template>
                     </template>
                 </template>
             </slot>
@@ -107,12 +126,7 @@ export default {
         ...mapGetters('packages', ['packageFeatures']),
         scopes: () => scopes,
 
-        packageData: vm => Object.assign(
-            {},
-            vm.data,
-            vm.installed[vm.data.name] || {},
-            vm.metadata || {},
-        ),
+        packageData: (vm) => Object.assign({}, vm.data, vm.installed[vm.data.name] || {}, vm.metadata || {}),
 
         license: (vm) => (vm.packageData.license instanceof Array ? vm.packageData.license.join('/') : vm.packageData.license),
 
@@ -163,13 +177,13 @@ export default {
             return this.$t('ui.package.hintRevert');
         },
 
-
         packageUpdates() {
-            return this.isInstalled && (
-                Object.keys(this.$store.state.packages.add).length > 0
-                || Object.keys(this.$store.state.packages.change).length > 0
-                || this.$store.state.packages.update.length > 0
-                || this.$store.state.packages.remove.length > 0
+            return (
+                this.isInstalled &&
+                (Object.keys(this.$store.state.packages.add).length > 0 ||
+                    Object.keys(this.$store.state.packages.change).length > 0 ||
+                    this.$store.state.packages.update.length > 0 ||
+                    this.$store.state.packages.remove.length > 0)
             );
         },
 
@@ -190,7 +204,10 @@ export default {
 
             if (this.packageData.abandoned) {
                 return {
-                    title: this.packageData.abandoned === true ? this.$t('ui.package.abandonedText') : this.$t('ui.package.abandonedReplace', { replacement: this.packageData.abandoned }),
+                    title:
+                        this.packageData.abandoned === true
+                            ? this.$t('ui.package.abandonedText')
+                            : this.$t('ui.package.abandonedReplace', { replacement: this.packageData.abandoned }),
                     text: this.$t('ui.package.abandoned'),
                 };
             }
@@ -245,7 +262,7 @@ export default {
 
         &--funding {
             width: 16px;
-            background-image: url("~contao-package-list/src/assets/images/funding.svg");
+            background-image: url('~contao-package-list/src/assets/images/funding.svg');
             background-size: 16px 16px;
             background-repeat: no-repeat;
             text-decoration: none !important;
