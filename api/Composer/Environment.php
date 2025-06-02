@@ -309,17 +309,6 @@ class Environment
         return $packages;
     }
 
-    public function hasPackage(string $packageName): bool
-    {
-        try {
-            $json = $this->getComposerJson();
-
-            return isset($json['require'][$packageName]);
-        } catch (\Exception) {
-            return false;
-        }
-    }
-
     public function mergeMetadata(array $package, string|null $language = null): array
     {
         if (isset($package['source']) || preg_match('{https?://}', $package['dist']['url'] ?? '') || empty($package['extra']['contao-metadata-url'])) {

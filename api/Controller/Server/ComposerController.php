@@ -61,11 +61,18 @@ class ComposerController
             if ($this->validateSchema($result)) {
                 // If schema is valid but does not contain contao/manager-bundle, mark as "not
                 // found" so the install screen will conflict with the file.
-                if (!$this->environment->hasPackage('contao/manager-bundle')) {
-                    $result['json']['found'] = false;
+                try {
+                    $json = $this->environment->getComposerJson();
+
+                    if (!isset($json['require']['contao/manager-bundle'])) {
+                        $result['json']['found'] = false;
+                        $result['json']['valid'] = false;
+                    } else {
+                        $this->validateLockFile($result);
+                    }
+                } catch (\Exception $exception) {
                     $result['json']['valid'] = false;
-                } else {
-                    $this->validateLockFile($result);
+                    $result['json']['error'] = $this->translator->trans('boot.composer.invalid', ['exception' => $exception->getMessage()]);
                 }
             }
         }
