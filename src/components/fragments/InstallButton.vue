@@ -7,7 +7,9 @@
         :disabled="disabled || isRootInstalled || isAdded || isRequired || !canBeInstalled"
         @click="install"
         v-if="isGranted(scopes.INSTALL)"
-    >{{ $t(small ? 'ui.package.installButtonShort' : 'ui.package.installButton') }}</confirm-button>
+    >
+        {{ $t(small ? 'ui.package.installButtonShort' : 'ui.package.installButton') }}
+    </confirm-button>
 </template>
 
 <script>
@@ -33,12 +35,6 @@ export default {
     computed: {
         ...mapGetters('auth', ['isGranted']),
         scopes: () => scopes,
-    },
-
-    methods: {
-        install() {
-            this.$store.commit('packages/add', { name: this.data.name });
-        },
     },
 };
 </script>

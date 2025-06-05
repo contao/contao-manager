@@ -107,7 +107,7 @@ export default {
                             const metadata = await this.dispatch('packages/metadata', { name });
 
                             if (!metadata.contaoConstraint || this.getters['packages/contaoSupported'](metadata.contaoConstraint)) {
-                                this.commit('packages/add', { name });
+                                this.commit('packages/add', metadata);
                             }
                         }
                     }),

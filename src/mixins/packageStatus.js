@@ -72,7 +72,7 @@ export default {
 
     methods: {
         install() {
-            this.$store.commit('packages/add', { name: this.data.name });
+            this.$store.commit('packages/add', this.metadata || this.data);
         },
 
         update() {
