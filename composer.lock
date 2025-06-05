@@ -6050,16 +6050,16 @@
         },
         {
             "name": "terminal42/composer-lock-validator",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/terminal42/composer-lock-validator.git",
-                "reference": "f01d3af03ed6fd536075c28efbda434f4867c5e4"
+                "reference": "9f209e27d580900fbe5036fa47d8405fc8a91e89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/terminal42/composer-lock-validator/zipball/f01d3af03ed6fd536075c28efbda434f4867c5e4",
-                "reference": "f01d3af03ed6fd536075c28efbda434f4867c5e4",
+                "url": "https://api.github.com/repos/terminal42/composer-lock-validator/zipball/9f209e27d580900fbe5036fa47d8405fc8a91e89",
+                "reference": "9f209e27d580900fbe5036fa47d8405fc8a91e89",
                 "shasum": ""
             },
             "require": {
@@ -6091,7 +6091,7 @@
             "description": "A library to validate a composer.lock file against your local Composer instance",
             "support": {
                 "issues": "https://github.com/terminal42/composer-lock-validator/issues",
-                "source": "https://github.com/terminal42/composer-lock-validator/tree/1.0.2"
+                "source": "https://github.com/terminal42/composer-lock-validator/tree/1.0.3"
             },
             "funding": [
                 {
@@ -6103,7 +6103,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2025-05-28T12:05:26+00:00"
+            "time": "2025-06-04T08:11:28+00:00"
         },
         {
             "name": "web-auth/cose-lib",
