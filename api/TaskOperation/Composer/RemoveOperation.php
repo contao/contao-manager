@@ -53,6 +53,6 @@ class RemoveOperation extends AbstractProcessOperation
 
     public function getSummary(): string
     {
-        return 'composer remove '.implode(' ', $this->removed);
+        return 'composer remove '.implode(' ', $this->removed).' --no-update';
     }
 }

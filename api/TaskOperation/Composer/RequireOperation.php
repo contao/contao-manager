@@ -55,6 +55,6 @@ class RequireOperation extends AbstractProcessOperation
 
     public function getSummary(): string
     {
-        return 'composer require '.implode(' ', $this->required);
+        return 'composer require '.implode(' ', $this->required).' --no-update';
     }
 }
