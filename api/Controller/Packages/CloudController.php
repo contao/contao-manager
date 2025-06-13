@@ -105,7 +105,9 @@ class CloudController extends AbstractController
         }
 
         try {
-            Validator::createFromComposer($this->environment->getComposer(true))->validate($lockContent);
+            Validator::createFromComposer($this->environment->getComposer(true))
+                ->validate($lockContent, $this->environment->getComposerLock())
+            ;
         } catch (\Throwable $throwable) {
             $this->logger->error('Invalid composerLock for /api/packages/cloud: '.$throwable->getMessage(), ['composerJson' => $json ?? null, 'composerLock' => $lock]);
 

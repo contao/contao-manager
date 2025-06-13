@@ -439,7 +439,9 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
             $remoteLock = $this->cloud->getComposerLock($job);
             $lockContent = JsonFile::parseJson($remoteLock);
 
-            Validator::createFromComposer($this->environment->getComposer(true))->validate($lockContent);
+            Validator::createFromComposer($this->environment->getComposer(true))
+                ->validate($lockContent, $this->environment->getComposerLock())
+            ;
         } catch (ValidationException $throwable) {
             $this->logger?->error('Failed validating composer.lock from cloud job: '.$throwable->getMessage(), ['composerJson' => $remoteJson, 'composerLock' => $remoteLock]);
 
