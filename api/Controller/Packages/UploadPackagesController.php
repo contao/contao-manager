@@ -210,8 +210,8 @@ class UploadPackagesController
             if (null === $json) {
                 return $this->installError($id, 'file');
             }
-        } catch (\RuntimeException) {
-            return $this->installError($id, 'file');
+        } catch (\RuntimeException $e) {
+            return $this->installError($id, 'file', $e);
         }
 
         try {

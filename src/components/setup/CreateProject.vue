@@ -16,7 +16,21 @@
         <template v-if="upload">
             <main class="setup__theme-upload">
                 <h1>{{ $t('ui.setup.create-project.theme.upload', { name: upload.name, size: uploadSize }) }}</h1>
-                <progress-bar :amount="upload.progress" />
+                <progress-bar :amount="upload.progress" :color="!upload.active && !upload.success ? 'alert' : ''" />
+
+                <template v-if="!upload.active && !upload.success">
+                    <br />
+                    <console-output
+                        :title="$t(`ui.setup.create-project.${upload.response.error}Error`, { file: upload.name })"
+                        :operations="[{ status: 'error', summary: `composer validate ${upload.name}#composer.json`, console: upload.response.exception }]"
+                        :console-output="upload.response.exception"
+                        :force-console="true"
+                        v-if="upload.response.exception"
+                    />
+                    <p v-else>{{ $t(`ui.setup.create-project.${upload.response.error}Error`, { file: upload.name }) }}</p>
+                    <br />
+                    <button class="widget-button widget-button--inline" @click="cancelTheme" :disabled="processing">{{ $t('ui.setup.create-project.cancel') }}</button>
+                </template>
             </main>
         </template>
 
@@ -255,11 +269,12 @@ import DiscoverPackage from 'contao-package-list/src/components/fragments/Discov
 import FileTree from '../fragments/FileTree.vue';
 import ButtonGroup from '../widgets/ButtonGroup.vue';
 import ProgressBar from '../fragments/ProgressBar.vue';
+import ConsoleOutput from '@/components/fragments/ConsoleOutput.vue';
 import filesize from '@/tools/filesize';
 
 export default {
     mixins: [search],
-    components: { ButtonGroup, FileTree, DiscoverPackage, LoadingSpinner, SearchInput, FileUpload, RadioButton, CheckBox, LoadingButton, ProgressBar },
+    components: { ButtonGroup, FileTree, DiscoverPackage, LoadingSpinner, SearchInput, FileUpload, RadioButton, CheckBox, LoadingButton, ProgressBar, ConsoleOutput },
 
     data: () => ({
         processing: false,
@@ -515,6 +530,9 @@ export default {
                         this.upload = null;
                         this.processing = false;
                     }
+                } else {
+                    this.upload = newFile;
+                    this.processing = false;
                 }
 
                 return;
@@ -577,6 +595,7 @@ export default {
 
         cancelTheme() {
             this.theme = null;
+            this.upload = null;
             this.$refs.uploader.clear();
         },
 
