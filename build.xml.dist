@@ -120,7 +120,7 @@
         <echo message="Compiling UI files" />
         <exec executable="npm" passthru="true" checkreturn="true">
             <arg value="run" />
-            <arg value="build" />
+            <arg value="build-dev" />
         </exec>
     </target>
 
@@ -141,6 +141,7 @@
         <exec executable="php" checkreturn="true" passthru="true">
             <arg value="vendor-bin/phing/vendor/bin/box" />
             <arg value="compile" />
+            <arg value="--dev" />
         </exec>
     </target>
 

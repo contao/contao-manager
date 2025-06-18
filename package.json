@@ -7,6 +7,7 @@
     "scripts": {
         "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
         "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
+        "build-dev": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build --mode development",
         "lint": "vue-cli-service lint",
         "cs-fixer": "prettier --write src"
     },

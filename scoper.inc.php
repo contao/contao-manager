@@ -184,5 +184,14 @@ return [
         static function (string $filePath, string $prefix, string $contents): string {
             return str_replace('#[\\Symfony\\', "#[\\{$prefix}\\Symfony\\", $contents);
         },
+
+        // Fix namespace of var-dumper functions
+        static function (string $filePath, string $prefix, string $contents): string {
+            if ('vendor/symfony/var-dumper/Resources/functions/dump.php' !== $filePath) {
+                return $contents;
+            }
+
+            return str_replace('_ContaoManager\\\\', '', $contents);
+        },
     ],
 ];

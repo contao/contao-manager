@@ -6,9 +6,15 @@
                 <path d="M0 0h24v24H0z" fill="none" />
             </svg>
         </button>
-        <div class="view-error__content">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="view-error__icon"><path d="M473.7 73.8l-2.4-2.5c-46-47-118-51.7-169.6-14.8L336 159.9l-96 64 48 128-144-144 96-64-28.6-86.5C159.7 19.6 87 24 40.7 71.4l-2.4 2.4C-10.4 123.6-12.5 202.9 31 256l212.1 218.6c7.1 7.3 18.6 7.3 25.7 0L481 255.9c43.5-53 41.4-132.3-7.3-182.1z" /></svg>
-            <div class="view-error__status">ERROR <a :href="`https://developer.mozilla.org/${$i18n.locale}/docs/Web/HTTP/Status/${error.status}`" target="_blank" v-if="error.status"> {{ error.status }}</a></div>
+        <div class="view-error__content" ref="debug">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="view-error__icon">
+                <path
+                    d="M473.7 73.8l-2.4-2.5c-46-47-118-51.7-169.6-14.8L336 159.9l-96 64 48 128-144-144 96-64-28.6-86.5C159.7 19.6 87 24 40.7 71.4l-2.4 2.4C-10.4 123.6-12.5 202.9 31 256l212.1 218.6c7.1 7.3 18.6 7.3 25.7 0L481 255.9c43.5-53 41.4-132.3-7.3-182.1z"
+                />
+            </svg>
+            <div class="view-error__status">
+                ERROR <a :href="`https://developer.mozilla.org/${$i18n.locale}/docs/Web/HTTP/Status/${error.status}`" target="_blank" v-if="error.status"> {{ error.status }}</a>
+            </div>
             <h1 class="view-error__headline">{{ title }}</h1>
             <div class="view-error__details" v-if="detail">{{ detail }}</div>
             <div class="view-error__debug" v-if="debug">{{ debug }}</div>
@@ -84,11 +90,19 @@ export default {
             this.$store.commit('setError', null);
         },
     },
+
+    mounted() {
+        if (this.debug && this.debug.includes('window.Sfdump')) {
+            this.$refs.debug.innerHTML = '';
+            this.$refs.debug.classList.add('view-error__content--dump');
+            this.$refs.debug.append(document.createRange().createContextualFragment(this.debug));
+        }
+    },
 };
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@use "~contao-package-list/src/assets/styles/defaults";
+@use '~contao-package-list/src/assets/styles/defaults';
 
 .view-error {
     position: fixed;
@@ -136,6 +150,20 @@ export default {
         max-height: 100vh;
         line-height: 1.5;
         text-align: center;
+
+        &--dump {
+            text-align: left !important;
+            overflow: auto !important;
+            max-width: none !important;
+            width: 100vw !important;
+            height: calc(100vh - 40px) !important;
+            display: block !important;
+            z-index: -1;
+
+            .sf-dump {
+                background: none !important;
+            }
+        }
     }
 
     &__icon {
@@ -171,6 +199,7 @@ export default {
 
     &__debug {
         align-self: flex-start;
+        width: 100%;
         max-height: 60vh;
         overflow-y: auto;
         margin-top: 2em;
