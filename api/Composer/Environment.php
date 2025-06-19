@@ -21,6 +21,7 @@ use Composer\Repository\ArtifactRepository;
 use Composer\Repository\PathRepository;
 use Composer\Repository\PlatformRepository;
 use Composer\Repository\RepositoryInterface;
+use Composer\Repository\RepositoryUtils;
 use Contao\ManagerApi\ApiKernel;
 use Contao\ManagerApi\Config\ComposerConfig;
 use Contao\ManagerApi\Config\ManagerConfig;
@@ -289,19 +290,21 @@ class Environment
         $repositories = $this->getComposer()->getRepositoryManager()->getRepositories();
         $dumper = new ArrayDumper();
 
-        foreach ($repositories as $repository) {
-            if ($repository instanceof ArtifactRepository || $repository instanceof PathRepository) {
-                foreach ($repository->getPackages() as $package) {
-                    $dump = $dumper->dump($package);
+        foreach ($repositories as $repo) {
+            foreach (RepositoryUtils::flattenRepositories($repo) as $repository) {
+                if ($repository instanceof ArtifactRepository || $repository instanceof PathRepository) {
+                    foreach ($repository->getPackages() as $package) {
+                        $dump = $dumper->dump($package);
 
-                    if (isset($dump['dist']['path'])) {
-                        $dump['dist']['path'] = $this->normalizeRepositoryPath($dump['dist']['path']);
+                        if (isset($dump['dist']['path'])) {
+                            $dump['dist']['path'] = $this->normalizeRepositoryPath($dump['dist']['path']);
+                        }
+
+                        // see https://github.com/composer/composer/issues/7955
+                        unset($dump['dist']['reference']);
+
+                        $packages[] = $dump;
                     }
-
-                    // see https://github.com/composer/composer/issues/7955
-                    unset($dump['dist']['reference']);
-
-                    $packages[] = $dump;
                 }
             }
         }
