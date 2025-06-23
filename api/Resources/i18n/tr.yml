@@ -76,7 +76,7 @@ tr:
         remove-uploads:
             summary: 'Yüklemeler kaldırılıyor'
         remove-artifacts:
-            summary: ''
+            summary: 'Yüklenmiş paketler kaldırılıyor'
         composer-install:
             retry: 'yeniden deneniyor {current}/{max}'
             nothing: 'Kurulacak ya da güncellenecek bir şey yok'
