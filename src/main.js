@@ -77,7 +77,7 @@ const notivue = createNotivue({
     enqueue: true,
 });
 
-bootstrap(App, i18n, [store, router, notivue], (app) => {
+bootstrap(App, i18n, [store, router(store), notivue], (app) => {
     app.config.globalProperties.$notify = push;
     app.config.globalProperties.$request = request;
 });

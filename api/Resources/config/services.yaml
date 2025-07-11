@@ -73,3 +73,9 @@ services:
             $ceremonyStepManager: '@contao_manager.webauthn.request_ceremony'
         calls:
             - setLogger: ['@logger']
+
+    # Override the AuthenticationTrustResolver to deny IS_AUTHENTICATED_FULLY if token has limited permissions
+    contao_manager.security.authentication_trust_resolver:
+        class: Contao\ManagerApi\Security\AuthenticationTrustResolver
+        decorates: 'security.authentication.trust_resolver'
+        arguments: ['@.inner']

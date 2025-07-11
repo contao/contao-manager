@@ -9,42 +9,50 @@ import MaintenanceRoute from '../components/routes/MaintenanceRoute';
 import LogViewerRoute from '../components/routes/LogViewerRoute';
 import UserManagerRoute from '../components/routes/UserManagerRoute';
 
-const router = createRouter({
-    history: createWebHashHistory(),
-    routes: [
-        {
-            name: routes.discover.name,
-            path: '/discover',
-            component: DiscoverRoute,
-        },
-        {
-            name: routes.packages.name,
-            path: '/packages',
-            component: PackagesListRoute,
-        },
-        {
-            name: routes.oauth.name,
-            path: '/oauth',
-            component: OAuthRoute,
-            props: true,
-        },
-        {
-            name: routes.maintenance.name,
-            path: '/maintenance',
-            component: MaintenanceRoute,
-        },
-        {
-            name: routes.logViewer.name,
-            path: '/logs',
-            component: LogViewerRoute,
-        },
-        {
-            name: routes.userManager.name,
-            path: '/users',
-            component: UserManagerRoute,
-        },
-        { path: '/:pathMatch(.*)*', redirect: '/discover' },
-    ],
-});
+const router = (store) =>
+    createRouter({
+        history: createWebHashHistory(),
+        routes: [
+            {
+                name: routes.discover.name,
+                path: '/discover',
+                component: DiscoverRoute,
+            },
+            {
+                name: routes.packages.name,
+                path: '/packages',
+                component: PackagesListRoute,
+            },
+            {
+                name: routes.oauth.name,
+                path: '/oauth',
+                component: OAuthRoute,
+                props: true,
+            },
+            {
+                name: routes.maintenance.name,
+                path: '/maintenance',
+                component: MaintenanceRoute,
+            },
+            {
+                name: routes.logViewer.name,
+                path: '/logs',
+                component: LogViewerRoute,
+            },
+            {
+                name: routes.userManager.name,
+                path: '/users',
+                component: UserManagerRoute,
+                beforeEnter: (to, from, next) => {
+                    if (store.state.auth.limited) {
+                        next(from);
+                    } else {
+                        next();
+                    }
+                },
+            },
+            { path: '/:pathMatch(.*)*', redirect: '/discover' },
+        ],
+    });
 
 export default router;

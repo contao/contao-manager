@@ -48,6 +48,7 @@ class UserController
      * Returns a list of users in the configuration file.
      */
     #[Route(path: '/users', methods: ['GET'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function listUsers(): Response
     {
         if (!$this->security->isGranted('ROLE_ADMIN')) {
@@ -82,6 +83,7 @@ class UserController
      * Returns user data from the configuration file.
      */
     #[Route(path: '/users/{username}', name: 'user_get', methods: ['GET'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function retrieveUser(string $username): Response
     {
         $this->denyAccessUnlessUserOrAdmin($username);
@@ -99,6 +101,7 @@ class UserController
      * Replaces user data in the configuration file.
      */
     #[Route(path: '/users/{username}', methods: ['PUT'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function replaceUser(string $username, Request $request): Response
     {
         $this->denyAccessUnlessUserOrAdmin($username);
@@ -133,6 +136,7 @@ class UserController
     }
 
     #[Route(path: '/users/{username}/password', methods: ['PUT'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function setPassword(string $username, Request $request): Response
     {
         $this->denyAccessUnlessUser($username);
@@ -170,6 +174,7 @@ class UserController
     }
 
     #[Route(path: '/users/{username}/totp', methods: ['GET'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function getTOTP(string $username): Response
     {
         $this->denyAccessUnlessUser($username);
@@ -195,6 +200,7 @@ class UserController
     }
 
     #[Route(path: '/users/{username}/totp', methods: ['PUT'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function setupTotp(string $username, Request $request): Response
     {
         $this->denyAccessUnlessUser($username);
@@ -233,6 +239,7 @@ class UserController
     }
 
     #[Route(path: '/users/{username}/totp', methods: ['DELETE'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function deleteTotp(string $username, Request $request): Response
     {
         $this->denyAccessUnlessUser($username);
@@ -270,6 +277,7 @@ class UserController
      * Returns a list of tokens of a user in the configuration file.
      */
     #[Route(path: '/users/{username}/tokens', methods: ['GET'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function listTokens(string $username): Response
     {
         $this->denyAccessUnlessUserOrAdmin($username);
@@ -286,6 +294,7 @@ class UserController
      * Adds a new token for a user to the configuration file.
      */
     #[Route(path: '/users/{username}/tokens', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function createToken(string $username, Request $request): Response
     {
         $this->denyAccessUnlessUserOrAdmin($username);
@@ -317,6 +326,7 @@ class UserController
      * Returns token data of a user from the configuration file.
      */
     #[Route(path: '/users/{username}/tokens/{id}', methods: ['GET'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function retrieveToken(string $username, string $id): Response
     {
         $this->denyAccessUnlessUserOrAdmin($username);
@@ -334,6 +344,7 @@ class UserController
      * Deletes a token from the configuration file.
      */
     #[Route(path: '/users/{username}/tokens/{id}', methods: ['DELETE'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function deleteToken(string $username, string $id): Response
     {
         $this->denyAccessUnlessUserOrAdmin($username);

@@ -37,7 +37,7 @@
                     <span>{{ $t('ui.navigation.advanced') }}</span>
                 </button>
                 <ul class="navigation__group navigation__group--sub navigation__group--right">
-                    <navigation-item :to="routes.userManager" sub @navigate="closeNavigation">{{ $t('ui.navigation.users') }}</navigation-item>
+                    <navigation-item :to="routes.userManager" sub @navigate="closeNavigation" v-if="!limited">{{ $t('ui.navigation.users') }}</navigation-item>
                     <li class="navigation__item navigation__item--sub">
                         <a href="#" @click.prevent="systemCheck">{{ $t('ui.navigation.systemCheck') }}</a>
                     </li>
@@ -68,6 +68,7 @@ export default {
 
     computed: {
         ...mapState(['safeMode']),
+        ...mapState('auth', ['limited']),
         ...mapState('contao/install-tool', { showInstallTool: 'isSupported' }),
         ...mapState('contao/access-key', { showAppDev: 'isEnabled' }),
         ...mapState('contao/jwt-cookie', { showPreview: 'isDebugEnabled' }),
