@@ -469,6 +469,7 @@
     "ui.package.updateUnknown": "unknown version",
     "ui.package.updateConstraint": "A newer version outside your version constraint is available.",
     "ui.package.incompatible": "{package} does not work with Contao {constraint}.",
+    "ui.package.forceInstall": "{package} does not work with your Contao version. Are you sure you want to add this package?",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Version {version}",

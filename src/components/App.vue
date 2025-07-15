@@ -212,7 +212,7 @@ export default {
 @use "~contao-package-list/src/assets/styles/forms";
 @use "~contao-package-list/src/assets/styles/animations";
 @use "~contao-package-list/src/assets/styles/defaults";
-@use "../assets/styles/defaults" as AppDefaults;
+@use "../assets/styles/app" as AppDefaults;
 
 @import '~notivue/notifications.css';
 @import '~notivue/animations.css';

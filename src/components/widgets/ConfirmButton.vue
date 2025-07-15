@@ -21,6 +21,7 @@ export default {
         icon: String,
         inline: Boolean,
         small: Boolean,
+        compatible: Boolean,
         disabled: Boolean,
     },
 
@@ -34,6 +35,7 @@ export default {
             'widget-button': true,
             'widget-button--inline': vm.inline,
             'widget-button--small': vm.small,
+            'widget-button--incompatible': !vm.compatible,
             [`widget-button--${vm.color}`]: vm.color,
         }),
 

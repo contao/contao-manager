@@ -4,8 +4,9 @@
         icon="add"
         :small="small"
         :inline="inline"
+        :compatible="isCompatible"
         :disabled="disabled || isRootInstalled || isAdded || isRequired || !canBeInstalled"
-        @click="install"
+        @click="install(isCompatible)"
         v-if="isGranted(scopes.INSTALL)"
     >
         {{ $t(small ? 'ui.package.installButtonShort' : 'ui.package.installButton') }}

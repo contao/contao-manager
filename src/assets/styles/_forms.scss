@@ -1,0 +1,12 @@
+.widget-button {
+
+  &--incompatible {
+    background-color: var(--btn-disabled);
+    border-color: var(--btn-disabled);
+    opacity: var(--opacity-disabled, 1);
+
+    &:hover {
+      background-color: var(--btn-warning);
+    }
+  }
+}
