@@ -115,7 +115,7 @@ export default {
         },
         contaoConstraint: (s, g) =>
             g.packageConstraint('contao/manager-bundle') ? coerce(g.packageConstraint('contao/manager-bundle'), { includePrerelease: true }).toString() : '',
-        contaoSupported: (s, g) => (constraint) => (constraint ? intersects(constraint, g.contaoConstraint, true) : true),
+        contaoSupported: (s, g) => (constraint) => (constraint ? intersects(constraint, g.contaoConstraint, { includePrerelease: true, loose: true }) : true),
     },
 
     mutations: {
