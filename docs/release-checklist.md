@@ -7,7 +7,7 @@
     - Contao Version getestet
         - [ ] 4.13 (LTS)
         - [ ] 5.3 (LTS)
-        - [ ] 5.5
+        - [ ] 5.6
     - Webhoster getestet
         - [ ] IONOS
         - [ ] All-Inkl
@@ -31,12 +31,12 @@
     - Contao Version getestet
         - [ ] 4.13 (LTS)
         - [ ] 5.3 (LTS)
-        - [ ] 5.5
+        - [ ] 5.6
 - [ ] Contao nur Core-Module
     - Contao Version getestet
         - [ ] 4.13 (LTS)
         - [ ] 5.3 (LTS)
-        - [ ] 5.5
+        - [ ] 5.6
 - [ ] Contao Manager bei bestehender Installation hinzufügen
 - [ ] Unterschiedliche PHP-Versionen, auch inkompatible testen
     - [ ] PHP 7.4

@@ -280,7 +280,7 @@ export default {
         processing: false,
         isWeb: true,
 
-        version: '5.5',
+        version: '5.6',
         demo: false,
 
         view: 'require',
@@ -307,10 +307,10 @@ export default {
             const versions = [];
 
             versions.push({
-                value: '5.5',
-                label: `Contao 5.5 (${this.$t('ui.setup.create-project.latestTitle')})`,
+                value: '5.6',
+                label: `Contao 5.6 (${this.$t('ui.setup.create-project.latestTitle')})`,
                 disabled: this.phpVersionId < 80200,
-                description: this.$t('ui.setup.create-project.latestQ3', { year: '2025' }),
+                description: this.$t('ui.setup.create-project.latestQ1', { year: '2026' }),
                 problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.2.0', current: this.phpVersion }),
             });
 
