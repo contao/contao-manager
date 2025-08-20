@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Contao\ManagerApi\Security;
 
 use Contao\ManagerApi\Config\UserConfig;
@@ -14,22 +16,22 @@ class AuthenticationTrustResolver implements AuthenticationTrustResolverInterfac
     ) {
     }
 
-    public function isAuthenticated(?TokenInterface $token = null): bool
+    public function isAuthenticated(TokenInterface|null $token = null): bool
     {
         return $this->inner->isAuthenticated($token);
     }
 
-    public function isRememberMe(?TokenInterface $token = null): bool
+    public function isRememberMe(TokenInterface|null $token = null): bool
     {
         return $this->inner->isRememberMe($token);
     }
 
-    public function isFullFledged(?TokenInterface $token = null): bool
+    public function isFullFledged(TokenInterface|null $token = null): bool
     {
         if (!$this->inner->isFullFledged($token) || !$token?->getUserIdentifier()) {
             return false;
         }
 
-        return User::scopeFromRoles($token?->getRoleNames()) === User::scopeFromRoles($this->config->getUser($token?->getUserIdentifier())?->getRoles());
+        return User::scopeFromRoles($token->getRoleNames()) === User::scopeFromRoles($this->config->getUser($token->getUserIdentifier())?->getRoles());
     }
 }
