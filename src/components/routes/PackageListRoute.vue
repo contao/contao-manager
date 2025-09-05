@@ -27,8 +27,8 @@
                     type="primary"
                     icon="update"
                     :loading="cloudLoading"
-                    :disabled="cloudError"
-                    :more-disabled="cloudLoading || cloudError"
+                    :disabled="cloudError || packageIncompatible"
+                    :more-disabled="cloudLoading || cloudError || packageIncompatible"
                     :label="$t('ui.packages.changesApply')"
                     @click="hasLockFile ? applyChanges() : applyChangesAll()"
                 >
@@ -80,7 +80,7 @@ export default {
             requiredPackages: 'required',
         }),
         ...mapState('packages/uploads', ['uploads', 'uploading', 'files', 'removing', 'confirmed']),
-        ...mapGetters('packages', ['totalChanges', 'packageMissing', 'canResetChanges', 'visibleRequired', 'visibleInstalled', 'visibleAdded']),
+        ...mapGetters('packages', ['totalChanges', 'packageMissing', 'packageIncompatible', 'canResetChanges', 'visibleRequired', 'visibleInstalled', 'visibleAdded']),
         ...mapGetters('packages/uploads', ['hasUploads', 'totalUploads', 'canConfirmUploads']),
         scopes: () => scopes,
 

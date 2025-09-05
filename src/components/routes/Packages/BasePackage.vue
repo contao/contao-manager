@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@use "~contao-package-list/src/assets/styles/defaults";
+@use '~contao-package-list/src/assets/styles/defaults';
 
 $package-padding: 16px;
 
@@ -105,7 +105,7 @@ $package-padding: 16px;
 
             &:not(:first-child):before {
                 padding-right: 10px;
-                content: "|";
+                content: '|';
             }
         }
     }
@@ -125,7 +125,7 @@ $package-padding: 16px;
         &:after {
             display: table;
             clear: both;
-            content: "";
+            content: '';
         }
     }
 
@@ -427,6 +427,7 @@ $package-padding: 16px;
             width: 180px;
             margin-left: 20px;
         }
+
         &__details {
             display: flex;
             align-self: center;

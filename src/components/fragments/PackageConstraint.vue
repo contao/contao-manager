@@ -6,14 +6,18 @@
             :placeholder="inputPlaceholder"
             :title="inputTitle"
             v-model="inputValue"
-            :class="{ disabled: !emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.INSTALL)), error: constraintError }"
+            :class="{
+                disabled: !emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.INSTALL)),
+                incompatible: isIncompatible,
+                error: constraintError,
+            }"
             :disabled="!constraintEditable || willBeRemoved || (!emit && !isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.INSTALL)"
             @keypress.enter.prevent="saveConstraint"
             @keypress.esc.prevent="resetConstraint"
             @blur="saveConstraint"
         />
         <button
-            :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating }"
+            :class="{ 'widget-button widget-button--gear': true, rotate: constraintValidating, incompatible: isIncompatible }"
             :title="buttonTitle"
             @click="editConstraint"
             :disabled="!emit && (willBeRemoved || (!isInstalled && !willBeInstalled && !isRequired) || isUpload || !isGranted(scopes.INSTALL))"
@@ -66,6 +70,8 @@ export default {
             !vm.isUpload && (!vm.$store.state.packages.root || !Object.keys(vm.$store.state.packages.root.require).includes(vm.data.name))
                 ? vm.$t('ui.package.latestConstraint')
                 : '',
+
+        isIncompatible: (vm) => !vm.isCompatible && !vm.constraint,
 
         inputValue: {
             get: (vm) => (vm.isUpload ? vm.$t('ui.package.private') : vm.constraint),
@@ -221,6 +227,11 @@ export default {
             border-color: var(--border);
         }
 
+        &.incompatible {
+            background: var(--btn-alert);
+            border-color: var(--btn-alert);
+        }
+
         &.error {
             animation: input-error 0.15s linear 3;
         }
@@ -251,6 +262,10 @@ export default {
             left: 50%;
             top: 50%;
             margin: -10px 0 0 -10px;
+        }
+
+        &.incompatible {
+            background: var(--btn-alert);
         }
 
         &.rotate:before {

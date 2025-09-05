@@ -21,6 +21,7 @@ export default {
             'packageFeature',
             'packageVisible',
             'packageSuggested',
+            'packageConstraint',
             'packageConstraintAdded',
             'packageConstraintChanged',
             'packageConstraintInstalled',
@@ -60,7 +61,7 @@ export default {
         installedTime: (vm) => (vm.installed[vm.data.name] ? vm.installed[vm.data.name].time : null),
 
         isCompatible: (vm) => vm.contaoSupported(vm.metadata.contaoConstraint),
-        canBeInstalled: (vm) => (!vm.isPrivate || vm.isSuggested) && !vm.isTheme && (!vm.isDependency || vm.isSuggested) && vm.isCompatible,
+        canBeInstalled: (vm) => (!vm.isPrivate || vm.isSuggested) && !vm.isTheme && (!vm.isDependency || vm.isSuggested),
 
         constraintInstalled: (vm) => vm.packageConstraintInstalled(vm.data.name),
         constraintRequired: (vm) => vm.packageConstraintRequired(vm.data.name),
@@ -72,6 +73,13 @@ export default {
 
     methods: {
         install() {
+            if (
+                !this.isCompatible &&
+                !confirm(this.$t('ui.package.incompatibleWarning', { package: this.data.name, constraint: this.packageConstraint('contao/manager-bundle') }))
+            ) {
+                return;
+            }
+
             this.$store.commit('packages/add', this.metadata || this.data);
         },
 

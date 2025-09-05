@@ -69,6 +69,8 @@ export default {
             Object.values(state.change).filter((pkg) => Object.keys(state.required).includes(pkg.name)).length -
             state.remove.filter((pkg) => Object.keys(state.required).includes(pkg)).length,
 
+        packageIncompatible: (state, get) => !!Object.values(state.add).find((p) => !p.constraint && !get.contaoSupported(p.contaoConstraint)),
+
         canResetChanges: (s, get) => get.totalChanges > get.totalRequired,
 
         visibleRequired: (s, g) => Object.values(s.required).filter((pkg) => isVisible(pkg.name, g)),

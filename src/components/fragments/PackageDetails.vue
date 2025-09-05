@@ -12,7 +12,7 @@
                         <template v-else>{{ $t('ui.package.version', { version: installedVersion }) }}</template>
                     </p>
                 </template>
-                <template v-else-if="canBeInstalled || isRequired">
+                <template v-else-if="(canBeInstalled && isCompatible) || isAdded || isRequired">
                     <install-button :data="data" />
                     <package-constraint :data="data" v-if="isAdded || isRequired" />
                 </template>
@@ -29,7 +29,17 @@
             </p>
         </template>
         <template #package-update v-else-if="!isCompatible">
-            <p class="package-popup__incompatible">{{ $t('ui.package.incompatible', { package: data.name, constraint: packageConstraint('contao/manager-bundle') }) }}</p>
+            <p class="package-popup__incompatible">
+                {{ $t('ui.package.incompatible', { package: data.name, constraint: packageConstraint('contao/manager-bundle') }) }}
+                <button
+                    type="button"
+                    class="widget-button widget-button--small widget-button--transparent widget-button--add"
+                    @click="install"
+                    v-if="canBeInstalled && !isRootInstalled && !isAdded && !isRequired"
+                >
+                    {{ $t('ui.package.incompatibleButton') }}
+                </button>
+            </p>
         </template>
         <template #suggest-actions="{ name }">
             <install-button inline small :data="{ name }" v-if="packageSuggested(name)" />
@@ -125,12 +135,20 @@ export default {
     }
 
     &__incompatible {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
         margin: 0 0 20px;
-        padding: 10px 20px 10px 50px;
+        padding: 10px 10px 10px 50px;
         color: var(--clr-btn);
         background: var(--contao) url('../../assets/images/button-incompatible.svg') 15px 50% no-repeat;
         background-size: 23px 23px;
         border-radius: var(--border-radius);
+
+        button {
+            flex-shrink: 0;
+        }
     }
 
     &__funding + .package-popup__update {

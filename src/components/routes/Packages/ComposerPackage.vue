@@ -148,6 +148,10 @@ export default {
                     return this.$t('ui.package.hintConstraint', { constraint: this.constraintAdded });
                 }
 
+                if (!this.isCompatible) {
+                    return this.$t('ui.package.incompatibleConstraint', { constraint: this.packageConstraint('contao/manager-bundle') });
+                }
+
                 return this.$t('ui.package.hintConstraintBest');
             }
 

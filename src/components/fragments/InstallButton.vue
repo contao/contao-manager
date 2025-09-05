@@ -4,7 +4,7 @@
         icon="add"
         :small="small"
         :inline="inline"
-        :disabled="disabled || isRootInstalled || isAdded || isRequired || !canBeInstalled"
+        :disabled="disabled || isRootInstalled || isAdded || isRequired || !canBeInstalled || !isCompatible"
         @click="install"
         v-if="isGranted(scopes.INSTALL)"
     >
