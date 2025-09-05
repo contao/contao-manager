@@ -292,9 +292,15 @@ class UserController
 
     /**
      * Adds a new token for a user to the configuration file.
+     *
+     * For adding a new token, a user does not have to be fully authenticated. We
+     * allow creating a token if
+     *  - the user is admin or the current user
+     *  - the requested scope is allowed for the current user
+     * This essentially means the current user can create a new token for itself with less
+     * or the same privileges, but never with higher privileges or for another user.
      */
     #[Route(path: '/users/{username}/tokens', methods: ['POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function createToken(string $username, Request $request): Response
     {
         $this->denyAccessUnlessUserOrAdmin($username);
