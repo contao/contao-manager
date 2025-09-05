@@ -120,6 +120,8 @@
     "ui.server.config.stateErrorCli": "No valid PHP binary was found on the server.",
     "ui.server.config.stateErrorCloud": "The Composer Resolver Cloud is not supported.",
     "ui.server.config.stateSuccess": "PHP binary at {php_cli}.",
+    "ui.server.config.cloudEnabled": "Package dependencies will be resolved using the Composer Resolver Cloud.",
+    "ui.server.config.cloudDisabled": "The Composer Resolver Cloud is disabled.",
     "ui.server.php_web.title": "PHP Web Process",
     "ui.server.php_web.below7": "Found PHP version {version}. Please switch to PHP 7 as soon as possible!",
     "ui.server.php_web.success": "Found PHP version {version}, no known issues found.",

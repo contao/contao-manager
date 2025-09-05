@@ -28,9 +28,9 @@
 
         <div class="boot-check__label">
             <h2 class="boot-check__title">{{ title }}</h2>
-            <p class="boot-check__description">
-                <slot name="description">{{ description }}</slot>
-            </p>
+            <slot name="description">
+                <p class="boot-check__description">{{ description }}</p>
+            </slot>
             <p class="boot-check__detail" v-if="detail">{{ detail }}</p>
         </div>
         <div class="boot-check__action">
@@ -58,7 +58,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@use "~contao-package-list/src/assets/styles/defaults";
+@use '~contao-package-list/src/assets/styles/defaults';
 
 .boot-check {
     padding: 10px;
@@ -66,7 +66,7 @@ export default {
     &:after {
         display: table;
         clear: both;
-        content: "";
+        content: '';
     }
 
     &__icon {
@@ -111,6 +111,16 @@ export default {
         text-overflow: ellipsis;
     }
 
+    ul.boot-check__description {
+        padding: 0 0 0 1em;
+        list-style: '- ';
+
+        li {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
     &__detail {
         margin-top: 5px;
         font-size: 12px;
@@ -143,7 +153,7 @@ export default {
                 margin: 3px 0;
             }
 
-            a[target="_blank"] {
+            a[target='_blank'] {
                 display: inline-block;
                 margin: 10px 0;
                 padding-left: 20px;

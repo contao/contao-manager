@@ -1,7 +1,17 @@
 <template>
     <boot-check :progress="bootState" :title="$t('ui.server.config.title')" :description="bootDescription">
-        <button class="widget-button widget-button--alert" v-if="bootState === 'error' || bootState === 'action'" :disabled="!isGranted(scopes.INSTALL)" @click="showConfiguration">{{ $t('ui.server.config.setup') }}</button>
-        <button class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" :disabled="!isGranted(scopes.INSTALL)" @click="showConfiguration">{{ $t('ui.server.config.change') }}</button>
+        <template #description v-if="bootState === 'success'">
+            <ul class="boot-check__description">
+                <li>{{ bootDescription }}</li>
+                <li>{{ $t(`ui.server.config.cloud${cloud ? 'Enabled' : 'Disabled'}`) }}</li>
+            </ul>
+        </template>
+        <button class="widget-button widget-button--alert" v-if="bootState === 'error' || bootState === 'action'" :disabled="!isGranted(scopes.INSTALL)" @click="showConfiguration">
+            {{ $t('ui.server.config.setup') }}
+        </button>
+        <button class="widget-button widget-button--edit" v-else-if="bootState !== 'loading'" :disabled="!isGranted(scopes.INSTALL)" @click="showConfiguration">
+            {{ $t('ui.server.config.change') }}
+        </button>
     </boot-check>
 </template>
 
