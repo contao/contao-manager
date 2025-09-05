@@ -76,7 +76,7 @@ cs:
         remove-uploads:
             summary: 'Smazat nahrané soubory'
         remove-artifacts:
-            summary: ''
+            summary: 'Mazání nahraných balíčků'
         composer-install:
             retry: 'Nový pokus {current}/{max}'
             nothing: 'Neexistuje nic k nainstalování či aktualizování'

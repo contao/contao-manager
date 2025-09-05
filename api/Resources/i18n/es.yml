@@ -76,7 +76,7 @@ es:
         remove-uploads:
             summary: 'Eliminando cargas'
         remove-artifacts:
-            summary: ''
+            summary: 'Eliminar paquetes cargados'
         composer-install:
             retry: 'volviendo a intentar {current}/{max}'
             nothing: 'Nada que instalar o actualizar'

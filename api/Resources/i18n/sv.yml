@@ -76,7 +76,7 @@ sv:
         remove-uploads:
             summary: 'Tar bort uppladdningar'
         remove-artifacts:
-            summary: ''
+            summary: 'Ta bort uppladdade paket'
         composer-install:
             retry: 'försöker igen {current}/{max}'
             nothing: 'Inget att installera eller uppdatera'

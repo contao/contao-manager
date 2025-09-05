@@ -120,6 +120,8 @@
     "ui.server.config.stateErrorCli": "Nie znaleziono poprawnego pliku binarnego PHP na serwerze.",
     "ui.server.config.stateErrorCloud": "Composer Resolver Cloud jest niewspierany.",
     "ui.server.config.stateSuccess": "Plik binarny PHP pod {php_cli}.",
+    "ui.server.config.cloudEnabled": "Package dependencies will be resolved using the Composer Resolver Cloud.",
+    "ui.server.config.cloudDisabled": "The Composer Resolver Cloud is disabled.",
     "ui.server.php_web.title": "PHP Web Process",
     "ui.server.php_web.below7": "Znaleziono wersję PHP {version}. Zaktualizuj ją do PHP 7 tak szybko, jak to możliwe!",
     "ui.server.php_web.success": "Znaleziono wersję PHP {version}, brak nieprawidłowości.",
@@ -469,6 +471,9 @@
     "ui.package.updateUnknown": "nieznana wersja",
     "ui.package.updateConstraint": "Dostępna jest nowsza wersja spoza ograniczenia wersji Twojego oprogramowania.",
     "ui.package.incompatible": "{package} does not work with Contao {constraint}.",
+    "ui.package.incompatibleWarning": "{package} does not work with Contao {constraint} in any of its stable releases. Do you want to add the package and set a version constraint to try installing a development branch?",
+    "ui.package.incompatibleConstraint": "This package does not have a stable release for Contao {constraint}. Set a version constraint to try installing a development branch.",
+    "ui.package.incompatibleButton": "Instalacja",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Wersja {version}",

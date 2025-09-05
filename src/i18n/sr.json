@@ -120,6 +120,8 @@
     "ui.server.config.stateErrorCli": "На серверу није пронађен валидан PHP binary.",
     "ui.server.config.stateErrorCloud": "Употреба Composer Resolver Cloud није подржана.",
     "ui.server.config.stateSuccess": "PHP binary на {php_cli}.",
+    "ui.server.config.cloudEnabled": "Package dependencies will be resolved using the Composer Resolver Cloud.",
+    "ui.server.config.cloudDisabled": "The Composer Resolver Cloud is disabled.",
     "ui.server.php_web.title": "PHP Web Process",
     "ui.server.php_web.below7": "Пронађена је верзија PHP {version}. Молимо Вас да што пре пређете на PHP 7!",
     "ui.server.php_web.success": "Пронађена верзија PHP {version}, нема познатих проблема.",
@@ -469,6 +471,9 @@
     "ui.package.updateUnknown": "непозната верзија",
     "ui.package.updateConstraint": "Новија верзија изван вашег опсега верзија је доступна.",
     "ui.package.incompatible": "{package} does not work with Contao {constraint}.",
+    "ui.package.incompatibleWarning": "{package} does not work with Contao {constraint} in any of its stable releases. Do you want to add the package and set a version constraint to try installing a development branch?",
+    "ui.package.incompatibleConstraint": "This package does not have a stable release for Contao {constraint}. Set a version constraint to try installing a development branch.",
+    "ui.package.incompatibleButton": "Инсталирај",
 
     "ui.cloudStatus.headline": "Composer Resolver Cloud",
     "ui.cloudStatus.version": "Верзија {version}",
