@@ -96,6 +96,13 @@
         }
     },
     "scripts": {
+        "all": [
+            "@rector",
+            "@ecs",
+            "@phpstan",
+            "@depcheck",
+            "@unit-tests"
+        ],
         "phing": "@php vendor-bin/phing/vendor/bin/phing",
         "ecs": "@php vendor-bin/ecs/vendor/bin/ecs check --fix",
         "phpstan": "@php vendor-bin/phpstan/vendor/bin/phpstan analyze",
