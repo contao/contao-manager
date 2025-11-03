@@ -34,7 +34,7 @@
         "composer/semver": "^3.4",
         "crell/api-problem": "^3.1",
         "firebase/php-jwt": "^6.0",
-        "justinrainbow/json-schema": "^5.3",
+        "justinrainbow/json-schema": "^6.0",
         "phpdocumentor/reflection-docblock": "^5.6",
         "psr/container": "^2.0",
         "psr/log": "^3.0",

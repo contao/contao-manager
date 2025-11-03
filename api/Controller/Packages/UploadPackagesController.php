@@ -22,6 +22,7 @@ use Contao\ManagerApi\Config\UploadsConfig;
 use Contao\ManagerApi\Exception\ApiProblemException;
 use Contao\ManagerApi\I18n\Translator;
 use Crell\ApiProblem\ApiProblem;
+use JsonSchema\Constraints\Constraint as JsonConstraint;
 use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 use Seld\JsonLint\ParsingException;
@@ -233,7 +234,7 @@ class UploadPackagesController
 
             $value = json_decode(json_encode($data), false);
             $validator = new Validator();
-            $validator->validate($value, $schema, \JsonSchema\Constraints\Constraint::CHECK_MODE_EXCEPTIONS);
+            $validator->validate($value, $schema, JsonConstraint::CHECK_MODE_EXCEPTIONS);
         } catch (ValidationException $exception) {
             return $this->installError($id, 'schema', $exception);
         }
