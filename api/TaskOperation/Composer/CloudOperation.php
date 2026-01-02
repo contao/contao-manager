@@ -103,7 +103,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
                 return '';
 
             case CloudJob::STATUS_FINISHED:
-                $seconds = $this->taskConfig->getState('cloud-job-finished', time()) - $this->taskConfig->getState('cloud-job-processing');
+                $seconds = $this->taskConfig->getState('cloud-job-finished', time()) - $this->taskConfig->getState('cloud-job-processing', time());
                 $profile = $this->getFinalProfile($this->getOutput());
                 preg_match('{Memory usage: ([^ ]+) \(peak: ([^)]+)\), time: ([0-9.]+s)\.}', $profile, $match);
 
@@ -174,10 +174,9 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
 
             case CloudJob::STATUS_FINISHED:
                 $output = $this->getOutput();
-                $seconds = $this->taskConfig->getState('cloud-job-finished', time()) - $this->taskConfig->getState('cloud-job-processing');
+                $seconds = $this->taskConfig->getState('cloud-job-finished', time()) - $this->taskConfig->getState('cloud-job-processing', time());
 
                 $profile = $this->getFinalProfile($output);
-                preg_match('{Memory usage: ([^ ]+) \(peak: ([^)]+)\), time: ([0-9.]+s)\.}', $profile, $match);
 
                 $console->add($output, $title);
                 $console->add("# Job ID {$job->getId()} completed in {$seconds} seconds\n# ".$profile);
