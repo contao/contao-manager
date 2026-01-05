@@ -39,8 +39,8 @@ export default {
         packageChanged: (state) => (name) => Object.keys(state.change).includes(name),
         packageUpdated: (state) => (name) => state.update.includes(name),
         packageRemoved: (state) => (name) => state.remove.includes(name),
-        packageFeatures: () => (name) => (features[name] ? features[name] : []),
-        packageFeature: (s, g) => (name) => !!Object.keys(features).find((pkg) => features[pkg].includes(name) && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
+        packageFeatures: () => (name) => (features[name] ? features[name] : {}),
+        packageFeature: (s, g) => (name) => !!Object.keys(features).find((pkg) => features[pkg][name] && (g.packageInstalled(pkg) || g.packageRequired(pkg))),
         packageVisible: (s, g) => (name) => isVisible(name, g),
         packageSuggested: (state) => (name) =>
             !!Object.values(state.local || {})
@@ -256,12 +256,19 @@ export default {
                 }
             }
 
+            let features = metadata?.features ? Object.keys(metadata.features) : [];
+
+            if (rootVersion) {
+                features = features.filter((f) => satisfies(rootVersion, metadata.features[f]));
+            }
+
             const result = Object.assign({}, metadata, {
                 dependents: data.dependents || metadata.dependents,
                 conflict: data.conflict || metadata.conflict,
                 require: data.require || metadata.require,
                 'require-dev': data['require-dev'] || metadata['require-dev'],
                 suggest: metadata.suggest,
+                features: features,
             });
 
             if (data.suggest) {
@@ -328,7 +335,7 @@ export default {
             });
 
             Object.keys(features).forEach((pkg) => {
-                features[pkg].forEach((feature) => {
+                Object.keys(features[pkg]).forEach((feature) => {
                     if ((state.root && Object.keys(state.root.require).includes(feature)) || (state.installed && Object.keys(state.installed).includes(feature))) {
                         if (update.includes(pkg)) {
                             update.push(feature);

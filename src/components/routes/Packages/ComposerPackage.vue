@@ -83,10 +83,10 @@
             </slot>
         </template>
 
-        <template #features v-if="packageFeatures(data.name)?.length">
+        <template #features v-if="Object.keys(packageFeatures(data.name) || {}).length">
             <section class="package__features">
                 <!-- eslint-disable vue/no-v-for-template-key -->
-                <template v-for="name in packageFeatures(data.name)" :key="name">
+                <template v-for="name in Object.keys(packageFeatures(data.name))" :key="name">
                     <feature-package :name="name" />
                 </template>
             </section>
