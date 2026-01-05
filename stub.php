@@ -7,7 +7,7 @@ if (function_exists('ini_set')) {
     @ini_set('display_startup_errors', 1);
     @ini_set('opcache.enable_cli', '0');
 
-    if (isset($_GET['opcache_reset']) && $_GET['opcache_reset'] === md5(Phar::running(false))) {
+    if (isset($_GET['opcache_reset']) && $_GET['opcache_reset'] === md5(__FILE__)) {
         $GLOBALS['opcacheEnabled'] = @ini_get('opcache.enable');
     } else {
         $GLOBALS['opcacheEnabled'] = @ini_set('opcache.enable', '0');
