@@ -15,16 +15,53 @@
                     <h1 class="view-login__headline">{{ $t('ui.login.headline') }}</h1>
                     <p class="view-login__description">{{ $t('ui.login.description') }}</p>
 
-                    <text-field ref="username" name="username" autocomplete="username webauthn" :label="$t('ui.login.username')" :placeholder="$t('ui.login.username')" class="view-login__user" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in || passkey_login" v-model="username" @input="reset" />
-                    <text-field type="password" name="password" autocomplete="current-password" :label="$t('ui.login.password')" :placeholder="$t('ui.login.password')" minlength="8" class="view-login__password" :class="login_failed ? 'widget--error' : ''" :disabled="logging_in || passkey_login" v-model="password" @input="reset" />
+                    <text-field
+                        ref="username"
+                        name="username"
+                        autocomplete="username webauthn"
+                        :label="$t('ui.login.username')"
+                        :placeholder="$t('ui.login.username')"
+                        class="view-login__user"
+                        :class="login_failed ? 'widget--error' : ''"
+                        :disabled="logging_in || passkey_login"
+                        v-model="username"
+                        @input="reset"
+                    />
+                    <text-field
+                        type="password"
+                        name="password"
+                        autocomplete="current-password"
+                        :label="$t('ui.login.password')"
+                        :placeholder="$t('ui.login.password')"
+                        minlength="8"
+                        class="view-login__password"
+                        :class="login_failed ? 'widget--error' : ''"
+                        :disabled="logging_in || passkey_login"
+                        v-model="password"
+                        @input="reset"
+                    />
 
-                    <loading-button submit class="view-login__button" color="primary" :disabled="!inputValid || login_failed || passkey_login" :loading="logging_in && !passkey_login">
+                    <loading-button
+                        submit
+                        class="view-login__button"
+                        color="primary"
+                        :disabled="!inputValid || login_failed || passkey_login"
+                        :loading="logging_in && !passkey_login"
+                    >
                         {{ $t('ui.login.button') }}
                     </loading-button>
 
                     <p class="view-login__or">{{ $t('ui.login.or') }}</p>
 
-                    <loading-button class="view-login__button" icon="passkey" color="primary" :loading="passkey_login" :disabled="logging_in" @click.prevent="passkeyLogin" v-if="showPasskey">
+                    <loading-button
+                        class="view-login__button"
+                        icon="passkey"
+                        color="primary"
+                        :loading="passkey_login"
+                        :disabled="logging_in"
+                        @click.prevent="passkeyLogin"
+                        v-if="showPasskey"
+                    >
                         {{ $t('ui.login.passkey') }}
                     </loading-button>
 
@@ -38,10 +75,14 @@
 
                     <text-field
                         name="totp"
-                        required minlength="6" maxlength="6"
+                        required
+                        minlength="6"
+                        maxlength="6"
                         autocomplete="one-time-code"
-                        :label="$t('ui.login.totp')" :placeholder="$t('ui.login.totp')"
-                        class="view-login__totp" :class="login_failed ? 'widget--error' : ''"
+                        :label="$t('ui.login.totp')"
+                        :placeholder="$t('ui.login.totp')"
+                        class="view-login__totp"
+                        :class="login_failed ? 'widget--error' : ''"
                         :disabled="logging_in"
                         v-model="totp"
                         @input="reset"
@@ -60,7 +101,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { startAuthentication, browserSupportsWebAuthn, browserSupportsWebAuthnAutofill } from '@simplewebauthn/browser';
+import { startAuthentication, browserSupportsWebAuthn } from '@simplewebauthn/browser';
 import views from '../../router/views';
 
 import BoxedLayout from '../layouts/BoxedLayout';
@@ -173,19 +214,13 @@ export default {
             return;
         }
 
-        const supportsWebAuthn = browserSupportsWebAuthn();
-        const supportsAutofill = await browserSupportsWebAuthnAutofill();
-        this.showPasskey = supportsWebAuthn;
-
-        if (supportsWebAuthn && supportsAutofill) {
-            this.passkeyLogin({ useBrowserAutofill: true });
-        }
+        this.showPasskey = browserSupportsWebAuthn();
     },
 };
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-@use "~contao-package-list/src/assets/styles/defaults";
+@use '~contao-package-list/src/assets/styles/defaults';
 
 .view-login {
     &__header {
@@ -241,26 +276,26 @@ export default {
         text-indent: -999em;
         pointer-events: none;
 
-        &[for=ctrl_username] {
+        &[for='ctrl_username'] {
             top: 0;
             bottom: 0;
             margin: auto;
             right: 13px;
             width: 16px;
             height: 16px;
-            background: url("../../assets/images/person.svg") left top no-repeat;
+            background: url('../../assets/images/person.svg') left top no-repeat;
             background-size: 16px 16px;
             z-index: 10;
         }
 
-        &[for=ctrl_password] {
+        &[for='ctrl_password'] {
             top: 0;
             bottom: 0;
             margin: auto;
             right: 12px;
             width: 16px;
             height: 16px;
-            background: url("../../assets/images/lock.svg") left top no-repeat;
+            background: url('../../assets/images/lock.svg') left top no-repeat;
             background-size: 14px 14px;
             z-index: 10;
         }
@@ -318,7 +353,7 @@ export default {
         &::after {
             align-self: center;
             border-top: 1px solid var(--border);
-            content: "";
+            content: '';
         }
     }
 
