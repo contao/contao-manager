@@ -72,7 +72,7 @@ class PartialConfig implements \IteratorAggregate, \Countable
      */
     public function set(string $key, array|bool|float|int|string $value): void
     {
-        $this->replace([$key => $value]);
+        $this->add([$key => $value]);
     }
 
     /**

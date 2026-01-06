@@ -39,7 +39,7 @@ export default {
                 config,
             };
 
-            return dispatch('config/composer/writeDefaults', null, { root: true }).then(() => dispatch('tasks/execute', task, { root: true }));
+            return dispatch('tasks/execute', task, { root: true });
         },
     },
 };

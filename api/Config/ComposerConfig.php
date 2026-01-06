@@ -40,8 +40,22 @@ class ComposerConfig extends AbstractConfig
     {
         $config = $this->config();
 
+        if ([] === $config->all() || ['allow-plugins' => true] === $config->all()) {
+            $config->replace([
+                'preferred-install' => 'dist',
+                'store-auths' => false,
+                'optimize-autoloader' => true,
+                'sort-packages' => true,
+                'discard-changes' => true,
+            ]);
+        }
+
         if (true !== $config->get('allow-plugins')) {
             $config->set('allow-plugins', true);
+        }
+
+        if (null === $config->get('audit')) {
+            $config->set('audit', ['block-insecure' => false]);
         }
     }
 
