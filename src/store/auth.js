@@ -12,7 +12,7 @@ let expires;
 let $store;
 
 const startCountdown = function () {
-    clearTimeout(timer);
+    clearInterval(timer);
 
     expires = Date.now() + 30 * 60 * 1000;
     countdown = 30 * 60;
