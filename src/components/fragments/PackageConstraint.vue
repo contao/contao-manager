@@ -228,8 +228,11 @@ export default {
         }
 
         &.incompatible {
-            background: var(--btn-alert);
             border-color: var(--btn-alert);
+
+            &:disabled {
+                background: var(--btn-alert);
+            }
         }
 
         &.error {
