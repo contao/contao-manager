@@ -122,18 +122,16 @@
 
                 <ul class="setup__versions">
                     <template v-for="version in versions">
-                        <template v-if="version.description">
-                            <li class="setup__version" :key="version.value" v-if="!version.disabled">
-                                <strong>{{ version.label }}</strong>
-                                <br />
-                                {{ version.description }}
-                            </li>
-                            <li class="setup__version" :key="version.value" v-else>
-                                <strong>{{ version.label }}</strong>
-                                <br />
-                                <span class="setup__version--warning">{{ version.problem }}</span>
-                            </li>
-                        </template>
+                        <li class="setup__version" :key="version.value" v-if="!version.disabled">
+                            <strong>{{ version.label }}</strong>
+                            <br />
+                            {{ version.description }}
+                        </li>
+                        <li class="setup__version" :key="version.value" v-else>
+                            <strong>{{ version.label }}</strong>
+                            <br />
+                            <span class="setup__version--warning">{{ version.problem }}</span>
+                        </li>
                     </template>
                 </ul>
 
@@ -183,7 +181,7 @@
                     </div>
 
                     <template v-else>
-                        <check-box name="demo" :label="$t('ui.setup.create-project.demo')" :disabled="processing" v-model="demo">
+                        <check-box name="demo" :label="$t('ui.setup.create-project.demo')" :disabled="processing || false === this.current.demo" v-model="demo">
                             <template #description>
                                 <i18n-t tag="p" keypath="ui.setup.create-project.demoDescription">
                                     <template #store>
@@ -280,7 +278,7 @@ export default {
         processing: false,
         isWeb: true,
 
-        version: '5.6',
+        version: '5.7',
         demo: false,
 
         view: 'require',
@@ -292,6 +290,8 @@ export default {
         results: null,
         hasMore: false,
         offline: false,
+
+        showHidden: false,
     }),
 
     computed: {
@@ -307,18 +307,19 @@ export default {
             const versions = [];
 
             versions.push({
-                value: '5.6',
-                label: `Contao 5.6 (${this.$t('ui.setup.create-project.latestTitle')})`,
-                disabled: this.phpVersionId < 80200,
-                description: this.$t('ui.setup.create-project.latestQ1', { year: '2026' }),
-                problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.2.0', current: this.phpVersion }),
+                value: '5.7',
+                label: `Contao 5.7 (${this.$t('ui.setup.create-project.latestTitle')})`,
+                disabled: this.phpVersionId < 80300,
+                demo: false,
+                description: this.$t('ui.setup.create-project.ltsText', { year: '2029' }),
+                problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.3.0', current: this.phpVersion }),
             });
 
             versions.push({
                 value: '5.3',
                 label: `Contao 5.3 (${this.$t('ui.setup.create-project.ltsTitle')})`,
                 disabled: this.phpVersionId < 80100,
-                description: this.$t('ui.setup.create-project.ltsText', { year: '2027' }),
+                description: this.$t('ui.setup.create-project.pltsText', { year: '2027' }),
                 problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.1.0', current: this.phpVersion }),
             });
 
@@ -326,6 +327,7 @@ export default {
                 value: '4.13',
                 label: `Contao 4.13 (${this.$t('ui.setup.create-project.ltsTitle')})`,
                 disabled: this.phpVersionId < 70400,
+                hidden: true,
                 description: this.$t('ui.setup.create-project.pltsText', { year: '2025' }),
                 problem: this.$t('ui.setup.create-project.requiresPHP', { version: '7.4.0', current: this.phpVersion }),
             });
@@ -335,7 +337,11 @@ export default {
                 label: this.$t('ui.setup.create-project.theme'),
             });
 
-            return versions;
+            return versions.filter((v) => !v.hidden || v.value === this.version || this.showHidden);
+        },
+
+        current() {
+            return this.versions.find((v) => v.value === this.version);
         },
     },
 
@@ -345,6 +351,10 @@ export default {
             this.searching = false;
             this.results = null;
             this.hasMore = false;
+
+            if (this.demo && false === this.current.demo) {
+                this.demo = false;
+            }
         },
 
         sorting() {
@@ -618,6 +628,12 @@ export default {
                 this.$refs.uploader.active = true;
             }
         },
+
+        toggleHidden(event) {
+            if (event.keyCode === 18) {
+                this.showHidden = event.type === 'keydown';
+            }
+        },
     },
 
     async mounted() {
@@ -632,6 +648,14 @@ export default {
         this.$store.commit('packages/setInstalled', {});
         this.isWeb = (await this.$store.dispatch('server/contao/get')).data.public_dir === 'web';
         this.version = this.versions.find((v) => !v.disabled).value;
+
+        window.addEventListener('keydown', this.toggleHidden);
+        window.addEventListener('keyup', this.toggleHidden);
+    },
+
+    unmounted() {
+        window.removeEventListener('keydown', this.toggleHidden);
+        window.removeEventListener('keyup', this.toggleHidden);
     },
 };
 </script>
