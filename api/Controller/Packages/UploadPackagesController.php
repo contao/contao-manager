@@ -222,19 +222,7 @@ class UploadPackagesController
         }
 
         try {
-            $schemaFile = __DIR__.'/../../../vendor/composer/composer/res/composer-schema.json';
-
-            // Prepend with file:// only when not using a special schema already (e.g. in the phar)
-            if (!str_contains($schemaFile, '://')) {
-                $schemaFile = 'file://'.$schemaFile;
-            }
-
-            $schema = (object) ['$ref' => $schemaFile];
-            $schema->required = ['name', 'version'];
-
-            $value = json_decode(json_encode($data), false);
-            $validator = new Validator();
-            $validator->validate($value, $schema, JsonConstraint::CHECK_MODE_EXCEPTIONS);
+            $this->validateJsonSchema($data);
         } catch (ValidationException $exception) {
             return $this->installError($id, 'schema', $exception);
         }
@@ -326,5 +314,34 @@ class UploadPackagesController
         }
 
         throw new ApiProblemException((new ApiProblem('Must install contao/manager-plugin 2.7 or later to support artifacts.'))->setStatus(Response::HTTP_NOT_IMPLEMENTED));
+    }
+
+    private function validateJsonSchema($data): void
+    {
+        $schemaFile = __DIR__.'/../../../vendor/composer/composer/res/composer-schema.json';
+
+        // Prepend with file:// only when not using a special schema already (e.g. in the phar)
+        if (!str_contains($schemaFile, '://')) {
+            $schemaFile = 'file://'.$schemaFile;
+        }
+
+        $schema = (object) ['$ref' => $schemaFile];
+        $schema->required = ['name', 'version'];
+
+        $value = json_decode(json_encode($data), false);
+        $validator = new Validator();
+        $validator->validate($value, $schema, JsonConstraint::CHECK_MODE_EXCEPTIONS);
+
+        if ($validator->isValid()) {
+            return;
+        }
+
+        $errors = [];
+
+        foreach ($validator->getErrors() as $error) {
+            $errors[] = ($error['property'] ? $error['property'].' : ' : '').$error['message'];
+        }
+
+        throw new ValidationException(implode(', ', $errors));
     }
 }

@@ -17,7 +17,6 @@ use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
-use JsonSchema\Constraints\Constraint;
 use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 use Seld\JsonLint\ParsingException;
@@ -95,7 +94,17 @@ class ComposerController
 
             $value = json_decode(file_get_contents($this->environment->getJsonFile()), false);
             $validator = new Validator();
-            $validator->validate($value, $schema, Constraint::CHECK_MODE_EXCEPTIONS);
+            $validator->validate($value, $schema);
+
+            if (!$validator->isValid()) {
+                $errors = [];
+
+                foreach ($validator->getErrors() as $error) {
+                    $errors[] = ($error['property'] ? $error['property'].' : ' : '').$error['message'];
+                }
+
+                throw new ValidationException(implode(', ', $errors));
+            }
 
             return true;
         } catch (ValidationException $exception) {
