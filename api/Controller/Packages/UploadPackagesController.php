@@ -316,7 +316,7 @@ class UploadPackagesController
         throw new ApiProblemException((new ApiProblem('Must install contao/manager-plugin 2.7 or later to support artifacts.'))->setStatus(Response::HTTP_NOT_IMPLEMENTED));
     }
 
-    private function validateJsonSchema($data): void
+    private function validateJsonSchema(mixed $data): void
     {
         $schemaFile = __DIR__.'/../../../vendor/composer/composer/res/composer-schema.json';
 
