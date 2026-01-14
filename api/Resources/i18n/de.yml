@@ -84,10 +84,10 @@ de:
         dump-autoload:
             result: 'Autoload-Dateien für {count} Klassen generiert'
         cloud:
-            queued: 'Berechnung startet in ca. {seconds} Sekunden (aktuell {jobs} Aufgaben auf {workers} Servern)'
-            processing: 'Aktiv seit {seconds} Sekunden.'
+            queued: '{seconds, plural, =1 {Berechnung startet in ca. 1 Sekunde} other {Berechnung startet in ca. # Sekunden}} (aktuell {jobs, plural, =1 {1 Aufgabe} other {# Aufgaben}} auf {workers, plural, =1 {1 Server} other {# Servern}})'
+            processing: 'Aktiv seit {seconds, plural, =1 {1 Sekunde} other {# Sekunden}}.'
             error: 'Abhängigkeits-Auflösung fehlgeschlagen'
-            finished: 'Erfolgreich nach {seconds} Sekunden. RAM-Verbrauch: {memory} (Spitze: {peak}), Dauer: {time}.'
+            finished: 'Erfolgreich nach {seconds, plural, =1 {1 Sekunde} other {# Sekunden}}. RAM-Verbrauch: {memory} (Spitze: {peak}), Dauer: {time}.'
 
     upload:
         error:
