@@ -3,14 +3,14 @@ fr:
         allow_url_fopen:
             title: 'Le paramètre PHP "allow_url_fopen" n''est pas activé sur le serveur.'
         process:
-            title: ''
-            detail: ''
+            title: 'Les fonctions PHP "proc_*" ne sont pas disponibles sur le serveur.'
+            detail: 'Les fonctions "proc_open", "proc_close", "proc_get_status" et "proc_terminate" sont nécessaires pour exécuter des tâches en ligne de commande en arrière-plan. Vérifiez auprès de votre hébergeur pourquoi cette méthode n''est pas disponible ; le Contao Manager ne fonctionnera pas correctement sans elle.'
         intl:
             title: 'L''extension PHP Intl n''est pas disponible.'
             detail: 'Contao 4 nécessite l''extension PHP Intl à des fins d''internationalisation.'
         openssl:
             title: 'L''extension PHP OpenSSL n''est pas disponible.'
-            detail: 'Contao Manager requiert l''extension OpenSSL pour télécharger des fichiers via une connexion cryptée (https).'
+            detail: 'Le Contao Manager nécessite l''extension OpenSSL pour télécharger des fichiers via une connexion sécurisée (https).'
         dom:
             title: 'L''extension PHP DOM n''est pas disponible.'
             detail: 'Contao 4 nécessite l''extension PHP DOM pour analyser les documents XML.'
@@ -18,87 +18,87 @@ fr:
             title: 'L''extension PHP XMLReader n''est pas disponible.'
             detail: 'Contao 4 nécessite l''extension PHP XMLReader pour analyser les documents XML.'
         graphics_lib:
-            title: 'No PHP image processing library is available.'
-            detail: 'Contao 4 requires either the GD, Imagick or Gmagick extension to process images.'
+            title: 'Aucune bibliothèque de traitement d''image PHP n''est disponible.'
+            detail: 'Contao 4 nécessite l''extension GD, Imagick ou Gmagick pour traiter les images.'
         symlink:
-            title: 'La méthode PHP symlink n''est pas disponible ou ne fonctionne pas correctement.'
+            title: 'La méthode PHP symlink est indisponible ou ne fonctionne pas correctement.'
         session:
             title: 'La session PHP n''a pas pu être démarrée.'
         memory_limit:
             title: 'Limite de mémoire PHP insuffisante.'
-            detail: 'Votre configuration PHP permet uniquement {limit} de mémoire (en ligne de commande). Ce n''est pas suffisant pour exécuter Composer et il n''a pas été possible d''augmenter automatiquement cette limite. Veuillez contacter votre hébergeur web pour obtenir de l''aide.'
+            detail: 'Votre configuration PHP n''autorise que {limit} de mémoire (en ligne de commande). Ce n''est pas suffisant pour exécuter Composer et il n''a pas été possible d''augmenter automatiquement cette limite. Veuillez contacter votre hébergeur pour obtenir de l''aide.'
         systempdir:
-            title: 'Impossible d''écrire sur le répertoire temporaire du système.'
-            detail: 'C''est probablement un problème avec votre configuration d''hébergement. Assurez-vous que open_basedir permet d''accéder au répertoire temporaire ou que sys_temp_dir est correctement configuré.'
+            title: 'Impossible d''écrire dans le répertoire système temporaire.'
+            detail: 'Il s''agit très probablement d''un problème avec votre configuration d''hébergement. Assurez-vous que open_basedir autorise l''accès au répertoire temporaire ou que sys_temp_dir est correctement configuré.'
         zip:
-            title: ''
+            title: 'L''extension zip et les commandes unzip/7z sont toutes manquantes.'
 
     boot:
         composer:
-            invalid: 'composer.json schema validation: {exception}'
+            invalid: 'Validation du schéma de composer.json : {exception}'
 
     config:
         php_cli:
             not_found: 'Ce chemin ne contient pas de binaire PHP valide.'
             incompatible: 'Ce binaire est une version PHP {cli} mais votre serveur web est en version {web}.'
-            error: ''
+            error: 'Erreur lors de la validation du binaire PHP.'
         cloud:
-            platform: 'Platform ne doit pas être configurée dans composer.json.'
+            platform: 'La plateforme ne doit pas être configurée dans composer.json.'
             cache: 'Les propriétés du cache ne doivent pas être configurées dans composer.json.'
 
     task:
         setup_packages:
             title: 'Installation de l''application Contao'
         install_packages:
-            title: 'Installation des dépendances de Composer'
+            title: 'Installation des dépendances Composer'
         update_packages:
-            title: 'Mise à jour des packages'
+            title: 'Mise à jour des paquets'
         dump_autoload:
-            title: 'Vidage de l''autoloader de Composer'
+            title: 'Génération de l''autoloader de classes Composer'
         clear_cache:
-            title: 'Effacer le cache de Composer'
+            title: 'Vidage du cache Composer'
         rebuild_cache:
-            title: 'Reconstruction du cache de Contao'
+            title: 'Reconstruction du cache Contao'
         self_update:
-            title: ''
+            title: 'Mise à jour automatique du Contao Manager'
         backup_create:
-            title: ''
+            title: 'Création de la sauvegarde de la base de données'
         backup_restore:
-            title: ''
+            title: 'Restauration de la sauvegarde de la base de données'
 
     taskoperation:
         self-update:
             detail: 'Mise à jour de {old} vers {new}'
-            success: ''
+            success: 'Mis à jour vers {new}'
         install-uploads:
-            summary: 'Installation des uploads'
-            console: 'Artifact installé pour {package} (version {version}) [to packages/{name}]'
+            summary: 'Installation des téléchargements'
+            console: 'Artéfact installé pour {package} (version {version}) [dans packages/{name}]'
         remove-uploads:
-            summary: 'Suppression des uploads'
+            summary: 'Suppression des téléchargements'
         remove-artifacts:
-            summary: ''
+            summary: 'Suppression des paquets téléchargés'
         composer-install:
-            retry: 'réessayer {current}/{max}'
+            retry: 'nouvelle tentative {current}/{max}'
             nothing: 'Rien à installer ou à mettre à jour'
-            result: '{installs} installés, {updates} mis à jour, {removals} supprimés'
+            result: '{installs} installé(s), {updates} mis à jour, {removals} supprimé(s)'
         dump-autoload:
-            result: 'Fichiers d''autoload optimisés générés contenant {count} classes'
+            result: 'Fichiers autoload optimisés générés contenant {count} classes'
         cloud:
-            queued: 'En attente, débute dans environ {seconds} secondes (actuellement {jobs} jobs sur {workers} workers)'
-            processing: 'En cours depuis {seconds} secondes.'
-            error: 'La résolution des dépendances a echoué.'
-            finished: 'Terminé en {seconds} secondes. Usage mémoire: {memory} (Pic: {peak}), Temps: {time}.'
+            queued: 'En attente, démarrage dans environ {seconds} secondes (actuellement {jobs} tâches sur {workers} workers)'
+            processing: 'Actif depuis {seconds} secondes.'
+            error: 'Échec de la résolution des dépendances'
+            finished: 'Terminé en {seconds} secondes. Utilisation mémoire : {memory} (pic : {peak}), temps : {time}.'
 
     upload:
         error:
-            file: 'Le fichier n''est pas valide ou ne contient pas de fichier composer.json.'
+            file: 'Le fichier est invalide ou ne contient pas de composer.json.'
             json: 'Le fichier composer.json ne contient pas de données JSON valides.'
-            schema: 'Le schéma du fichier composer.json n''est pas valide.'
-            partial: 'L''upload du fichier a échoué'
+            schema: 'La validation du schéma de composer.json a échoué.'
+            partial: 'Le téléchargement du fichier n''a pas été terminé.'
 
     error:
         writable:
-            root: 'Le Contao Manager n''a pas pu écrire dans le répertoire racine "{path}".'
+            root: 'Le Contao Manager n''a pas pu écrire dans le répertoire racine à l''adresse "{path}".'
             directory: 'Le Contao Manager n''a pas pu créer le répertoire "{path}".'
-            config-file: 'The Contao Manager n''a pas pu créer un fichier de configuration dans "{file}".'
-            detail: 'Il semble que votre serveur n''est pas configuré correctement. Si vous êtes sur le point d''installer Contao, veuillez configurer la racine du site sur votre serveur Web. Sinon, assurez-vous que les autorisations d''accès aux fichiers sont correctes. Si vous ne savez pas comment résoudre ce problème, contactez votre fournisseur d''hébergement pour obtenir de l''aide'
+            config-file: 'Le Contao Manager n''a pas pu écrire un fichier de configuration dans "{file}".'
+            detail: 'Il semble que votre serveur ne soit pas configuré correctement. Si vous êtes sur le point d''installer Contao, veuillez configurer le DocumentRoot de votre serveur web. Sinon, assurez-vous que les permissions d''accès aux fichiers sont correctes. Si vous ne savez pas comment résoudre ce problème, contactez votre hébergeur pour obtenir de l''aide.'
