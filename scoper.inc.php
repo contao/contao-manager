@@ -39,7 +39,7 @@ $symfonyDeprecationContracts = array_map(
 
 return [
     'prefix' => '_ContaoManager',
-    'whitelist' => [
+    'expose-classes' => [
         Finder::class,
     ],
     'exclude-namespaces' => [
@@ -96,12 +96,12 @@ return [
 
             return str_replace(
                 [
-                    '$definition = \substr_replace($definition, \'53\', 2, 2);',
-                    '$definition = \substr_replace($definition, \'Child\', 44, 0);',
+                    'substr_replace($definition, \'53\', 2, 2);',
+                    'substr_replace($definition, \'Child\', 44, 0);',
                 ],
                 [
-                    '$definition = \substr_replace($definition, \''.(53 + strlen($prefix.'\\')).'\', 2, 2);',
-                    '$definition = \substr_replace($definition, \'Child\', '.(44 + strlen($prefix.'\\')).', 0);',
+                    'substr_replace($definition, \''.(53 + strlen($prefix.'\\')).'\', 2, 2);',
+                    'substr_replace($definition, \'Child\', '.(44 + strlen($prefix.'\\')).', 0);',
                 ],
                 $contents,
             );
@@ -111,7 +111,7 @@ return [
                 return $contents;
             }
 
-            return str_replace("'{$prefix}\\\\", "'", $contents);
+            return str_replace("'{$prefix}\\", "'", $contents);
         },
 
         // Fix error templates (e.g. /vendor/symfony/error-handler/Resources/views)
