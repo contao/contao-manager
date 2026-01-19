@@ -236,22 +236,23 @@ export default {
             const rootVersion = state.installed ? getVersion(data) : null;
 
             metadata.update = null;
-            if (metadata.versions && rootConstraint && rootConstraint.substr(0, 4) !== 'dev-' && rootConstraint.substr(-4) !== '-dev') {
-                let update;
-                metadata.update = { valid: true, latest: true, version: null, time: null };
-                if (rootConstraint && rootVersion) {
-                    update = metadata.versions.filter((pkg) => pkg.version === rootVersion.version || satisfies(getVersion(pkg), rootConstraint)).pop();
+            if (
+                metadata.versions &&
+                rootConstraint &&
+                rootConstraint.substr(0, 4) !== 'dev-' &&
+                rootConstraint.substr(-4) !== '-dev' &&
+                rootVersion &&
+                metadata.versions.find((pkg) => pkg.version === rootVersion.version)
+            ) {
+                const update = metadata.versions.filter((pkg) => pkg.version === rootVersion.version || satisfies(getVersion(pkg), rootConstraint)).pop();
 
-                    if (!update) {
-                        metadata.update.valid = false;
-                    } else {
-                        metadata.update.version = update.version;
-                        metadata.update.time = update.time;
-                        metadata.update.latest = eq(getVersion(update), rootVersion);
+                if (!update) {
+                    metadata.update = { valid: false, latest: true, version: null, time: null };
+                } else {
+                    metadata.update = { valid: true, latest: eq(getVersion(update), rootVersion), version: update.version, time: update.time };
 
-                        if (metadata.latest && metadata.latest.version) {
-                            metadata.latest.active = eq(getVersion(update), metadata.latest.version);
-                        }
+                    if (metadata.latest && metadata.latest.version) {
+                        metadata.latest.active = eq(getVersion(update), metadata.latest.version);
                     }
                 }
             }
