@@ -693,27 +693,27 @@
         },
         {
             "name": "crell/api-problem",
-            "version": "3.7.0",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Crell/ApiProblem.git",
-                "reference": "b41d66dc1d403b2d406699e2e05bb2b48efe3b7f"
+                "reference": "3b52858d05736b68f08dd1e48e4235362de22831"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Crell/ApiProblem/zipball/b41d66dc1d403b2d406699e2e05bb2b48efe3b7f",
-                "reference": "b41d66dc1d403b2d406699e2e05bb2b48efe3b7f",
+                "url": "https://api.github.com/repos/Crell/ApiProblem/zipball/3b52858d05736b68f08dd1e48e4235362de22831",
+                "reference": "3b52858d05736b68f08dd1e48e4235362de22831",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "nyholm/psr7": "^1.8",
-                "phpstan/phpstan": "^1.3",
-                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
-                "psr/http-factory": "^1.0",
-                "psr/http-message": "1.*"
+                "nyholm/psr7": "^1.8.2",
+                "phpstan/phpstan": "^2.1.33",
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.6.31",
+                "psr/http-factory": "^1.1",
+                "psr/http-message": "^1.1"
             },
             "suggest": {
                 "psr/http-factory": "Common interfaces for PSR-7 HTTP message factories",
@@ -752,7 +752,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Crell/ApiProblem/issues",
-                "source": "https://github.com/Crell/ApiProblem/tree/3.7.0"
+                "source": "https://github.com/Crell/ApiProblem/tree/3.7.1"
             },
             "funding": [
                 {
@@ -760,7 +760,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-30T22:47:27+00:00"
+            "time": "2026-01-12T20:12:58+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1434,16 +1434,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "2.3.0",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "1e0cd5370df5dd2e556a36b9c62f62e555870495"
+                "reference": "16dbf9937da8d4528ceb2145c9c7c0bd29e26374"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/1e0cd5370df5dd2e556a36b9c62f62e555870495",
-                "reference": "1e0cd5370df5dd2e556a36b9c62f62e555870495",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/16dbf9937da8d4528ceb2145c9c7c0bd29e26374",
+                "reference": "16dbf9937da8d4528ceb2145c9c7c0bd29e26374",
                 "shasum": ""
             },
             "require": {
@@ -1475,9 +1475,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.1"
             },
-            "time": "2025-08-30T15:50:23+00:00"
+            "time": "2026-01-12T11:33:04+00:00"
         },
         {
             "name": "psr/cache",
@@ -6383,43 +6383,32 @@
         },
         {
             "name": "web-auth/cose-lib",
-            "version": "4.4.2",
+            "version": "4.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-auth/cose-lib.git",
-                "reference": "a93b61c48fb587855f64a9ec11ad7b60e867cb15"
+                "reference": "5adac6fe126994a3ee17ed9950efb4947ab132a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-auth/cose-lib/zipball/a93b61c48fb587855f64a9ec11ad7b60e867cb15",
-                "reference": "a93b61c48fb587855f64a9ec11ad7b60e867cb15",
+                "url": "https://api.github.com/repos/web-auth/cose-lib/zipball/5adac6fe126994a3ee17ed9950efb4947ab132a9",
+                "reference": "5adac6fe126994a3ee17ed9950efb4947ab132a9",
                 "shasum": ""
             },
             "require": {
-                "brick/math": "^0.9|^0.10|^0.11|^0.12|^0.13",
+                "brick/math": "^0.9|^0.10|^0.11|^0.12|^0.13|^0.14",
                 "ext-json": "*",
                 "ext-openssl": "*",
                 "php": ">=8.1",
                 "spomky-labs/pki-framework": "^1.0"
             },
             "require-dev": {
-                "deptrac/deptrac": "^3.0",
-                "ekino/phpstan-banned-code": "^1.0|^2.0|^3.0",
-                "infection/infection": "^0.29",
-                "php-parallel-lint/php-parallel-lint": "^1.3",
-                "phpstan/extension-installer": "^1.3",
-                "phpstan/phpstan": "^1.7|^2.0",
-                "phpstan/phpstan-deprecation-rules": "^1.0|^2.0",
-                "phpstan/phpstan-phpunit": "^1.1|^2.0",
-                "phpstan/phpstan-strict-rules": "^1.0|^2.0",
-                "phpunit/phpunit": "^10.1|^11.0|^12.0",
-                "rector/rector": "^2.0",
-                "symfony/phpunit-bridge": "^6.4|^7.0",
-                "symplify/easy-coding-standard": "^12.0"
+                "spomky-labs/cbor-php": "^3.2.2"
             },
             "suggest": {
                 "ext-bcmath": "For better performance, please install either GMP (recommended) or BCMath extension",
-                "ext-gmp": "For better performance, please install either GMP (recommended) or BCMath extension"
+                "ext-gmp": "For better performance, please install either GMP (recommended) or BCMath extension",
+                "spomky-labs/cbor-php": "For COSE Signature support"
             },
             "type": "library",
             "autoload": {
@@ -6449,7 +6438,7 @@
             ],
             "support": {
                 "issues": "https://github.com/web-auth/cose-lib/issues",
-                "source": "https://github.com/web-auth/cose-lib/tree/4.4.2"
+                "source": "https://github.com/web-auth/cose-lib/tree/4.5.0"
             },
             "funding": [
                 {
@@ -6461,7 +6450,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-08-14T20:33:29+00:00"
+            "time": "2026-01-03T14:43:18+00:00"
         },
         {
             "name": "web-auth/webauthn-lib",
@@ -8430,7 +8419,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -8439,9 +8428,9 @@
         "ext-session": "*",
         "ext-zip": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.1.0"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
