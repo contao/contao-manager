@@ -18,7 +18,9 @@
                 <p class="database-migration__description" v-else-if="type === 'schema-only'">{{ $t('ui.migrate.emptySchema') }}</p>
                 <p class="database-migration__description" v-else>{{ $t('ui.migrate.empty') }}</p>
                 <div class="database-migration__actions">
-                    <button class="widget-button widget-button--primary" :disabled="closing" @click="checkAll()" v-if="type === 'migrations-only' || type === 'schema-only'">{{ $t('ui.migrate.retryAll') }}</button>
+                    <button class="widget-button widget-button--primary" :disabled="closing" @click="checkAll()" v-if="type === 'migrations-only' || type === 'schema-only'">
+                        {{ $t('ui.migrate.retryAll') }}
+                    </button>
                     <loading-button :loading="closing" @click="close">{{ $t('ui.migrate.close') }}</loading-button>
                 </div>
             </template>
@@ -50,7 +52,9 @@
                 <p class="database-migration__description">{{ $t('ui.migrate.pending') }}</p>
                 <div class="database-migration__actions">
                     <loading-button class="database-migration__action" :loading="closing" :disabled="executing" @click="close">{{ $t('ui.migrate.cancel') }}</loading-button>
-                    <loading-button class="database-migration__action" color="primary" :loading="executing" :disabled="closing" @click="execute">{{ $t('ui.migrate.execute') }}</loading-button>
+                    <loading-button class="database-migration__action" color="primary" :loading="executing" :disabled="closing" @click="execute">{{
+                        $t('ui.migrate.execute')
+                    }}</loading-button>
                 </div>
                 <div class="database-migration__actions" v-if="hasDeletes">
                     <check-box name="withDeletes" :label="$t('ui.migrate.withDeletes')" :disabled="executing" v-model="withDeletes" />
@@ -338,12 +342,11 @@ export default {
                 result = new RegExp('^DROP INDEX ([^ ]+) ON ([^ ]+)$').exec(change.name);
                 if (result) {
                     operations.push({
-                        status: this.withDeletes ? change.status : 'skipped',
-                        summary: this.generateStatus(this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }), !this.withDeletes),
+                        status: change.status,
+                        summary: this.$t('ui.migrate.dropIndex', { name: result[1], table: result[2] }),
                         details: change.message,
                         console: change.name,
                     });
-                    this.hasDeletes = true;
                     return;
                 }
 
@@ -445,7 +448,7 @@ export default {
 </script>
 
 <style lang="scss">
-@use "~contao-package-list/src/assets/styles/defaults";
+@use '~contao-package-list/src/assets/styles/defaults';
 
 .database-migration {
     &__header {
