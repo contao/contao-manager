@@ -372,10 +372,13 @@ export default {
             }
 
             this.closePopup();
-            this.install({
-                package: this.themeName,
-                version: this.themeVersion,
-            });
+            // timeout fixes async router problem when closing package popup
+            setTimeout(() => {
+                this.install({
+                    package: this.themeName,
+                    version: this.themeVersion,
+                });
+            }, 100);
         },
     },
 
