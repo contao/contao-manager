@@ -4,10 +4,11 @@ import routes from './routes';
 
 import DiscoverRoute from '../components/routes/DiscoverRoute';
 import PackagesListRoute from '../components/routes/PackageListRoute';
-import OAuthRoute from '../components/routes/OAuthRoute';
 import MaintenanceRoute from '../components/routes/MaintenanceRoute';
+import MigrationsRoute from '@/components/routes/MigrationsRoute.vue';
 import LogViewerRoute from '../components/routes/LogViewerRoute';
 import UserManagerRoute from '../components/routes/UserManagerRoute';
+import OAuthRoute from '../components/routes/OAuthRoute';
 
 const router = (store) =>
     createRouter({
@@ -24,15 +25,14 @@ const router = (store) =>
                 component: PackagesListRoute,
             },
             {
-                name: routes.oauth.name,
-                path: '/oauth',
-                component: OAuthRoute,
-                props: true,
-            },
-            {
                 name: routes.maintenance.name,
                 path: '/maintenance',
                 component: MaintenanceRoute,
+            },
+            {
+                name: routes.migrations.name,
+                path: '/migrations/:type(.*)*',
+                component: MigrationsRoute,
             },
             {
                 name: routes.logViewer.name,
@@ -50,6 +50,12 @@ const router = (store) =>
                         next();
                     }
                 },
+            },
+            {
+                name: routes.oauth.name,
+                path: '/oauth',
+                component: OAuthRoute,
+                props: true,
             },
             { path: '/:pathMatch(.*)*', redirect: '/discover' },
         ],

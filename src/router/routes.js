@@ -1,8 +1,9 @@
 export default {
     discover: { name: 'discover' },
     packages: { name: 'packages' },
-    oauth: { name: 'oauth' },
     maintenance: { name: 'maintenance' },
-    userManager: { name: 'users' },
+    migrations: { name: 'migrations' },
     logViewer: { name: 'logs' },
+    userManager: { name: 'users' },
+    oauth: { name: 'oauth' },
 };

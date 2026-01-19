@@ -267,6 +267,8 @@ export default {
                 this.$store.commit('setView', views.READY);
             }
 
+            this.$emit('close');
+
             this.closing = false;
         },
 
