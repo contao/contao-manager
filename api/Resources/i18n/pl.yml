@@ -31,7 +31,7 @@ pl:
             title: 'Nie udało się zapisać do tymczasowego katalogu systemowego.'
             detail: 'To jest prawdopodobnie problem z konfiguracją hostingu. Upewnij się, że open_basedir pozwala na dostęp do tymczasowego katalogu lub, że sys_temp_dir jest poprawnie skonfigurowane.'
         zip:
-            title: ''
+            title: 'Brakuje zarówno rozszerzenia ZIP, jak i poleceń unzip/7z.'
 
     boot:
         composer:
@@ -76,7 +76,7 @@ pl:
         remove-uploads:
             summary: 'Usuwanie załadowanych plików'
         remove-artifacts:
-            summary: ''
+            summary: 'Usuwanie przesłanych pakietów'
         composer-install:
             retry: 'ponawianie {current}/{max}'
             nothing: 'Nic od instalacji lub aktualizacji'

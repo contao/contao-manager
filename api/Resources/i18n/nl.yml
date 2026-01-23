@@ -31,7 +31,7 @@ nl:
             title: 'Tijdelijke systeem directory niet beschrijfbaar.'
             detail: 'Er is waarschijnlijk een probleem met uw hostingconfiguratie. Zorg ervoor dat open_basedir toegang geeft tot de tijdelijke directory, of dat sys_temp_dir correct is geconfigureerd.'
         zip:
-            title: ''
+            title: 'De commando''s voor de zip-extensie en unzip/7z ontbreken.'
 
     boot:
         composer:
@@ -76,7 +76,7 @@ nl:
         remove-uploads:
             summary: 'Uploads verwijderen'
         remove-artifacts:
-            summary: ''
+            summary: 'Geüploade pakketten verwijderen'
         composer-install:
             retry: '{current} / {max} opnieuw proberen'
             nothing: 'Niets om te installeren of bij te werken'
