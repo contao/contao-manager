@@ -252,6 +252,19 @@ class Environment
         return $json;
     }
 
+    public function getComposerJsonWithConfig(): array
+    {
+        $composerJson = $this->getComposerJson();
+
+        if (\is_array($composerJson['config'] ?? null)) {
+            $composerJson['config'] = array_replace_recursive($this->composerConfig->config()->all(), $composerJson['config']);
+        } else {
+            $composerJson['config'] = $this->composerConfig->config()->all();
+        }
+
+        return $composerJson;
+    }
+
     public function getComposerLockFile(): JsonFile
     {
         return new JsonFile($this->getLockFile());

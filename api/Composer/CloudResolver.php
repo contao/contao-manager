@@ -37,7 +37,7 @@ class CloudResolver implements LoggerAwareInterface
         $environment->reset();
 
         $data = [
-            'composerJson' => $environment->getComposerJson(),
+            'composerJson' => $environment->getComposerJsonWithConfig(),
             'composerLock' => $environment->getComposerLock(),
             'platform' => $environment->getPlatformPackages(),
             'localPackages' => $environment->getLocalPackages(),

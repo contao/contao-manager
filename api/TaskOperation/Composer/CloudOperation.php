@@ -427,7 +427,7 @@ class CloudOperation implements TaskOperationInterface, SponsoredOperationInterf
     {
         try {
             $remoteJson = JsonFile::parseJson($this->cloud->getComposerJson($job));
-            $localJson = $this->environment->getComposerJson();
+            $localJson = $this->environment->getComposerJsonWithConfig();
 
             if ($remoteJson !== $localJson) {
                 $this->logger?->error('The composer.json file of the cloud job does not match the local composer.json', ['local' => $localJson, 'remote' => $remoteJson]);

@@ -43,7 +43,7 @@ class CloudController extends AbstractController
     public function getCloudData(): Response
     {
         return new JsonResponse([
-            'composerJson' => $this->environment->getComposerJson(),
+            'composerJson' => $this->environment->getComposerJsonWithConfig(),
             'composerLock' => $this->environment->getComposerLock(),
             'platform' => $this->environment->getPlatformPackages(),
             'localPackages' => $this->environment->getLocalPackages(),
