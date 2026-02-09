@@ -2,7 +2,16 @@
     "name": "contao/contao-manager",
     "description": "Contao Manager is the management tool for Contao 4 Open Source CMS",
     "type": "project",
-    "keywords": ["contao", "cms", "php", "vuejs", "symfony", "symfony-application", "manager", "installer"],
+    "keywords": [
+        "contao",
+        "cms",
+        "php",
+        "vuejs",
+        "symfony",
+        "symfony-application",
+        "manager",
+        "installer"
+    ],
     "homepage": "https://contao.org",
     "license": "GPL-3.0+",
     "authors": [
@@ -30,7 +39,7 @@
         "ext-session": "*",
         "ext-zip": "*",
         "composer/ca-bundle": "^1.5",
-        "composer/composer": "^2.6.2",
+        "composer/composer": "dev-main as 2.6.6",
         "composer/semver": "^3.4",
         "crell/api-problem": "^3.1",
         "firebase/php-jwt": "^6.0",
