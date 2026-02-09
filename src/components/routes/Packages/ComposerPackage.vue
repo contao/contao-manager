@@ -85,10 +85,7 @@
 
         <template #features v-if="Object.keys(packageFeatures(data.name) || {}).length">
             <section class="package__features">
-                <!-- eslint-disable vue/no-v-for-template-key -->
-                <template v-for="name in Object.keys(packageFeatures(data.name))" :key="name">
-                    <feature-package :name="name" />
-                </template>
+                <feature-package :name="name" v-for="name in Object.keys(packageFeatures(data.name))" :key="name" />
             </section>
         </template>
     </base-package>

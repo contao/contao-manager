@@ -60,7 +60,7 @@ export default {
         installedVersion: (vm) => (vm.installed[vm.data.name] ? vm.installed[vm.data.name].version : null),
         installedTime: (vm) => (vm.installed[vm.data.name] ? vm.installed[vm.data.name].time : null),
 
-        isCompatible: (vm) => vm.contaoSupported(vm.metadata.contaoConstraint),
+        isCompatible: (vm) => vm.isFeature || vm.contaoSupported(vm.metadata.contaoConstraint),
         canBeInstalled: (vm) => (!vm.isPrivate || vm.isSuggested) && !vm.isTheme && (!vm.isDependency || vm.isSuggested),
 
         constraintInstalled: (vm) => vm.packageConstraintInstalled(vm.data.name),
