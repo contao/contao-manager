@@ -47,6 +47,8 @@ class CreateContaoOperation extends AbstractInlineOperation
             return;
         }
 
+        // We must unse the kernel at runtime here because the parameter is not dynamic
+        /** @noinspection ProjectDirParameter */
         if ($kernel->getProjectDir() === $kernel->getPublicDir()) {
             throw new \RuntimeException('Cannot install without a public directory.');
         }
@@ -56,7 +58,7 @@ class CreateContaoOperation extends AbstractInlineOperation
 
     public function getSummary(): string
     {
-        return 'composer create-project contao/managed-edition:'.$this->version;
+        return 'composer create-project contao/managed-edition:'.$this->version.' --no-install';
     }
 
     protected function getName(): string
