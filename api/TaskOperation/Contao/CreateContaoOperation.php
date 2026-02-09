@@ -47,8 +47,8 @@ class CreateContaoOperation extends AbstractInlineOperation
             return;
         }
 
-        // We must unse the kernel at runtime here because the parameter is not dynamic
-        /** @noinspection ProjectDirParameter */
+        // We must use the kernel at runtime here because the parameter is not dynamic
+        // @noinspection ProjectDirParameter */
         if ($kernel->getProjectDir() === $kernel->getPublicDir()) {
             throw new \RuntimeException('Cannot install without a public directory.');
         }

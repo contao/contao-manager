@@ -17,6 +17,7 @@ return ECSConfig::configure()
     ])
     ->withSkip([
         __DIR__.'/downgrade.php',
+        __DIR__.'/installer.php',
         __DIR__.'/stub.php',
         HeaderCommentFixer::class => [
             __DIR__.'/ecs.php',

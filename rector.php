@@ -37,6 +37,7 @@ return RectorConfig::configure()
     ])
     ->withSkip([
         __DIR__.'/downgrade.php',
+        __DIR__.'/installer.php',
         __DIR__.'/stub.php',
         ChangeOrIfContinueToMultiContinueRector::class,
         CatchExceptionNameMatchingTypeRector::class,
