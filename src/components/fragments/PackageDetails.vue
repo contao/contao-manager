@@ -28,7 +28,7 @@
                 {{ datimFormat(metadata.update.time, 'short', 'long') }})
             </p>
         </template>
-        <template #package-update v-else-if="!isCompatible">
+        <template #package-update v-else-if="!isInstalled && !isCompatible">
             <p class="package-popup__incompatible">
                 {{ $t('ui.package.incompatible', { package: data.name, constraint: packageConstraint('contao/manager-bundle') }) }}
                 <button
