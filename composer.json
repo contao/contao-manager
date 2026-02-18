@@ -42,7 +42,7 @@
         "composer/composer": "dev-main as 2.6.6",
         "composer/semver": "^3.4",
         "crell/api-problem": "^3.1",
-        "firebase/php-jwt": "^6.0",
+        "firebase/php-jwt": "^7.0",
         "justinrainbow/json-schema": "^6.0",
         "phpdocumentor/reflection-docblock": "^5.6",
         "psr/container": "^2.0",
@@ -77,8 +77,7 @@
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.4",
         "phpunit/phpunit": "^10.0",
-        "shipmonk/composer-dependency-analyser": "^1.4",
-        "symfony/phpunit-bridge": "^6.4"
+        "shipmonk/composer-dependency-analyser": "^1.4"
     },
     "autoload": {
         "psr-4": {
