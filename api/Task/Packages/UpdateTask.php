@@ -97,7 +97,7 @@ class UpdateTask extends AbstractPackagesTask
         }
 
         if (!$changes->getDryRun() || $this->environment->useCloudResolver()) {
-            $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, false, !$config->isCancelled());
+            $operations[] = new InstallOperation($this->processFactory, $config, $this->environment, $this->translator, $changes->getDryRun(), !$config->isCancelled());
         }
 
         if ($toggleMaintenance) {
