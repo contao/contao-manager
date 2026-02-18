@@ -153,6 +153,6 @@ class CreateContaoOperation extends AbstractInlineOperation
 
     private function isDevVersion(string $version): bool
     {
-        return '5.7' === $version;
+        return false;
     }
 }

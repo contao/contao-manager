@@ -310,7 +310,6 @@ export default {
                 value: '5.7',
                 label: `Contao 5.7 (${this.$t('ui.setup.create-project.latestTitle')})`,
                 disabled: this.phpVersionId < 80300,
-                demo: false,
                 description: this.$t('ui.setup.create-project.ltsText', { year: '2029' }),
                 problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.3.0', current: this.phpVersion }),
             });
