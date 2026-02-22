@@ -20,16 +20,24 @@ class ContaoManagerInstaller
 
         if (false === $stream
             || false === file_put_contents($tempFile, $stream)
-            || false === fclose($stream)
-            || false === rename($fileName, $fileName.'.old')
-            || false === rename($tempFile, $fileName)
         ) {
-            @unlink($fileName.'.old');
-
             self::error();
         }
 
-        @unlink($fileName.'.old');
+        if (false === rename($tempFile, $fileName)) {
+            // If rename fails, try to rename original script first
+            if (false === rename($fileName, $fileName.'.old')) {
+                self::error();
+            }
+
+            if (false === rename($tempFile, $fileName)) {
+                @rename($fileName.'.old', $fileName);
+
+                self::error();
+            }
+
+            @unlink($fileName.'.old');
+        }
 
         if (function_exists('opcache_reset')) {
             opcache_reset();
