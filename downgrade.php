@@ -20,7 +20,7 @@ class ContaoManagerDowngrade
         if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI']))
             && (!isset($_SERVER['argv'][1]) || 'downgrade' !== $_SERVER['argv'][1])
         ) {
-            echo 'You are using PHP '.phpversion()." but you need least PHP 8.1.0 to run the Contao Manager.\n";
+            echo 'You are using PHP '.phpversion()." but you need at least PHP 8.1.0 to run the Contao Manager.\n";
             echo 'Run "'.$_SERVER['argv'][0]." downgrade\" to downgrade to a PHP 7.2 compatible version.\n";
             exit;
         }
@@ -31,11 +31,27 @@ class ContaoManagerDowngrade
 
         $stream = @fopen($url, 'rb', false, StreamContextFactory::getContext($url));
 
+        $failMsg = 'You are using PHP '.phpversion()." which is not supported by this Contao Manager. Automatic downgrade to version 1.8 was not successful.\n";
+
         if (false === $stream
             || false === file_put_contents($tempFile, $stream)
-            || false === rename($tempFile, $phar)
         ) {
-            die('You are using PHP '.phpversion()." which is not supported by this Contao Manager. Automatic downgrade to version 1.8 was not successful.\n");
+            die($failMsg);
+        }
+
+        if (false === rename($tempFile, $phar)) {
+            // If rename fails, try to rename original script first
+            if (false === rename($phar, $phar.'.old')) {
+                die($failMsg);
+            }
+
+            if (false === rename($tempFile, $phar)) {
+                @rename($phar.'.old', $phar);
+
+                die($failMsg);
+            }
+
+            @unlink($phar.'.old');
         }
 
         if (function_exists('opcache_reset')) {
