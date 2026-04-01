@@ -32,6 +32,7 @@ class DumpAutoloadOperation extends AbstractProcessOperation
                     [
                         'composer',
                         'dump-autoload',
+                        '--no-dev',
                         '--optimize',
                     ],
                     'dump-autoload',
