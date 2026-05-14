@@ -12,11 +12,17 @@
             <code class="setup-totp__uri">{{ provisioning_uri }}</code>
 
             <text-field
-                ref="totp" name="totp"
-                :label="$t('ui.totp.codeLabel')" :description="$t('ui.totp.codeDescription')"
-                required pattern="\d+" minlength="6" maxlength="6"
+                ref="totp"
+                name="totp"
+                :label="$t('ui.totp.codeLabel')"
+                :description="$t('ui.totp.codeDescription')"
+                required
+                pattern="\d+"
+                minlength="6"
+                maxlength="6"
                 autocomplete="one-time-code"
-                :error="error" @keyup="error = ''"
+                :error="error"
+                @keyup="error = ''"
                 v-model="totp"
             />
         </template>
@@ -102,8 +108,11 @@ export default {
         text-align: center;
 
         svg {
-            width: 200px;
-            height: 200px;
+            width: 220px;
+            height: 220px;
+            padding: 10px;
+            background: #fff;
+            border-radius: var(--border-radius);
         }
     }
 
