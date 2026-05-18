@@ -121,16 +121,16 @@
                 </i18n-t>
 
                 <ul class="setup__versions">
-                    <template v-for="version in versions">
-                        <li class="setup__version" :key="version.value" v-if="!version.disabled">
-                            <strong>{{ version.label }}</strong>
-                            <br />
-                            {{ version.description }}
-                        </li>
-                        <li class="setup__version" :key="version.value" v-else>
+                    <template v-for="version in visibleVersions">
+                        <li class="setup__version" :key="version.value" v-if="version.disabled">
                             <strong>{{ version.label }}</strong>
                             <br />
                             <span class="setup__version--warning">{{ version.problem }}</span>
+                        </li>
+                        <li class="setup__version" :key="version.value" v-else-if="version.description">
+                            <strong>{{ version.label }}</strong>
+                            <br />
+                            {{ version.description }}
                         </li>
                     </template>
                 </ul>
@@ -163,7 +163,10 @@
                 <div class="setup__fields">
                     <h2 class="setup__fieldtitle">{{ $t('ui.setup.create-project.formTitle') }}</h2>
                     <p class="setup__fielddesc setup__fielddesc--version">{{ $t('ui.setup.create-project.formText') }}</p>
-                    <radio-button name="version" :options="versions" :disabled="processing" v-model="version" />
+                    <radio-button name="version" :options="visibleVersions" :disabled="processing" v-model="version" />
+                    <button class="widget-button widget-button--small widget-button--anchor setup__version-more" @click="showHidden = !showHidden" v-if="hasHidden && !showHidden">
+                        {{ $t('ui.setup.create-project.showHidden') }}
+                    </button>
 
                     <div class="setup__theme" v-if="version === 'theme'">
                         <p>{{ $t('ui.setup.create-project.themeInstall') }}</p>
@@ -302,45 +305,51 @@ export default {
 
         themeFiles: (vm) => treeifyPaths(vm.theme.files, { directoriesFirst: true }).children,
         uploadSize: (vm) => (vm.upload && filesize(vm.upload.size)) || '',
+        visibleVersions: (vm) => vm.versions.filter((v) => !v.hidden || v.value === vm.version || vm.showHidden),
 
-        versions() {
-            const versions = [];
-
-            versions.push({
-                value: '5.7',
-                label: `Contao 5.7 (${this.$t('ui.setup.create-project.latestTitle')})`,
-                disabled: this.phpVersionId < 80300,
-                description: this.$t('ui.setup.create-project.ltsText', { year: '2029' }),
-                problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.3.0', current: this.phpVersion }),
-            });
-
-            versions.push({
-                value: '5.3',
-                label: `Contao 5.3 (${this.$t('ui.setup.create-project.ltsTitle')})`,
-                disabled: this.phpVersionId < 80100,
-                description: this.$t('ui.setup.create-project.pltsText', { year: '2027' }),
-                problem: this.$t('ui.setup.create-project.requiresPHP', { version: '8.1.0', current: this.phpVersion }),
-            });
-
-            versions.push({
-                value: '4.13',
-                label: `Contao 4.13 (${this.$t('ui.setup.create-project.ltsTitle')})`,
-                disabled: this.phpVersionId < 70400,
+        versions: (vm) => [
+            /*{
+                value: '6.0',
+                label: `Contao 6.0 (${vm.$t('ui.setup.create-project.prereleaseTitle')})`,
+                disabled: vm.phpVersionId < 80300,
                 hidden: true,
-                description: this.$t('ui.setup.create-project.pltsText', { year: '2025' }),
-                problem: this.$t('ui.setup.create-project.requiresPHP', { version: '7.4.0', current: this.phpVersion }),
-            });
-
-            versions.push({
+                description: vm.$t('ui.setup.create-project.prereleaseText'),
+                problem: vm.$t('ui.setup.create-project.requiresPHP', { version: '8.3.0', current: vm.phpVersion }),
+            },*/
+            {
+                value: '5.7',
+                label: `Contao 5.7 (${vm.$t('ui.setup.create-project.latestTitle')})`,
+                disabled: vm.phpVersionId < 80300,
+                description: vm.$t('ui.setup.create-project.ltsText', { year: '2029' }),
+                problem: vm.$t('ui.setup.create-project.requiresPHP', { version: '8.3.0', current: vm.phpVersion }),
+            },
+            {
+                value: '5.3',
+                label: `Contao 5.3 (${vm.$t('ui.setup.create-project.ltsTitle')})`,
+                disabled: vm.phpVersionId < 80100,
+                description: vm.$t('ui.setup.create-project.pltsText', { year: '2027' }),
+                problem: vm.$t('ui.setup.create-project.requiresPHP', { version: '8.1.0', current: vm.phpVersion }),
+            },
+            {
+                value: '4.13',
+                label: `Contao 4.13 (${vm.$t('ui.setup.create-project.unsupportedTitle')})`,
+                disabled: vm.phpVersionId < 70400,
+                hidden: true,
+                description: vm.$t('ui.setup.create-project.unsupportedText', { version: '4.13' }),
+                problem: vm.$t('ui.setup.create-project.requiresPHP', { version: '7.4.0', current: vm.phpVersion }),
+            },
+            {
                 value: 'theme',
-                label: this.$t('ui.setup.create-project.theme'),
-            });
-
-            return versions.filter((v) => !v.hidden || v.value === this.version || this.showHidden);
-        },
+                label: vm.$t('ui.setup.create-project.theme'),
+            },
+        ],
 
         current() {
-            return this.versions.find((v) => v.value === this.version);
+            return this.visibleVersions.find((v) => v.value === this.version);
+        },
+
+        hasHidden() {
+            return !!this.versions.find((v) => v.hidden);
         },
     },
 
@@ -629,8 +638,8 @@ export default {
         },
 
         toggleHidden(event) {
-            if (event.keyCode === 18) {
-                this.showHidden = event.type === 'keydown';
+            if (event.keyCode === 18 && event.type === 'keydown') {
+                this.showHidden = !this.showHidden;
             }
         },
     },
@@ -646,7 +655,7 @@ export default {
         await this.$store.dispatch('packages/details/init', { vue: this, component: ThemeDetails });
         this.$store.commit('packages/setInstalled', {});
         this.isWeb = (await this.$store.dispatch('server/contao/get')).data.public_dir === 'web';
-        this.version = this.versions.find((v) => !v.disabled).value;
+        this.version = this.visibleVersions.find((v) => !v.disabled).value;
 
         window.addEventListener('keydown', this.toggleHidden);
         window.addEventListener('keyup', this.toggleHidden);
@@ -674,6 +683,10 @@ export default {
 
         &--warning {
             color: var(--btn-alert);
+        }
+
+        &-more {
+            padding: 0;
         }
     }
 
