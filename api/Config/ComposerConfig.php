@@ -54,8 +54,8 @@ class ComposerConfig extends AbstractConfig
             $config->set('allow-plugins', true);
         }
 
-        if (null === $config->get('audit')) {
-            $config->set('audit', ['block-insecure' => false]);
+        if (null === $config->get('audit') && null === $config->get('policy')) {
+            $config->set('policy', ['advisories' => ['block' => false]]);
         }
     }
 
