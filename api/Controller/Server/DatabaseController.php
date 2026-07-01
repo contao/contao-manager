@@ -72,14 +72,21 @@ class DatabaseController
             }
 
             $this->contaoApi->runCommand(['dot-env:set', 'DATABASE_URL', $url]);
+
+            $status = $this->contaoConsole->checkDatabaseMigrations();
+
+            if ('error' === $status['type']) {
+                $this->contaoApi->runCommand(['dot-env:remove', 'DATABASE_URL']);
+            }
         } else {
             $url = $this->contaoApi->runCommand(['dot-env:get', 'DATABASE_URL']);
+            $status = $this->contaoConsole->checkDatabaseMigrations();
         }
 
         return new JsonResponse([
             'url' => $url,
             'pattern' => self::URL_PATTERN,
-            'status' => $this->contaoConsole->checkDatabaseMigrations(),
+            'status' => $status,
         ]);
     }
 
