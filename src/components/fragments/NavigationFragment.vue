@@ -133,6 +133,7 @@ export default {
             menuElement: this.$refs.menu,
             hoverType: 'on',
             submenuItemSelector: '.navigation__item--children', // fixes older browser support, uses :has(li) by default
+            hoverDelay: 50,
         });
 
         if (this.isGranted(scopes.UPDATE)) {
