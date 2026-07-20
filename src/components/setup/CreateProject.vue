@@ -308,14 +308,15 @@ export default {
         visibleVersions: (vm) => vm.versions.filter((v) => !v.hidden || v.value === vm.version || vm.showHidden),
 
         versions: (vm) => [
-            /*{
+            {
                 value: '6.0',
                 label: `Contao 6.0 (${vm.$t('ui.setup.create-project.prereleaseTitle')})`,
-                disabled: vm.phpVersionId < 80300,
+                disabled: vm.phpVersionId < 80400,
                 hidden: true,
+                demo: false,
                 description: vm.$t('ui.setup.create-project.prereleaseText'),
-                problem: vm.$t('ui.setup.create-project.requiresPHP', { version: '8.3.0', current: vm.phpVersion }),
-            },*/
+                problem: vm.$t('ui.setup.create-project.requiresPHP', { version: '8.4.0', current: vm.phpVersion }),
+            },
             {
                 value: '5.7',
                 label: `Contao 5.7 (${vm.$t('ui.setup.create-project.latestTitle')})`,

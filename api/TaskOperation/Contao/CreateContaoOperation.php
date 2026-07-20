@@ -22,7 +22,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_INSTALL')]
 class CreateContaoOperation extends AbstractInlineOperation
 {
-    private const SUPPORTED_VERSIONS = ['4.13', '5.3', '5.7'];
+    private const SUPPORTED_VERSIONS = ['4.13', '5.3', '5.7', '6.0'];
 
     private readonly string|null $version;
 
@@ -58,7 +58,7 @@ class CreateContaoOperation extends AbstractInlineOperation
 
     public function getSummary(): string
     {
-        return 'composer create-project contao/managed-edition:'.$this->version.' --no-install';
+        return 'composer create-project contao/managed-edition:'.$this->version.'.* --no-install';
     }
 
     protected function getName(): string
@@ -153,6 +153,6 @@ class CreateContaoOperation extends AbstractInlineOperation
 
     private function isDevVersion(string $version): bool
     {
-        return false;
+        return '6.0' === $version;
     }
 }
