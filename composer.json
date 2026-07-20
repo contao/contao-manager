@@ -95,6 +95,13 @@
         },
         "allow-plugins": {
             "bamarni/composer-bin-plugin": true
+        },
+        "policy": {
+            "advisories": {
+                "ignore-id": [
+                    "PKSA-zk1n-qbm6-d3rq"
+                ]
+            }
         }
     },
     "extra": {
