@@ -1919,6 +1919,11 @@ components:
                     type: boolean
                 reset_token:
                     type: string
+                status:
+                    description: Result of opcache_get_status(false) when reset token is given, or null if status information is unavailable.
+                    type: object
+                    nullable: true
+                    additionalProperties: true
 
         ServerContao:
             type: object

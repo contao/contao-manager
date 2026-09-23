@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller\Server;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -21,7 +22,7 @@ class OpcacheController
 {
     #[Route(path: '/server/opcache', methods: ['GET'])]
     #[IsGranted('ROLE_READ')]
-    public function getOpcache(): Response
+    public function getOpcache(Request $request): Response
     {
         if (!\function_exists('opcache_reset')) {
             return new JsonResponse(null, Response::HTTP_NOT_IMPLEMENTED);
@@ -34,12 +35,19 @@ class OpcacheController
             'reset_token' => md5(\Phar::running(false)),
         ];
 
+        if (
+            \function_exists('opcache_get_status')
+            && $request->query->get('opcache_reset') === md5(\Phar::running(false))
+        ) {
+            $status['status'] = \opcache_get_status(false);
+        }
+
         return new JsonResponse($status);
     }
 
     #[Route(path: '/server/opcache', methods: ['DELETE'])]
     #[IsGranted('ROLE_UPDATE')]
-    public function deleteOpcache(): Response
+    public function deleteOpcache(Request $request): Response
     {
         if (!\function_exists('opcache_reset')) {
             return new JsonResponse(null, Response::HTTP_NOT_IMPLEMENTED);
@@ -47,6 +55,6 @@ class OpcacheController
 
         opcache_reset();
 
-        return $this->getOpcache();
+        return $this->getOpcache($request);
     }
 }
