@@ -313,6 +313,13 @@ paths:
         get:
             summary: Gets PHP opcode cache Information
             tags: [Server Configuration]
+            parameters:
+                - name: stats
+                  in: query
+                  description: Whether to include OPcache statistics without script details.
+                  schema:
+                      type: boolean
+                      default: false
             security:
                 - CookieAuthentication: [ read ]
                 - TokenAuthentication: [ read ]
@@ -1919,6 +1926,11 @@ components:
                     type: boolean
                 reset_token:
                     type: string
+                status:
+                    description: Result of opcache_get_status(false) when stats are requested, or null if unavailable.
+                    type: object
+                    nullable: true
+                    additionalProperties: true
 
         ServerContao:
             type: object

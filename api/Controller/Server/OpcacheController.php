@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller\Server;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -21,9 +22,11 @@ class OpcacheController
 {
     #[Route(path: '/server/opcache', methods: ['GET'])]
     #[IsGranted('ROLE_READ')]
-    public function getOpcache(): Response
+    public function getOpcache(Request|null $request = null): Response
     {
-        if (!\function_exists('opcache_reset')) {
+        $includeStats = null !== $request && $request->query->getBoolean('stats');
+
+        if (!$includeStats && !\function_exists('opcache_reset')) {
             return new JsonResponse(null, Response::HTTP_NOT_IMPLEMENTED);
         }
 
@@ -33,6 +36,11 @@ class OpcacheController
             'opcache_enabled' => $opcacheEnabled,
             'reset_token' => md5(\Phar::running(false)),
         ];
+
+        if ($includeStats) {
+            $opcacheStatus = \function_exists('opcache_get_status') ? @opcache_get_status(false) : false;
+            $status['status'] = \is_array($opcacheStatus) ? $opcacheStatus : null;
+        }
 
         return new JsonResponse($status);
     }
