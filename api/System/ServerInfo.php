@@ -68,6 +68,8 @@ class ServerInfo
         'C:\laragon\bin\php\php-{major}.{minor}.{release}-Win32-VC15-x64\php.EXE',
     ];
 
+    private string|false|null $phpExecutable = false;
+
     public function __construct(
         private readonly PhpExecutableFinder $phpExecutableFinder,
         private readonly ManagerConfig $managerConfig,
@@ -84,6 +86,10 @@ class ServerInfo
      */
     public function getPhpExecutable(): string|null
     {
+        if (false !== $this->phpExecutable) {
+            return $this->phpExecutable;
+        }
+
         $paths = [];
 
         if ($php_cli = $this->managerConfig->get('php_cli')) {
@@ -100,7 +106,7 @@ class ServerInfo
             $this->managerConfig->set('php_cli', $found);
         }
 
-        return $found;
+        return $this->phpExecutable = $found;
     }
 
     /**
