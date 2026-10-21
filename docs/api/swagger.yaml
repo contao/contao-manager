@@ -387,6 +387,23 @@ paths:
             security:
                 - CookieAuthentication: [ read ]
                 - TokenAuthentication: [ read ]
+            parameters:
+                - name: properties
+                  in: query
+                  description: >-
+                      Comma-separated top-level properties to return. Omit to return all properties.
+                      API metadata and configuration commands are skipped unless api and config are selected respectively.
+                      Selecting version or supported still performs Contao version detection.
+                      Error responses are not filtered.
+                  style: form
+                  explode: false
+                  schema:
+                      type: array
+                      minItems: 1
+                      items:
+                          type: string
+                          enum: [version, supported, cli, api, config, conflicts, project_dir, public_dir, directory_separator]
+                  example: [version, supported]
             responses:
                 200:
                     description: Gets information about the current Contao installation.
@@ -394,6 +411,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerContao'
+                400:
+                    description: If the properties selector is empty, malformed or contains an unknown property.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
                 500:
                     description: If any of the commands did not run successfully.
                     content:
