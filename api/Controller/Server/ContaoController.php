@@ -46,14 +46,30 @@ class ContaoController
     #[IsGranted('ROLE_READ')]
     public function handle(Request $request, ServerInfo $serverInfo): Response
     {
-        $properties = $this->getRequestedProperties($request);
+        return $this->handleRequest($request, $serverInfo);
+    }
 
+    #[Route(path: '/server/contao', methods: ['POST'])]
+    #[IsGranted('ROLE_INSTALL')]
+    public function update(Request $request, ServerInfo $serverInfo): Response
+    {
+        return $this->handleRequest($request, $serverInfo);
+    }
+
+    private function handleRequest(Request $request, ServerInfo $serverInfo): Response
+    {
         if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
                     ->setStatus(Response::HTTP_SERVICE_UNAVAILABLE),
             );
         }
+
+        if ($request->isMethod('POST')) {
+            return $this->handleUpdate($request);
+        }
+
+        $properties = $this->getRequestedProperties($request);
 
         if (null !== $properties && [] === array_intersect($properties, ['version', 'supported', 'cli', 'api', 'config', 'conflicts'])) {
             return $this->createResponse([], Response::HTTP_OK, $properties);
@@ -64,19 +80,12 @@ class ContaoController
         try {
             $contaoVersion = $this->getContaoVersion();
         } catch (\RuntimeException $exception) {
-            if (null !== ($response = $this->createVersionErrorResponse($request, $exception))) {
+            if (null !== ($response = $this->createVersionErrorResponse($exception))) {
                 return $response;
             }
         }
 
         if (null === $contaoVersion) {
-            if ($request->isMethod('POST')) {
-                return $this->createDirectories(
-                    $request->request->get('directory'),
-                    $request->request->getBoolean('usePublicDir'),
-                );
-            }
-
             $data = [];
 
             if (null === $properties || \in_array('conflicts', $properties, true)) {
@@ -89,16 +98,27 @@ class ContaoController
         return $this->createResponse($this->getContaoData($contaoVersion, $properties), Response::HTTP_OK, $properties);
     }
 
-    #[Route(path: '/server/contao', methods: ['POST'])]
-    #[IsGranted('ROLE_INSTALL')]
-    public function update(Request $request, ServerInfo $serverInfo): Response
+    private function handleUpdate(Request $request): Response
     {
-        return $this->handle($request, $serverInfo);
+        try {
+            $contaoVersion = $this->getContaoVersion();
+        } catch (\RuntimeException) {
+            return new Response('', Response::HTTP_BAD_REQUEST);
+        }
+
+        if (null === $contaoVersion) {
+            return $this->createDirectories(
+                $request->request->get('directory'),
+                $request->request->getBoolean('usePublicDir'),
+            );
+        }
+
+        return $this->createResponse($this->getContaoData($contaoVersion, null));
     }
 
     private function getRequestedProperties(Request $request): array|null
     {
-        if (!$request->isMethod('GET') || !$request->query->has('properties')) {
+        if (!$request->query->has('properties')) {
             return null;
         }
 
@@ -117,12 +137,8 @@ class ContaoController
         return $properties;
     }
 
-    private function createVersionErrorResponse(Request $request, \RuntimeException $exception): Response|null
+    private function createVersionErrorResponse(\RuntimeException $exception): Response|null
     {
-        if ($request->isMethod('POST')) {
-            return new Response('', Response::HTTP_BAD_REQUEST);
-        }
-
         if ($exception instanceof ProcessFailedException) {
             return $this->createResponse(
                 ['supported' => false, 'error' => $exception->getMessage()],

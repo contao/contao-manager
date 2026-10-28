@@ -59,7 +59,7 @@ class ContaoControllerTest extends TestCase
     /**
      * @dataProvider requestedProperties
      */
-    public function testFetchesOnlySelectedData(string|null $properties, array $expected, string $method = 'GET'): void
+    public function testFetchesOnlySelectedData(array|string|null $properties, array $expected, string $method = 'GET'): void
     {
         $this->configureInstallation();
         $needsVersion = null === $properties || [] !== array_intersect(array_keys($expected), ['version', 'supported', 'cli', 'api', 'config', 'conflicts']);
@@ -85,8 +85,11 @@ class ContaoControllerTest extends TestCase
             ;
         }
 
-        $request = Request::create('/api/server/contao', $method, null === $properties ? [] : ['properties' => $properties]);
-        $response = $this->controller->handle($request, $this->serverInfo);
+        $query = null === $properties ? '' : '?'.http_build_query(['properties' => $properties]);
+        $request = Request::create('/api/server/contao'.$query, $method);
+        $response = 'POST' === $method
+            ? $this->controller->update($request, $this->serverInfo)
+            : $this->controller->handle($request, $this->serverInfo);
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame($expected, json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR));
@@ -108,6 +111,8 @@ class ContaoControllerTest extends TestCase
 
         yield 'default response' => [null, $full];
         yield 'POST ignores selector' => ['unknown', $full, 'POST'];
+        yield 'POST ignores array selector' => [['version', 'supported'], $full, 'POST'];
+        yield 'POST ignores directory selector' => ['project_dir', $full, 'POST'];
         yield 'all properties' => [implode(',', array_keys($full)), $full];
         yield 'monitoring' => ['version,supported', ['version' => '5.3.52', 'supported' => true]];
         yield 'whitespace and duplicates' => [' supported, version, version ', ['version' => '5.3.52', 'supported' => true]];
@@ -122,10 +127,7 @@ class ContaoControllerTest extends TestCase
      */
     public function testRejectsInvalidPropertiesBeforeStartingProcesses(mixed $properties): void
     {
-        $this->serverInfo
-            ->expects($this->never())
-            ->method('getPhpExecutable')
-        ;
+        $this->configureInstallation();
 
         $this->console
             ->expects($this->never())
@@ -164,7 +166,7 @@ class ContaoControllerTest extends TestCase
     /**
      * @dataProvider versionFailures
      */
-    public function testVersionFailureKeepsFullErrorResponse(bool $invalidOutput): void
+    public function testVersionFailureKeepsFullErrorResponse(bool $invalidOutput, string $method = 'GET'): void
     {
         $this->configureInstallation();
         $process = $this->createConfiguredMock(Process::class, [
@@ -187,7 +189,17 @@ class ContaoControllerTest extends TestCase
             ->method('getVersion')
         ;
 
-        $response = $this->controller->handle(Request::create('/api/server/contao?properties=version,supported'), $this->serverInfo);
+        $request = Request::create('/api/server/contao?properties=version,supported', $method);
+
+        if ('POST' === $method) {
+            $response = $this->controller->update($request, $this->serverInfo);
+            $this->assertSame(400, $response->getStatusCode());
+            $this->assertSame('', $response->getContent());
+
+            return;
+        }
+
+        $response = $this->controller->handle($request, $this->serverInfo);
         $data = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         $this->assertSame(502, $response->getStatusCode());
@@ -201,6 +213,8 @@ class ContaoControllerTest extends TestCase
     {
         yield 'invalid output' => [true];
         yield 'process failed' => [false];
+        yield 'POST invalid output' => [true, 'POST'];
+        yield 'POST process failed' => [false, 'POST'];
     }
 
     public function testMissingContaoReturnsSelectedDefaultsWithoutScanningProject(): void
