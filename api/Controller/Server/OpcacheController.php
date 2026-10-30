@@ -24,7 +24,7 @@ class OpcacheController
     #[IsGranted('ROLE_READ')]
     public function getOpcache(Request|null $request = null): Response
     {
-        $includeStats = null !== $request && $request->query->getBoolean('stats');
+        $includeStats = $request?->query->getBoolean('stats') ?? false;
 
         if (!$includeStats && !\function_exists('opcache_reset')) {
             return new JsonResponse(null, Response::HTTP_NOT_IMPLEMENTED);
@@ -38,7 +38,11 @@ class OpcacheController
         ];
 
         if ($includeStats) {
-            $opcacheStatus = \function_exists('opcache_get_status') ? @opcache_get_status(false) : false;
+            if (!\function_exists('opcache_get_status')) {
+                return new JsonResponse(null, Response::HTTP_NOT_IMPLEMENTED);
+            }
+
+            $opcacheStatus = @opcache_get_status(false);
             $status['status'] = \is_array($opcacheStatus) ? $opcacheStatus : null;
         }
 

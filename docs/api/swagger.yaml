@@ -330,6 +330,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerOpcache'
+                501:
+                    description: The opcache_reset (or opcache_get_status with query parameter) is not available on the server.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
         delete:
             summary: Resets the opcode cache
             tags: [Server Configuration]
@@ -343,6 +349,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerOpcache'
+                501:
+                    description: The opcache_reset method is not available on the server.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
 
     /api/server/composer:
         get:
