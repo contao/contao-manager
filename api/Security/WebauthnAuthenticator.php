@@ -186,7 +186,10 @@ class WebauthnAuthenticator extends AbstractBrowserAuthenticator
                     PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_PS256), //      \/
                     PublicKeyCredentialParameters::create('public-key', Algorithms::COSE_ALGORITHM_ED256), // Less interesting algorithm
                 ],
-                new AuthenticatorSelectionCriteria(userVerification: AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_REQUIRED),
+                new AuthenticatorSelectionCriteria(
+                    userVerification: AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_REQUIRED,
+                    residentKey: AuthenticatorSelectionCriteria::RESIDENT_KEY_REQUIREMENT_REQUIRED,
+                ),
             );
         }
 
