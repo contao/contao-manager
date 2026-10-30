@@ -242,9 +242,9 @@ export default {
                 rootConstraint.substr(0, 4) !== 'dev-' &&
                 rootConstraint.substr(-4) !== '-dev' &&
                 rootVersion &&
-                metadata.versions.find((pkg) => pkg.version === rootVersion.version)
+                metadata.versions.find((pkg) => getVersion(pkg)?.version === rootVersion.version)
             ) {
-                const update = metadata.versions.filter((pkg) => pkg.version === rootVersion.version || satisfies(getVersion(pkg), rootConstraint)).pop();
+                const update = metadata.versions.filter((pkg) => getVersion(pkg)?.version === rootVersion.version || satisfies(getVersion(pkg), rootConstraint)).pop();
 
                 if (!update) {
                     metadata.update = { valid: false, latest: true, version: null, time: null };
