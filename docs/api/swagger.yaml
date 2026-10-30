@@ -313,6 +313,13 @@ paths:
         get:
             summary: Gets PHP opcode cache Information
             tags: [Server Configuration]
+            parameters:
+                - name: stats
+                  in: query
+                  description: Whether to include OPcache statistics without script details.
+                  schema:
+                      type: boolean
+                      default: false
             security:
                 - CookieAuthentication: [ read ]
                 - TokenAuthentication: [ read ]
@@ -323,6 +330,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerOpcache'
+                501:
+                    description: The opcache_reset (or opcache_get_status with query parameter) is not available on the server.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
         delete:
             summary: Resets the opcode cache
             tags: [Server Configuration]
@@ -336,6 +349,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ServerOpcache'
+                501:
+                    description: The opcache_reset method is not available on the server.
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: '#/components/schemas/ApiProblem'
 
     /api/server/composer:
         get:
@@ -1919,6 +1938,11 @@ components:
                     type: boolean
                 reset_token:
                     type: string
+                status:
+                    description: Result of opcache_get_status(false) when stats are requested, or null if unavailable.
+                    type: object
+                    nullable: true
+                    additionalProperties: true
 
         ServerContao:
             type: object
