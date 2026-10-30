@@ -22,10 +22,10 @@ use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -46,18 +46,6 @@ class ContaoController
     #[IsGranted('ROLE_READ')]
     public function handle(Request $request, ServerInfo $serverInfo): Response
     {
-        return $this->handleRequest($request, $serverInfo);
-    }
-
-    #[Route(path: '/server/contao', methods: ['POST'])]
-    #[IsGranted('ROLE_INSTALL')]
-    public function update(Request $request, ServerInfo $serverInfo): Response
-    {
-        return $this->handleRequest($request, $serverInfo);
-    }
-
-    private function handleRequest(Request $request, ServerInfo $serverInfo): Response
-    {
         if (!$serverInfo->getPhpExecutable()) {
             return new ApiProblemResponse(
                 (new ApiProblem('Missing hosting configuration.', '/api/server/config'))
@@ -65,124 +53,88 @@ class ContaoController
             );
         }
 
-        if ($request->isMethod('POST')) {
-            return $this->handleUpdate($request);
-        }
+        if ($request->query->has('properties') && !$request->isMethod(Request::METHOD_POST)) {
+            try {
+                $properties = array_map('trim', explode(',', $request->query->getString('properties')));
 
-        $properties = $this->getRequestedProperties($request);
-
-        if (null !== $properties && [] === array_intersect($properties, ['version', 'supported', 'cli', 'api', 'config', 'conflicts'])) {
-            return $this->createResponse([], Response::HTTP_OK, $properties);
-        }
-
-        $contaoVersion = null;
-
-        try {
-            $contaoVersion = $this->getContaoVersion();
-        } catch (\RuntimeException $exception) {
-            if (null !== ($response = $this->createVersionErrorResponse($exception))) {
-                return $response;
+                if ([] === array_intersect($properties, ['version', 'supported', 'cli', 'api', 'config', 'conflicts'])) {
+                    return $this->createResponse($request, []);
+                }
+            } catch (BadRequestException) {
+                return new Response('', Response::HTTP_BAD_REQUEST);
             }
         }
 
-        if (null === $contaoVersion) {
-            $data = [];
-
-            if (null === $properties || \in_array('conflicts', $properties, true)) {
-                $data['conflicts'] = $this->getProjectFiles();
-            }
-
-            return $this->createResponse($data, Response::HTTP_OK, $properties);
-        }
-
-        return $this->createResponse($this->getContaoData($contaoVersion, $properties), Response::HTTP_OK, $properties);
-    }
-
-    private function handleUpdate(Request $request): Response
-    {
         try {
             $contaoVersion = $this->getContaoVersion();
-        } catch (\RuntimeException) {
-            return new Response('', Response::HTTP_BAD_REQUEST);
+        } catch (\RuntimeException $e) {
+            if ($request->isMethod('POST')) {
+                return new Response('', Response::HTTP_BAD_REQUEST);
+            }
+
+            if ($e instanceof ProcessFailedException) {
+                return $this->createResponse(
+                    null,
+                    [
+                        'supported' => false,
+                        'error' => $e->getMessage(),
+                    ],
+                    Response::HTTP_BAD_GATEWAY,
+                );
+            }
+
+            if ($e instanceof ProcessOutputException) {
+                return $this->createResponse(
+                    null,
+                    [
+                        'supported' => false,
+                        'error' => $e->getProcess()->getErrorOutput() ?: $e->getProcess()->getOutput(),
+                    ],
+                    Response::HTTP_BAD_GATEWAY,
+                );
+            }
+
+            $contaoVersion = null;
         }
 
         if (null === $contaoVersion) {
-            return $this->createDirectories(
-                $request->request->get('directory'),
-                $request->request->getBoolean('usePublicDir'),
-            );
+            $files = $this->getProjectFiles();
+
+            if ($request->isMethod('POST')) {
+                return $this->createDirectories(
+                    $request->request->get('directory'),
+                    $request->request->getBoolean('usePublicDir'),
+                );
+            }
+
+            return $this->createResponse($request, [
+                'conflicts' => $files,
+            ]);
         }
 
-        return $this->createResponse($this->getContaoData($contaoVersion, null));
-    }
-
-    private function getRequestedProperties(Request $request): array|null
-    {
-        if (!$request->query->has('properties')) {
-            return null;
-        }
-
-        $value = $request->query->all()['properties'];
-
-        if (!\is_string($value)) {
-            throw new BadRequestHttpException('Contao properties must be a comma-separated string.');
-        }
-
-        $properties = array_unique(array_map('trim', explode(',', $value)));
-
-        if ([] !== array_diff($properties, array_keys($this->getDefaultData()))) {
-            throw new BadRequestHttpException('Unknown Contao properties requested.');
-        }
-
-        return $properties;
-    }
-
-    private function createVersionErrorResponse(\RuntimeException $exception): Response|null
-    {
-        if ($exception instanceof ProcessFailedException) {
-            return $this->createResponse(
-                ['supported' => false, 'error' => $exception->getMessage()],
-                Response::HTTP_BAD_GATEWAY,
-            );
-        }
-
-        if ($exception instanceof ProcessOutputException) {
-            return $this->createResponse(
-                [
-                    'supported' => false,
-                    'error' => $exception->getProcess()->getErrorOutput() ?: $exception->getProcess()->getOutput(),
+        return $this->createResponse(
+            $request,
+            [
+                'version' => $contaoVersion,
+                'cli' => [
+                    'commands' => fn () => (object) $this->contaoConsole->getCommandList(),
                 ],
-                Response::HTTP_BAD_GATEWAY,
-            );
-        }
-
-        return null;
+                'api' => [
+                    'version' => fn () => $this->contaoApi->getVersion(),
+                    'features' => fn () => $this->contaoApi->getFeatures(),
+                    'commands' => fn () => $this->contaoApi->getCommands(),
+                ],
+                'config' => fn () => (object) $this->contaoConsole->getConfig(),
+                'supported' => version_compare($contaoVersion, '4.0.0', '>=') || str_starts_with($contaoVersion, 'dev-'),
+            ],
+        );
     }
 
-    private function getContaoData(string $version, array|null $properties): array
+    #[Route(path: '/server/contao', methods: ['POST'])]
+    #[IsGranted('ROLE_INSTALL')]
+    public function update(Request $request, ServerInfo $serverInfo): Response
     {
-        $data = [
-            'version' => $version,
-            'supported' => version_compare($version, '4.0.0', '>=') || str_starts_with($version, 'dev-'),
-        ];
-
-        if (null === $properties || \in_array('cli', $properties, true)) {
-            $data['cli'] = ['commands' => (object) $this->contaoConsole->getCommandList()];
-        }
-
-        if (null === $properties || \in_array('api', $properties, true)) {
-            $data['api'] = [
-                'version' => $this->contaoApi->getVersion(),
-                'features' => $this->contaoApi->getFeatures(),
-                'commands' => $this->contaoApi->getCommands(),
-            ];
-        }
-
-        if (null === $properties || \in_array('config', $properties, true)) {
-            $data['config'] = (object) $this->contaoConsole->getConfig();
-        }
-
-        return $data;
+        return $this->handle($request, $serverInfo);
     }
 
     private function createDirectories(string|null $directory, bool $usePublicDir): Response
@@ -219,6 +171,7 @@ class ContaoController
         // Create response before moving Phar, otherwise the JsonResponse class
         // cannot be autoloaded
         $response = $this->createResponse(
+            null,
             [
                 'project_dir' => $targetRoot,
                 'public_dir' => ($usePublicDir ? 'public' : 'web'),
@@ -327,20 +280,9 @@ class ContaoController
         return null;
     }
 
-    private function createResponse(array $data, int $status = Response::HTTP_OK, array|null $properties = null): JsonResponse
+    private function createResponse(Request|null $request, array $data, int $status = Response::HTTP_OK): Response
     {
-        $data = array_merge($this->getDefaultData(), $data);
-
-        if (null !== $properties) {
-            $data = array_intersect_key($data, array_flip($properties));
-        }
-
-        return new JsonResponse($data, $status);
-    }
-
-    private function getDefaultData(): array
-    {
-        return [
+        $data = array_merge([
             'version' => null,
             'cli' => [
                 'commands' => [],
@@ -356,6 +298,28 @@ class ContaoController
             'project_dir' => $this->kernel->getProjectDir(),
             'public_dir' => basename($this->kernel->getPublicDir()),
             'directory_separator' => \DIRECTORY_SEPARATOR,
-        ];
+        ], $data);
+
+        if ($request?->query->has('properties') && !$request->isMethod(Request::METHOD_POST)) {
+            try {
+                $properties = array_flip(array_map('trim', explode(',', $request->query->getString('properties'))));
+
+                if ([] === $properties || [] !== array_diff_key($properties, $data)) {
+                    return new Response('', Response::HTTP_BAD_REQUEST);
+                }
+            } catch (BadRequestException) {
+                return new Response('', Response::HTTP_BAD_REQUEST);
+            }
+
+            $data = array_intersect_key($data, $properties);
+        }
+
+        array_walk_recursive($data, function (&$value, $key) {
+            if ($value instanceof \Closure) {
+                $value = $value();
+            }
+        });
+
+        return new JsonResponse($data, $status);
     }
 }

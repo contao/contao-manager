@@ -130,12 +130,33 @@ class ContaoControllerTest extends TestCase
         $this->configureInstallation();
 
         $this->console
+            ->expects($this->exactly((int) str_contains((string) $properties, 'version')))
+            ->method('getVersion')
+        ;
+
+        $this->console
+            ->expects($this->never())
+            ->method('getCommandList')
+        ;
+
+        $this->api
             ->expects($this->never())
             ->method('getVersion')
         ;
-        $this->expectException(BadRequestHttpException::class);
 
-        $this->controller->handle(Request::create('/api/server/contao', 'GET', ['properties' => $properties]), $this->serverInfo);
+        $this->api
+            ->expects($this->never())
+            ->method('getFeatures')
+        ;
+
+        $this->api
+            ->expects($this->never())
+            ->method('getCommands')
+        ;
+
+        $response = $this->controller->handle(Request::create('/api/server/contao', 'GET', ['properties' => $properties]), $this->serverInfo);
+
+        $this->assertSame(400, $response->getStatusCode());
     }
 
     public static function invalidProperties(): iterable
