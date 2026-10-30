@@ -24,7 +24,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 

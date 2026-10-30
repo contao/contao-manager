@@ -112,22 +112,19 @@ class ContaoController
             ]);
         }
 
-        return $this->createResponse(
-            $request,
-            [
-                'version' => $contaoVersion,
-                'cli' => [
-                    'commands' => fn () => (object) $this->contaoConsole->getCommandList(),
-                ],
-                'api' => [
-                    'version' => fn () => $this->contaoApi->getVersion(),
-                    'features' => fn () => $this->contaoApi->getFeatures(),
-                    'commands' => fn () => $this->contaoApi->getCommands(),
-                ],
-                'config' => fn () => (object) $this->contaoConsole->getConfig(),
-                'supported' => version_compare($contaoVersion, '4.0.0', '>=') || str_starts_with($contaoVersion, 'dev-'),
+        return $this->createResponse($request, [
+            'version' => $contaoVersion,
+            'cli' => [
+                'commands' => fn () => (object) $this->contaoConsole->getCommandList(),
             ],
-        );
+            'api' => [
+                'version' => fn () => $this->contaoApi->getVersion(),
+                'features' => fn () => $this->contaoApi->getFeatures(),
+                'commands' => fn () => $this->contaoApi->getCommands(),
+            ],
+            'config' => fn () => (object) $this->contaoConsole->getConfig(),
+            'supported' => version_compare($contaoVersion, '4.0.0', '>=') || str_starts_with($contaoVersion, 'dev-'),
+        ]);
     }
 
     #[Route(path: '/server/contao', methods: ['POST'])]
@@ -282,23 +279,26 @@ class ContaoController
 
     private function createResponse(Request|null $request, array $data, int $status = Response::HTTP_OK): Response
     {
-        $data = array_merge([
-            'version' => null,
-            'cli' => [
-                'commands' => [],
+        $data = array_merge(
+            [
+                'version' => null,
+                'cli' => [
+                    'commands' => [],
+                ],
+                'api' => [
+                    'version' => 0,
+                    'features' => [],
+                    'commands' => [],
+                ],
+                'config' => new \stdClass(),
+                'supported' => false,
+                'conflicts' => [],
+                'project_dir' => $this->kernel->getProjectDir(),
+                'public_dir' => basename($this->kernel->getPublicDir()),
+                'directory_separator' => \DIRECTORY_SEPARATOR,
             ],
-            'api' => [
-                'version' => 0,
-                'features' => [],
-                'commands' => [],
-            ],
-            'config' => new \stdClass(),
-            'supported' => false,
-            'conflicts' => [],
-            'project_dir' => $this->kernel->getProjectDir(),
-            'public_dir' => basename($this->kernel->getPublicDir()),
-            'directory_separator' => \DIRECTORY_SEPARATOR,
-        ], $data);
+            $data,
+        );
 
         if ($request?->query->has('properties') && !$request->isMethod(Request::METHOD_POST)) {
             try {
@@ -314,11 +314,14 @@ class ContaoController
             $data = array_intersect_key($data, $properties);
         }
 
-        array_walk_recursive($data, function (&$value, $key) {
-            if ($value instanceof \Closure) {
-                $value = $value();
+        array_walk_recursive(
+            $data,
+            static function (&$value, $key): void {
+                if ($value instanceof \Closure) {
+                    $value = $value();
+                }
             }
-        });
+        );
 
         return new JsonResponse($data, $status);
     }
