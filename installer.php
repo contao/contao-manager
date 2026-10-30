@@ -16,24 +16,32 @@ class ContaoManagerInstaller
         $tempFile = $fileName.'.install';
         $url = 'https://download.contao.org/contao-manager/stable/contao-manager.phar';
 
+        foreach (['fopen', 'file_put_contents', 'rename', 'stream_context_create'] as $function) {
+            if (!\function_exists($function)) {
+                self::error('The PHP function '.$function.'() is not available or has been disabled.');
+            }
+        }
+
         $stream = @fopen($url, 'rb', false, StreamContextFactory::getContext($url));
 
-        if (false === $stream
-            || false === file_put_contents($tempFile, $stream)
-        ) {
-            self::error();
+        if (false === $stream) {
+            self::error('The file could not be downloaded, make sure allow_url_fopen is enabled..');
+        }
+
+        if (false === file_put_contents($tempFile, $stream)) {
+            self::error('A temporary file could not be written to the disk.');
         }
 
         if (false === rename($tempFile, $fileName)) {
             // If rename fails, try to rename original script first
             if (false === rename($fileName, $fileName.'.old')) {
-                self::error();
+                self::error('The temporary file could not be renamed.');
             }
 
             if (false === rename($tempFile, $fileName)) {
                 @rename($fileName.'.old', $fileName);
 
-                self::error();
+                self::error('The temporary file could not be renamed.');
             }
 
             @unlink($fileName.'.old');
@@ -55,13 +63,13 @@ class ContaoManagerInstaller
         self::html("Installing Contao Manager …\n<script>setTimeout(function() { window.location.reload(true) }, 2000)</script>", true);
     }
 
-    private static function error()
+    private static function error($message)
     {
         if (('cli' === PHP_SAPI || !isset($_SERVER['REQUEST_URI']))) {
-            die("Installation of the Contao Manager has failed. https://to.contao.org/install-failed\n");
+            die("Installation of the Contao Manager has failed.\n".$message."\nhttps://to.contao.org/install-failed\n");
         }
 
-        self::html('Installation of the Contao Manager has failed.<br><br> <a href="https://to.contao.org/install-failed" target="_blank" class="widget-button">Help</a>');
+        self::html('Installation of the Contao Manager has failed.<br>'.htmlspecialchars($message, ENT_QUOTES, 'UTF-8').'<br><br> <a href="https://to.contao.org/install-failed" target="_blank" class="widget-button">Help</a>');
     }
 
     private static function html($message, $loading = false)
