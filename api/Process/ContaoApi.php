@@ -111,7 +111,7 @@ class ContaoApi
             $process = $this->processFactory->createContaoApiProcess(['version']);
             $process->mustRun();
         } catch (ExceptionInterface) {
-            return $default;
+            return $this->apiInfo = $default;
         }
 
         $version = trim($process->getOutput());
