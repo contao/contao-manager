@@ -115,14 +115,14 @@ class ContaoController
         return $this->createResponse($request, [
             'version' => $contaoVersion,
             'cli' => [
-                'commands' => fn () => (object) $this->contaoConsole->getCommandList(),
+                'commands' => fn (): \stdClass => (object) $this->contaoConsole->getCommandList(),
             ],
             'api' => [
-                'version' => fn () => $this->contaoApi->getVersion(),
-                'features' => fn () => $this->contaoApi->getFeatures(),
-                'commands' => fn () => $this->contaoApi->getCommands(),
+                'version' => fn (): int => $this->contaoApi->getVersion(),
+                'features' => fn (): array => $this->contaoApi->getFeatures(),
+                'commands' => fn (): array => $this->contaoApi->getCommands(),
             ],
-            'config' => fn () => (object) $this->contaoConsole->getConfig(),
+            'config' => fn (): \stdClass => (object) $this->contaoConsole->getConfig(),
             'supported' => version_compare($contaoVersion, '4.0.0', '>=') || str_starts_with($contaoVersion, 'dev-'),
         ]);
     }
@@ -304,7 +304,7 @@ class ContaoController
             try {
                 $properties = array_flip(array_map('trim', explode(',', $request->query->getString('properties'))));
 
-                if ([] === $properties || [] !== array_diff_key($properties, $data)) {
+                if ([] !== array_diff_key($properties, $data)) {
                     return new Response('', Response::HTTP_BAD_REQUEST);
                 }
             } catch (BadRequestException) {
@@ -320,7 +320,7 @@ class ContaoController
                 if ($value instanceof \Closure) {
                     $value = $value();
                 }
-            }
+            },
         );
 
         return new JsonResponse($data, $status);
