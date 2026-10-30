@@ -22,6 +22,7 @@ use Contao\ManagerApi\System\ServerInfo;
 use Crell\ApiProblem\ApiProblem;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,6 +53,18 @@ class ContaoController
             );
         }
 
+        if ($request->query->has('properties') && !$request->isMethod(Request::METHOD_POST)) {
+            try {
+                $properties = array_map('trim', explode(',', $request->query->getString('properties')));
+
+                if ([] === array_intersect($properties, ['version', 'supported', 'cli', 'api', 'config', 'conflicts'])) {
+                    return $this->createResponse($request, []);
+                }
+            } catch (BadRequestException) {
+                return new Response('', Response::HTTP_BAD_REQUEST);
+            }
+        }
+
         try {
             $contaoVersion = $this->getContaoVersion();
         } catch (\RuntimeException $e) {
@@ -61,6 +74,7 @@ class ContaoController
 
             if ($e instanceof ProcessFailedException) {
                 return $this->createResponse(
+                    null,
                     [
                         'supported' => false,
                         'error' => $e->getMessage(),
@@ -71,6 +85,7 @@ class ContaoController
 
             if ($e instanceof ProcessOutputException) {
                 return $this->createResponse(
+                    null,
                     [
                         'supported' => false,
                         'error' => $e->getProcess()->getErrorOutput() ?: $e->getProcess()->getOutput(),
@@ -92,26 +107,24 @@ class ContaoController
                 );
             }
 
-            return $this->createResponse([
+            return $this->createResponse($request, [
                 'conflicts' => $files,
             ]);
         }
 
-        return $this->createResponse(
-            [
-                'version' => $contaoVersion,
-                'cli' => [
-                    'commands' => (object) $this->contaoConsole->getCommandList(),
-                ],
-                'api' => [
-                    'version' => $this->contaoApi->getVersion(),
-                    'features' => $this->contaoApi->getFeatures(),
-                    'commands' => $this->contaoApi->getCommands(),
-                ],
-                'config' => (object) $this->contaoConsole->getConfig(),
-                'supported' => version_compare($contaoVersion, '4.0.0', '>=') || str_starts_with($contaoVersion, 'dev-'),
+        return $this->createResponse($request, [
+            'version' => $contaoVersion,
+            'cli' => [
+                'commands' => fn (): \stdClass => (object) $this->contaoConsole->getCommandList(),
             ],
-        );
+            'api' => [
+                'version' => fn (): int => $this->contaoApi->getVersion(),
+                'features' => fn (): array => $this->contaoApi->getFeatures(),
+                'commands' => fn (): array => $this->contaoApi->getCommands(),
+            ],
+            'config' => fn (): \stdClass => (object) $this->contaoConsole->getConfig(),
+            'supported' => version_compare($contaoVersion, '4.0.0', '>=') || str_starts_with($contaoVersion, 'dev-'),
+        ]);
     }
 
     #[Route(path: '/server/contao', methods: ['POST'])]
@@ -155,6 +168,7 @@ class ContaoController
         // Create response before moving Phar, otherwise the JsonResponse class
         // cannot be autoloaded
         $response = $this->createResponse(
+            null,
             [
                 'project_dir' => $targetRoot,
                 'public_dir' => ($usePublicDir ? 'public' : 'web'),
@@ -263,24 +277,52 @@ class ContaoController
         return null;
     }
 
-    private function createResponse(array $data, int $status = Response::HTTP_OK): JsonResponse
+    private function createResponse(Request|null $request, array $data, int $status = Response::HTTP_OK): Response
     {
-        return new JsonResponse(array_merge([
-            'version' => null,
-            'cli' => [
-                'commands' => [],
+        $data = array_merge(
+            [
+                'version' => null,
+                'cli' => [
+                    'commands' => [],
+                ],
+                'api' => [
+                    'version' => 0,
+                    'features' => [],
+                    'commands' => [],
+                ],
+                'config' => new \stdClass(),
+                'supported' => false,
+                'conflicts' => [],
+                'project_dir' => $this->kernel->getProjectDir(),
+                'public_dir' => basename($this->kernel->getPublicDir()),
+                'directory_separator' => \DIRECTORY_SEPARATOR,
             ],
-            'api' => [
-                'version' => 0,
-                'features' => [],
-                'commands' => [],
-            ],
-            'config' => new \stdClass(),
-            'supported' => false,
-            'conflicts' => [],
-            'project_dir' => $this->kernel->getProjectDir(),
-            'public_dir' => basename($this->kernel->getPublicDir()),
-            'directory_separator' => \DIRECTORY_SEPARATOR,
-        ], $data), $status);
+            $data,
+        );
+
+        if ($request?->query->has('properties') && !$request->isMethod(Request::METHOD_POST)) {
+            try {
+                $properties = array_flip(array_map('trim', explode(',', $request->query->getString('properties'))));
+
+                if ([] !== array_diff_key($properties, $data)) {
+                    return new Response('', Response::HTTP_BAD_REQUEST);
+                }
+            } catch (BadRequestException) {
+                return new Response('', Response::HTTP_BAD_REQUEST);
+            }
+
+            $data = array_intersect_key($data, $properties);
+        }
+
+        array_walk_recursive(
+            $data,
+            static function (&$value, $key): void {
+                if ($value instanceof \Closure) {
+                    $value = $value();
+                }
+            },
+        );
+
+        return new JsonResponse($data, $status);
     }
 }
