@@ -83,11 +83,12 @@ class TaskManager implements LoggerAwareInterface
     }
 
     /**
-     * @throws ActiveTaskException If the task is still active
+     * @throws ActiveTaskException   If the task is still active
+     * @throws TaskConflictException If the stored task cannot be matched to the expected ID
      */
-    public function deleteTask(): TaskStatus|null
+    public function deleteTask(string|null $taskId = null): TaskStatus|null
     {
-        return $this->taskLock->synchronized(fn (): TaskStatus|null => $this->deleteCurrentTask());
+        return $this->taskLock->synchronized(fn (): TaskStatus|null => $this->deleteCurrentTask($taskId));
     }
 
     private function createCurrentTask(string $name, array $options): TaskStatus
@@ -182,12 +183,16 @@ class TaskManager implements LoggerAwareInterface
         return $task->abort($config);
     }
 
-    private function deleteCurrentTask(): TaskStatus|null
+    private function deleteCurrentTask(string|null $taskId): TaskStatus|null
     {
-        $config = $this->getTaskConfig();
+        $config = $this->getTaskConfig(null === $taskId);
 
         if (null === $config) {
             return null;
+        }
+
+        if (null !== $taskId && $config->getId() !== $taskId) {
+            throw new TaskConflictException();
         }
 
         $task = $this->loadTask($config);
@@ -224,7 +229,7 @@ class TaskManager implements LoggerAwareInterface
         return $task;
     }
 
-    private function getTaskConfig(): TaskConfig|null
+    private function getTaskConfig(bool $removeInvalid = true): TaskConfig|null
     {
         if ($this->filesystem->exists($this->configFile)) {
             try {
@@ -234,7 +239,11 @@ class TaskManager implements LoggerAwareInterface
                     $this->kernel->getTranslator(),
                     $this->taskLock,
                 );
-            } catch (\Exception) {
+            } catch (\Exception $e) {
+                if (!$removeInvalid) {
+                    throw new TaskConflictException($e);
+                }
+
                 $this->filesystem->remove($this->configFile);
             }
         }
