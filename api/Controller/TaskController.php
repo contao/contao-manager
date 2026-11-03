@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\Task\ActiveTaskException;
 use Contao\ManagerApi\Task\TaskManager;
 use Contao\ManagerApi\Task\TaskStatus;
 use Crell\ApiProblem\ApiProblem;
@@ -82,13 +83,9 @@ class TaskController
 
     private function deleteTask(): Response
     {
-        if (!$this->taskManager->hasTask()) {
-            return $this->getResponse();
-        }
-
         try {
             return $this->getResponse($this->taskManager->deleteTask());
-        } catch (\RuntimeException $e) {
+        } catch (ActiveTaskException $e) {
             return new ApiProblemResponse((new ApiProblem($e->getMessage()))->setStatus(Response::HTTP_FORBIDDEN));
         }
     }

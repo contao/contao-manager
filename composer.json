@@ -60,6 +60,7 @@
         "symfony/framework-bundle": "^6.4",
         "symfony/http-foundation": "^6.4",
         "symfony/http-kernel": "^6.4",
+        "symfony/lock": "^6.4",
         "symfony/monolog-bundle": "^3.3",
         "symfony/password-hasher": "^6.4",
         "symfony/process": "^6.4",
@@ -70,9 +71,9 @@
         "symfony/serializer": "^6.4",
         "symfony/service-contracts": "^3.5",
         "symfony/yaml": "^6.4",
+        "terminal42/composer-lock-validator": "^1.1",
         "web-auth/cose-lib": "^4.4",
-        "web-auth/webauthn-lib": "^4.9",
-        "terminal42/composer-lock-validator": "^1.1"
+        "web-auth/webauthn-lib": "^4.9"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.4",
