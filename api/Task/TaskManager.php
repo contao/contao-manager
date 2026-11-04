@@ -47,6 +47,7 @@ class TaskManager implements LoggerAwareInterface
         private readonly ConsoleProcessFactory $processFactory,
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly Filesystem $filesystem,
+        private readonly TaskLock $taskLock,
     ) {
         $this->configFile = $this->kernel->getConfigDir().\DIRECTORY_SEPARATOR.'task.json';
         $this->logFile = $this->kernel->getLogDir().'/task-output.log';
@@ -68,6 +69,30 @@ class TaskManager implements LoggerAwareInterface
 
     public function createTask(string $name, array $options): TaskStatus
     {
+        return $this->taskLock->synchronized(fn (): TaskStatus => $this->createCurrentTask($name, $options));
+    }
+
+    public function updateTask(bool $continue = false): TaskStatus|null
+    {
+        return $this->taskLock->synchronized(fn (): TaskStatus|null => $this->updateCurrentTask($continue));
+    }
+
+    public function abortTask(): TaskStatus|null
+    {
+        return $this->taskLock->synchronized(fn (): TaskStatus|null => $this->abortCurrentTask());
+    }
+
+    /**
+     * @throws ActiveTaskException   If the task is still active
+     * @throws TaskConflictException If the stored task cannot be matched to the expected ID
+     */
+    public function deleteTask(string|null $taskId = null): TaskStatus|null
+    {
+        return $this->taskLock->synchronized(fn (): TaskStatus|null => $this->deleteCurrentTask($taskId));
+    }
+
+    private function createCurrentTask(string $name, array $options): TaskStatus
+    {
         if ($this->hasTask()) {
             throw new \RuntimeException('A task already exists.');
         }
@@ -76,6 +101,7 @@ class TaskManager implements LoggerAwareInterface
             $this->configFile,
             $this->filesystem,
             $this->kernel->getTranslator(),
+            $this->taskLock,
             $name,
             $options,
         );
@@ -86,6 +112,19 @@ class TaskManager implements LoggerAwareInterface
 
         $status = $task->create($config);
 
+        $this->checkAuthorization($task, $config, $status);
+
+        if (null !== $this->logger) {
+            $this->logger->info('Created new task', ['name' => $name, 'options' => $options, 'class' => $task::class]);
+        }
+
+        $this->processFactory->createManagerConsoleBackgroundProcess(['task:update', '--poll']);
+
+        return $status;
+    }
+
+    private function checkAuthorization(TaskInterface $task, TaskConfig $config, TaskStatus $status): void
+    {
         foreach ($status->getOperations() as $operation) {
             foreach ((new \ReflectionClass($operation))->getAttributes(IsGranted::class) as $attribute) {
                 /** @var IsGranted $isGranted */
@@ -102,17 +141,9 @@ class TaskManager implements LoggerAwareInterface
                 }
             }
         }
-
-        if (null !== $this->logger) {
-            $this->logger->info('Created new task', ['name' => $name, 'options' => $options, 'class' => $task::class]);
-        }
-
-        $this->processFactory->createManagerConsoleBackgroundProcess(['task:update', '--poll']);
-
-        return $status;
     }
 
-    public function updateTask(bool $continue = false): TaskStatus|null
+    private function updateCurrentTask(bool $continue): TaskStatus|null
     {
         $config = $this->getTaskConfig();
 
@@ -135,7 +166,7 @@ class TaskManager implements LoggerAwareInterface
         return $status;
     }
 
-    public function abortTask(): TaskStatus|null
+    private function abortCurrentTask(): TaskStatus|null
     {
         $config = $this->getTaskConfig();
 
@@ -152,12 +183,16 @@ class TaskManager implements LoggerAwareInterface
         return $task->abort($config);
     }
 
-    public function deleteTask(): TaskStatus|null
+    private function deleteCurrentTask(string|null $taskId): TaskStatus|null
     {
-        $config = $this->getTaskConfig();
+        $config = $this->getTaskConfig(null === $taskId);
 
         if (null === $config) {
             return null;
+        }
+
+        if (null !== $taskId && $config->getId() !== $taskId) {
+            throw new TaskConflictException();
         }
 
         $task = $this->loadTask($config);
@@ -169,7 +204,7 @@ class TaskManager implements LoggerAwareInterface
         $status = $config->isCancelled() ? $task->abort($config) : $task->create($config);
 
         if ($status->isActive() || !$task->delete($config)) {
-            throw new \RuntimeException('Active task cannot be deleted');
+            throw new ActiveTaskException();
         }
 
         $this->saveConsoleOutput($status->getConsole());
@@ -194,7 +229,7 @@ class TaskManager implements LoggerAwareInterface
         return $task;
     }
 
-    private function getTaskConfig(): TaskConfig|null
+    private function getTaskConfig(bool $removeInvalid = true): TaskConfig|null
     {
         if ($this->filesystem->exists($this->configFile)) {
             try {
@@ -202,8 +237,13 @@ class TaskManager implements LoggerAwareInterface
                     $this->configFile,
                     $this->filesystem,
                     $this->kernel->getTranslator(),
+                    $this->taskLock,
                 );
-            } catch (\Exception) {
+            } catch (\Exception $e) {
+                if (!$removeInvalid) {
+                    throw new TaskConflictException($e);
+                }
+
                 $this->filesystem->remove($this->configFile);
             }
         }

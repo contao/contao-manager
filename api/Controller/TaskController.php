@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\Task\ActiveTaskException;
+use Contao\ManagerApi\Task\TaskConflictException;
 use Contao\ManagerApi\Task\TaskManager;
 use Contao\ManagerApi\Task\TaskStatus;
 use Crell\ApiProblem\ApiProblem;
@@ -21,9 +23,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/task', methods: ['GET', 'PUT', 'PATCH', 'DELETE'])]
 #[IsGranted('ROLE_UPDATE')]
 class TaskController
 {
@@ -31,13 +33,15 @@ class TaskController
     {
     }
 
+    #[Route(path: '/task', methods: ['GET', 'PUT', 'PATCH', 'DELETE'])]
+    #[Route(path: '/task/{taskId}', requirements: ['taskId' => Requirement::UUID], methods: ['DELETE'])]
     public function __invoke(Request $request): Response
     {
         return match ($request->getMethod()) {
             'GET' => $this->getTask(),
             'PUT' => $this->putTask($request),
             'PATCH' => $this->patchTask($request),
-            'DELETE' => $this->deleteTask(),
+            'DELETE' => $this->deleteTask($request->attributes->get('taskId')),
             default => new Response('', Response::HTTP_METHOD_NOT_ALLOWED),
         };
     }
@@ -80,15 +84,13 @@ class TaskController
         throw new BadRequestHttpException('Unsupported task status');
     }
 
-    private function deleteTask(): Response
+    private function deleteTask(string|null $taskId = null): Response
     {
-        if (!$this->taskManager->hasTask()) {
-            return $this->getResponse();
-        }
-
         try {
-            return $this->getResponse($this->taskManager->deleteTask());
-        } catch (\RuntimeException $e) {
+            return $this->getResponse($this->taskManager->deleteTask($taskId));
+        } catch (TaskConflictException $e) {
+            return new ApiProblemResponse((new ApiProblem($e->getMessage()))->setStatus(Response::HTTP_PRECONDITION_FAILED));
+        } catch (ActiveTaskException $e) {
             return new ApiProblemResponse((new ApiProblem($e->getMessage()))->setStatus(Response::HTTP_FORBIDDEN));
         }
     }

@@ -5,6 +5,7 @@ imports:
 framework:
     secret: ''
     default_locale: en
+    lock: 'flock://%kernel.project_dir%/contao-manager'
     router:
         resource: kernel::loadRoutes
         type: service

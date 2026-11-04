@@ -1555,7 +1555,11 @@ paths:
                     description: If the task status is unknown.
 
         delete:
-            summary: Deletes task data.
+            summary: Deletes the current task.
+            description: >-
+                Deletes whichever task is current, subject to the active-task
+                restrictions. To delete only a task with a specific ID, use
+                DELETE /api/task/{taskId}.
             tags: [Tasks]
             security:
                 - CookieAuthentication: [ update ]
@@ -1567,8 +1571,54 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/TaskStatus'
-                400:
-                    description: If the task cannot be deleted because it's running.
+                204:
+                    description: No task exists.
+                403:
+                    description: The task cannot be deleted because it is active, or authorization is insufficient.
+
+    /api/task/{taskId}:
+        delete:
+            summary: Deletes a task only if its ID matches.
+            description: >-
+                The ID check and deletion are atomic. If a different task exists,
+                it and its associated state remain unchanged. The same authorization
+                and active-task restrictions apply as for DELETE /api/task.
+            parameters:
+                - name: taskId
+                  in: path
+                  required: true
+                  description: The task ID returned when starting the task.
+                  schema:
+                      type: string
+                      format: uuid
+                      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[13-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+            tags: [Tasks]
+            security:
+                - CookieAuthentication: [ update ]
+                - TokenAuthentication: [ update ]
+            responses:
+                200:
+                    description: The deleted task data.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TaskStatus'
+                204:
+                    description: No task exists. Repeated cleanup is harmless.
+                404:
+                    description: The task ID is empty or malformed.
+                    content:
+                        application/problem+json:
+                            schema:
+                                type: object
+                403:
+                    description: The task cannot be deleted because it is active, or authorization is insufficient.
+                412:
+                    description: A different task exists. Nothing is deleted.
+                    content:
+                        application/problem+json:
+                            schema:
+                                type: object
 
 
     ################
