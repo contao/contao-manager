@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\EventListener;
 
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\Task\TaskBusyException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,7 +65,9 @@ class ExceptionListener
             $exception->getLine(),
         );
 
-        if (!$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500) {
+        if ($exception instanceof TaskBusyException) {
+            $this->logger->debug($message);
+        } elseif (!$exception instanceof HttpExceptionInterface || $exception->getStatusCode() >= 500) {
             $this->logger->critical($message, ['exception' => $exception]);
         } else {
             $this->logger->error($message, ['exception' => $exception]);

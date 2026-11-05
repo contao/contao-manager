@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import axios from 'axios';
+import taskRequest from '../tools/taskRequest';
 
 let handleTask;
 let failTask;
@@ -10,8 +11,7 @@ let ignoreErrors = false;
 
 const pollTask = (store, resolve, reject, delay = 5000, attempt = 1) => {
     setTimeout(() => {
-        axios
-            .get('api/task', { timeout: 5000 * attempt })
+        taskRequest(() => axios.get('api/task', { timeout: 5000 * attempt }))
             .then((response) => handleTask(response, store, resolve, reject))
             .catch((error) => failTask(error, store, resolve, reject));
     }, delay);
@@ -165,8 +165,7 @@ export default {
             store.commit('setCurrent', task);
             store.commit('setStatus', 'created');
 
-            axios
-                .put('api/task', task)
+            taskRequest(() => axios.put('api/task', task))
                 .then((response) => handleTask(response, store, queue.resolve, queue.reject))
                 .catch((error) => failTask(error, store, queue.resolve, queue.reject));
 
@@ -184,8 +183,7 @@ export default {
                 queue = Promise.withResolvers();
             }
 
-            axios
-                .patch('api/task', { status: 'aborting' })
+            taskRequest(() => axios.patch('api/task', { status: 'aborting' }))
                 .then((response) => handleTask(response, store, queue.resolve, queue.reject))
                 .catch((error) => failTask(error, store, queue.resolve, queue.reject));
 
@@ -199,8 +197,7 @@ export default {
 
             store.commit('setStatus', 'active');
 
-            axios
-                .patch('api/task', { status: 'active' })
+            taskRequest(() => axios.patch('api/task', { status: 'active' }))
                 .then((response) => handleTask(response, store, queue.resolve, queue.reject))
                 .catch((error) => failTask(error, store, queue.resolve, queue.reject));
         },
@@ -214,7 +211,7 @@ export default {
             }
 
             try {
-                await axios.delete('api/task');
+                await taskRequest(() => axios.delete('api/task'));
                 commit('setCurrent', null);
                 await dispatch('server/contao/get', false, { root: true });
             } catch (error) {
@@ -244,7 +241,7 @@ export default {
                             status: response.status,
                             response,
                         },
-                        { root: true },
+                        { root: true }
                     );
                 }
             }

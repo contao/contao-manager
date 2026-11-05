@@ -19,6 +19,17 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class TaskConfig extends AbstractConfig
 {
+    /**
+     * The ID of the task this configuration was loaded from or last saved as.
+     *
+     * For example, one request finishes task A and releases the manager lock. While
+     * it builds the API response, another request deletes A and creates task B. The
+     * first request may still save cloud output for A. Without this check, it would
+     * write A's old configuration over B's task.json. If B has not been created yet,
+     * it would bring the deleted task A back instead.
+     *
+     * Before saving, we check that task.json still belongs to the same task.
+     */
     private string|null $persistedId = null;
 
     private bool $deleted = false;

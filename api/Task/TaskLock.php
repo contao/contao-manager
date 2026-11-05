@@ -16,7 +16,18 @@ use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;
 
 /**
- * Locks the stable sidecar file, never the atomically replaced task.json inode.
+ * Serializes task operations across web requests and CLI processes.
+ *
+ * The lock uses a separate file in the manager directory because saving task.json
+ * replaces the file. Locking task.json itself would leave the lock attached to
+ * the old file and allow another process to lock its replacement.
+ *
+ * If another process holds the lock, fail immediately. Web requests receive a 503
+ * response with Retry-After so the frontend can retry the same request. CLI
+ * commands report the error and exit with a nonzero status.
+ *
+ * An acquired lock has no expiry. It stays held until the operation finishes or
+ * the process terminates, even if a background task continues separately.
  */
 final class TaskLock
 {
@@ -34,16 +45,18 @@ final class TaskLock
      *
      * @return T
      *
+     * @throws TaskBusyException If another process holds the lock
      * @throws \RuntimeException If the lock cannot be acquired or released
      */
     public function synchronized(callable $operation): mixed
     {
         if ($this->lock->isAcquired()) {
+            // Nested configuration saves share the outer operation's lock.
             return $operation();
         }
 
-        if (!$this->lock->acquire(true)) {
-            throw new \RuntimeException('Cannot acquire task lock.');
+        if (!$this->lock->acquire()) {
+            throw new TaskBusyException();
         }
 
         try {
