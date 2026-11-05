@@ -15,8 +15,10 @@ namespace Contao\ManagerApi\TaskOperation\Composer;
 use Contao\ManagerApi\Composer\Environment;
 use Contao\ManagerApi\I18n\Translator;
 use Contao\ManagerApi\Process\ConsoleProcessFactory;
+use Contao\ManagerApi\Process\ProcessController;
 use Contao\ManagerApi\Task\TaskConfig;
 use Contao\ManagerApi\TaskOperation\AbstractProcessOperation;
+use Contao\ManagerApi\TaskOperation\ConsoleOutput;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_UPDATE')]
@@ -35,6 +37,7 @@ class InstallOperation extends AbstractProcessOperation
             $retries = (int) $this->taskConfig->getState('install-retry', 0);
 
             if ($retry && $retries < 4 && $process->isTerminated() && !$process->isSuccessful()) {
+                $this->saveAttemptOutput($process, $retries + 1);
                 $process->delete();
                 $this->taskConfig->setState('install-retry', ++$retries);
 
@@ -76,6 +79,21 @@ class InstallOperation extends AbstractProcessOperation
         }
     }
 
+    public function getConsole(): ConsoleOutput
+    {
+        $console = new ConsoleOutput();
+        $console->add((string) $this->taskConfig->getState('install-output', ''));
+
+        if ($this->isStarted()) {
+            $console->add(
+                (string) parent::getConsole(),
+                '# Composer install attempt '.((int) $this->taskConfig->getState('install-retry', 0) + 1),
+            );
+        }
+
+        return $console;
+    }
+
     public function getSummary(): string
     {
         $summary = 'composer install';
@@ -115,6 +133,22 @@ class InstallOperation extends AbstractProcessOperation
         }
 
         return '';
+    }
+
+    private function saveAttemptOutput(ProcessController $process, int $attempt): void
+    {
+        $console = new ConsoleOutput();
+        $console->add((string) $this->taskConfig->getState('install-output', ''));
+        $console->add(
+            $process->getOutput().\sprintf(
+                "\n# Process terminated with exit code %s\n# Result: %s\n# Termination signal: %s\n",
+                $process->getExitCode(),
+                $process->getExitCodeText(),
+                $process->getTermSignal() ?? 'none',
+            ),
+            \sprintf("# Composer install attempt %d\n$ %s", $attempt, $process->getCommandLine()),
+        );
+        $this->taskConfig->setState('install-output', (string) $console);
     }
 
     private function getPackageOperations(string $output): array|null
