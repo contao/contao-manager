@@ -168,11 +168,15 @@ class TaskManager implements LoggerAwareInterface
 
         $status = $config->isCancelled() ? $task->abort($config) : $task->create($config);
 
-        if ($status->isActive() || !$task->delete($config)) {
+        if ($status->isActive()) {
             throw new \RuntimeException('Active task cannot be deleted');
         }
 
         $this->saveConsoleOutput($status->getConsole());
+
+        if (!$task->delete($config)) {
+            throw new \RuntimeException('Active task cannot be deleted');
+        }
 
         return $status;
     }
