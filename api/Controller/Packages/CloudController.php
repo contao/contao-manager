@@ -118,9 +118,15 @@ class CloudController extends AbstractController
             throw new BadRequestHttpException($throwable->getMessage(), $throwable);
         }
 
+        if (!$backupCreated && !$this->environment->createBackup()) {
+            $this->logger->error('Unable to create backup of composer files.', ['composerLock' => $lock]);
+
+            throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Unable to create backup of composer files.');
+        }
+
         // Only write after composer.json was validated
         $this->environment->getComposerLockFile()->write($lockContent);
 
-        return new JsonResponse($this->taskManager->createTask('composer/install', []));
+        return new JsonResponse($this->taskManager->createTask('composer/install', ['backup-created' => true]));
     }
 }
