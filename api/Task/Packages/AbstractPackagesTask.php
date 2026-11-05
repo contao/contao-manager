@@ -68,7 +68,8 @@ abstract class AbstractPackagesTask extends AbstractTask
             return;
         }
 
-        if (!$this->environment->createBackup()) {
+        // The cloud endpoint creates its backup before replacing the Composer files
+        if (!$config->getOption('backup-created', false) && !$this->environment->createBackup()) {
             return;
         }
 
