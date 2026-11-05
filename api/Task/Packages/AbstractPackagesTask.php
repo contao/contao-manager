@@ -31,10 +31,6 @@ abstract class AbstractPackagesTask extends AbstractTask
 
     public function create(TaskConfig $config): TaskStatus
     {
-        if ($config->getOption('backup-created', false)) {
-            $this->createBackup($config);
-        }
-
         return parent::create($config)->setAudit(!$config->getOption('dry_run', false))->setCancellable(true);
     }
 
