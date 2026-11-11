@@ -100,7 +100,6 @@ class TaskManager implements LoggerAwareInterface
             $this->configFile,
             $this->filesystem,
             $this->kernel->getTranslator(),
-            $this->taskLock,
             $name,
             $options,
         );
@@ -232,7 +231,6 @@ class TaskManager implements LoggerAwareInterface
                     $this->configFile,
                     $this->filesystem,
                     $this->kernel->getTranslator(),
-                    $this->taskLock,
                 );
             } catch (\Exception) {
                 $this->filesystem->remove($this->configFile);

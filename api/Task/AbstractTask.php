@@ -114,22 +114,7 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
         return $status;
     }
 
-    /**
-     * @throws TaskConflictException If the configuration refers to a removed or replaced task
-     */
     public function delete(TaskConfig $config): bool
-    {
-        return $config->withCurrent(fn (): bool => $this->deleteCurrent($config));
-    }
-
-    abstract protected function getTitle(): string;
-
-    /**
-     * @return array<TaskOperationInterface>
-     */
-    abstract protected function buildOperations(TaskConfig $config): array;
-
-    private function deleteCurrent(TaskConfig $config): bool
     {
         $status = $this->create($config);
         $operations = $status->getOperations();
@@ -156,4 +141,11 @@ abstract class AbstractTask implements TaskInterface, LoggerAwareInterface
 
         return true;
     }
+
+    abstract protected function getTitle(): string;
+
+    /**
+     * @return array<TaskOperationInterface>
+     */
+    abstract protected function buildOperations(TaskConfig $config): array;
 }

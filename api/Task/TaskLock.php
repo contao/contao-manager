@@ -28,6 +28,10 @@ use Symfony\Component\Lock\LockInterface;
  *
  * An acquired lock has no expiry. It stays held until the operation finishes or
  * the process terminates, even if a background task continues separately.
+ *
+ * Callers must keep the lock from loading task state until all operation getters
+ * and state changes have finished. Polling commands release it between updates
+ * and load a fresh configuration on each iteration.
  */
 final class TaskLock
 {
@@ -51,7 +55,7 @@ final class TaskLock
     public function synchronized(callable $operation): mixed
     {
         if ($this->lock->isAcquired()) {
-            // Nested configuration saves share the outer operation's lock.
+            // Nested task operations share the outer operation's lock
             return $operation();
         }
 

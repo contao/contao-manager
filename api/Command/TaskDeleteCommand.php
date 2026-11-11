@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Command;
 
+use Contao\ManagerApi\Task\TaskLock;
 use Contao\ManagerApi\Task\TaskManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -21,8 +22,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'task:delete', description: 'Deletes the current task if it is not active.')]
 class TaskDeleteCommand extends Command
 {
-    public function __construct(private readonly TaskManager $taskManager)
-    {
+    public function __construct(
+        private readonly TaskManager $taskManager,
+        private readonly TaskLock $taskLock,
+    ) {
         parent::__construct();
     }
 
@@ -31,6 +34,11 @@ class TaskDeleteCommand extends Command
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        return $this->taskLock->synchronized(fn (): int => $this->deleteTask($output));
+    }
+
+    private function deleteTask(OutputInterface $output): int
     {
         if (!$this->taskManager->hasTask()) {
             $output->writeln('No task is currently active.');

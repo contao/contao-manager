@@ -27,13 +27,13 @@ class TaskAbortCommand extends TaskUpdateCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!$this->taskManager->hasTask()) {
+        $aborted = $this->taskLock->synchronized(fn (): bool => null !== $this->taskManager->abortTask());
+
+        if (!$aborted) {
             $output->writeln('No task is currently active.');
 
             return Command::FAILURE;
         }
-
-        $this->taskManager->abortTask();
 
         return parent::execute($input, $output);
     }

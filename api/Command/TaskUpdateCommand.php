@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Contao\ManagerApi\Command;
 
+use Contao\ManagerApi\Task\TaskLock;
 use Contao\ManagerApi\Task\TaskManager;
 use Contao\ManagerApi\Task\TaskStatus;
 use Contao\ManagerApi\TaskOperation\TaskOperationInterface;
@@ -28,8 +29,20 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'task:update', description: 'Updates the current task and returns the status information.')]
 class TaskUpdateCommand extends Command
 {
-    public function __construct(protected TaskManager $taskManager)
-    {
+    /**
+     * @var array<ConsoleSectionOutput>
+     */
+    private array $sections = [];
+
+    /**
+     * @var array<ProgressIndicator>
+     */
+    private array $progresses = [];
+
+    public function __construct(
+        protected TaskManager $taskManager,
+        protected readonly TaskLock $taskLock,
+    ) {
         parent::__construct();
     }
 
@@ -43,56 +56,34 @@ class TaskUpdateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!$this->taskManager->hasTask()) {
+        if (!$output instanceof ConsoleOutput) {
+            return Command::FAILURE;
+        }
+
+        $this->sections = [];
+        $this->progresses = [];
+        $style = new SymfonyStyle($input, $output);
+        $status = $this->updateStatus($style, $output);
+
+        if (null === $status) {
             $output->writeln('No task is currently active.');
 
             return Command::FAILURE;
         }
 
-        $status = $this->taskManager->updateTask();
-
-        if (null === $status) {
-            return Command::FAILURE;
-        }
-
-        if (!$output instanceof ConsoleOutput) {
-            return Command::FAILURE;
-        }
-
-        $style = new SymfonyStyle($input, $output);
-        $style->title($status->getTitle());
-
-        $sections = [];
-        $progresses = [];
-        $operations = $status->getOperations();
-
-        foreach ($operations as $i => $operation) {
-            $section = $output->section();
-            $section->writeln(($operation->isRunning() ? ' > ' : ' - ').$operation->getSummary());
-            $section->writeln('');
-
-            $sections[$i] = $section;
-        }
-
-        $this->updateOperations($status->getOperations(), $sections, $progresses);
-
         if ($input->getOption('poll')) {
-            while ($status->isActive()) {
+            while (TaskStatus::STATUS_ACTIVE === $status) {
                 sleep((int) $input->getOption('interval'));
 
-                $newStatus = $this->taskManager->updateTask();
+                $status = $this->updateStatus($style, $output);
 
-                if (null === $newStatus) {
+                if (null === $status) {
                     return Command::FAILURE;
-                }
-
-                if ($this->updateOperations($newStatus->getOperations(), $sections, $progresses)) {
-                    break;
                 }
             }
         }
 
-        match ($status->getStatus()) {
+        match ($status) {
             TaskStatus::STATUS_COMPLETE => $style->success('Operations completed successfully'),
             TaskStatus::STATUS_ERROR => $style->error('Task terminated unexpectedly'),
             TaskStatus::STATUS_STOPPED => $style->warning('Task has been stopped'),
@@ -102,12 +93,41 @@ class TaskUpdateCommand extends Command
         return Command::SUCCESS;
     }
 
+    private function updateStatus(SymfonyStyle $style, ConsoleOutput $output): string|null
+    {
+        return $this->taskLock->synchronized(
+            function () use ($style, $output): string|null {
+                $status = $this->taskManager->updateTask();
+
+                if (null === $status) {
+                    return null;
+                }
+
+                if ([] === $this->sections) {
+                    $style->title($status->getTitle());
+
+                    foreach ($status->getOperations() as $i => $operation) {
+                        $section = $output->section();
+                        $section->writeln(($operation->isRunning() ? ' > ' : ' - ').$operation->getSummary());
+                        $section->writeln('');
+
+                        $this->sections[$i] = $section;
+                    }
+                }
+
+                $this->updateOperations($status->getOperations(), $this->sections, $this->progresses);
+
+                return $status->getStatus();
+            },
+        );
+    }
+
     /**
      * @param array<TaskOperationInterface> $operations
      * @param array<ConsoleSectionOutput>   $sections
      * @param array<ProgressIndicator>      $progresses
      */
-    private function updateOperations(array $operations, array $sections, array &$progresses): bool
+    private function updateOperations(array $operations, array $sections, array &$progresses): void
     {
         foreach ($operations as $i => $operation) {
             $section = $sections[$i];
@@ -120,11 +140,9 @@ class TaskUpdateCommand extends Command
             }
 
             if (!$operation->isStarted() || $operation->isRunning()) {
-                return false;
+                return;
             }
         }
-
-        return true;
     }
 
     private function updateOperation(TaskOperationInterface $operation, ConsoleSectionOutput $section, ProgressIndicator|null &$progress): void

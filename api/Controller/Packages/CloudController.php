@@ -14,6 +14,7 @@ namespace Contao\ManagerApi\Controller\Packages;
 
 use Composer\Json\JsonFile;
 use Contao\ManagerApi\Composer\Environment;
+use Contao\ManagerApi\Task\TaskLock;
 use Contao\ManagerApi\Task\TaskManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,6 +34,7 @@ class CloudController extends AbstractController
     public function __construct(
         private readonly Environment $environment,
         private readonly TaskManager $taskManager,
+        private readonly TaskLock $taskLock,
         private readonly Filesystem $filesystem,
         private readonly LoggerInterface $logger,
     ) {
@@ -54,62 +56,30 @@ class CloudController extends AbstractController
     #[IsGranted('ROLE_UPDATE')]
     public function writeAndInstall(Request $request): Response
     {
+        return $this->taskLock->synchronized(fn (): Response => $this->install($request));
+    }
+
+    private function install(Request $request): Response
+    {
         if ($this->taskManager->hasTask()) {
             throw new BadRequestHttpException('A task is already active');
         }
 
-        $backupCreated = false;
         $lock = $request->request->all('composerLock');
 
         if ([] === $lock) {
             return new Response('composerLock is missing', Response::HTTP_BAD_REQUEST);
         }
 
-        try {
-            $lockFile = new JsonFile($this->filesystem->tempnam(sys_get_temp_dir(), md5(\Phar::running())));
-            $lockFile->write($lock);
-            $lockContent = $lockFile->read(); // Validates the JSON
-        } catch (\Throwable $throwable) {
-            $this->logger->error('Invalid composerLock for /api/packages/cloud.', ['composerLock' => $lock]);
-
-            throw new BadRequestHttpException($throwable->getMessage(), $throwable);
-        }
-
-        try {
-            if ($request->request->has('composerJson') && [] !== ($json = $request->request->all('composerJson'))) {
-                $jsonFile = new JsonFile($this->filesystem->tempnam(sys_get_temp_dir(), md5(\Phar::running())));
-                $jsonFile->write($json);
-                $jsonFile->validateSchema(JsonFile::LAX_SCHEMA);
-
-                if (!$this->isGranted('ROLE_INSTALL') && $jsonFile->read() !== $this->environment->getComposerJsonFile()->read()) {
-                    throw $this->createAccessDeniedException('No permission to change the composer.json');
-                }
-
-                if (!$this->environment->createBackup()) {
-                    $this->logger->error('Unable to create backup of composer files.', ['composerJson' => $json ?? null, 'composerLock' => $lock]);
-
-                    throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Unable to create backup of composer files.');
-                }
-
-                $backupCreated = true;
-                $this->environment->getComposerJsonFile()->write($jsonFile->read());
-            }
-        } catch (\Throwable $throwable) {
-            $this->logger->error('Invalid composerJson for /api/packages/cloud: '.$throwable->getMessage(), ['composerJson' => $json ?? null, 'composerLock' => $lock]);
-
-            if ($throwable instanceof HttpExceptionInterface) {
-                throw $throwable;
-            }
-
-            throw new BadRequestHttpException($throwable->getMessage(), $throwable);
-        }
+        $lockContent = $this->readComposerLock($lock);
+        $backupCreated = $this->writeComposerJson($request, $lock);
 
         try {
             Validator::createFromComposer($this->environment->getComposer(true))
                 ->validate($lockContent, $this->environment->getComposerLock())
             ;
         } catch (\Throwable $throwable) {
-            $this->logger->error('Invalid composerLock for /api/packages/cloud: '.$throwable->getMessage(), ['composerJson' => $json ?? null, 'composerLock' => $lock]);
+            $this->logger->error('Invalid composerLock for /api/packages/cloud: '.$throwable->getMessage(), ['composerJson' => $request->request->all()['composerJson'] ?? null, 'composerLock' => $lock]);
 
             if ($backupCreated) {
                 $this->environment->restoreBackup();
@@ -122,5 +92,54 @@ class CloudController extends AbstractController
         $this->environment->getComposerLockFile()->write($lockContent);
 
         return new JsonResponse($this->taskManager->createTask('composer/install', []));
+    }
+
+    private function readComposerLock(array $lock): array
+    {
+        try {
+            $lockFile = new JsonFile($this->filesystem->tempnam(sys_get_temp_dir(), md5(\Phar::running())));
+            $lockFile->write($lock);
+
+            return $lockFile->read(); // Validates the JSON
+        } catch (\Throwable $throwable) {
+            $this->logger->error('Invalid composerLock for /api/packages/cloud.', ['composerLock' => $lock]);
+
+            throw new BadRequestHttpException($throwable->getMessage(), $throwable);
+        }
+    }
+
+    private function writeComposerJson(Request $request, array $lock): bool
+    {
+        try {
+            if (!$request->request->has('composerJson') || [] === ($json = $request->request->all('composerJson'))) {
+                return false;
+            }
+
+            $jsonFile = new JsonFile($this->filesystem->tempnam(sys_get_temp_dir(), md5(\Phar::running())));
+            $jsonFile->write($json);
+            $jsonFile->validateSchema(JsonFile::LAX_SCHEMA);
+
+            if (!$this->isGranted('ROLE_INSTALL') && $jsonFile->read() !== $this->environment->getComposerJsonFile()->read()) {
+                throw $this->createAccessDeniedException('No permission to change the composer.json');
+            }
+
+            if (!$this->environment->createBackup()) {
+                $this->logger->error('Unable to create backup of composer files.', ['composerJson' => $json, 'composerLock' => $lock]);
+
+                throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Unable to create backup of composer files.');
+            }
+
+            $this->environment->getComposerJsonFile()->write($jsonFile->read());
+
+            return true;
+        } catch (\Throwable $throwable) {
+            $this->logger->error('Invalid composerJson for /api/packages/cloud: '.$throwable->getMessage(), ['composerJson' => $json ?? null, 'composerLock' => $lock]);
+
+            if ($throwable instanceof HttpExceptionInterface) {
+                throw $throwable;
+            }
+
+            throw new BadRequestHttpException($throwable->getMessage(), $throwable);
+        }
     }
 }
