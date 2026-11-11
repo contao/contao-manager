@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace Contao\ManagerApi\Controller;
 
 use Contao\ManagerApi\HttpKernel\ApiProblemResponse;
+use Contao\ManagerApi\Task\ActiveTaskException;
+use Contao\ManagerApi\Task\TaskLock;
 use Contao\ManagerApi\Task\TaskManager;
 use Contao\ManagerApi\Task\TaskStatus;
 use Crell\ApiProblem\ApiProblem;
@@ -27,19 +29,22 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_UPDATE')]
 class TaskController
 {
-    public function __construct(private readonly TaskManager $taskManager)
-    {
+    public function __construct(
+        private readonly TaskManager $taskManager,
+        private readonly TaskLock $taskLock,
+    ) {
     }
 
     public function __invoke(Request $request): Response
     {
-        return match ($request->getMethod()) {
+        // Operation getters can persist state while the response is serialized
+        return $this->taskLock->synchronized(fn (): Response => match ($request->getMethod()) {
             'GET' => $this->getTask(),
             'PUT' => $this->putTask($request),
             'PATCH' => $this->patchTask($request),
             'DELETE' => $this->deleteTask(),
             default => new Response('', Response::HTTP_METHOD_NOT_ALLOWED),
-        };
+        });
     }
 
     private function getTask(): Response
@@ -82,13 +87,9 @@ class TaskController
 
     private function deleteTask(): Response
     {
-        if (!$this->taskManager->hasTask()) {
-            return $this->getResponse();
-        }
-
         try {
             return $this->getResponse($this->taskManager->deleteTask());
-        } catch (\RuntimeException $e) {
+        } catch (ActiveTaskException $e) {
             return new ApiProblemResponse((new ApiProblem($e->getMessage()))->setStatus(Response::HTTP_FORBIDDEN));
         }
     }
